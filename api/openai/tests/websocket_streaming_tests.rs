@@ -79,7 +79,7 @@ mod websocket_streaming_tests
       assert!( !serialized.is_empty() );
 
       // Test deserialization
-      let deserialized: WebSocketMessage = serde_json::from_str( &serialized )
+      let deserialized : WebSocketMessage = serde_json::from_str( &serialized )
         .expect( "Failed to deserialize message" );
 
       assert_eq!( message, deserialized );
@@ -106,7 +106,7 @@ mod websocket_streaming_tests
       assert!( !serialized.is_empty() );
 
       // Test deserialization
-      let deserialized: WebSocketState = serde_json::from_str( &serialized )
+      let deserialized : WebSocketState = serde_json::from_str( &serialized )
         .expect( "Failed to deserialize state" );
 
       assert_eq!( *state, deserialized );
@@ -151,7 +151,7 @@ mod websocket_streaming_tests
     let valid_config = WebSocketConfig::default();
     assert!( WebSocketStreamer::validate_config( &valid_config ).is_ok() );
 
-    // Invalid: zero timeout
+    // Invalid : zero timeout
     let invalid_config1 = WebSocketConfig
     {
       connect_timeout_ms : 0,
@@ -159,7 +159,7 @@ mod websocket_streaming_tests
     };
     assert!( WebSocketStreamer::validate_config( &invalid_config1 ).is_err() );
 
-    // Invalid: zero message size
+    // Invalid : zero message size
     let invalid_config2 = WebSocketConfig
     {
       max_message_size : 0,
@@ -167,7 +167,7 @@ mod websocket_streaming_tests
     };
     assert!( WebSocketStreamer::validate_config( &invalid_config2 ).is_err() );
 
-    // Invalid: zero heartbeat interval
+    // Invalid : zero heartbeat interval
     let invalid_config3 = WebSocketConfig
     {
       heartbeat_interval_ms : 0,
@@ -175,7 +175,7 @@ mod websocket_streaming_tests
     };
     assert!( WebSocketStreamer::validate_config( &invalid_config3 ).is_err() );
 
-    // Invalid: zero queue size
+    // Invalid : zero queue size
     let invalid_config4 = WebSocketConfig
     {
       max_queue_size : 0,
@@ -203,7 +203,7 @@ mod websocket_streaming_tests
     assert!( !serialized.is_empty() );
 
     // Test deserialization
-    let deserialized: WebSocketConfig = serde_json::from_str( &serialized )
+    let deserialized : WebSocketConfig = serde_json::from_str( &serialized )
       .expect( "Failed to deserialize config" );
 
     assert_eq!( config.connect_timeout_ms, deserialized.connect_timeout_ms );
@@ -251,7 +251,7 @@ mod websocket_streaming_tests
     assert!( connection.is_active() );
     assert!( connection.connected_at.is_some() );
 
-    time::sleep( Duration::from_millis( 10 ) ).await;
+    time ::sleep( Duration::from_millis( 10 ) ).await;
 
     // Check connection duration
     let duration = connection.connection_duration();
@@ -274,7 +274,7 @@ mod websocket_streaming_tests
       config,
     );
 
-    time::sleep( Duration::from_millis( 10 ) ).await;
+    time ::sleep( Duration::from_millis( 10 ) ).await;
 
     let idle_duration = connection.idle_duration();
     assert!( idle_duration >= Duration::from_millis( 10 ) );
@@ -504,7 +504,7 @@ mod websocket_streaming_tests
     assert_eq!( pool.connection_ids().len(), 2 );
 
     // Wait for connections to become idle
-    time::sleep( Duration::from_millis( 60 ) ).await;
+    time ::sleep( Duration::from_millis( 60 ) ).await;
 
     // Cleanup should remove idle connections
     let removed = pool.cleanup_idle_connections();
@@ -688,9 +688,9 @@ mod websocket_streaming_tests
     let ( sender, mut receiver ) = WebSocketStreamer::create_event_notifier();
 
     // Send event after a delay
-    tokio::spawn( async move
+    tokio ::spawn( async move
     {
-      time::sleep( Duration::from_millis( 25 ) ).await;
+      time ::sleep( Duration::from_millis( 25 ) ).await;
       let _ = sender.send_connected( "async_conn".to_string() );
     });
 
@@ -714,9 +714,9 @@ mod websocket_streaming_tests
     let ( sender, mut receiver ) = WebSocketStreamer::create_message_channel();
 
     // Send message after a delay
-    tokio::spawn( async move
+    tokio ::spawn( async move
     {
-      time::sleep( Duration::from_millis( 25 ) ).await;
+      time ::sleep( Duration::from_millis( 25 ) ).await;
       let _ = sender.send_text( "Async message".to_string() );
     });
 
@@ -787,7 +787,7 @@ mod websocket_streaming_tests
       {
         count += 1;
       }
-      time::sleep( Duration::from_millis( 10 ) ).await;
+      time ::sleep( Duration::from_millis( 10 ) ).await;
     }
 
     assert!( count >= 2, "Should have received at least 2 heartbeats" );

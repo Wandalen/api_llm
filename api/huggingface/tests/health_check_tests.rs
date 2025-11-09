@@ -280,7 +280,7 @@ async fn test_background_monitoring_performs_checks()
   let handle = checker.start_monitoring( ).await;
 
   // Wait for a few checks
-  tokio::time::sleep( Duration::from_millis( 600 )).await;
+  tokio ::time::sleep( Duration::from_millis( 600 )).await;
 
   // Stop monitoring
   checker.stop_monitoring( ).await;
@@ -313,7 +313,7 @@ async fn test_monitoring_can_be_started_and_stopped()
   handle.stop( ).await;
 
   // Give it a moment to stop
-  tokio::time::sleep( Duration::from_millis( 50 )).await;
+  tokio ::time::sleep( Duration::from_millis( 50 )).await;
 
   assert!( !checker.is_monitoring( ).await, "Should not be monitoring after stop" );
 }

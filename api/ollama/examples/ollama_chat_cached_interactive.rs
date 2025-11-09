@@ -144,27 +144,27 @@ impl SessionStats
   {
     println!( "\n📊 Cache Statistics Summary" );
     println!( "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" );
-    println!( "Total Requests:           {}", self.total_requests );
+    println!( "Total Requests :           {}", self.total_requests );
     println!( "\nCache Performance:" );
-    println!( "  Cache Hits:             {:>8}", self.cache_hits );
-    println!( "  Cache Misses:           {:>8}", self.cache_misses );
-    println!( "  Cache Evictions:        {:>8}", self.cache_evictions );
-    println!( "  Hit Rate:               {:>7.1}%", self.cache_hit_rate() );
+    println!( "  Cache Hits :             {:>8}", self.cache_hits );
+    println!( "  Cache Misses :           {:>8}", self.cache_misses );
+    println!( "  Cache Evictions :        {:>8}", self.cache_evictions );
+    println!( "  Hit Rate :               {:>7.1}%", self.cache_hit_rate() );
 
     if !self.cache_response_times.is_empty() || !self.uncached_response_times.is_empty()
     {
       println!( "\nPerformance Metrics:" );
       if !self.uncached_response_times.is_empty()
       {
-        println!( "  Uncached Avg Time:      {:>7.2}s", self.avg_uncached_time().as_secs_f64() );
+        println!( "  Uncached Avg Time :      {:>7.2}s", self.avg_uncached_time().as_secs_f64() );
       }
       if !self.cache_response_times.is_empty()
       {
-        println!( "  Cached Avg Time:        {:>7.2}s", self.avg_cached_time().as_secs_f64() );
+        println!( "  Cached Avg Time :        {:>7.2}s", self.avg_cached_time().as_secs_f64() );
       }
       if !self.cache_response_times.is_empty() && !self.uncached_response_times.is_empty()
       {
-        println!( "  ⚡ Speed Improvement:    {:>7.1}%", self.performance_improvement() );
+        println!( "  ⚡ Speed Improvement :    {:>7.1}%", self.performance_improvement() );
       }
     }
     println!( "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" );
@@ -176,50 +176,50 @@ impl SessionStats
     println!( "\n📈 Detailed Cache Statistics" );
     println!( "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" );
     println!( "Request Breakdown:" );
-    println!( "  Total Requests:         {}", self.total_requests );
-    println!( "  Cached Requests:        {}", self.cached_requests );
-    println!( "  Uncached Requests:      {}", self.uncached_requests );
+    println!( "  Total Requests :         {}", self.total_requests );
+    println!( "  Cached Requests :        {}", self.cached_requests );
+    println!( "  Uncached Requests :      {}", self.uncached_requests );
 
     println!( "\nCache Statistics:" );
-    println!( "  Hits:                   {}", self.cache_hits );
-    println!( "  Misses:                 {}", self.cache_misses );
-    println!( "  Evictions:              {}", self.cache_evictions );
-    println!( "  Hit Rate:               {:.1}%", self.cache_hit_rate() );
+    println!( "  Hits :                   {}", self.cache_hits );
+    println!( "  Misses :                 {}", self.cache_misses );
+    println!( "  Evictions :              {}", self.cache_evictions );
+    println!( "  Hit Rate :               {:.1}%", self.cache_hit_rate() );
 
     if !self.cache_response_times.is_empty()
     {
       println!( "\nCached Response Times:" );
-      println!( "  Count:                  {}", self.cache_response_times.len() );
-      println!( "  Average:                {:.2}s", self.avg_cached_time().as_secs_f64() );
+      println!( "  Count :                  {}", self.cache_response_times.len() );
+      println!( "  Average :                {:.2}s", self.avg_cached_time().as_secs_f64() );
       if let Some( min ) = self.cache_response_times.iter().min()
       {
-        println!( "  Minimum:                {:.2}s", min.as_secs_f64() );
+        println!( "  Minimum :                {:.2}s", min.as_secs_f64() );
       }
       if let Some( max ) = self.cache_response_times.iter().max()
       {
-        println!( "  Maximum:                {:.2}s", max.as_secs_f64() );
+        println!( "  Maximum :                {:.2}s", max.as_secs_f64() );
       }
     }
 
     if !self.uncached_response_times.is_empty()
     {
       println!( "\nUncached Response Times:" );
-      println!( "  Count:                  {}", self.uncached_response_times.len() );
-      println!( "  Average:                {:.2}s", self.avg_uncached_time().as_secs_f64() );
+      println!( "  Count :                  {}", self.uncached_response_times.len() );
+      println!( "  Average :                {:.2}s", self.avg_uncached_time().as_secs_f64() );
       if let Some( min ) = self.uncached_response_times.iter().min()
       {
-        println!( "  Minimum:                {:.2}s", min.as_secs_f64() );
+        println!( "  Minimum :                {:.2}s", min.as_secs_f64() );
       }
       if let Some( max ) = self.uncached_response_times.iter().max()
       {
-        println!( "  Maximum:                {:.2}s", max.as_secs_f64() );
+        println!( "  Maximum :                {:.2}s", max.as_secs_f64() );
       }
     }
 
     if !self.cache_response_times.is_empty() && !self.uncached_response_times.is_empty()
     {
       println!( "\nPerformance Comparison:" );
-      println!( "  Speed Improvement:      {:.1}%", self.performance_improvement() );
+      println!( "  Speed Improvement :      {:.1}%", self.performance_improvement() );
       println!( "  Time Saved (avg):       {:.2}s",
         self.avg_uncached_time().as_secs_f64() - self.avg_cached_time().as_secs_f64()
       );
@@ -265,11 +265,11 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
   // Verify cache is enabled
   if client.has_cache()
   {
-    println!( "✅ Cache enabled (max: 100 entries, TTL: 5 minutes)\n" );
+    println!( "✅ Cache enabled (max : 100 entries, TTL: 5 minutes)\n" );
   }
   else
   {
-    eprintln!( "Warning: Cache initialization failed" );
+    eprintln!( "Warning : Cache initialization failed" );
   }
 
   let mut conversation_history : Vec< ChatMessage > = Vec::new();
@@ -286,8 +286,8 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
   loop
   {
     // Get user input
-    print!( "\n> " );
-    io::stdout().flush()?;
+    print!( "\n > " );
+    io ::stdout().flush()?;
 
     let mut input = String::new();
     let bytes_read = match io::stdin().read_line( &mut input )
@@ -295,7 +295,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
       Ok( n ) => n,
       Err( e ) =>
       {
-        println!( "\nError reading input: {e}" );
+        println!( "\nError reading input : {e}" );
         break;
       }
     };
@@ -304,8 +304,8 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     if bytes_read == 0
     {
       println!( "\n👋 No input available (EOF). Exiting gracefully." );
-      println!( "Note: Use this example in interactive terminal only." );
-      println!( "Run: cargo run --example ollama_chat_cached_interactive --all-features" );
+      println!( "Note : Use this example in interactive terminal only." );
+      println!( "Run : cargo run --example ollama_chat_cached_interactive --all-features" );
       break;
     }
 
@@ -407,7 +407,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     };
 
     print!( "\n🤖 AI: " );
-    io::stdout().flush()?;
+    io ::stdout().flush()?;
 
     // Track response time
     let start_time = Instant::now();
@@ -430,7 +430,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
                 if !streaming_response.message.content.is_empty()
                 {
                   print!( "{}", streaming_response.message.content );
-                  io::stdout().flush()?;
+                  io ::stdout().flush()?;
                   full_response.push_str( &streaming_response.message.content );
                 }
 
@@ -441,7 +441,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
               }
               Err( e ) =>
               {
-                println!( "\nStreaming error: {e}" );
+                println!( "\nStreaming error : {e}" );
                 break;
               }
             }
@@ -484,7 +484,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
         }
         Err( e ) =>
         {
-          println!( "Error: {e}" );
+          println!( "Error : {e}" );
           println!( "Please try again or type /quit to exit.\n" );
           conversation_history.pop(); // Remove failed user message
         }
@@ -523,8 +523,8 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
               {
                 print!( " " );
               }
-              io::stdout().flush()?;
-              tokio::time::sleep( tokio::time::Duration::from_millis( 50 ) ).await;
+              io ::stdout().flush()?;
+              tokio ::time::sleep( tokio::time::Duration::from_millis( 50 ) ).await;
             }
             println!( "\n" );
 
@@ -564,7 +564,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
         }
         Err( e ) =>
         {
-          println!( "Error: {e}" );
+          println!( "Error : {e}" );
           println!( "Please try again or type /quit to exit.\n" );
           conversation_history.pop(); // Remove failed user message
         }

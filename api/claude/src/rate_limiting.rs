@@ -18,11 +18,11 @@ mod private
   pub struct RateLimiterConfig
   {
     /// Tokens per second rate
-    tokens_per_second: f64,
+    tokens_per_second : f64,
     /// Maximum bucket capacity
-    bucket_capacity: u32,
+    bucket_capacity : u32,
     /// Initial number of tokens
-    initial_tokens: u32,
+    initial_tokens : u32,
   }
 
   // No Default implementation - explicit configuration required per governing principle
@@ -36,7 +36,7 @@ mod private
     /// * `tokens_per_second` - Rate at which tokens are added to the bucket (must be > 0.0)
     /// * `bucket_capacity` - Maximum number of tokens the bucket can hold (must be > 0)
     /// * `initial_tokens` - Initial number of tokens in the bucket (must be <= `bucket_capacity`)
-    pub fn with_explicit_config( tokens_per_second: f64, bucket_capacity: u32, initial_tokens: u32 ) -> Self
+    pub fn with_explicit_config( tokens_per_second : f64, bucket_capacity : u32, initial_tokens : u32 ) -> Self
     {
       Self {
         tokens_per_second,
@@ -63,15 +63,15 @@ mod private
     {
       // Compatibility wrapper with sensible defaults for rate limiting
       Self::with_explicit_config(
-        10.0, // tokens_per_second: 10 tokens per second
-        100,  // bucket_capacity: 100 tokens maximum
-        50,   // initial_tokens: start with half capacity
+        10.0, // tokens_per_second : 10 tokens per second
+        100,  // bucket_capacity : 100 tokens maximum
+        50,   // initial_tokens : start with half capacity
       )
     }
 
     /// Set tokens per second
     #[ must_use ]
-    pub fn with_tokens_per_second( mut self, tokens_per_second: f64 ) -> Self
+    pub fn with_tokens_per_second( mut self, tokens_per_second : f64 ) -> Self
     {
       self.tokens_per_second = tokens_per_second;
       self
@@ -79,7 +79,7 @@ mod private
 
     /// Set bucket capacity
     #[ must_use ]
-    pub fn with_bucket_capacity( mut self, bucket_capacity: u32 ) -> Self
+    pub fn with_bucket_capacity( mut self, bucket_capacity : u32 ) -> Self
     {
       self.bucket_capacity = bucket_capacity;
       self
@@ -87,7 +87,7 @@ mod private
 
     /// Set initial tokens
     #[ must_use ]
-    pub fn with_initial_tokens( mut self, initial_tokens: u32 ) -> Self
+    pub fn with_initial_tokens( mut self, initial_tokens : u32 ) -> Self
     {
       self.initial_tokens = initial_tokens;
       self
@@ -125,19 +125,19 @@ mod private
   #[ allow( dead_code ) ]
   struct RateLimiterState
   {
-    tokens: f64,
-    last_refill: Instant,
+    tokens : f64,
+    last_refill : Instant,
   }
 
   /// Rate limiter metrics
   #[ derive( Debug, Clone ) ]
   pub struct RateLimiterMetrics
   {
-    requests_allowed: u64,
-    requests_blocked: u64,
-    total_tokens_consumed: u64,
+    requests_allowed : u64,
+    requests_blocked : u64,
+    total_tokens_consumed : u64,
     #[ allow( dead_code ) ]
-    start_time: Option< Instant >,
+    start_time : Option< Instant >,
   }
 
   impl RateLimiterMetrics
@@ -198,29 +198,29 @@ mod private
   #[ derive( Debug, Clone ) ]
   pub struct RateLimiter
   {
-    config: RateLimiterConfig,
+    config : RateLimiterConfig,
     #[ allow( dead_code ) ]
-    state: Arc< Mutex< RateLimiterState > >,
-    metrics: Arc< Mutex< RateLimiterMetrics > >,
+    state : Arc< Mutex< RateLimiterState > >,
+    metrics : Arc< Mutex< RateLimiterMetrics > >,
   }
 
   impl RateLimiter
   {
     /// Create a new rate limiter
-    pub fn new( config: RateLimiterConfig ) -> Self
+    pub fn new( config : RateLimiterConfig ) -> Self
     {
       let now = Instant::now();
       Self {
         config,
-        state: Arc::new( Mutex::new( RateLimiterState {
-          tokens: f64::from(config.initial_tokens),
-          last_refill: now,
+        state : Arc::new( Mutex::new( RateLimiterState {
+          tokens : f64::from(config.initial_tokens),
+          last_refill : now,
         } ) ),
-        metrics: Arc::new( Mutex::new( RateLimiterMetrics {
-          start_time: Some( now ),
-          requests_allowed: 0,
-          requests_blocked: 0,
-          total_tokens_consumed: 0,
+        metrics : Arc::new( Mutex::new( RateLimiterMetrics {
+          start_time : Some( now ),
+          requests_allowed : 0,
+          requests_blocked : 0,
+          total_tokens_consumed : 0,
         } ) ),
       }
     }
@@ -244,7 +244,7 @@ mod private
     /// # Panics
     ///
     /// Panics if the internal mutex is poisoned
-    pub fn can_make_request( &self, tokens: u32 ) -> bool
+    pub fn can_make_request( &self, tokens : u32 ) -> bool
     {
       let state = self.state.lock().unwrap();
       if tokens == 0
@@ -260,7 +260,7 @@ mod private
     /// # Panics
     ///
     /// Panics if the internal mutex is poisoned
-    pub fn try_consume( &self, tokens: u32 ) -> bool
+    pub fn try_consume( &self, tokens : u32 ) -> bool
     {
       let mut state = self.state.lock().unwrap();
       if state.tokens > 0.0
@@ -310,7 +310,7 @@ mod private
     /// # Panics
     ///
     /// Panics if the internal mutex is poisoned
-    pub fn time_until_tokens_available( &self, tokens: u32 ) -> Duration
+    pub fn time_until_tokens_available( &self, tokens : u32 ) -> Duration
     {
       let state = self.state.lock().unwrap();
 
@@ -326,7 +326,7 @@ mod private
     }
 
     /// Wait for tokens with explicit timeout and check interval
-    pub fn wait_for_tokens_with_config( &self, tokens: u32, timeout: Duration, check_interval: Duration ) -> bool
+    pub fn wait_for_tokens_with_config( &self, tokens : u32, timeout : Duration, check_interval : Duration ) -> bool
     {
       let start = Instant::now();
 
@@ -343,14 +343,14 @@ mod private
         }
 
         // Sleep for the specified interval before checking again
-        std::thread::sleep( check_interval );
+        std ::thread::sleep( check_interval );
       }
     }
 
     /// Wait for tokens with optional timeout (compatibility wrapper)
     ///
     /// NOTE: This is a compatibility wrapper with sensible defaults. For explicit control, use `wait_for_tokens_with_config()`
-    pub fn wait_for_tokens( &self, tokens: u32, timeout: Option< Duration > ) -> bool
+    pub fn wait_for_tokens( &self, tokens : u32, timeout : Option< Duration > ) -> bool
     {
       // Compatibility wrapper with sensible defaults
       let actual_timeout = timeout.unwrap_or( Duration::from_secs( 60 ) ); // Default 60 second timeout
@@ -362,14 +362,14 @@ mod private
     #[ allow(clippy::too_many_arguments) ]
     pub fn calculate_request_cost_with_config(
       &self,
-      request: &CreateMessageRequest,
-      base_cost: u32,
-      max_tokens_divisor: Option< f64 >,
-      message_cost_per_count: Option< u32 >,
-      system_prompt_divisor: Option< f64 >,
-      content_length_divisor: Option< f64 >,
-      non_text_content_cost: Option< u32 >,
-      minimum_cost: Option< u32 >,
+      request : &CreateMessageRequest,
+      base_cost : u32,
+      max_tokens_divisor : Option< f64 >,
+      message_cost_per_count : Option< u32 >,
+      system_prompt_divisor : Option< f64 >,
+      content_length_divisor : Option< f64 >,
+      non_text_content_cost : Option< u32 >,
+      minimum_cost : Option< u32 >,
     ) -> u32
     {
       let mut cost = base_cost;
@@ -408,7 +408,7 @@ mod private
           {
             let content_cost = match content
             {
-              crate::messages::Content::Text { text, .. } => {
+              crate ::messages::Content::Text { text, .. } => {
                 if let Some( divisor ) = content_length_divisor
                 {
                   #[ allow( clippy::cast_possible_truncation, clippy::cast_sign_loss ) ]
@@ -435,18 +435,18 @@ mod private
     /// Calculate request cost in tokens (compatibility wrapper)
     ///
     /// NOTE: This is a compatibility wrapper with sensible defaults. For explicit control, use `calculate_request_cost_with_config()`
-    pub fn calculate_request_cost( &self, request: &CreateMessageRequest ) -> u32
+    pub fn calculate_request_cost( &self, request : &CreateMessageRequest ) -> u32
     {
       // Compatibility wrapper with the original magic numbers as explicit values
       self.calculate_request_cost_with_config(
         request,
-        1,              // base_cost: 1 token base cost
-        Some( 1000.0 ), // max_tokens_divisor: divide max_tokens by 1000
-        Some( 1 ),      // message_cost_per_count: 1 token per message
-        Some( 100.0 ),  // system_prompt_divisor: divide length by 100
-        Some( 100.0 ),  // content_length_divisor: divide length by 100
-        Some( 50 ),     // non_text_content_cost: 50 tokens for non-text
-        Some( 1 ),      // minimum_cost: minimum 1 token
+        1,              // base_cost : 1 token base cost
+        Some( 1000.0 ), // max_tokens_divisor : divide max_tokens by 1000
+        Some( 1 ),      // message_cost_per_count : 1 token per message
+        Some( 100.0 ),  // system_prompt_divisor : divide length by 100
+        Some( 100.0 ),  // content_length_divisor : divide length by 100
+        Some( 50 ),     // non_text_content_cost : 50 tokens for non-text
+        Some( 1 ),      // minimum_cost : minimum 1 token
       )
     }
 
@@ -488,7 +488,7 @@ mod private
     ///
     /// Returns an error if the state string cannot be parsed or contains invalid data
     #[ allow( clippy::cast_possible_truncation, clippy::cast_sign_loss ) ]
-    pub fn from_state( config: RateLimiterConfig, state_str: &str ) -> Result< Self, String >
+    pub fn from_state( config : RateLimiterConfig, state_str : &str ) -> Result< Self, String >
     {
       if state_str.is_empty() || state_str == "{}"
       {
@@ -507,21 +507,21 @@ mod private
 
       Ok( Self {
         config,
-        state: Arc::new( Mutex::new( RateLimiterState {
+        state : Arc::new( Mutex::new( RateLimiterState {
           tokens,
           last_refill,
         } ) ),
-        metrics: Arc::new( Mutex::new( RateLimiterMetrics {
+        metrics : Arc::new( Mutex::new( RateLimiterMetrics {
           requests_allowed,
           requests_blocked,
           total_tokens_consumed,
-          start_time: Some( now ),
+          start_time : Some( now ),
         } ) ),
       } )
     }
 
     /// Extract a numeric field from JSON-like string
-    fn extract_json_field( json: &str, field: &str ) -> Result< f64, String >
+    fn extract_json_field( json : &str, field : &str ) -> Result< f64, String >
     {
       let pattern = format!( "\"{field}\":" );
       if let Some( start ) = json.find( &pattern )
@@ -531,7 +531,7 @@ mod private
         if let Some( end ) = end
         {
           let value_str = &json[ start..start + end ];
-          value_str.parse::<f64>().map_err( |_| format!( "Failed to parse {field} field" ) )
+          value_str.parse::< f64 >().map_err( |_| format!( "Failed to parse {field} field" ) )
         } else {
           Err( format!( "Could not find end of {field} field" ) )
         }
@@ -551,10 +551,10 @@ mod private
   #[ derive( Debug, Clone ) ]
   pub struct AdaptiveRateLimiterConfig
   {
-    base_tokens_per_second: f64,
-    max_tokens_per_second: f64,
-    min_tokens_per_second: f64,
-    adjustment_factor: f64,
+    base_tokens_per_second : f64,
+    max_tokens_per_second : f64,
+    min_tokens_per_second : f64,
+    adjustment_factor : f64,
   }
 
   impl Default for AdaptiveRateLimiterConfig 
@@ -575,7 +575,7 @@ mod private
     /// * `max_tokens_per_second` - Maximum rate limit
     /// * `min_tokens_per_second` - Minimum rate limit
     /// * `adjustment_factor` - Factor for rate adjustments (must be > 0.0 and < 1.0)
-    pub fn with_explicit_config( base_tokens_per_second: f64, max_tokens_per_second: f64, min_tokens_per_second: f64, adjustment_factor: f64 ) -> Self
+    pub fn with_explicit_config( base_tokens_per_second : f64, max_tokens_per_second : f64, min_tokens_per_second : f64, adjustment_factor : f64 ) -> Self
     {
       Self {
         base_tokens_per_second,
@@ -592,16 +592,16 @@ mod private
     {
       // Compatibility wrapper with sensible defaults for adaptive rate limiting
       Self::with_explicit_config(
-        10.0, // base_tokens_per_second: start at 10 TPS
-        50.0, // max_tokens_per_second: max 50 TPS
-        1.0,  // min_tokens_per_second: min 1 TPS
-        0.1,  // adjustment_factor: 10% adjustments
+        10.0, // base_tokens_per_second : start at 10 TPS
+        50.0, // max_tokens_per_second : max 50 TPS
+        1.0,  // min_tokens_per_second : min 1 TPS
+        0.1,  // adjustment_factor : 10% adjustments
       )
     }
 
     /// Set base tokens per second
     #[ must_use ]
-    pub fn with_base_tokens_per_second( mut self, rate: f64 ) -> Self
+    pub fn with_base_tokens_per_second( mut self, rate : f64 ) -> Self
     {
       self.base_tokens_per_second = rate;
       self
@@ -609,7 +609,7 @@ mod private
 
     /// Set maximum tokens per second
     #[ must_use ]
-    pub fn with_max_tokens_per_second( mut self, rate: f64 ) -> Self
+    pub fn with_max_tokens_per_second( mut self, rate : f64 ) -> Self
     {
       self.max_tokens_per_second = rate;
       self
@@ -617,7 +617,7 @@ mod private
 
     /// Set minimum tokens per second
     #[ must_use ]
-    pub fn with_min_tokens_per_second( mut self, rate: f64 ) -> Self
+    pub fn with_min_tokens_per_second( mut self, rate : f64 ) -> Self
     {
       self.min_tokens_per_second = rate;
       self
@@ -625,7 +625,7 @@ mod private
 
     /// Set adjustment factor
     #[ must_use ]
-    pub fn with_adjustment_factor( mut self, factor: f64 ) -> Self
+    pub fn with_adjustment_factor( mut self, factor : f64 ) -> Self
     {
       self.adjustment_factor = factor;
       self
@@ -637,20 +637,20 @@ mod private
   pub struct AdaptiveRateLimiter
   {
     #[ allow( dead_code ) ]
-    config: AdaptiveRateLimiterConfig,
+    config : AdaptiveRateLimiterConfig,
     #[ allow( dead_code ) ]
-    current_rate: Arc< Mutex< f64 > >,
+    current_rate : Arc< Mutex< f64 > >,
   }
 
   impl AdaptiveRateLimiter
   {
     /// Create new adaptive rate limiter
-    pub fn new( config: AdaptiveRateLimiterConfig ) -> Self
+    pub fn new( config : AdaptiveRateLimiterConfig ) -> Self
     {
       let current_rate = config.base_tokens_per_second;
       Self {
         config,
-        current_rate: Arc::new( Mutex::new( current_rate ) ),
+        current_rate : Arc::new( Mutex::new( current_rate ) ),
       }
     }
 
@@ -670,7 +670,7 @@ mod private
     /// # Panics
     ///
     /// Panics if the internal mutex is poisoned
-    pub fn record_success_with_config( &self, increase_factor: f64 )
+    pub fn record_success_with_config( &self, increase_factor : f64 )
     {
       let mut current_rate = self.current_rate.lock().unwrap();
       let new_rate = *current_rate * ( 1.0 + increase_factor );
@@ -682,7 +682,7 @@ mod private
     /// # Panics
     ///
     /// Panics if the internal mutex is poisoned
-    pub fn record_rate_limit_hit_with_config( &self, decrease_factor: f64 )
+    pub fn record_rate_limit_hit_with_config( &self, decrease_factor : f64 )
     {
       let mut current_rate = self.current_rate.lock().unwrap();
       let new_rate = *current_rate * ( 1.0 - decrease_factor );
@@ -694,7 +694,7 @@ mod private
     /// # Panics
     ///
     /// Panics if the internal mutex is poisoned
-    pub fn record_error_with_config( &self, decrease_factor: f64 )
+    pub fn record_error_with_config( &self, decrease_factor : f64 )
     {
       let mut current_rate = self.current_rate.lock().unwrap();
       let new_rate = *current_rate * ( 1.0 - decrease_factor );
@@ -731,7 +731,7 @@ mod private
 }
 
 #[ cfg( feature = "rate-limiting" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {
@@ -744,7 +744,7 @@ crate::mod_interface!
 }
 
 #[ cfg( not( feature = "rate-limiting" ) ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   // Empty when rate-limiting feature is disabled
 }

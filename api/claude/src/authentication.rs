@@ -781,7 +781,7 @@ mod private
         if api_key.len() < min
         {
           return Err( AnthropicError::Authentication(
-            AuthenticationError::new( format!( "Enhanced validation failed: API key must be at least {min} characters long" ) )
+            AuthenticationError::new( format!( "Enhanced validation failed : API key must be at least {min} characters long" ) )
           ));
         }
       }
@@ -791,7 +791,7 @@ mod private
         if api_key.len() > max
         {
           return Err( AnthropicError::Authentication(
-            AuthenticationError::new( format!( "Enhanced validation failed: API key must be at most {max} characters long" ) )
+            AuthenticationError::new( format!( "Enhanced validation failed : API key must be at most {max} characters long" ) )
           ));
         }
       }
@@ -843,14 +843,14 @@ mod private
       // If no environment variables found, return an error
       let env_list = env_vars.join( "," );
       Err( AnthropicError::MissingEnvironment( 
-        format!( "No API key found in environment variables: {env_list}" )
+        format!( "No API key found in environment variables : {env_list}" )
       ))
     }
   }
 }
 
 #[ cfg( feature = "authentication" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {
@@ -868,7 +868,7 @@ crate::mod_interface!
 }
 
 #[ cfg( not( feature = "authentication" ) ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   // Empty when authentication feature is disabled
 }

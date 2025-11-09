@@ -9,7 +9,7 @@ mod private
   use serde::{ Serialize, Deserialize };
   use serde_json::Value; // Needed for BatchRequestOutput body
 
-  // Note: Many structs here are duplicates from administration_shared.rs
+  // Note : Many structs here are duplicates from administration_shared.rs
   // In a real implementation, these would likely be defined in a common place
   // (like common.rs or a dedicated admin.rs) and reused.
   // For this exercise, I'm keeping them separate as generated.
@@ -463,13 +463,13 @@ mod private
   pub struct BatchErrorData
   {
       /// An error code identifying the error type.
-      pub code: Option< String >,
+      pub code : Option< String >,
       /// A human-readable message providing more details about the error.
-      pub message: Option< String >,
+      pub message : Option< String >,
       /// The name of the parameter that caused the error, if applicable.
-      pub param: Option< String >,
+      pub param : Option< String >,
       /// The line number of the input file where the error occurred, if applicable.
-      pub line: Option< i64 >,
+      pub line : Option< i64 >,
   }
 
   /// Represents the list of errors for a Batch job.
@@ -480,9 +480,9 @@ mod private
   pub struct BatchErrors
   {
       /// The object type, which is always `list`.
-      pub object: Option< String >,
+      pub object : Option< String >,
       /// List of error data objects.
-      pub data: Option< Vec< BatchErrorData > >,
+      pub data : Option< Vec< BatchErrorData > >,
   }
 
   /// Represents the request counts for different statuses within a batch job.
@@ -493,11 +493,11 @@ mod private
   pub struct BatchRequestCounts
   {
       /// Total number of requests in the batch.
-      pub total: i64,
+      pub total : i64,
       /// Number of requests that have been completed successfully.
-      pub completed: i64,
+      pub completed : i64,
       /// Number of requests that have failed.
-      pub failed: i64,
+      pub failed : i64,
   }
 
   /// Represents a Batch job object.
@@ -510,58 +510,58 @@ mod private
   pub struct Batch
   {
       /// Batch job ID.
-      pub id: String,
+      pub id : String,
       /// The object type, always `batch`.
-      pub object: String,
+      pub object : String,
       /// The `OpenAI` API endpoint used by the batch.
-      pub endpoint: String,
+      pub endpoint : String,
       /// Errors associated with the batch job.
       #[ serde( skip_serializing_if = "Option::is_none" ) ]
-      pub errors: Option< BatchErrors >,
+      pub errors : Option< BatchErrors >,
       /// The ID of the input file for the batch.
-      pub input_file_id: String,
+      pub input_file_id : String,
       /// The time frame within which the batch should be processed (e.g., "24h").
-      pub completion_window: String,
+      pub completion_window : String,
       /// The current status of the batch.
-      pub status: String, // Enum: validating, failed, in_progress, finalizing, completed, expired, cancelling, cancelled
+      pub status : String, // Enum : validating, failed, in_progress, finalizing, completed, expired, cancelling, cancelled
       /// The ID of the file containing the outputs of successfully executed requests.
       #[ serde( skip_serializing_if = "Option::is_none" ) ]
-      pub output_file_id: Option< String >,
+      pub output_file_id : Option< String >,
       /// The ID of the file containing the outputs of requests with errors.
       #[ serde( skip_serializing_if = "Option::is_none" ) ]
-      pub error_file_id: Option< String >,
+      pub error_file_id : Option< String >,
       /// Creation timestamp.
-      pub created_at: i64,
+      pub created_at : i64,
       /// Timestamp when processing started.
       #[ serde( skip_serializing_if = "Option::is_none" ) ]
-      pub in_progress_at: Option< i64 >,
+      pub in_progress_at : Option< i64 >,
       /// Expiration timestamp.
       #[ serde( skip_serializing_if = "Option::is_none" ) ]
-      pub expires_at: Option< i64 >,
+      pub expires_at : Option< i64 >,
       /// Timestamp when finalization started.
       #[ serde( skip_serializing_if = "Option::is_none" ) ]
-      pub finalizing_at: Option< i64 >,
+      pub finalizing_at : Option< i64 >,
       /// Completion timestamp.
       #[ serde( skip_serializing_if = "Option::is_none" ) ]
-      pub completed_at: Option< i64 >,
+      pub completed_at : Option< i64 >,
       /// Failure timestamp.
       #[ serde( skip_serializing_if = "Option::is_none" ) ]
-      pub failed_at: Option< i64 >,
+      pub failed_at : Option< i64 >,
       /// Timestamp when the batch expired.
       #[ serde( skip_serializing_if = "Option::is_none" ) ]
-      pub expired_at: Option< i64 >,
+      pub expired_at : Option< i64 >,
       /// Timestamp when cancellation started.
       #[ serde( skip_serializing_if = "Option::is_none" ) ]
-      pub cancelling_at: Option< i64 >,
+      pub cancelling_at : Option< i64 >,
       /// Timestamp when the batch was cancelled.
       #[ serde( skip_serializing_if = "Option::is_none" ) ]
-      pub cancelled_at: Option< i64 >,
+      pub cancelled_at : Option< i64 >,
       /// Request counts for different statuses within the batch.
       #[ serde( skip_serializing_if = "Option::is_none" ) ]
-      pub request_counts: Option< BatchRequestCounts >,
+      pub request_counts : Option< BatchRequestCounts >,
       /// Metadata associated with the batch.
       #[ serde( skip_serializing_if = "Option::is_none" ) ]
-      pub metadata: Option< Metadata >,
+      pub metadata : Option< Metadata >,
   }
 
   /// Response containing a list of Batch jobs.
@@ -572,15 +572,15 @@ mod private
   pub struct ListBatchesResponse
   {
       /// List of Batch objects.
-      pub data: Vec< Batch >,
+      pub data : Vec< Batch >,
       /// ID of the first batch in the list.
-      pub first_id: Option< String >,
+      pub first_id : Option< String >,
       /// ID of the last batch in the list.
-      pub last_id: Option< String >,
+      pub last_id : Option< String >,
       /// Indicates if more batches are available.
-      pub has_more: bool,
+      pub has_more : bool,
       /// Object type, always "list".
-      pub object: String,
+      pub object : String,
   }
 
   /// Represents the input structure for a single request within a batch file (JSONL format).
@@ -592,14 +592,14 @@ mod private
   {
       /// A developer-provided per-request id used to match outputs to inputs. Must be unique per batch.
       #[ serde( skip_serializing_if = "Option::is_none" ) ]
-      pub custom_id: Option< String >,
+      pub custom_id : Option< String >,
       /// The HTTP method (currently only "POST").
       #[ serde( skip_serializing_if = "Option::is_none" ) ]
-      pub method: Option< String >,
+      pub method : Option< String >,
       /// The `OpenAI` API relative URL (e.g., "/v1/chat/completions").
       #[ serde( skip_serializing_if = "Option::is_none" ) ]
-      pub url: Option< String >,
-      // Note: The 'body' field containing the actual request payload (e.g., CreateChatCompletionRequest)
+      pub url : Option< String >,
+      // Note : The 'body' field containing the actual request payload (e.g., CreateChatCompletionRequest)
       // is handled dynamically during batch file creation/parsing, typically using serde_json::Value.
       // It's not explicitly defined with a concrete type here to maintain flexibility.
   }
@@ -613,13 +613,13 @@ mod private
   {
       /// The HTTP status code of the response.
       #[ serde( skip_serializing_if = "Option::is_none" ) ]
-      pub status_code: Option< i32 >,
+      pub status_code : Option< i32 >,
       /// The unique `OpenAI` request ID.
       #[ serde( skip_serializing_if = "Option::is_none" ) ]
-      pub request_id: Option< String >,
+      pub request_id : Option< String >,
       /// The JSON body of the response. Type depends on the endpoint called.
       #[ serde( skip_serializing_if = "Option::is_none" ) ]
-      pub body: Option< Value >,
+      pub body : Option< Value >,
   }
 
   /// Represents error details for a failed request within a batch output file.
@@ -631,10 +631,10 @@ mod private
   {
       /// A machine-readable error code.
       #[ serde( skip_serializing_if = "Option::is_none" ) ]
-      pub code: Option< String >,
+      pub code : Option< String >,
       /// A human-readable error message.
       #[ serde( skip_serializing_if = "Option::is_none" ) ]
-      pub message: Option< String >,
+      pub message : Option< String >,
   }
 
   /// Represents the output structure for a single request within a batch output/error file (JSONL format).
@@ -646,23 +646,23 @@ mod private
   {
       /// The unique ID of the batch request.
       #[ serde( skip_serializing_if = "Option::is_none" ) ]
-      pub id: Option< String >,
+      pub id : Option< String >,
       /// The developer-provided custom ID corresponding to the input request.
       #[ serde( skip_serializing_if = "Option::is_none" ) ]
-      pub custom_id: Option< String >,
+      pub custom_id : Option< String >,
       /// The response object if the request was successful.
       #[ serde( skip_serializing_if = "Option::is_none" ) ]
-      pub response: Option< BatchRequestOutputResponse >,
+      pub response : Option< BatchRequestOutputResponse >,
       /// The error object if the request failed.
       #[ serde( skip_serializing_if = "Option::is_none" ) ]
-      pub error: Option< BatchRequestOutputError >,
+      pub error : Option< BatchRequestOutputError >,
   }
 
 } // end mod private
 
-crate::mod_interface!
+crate ::mod_interface!
 {
-  // Note: Re-exporting admin types again here, ideally they'd be in a common admin module.
+  // Note : Re-exporting admin types again here, ideally they'd be in a common admin module.
   // qqq : rid of duplications
   exposed use 
   {

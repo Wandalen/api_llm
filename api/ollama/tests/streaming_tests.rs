@@ -37,31 +37,31 @@ use futures_util::StreamExt;
 #[ ignore = "Integration test disabled - requires stable server infrastructure" ]
 async fn test_streaming_chat_basic()
 {
-  with_test_server!(|mut client: OllamaClient, model: String| async move {
+  with_test_server!(|mut client : OllamaClient, model : String| async move {
     let request = ChatRequest
     {
       model,
-      messages: vec![
+      messages : vec![
         ChatMessage
         {
-          role: MessageRole::User,
-          content: "Count from 1 to 3, one number per response.".to_string(),
-          images: None,
+          role : MessageRole::User,
+          content : "Count from 1 to 3, one number per response.".to_string(),
+          images : None,
           #[ cfg( feature = "tool_calling" ) ]
-          tool_calls: None,
+          tool_calls : None,
         }
       ],
-      stream: None, // This will be set to true by the streaming method
-      options: None,
+      stream : None, // This will be set to true by the streaming method
+      options : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tools: None,
+      tools : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tool_messages: None,
+      tool_messages : None,
     };
     
     // Fix(issue-silent-failure-001): Fail loudly when server unavailable
-    // Root cause: Silent skip with println+return created false positive test results
-    // Pitfall: Integration tests MUST fail loudly when dependencies unavailable per codebase_hygiene.rulebook.md
+    // Root cause : Silent skip with println+return created false positive test results
+    // Pitfall : Integration tests MUST fail loudly when dependencies unavailable per codebase_hygiene.rulebook.md
     let mut stream = client.chat_stream(request).await
       .expect("Failed to create chat stream - Ollama server must be available for integration tests");
     let mut responses = Vec::new();
@@ -73,7 +73,7 @@ async fn test_streaming_chat_basic()
     {
       response_count += 1;
       
-      assert!(response_result.is_ok(), "Stream response error: {response_result:?}");
+      assert!(response_result.is_ok(), "Stream response error : {response_result:?}");
       let response = response_result.unwrap();
       responses.push(response.clone());
       
@@ -137,7 +137,7 @@ async fn test_streaming_chat_error_handling()
   if let Err( error ) = result
   {
     let error_str = format!( "{error}" );
-    assert!( error_str.contains( "Network error" ), "Expected network error, got: {error_str}" );
+    assert!( error_str.contains( "Network error" ), "Expected network error, got : {error_str}" );
   }
 }
 

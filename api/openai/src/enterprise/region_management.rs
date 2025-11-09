@@ -24,7 +24,7 @@ pub enum Region
 impl core::fmt::Display for Region
 {
   #[ inline ]
-  fn fmt( &self, f: &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result
+  fn fmt( &self, f : &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result
   {
     match self
     {
@@ -42,17 +42,17 @@ impl core::fmt::Display for Region
 pub struct RegionConfig
 {
   /// Primary region for requests
-  pub primary_region: Region,
+  pub primary_region : Region,
   /// Fallback regions in order of preference
-  pub fallback_regions: Vec< Region >,
+  pub fallback_regions : Vec< Region >,
   /// Latency preferences
-  pub latency_preferences: LatencyPreferences,
+  pub latency_preferences : LatencyPreferences,
   /// Compliance requirements
-  pub compliance_requirements: ComplianceRequirements,
+  pub compliance_requirements : ComplianceRequirements,
   /// Enable automatic failover
-  pub enable_automatic_failover: bool,
+  pub enable_automatic_failover : bool,
   /// Health check configuration
-  pub health_check_config: HealthCheckConfig,
+  pub health_check_config : HealthCheckConfig,
 }
 
 /// Latency optimization preferences
@@ -60,13 +60,13 @@ pub struct RegionConfig
 pub struct LatencyPreferences
 {
   /// Maximum acceptable latency in milliseconds
-  pub max_latency_ms: u32,
+  pub max_latency_ms : u32,
   /// Preferred latency in milliseconds
-  pub preferred_latency_ms: u32,
+  pub preferred_latency_ms : u32,
   /// Enable latency-based routing
-  pub enable_latency_routing: bool,
+  pub enable_latency_routing : bool,
   /// Weight factor for latency vs other factors (0.0-1.0)
-  pub latency_weight: f64,
+  pub latency_weight : f64,
 }
 
 /// Data compliance and regulatory requirements
@@ -74,15 +74,15 @@ pub struct LatencyPreferences
 pub struct ComplianceRequirements
 {
   /// Require data residency in specific regions
-  pub data_residency_regions: Vec< Region >,
+  pub data_residency_regions : Vec< Region >,
   /// GDPR compliance required
-  pub gdpr_required: bool,
+  pub gdpr_required : bool,
   /// HIPAA compliance required
-  pub hipaa_required: bool,
+  pub hipaa_required : bool,
   /// SOC 2 compliance required
-  pub soc2_required: bool,
+  pub soc2_required : bool,
   /// Additional compliance standards
-  pub additional_standards: Vec< String >,
+  pub additional_standards : Vec< String >,
 }
 
 /// Health check configuration for regions
@@ -90,15 +90,15 @@ pub struct ComplianceRequirements
 pub struct HealthCheckConfig
 {
   /// Health check interval in seconds
-  pub interval_seconds: u32,
+  pub interval_seconds : u32,
   /// Timeout for health checks in seconds
-  pub timeout_seconds: u32,
+  pub timeout_seconds : u32,
   /// Number of consecutive failures before marking unhealthy
-  pub failure_threshold: u32,
+  pub failure_threshold : u32,
   /// Number of consecutive successes before marking healthy
-  pub success_threshold: u32,
+  pub success_threshold : u32,
   /// Enable detailed health metrics
-  pub enable_detailed_metrics: bool,
+  pub enable_detailed_metrics : bool,
 }
 
 /// Current status of a region
@@ -106,19 +106,19 @@ pub struct HealthCheckConfig
 pub struct RegionStatus
 {
   /// Region identifier
-  pub region: Region,
+  pub region : Region,
   /// Whether region is currently healthy
-  pub is_healthy: bool,
+  pub is_healthy : bool,
   /// Current latency in milliseconds
-  pub latency_ms: Option< u32 >,
+  pub latency_ms : Option< u32 >,
   /// Last health check timestamp
-  pub last_check: u64,
+  pub last_check : u64,
   /// Error rate (0.0-1.0)
-  pub error_rate: f64,
+  pub error_rate : f64,
   /// Current load (0.0-1.0)
-  pub current_load: f64,
+  pub current_load : f64,
   /// Additional status details
-  pub details: String,
+  pub details : String,
 }
 
 /// Comprehensive latency metrics across regions
@@ -126,15 +126,15 @@ pub struct RegionStatus
 pub struct LatencyMetrics
 {
   /// Overall average latency in milliseconds
-  pub avg_latency_ms: f64,
+  pub avg_latency_ms : f64,
   /// Minimum recorded latency
-  pub min_latency_ms: u32,
+  pub min_latency_ms : u32,
   /// Maximum recorded latency
-  pub max_latency_ms: u32,
+  pub max_latency_ms : u32,
   /// Latency percentiles
-  pub percentiles: LatencyPercentiles,
+  pub percentiles : LatencyPercentiles,
   /// Per-region latency breakdown
-  pub region_metrics: Vec< RegionLatencyMetrics >,
+  pub region_metrics : Vec< RegionLatencyMetrics >,
 }
 
 /// Latency percentile measurements
@@ -142,15 +142,15 @@ pub struct LatencyMetrics
 pub struct LatencyPercentiles
 {
   /// 50th percentile (median)
-  pub p50: f64,
+  pub p50 : f64,
   /// 90th percentile
-  pub p90: f64,
+  pub p90 : f64,
   /// 95th percentile
-  pub p95: f64,
+  pub p95 : f64,
   /// 99th percentile
-  pub p99: f64,
+  pub p99 : f64,
   /// 99.9th percentile
-  pub p999: f64,
+  pub p999 : f64,
 }
 
 /// Latency metrics for a specific region
@@ -158,15 +158,15 @@ pub struct LatencyPercentiles
 pub struct RegionLatencyMetrics
 {
   /// Region identifier
-  pub region: Region,
+  pub region : Region,
   /// Average latency for this region
-  pub avg_latency_ms: f64,
+  pub avg_latency_ms : f64,
   /// Request count for this region
-  pub request_count: u64,
+  pub request_count : u64,
   /// Success rate for this region
-  pub success_rate: f64,
+  pub success_rate : f64,
   /// Last updated timestamp
-  pub last_updated: u64,
+  pub last_updated : u64,
 }
 
 impl Default for LatencyPreferences
@@ -176,10 +176,10 @@ impl Default for LatencyPreferences
   {
     Self
     {
-      max_latency_ms: 5000,    // 5 seconds max
-      preferred_latency_ms: 1000, // 1 second preferred
-      enable_latency_routing: true,
-      latency_weight: 0.7,     // 70% weight on latency
+      max_latency_ms : 5000,    // 5 seconds max
+      preferred_latency_ms : 1000, // 1 second preferred
+      enable_latency_routing : true,
+      latency_weight : 0.7,     // 70% weight on latency
     }
   }
 }
@@ -191,11 +191,11 @@ impl Default for ComplianceRequirements
   {
     Self
     {
-      data_residency_regions: Vec::new(),
-      gdpr_required: false,
-      hipaa_required: false,
-      soc2_required: false,
-      additional_standards: Vec::new(),
+      data_residency_regions : Vec::new(),
+      gdpr_required : false,
+      hipaa_required : false,
+      soc2_required : false,
+      additional_standards : Vec::new(),
     }
   }
 }
@@ -207,11 +207,11 @@ impl Default for HealthCheckConfig
   {
     Self
     {
-      interval_seconds: 30,
-      timeout_seconds: 10,
-      failure_threshold: 3,
-      success_threshold: 2,
-      enable_detailed_metrics: true,
+      interval_seconds : 30,
+      timeout_seconds : 10,
+      failure_threshold : 3,
+      success_threshold : 2,
+      enable_detailed_metrics : true,
     }
   }
 }
@@ -223,12 +223,12 @@ impl Default for RegionConfig
   {
     Self
     {
-      primary_region: Region::UsEast1,
-      fallback_regions: vec![ Region::UsWest2, Region::EuropeWest1 ],
-      latency_preferences: LatencyPreferences::default(),
-      compliance_requirements: ComplianceRequirements::default(),
-      enable_automatic_failover: true,
-      health_check_config: HealthCheckConfig::default(),
+      primary_region : Region::UsEast1,
+      fallback_regions : vec![ Region::UsWest2, Region::EuropeWest1 ],
+      latency_preferences : LatencyPreferences::default(),
+      compliance_requirements : ComplianceRequirements::default(),
+      enable_automatic_failover : true,
+      health_check_config : HealthCheckConfig::default(),
     }
   }
 }
@@ -293,7 +293,7 @@ impl RegionConfig
   /// Create new region config with primary region
   #[ must_use ]
   #[ inline ]
-  pub fn with_primary_region( primary_region: Region ) -> Self
+  pub fn with_primary_region( primary_region : Region ) -> Self
   {
     Self
     {
@@ -305,7 +305,7 @@ impl RegionConfig
   /// Add fallback region
   #[ must_use ]
   #[ inline ]
-  pub fn add_fallback_region( mut self, region: Region ) -> Self
+  pub fn add_fallback_region( mut self, region : Region ) -> Self
   {
     if !self.fallback_regions.contains( &region ) && region != self.primary_region
     {
@@ -317,7 +317,7 @@ impl RegionConfig
   /// Set maximum acceptable latency
   #[ must_use ]
   #[ inline ]
-  pub fn with_max_latency( mut self, max_latency_ms: u32 ) -> Self
+  pub fn with_max_latency( mut self, max_latency_ms : u32 ) -> Self
   {
     self.latency_preferences.max_latency_ms = max_latency_ms;
     self
@@ -341,7 +341,7 @@ impl RegionConfig
   /// Add data residency requirement
   #[ must_use ]
   #[ inline ]
-  pub fn with_data_residency( mut self, regions: Vec< Region > ) -> Self
+  pub fn with_data_residency( mut self, regions : Vec< Region > ) -> Self
   {
     self.compliance_requirements.data_residency_regions = regions;
     self
@@ -375,10 +375,10 @@ impl RegionConfig
   /// Select best region based on current metrics
   #[ must_use ]
   #[ inline ]
-  pub fn select_optimal_region( &self, region_statuses: &[ RegionStatus ] ) -> Option< Region >
+  pub fn select_optimal_region( &self, region_statuses : &[ RegionStatus ] ) -> Option< Region >
   {
     let compliant_regions = self.get_compliant_regions();
-    let mut candidate_regions: Vec< _ > = region_statuses.iter()
+    let mut candidate_regions : Vec< _ > = region_statuses.iter()
       .filter( | status | compliant_regions.contains( &status.region ) && status.is_healthy )
       .collect();
 
@@ -399,7 +399,7 @@ impl RegionConfig
   }
 
   /// Calculate score for region selection (higher is better)
-  fn calculate_region_score( &self, status: &RegionStatus ) -> f64
+  fn calculate_region_score( &self, status : &RegionStatus ) -> f64
   {
     let mut score = 0.0;
 
@@ -442,20 +442,20 @@ impl RegionStatus
   /// Panics if the system time is before the Unix epoch.
   #[ must_use ]
   #[ inline ]
-  pub fn healthy( region: Region, latency_ms: u32 ) -> Self
+  pub fn healthy( region : Region, latency_ms : u32 ) -> Self
   {
     Self
     {
       region,
-      is_healthy: true,
-      latency_ms: Some( latency_ms ),
-      last_check: std::time::SystemTime::now()
+      is_healthy : true,
+      latency_ms : Some( latency_ms ),
+      last_check : std::time::SystemTime::now()
         .duration_since( std::time::UNIX_EPOCH )
         .unwrap()
         .as_secs(),
-      error_rate: 0.0,
-      current_load: 0.5, // Moderate load
-      details: "Healthy".to_string(),
+      error_rate : 0.0,
+      current_load : 0.5, // Moderate load
+      details : "Healthy".to_string(),
     }
   }
 
@@ -465,20 +465,20 @@ impl RegionStatus
   /// Panics if the system time is before the Unix epoch.
   #[ must_use ]
   #[ inline ]
-  pub fn unhealthy( region: Region, reason: String ) -> Self
+  pub fn unhealthy( region : Region, reason : String ) -> Self
   {
     Self
     {
       region,
-      is_healthy: false,
-      latency_ms: None,
-      last_check: std::time::SystemTime::now()
+      is_healthy : false,
+      latency_ms : None,
+      last_check : std::time::SystemTime::now()
         .duration_since( std::time::UNIX_EPOCH )
         .unwrap()
         .as_secs(),
-      error_rate: 1.0,
-      current_load: 0.0,
-      details: reason,
+      error_rate : 1.0,
+      current_load : 0.0,
+      details : reason,
     }
   }
 }

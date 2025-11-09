@@ -2,7 +2,7 @@
 use super::*;
 use super::test_data_factories::*;
 use super::test_data_factories::{ constants, scenarios };
-// Corrected import path: Use api::responses for the main request/response types if they are re-exported there,
+// Corrected import path : Use api::responses for the main request/response types if they are re-exported there,
 // otherwise import directly from components. Since CreateResponseRequest is defined in components::responses,
 // we import it from there. Other types like ResponseInput, InputItem, etc. are also in components.
 use api_openai::exposed::components::responses::{ CreateResponseRequest, ResponseInput };
@@ -57,7 +57,7 @@ fn create_request_simple_string_input()
 fn create_request_with_optional_params()
 {
   let request = CreateResponseRequestFactory::with_optional_params(
-    constants::DEFAULT_MODEL_MINI,
+    constants ::DEFAULT_MODEL_MINI,
     "Write a poem.",
     Some( constants::DEFAULT_TEMPERATURE ),
     Some( constants::DEFAULT_TOP_P ),
@@ -85,7 +85,7 @@ fn create_request_item_input()
   let request = CreateResponseRequestFactory::with_message_items( constants::DEFAULT_MODEL, vec![ message ] );
 
   let json_result = serde_json::to_string_pretty( &request );
-  assert!( json_result.is_ok(), "Serialization failed: {:?}", json_result.err() );
+  assert!( json_result.is_ok(), "Serialization failed : {:?}", json_result.err() );
   let json_string = json_result.unwrap();
 
   // Check for required fields instead of exact JSON match to handle field order and extra fields
@@ -101,13 +101,13 @@ fn create_request_item_input()
 fn create_request_with_metadata()
 {
   let request = CreateResponseRequestFactory::with_metadata(
-    constants::DEFAULT_MODEL,
+    constants ::DEFAULT_MODEL,
     "Hello with metadata!",
     vec![ ( "user_id", "abc-123" ), ( "session_id", "xyz-789" ) ]
   );
 
   let json_result = serde_json::to_string_pretty( &request );
-  assert!( json_result.is_ok(), "Serialization failed: {:?}", json_result.err() );
+  assert!( json_result.is_ok(), "Serialization failed : {:?}", json_result.err() );
   let json_string = json_result.unwrap();
 
   println!( "Serialized JSON with Metadata:\n{json_string}" );
@@ -128,7 +128,7 @@ fn create_request_multiple_messages()
   let request = scenarios::multi_turn_conversation();
 
   let json_result = serde_json::to_string_pretty( &request );
-  assert!( json_result.is_ok(), "Serialization failed: {:?}", json_result.err() );
+  assert!( json_result.is_ok(), "Serialization failed : {:?}", json_result.err() );
   let json_string = json_result.unwrap();
 
   println!( "Serialized JSON with Multiple Messages:\n{json_string}" );
@@ -159,7 +159,7 @@ fn create_request_with_file_search_tool()
   let request = scenarios::file_search( "Search my files for info on project X." );
 
   let json_result = serde_json::to_string_pretty( &request );
-  assert!( json_result.is_ok(), "Serialization failed: {:?}", json_result.err() );
+  assert!( json_result.is_ok(), "Serialization failed : {:?}", json_result.err() );
   let json_string = json_result.unwrap();
 
   println!( "Serialized JSON with File Search Tool:\n{json_string}" );
@@ -169,7 +169,7 @@ fn create_request_with_file_search_tool()
   assert!( json_string.contains( r#""tools": ["# ) );
   assert!( json_string.contains( r#""type": "file_search""# ) );
   assert!( json_string.contains( r#""tool_choice": "auto""# ) );
-  // Note: FileSearchTool uses default() so specific parameters are not tested
+  // Note : FileSearchTool uses default() so specific parameters are not tested
 }
 
 /// Tests serialization of `CreateResponseRequest` including a web search tool.
@@ -179,7 +179,7 @@ fn create_request_with_web_search_tool()
   let request = scenarios::web_search( "What's the latest news?" );
 
   let json_result = serde_json::to_string_pretty( &request );
-  assert!( json_result.is_ok(), "Serialization failed: {:?}", json_result.err() );
+  assert!( json_result.is_ok(), "Serialization failed : {:?}", json_result.err() );
   let json_string = json_result.unwrap();
 
   println!( "Serialized JSON with Web Search Tool:\n{json_string}" );
@@ -199,7 +199,7 @@ fn create_request_with_computer_tool()
   let request = scenarios::computer_use( "Open the calculator app." );
 
   let json_result = serde_json::to_string_pretty( &request );
-  assert!( json_result.is_ok(), "Serialization failed: {:?}", json_result.err() );
+  assert!( json_result.is_ok(), "Serialization failed : {:?}", json_result.err() );
   let json_string = json_result.unwrap();
 
   println!( "Serialized JSON with Computer Use Tool:\n{json_string}" );
@@ -223,7 +223,7 @@ fn create_request_tool_choice_none()
   let request = CreateResponseRequestFactory::with_tools( constants::DEFAULT_MODEL, "Just chat.", tools, tool_choice );
 
   let json_result = serde_json::to_string_pretty( &request );
-  assert!( json_result.is_ok(), "Serialization failed: {:?}", json_result.err() );
+  assert!( json_result.is_ok(), "Serialization failed : {:?}", json_result.err() );
   let json_string = json_result.unwrap();
 
   println!( "Serialized JSON with tool_choice=none:\n{json_string}" );
@@ -240,7 +240,7 @@ fn create_request_tool_choice_auto()
   let request = CreateResponseRequestFactory::with_tools( constants::DEFAULT_MODEL, "Maybe use a tool?", tools, tool_choice );
 
   let json_result = serde_json::to_string_pretty( &request );
-  assert!( json_result.is_ok(), "Serialization failed: {:?}", json_result.err() );
+  assert!( json_result.is_ok(), "Serialization failed : {:?}", json_result.err() );
   let json_string = json_result.unwrap();
 
   println!( "Serialized JSON with tool_choice=auto:\n{json_string}" );
@@ -257,7 +257,7 @@ fn create_request_tool_choice_required()
   let request = CreateResponseRequestFactory::with_tools( constants::DEFAULT_MODEL, "Must use a tool!", tools, tool_choice );
 
   let json_result = serde_json::to_string_pretty( &request );
-  assert!( json_result.is_ok(), "Serialization failed: {:?}", json_result.err() );
+  assert!( json_result.is_ok(), "Serialization failed : {:?}", json_result.err() );
   let json_string = json_result.unwrap();
 
   println!( "Serialized JSON with tool_choice=required:\n{json_string}" );
@@ -272,7 +272,7 @@ fn create_request_with_image_input()
   let request = scenarios::multimodal_with_image( "What is in this image?" );
 
   let json_result = serde_json::to_string_pretty( &request );
-  assert!( json_result.is_ok(), "Serialization failed: {:?}", json_result.err() );
+  assert!( json_result.is_ok(), "Serialization failed : {:?}", json_result.err() );
   let json_string = json_result.unwrap();
 
   println!( "Serialized JSON with Image Input:\n{json_string}" );

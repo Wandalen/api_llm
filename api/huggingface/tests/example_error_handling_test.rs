@@ -74,7 +74,7 @@ fn test_no_expect_for_env_vars()
       // Check for std::env::var().expect() pattern
       if content.contains( "std::env::var" ) && content.contains( ".expect(" )
       {
-  // More precise check: look for env::var followed by expect
+  // More precise check : look for env::var followed by expect
   let lines : Vec< &str > = content.lines().collect();
   for ( i, line ) in lines.iter().enumerate()
   {
@@ -133,7 +133,7 @@ fn test_examples_return_result()
       if !has_result_return
       {
   violations.push( format!(
-          "{filename}: main() should return Result< (), Box< dyn std::error::Error >> for proper error handling"
+          "{filename}: main() should return Result< (), Box< dyn std::error::Error > > for proper error handling"
   ) );
       }
   }
@@ -149,8 +149,8 @@ fn test_examples_return_result()
 /// Test that examples use consistent secret loading patterns
 ///
 /// Valid patterns:
-/// 1. Simple: `Secret::load_from_env("HUGGINGFACE_API_KEY`")?
-/// 2. Advanced: `std::env::var().or_else()` with `workspace_tools` fallback
+/// 1. Simple : `Secret::load_from_env("HUGGINGFACE_API_KEY`")?
+/// 2. Advanced : `std::env::var().or_else()` with `workspace_tools` fallback
 ///
 /// Invalid patterns:
 /// - `std::env::var().unwrap()`
@@ -266,7 +266,7 @@ fn test_no_hardcoded_secrets()
   if content.contains( pattern )
   {
           violations.push( format!(
-      "{filename}: Possible hardcoded secret found (pattern: {pattern})"
+      "{filename}: Possible hardcoded secret found (pattern : {pattern})"
           ) );
   }
       }

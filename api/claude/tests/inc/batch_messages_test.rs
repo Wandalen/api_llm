@@ -58,7 +58,7 @@ mod batch_api_tests
 
     // Valid batch with one request
     let valid_batch = the_module::CreateBatchRequest::new( vec![
-      the_module::BatchRequestItem::new( "req-001".to_string(), message_request.clone() )
+      the_module ::BatchRequestItem::new( "req-001".to_string(), message_request.clone() )
     ] );
     assert!( valid_batch.validate().is_ok() );
 
@@ -68,9 +68,9 @@ mod batch_api_tests
 
     // Batch with multiple valid requests
     let multi_batch = the_module::CreateBatchRequest::new( vec![
-      the_module::BatchRequestItem::new( "req-001".to_string(), message_request.clone() ),
-      the_module::BatchRequestItem::new( "req-002".to_string(), message_request.clone() ),
-      the_module::BatchRequestItem::new( "req-003".to_string(), message_request ),
+      the_module ::BatchRequestItem::new( "req-001".to_string(), message_request.clone() ),
+      the_module ::BatchRequestItem::new( "req-002".to_string(), message_request.clone() ),
+      the_module ::BatchRequestItem::new( "req-003".to_string(), message_request ),
     ] );
     assert!( multi_batch.validate().is_ok() );
   }
@@ -162,7 +162,7 @@ mod batch_api_tests
       .build();
 
     let batch_request = the_module::CreateBatchRequest::new( vec![
-      the_module::BatchRequestItem::new( "req-001".to_string(), message_request )
+      the_module ::BatchRequestItem::new( "req-001".to_string(), message_request )
     ] );
 
     let json = serde_json::to_string( &batch_request ).unwrap();
@@ -173,6 +173,7 @@ mod batch_api_tests
 
   #[ cfg( feature = "integration" ) ]
   #[ tokio::test ]
+  #[ ignore = "Requires workspace secrets file" ]
   async fn integration_batch_create_and_retrieve()
   {
     // This test requires real API credentials
@@ -193,8 +194,8 @@ mod batch_api_tests
       .build();
 
     let batch_request = the_module::CreateBatchRequest::new( vec![
-      the_module::BatchRequestItem::new( "math-001".to_string(), message_request1 ),
-      the_module::BatchRequestItem::new( "geography-001".to_string(), message_request2 ),
+      the_module ::BatchRequestItem::new( "math-001".to_string(), message_request1 ),
+      the_module ::BatchRequestItem::new( "geography-001".to_string(), message_request2 ),
     ] );
 
     // Create batch
@@ -213,6 +214,7 @@ mod batch_api_tests
 
   #[ cfg( feature = "integration" ) ]
   #[ tokio::test ]
+  #[ ignore = "Requires workspace secrets file" ]
   async fn integration_batch_list()
   {
     let client = the_module::Client::from_workspace()
@@ -228,6 +230,7 @@ mod batch_api_tests
 
   #[ cfg( feature = "integration" ) ]
   #[ tokio::test ]
+  #[ ignore = "Requires workspace secrets file" ]
   async fn integration_batch_validation_errors()
   {
     let client = the_module::Client::from_workspace()
@@ -241,7 +244,7 @@ mod batch_api_tests
       .build();
 
     let invalid_batch = the_module::CreateBatchRequest::new( vec![
-      the_module::BatchRequestItem::new( String::new(), message_request )
+      the_module ::BatchRequestItem::new( String::new(), message_request )
     ] );
 
     // Should fail validation
@@ -251,6 +254,7 @@ mod batch_api_tests
 
   #[ cfg( feature = "integration" ) ]
   #[ tokio::test ]
+  #[ ignore = "Requires workspace secrets file" ]
   async fn integration_batch_retrieve_invalid_id()
   {
     let client = the_module::Client::from_workspace()

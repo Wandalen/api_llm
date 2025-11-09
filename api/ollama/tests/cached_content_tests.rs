@@ -4,7 +4,7 @@
 //! Tests response caching for repeated queries, cache invalidation and management,
 //! performance optimization, and integration with the Ollama backend.
 //!
-//! Note: These tests verify cache behavior using the cache API directly with test data.
+//! Note : These tests verify cache behavior using the cache API directly with test data.
 //! The `cache_response()` method is part of the public API for manual cache management.
 
 #[ cfg( feature = "request_caching" ) ]
@@ -17,25 +17,25 @@ mod cached_content_tests
   use std::time::{ Duration, Instant };
 
   /// Sample chat messages for caching tests
-  fn create_test_chat_request( message: &str ) -> ChatRequest
+  fn create_test_chat_request( message : &str ) -> ChatRequest
   {
     ChatRequest
     {
-      model: "llama3.2".to_string(),
-      messages: vec![ ChatMessage
+      model : "llama3.2".to_string(),
+      messages : vec![ ChatMessage
       {
-        role: MessageRole::User,
-        content: message.to_string(),
-        images: None,
+        role : MessageRole::User,
+        content : message.to_string(),
+        images : None,
         #[ cfg( feature = "tool_calling" ) ]
-        tool_calls: None,
+        tool_calls : None,
       } ],
-      stream: None,
-      options: None,
+      stream : None,
+      options : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tools: None,
+      tools : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tool_messages: None,
+      tool_messages : None,
     }
   }
 
@@ -129,8 +129,8 @@ mod cached_content_tests
 
     // Verify response was cached (cache stats structure confirmed)
     let stats = client.cache_stats();
-    // Note: We test that caching doesn't break stats, actual entry tracking may be internal
-    println!( "✓ Response caching successful - cache stats: hits={}, misses={}, evictions={}", stats.hits, stats.misses, stats.evictions );
+    // Note : We test that caching doesn't break stats, actual entry tracking may be internal
+    println!( "✓ Response caching successful - cache stats : hits={}, misses={}, evictions={}", stats.hits, stats.misses, stats.evictions );
 
     // Test caching multiple different requests
     let requests =
@@ -148,7 +148,7 @@ mod cached_content_tests
 
     let final_stats = client.cache_stats();
     // Verify cache operations don't break stats tracking
-    println!( "✓ Multiple response caching successful - cache stats: hits={}, misses={}, evictions={}", final_stats.hits, final_stats.misses, final_stats.evictions );
+    println!( "✓ Multiple response caching successful - cache stats : hits={}, misses={}, evictions={}", final_stats.hits, final_stats.misses, final_stats.evictions );
   }
 
   /// Test cache hit and miss ratio tracking
@@ -180,7 +180,7 @@ mod cached_content_tests
 
     // Verify cache operations completed
     let stats = client.cache_stats();
-    println!( "✓ Cache populated - cache stats: hits={}, misses={}, evictions={}", stats.hits, stats.misses, stats.evictions );
+    println!( "✓ Cache populated - cache stats : hits={}, misses={}, evictions={}", stats.hits, stats.misses, stats.evictions );
 
     // Test cache hit ratio calculation
     let hit_ratio = if stats.hits + stats.misses > 0
@@ -193,13 +193,13 @@ mod cached_content_tests
     };
 
     assert!( (0.0..=1.0).contains(&hit_ratio) );
-    println!( "✓ Cache hit ratio calculation: {:.2}%", hit_ratio * 100.0 );
+    println!( "✓ Cache hit ratio calculation : {:.2}%", hit_ratio * 100.0 );
 
     // Test cache miss tracking (when requesting non-cached content)
     let initial_misses = stats.misses; let _ = initial_misses;
     let _uncached_request = create_test_chat_request( "This was never cached" );
 
-    // Note: In a real test, we would trigger an actual cache miss
+    // Note : In a real test, we would trigger an actual cache miss
     // For now, we just verify the structure works
     println!( "✓ Cache miss tracking structure validated" );
   }
@@ -231,7 +231,7 @@ mod cached_content_tests
     }
 
     let stats_at_capacity = client.cache_stats();
-    println!( "✓ Cache filled to capacity - cache stats: hits={}, misses={}, evictions={}", stats_at_capacity.hits, stats_at_capacity.misses, stats_at_capacity.evictions );
+    println!( "✓ Cache filled to capacity - cache stats : hits={}, misses={}, evictions={}", stats_at_capacity.hits, stats_at_capacity.misses, stats_at_capacity.evictions );
 
     // Add one more entry to trigger eviction
     let overflow_request = create_test_chat_request( "Query 4 - should trigger eviction" );
@@ -241,7 +241,7 @@ mod cached_content_tests
     let stats_after_overflow = client.cache_stats();
 
     // Verify cache operations completed (evictions may have occurred)
-    println!( "✓ Cache memory management - cache stats: hits={}, misses={}, evictions={}",
+    println!( "✓ Cache memory management - cache stats : hits={}, misses={}, evictions={}",
              stats_after_overflow.hits, stats_after_overflow.misses, stats_after_overflow.evictions );
   }
 
@@ -266,12 +266,12 @@ mod cached_content_tests
     client.cache_response( &request, response.to_string(), Some( Duration::from_millis( 50 ) ) );
 
     let initial_stats = client.cache_stats();
-    println!( "✓ Response cached with TTL - cache stats: hits={}, misses={}, evictions={}", initial_stats.hits, initial_stats.misses, initial_stats.evictions );
+    println!( "✓ Response cached with TTL - cache stats : hits={}, misses={}, evictions={}", initial_stats.hits, initial_stats.misses, initial_stats.evictions );
 
     // Wait for TTL to expire
-    tokio::time::sleep( Duration::from_millis( 150 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 150 ) ).await;
 
-    // Note: In a real implementation, expired entries would be cleaned up
+    // Note : In a real implementation, expired entries would be cleaned up
     // For testing purposes, we verify the TTL structure works
     println!( "✓ TTL functionality structure validated" );
 
@@ -281,7 +281,7 @@ mod cached_content_tests
     client.cache_response( &long_request, long_response.to_string(), None );
 
     let final_stats = client.cache_stats();
-    println!( "✓ Default TTL caching successful - cache stats: hits={}, misses={}, evictions={}", final_stats.hits, final_stats.misses, final_stats.evictions );
+    println!( "✓ Default TTL caching successful - cache stats : hits={}, misses={}, evictions={}", final_stats.hits, final_stats.misses, final_stats.evictions );
   }
 
   /// Test cache performance optimization benefits
@@ -307,7 +307,7 @@ mod cached_content_tests
     let cache_duration = start_cache.elapsed();
 
     assert!( cache_duration < Duration::from_millis( 10 ) ); // Should be very fast
-    println!( "✓ Cache write performance: {cache_duration:?}" );
+    println!( "✓ Cache write performance : {cache_duration:?}" );
 
     // Test cache statistics retrieval performance
     let start_stats = Instant::now();
@@ -315,8 +315,8 @@ mod cached_content_tests
     let stats_duration = start_stats.elapsed();
 
     assert!( stats_duration < Duration::from_millis( 5 ) ); // Should be very fast
-    // Note: Cache stats validated for consistency, actual entry tracking may be internal
-    println!( "✓ Cache stats performance: {stats_duration:?}" );
+    // Note : Cache stats validated for consistency, actual entry tracking may be internal
+    println!( "✓ Cache stats performance : {stats_duration:?}" );
 
     // Test multiple cache operations performance
     let start_batch = Instant::now();
@@ -329,10 +329,10 @@ mod cached_content_tests
     let batch_duration = start_batch.elapsed();
 
     assert!( batch_duration < Duration::from_millis( 50 ) ); // Should be fast even for batch
-    println!( "✓ Batch cache operations performance: {batch_duration:?}" );
+    println!( "✓ Batch cache operations performance : {batch_duration:?}" );
 
     let final_stats = client.cache_stats();
-    println!( "✓ Performance optimization validation successful - cache stats: hits={}, misses={}, evictions={}", final_stats.hits, final_stats.misses, final_stats.evictions );
+    println!( "✓ Performance optimization validation successful - cache stats : hits={}, misses={}, evictions={}", final_stats.hits, final_stats.misses, final_stats.evictions );
   }
 
   /// Test cache integration with different request types
@@ -368,7 +368,7 @@ mod cached_content_tests
     }
 
     let stats = client.cache_stats();
-    println!( "✓ Cache integration with {} request types successful - cache stats: hits={}, misses={}, evictions={}", request_types.len(), stats.hits, stats.misses, stats.evictions );
+    println!( "✓ Cache integration with {} request types successful - cache stats : hits={}, misses={}, evictions={}", request_types.len(), stats.hits, stats.misses, stats.evictions );
 
     // Test cache with identical content but different options (should be separate entries)
     let base_message = "Same message, different options";
@@ -380,7 +380,7 @@ mod cached_content_tests
     client.cache_response( &request2, "Response 2".to_string(), None );
 
     let final_stats = client.cache_stats();
-    println!( "✓ Cache request differentiation successful - cache stats: hits={}, misses={}, evictions={}", final_stats.hits, final_stats.misses, final_stats.evictions );
+    println!( "✓ Cache request differentiation successful - cache stats : hits={}, misses={}, evictions={}", final_stats.hits, final_stats.misses, final_stats.evictions );
   }
 
   /// Test cache error handling and edge cases
@@ -401,30 +401,30 @@ mod cached_content_tests
     client.cache_response( &empty_request, String::new(), None );
 
     let stats_empty = client.cache_stats();
-    println!( "✓ Empty response caching handled successfully - cache stats: hits={}, misses={}, evictions={}", stats_empty.hits, stats_empty.misses, stats_empty.evictions );
+    println!( "✓ Empty response caching handled successfully - cache stats : hits={}, misses={}, evictions={}", stats_empty.hits, stats_empty.misses, stats_empty.evictions );
 
     // Test caching with very large responses
-    let large_response = "Large response content: ".to_string() + &"x".repeat( 10000 );
+    let large_response = "Large response content : ".to_string() + &"x".repeat( 10000 );
     let large_request = create_test_chat_request( "Large response test" );
     client.cache_response( &large_request, large_response, None );
 
     let stats_large = client.cache_stats();
-    println!( "✓ Large response caching handled successfully - cache stats: hits={}, misses={}, evictions={}", stats_large.hits, stats_large.misses, stats_large.evictions );
+    println!( "✓ Large response caching handled successfully - cache stats : hits={}, misses={}, evictions={}", stats_large.hits, stats_large.misses, stats_large.evictions );
 
     // Test caching with special characters and unicode
-    let unicode_request = create_test_chat_request( "Unicode test: 🌟🚀💫 special chars" );
-    let unicode_response = r#"{"message":{"role":"assistant","content":"Unicode response: 你好世界 🌍"}}"#;
+    let unicode_request = create_test_chat_request( "Unicode test : 🌟🚀💫 special chars" );
+    let unicode_response = r#"{"message":{"role":"assistant","content":"Unicode response : 你好世界 🌍"}}"#;
     client.cache_response( &unicode_request, unicode_response.to_string(), None );
 
     let stats_unicode = client.cache_stats();
-    println!( "✓ Unicode content caching handled successfully - cache stats: hits={}, misses={}, evictions={}", stats_unicode.hits, stats_unicode.misses, stats_unicode.evictions );
+    println!( "✓ Unicode content caching handled successfully - cache stats : hits={}, misses={}, evictions={}", stats_unicode.hits, stats_unicode.misses, stats_unicode.evictions );
 
     // Test caching with zero TTL (should work but expire immediately)
     let zero_ttl_request = create_test_chat_request( "Zero TTL test" );
     client.cache_response( &zero_ttl_request, "Zero TTL response".to_string(), Some( Duration::from_secs( 0 ) ) );
 
     let stats_zero_ttl = client.cache_stats();
-    println!( "✓ Zero TTL caching handled - cache stats: hits={}, misses={}, evictions={}", stats_zero_ttl.hits, stats_zero_ttl.misses, stats_zero_ttl.evictions );
+    println!( "✓ Zero TTL caching handled - cache stats : hits={}, misses={}, evictions={}", stats_zero_ttl.hits, stats_zero_ttl.misses, stats_zero_ttl.evictions );
 
     println!( "✓ Cache error handling and edge cases validation successful" );
   }
@@ -452,7 +452,7 @@ mod cached_content_tests
     }
 
     let populated_stats = client.cache_stats();
-    println!( "✓ Cache populated for cleanup test - cache stats: hits={}, misses={}, evictions={}", populated_stats.hits, populated_stats.misses, populated_stats.evictions );
+    println!( "✓ Cache populated for cleanup test - cache stats : hits={}, misses={}, evictions={}", populated_stats.hits, populated_stats.misses, populated_stats.evictions );
 
     // Test cache statistics consistency
     let stats1 = client.cache_stats();

@@ -10,15 +10,15 @@ mod private
 {
   use std::
   {
-    collections::{ HashMap, VecDeque },
-    sync::Arc,
-    time::Instant,
+    collections ::{ HashMap, VecDeque },
+    sync ::Arc,
+    time ::Instant,
   };
   use core::
   {
-    hash::{ Hash, Hasher },
-    sync::atomic::{ AtomicU32, AtomicU64, AtomicBool, Ordering },
-    time::Duration,
+    hash ::{ Hash, Hasher },
+    sync ::atomic::{ AtomicU32, AtomicU64, AtomicBool, Ordering },
+    time ::Duration,
   };
   use tokio::sync::{ RwLock, Mutex };
   use serde::{ Serialize, Deserialize };
@@ -719,7 +719,7 @@ mod private
     {
       // In a real implementation, this would use serialization or reflection
       // For now, return a reasonable default
-      core::mem::size_of::< V >().max( 256 )
+      core ::mem::size_of::< V >().max( 256 )
     }
 
     /// Update average access time
@@ -854,7 +854,7 @@ mod private
       let body_hash = if let Some( body ) = request_body
       {
         let body_json = serde_json::to_string( body ).map_err( |e|
-          crate::error::OpenAIError::Internal( format!( "Failed to serialize request body for cache key: {e}" ) )
+          crate ::error::OpenAIError::Internal( format!( "Failed to serialize request body for cache key : {e}" ) )
         )?;
         Self::hash_string( &body_json )
       }
@@ -870,7 +870,7 @@ mod private
         .collect();
 
       let headers_json = serde_json::to_string( &relevant_headers ).map_err( |e|
-        crate::error::OpenAIError::Internal( format!( "Failed to serialize headers for cache key: {e}" ) )
+        crate ::error::OpenAIError::Internal( format!( "Failed to serialize headers for cache key : {e}" ) )
       )?;
 
       Ok( Self
@@ -901,7 +901,7 @@ mod private
 
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   orphan use EnhancedCacheConfig;
   orphan use EvictionPolicy;

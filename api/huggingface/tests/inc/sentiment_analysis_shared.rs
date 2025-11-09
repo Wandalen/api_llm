@@ -6,12 +6,12 @@
 use api_huggingface::
 {
   Client,
-  environment::HuggingFaceEnvironmentImpl,
-  components::
+  environment ::HuggingFaceEnvironmentImpl,
+  components ::
   {
-  input::InferenceParameters,
+  input ::InferenceParameters,
   },
-  secret::Secret,
+  secret ::Secret,
 };
 use std::{ collections::HashMap, time::Instant };
 use serde::{ Serialize, Deserialize };
@@ -736,7 +736,7 @@ impl SentimentAnalysisPlatform
   fn build_sentiment_prompt( text : &str ) -> String
   {
   format!(
-      "Analyze the sentiment of the following text and classify it as very positive, positive, neutral, negative, or very negative:\n\nText: {text}\n\nSentiment:"
+      "Analyze the sentiment of the following text and classify it as very positive, positive, neutral, negative, or very negative:\n\nText : {text}\n\nSentiment:"
   )
   }
 
@@ -915,7 +915,7 @@ impl SentimentAnalysisPlatform
 // Helper function to get API key for testing
 fn get_api_key_for_testing() -> Option< String >
 {
-  std::env::var( "HUGGINGFACE_API_KEY" ).ok()
+  std ::env::var( "HUGGINGFACE_API_KEY" ).ok()
 }
 
 // Helper function to create test client

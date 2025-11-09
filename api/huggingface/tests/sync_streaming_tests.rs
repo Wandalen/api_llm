@@ -39,7 +39,7 @@ fn test_sync_stream_basic()
   assert!( !token.is_empty(), "Token should not be empty" );
   token_count += 1;
       }
-      Err( e ) => panic!( "Stream error: {e}" ),
+      Err( e ) => panic!( "Stream error : {e}" ),
   }
   }
 
@@ -103,7 +103,7 @@ fn test_sync_stream_early_termination()
           break;
   }
       }
-      Err( e ) => panic!( "Stream error: {e}" ),
+      Err( e ) => panic!( "Stream error : {e}" ),
   }
   }
 
@@ -246,7 +246,7 @@ fn test_sync_stream_token_accumulation()
   match token_result
   {
       Ok( token ) => full_text.push_str( &token ),
-      Err( e ) => panic!( "Stream error: {e}" ),
+      Err( e ) => panic!( "Stream error : {e}" ),
   }
   }
 
@@ -453,7 +453,7 @@ fn test_sync_stream_utf8_content()
   // Verify its valid UTF-8
   assert!( token.is_ascii() || token.chars().all( | c | c.is_alphabetic() || c.is_whitespace() ) );
       }
-      Err( e ) => panic!( "Stream error: {e}" ),
+      Err( e ) => panic!( "Stream error : {e}" ),
   }
   }
 }
@@ -463,5 +463,5 @@ fn test_sync_stream_type_safety()
 {
   // Compile-time test that SyncStream implements Iterator
   fn _assert_iterator< T : Iterator >() {}
-  _assert_iterator::< api_huggingface::sync::SyncStream >();
+  _assert_iterator ::< api_huggingface::sync::SyncStream >();
 }

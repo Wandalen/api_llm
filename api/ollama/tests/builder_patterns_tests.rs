@@ -29,7 +29,7 @@ use std::collections::HashMap;
 mod server_helpers;
 
 /// Helper function to handle slow server responses gracefully
-fn handle_slow_server_result< T, E >( result: Result< T, E > ) -> Option< T >
+fn handle_slow_server_result< T, E >( result : Result< T, E > ) -> Option< T >
 where 
   E: core::fmt::Display + core::fmt::Debug,
 {
@@ -45,14 +45,14 @@ where
       println!("This is acceptable for integration tests in resource-constrained environments");
       None // Indicate graceful skip
     }
-    Err(e) => panic!("Request failed with unexpected error: {e:?}"),
+    Err(e) => panic!("Request failed with unexpected error : {e:?}"),
   }
 }
 
 #[ tokio::test ]
 async fn test_chat_request_builder_basic()
 {
-  with_test_server!(|mut client: OllamaClient, model: String| async move {
+  with_test_server!(|mut client : OllamaClient, model : String| async move {
     let request = ChatRequestBuilder::new()
       .model(&model)
       .user_message("Hello, how are you?")
@@ -71,7 +71,7 @@ async fn test_chat_request_builder_basic()
 #[ tokio::test ]
 async fn test_chat_request_builder_conversation()
 {
-  with_test_server!(|mut client: OllamaClient, model: String| async move {
+  with_test_server!(|mut client : OllamaClient, model : String| async move {
     let request = ChatRequestBuilder::new()
       .model(&model)
       .system_message("You are a helpful assistant.")
@@ -97,7 +97,7 @@ async fn test_chat_request_builder_conversation()
 #[ tokio::test ]
 async fn test_chat_request_builder_with_options()
 {
-  with_test_server!(|mut client: OllamaClient, model: String| async move {
+  with_test_server!(|mut client : OllamaClient, model : String| async move {
     let mut options = HashMap::new();
     options.insert("temperature".to_string(), serde_json::Value::from(0.7));
     options.insert("top_p".to_string(), serde_json::Value::from(0.9));
@@ -124,7 +124,7 @@ async fn test_chat_request_builder_streaming()
 {
   #[ cfg( feature = "streaming" ) ]
   {
-    with_test_server!(|mut client: OllamaClient, model: String| async move {
+    with_test_server!(|mut client : OllamaClient, model : String| async move {
       let request = ChatRequestBuilder::new()
         .model(&model)
         .user_message("Count from 1 to 3")
@@ -150,7 +150,7 @@ async fn test_chat_request_builder_streaming()
 #[ tokio::test ]
 async fn test_generate_request_builder_basic()
 {
-  with_test_server!(|mut client: OllamaClient, model: String| async move {
+  with_test_server!(|mut client : OllamaClient, model : String| async move {
     let request = GenerateRequestBuilder::new()
       .model(&model)
       .prompt("Write a haiku about coding")
@@ -168,7 +168,7 @@ async fn test_generate_request_builder_basic()
 #[ tokio::test ]
 async fn test_generate_request_builder_with_options()
 {
-  with_test_server!(|mut client: OllamaClient, model: String| async move {
+  with_test_server!(|mut client : OllamaClient, model : String| async move {
     let request = GenerateRequestBuilder::new()
       .model(&model)
       .prompt("Say hello in one word")
@@ -190,7 +190,7 @@ async fn test_embeddings_request_builder_basic()
 {
   #[ cfg( feature = "embeddings" ) ]
   {
-    with_test_server!(|mut client: OllamaClient, model: String| async move {
+    with_test_server!(|mut client : OllamaClient, model : String| async move {
       let request = EmbeddingsRequestBuilder::new()
         .model(&model)
         .prompt("Hello world")
@@ -216,7 +216,7 @@ async fn test_embeddings_request_builder_with_options()
 {
   #[ cfg( feature = "embeddings" ) ]
   {
-    with_test_server!(|mut client: OllamaClient, model: String| async move {
+    with_test_server!(|mut client : OllamaClient, model : String| async move {
       let request = EmbeddingsRequestBuilder::new()
         .model(&model)
         .prompt("Machine learning is fascinating")
@@ -241,7 +241,7 @@ async fn test_embeddings_request_builder_with_options()
 #[ tokio::test ]
 async fn test_builder_method_chaining()
 {
-  with_test_server!(|mut client: OllamaClient, model: String| async move {
+  with_test_server!(|mut client : OllamaClient, model : String| async move {
     // Test fluent method chaining
     let request = ChatRequestBuilder::new()
       .model(&model)
@@ -340,7 +340,7 @@ async fn test_builder_authentication_integration()
   {
     use api_ollama::SecretStore;
     
-    with_test_server!(|client: OllamaClient, model: String| async move {
+    with_test_server!(|client : OllamaClient, model : String| async move {
       let mut secret_store = SecretStore::new();
       secret_store.set("api_key", "test-key").expect("Failed to set API key");
       
@@ -368,7 +368,7 @@ async fn test_builder_authentication_integration()
 #[ tokio::test ]
 async fn test_builder_complex_conversation()
 {
-  with_test_server!(|mut client: OllamaClient, model: String| async move {
+  with_test_server!(|mut client : OllamaClient, model : String| async move {
     let request = ChatRequestBuilder::new()
       .model(&model)
       .system_message("You are a helpful math tutor. Answer questions step by step.")

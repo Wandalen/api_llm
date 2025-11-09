@@ -10,9 +10,9 @@ mod private
 {
   use std::
   {
-    collections::{ HashMap, VecDeque },
-    sync::Arc,
-    time::{ Duration, Instant },
+    collections ::{ HashMap, VecDeque },
+    sync ::Arc,
+    time ::{ Duration, Instant },
   };
   use core::sync::atomic::{ AtomicU64, AtomicUsize, Ordering };
   use tokio::sync::{ RwLock, Mutex };
@@ -24,19 +24,19 @@ mod private
   pub struct ConnectionConfig
   {
     /// Maximum connections per host
-    pub max_connections_per_host: usize,
+    pub max_connections_per_host : usize,
     /// Minimum connections to maintain per host
-    pub min_connections_per_host: usize,
+    pub min_connections_per_host : usize,
     /// Connection idle timeout
-    pub idle_timeout: Duration,
+    pub idle_timeout : Duration,
     /// Connection health check interval
-    pub health_check_interval: Duration,
+    pub health_check_interval : Duration,
     /// Enable adaptive pooling based on usage patterns
-    pub adaptive_pooling: bool,
+    pub adaptive_pooling : bool,
     /// Connection warming for frequently used endpoints
-    pub enable_connection_warming: bool,
+    pub enable_connection_warming : bool,
     /// Maximum time to wait for a connection
-    pub connection_wait_timeout: Duration,
+    pub connection_wait_timeout : Duration,
   }
 
   impl Default for ConnectionConfig
@@ -46,13 +46,13 @@ mod private
     {
       Self
       {
-        max_connections_per_host: 20,
-        min_connections_per_host: 2,
-        idle_timeout: Duration::from_secs( 120 ),
-        health_check_interval: Duration::from_secs( 30 ),
-        adaptive_pooling: true,
-        enable_connection_warming: true,
-        connection_wait_timeout: Duration::from_secs( 10 ),
+        max_connections_per_host : 20,
+        min_connections_per_host : 2,
+        idle_timeout : Duration::from_secs( 120 ),
+        health_check_interval : Duration::from_secs( 30 ),
+        adaptive_pooling : true,
+        enable_connection_warming : true,
+        connection_wait_timeout : Duration::from_secs( 10 ),
       }
     }
   }
@@ -76,17 +76,17 @@ mod private
   pub struct ConnectionStats
   {
     /// Number of requests served by this connection
-    pub requests_served: u64,
+    pub requests_served : u64,
     /// Last time this connection was used
-    pub last_used: Instant,
+    pub last_used : Instant,
     /// Connection creation time
-    pub created_at: Instant,
+    pub created_at : Instant,
     /// Average response time for this connection
-    pub avg_response_time: Duration,
+    pub avg_response_time : Duration,
     /// Number of failures on this connection
-    pub failure_count: u64,
+    pub failure_count : u64,
     /// Current health status
-    pub health: ConnectionHealth,
+    pub health : ConnectionHealth,
   }
 
   impl Default for ConnectionStats
@@ -97,12 +97,12 @@ mod private
       let now = Instant::now();
       Self
       {
-        requests_served: 0,
-        last_used: now,
-        created_at: now,
-        avg_response_time: Duration::from_millis( 100 ),
-        failure_count: 0,
-        health: ConnectionHealth::Healthy,
+        requests_served : 0,
+        last_used : now,
+        created_at : now,
+        avg_response_time : Duration::from_millis( 100 ),
+        failure_count : 0,
+        health : ConnectionHealth::Healthy,
       }
     }
   }
@@ -112,13 +112,13 @@ mod private
   pub struct ManagedConnection
   {
     /// The actual HTTP client
-    pub client: HttpClient,
+    pub client : HttpClient,
     /// Connection statistics and health
-    pub stats: Arc< RwLock< ConnectionStats > >,
+    pub stats : Arc< RwLock< ConnectionStats > >,
     /// Unique identifier for this connection
-    pub id: String,
+    pub id : String,
     /// Host this connection is optimized for
-    pub host: String,
+    pub host : String,
   }
 
   impl ManagedConnection
@@ -126,20 +126,20 @@ mod private
     /// Create a new managed connection
     #[ inline ]
     #[ must_use ]
-    pub fn new( client: HttpClient, host: String ) -> Self
+    pub fn new( client : HttpClient, host : String ) -> Self
     {
       Self
       {
         client,
-        stats: Arc::new( RwLock::new( ConnectionStats::default() ) ),
-        id: uuid::Uuid::new_v4().to_string(),
+        stats : Arc::new( RwLock::new( ConnectionStats::default() ) ),
+        id : uuid::Uuid::new_v4().to_string(),
         host,
       }
     }
 
     /// Record successful request on this connection
     #[ inline ]
-    pub async fn record_success( &self, response_time: Duration )
+    pub async fn record_success( &self, response_time : Duration )
     {
       let mut stats = self.stats.write().await;
       stats.requests_served += 1;
@@ -181,7 +181,7 @@ mod private
 
     /// Check if connection is idle and should be cleaned up
     #[ inline ]
-    pub async fn is_idle( &self, idle_timeout: Duration ) -> bool
+    pub async fn is_idle( &self, idle_timeout : Duration ) -> bool
     {
       let stats = self.stats.read().await;
       stats.last_used.elapsed() > idle_timeout
@@ -207,15 +207,15 @@ mod private
   pub struct HostConnectionPool
   {
     /// Host this pool manages
-    pub host: String,
+    pub host : String,
     /// Available connections
-    pub available: Arc< Mutex< VecDeque< Arc< ManagedConnection > > > >,
+    pub available : Arc< Mutex< VecDeque< Arc< ManagedConnection > > > >,
     /// Currently in-use connections
-    pub in_use: Arc< RwLock< HashMap< String, Arc< ManagedConnection > > > >,
+    pub in_use : Arc< RwLock< HashMap< String, Arc< ManagedConnection > > > >,
     /// Pool configuration
-    pub config: ConnectionConfig,
+    pub config : ConnectionConfig,
     /// Pool-level statistics
-    pub pool_stats: Arc< RwLock< PoolStats > >,
+    pub pool_stats : Arc< RwLock< PoolStats > >,
   }
 
   /// Pool-level statistics
@@ -223,15 +223,15 @@ mod private
   pub struct PoolStats
   {
     /// Total connections created
-    pub connections_created: AtomicU64,
+    pub connections_created : AtomicU64,
     /// Total connections destroyed
-    pub connections_destroyed: AtomicU64,
+    pub connections_destroyed : AtomicU64,
     /// Total requests served
-    pub total_requests: AtomicU64,
+    pub total_requests : AtomicU64,
     /// Average pool utilization
-    pub avg_utilization: f64,
+    pub avg_utilization : f64,
     /// Peak simultaneous connections
-    pub peak_connections: AtomicUsize,
+    pub peak_connections : AtomicUsize,
   }
 
   impl HostConnectionPool
@@ -239,15 +239,15 @@ mod private
     /// Create new connection pool for host
     #[ inline ]
     #[ must_use ]
-    pub fn new( host: String, config: ConnectionConfig ) -> Self
+    pub fn new( host : String, config : ConnectionConfig ) -> Self
     {
       Self
       {
         host,
-        available: Arc::new( Mutex::new( VecDeque::new() ) ),
-        in_use: Arc::new( RwLock::new( HashMap::new() ) ),
+        available : Arc::new( Mutex::new( VecDeque::new() ) ),
+        in_use : Arc::new( RwLock::new( HashMap::new() ) ),
         config,
-        pool_stats: Arc::new( RwLock::new( PoolStats::default() ) ),
+        pool_stats : Arc::new( RwLock::new( PoolStats::default() ) ),
       }
     }
 
@@ -343,7 +343,7 @@ mod private
     }
 
     /// Mark connection as in use
-    async fn mark_in_use( &self, conn: &Arc< ManagedConnection > )
+    async fn mark_in_use( &self, conn : &Arc< ManagedConnection > )
     {
       let mut in_use = self.in_use.write().await;
       in_use.insert( conn.id.clone(), conn.clone() );
@@ -368,7 +368,7 @@ mod private
           self.mark_in_use( &conn ).await;
           return Ok( conn );
         }
-        tokio::time::sleep( Duration::from_millis( 10 ) ).await;
+        tokio ::time::sleep( Duration::from_millis( 10 ) ).await;
       }
 
       // Timeout - create connection anyway (will exceed pool limit)
@@ -379,7 +379,7 @@ mod private
 
     /// Return connection to available pool
     #[ inline ]
-    pub async fn return_connection( &self, conn: Arc< ManagedConnection > )
+    pub async fn return_connection( &self, conn : Arc< ManagedConnection > )
     {
       // Remove from in-use
       {
@@ -449,14 +449,14 @@ mod private
 
       PoolStatistics
       {
-        host: self.host.clone(),
-        available_connections: available_count,
-        in_use_connections: in_use_count,
-        total_connections_created: stats.connections_created.load( Ordering::Relaxed ),
-        total_connections_destroyed: stats.connections_destroyed.load( Ordering::Relaxed ),
-        total_requests_served: stats.total_requests.load( Ordering::Relaxed ),
-        peak_connections: stats.peak_connections.load( Ordering::Relaxed ),
-        current_utilization: if available_count + in_use_count > 0 { in_use_count as f64 / (available_count + in_use_count) as f64 } else { 0.0 },
+        host : self.host.clone(),
+        available_connections : available_count,
+        in_use_connections : in_use_count,
+        total_connections_created : stats.connections_created.load( Ordering::Relaxed ),
+        total_connections_destroyed : stats.connections_destroyed.load( Ordering::Relaxed ),
+        total_requests_served : stats.total_requests.load( Ordering::Relaxed ),
+        peak_connections : stats.peak_connections.load( Ordering::Relaxed ),
+        current_utilization : if available_count + in_use_count > 0 { in_use_count as f64 / (available_count + in_use_count) as f64 } else { 0.0 },
       }
     }
   }
@@ -466,21 +466,21 @@ mod private
   pub struct PoolStatistics
   {
     /// Host this pool serves
-    pub host: String,
+    pub host : String,
     /// Currently available connections
-    pub available_connections: usize,
+    pub available_connections : usize,
     /// Currently in-use connections
-    pub in_use_connections: usize,
+    pub in_use_connections : usize,
     /// Total connections created since start
-    pub total_connections_created: u64,
+    pub total_connections_created : u64,
     /// Total connections destroyed since start
-    pub total_connections_destroyed: u64,
+    pub total_connections_destroyed : u64,
     /// Total requests served by this pool
-    pub total_requests_served: u64,
+    pub total_requests_served : u64,
     /// Peak number of simultaneous connections
-    pub peak_connections: usize,
+    pub peak_connections : usize,
     /// Current pool utilization (0.0 to 1.0)
-    pub current_utilization: f64,
+    pub current_utilization : f64,
   }
 
   /// Global connection manager
@@ -488,11 +488,11 @@ mod private
   pub struct ConnectionManager
   {
     /// Per-host connection pools
-    pools: Arc< RwLock< HashMap< String, Arc< HostConnectionPool > > > >,
+    pools : Arc< RwLock< HashMap< String, Arc< HostConnectionPool > > > >,
     /// Global configuration
-    config: ConnectionConfig,
+    config : ConnectionConfig,
     /// Background cleanup task handle
-    cleanup_handle: Option< tokio::task::JoinHandle< () > >,
+    cleanup_handle : Option< tokio::task::JoinHandle< () > >,
   }
 
   impl ConnectionManager
@@ -500,13 +500,13 @@ mod private
     /// Create new connection manager
     #[ inline ]
     #[ must_use ]
-    pub fn new( config: ConnectionConfig ) -> Self
+    pub fn new( config : ConnectionConfig ) -> Self
     {
       Self
       {
-        pools: Arc::new( RwLock::new( HashMap::new() ) ),
+        pools : Arc::new( RwLock::new( HashMap::new() ) ),
         config,
-        cleanup_handle: None,
+        cleanup_handle : None,
       }
     }
 
@@ -525,10 +525,10 @@ mod private
           interval.tick().await;
 
           let pools_guard = pools.read().await;
-          let cleanup_tasks: Vec< _ > = pools_guard.values().map( | pool |
+          let cleanup_tasks : Vec< _ > = pools_guard.values().map( | pool |
           {
             let pool_clone = pool.clone();
-            tokio::spawn( async move
+            tokio ::spawn( async move
             {
               pool_clone.cleanup_connections().await;
             } )
@@ -552,7 +552,7 @@ mod private
     ///
     /// Returns an error if no connection can be obtained from the pool for the specified host.
     #[ inline ]
-    pub async fn get_connection( &self, host: &str ) -> Result< Arc< ManagedConnection >, reqwest::Error >
+    pub async fn get_connection( &self, host : &str ) -> Result< Arc< ManagedConnection >, reqwest::Error >
     {
       let pool = self.get_or_create_pool( host ).await;
       pool.get_connection().await
@@ -560,7 +560,7 @@ mod private
 
     /// Return connection to pool
     #[ inline ]
-    pub async fn return_connection( &self, conn: Arc< ManagedConnection > )
+    pub async fn return_connection( &self, conn : Arc< ManagedConnection > )
     {
       if let Some( pool ) = self.get_pool( &conn.host ).await
       {
@@ -569,7 +569,7 @@ mod private
     }
 
     /// Get or create pool for host
-    async fn get_or_create_pool( &self, host: &str ) -> Arc< HostConnectionPool >
+    async fn get_or_create_pool( &self, host : &str ) -> Arc< HostConnectionPool >
     {
       // Try to get existing pool
       {
@@ -596,7 +596,7 @@ mod private
     }
 
     /// Get existing pool for host
-    async fn get_pool( &self, host: &str ) -> Option< Arc< HostConnectionPool > >
+    async fn get_pool( &self, host : &str ) -> Option< Arc< HostConnectionPool > >
     {
       let pools = self.pools.read().await;
       pools.get( host ).cloned()
@@ -623,10 +623,10 @@ mod private
     {
       let all_stats = self.get_all_stats().await;
 
-      let total_requests: u64 = all_stats.iter().map( | s | s.total_requests_served ).sum();
-      let total_connections_created: u64 = all_stats.iter().map( | s | s.total_connections_created ).sum();
-      let total_connections_destroyed: u64 = all_stats.iter().map( | s | s.total_connections_destroyed ).sum();
-      let avg_utilization: f64 = if all_stats.is_empty()
+      let total_requests : u64 = all_stats.iter().map( | s | s.total_requests_served ).sum();
+      let total_connections_created : u64 = all_stats.iter().map( | s | s.total_connections_created ).sum();
+      let total_connections_destroyed : u64 = all_stats.iter().map( | s | s.total_connections_destroyed ).sum();
+      let avg_utilization : f64 = if all_stats.is_empty()
       {
         0.0
       }
@@ -646,18 +646,18 @@ mod private
 
       ConnectionEfficiencyMetrics
       {
-        total_requests_served: total_requests,
+        total_requests_served : total_requests,
         total_connections_created,
         total_connections_destroyed,
-        active_pools: all_stats.len(),
-        average_pool_utilization: avg_utilization,
+        active_pools : all_stats.len(),
+        average_pool_utilization : avg_utilization,
         connection_reuse_ratio,
-        efficiency_score: Self::calculate_efficiency_score( connection_reuse_ratio, avg_utilization ),
+        efficiency_score : Self::calculate_efficiency_score( connection_reuse_ratio, avg_utilization ),
       }
     }
 
     /// Calculate overall efficiency score (0.0 to 1.0)
-    fn calculate_efficiency_score( reuse_ratio: f64, utilization: f64 ) -> f64
+    fn calculate_efficiency_score( reuse_ratio : f64, utilization : f64 ) -> f64
     {
       // Optimal reuse ratio is around 10-50 requests per connection
       let reuse_score = if (10.0..=50.0).contains(&reuse_ratio)
@@ -696,19 +696,19 @@ mod private
   pub struct ConnectionEfficiencyMetrics
   {
     /// Total requests served across all pools
-    pub total_requests_served: u64,
+    pub total_requests_served : u64,
     /// Total connections created
-    pub total_connections_created: u64,
+    pub total_connections_created : u64,
     /// Total connections destroyed
-    pub total_connections_destroyed: u64,
+    pub total_connections_destroyed : u64,
     /// Number of active connection pools
-    pub active_pools: usize,
+    pub active_pools : usize,
     /// Average utilization across all pools
-    pub average_pool_utilization: f64,
+    pub average_pool_utilization : f64,
     /// Ratio of requests to connections (higher = better reuse)
-    pub connection_reuse_ratio: f64,
+    pub connection_reuse_ratio : f64,
     /// Overall efficiency score (0.0 to 1.0)
-    pub efficiency_score: f64,
+    pub efficiency_score : f64,
   }
 
   impl Drop for ConnectionManager

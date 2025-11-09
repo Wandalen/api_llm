@@ -71,7 +71,7 @@ impl StreamState
 
   /// Convert u8 back to StreamState from atomic operations
   #[ inline ]
-  pub( crate ) fn from_u8( value: u8 ) -> Self
+  pub( crate ) fn from_u8( value : u8 ) -> Self
   {
     match value
     {
@@ -103,21 +103,21 @@ pub enum MetricsLevel
 pub struct StreamControlConfig
 {
   /// Maximum buffer size for paused streams (in bytes)
-  pub buffer_size: usize,
+  pub buffer_size : usize,
   /// Timeout for paused streams before auto-cancellation
-  pub pause_timeout: Duration,
+  pub pause_timeout : Duration,
   /// Whether to automatically cleanup resources on completion
-  pub auto_cleanup: bool,
+  pub auto_cleanup : bool,
   /// Maximum number of chunks to buffer during pause
-  pub max_buffered_chunks: usize,
+  pub max_buffered_chunks : usize,
   /// Control operation timeout (how long to wait for control commands to be processed)
-  pub control_operation_timeout: Duration,
+  pub control_operation_timeout : Duration,
   /// Buffer management strategy for better memory usage
-  pub buffer_strategy: BufferStrategy,
+  pub buffer_strategy : BufferStrategy,
   /// Metrics collection level (affects performance vs observability trade-off)
-  pub metrics_level: MetricsLevel,
+  pub metrics_level : MetricsLevel,
   /// Whether to use event-driven timeout handling (more efficient)
-  pub event_driven_timeouts: bool,
+  pub event_driven_timeouts : bool,
 }
 
 impl Default for StreamControlConfig
@@ -126,14 +126,14 @@ impl Default for StreamControlConfig
   fn default() -> Self
   {
     Self {
-      buffer_size: 1024 * 1024, // 1MB default buffer
-      pause_timeout: Duration::from_secs( 300 ), // 5 minutes default
-      auto_cleanup: true,
-      max_buffered_chunks: 100,
-      control_operation_timeout: Duration::from_millis( 100 ), // Fast control response
-      buffer_strategy: BufferStrategy::Circular, // More memory efficient
-      metrics_level: MetricsLevel::Basic, // Balanced performance/observability
-      event_driven_timeouts: true, // More efficient timeout handling
+      buffer_size : 1024 * 1024, // 1MB default buffer
+      pause_timeout : Duration::from_secs( 300 ), // 5 minutes default
+      auto_cleanup : true,
+      max_buffered_chunks : 100,
+      control_operation_timeout : Duration::from_millis( 100 ), // Fast control response
+      buffer_strategy : BufferStrategy::Circular, // More memory efficient
+      metrics_level : MetricsLevel::Basic, // Balanced performance/observability
+      event_driven_timeouts : true, // More efficient timeout handling
     }
   }
 }
@@ -142,7 +142,7 @@ impl Default for StreamControlConfig
 #[ derive( Debug, Clone ) ]
 pub struct StreamControlConfigBuilder
 {
-  config: StreamControlConfig,
+  config : StreamControlConfig,
 }
 
 impl StreamControlConfigBuilder
@@ -153,14 +153,14 @@ impl StreamControlConfigBuilder
   pub fn new() -> Self
   {
     Self {
-      config: StreamControlConfig::default(),
+      config : StreamControlConfig::default(),
     }
   }
 
   /// Set the buffer size for paused streams
   #[ inline ]
   #[ must_use ]
-  pub fn buffer_size( mut self, size: usize ) -> Self
+  pub fn buffer_size( mut self, size : usize ) -> Self
   {
     self.config.buffer_size = size;
     self
@@ -169,7 +169,7 @@ impl StreamControlConfigBuilder
   /// Set the pause timeout duration
   #[ inline ]
   #[ must_use ]
-  pub fn pause_timeout( mut self, timeout: Duration ) -> Self
+  pub fn pause_timeout( mut self, timeout : Duration ) -> Self
   {
     self.config.pause_timeout = timeout;
     self
@@ -178,7 +178,7 @@ impl StreamControlConfigBuilder
   /// Enable or disable automatic cleanup
   #[ inline ]
   #[ must_use ]
-  pub fn auto_cleanup( mut self, enable: bool ) -> Self
+  pub fn auto_cleanup( mut self, enable : bool ) -> Self
   {
     self.config.auto_cleanup = enable;
     self
@@ -187,7 +187,7 @@ impl StreamControlConfigBuilder
   /// Set maximum number of chunks to buffer
   #[ inline ]
   #[ must_use ]
-  pub fn max_buffered_chunks( mut self, count: usize ) -> Self
+  pub fn max_buffered_chunks( mut self, count : usize ) -> Self
   {
     self.config.max_buffered_chunks = count;
     self
@@ -196,7 +196,7 @@ impl StreamControlConfigBuilder
   /// Set control operation timeout
   #[ inline ]
   #[ must_use ]
-  pub fn control_operation_timeout( mut self, timeout: Duration ) -> Self
+  pub fn control_operation_timeout( mut self, timeout : Duration ) -> Self
   {
     self.config.control_operation_timeout = timeout;
     self
@@ -205,7 +205,7 @@ impl StreamControlConfigBuilder
   /// Set buffer management strategy
   #[ inline ]
   #[ must_use ]
-  pub fn buffer_strategy( mut self, strategy: BufferStrategy ) -> Self
+  pub fn buffer_strategy( mut self, strategy : BufferStrategy ) -> Self
   {
     self.config.buffer_strategy = strategy;
     self
@@ -214,7 +214,7 @@ impl StreamControlConfigBuilder
   /// Set metrics collection level
   #[ inline ]
   #[ must_use ]
-  pub fn metrics_level( mut self, level: MetricsLevel ) -> Self
+  pub fn metrics_level( mut self, level : MetricsLevel ) -> Self
   {
     self.config.metrics_level = level;
     self
@@ -223,7 +223,7 @@ impl StreamControlConfigBuilder
   /// Enable or disable event-driven timeout handling
   #[ inline ]
   #[ must_use ]
-  pub fn event_driven_timeouts( mut self, enable: bool ) -> Self
+  pub fn event_driven_timeouts( mut self, enable : bool ) -> Self
   {
     self.config.event_driven_timeouts = enable;
     self
@@ -305,27 +305,27 @@ impl StreamControlConfig
 pub struct StreamMetrics
 {
   /// Total number of chunks received
-  pub total_chunks: AtomicU64,
+  pub total_chunks : AtomicU64,
   /// Current buffer size in bytes
-  pub buffer_size: AtomicUsize,
+  pub buffer_size : AtomicUsize,
   /// Total bytes received
-  pub bytes_received: AtomicU64,
+  pub bytes_received : AtomicU64,
   /// Number of times stream was paused
-  pub pause_count: AtomicU64,
+  pub pause_count : AtomicU64,
   /// Number of times stream was resumed
-  pub resume_count: AtomicU64,
+  pub resume_count : AtomicU64,
   /// Total number of state changes
-  pub state_changes: AtomicU64,
+  pub state_changes : AtomicU64,
   /// Peak buffer size reached during stream lifetime
-  pub peak_buffer_size: AtomicUsize,
+  pub peak_buffer_size : AtomicUsize,
   /// Average response time for control operations in microseconds
-  pub avg_control_response_time_us: AtomicU64,
+  pub avg_control_response_time_us : AtomicU64,
   /// Number of control operations performed
-  pub control_operations: AtomicU64,
+  pub control_operations : AtomicU64,
   /// Number of buffer overflows (when pause buffer reached max capacity)
-  pub buffer_overflows: AtomicU64,
+  pub buffer_overflows : AtomicU64,
   /// Number of items sent through the stream
-  pub items_sent: AtomicU64,
+  pub items_sent : AtomicU64,
 }
 
 impl StreamMetrics
@@ -335,17 +335,17 @@ impl StreamMetrics
   {
     Self
     {
-      total_chunks: AtomicU64::new( 0 ),
-      buffer_size: AtomicUsize::new( 0 ),
-      bytes_received: AtomicU64::new( 0 ),
-      pause_count: AtomicU64::new( 0 ),
-      resume_count: AtomicU64::new( 0 ),
-      state_changes: AtomicU64::new( 0 ),
-      peak_buffer_size: AtomicUsize::new( 0 ),
-      avg_control_response_time_us: AtomicU64::new( 0 ),
-      control_operations: AtomicU64::new( 0 ),
-      buffer_overflows: AtomicU64::new( 0 ),
-      items_sent: AtomicU64::new( 0 ),
+      total_chunks : AtomicU64::new( 0 ),
+      buffer_size : AtomicUsize::new( 0 ),
+      bytes_received : AtomicU64::new( 0 ),
+      pause_count : AtomicU64::new( 0 ),
+      resume_count : AtomicU64::new( 0 ),
+      state_changes : AtomicU64::new( 0 ),
+      peak_buffer_size : AtomicUsize::new( 0 ),
+      avg_control_response_time_us : AtomicU64::new( 0 ),
+      control_operations : AtomicU64::new( 0 ),
+      buffer_overflows : AtomicU64::new( 0 ),
+      items_sent : AtomicU64::new( 0 ),
     }
   }
 }
@@ -355,27 +355,27 @@ impl StreamMetrics
 pub struct StreamMetricsSnapshot
 {
   /// Total number of chunks received
-  pub total_chunks: u64,
+  pub total_chunks : u64,
   /// Current buffer size in bytes
-  pub buffer_size: usize,
+  pub buffer_size : usize,
   /// Total bytes received
-  pub bytes_received: u64,
+  pub bytes_received : u64,
   /// Number of times stream was paused
-  pub pause_count: u64,
+  pub pause_count : u64,
   /// Number of times stream was resumed
-  pub resume_count: u64,
+  pub resume_count : u64,
   /// Total number of state changes
-  pub state_changes: u64,
+  pub state_changes : u64,
   /// Peak buffer size reached during stream lifetime
-  pub peak_buffer_size: usize,
+  pub peak_buffer_size : usize,
   /// Average response time for control operations in microseconds
-  pub avg_control_response_time_us: u64,
+  pub avg_control_response_time_us : u64,
   /// Number of control operations performed
-  pub control_operations: u64,
+  pub control_operations : u64,
   /// Number of buffer overflows
-  pub buffer_overflows: u64,
+  pub buffer_overflows : u64,
   /// Number of items sent through the stream
-  pub items_sent: u64,
+  pub items_sent : u64,
 }
 
 impl Default for StreamMetrics
@@ -383,17 +383,17 @@ impl Default for StreamMetrics
   fn default() -> Self
   {
     Self {
-      total_chunks: AtomicU64::new( 0 ),
-      buffer_size: AtomicUsize::new( 0 ),
-      bytes_received: AtomicU64::new( 0 ),
-      pause_count: AtomicU64::new( 0 ),
-      resume_count: AtomicU64::new( 0 ),
-      state_changes: AtomicU64::new( 0 ),
-      peak_buffer_size: AtomicUsize::new( 0 ),
-      avg_control_response_time_us: AtomicU64::new( 0 ),
-      control_operations: AtomicU64::new( 0 ),
-      buffer_overflows: AtomicU64::new( 0 ),
-      items_sent: AtomicU64::new( 0 ),
+      total_chunks : AtomicU64::new( 0 ),
+      buffer_size : AtomicUsize::new( 0 ),
+      bytes_received : AtomicU64::new( 0 ),
+      pause_count : AtomicU64::new( 0 ),
+      resume_count : AtomicU64::new( 0 ),
+      state_changes : AtomicU64::new( 0 ),
+      peak_buffer_size : AtomicUsize::new( 0 ),
+      avg_control_response_time_us : AtomicU64::new( 0 ),
+      control_operations : AtomicU64::new( 0 ),
+      buffer_overflows : AtomicU64::new( 0 ),
+      items_sent : AtomicU64::new( 0 ),
     }
   }
 }
@@ -404,17 +404,17 @@ impl StreamMetrics
   pub fn snapshot( &self ) -> StreamMetricsSnapshot
   {
     StreamMetricsSnapshot {
-      total_chunks: self.total_chunks.load( Ordering::Relaxed ),
-      buffer_size: self.buffer_size.load( Ordering::Relaxed ),
-      bytes_received: self.bytes_received.load( Ordering::Relaxed ),
-      pause_count: self.pause_count.load( Ordering::Relaxed ),
-      resume_count: self.resume_count.load( Ordering::Relaxed ),
-      state_changes: self.state_changes.load( Ordering::Relaxed ),
-      peak_buffer_size: self.peak_buffer_size.load( Ordering::Relaxed ),
-      avg_control_response_time_us: self.avg_control_response_time_us.load( Ordering::Relaxed ),
-      control_operations: self.control_operations.load( Ordering::Relaxed ),
-      buffer_overflows: self.buffer_overflows.load( Ordering::Relaxed ),
-      items_sent: self.items_sent.load( Ordering::Relaxed ),
+      total_chunks : self.total_chunks.load( Ordering::Relaxed ),
+      buffer_size : self.buffer_size.load( Ordering::Relaxed ),
+      bytes_received : self.bytes_received.load( Ordering::Relaxed ),
+      pause_count : self.pause_count.load( Ordering::Relaxed ),
+      resume_count : self.resume_count.load( Ordering::Relaxed ),
+      state_changes : self.state_changes.load( Ordering::Relaxed ),
+      peak_buffer_size : self.peak_buffer_size.load( Ordering::Relaxed ),
+      avg_control_response_time_us : self.avg_control_response_time_us.load( Ordering::Relaxed ),
+      control_operations : self.control_operations.load( Ordering::Relaxed ),
+      buffer_overflows : self.buffer_overflows.load( Ordering::Relaxed ),
+      items_sent : self.items_sent.load( Ordering::Relaxed ),
     }
   }
 }

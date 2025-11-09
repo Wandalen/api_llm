@@ -33,11 +33,11 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
   loop
   {
     // Get user input
-    print!( "You: " );
-    io::stdout().flush()?;
+    print!( "You : " );
+    io ::stdout().flush()?;
 
     let mut input = String::new();
-    io::stdin().read_line( &mut input )?;
+    io ::stdin().read_line( &mut input )?;
     let input = input.trim();
 
     // Check for exit commands
@@ -64,8 +64,8 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
       .form();
 
     // Execute the request
-    print!( "🤖 Assistant: " );
-    io::stdout().flush()?;
+    print!( "🤖 Assistant : " );
+    io ::stdout().flush()?;
 
     match client.chat().create( request ).await
     {
@@ -81,7 +81,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
             messages.push( choice.message.clone() );
 
             // Display token usage
-            println!( "   [Tokens: {} prompt + {} completion = {} total]",
+            println!( "   [Tokens : {} prompt + {} completion = {} total]",
               response.usage.prompt_tokens,
               response.usage.completion_tokens,
               response.usage.total_tokens
@@ -100,7 +100,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
       }
       Err( e ) =>
       {
-        println!( "\n❌ Error: {e}\n" );
+        println!( "\n❌ Error : {e}\n" );
         // Remove the last user message since we got an error
         messages.pop();
       }

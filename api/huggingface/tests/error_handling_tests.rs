@@ -2,9 +2,9 @@
 
 use api_huggingface::
 {
-  environment::{ HuggingFaceEnvironmentImpl, HuggingFaceEnvironment, EnvironmentInterface },
-  secret::Secret,
-  error::{ HuggingFaceError, Result },
+  environment ::{ HuggingFaceEnvironmentImpl, HuggingFaceEnvironment, EnvironmentInterface },
+  secret ::Secret,
+  error ::{ HuggingFaceError, Result },
 };
 
 #[ tokio::test ]
@@ -55,7 +55,7 @@ async fn environment_with_invalid_url()
   match url_result.unwrap_err()
   {
   HuggingFaceError::InvalidArgument( _ ) => {}, // Expected
-  other => panic!( "Expected InvalidArgument error, got: {other:?}" ),
+  other => panic!( "Expected InvalidArgument error, got : {other:?}" ),
   }
 }
 
@@ -99,7 +99,7 @@ async fn error_chain_propagation()
   fn simulate_nested_error() -> Result< String >
   {
   Err( HuggingFaceError::Http( "Connection failed".to_string() ) )
-      .map_err( | e | HuggingFaceError::InvalidArgument( format!( "Wrapped: {e}" ) ) )
+      .map_err( | e | HuggingFaceError::InvalidArgument( format!( "Wrapped : {e}" ) ) )
   }
   
   let result = simulate_nested_error();
@@ -112,7 +112,7 @@ async fn error_chain_propagation()
       assert!( msg.contains( "Wrapped:" ), "Should contain wrapped error context" );
       assert!( msg.contains( "Connection failed" ), "Should contain original error message" );
   },
-  other => panic!( "Expected InvalidArgument error, got: {other:?}" ),
+  other => panic!( "Expected InvalidArgument error, got : {other:?}" ),
   }
 }
 
@@ -123,7 +123,7 @@ mod integration_tests
   use api_huggingface::
   {
   Client,
-  components::input::InferenceParameters,
+  components ::input::InferenceParameters,
   };
 
   fn get_api_key_for_integration() -> String
@@ -161,7 +161,7 @@ mod integration_tests
   let error_string = format!( "{error}" );
   assert!( 
       error_string.contains( "401" ) || error_string.contains( "auth" ) || error_string.contains( "token" ),
-      "Error should indicate authentication issue: {error_string}" 
+      "Error should indicate authentication issue : {error_string}" 
   );
   }
 
@@ -188,7 +188,7 @@ mod integration_tests
       results.push( result );
       
       // Small delay to not overwhelm
-      tokio::time::sleep( core::time::Duration::from_millis( 100 ) ).await;
+      tokio ::time::sleep( core::time::Duration::from_millis( 100 ) ).await;
   }
 
   // Check if we have any results at all (either success or proper error handling)
@@ -200,7 +200,7 @@ mod integration_tests
   // 2. All calls fail but with proper error handling (rate limit or auth issues)
   assert!(
       successful_calls > 0 || failed_calls == results.len(),
-      "Either some calls should succeed or all should fail with proper errors. Successful: {successful_calls}, Failed: {failed_calls}"
+      "Either some calls should succeed or all should fail with proper errors. Successful : {successful_calls}, Failed : {failed_calls}"
   );
 
   // Check error handling for any failed calls
@@ -209,7 +209,7 @@ mod integration_tests
       if let Err( error ) = result
       {
   let error_string = format!( "{error}" );
-  println!( "Call {i} error: {error_string}" );
+  println!( "Call {i} error : {error_string}" );
   // Error should be properly structured
   assert!( !error_string.is_empty(), "Error message should not be empty" );
       }
@@ -241,7 +241,7 @@ mod integration_tests
   let error_string = format!( "{error}" );
   assert!( 
       error_string.contains( "model" ) || error_string.contains( "404" ) || error_string.contains( "not found" ),
-      "Error should indicate model issue: {error_string}" 
+      "Error should indicate model issue : {error_string}" 
   );
   }
 
@@ -277,6 +277,6 @@ mod integration_tests
       || error_string.contains( "sending request" )
       || error_string.contains( "error" );
   
-  assert!( has_network_keywords, "Network error should contain relevant keywords: {error_string}" );
+  assert!( has_network_keywords, "Network error should contain relevant keywords : {error_string}" );
   }
 }

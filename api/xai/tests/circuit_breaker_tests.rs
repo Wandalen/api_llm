@@ -16,7 +16,7 @@
 //!   ```
 //!
 //! - **Design Decision**: Circuit opens AFTER threshold failures (not at threshold).
-//!   Example: threshold=3 means circuit opens on the 3rd consecutive failure.
+//!   Example : threshold=3 means circuit opens on the 3rd consecutive failure.
 //!
 //! - **`HalfOpen` Behavior**: Any single failure in `HalfOpen` immediately reopens
 //!   the circuit. This prevents flapping and ensures service has truly recovered.
@@ -83,7 +83,7 @@ fn circuit_breaker_transitions_to_half_open_after_timeout()
   assert_eq!( breaker.state(), CircuitState::Open );
 
   // Wait for timeout
-  std::thread::sleep( Duration::from_millis( 150 ) );
+  std ::thread::sleep( Duration::from_millis( 150 ) );
 
   // Check if request is allowed (should transition to HalfOpen)
   assert!( breaker.is_request_allowed(), "Should allow request after timeout" );
@@ -106,7 +106,7 @@ fn circuit_breaker_closes_after_success_threshold_in_half_open()
   assert_eq!( breaker.state(), CircuitState::Open );
 
   // Wait for timeout and transition to HalfOpen
-  std::thread::sleep( Duration::from_millis( 150 ) );
+  std ::thread::sleep( Duration::from_millis( 150 ) );
   assert!( breaker.is_request_allowed() );
   assert_eq!( breaker.state(), CircuitState::HalfOpen );
 
@@ -133,7 +133,7 @@ fn circuit_breaker_reopens_on_failure_in_half_open()
   assert_eq!( breaker.state(), CircuitState::Open );
 
   // Wait for timeout and transition to HalfOpen
-  std::thread::sleep( Duration::from_millis( 150 ) );
+  std ::thread::sleep( Duration::from_millis( 150 ) );
   assert!( breaker.is_request_allowed() );
   assert_eq!( breaker.state(), CircuitState::HalfOpen );
 

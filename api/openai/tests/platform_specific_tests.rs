@@ -2,7 +2,7 @@
 
 use api_openai::
 {
-  platform_specific::
+  platform_specific ::
   {
     SearchGroundingConfig, SearchEngine, GroundedResponse, SearchSource, SearchMetadata,
     CodeExecutionConfig, CodeRuntime, SecurityLevel, CodeExecutionResult,
@@ -13,14 +13,14 @@ use api_openai::
     ApiConnectorConfig, ApiAuthentication, RateLimitConfig, RetryConfig, ApiConnector,
     PlatformSpecificClient,
   },
-  environment::{ OpenaiEnvironmentImpl, OpenAIRecommended },
-  secret::Secret,
+  environment ::{ OpenaiEnvironmentImpl, OpenAIRecommended },
+  secret ::Secret,
   Client,
-  error::Result,
+  error ::Result,
 };
 use std::
 {
-  collections::HashMap,
+  collections ::HashMap,
 };
 use core::time::Duration;
 use serde_json::json;
@@ -30,11 +30,11 @@ async fn test_search_grounding_config_creation()
 {
   let config = SearchGroundingConfig
   {
-    search_engine: SearchEngine::Google,
-    max_results: 5,
-    snippet_length: 150,
-    enable_safe_search: true,
-    language_preference: Some( "en".to_string() ),
+    search_engine : SearchEngine::Google,
+    max_results : 5,
+    snippet_length : 150,
+    enable_safe_search : true,
+    language_preference : Some( "en".to_string() ),
   };
 
   assert!( matches!( config.search_engine, SearchEngine::Google ) );
@@ -63,8 +63,8 @@ fn test_search_engine_variants()
   let bing = SearchEngine::Bing;
   let custom = SearchEngine::Custom
   {
-    endpoint: "https://api.example.com/search".to_string(),
-    api_key: "test-key-12345".to_string(),
+    endpoint : "https://api.example.com/search".to_string(),
+    api_key : "test-key-12345".to_string(),
   };
 
   assert!( matches!( google, SearchEngine::Google ) );
@@ -87,34 +87,34 @@ fn test_grounded_response_structure()
   let sources = vec![
     SearchSource
     {
-      url: "https://example.com/1".to_string(),
-      title: "Example 1".to_string(),
-      snippet: "This is a test snippet".to_string(),
-      relevance_score: 0.95,
+      url : "https://example.com/1".to_string(),
+      title : "Example 1".to_string(),
+      snippet : "This is a test snippet".to_string(),
+      relevance_score : 0.95,
     },
     SearchSource
     {
-      url: "https://example.com/2".to_string(),
-      title: "Example 2".to_string(),
-      snippet: "Another test snippet".to_string(),
-      relevance_score: 0.88,
+      url : "https://example.com/2".to_string(),
+      title : "Example 2".to_string(),
+      snippet : "Another test snippet".to_string(),
+      relevance_score : 0.88,
     },
   ];
 
   let metadata = SearchMetadata
   {
-    query: "test query".to_string(),
-    total_results: 100,
-    search_time_ms: 250,
-    engine_used: "Google".to_string(),
+    query : "test query".to_string(),
+    total_results : 100,
+    search_time_ms : 250,
+    engine_used : "Google".to_string(),
   };
 
   let response = GroundedResponse
   {
-    response: "Based on search results...".to_string(),
+    response : "Based on search results...".to_string(),
     sources,
-    confidence_score: 0.92,
-    search_metadata: metadata,
+    confidence_score : 0.92,
+    search_metadata : metadata,
   };
 
   assert!( response.response.contains( "Based on" ) );
@@ -128,11 +128,11 @@ fn test_code_execution_config_creation()
 {
   let config = CodeExecutionConfig
   {
-    runtime: CodeRuntime::Python,
-    timeout: Duration::from_secs( 60 ),
-    memory_limit: 256 * 1024 * 1024, // 256MB
-    allowed_imports: vec![ "numpy".to_string(), "pandas".to_string() ],
-    security_level: SecurityLevel::Sandbox,
+    runtime : CodeRuntime::Python,
+    timeout : Duration::from_secs( 60 ),
+    memory_limit : 256 * 1024 * 1024, // 256MB
+    allowed_imports : vec![ "numpy".to_string(), "pandas".to_string() ],
+    security_level : SecurityLevel::Sandbox,
   };
 
   assert!( matches!( config.runtime, CodeRuntime::Python ) );
@@ -163,8 +163,8 @@ fn test_code_runtime_variants()
   let go = CodeRuntime::Go;
   let custom = CodeRuntime::Custom
   {
-    name: "nodejs".to_string(),
-    image: "node:18-alpine".to_string(),
+    name : "nodejs".to_string(),
+    image : "node:18-alpine".to_string(),
   };
 
   assert!( matches!( python, CodeRuntime::Python ) );
@@ -196,11 +196,11 @@ fn test_code_execution_result_structure()
 {
   let result = CodeExecutionResult
   {
-    output: "Hello, World!".to_string(),
-    error: None,
-    execution_time: Duration::from_millis( 150 ),
-    memory_used: 1024 * 1024, // 1MB
-    return_code: 0,
+    output : "Hello, World!".to_string(),
+    error : None,
+    execution_time : Duration::from_millis( 150 ),
+    memory_used : 1024 * 1024, // 1MB
+    return_code : 0,
   };
 
   assert_eq!( result.output, "Hello, World!" );
@@ -212,11 +212,11 @@ fn test_code_execution_result_structure()
   // Test with error
   let error_result = CodeExecutionResult
   {
-    output: String::new(),
-    error: Some( "SyntaxError: invalid syntax".to_string() ),
-    execution_time: Duration::from_millis( 50 ),
-    memory_used: 512 * 1024,
-    return_code: 1,
+    output : String::new(),
+    error : Some( "SyntaxError : invalid syntax".to_string() ),
+    execution_time : Duration::from_millis( 50 ),
+    memory_used : 512 * 1024,
+    return_code : 1,
   };
 
   assert!( error_result.error.is_some() );
@@ -228,12 +228,12 @@ fn test_web_browsing_config_creation()
 {
   let config = WebBrowsingConfig
   {
-    user_agent: "Custom Agent/1.0".to_string(),
-    max_page_size: 5 * 1024 * 1024, // 5MB
-    follow_redirects: false,
-    javascript_enabled: true,
-    screenshot_enabled: true,
-    timeout: Duration::from_secs( 45 ),
+    user_agent : "Custom Agent/1.0".to_string(),
+    max_page_size : 5 * 1024 * 1024, // 5MB
+    follow_redirects : false,
+    javascript_enabled : true,
+    screenshot_enabled : true,
+    timeout : Duration::from_secs( 45 ),
   };
 
   assert_eq!( config.user_agent, "Custom Agent/1.0" );
@@ -262,21 +262,21 @@ fn test_browsing_result_structure()
 {
   let metadata = BrowsingMetadata
   {
-    status_code: 200,
-    content_type: "text/html".to_string(),
-    content_length: 12345,
-    load_time_ms: 500,
-    redirect_count: 1,
+    status_code : 200,
+    content_type : "text/html".to_string(),
+    content_length : 12345,
+    load_time_ms : 500,
+    redirect_count : 1,
   };
 
   let result = BrowsingResult
   {
-    url: "https://example.com/final".to_string(),
-    title: "Example Page".to_string(),
-    content: "Page content goes here...".to_string(),
-    links: vec![ "https://example.com/link1".to_string(), "https://example.com/link2".to_string() ],
-    images: vec![ "https://example.com/image1.jpg".to_string() ],
-    screenshot: Some( vec![ 1, 2, 3, 4, 5 ] ), // Mock screenshot data
+    url : "https://example.com/final".to_string(),
+    title : "Example Page".to_string(),
+    content : "Page content goes here...".to_string(),
+    links : vec![ "https://example.com/link1".to_string(), "https://example.com/link2".to_string() ],
+    images : vec![ "https://example.com/image1.jpg".to_string() ],
+    screenshot : Some( vec![ 1, 2, 3, 4, 5 ] ), // Mock screenshot data
     metadata,
   };
 
@@ -295,22 +295,22 @@ fn test_tool_parameters_creation()
   let mut properties = HashMap::new();
   properties.insert( "input".to_string(), ParameterDefinition
   {
-    param_type: "string".to_string(),
-    description: "Input text to process".to_string(),
-    required: true,
-    default: None,
+    param_type : "string".to_string(),
+    description : "Input text to process".to_string(),
+    required : true,
+    default : None,
   });
   properties.insert( "format".to_string(), ParameterDefinition
   {
-    param_type: "string".to_string(),
-    description: "Output format".to_string(),
-    required: false,
-    default: Some( json!( "text" ) ),
+    param_type : "string".to_string(),
+    description : "Output format".to_string(),
+    required : false,
+    default : Some( json!( "text" ) ),
   });
 
   let params = ToolParameters
   {
-    required: vec![ "input".to_string() ],
+    required : vec![ "input".to_string() ],
     properties,
   };
 
@@ -329,9 +329,9 @@ fn test_tool_result_structure()
 {
   let success_result = ToolResult
   {
-    output: json!( { "result": "processed successfully" } ),
-    success: true,
-    error_message: None,
+    output : json!( { "result": "processed successfully" } ),
+    success : true,
+    error_message : None,
   };
 
   assert!( success_result.success );
@@ -340,9 +340,9 @@ fn test_tool_result_structure()
 
   let error_result = ToolResult
   {
-    output: json!( null ),
-    success: false,
-    error_message: Some( "Processing failed".to_string() ),
+    output : json!( null ),
+    success : false,
+    error_message : Some( "Processing failed".to_string() ),
   };
 
   assert!( !error_result.success );
@@ -352,18 +352,18 @@ fn test_tool_result_structure()
 // Mock implementation of CustomTool for testing
 struct MockTool
 {
-  name: String,
-  description: String,
+  name : String,
+  description : String,
 }
 
 impl MockTool
 {
-  fn new( name: &str, description: &str ) -> Self
+  fn new( name : &str, description : &str ) -> Self
   {
     Self
     {
-      name: name.to_string(),
-      description: description.to_string(),
+      name : name.to_string(),
+      description : description.to_string(),
     }
   }
 }
@@ -386,37 +386,37 @@ impl CustomTool for MockTool
     let mut properties = HashMap::new();
     properties.insert( "text".to_string(), ParameterDefinition
     {
-      param_type: "string".to_string(),
-      description: "Text to process".to_string(),
-      required: true,
-      default: None,
+      param_type : "string".to_string(),
+      description : "Text to process".to_string(),
+      required : true,
+      default : None,
     });
 
     ToolParameters
     {
-      required: vec![ "text".to_string() ],
+      required : vec![ "text".to_string() ],
       properties,
     }
   }
 
-  async fn execute( &self, parameters: serde_json::Value ) -> Result< ToolResult >
+  async fn execute( &self, parameters : serde_json::Value ) -> Result< ToolResult >
   {
     if let Some( text ) = parameters.get( "text" ).and_then( | v | v.as_str() )
     {
       Ok( ToolResult
       {
-        output: json!( { "processed": text.to_uppercase() } ),
-        success: true,
-        error_message: None,
+        output : json!( { "processed": text.to_uppercase() } ),
+        success : true,
+        error_message : None,
       })
     }
     else
     {
       Ok( ToolResult
       {
-        output: json!( null ),
-        success: false,
-        error_message: Some( "Missing required parameter: text".to_string() ),
+        output : json!( null ),
+        success : false,
+        error_message : Some( "Missing required parameter : text".to_string() ),
       })
     }
   }
@@ -452,11 +452,11 @@ fn test_image_generation_config_creation()
 {
   let config = ImageGenerationConfig
   {
-    model: ImageModel::DallE3,
-    size: ImageSize::Wide1792x1024,
-    quality: ImageQuality::HD,
-    style: ImageStyle::Natural,
-    response_format: ImageResponseFormat::Base64,
+    model : ImageModel::DallE3,
+    size : ImageSize::Wide1792x1024,
+    quality : ImageQuality::HD,
+    style : ImageStyle::Natural,
+    response_format : ImageResponseFormat::Base64,
   };
 
   assert!( matches!( config.model, ImageModel::DallE3 ) );
@@ -525,23 +525,23 @@ fn test_image_result_structure()
 {
   let metadata = ImageMetadata
   {
-    width: 1024,
-    height: 1024,
-    format: "PNG".to_string(),
-    generation_time_ms: 5000,
+    width : 1024,
+    height : 1024,
+    format : "PNG".to_string(),
+    generation_time_ms : 5000,
   };
 
   let url_result = ImageResult
   {
-    url: Some( "https://example.com/image.png".to_string() ),
-    b64_json: None,
-    metadata: metadata.clone(),
+    url : Some( "https://example.com/image.png".to_string() ),
+    b64_json : None,
+    metadata : metadata.clone(),
   };
 
   let base64_result = ImageResult
   {
-    url: None,
-    b64_json: Some( "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChAGAWaM8jwAAAABJRU5ErkJggg==".to_string() ),
+    url : None,
+    b64_json : Some( "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChAGAWaM8jwAAAABJRU5ErkJggg==".to_string() ),
     metadata,
   };
 
@@ -559,31 +559,31 @@ fn test_api_connector_config_creation()
 {
   let auth = ApiAuthentication::ApiKey
   {
-    header: "Authorization".to_string(),
-    key: "Bearer test-token".to_string(),
+    header : "Authorization".to_string(),
+    key : "Bearer test-token".to_string(),
   };
 
   let rate_limits = RateLimitConfig
   {
-    requests_per_minute: 100,
-    requests_per_hour: 1000,
-    burst_limit: 10,
+    requests_per_minute : 100,
+    requests_per_hour : 1000,
+    burst_limit : 10,
   };
 
   let retry_config = RetryConfig
   {
-    max_retries: 3,
-    base_delay: Duration::from_millis( 100 ),
-    max_delay: Duration::from_secs( 10 ),
-    backoff_factor: 2.0,
+    max_retries : 3,
+    base_delay : Duration::from_millis( 100 ),
+    max_delay : Duration::from_secs( 10 ),
+    backoff_factor : 2.0,
   };
 
   let config = ApiConnectorConfig
   {
-    base_url: "https://api.example.com".to_string(),
-    authentication: auth,
-    rate_limits: Some( rate_limits ),
-    retry_config: Some( retry_config ),
+    base_url : "https://api.example.com".to_string(),
+    authentication : auth,
+    rate_limits : Some( rate_limits ),
+    retry_config : Some( retry_config ),
   };
 
   assert_eq!( config.base_url, "https://api.example.com" );
@@ -598,17 +598,17 @@ fn test_api_authentication_variants()
   let none = ApiAuthentication::None;
   let api_key = ApiAuthentication::ApiKey
   {
-    header: "X-API-Key".to_string(),
-    key: "secret-key".to_string(),
+    header : "X-API-Key".to_string(),
+    key : "secret-key".to_string(),
   };
   let bearer = ApiAuthentication::Bearer
   {
-    token: "bearer-token".to_string(),
+    token : "bearer-token".to_string(),
   };
   let oauth2 = ApiAuthentication::OAuth2
   {
-    client_id: "client-123".to_string(),
-    client_secret: "secret-456".to_string(),
+    client_id : "client-123".to_string(),
+    client_secret : "secret-456".to_string(),
   };
 
   let mut headers = HashMap::new();
@@ -625,23 +625,23 @@ fn test_api_authentication_variants()
 // Mock implementation of ApiConnector for testing
 struct MockApiConnector
 {
-  name: String,
-  config: ApiConnectorConfig,
+  name : String,
+  config : ApiConnectorConfig,
 }
 
 impl MockApiConnector
 {
-  fn new( name: &str, base_url: &str ) -> Self
+  fn new( name : &str, base_url : &str ) -> Self
   {
     Self
     {
-      name: name.to_string(),
-      config: ApiConnectorConfig
+      name : name.to_string(),
+      config : ApiConnectorConfig
       {
-        base_url: base_url.to_string(),
-        authentication: ApiAuthentication::None,
-        rate_limits: None,
-        retry_config: None,
+        base_url : base_url.to_string(),
+        authentication : ApiAuthentication::None,
+        rate_limits : None,
+        retry_config : None,
       },
     }
   }
@@ -662,9 +662,9 @@ impl ApiConnector for MockApiConnector
 
   async fn make_request(
     &self,
-    method: &str,
-    endpoint: &str,
-    body: Option< serde_json::Value >
+    method : &str,
+    endpoint : &str,
+    body : Option< serde_json::Value >
   ) -> Result< serde_json::Value >
   {
     // Mock implementation that returns a success response
@@ -761,9 +761,9 @@ fn test_rate_limit_config_structure()
 {
   let config = RateLimitConfig
   {
-    requests_per_minute: 60,
-    requests_per_hour: 1000,
-    burst_limit: 10,
+    requests_per_minute : 60,
+    requests_per_hour : 1000,
+    burst_limit : 10,
   };
 
   assert_eq!( config.requests_per_minute, 60 );
@@ -776,10 +776,10 @@ fn test_retry_config_structure()
 {
   let config = RetryConfig
   {
-    max_retries: 5,
-    base_delay: Duration::from_millis( 200 ),
-    max_delay: Duration::from_secs( 30 ),
-    backoff_factor: 1.5,
+    max_retries : 5,
+    base_delay : Duration::from_millis( 200 ),
+    max_delay : Duration::from_secs( 30 ),
+    backoff_factor : 1.5,
   };
 
   assert_eq!( config.max_retries, 5 );
@@ -794,19 +794,19 @@ fn test_serialization_deserialization()
   // Test SearchGroundingConfig serialization
   let search_config = SearchGroundingConfig::default();
   let serialized = serde_json::to_string( &search_config ).unwrap();
-  let deserialized: SearchGroundingConfig = serde_json::from_str( &serialized ).unwrap();
+  let deserialized : SearchGroundingConfig = serde_json::from_str( &serialized ).unwrap();
   assert_eq!( deserialized.max_results, search_config.max_results );
 
   // Test CodeExecutionConfig serialization
   let code_config = CodeExecutionConfig::default();
   let serialized = serde_json::to_string( &code_config ).unwrap();
-  let deserialized: CodeExecutionConfig = serde_json::from_str( &serialized ).unwrap();
+  let deserialized : CodeExecutionConfig = serde_json::from_str( &serialized ).unwrap();
   assert_eq!( deserialized.memory_limit, code_config.memory_limit );
 
   // Test ImageGenerationConfig serialization
   let image_config = ImageGenerationConfig::default();
   let serialized = serde_json::to_string( &image_config ).unwrap();
-  let deserialized: ImageGenerationConfig = serde_json::from_str( &serialized ).unwrap();
+  let deserialized : ImageGenerationConfig = serde_json::from_str( &serialized ).unwrap();
   assert!( matches!( deserialized.model, ImageModel::DallE3 ) );
 }
 
@@ -815,7 +815,7 @@ fn test_duration_handling()
 {
   let config = CodeExecutionConfig
   {
-    timeout: Duration::from_secs( 120 ),
+    timeout : Duration::from_secs( 120 ),
     ..Default::default()
   };
 
@@ -829,13 +829,13 @@ fn test_memory_limit_calculations()
 {
   let small_config = CodeExecutionConfig
   {
-    memory_limit: 64 * 1024 * 1024, // 64MB
+    memory_limit : 64 * 1024 * 1024, // 64MB
     ..Default::default()
   };
 
   let large_config = CodeExecutionConfig
   {
-    memory_limit: 1024 * 1024 * 1024, // 1GB
+    memory_limit : 1024 * 1024 * 1024, // 1GB
     ..Default::default()
   };
 
@@ -849,20 +849,20 @@ fn test_browsing_metadata_http_codes()
 {
   let success_metadata = BrowsingMetadata
   {
-    status_code: 200,
-    content_type: "text/html".to_string(),
-    content_length: 5000,
-    load_time_ms: 250,
-    redirect_count: 0,
+    status_code : 200,
+    content_type : "text/html".to_string(),
+    content_length : 5000,
+    load_time_ms : 250,
+    redirect_count : 0,
   };
 
   let redirect_metadata = BrowsingMetadata
   {
-    status_code: 301,
-    content_type: "text/html".to_string(),
-    content_length: 1000,
-    load_time_ms: 150,
-    redirect_count: 2,
+    status_code : 301,
+    content_type : "text/html".to_string(),
+    content_length : 1000,
+    load_time_ms : 150,
+    redirect_count : 2,
   };
 
   assert_eq!( success_metadata.status_code, 200 );

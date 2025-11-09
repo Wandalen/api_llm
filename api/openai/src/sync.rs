@@ -10,21 +10,21 @@ mod private
   use crate::
   {
     Client,
-    client::ClientApiAccessors,
-    error::{ Result, OpenAIError },
-    environment::{ OpenaiEnvironment, EnvironmentInterface },
+    client ::ClientApiAccessors,
+    error ::{ Result, OpenAIError },
+    environment ::{ OpenaiEnvironment, EnvironmentInterface },
   };
   use crate::components::
   {
-    chat_shared::{ ChatCompletionRequest, CreateChatCompletionResponse, ChatCompletionStreamResponse },
-    embeddings_request::CreateEmbeddingRequest,
-    embeddings::CreateEmbeddingResponse,
-    models::{ ListModelsResponse, Model },
+    chat_shared ::{ ChatCompletionRequest, CreateChatCompletionResponse, ChatCompletionStreamResponse },
+    embeddings_request ::CreateEmbeddingRequest,
+    embeddings ::CreateEmbeddingResponse,
+    models ::{ ListModelsResponse, Model },
   };
   use std::sync::
   {
     Arc,
-    mpsc::{ self, Receiver },
+    mpsc ::{ self, Receiver },
   };
   use core::sync::atomic::{ AtomicBool, Ordering };
   use std::thread::{ self, JoinHandle };
@@ -58,8 +58,8 @@ mod private
     #[ inline ]
     pub fn new( environment : E ) -> Result< Self >
     {
-      let runtime = Runtime::new().map_err( |e| OpenAIError::Internal( format!( "Failed to create runtime: {e}" ) ) )?;
-      let async_client = Client::build( environment ).map_err( |e| OpenAIError::Internal( format!( "Failed to build async client: {e}" ) ) )?;
+      let runtime = Runtime::new().map_err( |e| OpenAIError::Internal( format!( "Failed to create runtime : {e}" ) ) )?;
+      let async_client = Client::build( environment ).map_err( |e| OpenAIError::Internal( format!( "Failed to build async client : {e}" ) ) )?;
 
       Ok( Self
       {
@@ -79,7 +79,7 @@ mod private
     #[ inline ]
     pub fn with_runtime( environment : E, runtime : Arc< Runtime > ) -> Result< Self >
     {
-      let async_client = Client::build( environment ).map_err( |e| OpenAIError::Internal( format!( "Failed to build async client: {e}" ) ) )?;
+      let async_client = Client::build( environment ).map_err( |e| OpenAIError::Internal( format!( "Failed to build async client : {e}" ) ) )?;
 
       Ok( Self
       {
@@ -218,7 +218,7 @@ mod private
     ///       }
     ///     }
     ///     Err(e) => {
-    ///       eprintln!("Stream error: {}", e);
+    ///       eprintln!("Stream error : {}", e);
     ///       break;
     ///     }
     ///   }
@@ -356,11 +356,11 @@ mod private
   pub struct StreamConfig
   {
     /// Timeout for the entire stream operation
-    pub timeout: Option< Duration >,
+    pub timeout : Option< Duration >,
     /// Buffer size for the internal channel
-    pub buffer_size: usize,
+    pub buffer_size : usize,
     /// Cancellation token to stop streaming early
-    pub cancellation_token: Option< Arc< AtomicBool > >,
+    pub cancellation_token : Option< Arc< AtomicBool > >,
   }
 
   impl Default for StreamConfig
@@ -370,9 +370,9 @@ mod private
     {
       Self
       {
-        timeout: Some( Duration::from_secs( 300 ) ), // 5 minutes default
-        buffer_size: 100,
-        cancellation_token: None,
+        timeout : Some( Duration::from_secs( 300 ) ), // 5 minutes default
+        buffer_size : 100,
+        cancellation_token : None,
       }
     }
   }
@@ -386,13 +386,13 @@ mod private
     T: Send + 'static,
   {
     /// Receiver for stream items
-    receiver: Receiver< Result< T > >,
+    receiver : Receiver< Result< T > >,
     /// Handle to the background thread
-    handle: Option< JoinHandle< () > >,
+    handle : Option< JoinHandle< () > >,
     /// Cancellation token for early termination
-    cancellation_token: Arc< AtomicBool >,
+    cancellation_token : Arc< AtomicBool >,
     /// Whether the stream has ended
-    ended: bool,
+    ended : bool,
   }
 
   impl< T > core::fmt::Debug for SyncStreamIterator< T >
@@ -400,14 +400,14 @@ mod private
     T: Send + 'static,
   {
     #[ inline ]
-    fn fmt( &self, f: &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result
+    fn fmt( &self, f : &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result
     {
       f.debug_struct( "SyncStreamIterator" )
         .field( "ended", &self.ended )
         .field( "cancelled", &self.is_cancelled() )
         .field( "has_handle", &self.handle.is_some() )
-        .field( "receiver", &"<receiver>" )
-        .field( "cancellation_token", &"<token>" )
+        .field( "receiver", &"< receiver >" )
+        .field( "cancellation_token", &"< token >" )
         .finish()
     }
   }
@@ -426,8 +426,8 @@ mod private
     /// Returns an error if the background thread cannot be started.
     #[ inline ]
     pub fn from_tokio_receiver(
-      mut tokio_receiver: tokio::sync::mpsc::Receiver< Result< T > >,
-      config: StreamConfig,
+      mut tokio_receiver : tokio::sync::mpsc::Receiver< Result< T > >,
+      config : StreamConfig,
     ) -> Result< Self >
     {
       let ( sender, receiver ) = mpsc::channel();
@@ -435,7 +435,7 @@ mod private
       let cancel_clone = cancellation_token.clone();
 
       // Create a runtime for the background thread
-      let runtime = Arc::new( Runtime::new().map_err( | e | OpenAIError::Internal( format!( "Failed to create runtime: {e}" ) ) )? );
+      let runtime = Arc::new( Runtime::new().map_err( | e | OpenAIError::Internal( format!( "Failed to create runtime : {e}" ) ) )? );
 
       let handle = thread::spawn( move || {
         runtime.block_on( async move {
@@ -470,9 +470,9 @@ mod private
       Ok( SyncStreamIterator
       {
         receiver,
-        handle: Some( handle ),
+        handle : Some( handle ),
         cancellation_token,
-        ended: false,
+        ended : false,
       })
     }
 
@@ -562,9 +562,9 @@ mod private
       let cancel_token = Arc::new( AtomicBool::new( false ) );
       let config = StreamConfig
       {
-        timeout: Some( Duration::from_secs( 60 ) ),
-        buffer_size: 50,
-        cancellation_token: Some( cancel_token.clone() ),
+        timeout : Some( Duration::from_secs( 60 ) ),
+        buffer_size : 50,
+        cancellation_token : Some( cancel_token.clone() ),
       };
 
       assert_eq!( config.timeout, Some( Duration::from_secs( 60 ) ) );
@@ -585,7 +585,7 @@ mod private
 
 } // end mod private
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

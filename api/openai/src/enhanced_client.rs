@@ -9,22 +9,22 @@ mod private
 {
   use crate::
   {
-    client::{ Client, ClientApiAccessors },
-    environment::{ OpenaiEnvironment, EnvironmentInterface },
-    connection_manager::{ ConnectionManager, ConnectionConfig },
-    metrics_framework::{ MetricsCollector, MetricsConfig, MetricsSnapshot, MetricsAnalysisReport },
-    error::{ Result, OpenAIError },
-    chat::Chat,
-    embeddings::Embeddings,
-    models::Models,
-    assistants::Assistants,
-    files::Files,
-    fine_tuning::FineTuning,
-    images::Images,
-    realtime::Realtime,
-    responses::Responses,
-    vector_stores::VectorStores,
-    enhanced_client_performance::{ ConnectionPerformanceReport, UnifiedPerformanceDashboard },
+    client ::{ Client, ClientApiAccessors },
+    environment ::{ OpenaiEnvironment, EnvironmentInterface },
+    connection_manager ::{ ConnectionManager, ConnectionConfig },
+    metrics_framework ::{ MetricsCollector, MetricsConfig, MetricsSnapshot, MetricsAnalysisReport },
+    error ::{ Result, OpenAIError },
+    chat ::Chat,
+    embeddings ::Embeddings,
+    models ::Models,
+    assistants ::Assistants,
+    files ::Files,
+    fine_tuning ::FineTuning,
+    images ::Images,
+    realtime ::Realtime,
+    responses ::Responses,
+    vector_stores ::VectorStores,
+    enhanced_client_performance ::{ ConnectionPerformanceReport, UnifiedPerformanceDashboard },
   };
 
   // Feature-gated imports
@@ -51,31 +51,31 @@ mod private
     E : OpenaiEnvironment + EnvironmentInterface + Send + Sync + 'static,
   {
     /// Base client for API operations
-    base_client: Client< E >,
+    base_client : Client< E >,
     /// Advanced connection manager
-    connection_manager: Arc< RwLock< ConnectionManager > >,
+    connection_manager : Arc< RwLock< ConnectionManager > >,
     /// Connection configuration
-    config: ConnectionConfig,
+    config : ConnectionConfig,
     /// Optional response cache for improved performance
     #[ cfg( feature = "caching" ) ]
-    response_cache: Option< ResponseCache >,
+    response_cache : Option< ResponseCache >,
     /// Placeholder for response cache when feature is disabled
     #[ cfg( not( feature = "caching" ) ) ]
-    response_cache: Option< () >,
+    response_cache : Option< () >,
     /// Optional circuit breaker configuration
     #[ cfg( feature = "circuit_breaker" ) ]
-    circuit_breaker_config: Option< EnhancedCircuitBreakerConfig >,
+    circuit_breaker_config : Option< EnhancedCircuitBreakerConfig >,
     /// Placeholder for circuit breaker config when feature is disabled
     #[ cfg( not( feature = "circuit_breaker" ) ) ]
-    circuit_breaker_config: Option< () >,
+    circuit_breaker_config : Option< () >,
     /// Optional circuit breaker instance for fault tolerance (only when feature is enabled)
     #[ cfg( feature = "circuit_breaker" ) ]
-    circuit_breaker: Option< EnhancedCircuitBreaker >,
+    circuit_breaker : Option< EnhancedCircuitBreaker >,
     /// Placeholder for circuit breaker when feature is disabled
     #[ cfg( not( feature = "circuit_breaker" ) ) ]
-    circuit_breaker: Option< () >,
+    circuit_breaker : Option< () >,
     /// Comprehensive metrics collector
-    metrics_collector: Option< Arc< RwLock< MetricsCollector > > >,
+    metrics_collector : Option< Arc< RwLock< MetricsCollector > > >,
   }
 
   impl< E > EnhancedClient< E >
@@ -88,7 +88,7 @@ mod private
     ///
     /// Returns an error if the base client cannot be created.
     #[ inline ]
-    pub fn build( environment: E ) -> Result< Self >
+    pub fn build( environment : E ) -> Result< Self >
     {
       Self::build_with_config( environment, ConnectionConfig::default() )
     }
@@ -99,7 +99,7 @@ mod private
     ///
     /// Returns an error if the base client cannot be created.
     #[ inline ]
-    pub fn build_with_config( environment: E, config: ConnectionConfig ) -> Result< Self >
+    pub fn build_with_config( environment : E, config : ConnectionConfig ) -> Result< Self >
     {
       let base_client = Client::build( environment )?;
       let mut connection_manager = ConnectionManager::new( config.clone() );
@@ -110,12 +110,12 @@ mod private
       Ok( Self
       {
         base_client,
-        connection_manager: Arc::new( RwLock::new( connection_manager ) ),
+        connection_manager : Arc::new( RwLock::new( connection_manager ) ),
         config,
-        response_cache: None,
-        circuit_breaker_config: None,
-        circuit_breaker: None,
-        metrics_collector: None,
+        response_cache : None,
+        circuit_breaker_config : None,
+        circuit_breaker : None,
+        metrics_collector : None,
       } )
     }
 
@@ -127,9 +127,9 @@ mod private
     #[ cfg( feature = "caching" ) ]
     #[ inline ]
     pub fn build_with_caching(
-      environment: E,
-      connection_config: ConnectionConfig,
-      cache_config: CacheConfig
+      environment : E,
+      connection_config : ConnectionConfig,
+      cache_config : CacheConfig
     ) -> Result< Self >
     {
       let base_client = Client::build( environment )?;
@@ -144,19 +144,19 @@ mod private
       Ok( Self
       {
         base_client,
-        connection_manager: Arc::new( RwLock::new( connection_manager ) ),
-        config: connection_config,
-        response_cache: Some( response_cache ),
-        circuit_breaker_config: None,
-        circuit_breaker: None,
-        metrics_collector: None,
+        connection_manager : Arc::new( RwLock::new( connection_manager ) ),
+        config : connection_config,
+        response_cache : Some( response_cache ),
+        circuit_breaker_config : None,
+        circuit_breaker : None,
+        metrics_collector : None,
       } )
     }
 
     /// Enable response caching on existing client
     #[ cfg( feature = "caching" ) ]
     #[ inline ]
-    pub fn enable_caching( &mut self, cache_config: CacheConfig )
+    pub fn enable_caching( &mut self, cache_config : CacheConfig )
     {
       self.response_cache = Some( ResponseCache::with_config( cache_config ) );
     }
@@ -177,11 +177,11 @@ mod private
     #[ cfg( all( feature = "caching", feature = "circuit_breaker" ) ) ]
     #[ inline ]
     pub fn build_with_full_config(
-      environment: E,
-      connection_config: ConnectionConfig,
-      cache_config: Option< CacheConfig >,
-      circuit_breaker_config: Option< EnhancedCircuitBreakerConfig >,
-      metrics_config: Option< MetricsConfig >
+      environment : E,
+      connection_config : ConnectionConfig,
+      cache_config : Option< CacheConfig >,
+      circuit_breaker_config : Option< EnhancedCircuitBreakerConfig >,
+      metrics_config : Option< MetricsConfig >
     ) -> Result< Self >
     {
       let base_client = Client::build( environment )?;
@@ -217,8 +217,8 @@ mod private
       Ok( Self
       {
         base_client,
-        connection_manager: Arc::new( RwLock::new( connection_manager ) ),
-        config: connection_config,
+        connection_manager : Arc::new( RwLock::new( connection_manager ) ),
+        config : connection_config,
         response_cache,
         circuit_breaker_config,
         circuit_breaker,
@@ -240,7 +240,7 @@ mod private
     /// Enable circuit breaker with custom configuration
     #[ cfg( feature = "circuit_breaker" ) ]
     #[ inline ]
-    pub fn enable_circuit_breaker_with_config( &mut self, config: EnhancedCircuitBreakerConfig )
+    pub fn enable_circuit_breaker_with_config( &mut self, config : EnhancedCircuitBreakerConfig )
     {
       self.circuit_breaker_config = Some( config.clone() );
       self.circuit_breaker = EnhancedCircuitBreaker::new( config ).ok();
@@ -287,7 +287,7 @@ mod private
     ///
     /// Returns an error if metrics collection cannot be enabled.
     #[ inline ]
-    pub fn enable_metrics_with_config( &mut self, config: MetricsConfig ) -> Result< () >
+    pub fn enable_metrics_with_config( &mut self, config : MetricsConfig ) -> Result< () >
     {
       let mut collector = MetricsCollector::with_config( config );
       collector.start_collection();
@@ -327,10 +327,10 @@ mod private
 
         // Circuit breaker stats are temporarily disabled until the circuit breaker module provides stats
         #[ cfg( feature = "circuit_breaker" ) ]
-        let circuit_breaker_stats: Option< &() > = None;
+        let circuit_breaker_stats : Option< &() > = None;
 
         #[ cfg( not( feature = "circuit_breaker" ) ) ]
-        let circuit_breaker_stats: Option< &() > = None;
+        let circuit_breaker_stats : Option< &() > = None;
 
         Some( collector.collect_snapshot(
           Some( &connection_metrics ),
@@ -488,9 +488,9 @@ mod private
     #[ inline ]
     pub async fn execute_managed_request< I, O >(
       &self,
-      method: Method,
-      path: &str,
-      body: Option< &I >,
+      method : Method,
+      path : &str,
+      body : Option< &I >,
     ) -> Result< O >
     where
       I : serde::Serialize + Send + Sync,
@@ -512,9 +512,9 @@ mod private
     /// Internal request execution method (used by circuit breaker)
     async fn execute_request_internal< I, O >(
       &self,
-      method: Method,
-      path: &str,
-      body: Option< &I >,
+      method : Method,
+      path : &str,
+      body : Option< &I >,
     ) -> Result< O >
     where
       I : serde::Serialize + Send + Sync,
@@ -529,7 +529,7 @@ mod private
       let connection = {
         let manager = self.connection_manager.read().await;
         manager.get_connection( host ).await
-          .map_err( | e | OpenAIError::Internal( format!( "Failed to get connection: {e}" ) ) )?
+          .map_err( | e | OpenAIError::Internal( format!( "Failed to get connection : {e}" ) ) )?
       };
 
       // Build and execute request
@@ -563,9 +563,9 @@ mod private
 
           // Parse response
           let bytes = resp.bytes().await
-            .map_err( | e | OpenAIError::Internal( format!( "Failed to read response: {e}" ) ) )?;
+            .map_err( | e | OpenAIError::Internal( format!( "Failed to read response : {e}" ) ) )?;
 
-          let result: O = serde_json::from_slice( &bytes )
+          let result : O = serde_json::from_slice( &bytes )
             .map_err( | e | OpenAIError::Internal( format!( "Failed to parse JSON: {e}" ) ) )?;
 
           // Return connection to pool
@@ -597,7 +597,7 @@ mod private
             manager.return_connection( connection ).await;
           }
 
-          Err( OpenAIError::Internal( format!( "Request failed: {e}" ) ).into() )
+          Err( OpenAIError::Internal( format!( "Request failed : {e}" ) ).into() )
         }
       }
     }
@@ -609,7 +609,7 @@ mod private
     /// Returns an error if the request fails or caching operations fail.
     #[ allow( unused_variables ) ]
     #[ inline ]
-    pub async fn get_cached< O >( &self, path: &str, ttl: Option< Duration > ) -> Result< O >
+    pub async fn get_cached< O >( &self, path : &str, ttl : Option< Duration > ) -> Result< O >
     where
       O: serde::de::DeserializeOwned + serde::Serialize,
     {
@@ -621,13 +621,13 @@ mod private
           let cache_key = CacheKey::new( "GET", path, None, None );
           if let Some( cached_data ) = cache.get( &cache_key ).await
           {
-            let result: O = serde_json::from_slice( &cached_data )
-              .map_err( | e | OpenAIError::Internal( format!( "Failed to deserialize cached response: {e}" ) ) )?;
+            let result : O = serde_json::from_slice( &cached_data )
+              .map_err( | e | OpenAIError::Internal( format!( "Failed to deserialize cached response : {e}" ) ) )?;
             return Ok( result );
           }
 
           // Cache miss - make request and cache result
-          let response: O = self.execute_managed_request( Method::GET, path, None::< &() > ).await?;
+          let response : O = self.execute_managed_request( Method::GET, path, None::< &() > ).await?;
 
           // Cache the response
           if let Ok( serialized ) = serde_json::to_vec( &response )
@@ -656,7 +656,7 @@ mod private
     /// Returns an error if the request fails or caching operations fail.
     #[ allow( unused_variables ) ]
     #[ inline ]
-    pub async fn post_cached< I, O >( &self, path: &str, body: &I, ttl: Option< Duration > ) -> Result< O >
+    pub async fn post_cached< I, O >( &self, path : &str, body : &I, ttl : Option< Duration > ) -> Result< O >
     where
       I: serde::Serialize + Send + Sync,
       O: serde::de::DeserializeOwned + serde::Serialize,
@@ -669,18 +669,18 @@ mod private
           if ttl.is_some()
           {
           let body_bytes = serde_json::to_vec( body )
-            .map_err( | e | OpenAIError::Internal( format!( "Failed to serialize request body: {e}" ) ) )?;
+            .map_err( | e | OpenAIError::Internal( format!( "Failed to serialize request body : {e}" ) ) )?;
 
           let cache_key = CacheKey::new( "POST", path, Some( &body_bytes ), None );
           if let Some( cached_data ) = cache.get( &cache_key ).await
           {
-            let result: O = serde_json::from_slice( &cached_data )
-              .map_err( | e | OpenAIError::Internal( format!( "Failed to deserialize cached response: {e}" ) ) )?;
+            let result : O = serde_json::from_slice( &cached_data )
+              .map_err( | e | OpenAIError::Internal( format!( "Failed to deserialize cached response : {e}" ) ) )?;
             return Ok( result );
           }
 
           // Cache miss - make request and cache result
-          let response: O = self.execute_managed_request( Method::POST, path, Some( body ) ).await?;
+          let response : O = self.execute_managed_request( Method::POST, path, Some( body ) ).await?;
 
           // Cache the response
           if let Ok( serialized ) = serde_json::to_vec( &response )
@@ -766,7 +766,7 @@ mod private
     ///
     /// Returns an error if connection warm-up operations fail.
     #[ inline ]
-    pub async fn warm_up_connections( &self, hosts: Vec< &str >, connections_per_host: usize ) -> Result< () >
+    pub async fn warm_up_connections( &self, hosts : Vec< &str >, connections_per_host : usize ) -> Result< () >
     {
       let manager = self.connection_manager.read().await;
 
@@ -808,7 +808,7 @@ mod private
 
     /// Update connection configuration
     #[ inline ]
-    pub async fn update_connection_config( &self, new_config: ConnectionConfig )
+    pub async fn update_connection_config( &self, new_config : ConnectionConfig )
     {
       let mut manager = self.connection_manager.write().await;
       *manager = ConnectionManager::new( new_config.clone() );
@@ -828,7 +828,7 @@ mod private
 
       // Collect cache statistics if available
       #[ cfg( feature = "caching" ) ]
-      let cache_stats: Option< crate::response_cache::CacheStatistics > = if let Some( ref cache ) = self.response_cache
+      let cache_stats : Option< crate::response_cache::CacheStatistics > = if let Some( ref cache ) = self.response_cache
       {
         Some( cache.get_statistics().await )
       }
@@ -838,10 +838,10 @@ mod private
       };
 
       #[ cfg( not( feature = "caching" ) ) ]
-      let cache_stats: Option< () > = None;
+      let cache_stats : Option< () > = None;
 
       // Collect metrics if available (create a snapshot)
-      let metrics_summary: Option< crate::metrics_framework::MetricsSnapshot > = if let Some( ref metrics_collector ) = self.metrics_collector
+      let metrics_summary : Option< crate::metrics_framework::MetricsSnapshot > = if let Some( ref metrics_collector ) = self.metrics_collector
       {
         let collector = metrics_collector.read().await;
         Some( collector.collect_snapshot(
@@ -906,9 +906,9 @@ mod private
 
       Ok( UnifiedPerformanceDashboard
       {
-        overall_performance_score: overall_score,
-        connection_performance: connection_report,
-        cache_performance: cache_stats,
+        overall_performance_score : overall_score,
+        connection_performance : connection_report,
+        cache_performance : cache_stats,
         metrics_summary,
         recommendations,
       } )

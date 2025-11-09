@@ -31,13 +31,13 @@ async fn test_compare_models_basic() -> Result< (), Box< dyn std::error::Error >
   let models_api = client.models();
 
   let request = CompareModelsRequest {
-    model_names: vec![
+    model_names : vec![
       "gemini-2.0-flash-experimental".to_string(),
       "gemini-1.5-pro-002".to_string(),
     ],
-    criteria: Some( vec![ "performance".to_string(), "cost".to_string() ] ),
-    include_benchmarks: Some( true ),
-    include_cost_analysis: Some( true ),
+    criteria : Some( vec![ "performance".to_string(), "cost".to_string() ] ),
+    include_benchmarks : Some( true ),
+    include_cost_analysis : Some( true ),
   };
 
   let response = models_api.compare_models( &request ).await?;
@@ -118,14 +118,14 @@ async fn test_get_recommendations_chatbot() -> Result< (), Box< dyn std::error::
   let models_api = client.models();
 
   let request = GetRecommendationsRequest {
-    use_case: "Real-time customer support chatbot".to_string(),
-    input_size_range: Some( "short".to_string() ),
-    performance_requirements: Some( vec![
+    use_case : "Real-time customer support chatbot".to_string(),
+    input_size_range : Some( "short".to_string() ),
+    performance_requirements : Some( vec![
       "low-latency".to_string(),
       "high-availability".to_string(),
     ] ),
-    budget_constraints: Some( 50.0 ),
-    real_time_required: Some( true ),
+    budget_constraints : Some( 50.0 ),
+    real_time_required : Some( true ),
   };
 
   let response = models_api.get_recommendations( &request ).await?;
@@ -175,7 +175,7 @@ async fn test_get_recommendations_chatbot() -> Result< (), Box< dyn std::error::
 
   println!( "✓ Chatbot recommendations test passed" );
   println!( "  Received {} recommendations", response.recommendations.len() );
-  println!( "  Top recommendation: {} (confidence: {:.2})",
+  println!( "  Top recommendation : {} (confidence : {:.2})",
     response.recommendations[ 0 ].recommended_model,
     response.recommendations[ 0 ].confidence_score
   );
@@ -201,22 +201,22 @@ async fn test_get_recommendations_different_use_cases() -> Result< (), Box< dyn 
 
   // Test embedding use case
   let embedding_request = GetRecommendationsRequest {
-    use_case: "Document similarity analysis and search".to_string(),
-    input_size_range: Some( "medium".to_string() ),
-    performance_requirements: Some( vec![ "batch-processing".to_string() ] ),
-    budget_constraints: Some( 100.0 ),
-    real_time_required: Some( false ),
+    use_case : "Document similarity analysis and search".to_string(),
+    input_size_range : Some( "medium".to_string() ),
+    performance_requirements : Some( vec![ "batch-processing".to_string() ] ),
+    budget_constraints : Some( 100.0 ),
+    real_time_required : Some( false ),
   };
 
   let embedding_response = models_api.get_recommendations( &embedding_request ).await?;
 
   // Test content generation use case
   let generation_request = GetRecommendationsRequest {
-    use_case: "Creative writing and content generation".to_string(),
-    input_size_range: Some( "long".to_string() ),
-    performance_requirements: Some( vec![ "high-quality".to_string(), "creative".to_string() ] ),
-    budget_constraints: Some( 200.0 ),
-    real_time_required: Some( false ),
+    use_case : "Creative writing and content generation".to_string(),
+    input_size_range : Some( "long".to_string() ),
+    performance_requirements : Some( vec![ "high-quality".to_string(), "creative".to_string() ] ),
+    budget_constraints : Some( 200.0 ),
+    real_time_required : Some( false ),
   };
 
   let generation_response = models_api.get_recommendations( &generation_request ).await?;
@@ -239,8 +239,8 @@ async fn test_get_recommendations_different_use_cases() -> Result< (), Box< dyn 
   );
 
   println!( "✓ Different use cases test passed" );
-  println!( "  Embedding use case top pick: {}", embedding_top );
-  println!( "  Generation use case top pick: {}", generation_top );
+  println!( "  Embedding use case top pick : {}", embedding_top );
+  println!( "  Generation use case top pick : {}", generation_top );
 
   Ok( () )
 }
@@ -262,12 +262,12 @@ async fn test_advanced_filter_comprehensive() -> Result< (), Box< dyn std::error
   let models_api = client.models();
 
   let request = AdvancedFilterRequest {
-    capabilities: Some( vec![ "generateContent".to_string() ] ),
-    max_cost_per_1k: Some( 0.01 ), // Reasonable cost limit
-    min_quality_score: Some( 0.7 ), // High quality requirement
-    max_response_time: Some( 5000.0 ), // 5 second max response time
-    supports_streaming: Some( true ),
-    sort_by: Some( "quality".to_string() ),
+    capabilities : Some( vec![ "generateContent".to_string() ] ),
+    max_cost_per_1k : Some( 0.01 ), // Reasonable cost limit
+    min_quality_score : Some( 0.7 ), // High quality requirement
+    max_response_time : Some( 5000.0 ), // 5 second max response time
+    supports_streaming : Some( true ),
+    sort_by : Some( "quality".to_string() ),
   };
 
   let response = models_api.advanced_filter( &request ).await?;
@@ -326,24 +326,24 @@ async fn test_advanced_filter_different_criteria() -> Result< (), Box< dyn std::
 
   // Test cost-focused filtering
   let cost_request = AdvancedFilterRequest {
-    capabilities: None,
-    max_cost_per_1k: Some( 0.001 ), // Very low cost requirement
-    min_quality_score: None,
-    max_response_time: None,
-    supports_streaming: None,
-    sort_by: Some( "cost".to_string() ),
+    capabilities : None,
+    max_cost_per_1k : Some( 0.001 ), // Very low cost requirement
+    min_quality_score : None,
+    max_response_time : None,
+    supports_streaming : None,
+    sort_by : Some( "cost".to_string() ),
   };
 
   let cost_response = models_api.advanced_filter( &cost_request ).await?;
 
   // Test performance-focused filtering
   let performance_request = AdvancedFilterRequest {
-    capabilities: None,
-    max_cost_per_1k: None,
-    min_quality_score: Some( 0.9 ), // Very high quality requirement
-    max_response_time: Some( 1000.0 ), // Fast response requirement
-    supports_streaming: Some( true ),
-    sort_by: Some( "performance".to_string() ),
+    capabilities : None,
+    max_cost_per_1k : None,
+    min_quality_score : Some( 0.9 ), // Very high quality requirement
+    max_response_time : Some( 1000.0 ), // Fast response requirement
+    supports_streaming : Some( true ),
+    sort_by : Some( "performance".to_string() ),
   };
 
   let performance_response = models_api.advanced_filter( &performance_request ).await?;
@@ -356,8 +356,8 @@ async fn test_advanced_filter_different_criteria() -> Result< (), Box< dyn std::
   // (This is expected behavior, not a hard requirement)
 
   println!( "✓ Different filter criteria test passed" );
-  println!( "  Cost-focused results: {} matches", cost_response.total_matches );
-  println!( "  Performance-focused results: {} matches", performance_response.total_matches );
+  println!( "  Cost-focused results : {} matches", cost_response.total_matches );
+  println!( "  Performance-focused results : {} matches", performance_response.total_matches );
 
   Ok( () )
 }
@@ -379,11 +379,11 @@ async fn test_model_status_monitoring() -> Result< (), Box< dyn std::error::Erro
   let models_api = client.models();
 
   let request = ModelStatusRequest {
-    model_names: vec![
+    model_names : vec![
       "gemini-2.0-flash-experimental".to_string(),
       "gemini-1.5-pro-002".to_string(),
     ],
-    include_health_metrics: Some( true ),
+    include_health_metrics : Some( true ),
   };
 
   let response = models_api.get_model_status( &request ).await?;
@@ -399,7 +399,7 @@ async fn test_model_status_monitoring() -> Result< (), Box< dyn std::error::Erro
 
     // Status should be a valid status string
     let _valid_statuses = vec![ "available", "unavailable", "limited", "maintenance", "deprecated" ];
-    // Note: The actual API might use different status values
+    // Note : The actual API might use different status values
 
     // Health percentage should be valid if provided
     if let Some( health ) = status.health_percentage
@@ -426,7 +426,7 @@ async fn test_model_status_monitoring() -> Result< (), Box< dyn std::error::Erro
     println!( "  {}: {}", status.model_name, status.status );
     if let Some( health ) = status.health_percentage
     {
-      println!( "    Health: {:.1}%", health );
+      println!( "    Health : {:.1}%", health );
     }
   }
 
@@ -445,13 +445,13 @@ async fn test_model_discovery_error_handling() -> Result< (), Box< dyn std::erro
 
   // Test comparison with non-existent models
   let invalid_compare_request = CompareModelsRequest {
-    model_names: vec![
+    model_names : vec![
       "non-existent-model-1".to_string(),
       "non-existent-model-2".to_string(),
     ],
-    criteria: None,
-    include_benchmarks: Some( false ),
-    include_cost_analysis: Some( false ),
+    criteria : None,
+    include_benchmarks : Some( false ),
+    include_cost_analysis : Some( false ),
   };
 
   let compare_result = models_api.compare_models( &invalid_compare_request ).await;
@@ -459,11 +459,11 @@ async fn test_model_discovery_error_handling() -> Result< (), Box< dyn std::erro
 
   // Test recommendations with empty use case
   let empty_use_case_request = GetRecommendationsRequest {
-    use_case: "".to_string(),
-    input_size_range: None,
-    performance_requirements: None,
-    budget_constraints: None,
-    real_time_required: None,
+    use_case : "".to_string(),
+    input_size_range : None,
+    performance_requirements : None,
+    budget_constraints : None,
+    real_time_required : None,
   };
 
   let recommendations_result = models_api.get_recommendations( &empty_use_case_request ).await;
@@ -471,17 +471,17 @@ async fn test_model_discovery_error_handling() -> Result< (), Box< dyn std::erro
 
   // Test status for non-existent models
   let invalid_status_request = ModelStatusRequest {
-    model_names: vec![ "completely-invalid-model".to_string() ],
-    include_health_metrics: Some( true ),
+    model_names : vec![ "completely-invalid-model".to_string() ],
+    include_health_metrics : Some( true ),
   };
 
   let status_result = models_api.get_model_status( &invalid_status_request ).await;
   // Should handle gracefully (might return "unavailable" status or error)
 
   println!( "✓ Error handling test completed" );
-  println!( "  Compare result: {}", if compare_result.is_ok() { "OK" } else { "Error" } );
-  println!( "  Recommendations result: {}", if recommendations_result.is_ok() { "OK" } else { "Error" } );
-  println!( "  Status result: {}", if status_result.is_ok() { "OK" } else { "Error" } );
+  println!( "  Compare result : {}", if compare_result.is_ok() { "OK" } else { "Error" } );
+  println!( "  Recommendations result : {}", if recommendations_result.is_ok() { "OK" } else { "Error" } );
+  println!( "  Status result : {}", if status_result.is_ok() { "OK" } else { "Error" } );
 
   Ok( () )
 }
@@ -504,18 +504,18 @@ async fn test_model_discovery_workflow() -> Result< (), Box< dyn std::error::Err
 
   // Step 1: Get recommendations for a specific use case
   let recommendations_request = GetRecommendationsRequest {
-    use_case: "High-quality content generation for marketing materials".to_string(),
-    input_size_range: Some( "medium".to_string() ),
-    performance_requirements: Some( vec![ "high-quality".to_string(), "creative".to_string() ] ),
-    budget_constraints: Some( 150.0 ),
-    real_time_required: Some( false ),
+    use_case : "High-quality content generation for marketing materials".to_string(),
+    input_size_range : Some( "medium".to_string() ),
+    performance_requirements : Some( vec![ "high-quality".to_string(), "creative".to_string() ] ),
+    budget_constraints : Some( 150.0 ),
+    real_time_required : Some( false ),
   };
 
   let recommendations_response = models_api.get_recommendations( &recommendations_request ).await?;
   assert!( !recommendations_response.recommendations.is_empty(), "Should get recommendations" );
 
   // Step 2: Compare the top recommended models
-  let top_models: Vec< String > = recommendations_response.recommendations
+  let top_models : Vec< String > = recommendations_response.recommendations
     .iter()
     .take( 3 ) // Take top 3 recommendations
     .map( |r| r.recommended_model.clone() )
@@ -524,10 +524,10 @@ async fn test_model_discovery_workflow() -> Result< (), Box< dyn std::error::Err
   if top_models.len() >= 2
   {
     let compare_request = CompareModelsRequest {
-      model_names: top_models.clone(),
-      criteria: Some( vec![ "performance".to_string(), "cost".to_string(), "quality".to_string() ] ),
-      include_benchmarks: Some( true ),
-      include_cost_analysis: Some( true ),
+      model_names : top_models.clone(),
+      criteria : Some( vec![ "performance".to_string(), "cost".to_string(), "quality".to_string() ] ),
+      include_benchmarks : Some( true ),
+      include_cost_analysis : Some( true ),
     };
 
     let compare_response = models_api.compare_models( &compare_request ).await?;
@@ -536,8 +536,8 @@ async fn test_model_discovery_workflow() -> Result< (), Box< dyn std::error::Err
 
     // Step 3: Check status of the compared models
     let status_request = ModelStatusRequest {
-      model_names: top_models.clone(),
-      include_health_metrics: Some( true ),
+      model_names : top_models.clone(),
+      include_health_metrics : Some( true ),
     };
 
     let status_response = models_api.get_model_status( &status_request ).await?;
@@ -546,21 +546,21 @@ async fn test_model_discovery_workflow() -> Result< (), Box< dyn std::error::Err
 
     // Step 4: Filter for additional options
     let filter_request = AdvancedFilterRequest {
-      capabilities: Some( vec![ "generateContent".to_string() ] ),
-      max_cost_per_1k: Some( 0.005 ),
-      min_quality_score: Some( 0.8 ),
-      max_response_time: None,
-      supports_streaming: Some( true ),
-      sort_by: Some( "quality".to_string() ),
+      capabilities : Some( vec![ "generateContent".to_string() ] ),
+      max_cost_per_1k : Some( 0.005 ),
+      min_quality_score : Some( 0.8 ),
+      max_response_time : None,
+      supports_streaming : Some( true ),
+      sort_by : Some( "quality".to_string() ),
     };
 
     let filter_response = models_api.advanced_filter( &filter_request ).await?;
 
     println!( "✓ Complete model discovery workflow test passed" );
-    println!( "  Initial recommendations: {}", recommendations_response.recommendations.len() );
-    println!( "  Models compared: {}", compare_response.comparisons.len() );
-    println!( "  Status checked for: {} models", status_response.model_statuses.len() );
-    println!( "  Additional filtered options: {}", filter_response.total_matches );
+    println!( "  Initial recommendations : {}", recommendations_response.recommendations.len() );
+    println!( "  Models compared : {}", compare_response.comparisons.len() );
+    println!( "  Status checked for : {} models", status_response.model_statuses.len() );
+    println!( "  Additional filtered options : {}", filter_response.total_matches );
 
     // Verify workflow coherence
     assert!(

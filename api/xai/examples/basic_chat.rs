@@ -41,15 +41,15 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
   {
     if let Some( content ) = choice.message.content
     {
-      println!( "🤖 Assistant: {content}\n" );
+      println!( "🤖 Assistant : {content}\n" );
     }
   }
 
   // Display usage statistics
   println!( "📊 Token Usage:" );
-  println!( "   - Prompt: {} tokens", response.usage.prompt_tokens );
-  println!( "   - Completion: {} tokens", response.usage.completion_tokens );
-  println!( "   - Total: {} tokens", response.usage.total_tokens );
+  println!( "   - Prompt : {} tokens", response.usage.prompt_tokens );
+  println!( "   - Completion : {} tokens", response.usage.completion_tokens );
+  println!( "   - Total : {} tokens", response.usage.total_tokens );
 
   Ok( () )
 }

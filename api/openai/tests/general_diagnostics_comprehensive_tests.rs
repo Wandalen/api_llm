@@ -18,9 +18,9 @@ use api_openai::ClientApiAccessors;
 use api_openai::
 {
   Client,
-  environment::OpenaiEnvironmentImpl,
-  secret::Secret,
-  diagnostics::
+  environment ::OpenaiEnvironmentImpl,
+  secret ::Secret,
+  diagnostics ::
   {
     DiagnosticsCollector,
     DiagnosticsConfig,
@@ -32,8 +32,8 @@ use api_openai::
     PerformanceMetrics,
     DiagnosticsReport,
   },
-  components::embeddings_request::CreateEmbeddingRequest,
-  components::common::ResponseUsage,
+  components ::embeddings_request::CreateEmbeddingRequest,
+  components ::common::ResponseUsage,
 };
 
 use std::time::{ Duration, Instant };
@@ -44,19 +44,19 @@ fn create_diagnostic_client() -> Result< Client< OpenaiEnvironmentImpl >, Box< d
   let secret = Secret::load_from_env( "OPENAI_API_KEY" )?;
   let config = DiagnosticsConfig
   {
-    collection: DiagnosticsCollectionConfig
+    collection : DiagnosticsCollectionConfig
     {
-      enabled: true,
-      request_headers: true,
-      response_headers: true,
-      request_body: false, // For privacy
-      response_body: false, // For privacy
+      enabled : true,
+      request_headers : true,
+      response_headers : true,
+      request_body : false, // For privacy
+      response_body : false, // For privacy
     },
-    performance: DiagnosticsPerformanceConfig
+    performance : DiagnosticsPerformanceConfig
     {
-      enabled: true,
+      enabled : true,
     },
-    max_history_size: 100,
+    max_history_size : 100,
   };
 
   let env = OpenaiEnvironmentImpl::build_with_diagnostics( secret, None, None, api_openai::environment::OpenAIRecommended::base_url().to_string(), api_openai::environment::OpenAIRecommended::realtime_base_url().to_string(), Some( config ) )?;
@@ -66,7 +66,7 @@ fn create_diagnostic_client() -> Result< Client< OpenaiEnvironmentImpl >, Box< d
 /// Helper function to check if we should run integration tests
 fn should_run_integration_tests() -> bool
 {
-  std::env::var( "OPENAI_API_KEY" ).is_ok()
+  std ::env::var( "OPENAI_API_KEY" ).is_ok()
 }
 
 // === UNIT TESTS ===
@@ -76,19 +76,19 @@ fn test_diagnostics_config_creation()
 {
   let config = DiagnosticsConfig
   {
-    collection: DiagnosticsCollectionConfig
+    collection : DiagnosticsCollectionConfig
     {
-      enabled: true,
-      request_headers: true,
-      response_headers: true,
-      request_body: false,
-      response_body: false,
+      enabled : true,
+      request_headers : true,
+      response_headers : true,
+      request_body : false,
+      response_body : false,
     },
-    performance: DiagnosticsPerformanceConfig
+    performance : DiagnosticsPerformanceConfig
     {
-      enabled: true,
+      enabled : true,
     },
-    max_history_size: 50,
+    max_history_size : 50,
   };
 
   assert!(config.collection.enabled);
@@ -116,12 +116,12 @@ fn test_request_metrics_structure()
 {
   let metrics = RequestMetrics
   {
-    timestamp: Instant::now(),
-    method: "POST".to_string(),
-    endpoint: "embeddings".to_string(),
-    headers: vec![ ("Authorization".to_string(), "[REDACTED]".to_string()) ],
-    body_size: 256,
-    user_agent: "api_openai/0.2.0".to_string(),
+    timestamp : Instant::now(),
+    method : "POST".to_string(),
+    endpoint : "embeddings".to_string(),
+    headers : vec![ ("Authorization".to_string(), "[REDACTED]".to_string()) ],
+    body_size : 256,
+    user_agent : "api_openai/0.2.0".to_string(),
   };
 
   assert_eq!(metrics.method, "POST");
@@ -135,16 +135,16 @@ fn test_response_metrics_structure()
 {
   let metrics = ResponseMetrics
   {
-    timestamp: Instant::now(),
-    status_code: 200,
-    headers: vec![ ("Content-Type".to_string(), "application/json".to_string()) ],
-    body_size: 1024,
-    response_time: Duration::from_millis(250),
-    tokens_used: Some( ResponseUsage
+    timestamp : Instant::now(),
+    status_code : 200,
+    headers : vec![ ("Content-Type".to_string(), "application/json".to_string()) ],
+    body_size : 1024,
+    response_time : Duration::from_millis(250),
+    tokens_used : Some( ResponseUsage
     {
-      prompt_tokens: 10,
-      completion_tokens: None,
-      total_tokens: 10,
+      prompt_tokens : 10,
+      completion_tokens : None,
+      total_tokens : 10,
     }),
   };
 
@@ -159,12 +159,12 @@ fn test_error_metrics_structure()
 {
   let metrics = ErrorMetrics
   {
-    timestamp: Instant::now(),
-    error_type: "RateLimitError".to_string(),
-    error_code: Some(429),
-    error_message: "Rate limit exceeded".to_string(),
-    retry_count: 2,
-    final_failure: false,
+    timestamp : Instant::now(),
+    error_type : "RateLimitError".to_string(),
+    error_code : Some(429),
+    error_message : "Rate limit exceeded".to_string(),
+    retry_count : 2,
+    final_failure : false,
   };
 
   assert_eq!(metrics.error_type, "RateLimitError");
@@ -178,15 +178,15 @@ fn test_performance_metrics_structure()
 {
   let metrics = PerformanceMetrics
   {
-    total_requests: 100,
-    successful_requests: 95,
-    failed_requests: 5,
-    average_response_time: Duration::from_millis(300),
-    min_response_time: Duration::from_millis(50),
-    max_response_time: Duration::from_millis(1200),
-    total_tokens_used: 5000,
-    requests_per_minute: 12.5,
-    error_rate: 0.05,
+    total_requests : 100,
+    successful_requests : 95,
+    failed_requests : 5,
+    average_response_time : Duration::from_millis(300),
+    min_response_time : Duration::from_millis(50),
+    max_response_time : Duration::from_millis(1200),
+    total_tokens_used : 5000,
+    requests_per_minute : 12.5,
+    error_rate : 0.05,
   };
 
   assert_eq!(metrics.total_requests, 100);
@@ -200,25 +200,25 @@ fn test_diagnostics_report_structure()
 {
   let report = DiagnosticsReport
   {
-    generated_at: Instant::now(),
-    time_range: Duration::from_secs(3600),
-    performance: PerformanceMetrics
+    generated_at : Instant::now(),
+    time_range : Duration::from_secs(3600),
+    performance : PerformanceMetrics
     {
-      total_requests: 50,
-      successful_requests: 48,
-      failed_requests: 2,
-      average_response_time: Duration::from_millis(200),
-      min_response_time: Duration::from_millis(50),
-      max_response_time: Duration::from_millis(800),
-      total_tokens_used: 2500,
-      requests_per_minute: 0.83, // 50 requests in 60 minutes
-      error_rate: 0.04,
+      total_requests : 50,
+      successful_requests : 48,
+      failed_requests : 2,
+      average_response_time : Duration::from_millis(200),
+      min_response_time : Duration::from_millis(50),
+      max_response_time : Duration::from_millis(800),
+      total_tokens_used : 2500,
+      requests_per_minute : 0.83, // 50 requests in 60 minutes
+      error_rate : 0.04,
     },
-    top_endpoints: vec![
+    top_endpoints : vec![
       ("embeddings".to_string(), 30),
       ("chat/completions".to_string(), 20),
     ],
-    error_summary: vec![
+    error_summary : vec![
       ("RateLimitError".to_string(), 1),
       ("NetworkError".to_string(), 1),
     ],
@@ -238,7 +238,7 @@ async fn test_diagnostics_request_tracking()
   // INTEGRATION TEST - STRICT FAILURE POLICY: Must have valid API key
   if !should_run_integration_tests()
   {
-    eprintln!("Skipping integration test: OPENAI_API_KEY not available");
+    eprintln!("Skipping integration test : OPENAI_API_KEY not available");
     return;
   }
 
@@ -267,7 +267,7 @@ async fn test_diagnostics_request_tracking()
       assert!(latest_metric.response.is_some());
       assert_eq!(latest_metric.response.as_ref().unwrap().status_code, 200);
     },
-    Err(e) => panic!("Expected successful embedding creation for diagnostics tracking, got error: {:?}", e),
+    Err(e) => panic!("Expected successful embedding creation for diagnostics tracking, got error : {:?}", e),
   }
 }
 
@@ -278,7 +278,7 @@ async fn test_diagnostics_performance_tracking()
   // INTEGRATION TEST - STRICT FAILURE POLICY: Must have valid API key
   if !should_run_integration_tests()
   {
-    eprintln!("Skipping integration test: OPENAI_API_KEY not available");
+    eprintln!("Skipping integration test : OPENAI_API_KEY not available");
     return;
   }
 
@@ -293,7 +293,7 @@ async fn test_diagnostics_performance_tracking()
     );
 
     let _result = client.embeddings().create(request).await;
-    tokio::time::sleep(Duration::from_millis(100)).await;
+    tokio ::time::sleep(Duration::from_millis(100)).await;
   }
 
   let diagnostics = client.get_diagnostics().expect("Diagnostics should be enabled");
@@ -312,7 +312,7 @@ async fn test_diagnostics_error_tracking()
   // INTEGRATION TEST - STRICT FAILURE POLICY: Must have valid API key
   if !should_run_integration_tests()
   {
-    eprintln!("Skipping integration test: OPENAI_API_KEY not available");
+    eprintln!("Skipping integration test : OPENAI_API_KEY not available");
     return;
   }
 
@@ -351,7 +351,7 @@ async fn test_diagnostics_report_generation()
   // INTEGRATION TEST - STRICT FAILURE POLICY: Must have valid API key
   if !should_run_integration_tests()
   {
-    eprintln!("Skipping integration test: OPENAI_API_KEY not available");
+    eprintln!("Skipping integration test : OPENAI_API_KEY not available");
     return;
   }
 
@@ -378,26 +378,26 @@ fn test_diagnostics_config_serialization()
 {
   let config = DiagnosticsConfig
   {
-    collection: DiagnosticsCollectionConfig
+    collection : DiagnosticsCollectionConfig
     {
-      enabled: true,
-      request_headers: false,
-      response_headers: true,
-      request_body: false,
-      response_body: false,
+      enabled : true,
+      request_headers : false,
+      response_headers : true,
+      request_body : false,
+      response_body : false,
     },
-    performance: DiagnosticsPerformanceConfig
+    performance : DiagnosticsPerformanceConfig
     {
-      enabled: true,
+      enabled : true,
     },
-    max_history_size: 200,
+    max_history_size : 200,
   };
 
   let serialized = serde_json::to_string(&config).expect("Failed to serialize diagnostics config");
   assert!(serialized.contains("\"enabled\":true"));
   assert!(serialized.contains("\"max_history_size\":200"));
 
-  let deserialized: DiagnosticsConfig = serde_json::from_str(&serialized)
+  let deserialized : DiagnosticsConfig = serde_json::from_str(&serialized)
     .expect("Failed to deserialize diagnostics config");
 
   assert_eq!(config.collection.enabled, deserialized.collection.enabled);
@@ -409,19 +409,19 @@ fn test_diagnostics_privacy_controls()
 {
   let config = DiagnosticsConfig
   {
-    collection: DiagnosticsCollectionConfig
+    collection : DiagnosticsCollectionConfig
     {
-      enabled: true,
-      request_headers: false, // Privacy: don't collect headers
-      response_headers: false, // Privacy: don't collect headers
-      request_body: false, // Privacy: don't collect request body
-      response_body: false, // Privacy: don't collect response body
+      enabled : true,
+      request_headers : false, // Privacy : don't collect headers
+      response_headers : false, // Privacy : don't collect headers
+      request_body : false, // Privacy : don't collect request body
+      response_body : false, // Privacy : don't collect response body
     },
-    performance: DiagnosticsPerformanceConfig
+    performance : DiagnosticsPerformanceConfig
     {
-      enabled: true, // OK: only timing data
+      enabled : true, // OK: only timing data
     },
-    max_history_size: 10,
+    max_history_size : 10,
   };
 
   let collector = DiagnosticsCollector::new(config);
@@ -447,22 +447,22 @@ fn test_diagnostics_overhead_benchmark()
   {
     let request_metrics = RequestMetrics
     {
-      timestamp: Instant::now(),
-      method: "POST".to_string(),
-      endpoint: "test".to_string(),
-      headers: vec![],
-      body_size: 100,
-      user_agent: "test".to_string(),
+      timestamp : Instant::now(),
+      method : "POST".to_string(),
+      endpoint : "test".to_string(),
+      headers : vec![],
+      body_size : 100,
+      user_agent : "test".to_string(),
     };
 
     let response_metrics = ResponseMetrics
     {
-      timestamp: Instant::now(),
-      status_code: 200,
-      headers: vec![],
-      body_size: 200,
-      response_time: Duration::from_millis(100),
-      tokens_used: None,
+      timestamp : Instant::now(),
+      status_code : 200,
+      headers : vec![],
+      body_size : 200,
+      response_time : Duration::from_millis(100),
+      tokens_used : None,
     };
 
     collector.record_request(&request_metrics);
@@ -473,7 +473,7 @@ fn test_diagnostics_overhead_benchmark()
 
   // Diagnostics overhead should be minimal (< 20ms for 1000 operations)
   assert!(overhead < Duration::from_millis(20),
-    "Diagnostics overhead too high: {:?}", overhead);
+    "Diagnostics overhead too high : {:?}", overhead);
 }
 
 #[ cfg( feature = "integration" ) ]
@@ -483,7 +483,7 @@ async fn test_diagnostics_memory_usage()
   // INTEGRATION TEST - STRICT FAILURE POLICY: Must have valid API key
   if !should_run_integration_tests()
   {
-    eprintln!("Skipping integration test: OPENAI_API_KEY not available");
+    eprintln!("Skipping integration test : OPENAI_API_KEY not available");
     return;
   }
 
@@ -509,5 +509,5 @@ async fn test_diagnostics_memory_usage()
   // Memory usage should be bounded
   let memory_estimate = diagnostics.estimate_memory_usage();
   assert!(memory_estimate < 1024 * 1024, // Less than 1MB
-    "Diagnostics memory usage too high: {} bytes", memory_estimate);
+    "Diagnostics memory usage too high : {} bytes", memory_estimate);
 }

@@ -76,7 +76,7 @@ mod private
   /// # Examples
   ///
   /// ```no_run
-  /// # #[cfg(feature = "caching")]
+  /// # #[ cfg( feature = "caching") ]
   /// # {
   /// use api_xai::{ CachedClient, Client, Secret, XaiEnvironmentImpl, ChatCompletionRequest, Message };
   ///
@@ -85,7 +85,7 @@ mod private
   /// let env = XaiEnvironmentImpl::new( secret )?;
   /// let client = Client::build( env )?;
   ///
-  /// // Wrap with cache (capacity: 100 responses)
+  /// // Wrap with cache (capacity : 100 responses)
   /// let cached_client = CachedClient::new( client, 100 );
   ///
   /// let request = ChatCompletionRequest::former()
@@ -93,10 +93,10 @@ mod private
   ///   .messages( vec![ Message::user( "What is Rust?" ) ] )
   ///   .form();
   ///
-  /// // First call: hits API
+  /// // First call : hits API
   /// let response1 = cached_client.cached_create( request.clone() ).await?;
   ///
-  /// // Second call: hits cache (instant, no API call)
+  /// // Second call : hits cache (instant, no API call)
   /// let response2 = cached_client.cached_create( request ).await?;
   ///
   /// assert_eq!( response1.id, response2.id ); // Same response
@@ -122,7 +122,7 @@ mod private
     {
       f.debug_struct( "CachedClient" )
         .field( "client", &self.client )
-        .field( "cache", &"<LruCache>" )
+        .field( "cache", &"< LruCache >" )
         .finish()
     }
   }
@@ -142,7 +142,7 @@ mod private
     /// # Examples
     ///
     /// ```no_run
-    /// # #[cfg(feature = "caching")]
+    /// # #[ cfg( feature = "caching") ]
     /// # {
     /// use api_xai::{ CachedClient, Client, Secret, XaiEnvironmentImpl };
     ///
@@ -202,7 +202,7 @@ mod private
     /// # Examples
     ///
     /// ```no_run
-    /// # #[cfg(feature = "caching")]
+    /// # #[ cfg( feature = "caching") ]
     /// # {
     /// use api_xai::{ CachedClient, Client, Secret, XaiEnvironmentImpl, ChatCompletionRequest, Message };
     ///
@@ -218,7 +218,7 @@ mod private
     ///   .form();
     ///
     /// let response = cached_client.cached_create( request ).await?;
-    /// println!( "Response: {:?}", response.choices[ 0 ].message.content );
+    /// println!( "Response : {:?}", response.choices[ 0 ].message.content );
     /// # Ok( () )
     /// # }
     /// # }
@@ -268,7 +268,7 @@ mod private
     /// # Examples
     ///
     /// ```no_run
-    /// # #[cfg(feature = "caching")]
+    /// # #[ cfg( feature = "caching") ]
     /// # {
     /// use api_xai::{ CachedClient, Client, Secret, XaiEnvironmentImpl };
     ///
@@ -301,7 +301,7 @@ mod private
     /// # Examples
     ///
     /// ```no_run
-    /// # #[cfg(feature = "caching")]
+    /// # #[ cfg( feature = "caching") ]
     /// # {
     /// use api_xai::{ CachedClient, Client, Secret, XaiEnvironmentImpl };
     ///
@@ -311,7 +311,7 @@ mod private
     /// let client = Client::build( env )?;
     /// let cached_client = CachedClient::new( client, 100 );
     ///
-    /// println!( "Cache size: {}", cached_client.len() );
+    /// println!( "Cache size : {}", cached_client.len() );
     /// # Ok( () )
     /// # }
     /// # }
@@ -331,7 +331,7 @@ mod private
     /// # Examples
     ///
     /// ```no_run
-    /// # #[cfg(feature = "caching")]
+    /// # #[ cfg( feature = "caching") ]
     /// # {
     /// use api_xai::{ CachedClient, Client, Secret, XaiEnvironmentImpl };
     ///
@@ -372,7 +372,7 @@ mod private
 }
 
 #[ cfg( feature = "caching" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

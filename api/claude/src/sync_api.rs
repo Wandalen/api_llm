@@ -8,10 +8,10 @@
 mod private
 {
   use crate::{
-    client::{ Client, ClientConfig },
+    client ::{ Client, ClientConfig },
     CreateMessageRequest, CreateMessageResponse,
-    error::{ AnthropicError, AnthropicResult },
-    secret::Secret,
+    error ::{ AnthropicError, AnthropicResult },
+    secret ::Secret,
     Message, messages::{ Content, Role },
   };
   use std::{ sync::Arc, time::Duration };
@@ -64,7 +64,7 @@ mod private
       let rt = tokio::runtime::Builder::new_current_thread()
         .enable_all()
         .build()
-        .map_err( |e| AnthropicError::InvalidRequest( format!( "Failed to create runtime: {e}" ) ) )?;
+        .map_err( |e| AnthropicError::InvalidRequest( format!( "Failed to create runtime : {e}" ) ) )?;
 
       Ok( Self
       {
@@ -183,7 +183,7 @@ mod private
       }
       else
       {
-        "<NO_API_KEY>".to_string()
+        "< NO_API_KEY >".to_string()
       }
     }
 
@@ -234,7 +234,7 @@ mod private
   #[ cfg( feature = "streaming" ) ]
   impl core::fmt::Debug for SyncStreamIterator
   {
-    fn fmt( &self, f : &mut core::fmt::Formatter<'_> ) -> core::fmt::Result
+    fn fmt( &self, f : &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result
     {
       f.debug_struct( "SyncStreamIterator" )
         .field( "runtime", &self.runtime )
@@ -468,7 +468,7 @@ mod private
 }
 
 #[ cfg( all( feature = "sync-api", feature = "streaming" ) ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {
@@ -480,7 +480,7 @@ crate::mod_interface!
 }
 
 #[ cfg( all( feature = "sync-api", not( feature = "streaming" ) ) ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {
@@ -491,7 +491,7 @@ crate::mod_interface!
 }
 
 #[ cfg( not( feature = "sync-api" ) ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   // Empty when sync-api feature is disabled
 }

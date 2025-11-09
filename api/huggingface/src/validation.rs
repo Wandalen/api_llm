@@ -41,7 +41,7 @@ pub fn validate_input_text( input : &str ) -> Result< () >
   {
   return Err( HuggingFaceError::Validation(
       format!(
-  "Input text is too long ({} characters). Maximum allowed: {} characters",
+  "Input text is too long ({} characters). Maximum allowed : {} characters",
   input.len(),
   MAX_INPUT_LENGTH
       )
@@ -87,7 +87,7 @@ pub fn validate_model_identifier( model_id : &str ) -> Result< () >
   {
   return Err( HuggingFaceError::Validation(
       format!(
-  "Model identifier is too long ({} characters). Maximum allowed: {} characters",
+  "Model identifier is too long ({} characters). Maximum allowed : {} characters",
   model_id.len(),
   MAX_MODEL_ID_LENGTH
       )
@@ -142,7 +142,7 @@ pub fn validate_batch_inputs( inputs : &[ String ] ) -> Result< () >
   {
   return Err( HuggingFaceError::Validation(
       format!(
-  "Too many batch inputs ({}). Maximum allowed: {}",
+  "Too many batch inputs ({}). Maximum allowed : {}",
   inputs.len(),
   MAX_BATCH_SIZE
       )
@@ -176,14 +176,14 @@ pub fn validate_temperature( temperature : f32 ) -> Result< () >
   if !( 0.0..=2.0 ).contains( &temperature )
   {
   return Err( HuggingFaceError::Validation(
-      format!( "Temperature must be between 0.0 and 2.0, got: {temperature}" )
+      format!( "Temperature must be between 0.0 and 2.0, got : {temperature}" )
   ) );
   }
   
   if temperature.is_nan() || temperature.is_infinite()
   {
   return Err( HuggingFaceError::Validation(
-      format!( "Temperature must be a valid number, got: {temperature}" )
+      format!( "Temperature must be a valid number, got : {temperature}" )
   ) );
   }
 
@@ -210,7 +210,7 @@ pub fn validate_max_new_tokens( max_tokens : u32 ) -> Result< () >
   if max_tokens > MAX_NEW_TOKENS
   {
   return Err( HuggingFaceError::Validation(
-      format!( "max_new_tokens is too large ({max_tokens}). Maximum allowed: {MAX_NEW_TOKENS}" )
+      format!( "max_new_tokens is too large ({max_tokens}). Maximum allowed : {MAX_NEW_TOKENS}" )
   ) );
   }
 
@@ -230,14 +230,14 @@ pub fn validate_top_p( top_p : f32 ) -> Result< () >
   if !( 0.0..=1.0 ).contains( &top_p )
   {
   return Err( HuggingFaceError::Validation(
-      format!( "top_p must be between 0.0 and 1.0, got: {top_p}" )
+      format!( "top_p must be between 0.0 and 1.0, got : {top_p}" )
   ) );
   }
 
   if top_p.is_nan() || top_p.is_infinite()
   {
   return Err( HuggingFaceError::Validation(
-      format!( "top_p must be a valid number, got: {top_p}" )
+      format!( "top_p must be a valid number, got : {top_p}" )
   ) );
   }
 
@@ -257,21 +257,21 @@ pub fn validate_repetition_penalty( penalty : f32 ) -> Result< () >
   if penalty <= 0.0
   {
   return Err( HuggingFaceError::Validation(
-      format!( "repetition_penalty must be positive, got: {penalty}" )
+      format!( "repetition_penalty must be positive, got : {penalty}" )
   ) );
   }
 
   if penalty > 10.0
   {
   return Err( HuggingFaceError::Validation(
-      format!( "repetition_penalty is too high ({penalty}). Maximum recommended: 10.0" )
+      format!( "repetition_penalty is too high ({penalty}). Maximum recommended : 10.0" )
   ) );
   }
 
   if penalty.is_nan() || penalty.is_infinite()
   {
   return Err( HuggingFaceError::Validation(
-      format!( "repetition_penalty must be a valid number, got: {penalty}" )
+      format!( "repetition_penalty must be a valid number, got : {penalty}" )
   ) );
   }
 
@@ -292,7 +292,7 @@ pub fn validate_stop_sequences( stop_sequences : &[ String ] ) -> Result< () >
   {
   return Err( HuggingFaceError::Validation(
       format!(
-  "Too many stop sequences ({}). Maximum allowed: {}",
+  "Too many stop sequences ({}). Maximum allowed : {}",
   stop_sequences.len(),
   MAX_STOP_SEQUENCES
       )
@@ -312,7 +312,7 @@ pub fn validate_stop_sequences( stop_sequences : &[ String ] ) -> Result< () >
   {
       return Err( HuggingFaceError::Validation(
   format!(
-          "Stop sequence at index {} is too long ({}). Maximum: 100 characters",
+          "Stop sequence at index {} is too long ({}). Maximum : 100 characters",
           index,
           stop.len()
   )
@@ -343,7 +343,7 @@ pub fn validate_top_k( top_k : u32 ) -> Result< () >
   if top_k > 1000
   {
   return Err( HuggingFaceError::Validation(
-      format!( "top_k is too large ({top_k}). Maximum recommended: 1000" )
+      format!( "top_k is too large ({top_k}). Maximum recommended : 1000" )
   ) );
   }
 
@@ -363,14 +363,14 @@ pub fn validate_frequency_penalty( penalty : f32 ) -> Result< () >
   if !( -2.0..=2.0 ).contains( &penalty )
   {
   return Err( HuggingFaceError::Validation(
-      format!( "frequency_penalty must be between -2.0 and 2.0, got: {penalty}" )
+      format!( "frequency_penalty must be between -2.0 and 2.0, got : {penalty}" )
   ) );
   }
 
   if penalty.is_nan() || penalty.is_infinite()
   {
   return Err( HuggingFaceError::Validation(
-      format!( "frequency_penalty must be a valid number, got: {penalty}" )
+      format!( "frequency_penalty must be a valid number, got : {penalty}" )
   ) );
   }
 
@@ -390,14 +390,14 @@ pub fn validate_presence_penalty( penalty : f32 ) -> Result< () >
   if !( -2.0..=2.0 ).contains( &penalty )
   {
   return Err( HuggingFaceError::Validation(
-      format!( "presence_penalty must be between -2.0 and 2.0, got: {penalty}" )
+      format!( "presence_penalty must be between -2.0 and 2.0, got : {penalty}" )
   ) );
   }
 
   if penalty.is_nan() || penalty.is_infinite()
   {
   return Err( HuggingFaceError::Validation(
-      format!( "presence_penalty must be a valid number, got: {penalty}" )
+      format!( "presence_penalty must be a valid number, got : {penalty}" )
   ) );
   }
 
@@ -418,7 +418,7 @@ pub fn validate_message_role( role : &str ) -> Result< () >
   {
   "system" | "user" | "assistant" | "tool" | "function" => Ok( () ),
   _ => Err( HuggingFaceError::Validation(
-      format!( "Invalid message role: {role}. Must be one of: system, user, assistant, tool, function" )
+      format!( "Invalid message role : {role}. Must be one of : system, user, assistant, tool, function" )
   ) ),
   }
 }
@@ -444,7 +444,7 @@ pub fn validate_message_content( content : &str ) -> Result< () >
   {
   return Err( HuggingFaceError::Validation(
       format!(
-  "Message content is too long ({} characters). Maximum allowed: {} characters",
+  "Message content is too long ({} characters). Maximum allowed : {} characters",
   content.len(),
   MAX_INPUT_LENGTH
       )
@@ -511,7 +511,7 @@ pub fn validate_image_size( data : &[ u8 ] ) -> Result< () >
   {
   return Err( HuggingFaceError::Validation(
       format!(
-  "Image data is too large ({} bytes). Maximum allowed: {} bytes",
+  "Image data is too large ({} bytes). Maximum allowed : {} bytes",
   data.len(),
   MAX_IMAGE_SIZE_BYTES
       )
@@ -542,7 +542,7 @@ pub fn validate_audio_size( data : &[ u8 ] ) -> Result< () >
   {
   return Err( HuggingFaceError::Validation(
       format!(
-  "Audio data is too large ({} bytes). Maximum allowed: {} bytes",
+  "Audio data is too large ({} bytes). Maximum allowed : {} bytes",
   data.len(),
   MAX_AUDIO_SIZE_BYTES
       )
@@ -572,14 +572,14 @@ pub fn validate_url( url : &str ) -> Result< () >
   if !url.starts_with( "http://" ) && !url.starts_with( "https://" )
   {
   return Err( HuggingFaceError::Validation(
-      format!( "URL must start with http:// or https://, got: {url}" )
+      format!( "URL must start with http:// or https://, got : {url}" )
   ) );
   }
 
   if url.len() > 2048
   {
   return Err( HuggingFaceError::Validation(
-      format!( "URL is too long ({} characters). Maximum allowed: 2048 characters", url.len() )
+      format!( "URL is too long ({} characters). Maximum allowed : 2048 characters", url.len() )
   ) );
   }
 

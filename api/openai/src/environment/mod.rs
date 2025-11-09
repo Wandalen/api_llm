@@ -35,7 +35,7 @@ mod private
   {
     /// Returns the official `OpenAI` API base URL.
     ///
-    /// Following the governing principle: this provides information for explicit developer choice
+    /// Following the governing principle : this provides information for explicit developer choice
     /// rather than being an automatic default.
     #[ inline ]
     #[ must_use ]
@@ -46,7 +46,7 @@ mod private
 
     /// Returns the official `OpenAI` Realtime API base URL.
     ///
-    /// Following the governing principle: this provides information for explicit developer choice
+    /// Following the governing principle : this provides information for explicit developer choice
     /// rather than being an automatic default.
     #[ inline ]
     #[ must_use ]
@@ -153,7 +153,7 @@ mod private
         organization_id,
         project_id,
         realtime_base_url,
-        diagnostics_config: None,
+        diagnostics_config : None,
       })
     }
 
@@ -241,7 +241,7 @@ mod private
       let mut headers = header::HeaderMap::new();
       let api_key = self.api_key.expose_secret();
       let auth_value = header::HeaderValue::from_str( &format!( "Bearer {api_key}" ) )
-      .map_err( | error | error_tools::Error::from( OpenAIError::InvalidArgument( format!( "Invalid API key: {error}" ) ) ) )?;
+      .map_err( | error | error_tools::Error::from( OpenAIError::InvalidArgument( format!( "Invalid API key : {error}" ) ) ) )?;
       headers.insert( header::AUTHORIZATION, auth_value );
 
       if let Some( org_id ) = OpenaiEnvironment::organization_id( self )
@@ -295,7 +295,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   // Expose the trait and its concrete implementation
   exposed use

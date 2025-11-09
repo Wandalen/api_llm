@@ -10,8 +10,8 @@ mod private
 {
   use std::
   {
-    collections::HashMap,
-    time::SystemTime,
+    collections ::HashMap,
+    time ::SystemTime,
   };
   use core::time::Duration;
   use serde::{ Deserialize, Serialize };
@@ -267,7 +267,7 @@ mod private
           running,
           healthy,
         },
-        message : format!( "Replicas updated: {running} running, {healthy} healthy" ),
+        message : format!( "Replicas updated : {running} running, {healthy} healthy" ),
       };
 
       self.running_replicas = running;
@@ -873,7 +873,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use private::DeploymentStatus;
   exposed use private::DeploymentStrategy;

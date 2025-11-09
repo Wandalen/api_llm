@@ -17,7 +17,7 @@ use core::time::Duration;
 
 /// Mock environment configuration for testing
 ///
-/// Note: This is configuration validation testing, not HTTP mocking.
+/// Note : This is configuration validation testing, not HTTP mocking.
 /// Does NOT violate `codebase_hygiene` no-mocking rule because:
 /// - Tests configuration builder logic only (no network/API behavior)
 /// - Does not mock external dependencies or API responses
@@ -26,17 +26,17 @@ use core::time::Duration;
 pub struct MockEnvironmentConfig
 {
   /// Base URL for API requests
-  pub base_url: String,
+  pub base_url : String,
   /// API key for authentication
-  pub api_key: String,
+  pub api_key : String,
   /// Custom headers to include in requests
-  pub headers: HashMap<  String, String  >,
+  pub headers : HashMap<  String, String  >,
   /// Request timeout duration
-  pub timeout: Duration,
+  pub timeout : Duration,
   /// Maximum number of retry attempts
-  pub max_retries: u32,
+  pub max_retries : u32,
   /// User agent string for requests
-  pub user_agent: String,
+  pub user_agent : String,
 }
 
 impl Default for MockEnvironmentConfig
@@ -45,12 +45,12 @@ impl Default for MockEnvironmentConfig
   {
     Self
     {
-      base_url: "https://api.openai.com/v1/".to_string(),
-      api_key: String::new(),
-      headers: HashMap::new(),
-      timeout: Duration::from_secs( 30 ),
-      max_retries: 3,
-      user_agent: "openai-rust-client/1.0".to_string(),
+      base_url : "https://api.openai.com/v1/".to_string(),
+      api_key : String::new(),
+      headers : HashMap::new(),
+      timeout : Duration::from_secs( 30 ),
+      max_retries : 3,
+      user_agent : "openai-rust-client/1.0".to_string(),
     }
   }
 }
@@ -59,7 +59,7 @@ impl Default for MockEnvironmentConfig
 #[ derive( Debug ) ]
 pub struct MockEnvironmentBuilder
 {
-  config: MockEnvironmentConfig,
+  config : MockEnvironmentConfig,
 }
 
 impl Default for MockEnvironmentBuilder
@@ -78,13 +78,13 @@ impl MockEnvironmentBuilder
   {
     Self
     {
-      config: MockEnvironmentConfig::default(),
+      config : MockEnvironmentConfig::default(),
     }
   }
   
   /// Set the API key for authentication
   #[ must_use ]
-  pub fn with_api_key( mut self, api_key: String ) -> Self
+  pub fn with_api_key( mut self, api_key : String ) -> Self
   {
     self.config.api_key = api_key;
     self
@@ -92,7 +92,7 @@ impl MockEnvironmentBuilder
   
   /// Set the base URL for API requests
   #[ must_use ]
-  pub fn with_base_url( mut self, base_url: String ) -> Self
+  pub fn with_base_url( mut self, base_url : String ) -> Self
   {
     self.config.base_url = base_url;
     self
@@ -100,7 +100,7 @@ impl MockEnvironmentBuilder
   
   /// Set the request timeout duration
   #[ must_use ]
-  pub fn with_timeout( mut self, timeout: Duration ) -> Self
+  pub fn with_timeout( mut self, timeout : Duration ) -> Self
   {
     self.config.timeout = timeout;
     self
@@ -108,7 +108,7 @@ impl MockEnvironmentBuilder
   
   /// Set the maximum number of retry attempts
   #[ must_use ]
-  pub fn with_max_retries( mut self, retries: u32 ) -> Self
+  pub fn with_max_retries( mut self, retries : u32 ) -> Self
   {
     self.config.max_retries = retries;
     self
@@ -116,7 +116,7 @@ impl MockEnvironmentBuilder
   
   /// Add a custom header to the configuration
   #[ must_use ]
-  pub fn with_header( mut self, key: String, value: String ) -> Self
+  pub fn with_header( mut self, key : String, value : String ) -> Self
   {
     self.config.headers.insert( key, value );
     self
@@ -124,7 +124,7 @@ impl MockEnvironmentBuilder
   
   /// Set the user agent string for requests
   #[ must_use ]
-  pub fn with_user_agent( mut self, user_agent: String ) -> Self
+  pub fn with_user_agent( mut self, user_agent : String ) -> Self
   {
     self.config.user_agent = user_agent;
     self
@@ -135,7 +135,7 @@ impl MockEnvironmentBuilder
   /// # Errors
   /// 
   /// Returns an error if the URL is invalid
-  pub fn validate_url( url: &str ) -> Result< (), String >
+  pub fn validate_url( url : &str ) -> Result< (), String >
   {
     if url.is_empty()
     {
@@ -170,7 +170,7 @@ impl MockEnvironmentBuilder
   /// # Errors
   /// 
   /// Returns an error if the API key is invalid
-  pub fn validate_api_key( api_key: &str ) -> Result< (), String >
+  pub fn validate_api_key( api_key : &str ) -> Result< (), String >
   {
     if api_key.is_empty()
     {
@@ -200,7 +200,7 @@ impl MockEnvironmentBuilder
   /// # Errors
   /// 
   /// Returns an error if the header key or value is invalid
-  pub fn validate_header( key: &str, value: &str ) -> Result< (), String >
+  pub fn validate_header( key : &str, value : &str ) -> Result< (), String >
   {
     if key.is_empty()
     {
@@ -216,7 +216,7 @@ impl MockEnvironmentBuilder
     let forbidden_headers = [ "authorization", "content-type", "user-agent" ];
     if forbidden_headers.contains( &key.to_lowercase().as_str() )
     {
-      return Err( format!( "Cannot override system header: {key}" ) );
+      return Err( format!( "Cannot override system header : {key}" ) );
     }
     
     // Check for valid header characters
@@ -233,7 +233,7 @@ impl MockEnvironmentBuilder
   /// # Errors
   /// 
   /// Returns an error if the timeout is out of range
-  pub fn validate_timeout( timeout: Duration ) -> Result< (), String >
+  pub fn validate_timeout( timeout : Duration ) -> Result< (), String >
   {
     let secs = timeout.as_secs();
     
@@ -307,7 +307,7 @@ fn test_url_validation_success()
   for url in valid_urls
   {
     let result = MockEnvironmentBuilder::validate_url( url );
-    assert!( result.is_ok(), "URL should be valid: {url}" );
+    assert!( result.is_ok(), "URL should be valid : {url}" );
   }
 }
 
@@ -340,7 +340,7 @@ fn test_api_key_validation_success()
   for key in valid_keys
   {
     let result = MockEnvironmentBuilder::validate_api_key( &key );
-    assert!( result.is_ok(), "API key should be valid: {key}" );
+    assert!( result.is_ok(), "API key should be valid : {key}" );
   }
 }
 
@@ -374,7 +374,7 @@ fn test_header_validation_success()
   for ( key, value ) in valid_headers
   {
     let result = MockEnvironmentBuilder::validate_header( key, value );
-    assert!( result.is_ok(), "Header should be valid: {key}: {value}" );
+    assert!( result.is_ok(), "Header should be valid : {key}: {value}" );
   }
 }
 
@@ -410,7 +410,7 @@ fn test_timeout_validation()
   for timeout in valid_timeouts
   {
     let result = MockEnvironmentBuilder::validate_timeout( timeout );
-    assert!( result.is_ok(), "Timeout should be valid: {timeout:?}" );
+    assert!( result.is_ok(), "Timeout should be valid : {timeout:?}" );
   }
   
   // Invalid timeouts
@@ -422,7 +422,7 @@ fn test_timeout_validation()
   for timeout in invalid_timeouts
   {
     let result = MockEnvironmentBuilder::validate_timeout( timeout );
-    assert!( result.is_err(), "Timeout should be invalid: {timeout:?}" );
+    assert!( result.is_err(), "Timeout should be invalid : {timeout:?}" );
   }
 }
 

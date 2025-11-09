@@ -98,7 +98,7 @@ async fn test_background_health_monitoring()
   client.start_health_monitoring().await;
 
   // Wait a bit for health checks to run
-  tokio::time::sleep( Duration::from_millis( 300 ) ).await;
+  tokio ::time::sleep( Duration::from_millis( 300 ) ).await;
 
   let status = client.get_health_status();
   assert!( status.total_checks() >= 1 );
@@ -125,7 +125,7 @@ async fn test_health_check_failure_detection()
   client.start_health_monitoring().await;
 
   // Wait for failures to accumulate
-  tokio::time::sleep( Duration::from_millis( 400 ) ).await;
+  tokio ::time::sleep( Duration::from_millis( 400 ) ).await;
 
   let status = client.get_health_status();
   assert!( status.failed_checks() >= 2 );
@@ -150,7 +150,7 @@ async fn test_response_time_tracking()
   ).unwrap();
 
   client.start_health_monitoring().await;
-  tokio::time::sleep( Duration::from_millis( 300 ) ).await;
+  tokio ::time::sleep( Duration::from_millis( 300 ) ).await;
 
   let status = client.get_health_status();
   let response_times = status.get_response_times();
@@ -186,7 +186,7 @@ async fn test_circuit_breaker_integration()
   client.start_health_monitoring().await;
 
   // Wait for failures to trigger circuit breaker
-  tokio::time::sleep( Duration::from_millis( 400 ) ).await;
+  tokio ::time::sleep( Duration::from_millis( 400 ) ).await;
 
   let status = client.get_health_status();
   assert!( status.circuit_breaker_open() );
@@ -209,7 +209,7 @@ async fn test_health_metrics_collection()
   ).unwrap();
 
   client.start_health_monitoring().await;
-  tokio::time::sleep( Duration::from_millis( 500 ) ).await;
+  tokio ::time::sleep( Duration::from_millis( 500 ) ).await;
 
   let metrics = client.get_health_metrics();
   assert!( metrics.total_checks > 0 );
@@ -239,11 +239,11 @@ async fn test_intermittent_failure_handling()
 
   // Simulate intermittent failures by temporarily marking endpoint as unhealthy
   client.simulate_endpoint_failure();
-  tokio::time::sleep( Duration::from_millis( 200 ) ).await;
+  tokio ::time::sleep( Duration::from_millis( 200 ) ).await;
 
   // Restore endpoint
   client.restore_endpoint();
-  tokio::time::sleep( Duration::from_millis( 400 ) ).await;
+  tokio ::time::sleep( Duration::from_millis( 400 ) ).await;
 
   let status = client.get_health_status();
   // Should have recovered from intermittent failure

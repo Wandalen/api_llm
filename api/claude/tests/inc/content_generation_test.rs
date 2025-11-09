@@ -8,8 +8,8 @@
 //! - Tests MUST FAIL IMMEDIATELY on any API endpoint errors
 //! - NO SILENT PASSES allowed when problems occur
 //!
-//! Run with: cargo test --features `content_generation,integration`
-//! Requires: Valid `ANTHROPIC_API_KEY` in environment or ../../secret/-secrets.sh
+//! Run with : cargo test --features `content_generation,integration`
+//! Requires : Valid `ANTHROPIC_API_KEY` in environment or ../../secret/-secrets.sh
 
 #[ allow( unused_imports ) ]
 use super::*;
@@ -178,7 +178,7 @@ async fn test_request_structure_error_validation()
   // Test that request structure validation works correctly
 
   // Test with missing required fields - should panic on build()
-  std::panic::catch_unwind( ||
+  std ::panic::catch_unwind( ||
   {
     let _request = the_module::CreateMessageRequest::builder()
       .message( the_module::Message::user( "Test".to_string() ) )
@@ -208,7 +208,7 @@ async fn test_response_structure_parsing()
   };
 
   let content = vec![
-    the_module::ResponseContent
+    the_module ::ResponseContent
     {
       r#type : "text".to_string(),
       text : Some( "Generated content here".to_string() ),
@@ -327,7 +327,7 @@ async fn integration_content_generation_temperature_control()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted - this confirms real API usage" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION: Low temperature request must work: {err}" ),
+    Err( err ) => panic!( "INTEGRATION: Low temperature request must work : {err}" ),
   };
 
   let high_response = match client.create_message( high_temp_request ).await
@@ -338,7 +338,7 @@ async fn integration_content_generation_temperature_control()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted - this confirms real API usage" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION: High temperature request must work: {err}" ),
+    Err( err ) => panic!( "INTEGRATION: High temperature request must work : {err}" ),
   };
 
   // Both should succeed and return content
@@ -401,7 +401,7 @@ async fn integration_content_generation_max_tokens_control()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted - this confirms real API usage" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION: Short max_tokens request must work: {err}" ),
+    Err( err ) => panic!( "INTEGRATION: Short max_tokens request must work : {err}" ),
   };
 
   let long_response = match client.create_message( long_request ).await
@@ -412,12 +412,12 @@ async fn integration_content_generation_max_tokens_control()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted - this confirms real API usage" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION: Long max_tokens request must work: {err}" ),
+    Err( err ) => panic!( "INTEGRATION: Long max_tokens request must work : {err}" ),
   };
 
   // Verify token limits are respected
   assert!( short_response.usage.output_tokens <= 10, 
-    "Short response should have ≤10 tokens, got: {}", short_response.usage.output_tokens );
+    "Short response should have ≤10 tokens, got : {}", short_response.usage.output_tokens );
   assert!( long_response.usage.output_tokens > short_response.usage.output_tokens,
     "Long response should have more tokens than short" );
 

@@ -29,7 +29,7 @@ fn test_performance_metrics_record_operation()
   let mut metrics = the_module::PerformanceMetrics::new();
 
   let start = Instant::now();
-  std::thread::sleep( Duration::from_millis( 10 ) );
+  std ::thread::sleep( Duration::from_millis( 10 ) );
   let duration = start.elapsed();
 
   metrics.record_operation( "test_operation", duration );
@@ -138,7 +138,7 @@ fn test_performance_metrics_throughput()
   let throughput = metrics.calculate_throughput( "throughput_test", elapsed );
 
   assert!( throughput > 0.0 );
-  println!( "Throughput: {} ops/sec", throughput );
+  println!( "Throughput : {} ops/sec", throughput );
 }
 
 // ============================================================================
@@ -202,7 +202,7 @@ fn test_performance_monitoring_zero_overhead_disabled()
   {
     let _result = simple_operation();
     // Monitoring is disabled - should be noop
-    the_module::PerformanceMonitor::record_if_enabled( "operation", Duration::ZERO );
+    the_module ::PerformanceMonitor::record_if_enabled( "operation", Duration::ZERO );
   }
 
   let duration_with_disabled_monitoring = start.elapsed();
@@ -210,12 +210,12 @@ fn test_performance_monitoring_zero_overhead_disabled()
   // Overhead should be minimal (less than 2x under concurrent test load)
   let overhead_ratio = duration_with_disabled_monitoring.as_micros() as f64 / duration_without_monitoring.as_micros() as f64;
 
-  assert!( overhead_ratio < 2.0, "Disabled monitoring has too much overhead: {overhead_ratio}x" );
+  assert!( overhead_ratio < 2.0, "Disabled monitoring has too much overhead : {overhead_ratio}x" );
 
   println!( "✅ Zero overhead test passed!" );
-  println!( "   Without monitoring: {:?}", duration_without_monitoring );
-  println!( "   With disabled monitoring: {:?}", duration_with_disabled_monitoring );
-  println!( "   Overhead ratio: {:.2}x", overhead_ratio );
+  println!( "   Without monitoring : {:?}", duration_without_monitoring );
+  println!( "   With disabled monitoring : {:?}", duration_with_disabled_monitoring );
+  println!( "   Overhead ratio : {:.2}x", overhead_ratio );
 }
 
 // Helper function for overhead testing
@@ -262,7 +262,7 @@ async fn integration_performance_monitoring_api_request()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION: API call must work: {err}" ),
+    Err( err ) => panic!( "INTEGRATION: API call must work : {err}" ),
   };
 
   let duration = start.elapsed();
@@ -278,8 +278,8 @@ async fn integration_performance_monitoring_api_request()
   assert!( !response.id.is_empty() );
 
   println!( "✅ API request monitoring integration test passed!" );
-  println!( "   Request duration: {:?}", duration );
-  println!( "   Monitored stats: {} calls, avg {:?}", stats.count(), stats.average_duration() );
+  println!( "   Request duration : {:?}", duration );
+  println!( "   Monitored stats : {} calls, avg {:?}", stats.count(), stats.average_duration() );
 }
 
 #[ tokio::test ]
@@ -327,7 +327,7 @@ async fn integration_performance_monitoring_multiple_requests()
         println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted on request {i}" );
         return;
       },
-      Err( err ) => panic!( "Request {i} failed: {err}" ),
+      Err( err ) => panic!( "Request {i} failed : {err}" ),
     }
   }
 
@@ -342,10 +342,10 @@ async fn integration_performance_monitoring_multiple_requests()
   assert!( report.contains( '3' ) ); // Should show 3 requests
 
   println!( "✅ Multiple requests monitoring integration test passed!" );
-  println!( "   Total requests: {}", stats.count() );
-  println!( "   Average duration: {:?}", stats.average_duration() );
-  println!( "   Min duration: {:?}", stats.min_duration() );
-  println!( "   Max duration: {:?}", stats.max_duration() );
+  println!( "   Total requests : {}", stats.count() );
+  println!( "   Average duration : {:?}", stats.average_duration() );
+  println!( "   Min duration : {:?}", stats.min_duration() );
+  println!( "   Max duration : {:?}", stats.max_duration() );
 }
 
 #[ tokio::test ]
@@ -391,7 +391,7 @@ async fn integration_performance_monitoring_throughput_measurement()
         println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted on request {i}" );
         return;
       },
-      Err( err ) => panic!( "Request {i} failed: {err}" ),
+      Err( err ) => panic!( "Request {i} failed : {err}" ),
     }
   }
 
@@ -404,7 +404,7 @@ async fn integration_performance_monitoring_throughput_measurement()
   assert!( throughput < 100.0 ); // Reasonable upper bound
 
   println!( "✅ Throughput measurement integration test passed!" );
-  println!( "   Total time: {:?}", total_elapsed );
-  println!( "   Throughput: {:.2} requests/sec", throughput );
-  println!( "   Average latency: {:?}", monitor.get_stats( "create_message" ).unwrap().average_duration() );
+  println!( "   Total time : {:?}", total_elapsed );
+  println!( "   Throughput : {:.2} requests/sec", throughput );
+  println!( "   Average latency : {:?}", monitor.get_stats( "create_message" ).unwrap().average_duration() );
 }

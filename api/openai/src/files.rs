@@ -10,9 +10,9 @@ mod private
   // Use crate root for base access
   use crate::
   {
-    client::Client,
-    error::Result,
-    environment::{ OpenaiEnvironment, EnvironmentInterface },
+    client ::Client,
+    error ::Result,
+    environment ::{ OpenaiEnvironment, EnvironmentInterface },
   };
   use crate::components::files::
   {
@@ -63,7 +63,7 @@ mod private
       let file_part = Part::bytes( request.file )
         .file_name( request.filename.clone() )
         .mime_str( "application/octet-stream" )
-        .map_err( | e | crate::error::OpenAIError::Internal( format!( "Failed to create file part: {e}" ) ) )?;
+        .map_err( | e | crate::error::OpenAIError::Internal( format!( "Failed to create file part : {e}" ) ) )?;
 
       let form = Form::new()
         .part( "file", file_part )
@@ -139,7 +139,7 @@ mod private
   }
 } // end mod private
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   // Expose all structs defined in this module
   exposed use 

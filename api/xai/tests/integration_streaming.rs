@@ -79,7 +79,7 @@ async fn test_streaming_chat_completion_basic()
 
   println!( "✅ Streaming basic test passed" );
   println!( "Received {chunks_received} chunks" );
-  println!( "Full response: {full_response}" );
+  println!( "Full response : {full_response}" );
 }
 
 #[ tokio::test ]
@@ -115,7 +115,7 @@ async fn test_streaming_with_system_message()
   assert!( !content.is_empty(), "Should receive content" );
 
   println!( "✅ Streaming with system message test passed" );
-  println!( "Response: {content}" );
+  println!( "Response : {content}" );
 }
 
 #[ tokio::test ]
@@ -151,11 +151,11 @@ async fn test_streaming_finish_reason()
   let finish_reason = last_finish_reason.unwrap();
   assert!(
     finish_reason == "stop" || finish_reason == "length",
-    "Finish reason should be 'stop' or 'length', got: {finish_reason}"
+    "Finish reason should be 'stop' or 'length', got : {finish_reason}"
   );
 
   println!( "✅ Streaming finish reason test passed" );
-  println!( "Finish reason: {finish_reason}" );
+  println!( "Finish reason : {finish_reason}" );
 }
 
 #[ tokio::test ]
@@ -179,7 +179,7 @@ async fn test_streaming_role_in_first_chunk()
     if let Some( delta ) = chunk.choices.first().map( |c| &c.delta ) {
       // First chunk typically contains the role
       if delta.role.is_some() {
-        println!( "✅ First chunk contains role: {:?}", delta.role );
+        println!( "✅ First chunk contains role : {:?}", delta.role );
       }
     }
   }
@@ -220,5 +220,5 @@ async fn test_streaming_collect_all_content()
   assert!( !full_content.is_empty(), "Should collect content" );
 
   println!( "✅ Streaming collect all content test passed" );
-  println!( "Full content length: {} characters", full_content.len() );
+  println!( "Full content length : {} characters", full_content.len() );
 }

@@ -7,9 +7,9 @@ mod private
 {
   use crate::
   {
-  client::Client,
-  error::Result,
-  validation::{ validate_input_text, validate_model_identifier },
+  client ::Client,
+  error ::Result,
+  validation ::{ validate_input_text, validate_model_identifier },
   };
 
   #[ cfg( feature = "env-config" ) ]
@@ -394,7 +394,7 @@ mod private
   .into_iter()
   .map( | tool |
   {
-          crate::components::inference_shared::ToolDefinition
+          crate ::components::inference_shared::ToolDefinition
           {
       tool_type : "function".to_string(),
       function : tool,
@@ -439,7 +439,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use private::
   {

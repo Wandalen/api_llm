@@ -6,8 +6,8 @@
 
 use api_gemini::
 {
-  client::Client,
-  models::
+  client ::Client,
+  models ::
   {
     GenerateContentRequest, Content, Part, SystemInstruction,
     GenerationConfig,
@@ -19,14 +19,14 @@ use std::collections::HashMap;
 /// Create a test client using the API key from workspace secrets or environment.
 ///
 /// This uses `Client::new()` which attempts to load GEMINI_API_KEY from:
-/// 1. Workspace secrets: `secret/-secrets.sh` (workspace_tools 0.6.0)
-/// 2. Environment variable: `GEMINI_API_KEY`
+/// 1. Workspace secrets : `secret/-secrets.sh` (workspace_tools 0.6.0)
+/// 2. Environment variable : `GEMINI_API_KEY`
 ///
 /// Tests will FAIL EXPLICITLY (not skip) if the API key cannot be loaded.
 /// This is intentional - silent skipping masks configuration issues and creates
 /// false confidence in CI/CD pipelines.
 ///
-/// Note: workspace_tools 0.6.0 uses `secret/` (visible directory, NO dot prefix)
+/// Note : workspace_tools 0.6.0 uses `secret/` (visible directory, NO dot prefix)
 fn create_test_client() -> Client
 {
   Client::new().unwrap()
@@ -129,33 +129,33 @@ fn diagnose_response( response : &api_gemini::models::GenerateContentResponse, q
   let mut diagnostics = Vec::new();
 
   diagnostics.push( format!( "Query {}: Response Diagnostics", query_num ) );
-  diagnostics.push( format!( "  Candidates count: {}", response.candidates.len() ) );
+  diagnostics.push( format!( "  Candidates count : {}", response.candidates.len() ) );
 
   if let Some( candidate ) = response.candidates.first()
   {
     if let Some( finish_reason ) = &candidate.finish_reason
     {
-      diagnostics.push( format!( "  Finish reason: {:?}", finish_reason ) );
+      diagnostics.push( format!( "  Finish reason : {:?}", finish_reason ) );
     } else {
-      diagnostics.push( "  Finish reason: None".to_string() );
+      diagnostics.push( "  Finish reason : None".to_string() );
     }
 
     if let Some( safety_ratings ) = &candidate.safety_ratings
     {
-      diagnostics.push( format!( "  Safety ratings: {} checks", safety_ratings.len() ) );
+      diagnostics.push( format!( "  Safety ratings : {} checks", safety_ratings.len() ) );
       for rating in safety_ratings
       {
-        diagnostics.push( format!( "    - Category: {:?}, Probability: {:?}, Blocked: {:?}",
+        diagnostics.push( format!( "    - Category : {:?}, Probability : {:?}, Blocked : {:?}",
           rating.category, rating.probability, rating.blocked ) );
       }
     }
 
-    diagnostics.push( format!( "  Parts count: {}", candidate.content.parts.len() ) );
+    diagnostics.push( format!( "  Parts count : {}", candidate.content.parts.len() ) );
     for ( i, part ) in candidate.content.parts.iter().enumerate()
     {
       let text_preview = part.text.as_ref()
         .map( |t| if t.len() > 50 { format!( "{}...", &t[ ..50 ] ) } else { t.clone() } )
-        .unwrap_or_else( || "<no text>".to_string() );
+        .unwrap_or_else( || "< no text >".to_string() );
       diagnostics.push( format!( "    Part {}: {}", i, text_preview ) );
     }
   } else {
@@ -164,14 +164,14 @@ fn diagnose_response( response : &api_gemini::models::GenerateContentResponse, q
 
   if let Some( prompt_feedback ) = &response.prompt_feedback
   {
-    diagnostics.push( format!( "  Prompt feedback: {:?}", prompt_feedback ) );
+    diagnostics.push( format!( "  Prompt feedback : {:?}", prompt_feedback ) );
   }
 
   if let Some( usage ) = &response.usage_metadata
   {
     if let Some( total ) = usage.total_token_count
     {
-      diagnostics.push( format!( "  Total tokens: {}", total ) );
+      diagnostics.push( format!( "  Total tokens : {}", total ) );
     }
   }
 
@@ -228,11 +228,11 @@ async fn retry_generate_content_with_backoff(
         }
 
         println!( "🔄 Retrying query {} after {}ms delay...\n", query_num, delay_ms );
-        tokio::time::sleep( Duration::from_millis( delay_ms ) ).await;
+        tokio ::time::sleep( Duration::from_millis( delay_ms ) ).await;
         delay_ms *= 2; // Exponential backoff
       },
       Ok( Err( e ) ) => {
-        println!( "\n⚠️  Query {} attempt {}/{}: API error: {}", query_num, attempt, max_attempts, e );
+        println!( "\n⚠️  Query {} attempt {}/{}: API error : {}", query_num, attempt, max_attempts, e );
 
         if attempt >= max_attempts
         {
@@ -241,11 +241,11 @@ async fn retry_generate_content_with_backoff(
         }
 
         println!( "🔄 Retrying query {} after {}ms delay...\n", query_num, delay_ms );
-        tokio::time::sleep( Duration::from_millis( delay_ms ) ).await;
+        tokio ::time::sleep( Duration::from_millis( delay_ms ) ).await;
         delay_ms *= 2;
       },
       Err( e ) => {
-        println!( "\n⚠️  Query {} attempt {}/{}: Timeout error: {}", query_num, attempt, max_attempts, e );
+        println!( "\n⚠️  Query {} attempt {}/{}: Timeout error : {}", query_num, attempt, max_attempts, e );
 
         if attempt >= max_attempts
         {
@@ -254,7 +254,7 @@ async fn retry_generate_content_with_backoff(
         }
 
         println!( "🔄 Retrying query {} after {}ms delay...\n", query_num, delay_ms );
-        tokio::time::sleep( Duration::from_millis( delay_ms ) ).await;
+        tokio ::time::sleep( Duration::from_millis( delay_ms ) ).await;
         delay_ms *= 2;
       }
     }
@@ -356,7 +356,7 @@ async fn test_instruction_consistency() -> Result< (), Box< dyn std::error::Erro
     let text_lower = response_text.to_lowercase();
     assert!(
       text_lower.contains( "verse" ),
-      "Query {} response should contain the word 'verse' as instructed. Response: {}",
+      "Query {} response should contain the word 'verse' as instructed. Response : {}",
       query_num,
       response_text
     );
@@ -383,7 +383,7 @@ async fn test_instruction_consistency() -> Result< (), Box< dyn std::error::Erro
     if i < test_queries.len() - 1
     {
       println!( "Waiting 2 seconds before next query to avoid rate limiting...\n" );
-      tokio::time::sleep( Duration::from_millis( 2000 ) ).await;
+      tokio ::time::sleep( Duration::from_millis( 2000 ) ).await;
     }
   }
 
@@ -427,15 +427,15 @@ async fn test_instruction_impact_comparison() -> Result< (), Box< dyn std::error
   let instruction_text = extract_response_text( &instruction_response );
   assert!( !instruction_text.trim().is_empty(), "Instruction response should not be empty" );
 
-  println!( "Basic response length: {} characters", basic_text.len() );
-  println!( "Instruction response length: {} characters", instruction_text.len() );
+  println!( "Basic response length : {} characters", basic_text.len() );
+  println!( "Instruction response length : {} characters", instruction_text.len() );
 
   // Analyze both responses
   let basic_characteristics = analyze_response_characteristics( &basic_text );
   let instruction_characteristics = analyze_response_characteristics( &instruction_text );
 
-  println!( "Basic response characteristics: {:?}", basic_characteristics );
-  println!( "Instruction response characteristics: {:?}", instruction_characteristics );
+  println!( "Basic response characteristics : {:?}", basic_characteristics );
+  println!( "Instruction response characteristics : {:?}", instruction_characteristics );
 
   // Check for bullet points in instruction response
   let bullet_count = instruction_text.matches( "•" ).count() +
@@ -467,7 +467,7 @@ async fn test_instruction_impact_comparison() -> Result< (), Box< dyn std::error
     if let ( Some( basic_total ), Some( instruction_total ) ) =
       ( basic_usage.total_token_count, instruction_usage.total_token_count ) {
 
-      println!( "Token usage - Basic: {}, Instruction: {}", basic_total, instruction_total );
+      println!( "Token usage - Basic : {}, Instruction : {}", basic_total, instruction_total );
 
       // System instructions typically increase token usage
       if instruction_total > basic_total
@@ -563,7 +563,7 @@ Maintain this behavior throughout our conversation.";
     } );
 
     // Brief pause between turns
-    tokio::time::sleep( Duration::from_millis( 1000 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 1000 ) ).await;
   }
 
   println!( "✅ Multi-turn conversation completed with {} turns", conversation_turns.len() );
@@ -661,14 +661,14 @@ If asked about non-investment topics, politely redirect to investment education.
     }
 
     // Brief pause between queries
-    tokio::time::sleep( Duration::from_millis( 500 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 500 ) ).await;
   }
 
   Ok( () )
 }
 
 #[ tokio::test ]
-/// Integration test: Complex system instruction workflow
+/// Integration test : Complex system instruction workflow
 async fn test_complex_instruction_workflow() -> Result< (), Box< dyn std::error::Error > >
 {
   let client = create_test_client();
@@ -791,7 +791,7 @@ ADAPTATION RULES:
     let compliance_percentage = ( compliance_score as f64 / max_score as f64 ) * 100.0;
     instruction_compliance_scores.push( compliance_percentage );
 
-    println!( "  Instruction compliance: {:.1}% ({}/{})", compliance_percentage, compliance_score, max_score );
+    println!( "  Instruction compliance : {:.1}% ({}/{})", compliance_percentage, compliance_score, max_score );
 
     // Update conversation history
     conversation_history.push( Content {
@@ -811,16 +811,16 @@ ADAPTATION RULES:
     } );
 
     // Brief pause between tutorial steps
-    tokio::time::sleep( Duration::from_millis( 1500 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 1500 ) ).await;
   }
 
   // Analyze overall workflow performance
   let avg_compliance = instruction_compliance_scores.iter().sum::< f64 >() / instruction_compliance_scores.len() as f64;
 
   println!( "Workflow Summary:" );
-  println!( "  Total tutorial steps: {}", tutorial_steps.len() );
-  println!( "  Average instruction compliance: {:.1}%", avg_compliance );
-  println!( "  Conversation history length: {} exchanges", conversation_history.len() / 2 );
+  println!( "  Total tutorial steps : {}", tutorial_steps.len() );
+  println!( "  Average instruction compliance : {:.1}%", avg_compliance );
+  println!( "  Conversation history length : {} exchanges", conversation_history.len() / 2 );
 
   // Expect reasonable compliance with complex instructions
   assert!(

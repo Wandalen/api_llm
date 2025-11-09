@@ -41,25 +41,25 @@ async fn test_circuit_breaker_blocks_http_requests()
 
   let request = ChatRequest
   {
-    model: "test-model".to_string(),
-    messages: vec!
+    model : "test-model".to_string(),
+    messages : vec!
     [
       ChatMessage
       {
-        role: MessageRole::User,
-        content: "Test circuit breaker HTTP integration".to_string(),
+        role : MessageRole::User,
+        content : "Test circuit breaker HTTP integration".to_string(),
         #[ cfg( feature = "vision_support" ) ]
-        images: None,
+        images : None,
         #[ cfg( feature = "tool_calling" ) ]
-        tool_calls: None,
+        tool_calls : None,
       }
     ],
-    stream: Some( false ),
-    options: None,
+    stream : Some( false ),
+    options : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tools: None,
+    tools : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tool_messages: None,
+    tool_messages : None,
   };
 
   // Initially circuit should be closed
@@ -107,25 +107,25 @@ async fn test_circuit_breaker_recovery_with_http()
 
   let request = ChatRequest
   {
-    model: "test".to_string(),
-    messages: vec!
+    model : "test".to_string(),
+    messages : vec!
     [
       ChatMessage
       {
-        role: MessageRole::User,
-        content: "Recovery test".to_string(),
+        role : MessageRole::User,
+        content : "Recovery test".to_string(),
         #[ cfg( feature = "vision_support" ) ]
-        images: None,
+        images : None,
         #[ cfg( feature = "tool_calling" ) ]
-        tool_calls: None,
+        tool_calls : None,
       }
     ],
-    stream: Some( false ),
-    options: None,
+    stream : Some( false ),
+    options : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tools: None,
+    tools : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tool_messages: None,
+    tool_messages : None,
   };
 
   // Trigger circuit breaker to open
@@ -133,7 +133,7 @@ async fn test_circuit_breaker_recovery_with_http()
   assert_eq!( client.circuit_breaker_state(), CircuitBreakerState::Open );
 
   // Wait for recovery timeout
-  tokio::time::sleep( Duration::from_millis( 250 ) ).await;
+  tokio ::time::sleep( Duration::from_millis( 250 ) ).await;
 
   // Circuit should transition to half-open on next request attempt
   let result = client.chat( request.clone() ).await;
@@ -162,25 +162,25 @@ async fn test_circuit_breaker_error_classification()
 
   let request = ChatRequest
   {
-    model: "test".to_string(),
-    messages: vec!
+    model : "test".to_string(),
+    messages : vec!
     [
       ChatMessage
       {
-        role: MessageRole::User,
-        content: "Error classification test".to_string(),
+        role : MessageRole::User,
+        content : "Error classification test".to_string(),
         #[ cfg( feature = "vision_support" ) ]
-        images: None,
+        images : None,
         #[ cfg( feature = "tool_calling" ) ]
-        tool_calls: None,
+        tool_calls : None,
       }
     ],
-    stream: Some( false ),
-    options: None,
+    stream : Some( false ),
+    options : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tools: None,
+    tools : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tool_messages: None,
+    tool_messages : None,
   };
 
   // Make requests that will get 500 errors (should trigger circuit breaker)
@@ -191,10 +191,10 @@ async fn test_circuit_breaker_error_classification()
     let state_after = client.circuit_breaker_state();
 
     assert!( result.is_err() );
-    println!( "  Request {i}: Failed with 500, state: {state_before:?} -> {state_after:?}" );
+    println!( "  Request {i}: Failed with 500, state : {state_before:?} -> {state_after:?}" );
 
     // Small delay between requests
-    tokio::time::sleep( Duration::from_millis( 100 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 100 ) ).await;
   }
 
   // Circuit should be open after 3 server errors
@@ -207,7 +207,7 @@ async fn test_circuit_breaker_error_classification()
 #[ tokio::test ]
 async fn test_circuit_breaker_success_recovery()
 {
-  // Note: This test would require a controllable HTTP endpoint
+  // Note : This test would require a controllable HTTP endpoint
   // For now, we'll test the logic with client state validation
 
   let config = CircuitBreakerConfig::new()
@@ -222,25 +222,25 @@ async fn test_circuit_breaker_success_recovery()
 
   let request = ChatRequest
   {
-    model: "test".to_string(),
-    messages: vec!
+    model : "test".to_string(),
+    messages : vec!
     [
       ChatMessage
       {
-        role: MessageRole::User,
-        content: "Success recovery test".to_string(),
+        role : MessageRole::User,
+        content : "Success recovery test".to_string(),
         #[ cfg( feature = "vision_support" ) ]
-        images: None,
+        images : None,
         #[ cfg( feature = "tool_calling" ) ]
-        tool_calls: None,
+        tool_calls : None,
       }
     ],
-    stream: Some( false ),
-    options: None,
+    stream : Some( false ),
+    options : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tools: None,
+    tools : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tool_messages: None,
+    tool_messages : None,
   };
 
   // Open the circuit with a failure
@@ -290,25 +290,25 @@ async fn test_explicit_circuit_breaker_methods()
 
   let request = ChatRequest
   {
-    model: "test".to_string(),
-    messages: vec!
+    model : "test".to_string(),
+    messages : vec!
     [
       ChatMessage
       {
-        role: MessageRole::User,
-        content: "Explicit methods test".to_string(),
+        role : MessageRole::User,
+        content : "Explicit methods test".to_string(),
         #[ cfg( feature = "vision_support" ) ]
-        images: None,
+        images : None,
         #[ cfg( feature = "tool_calling" ) ]
-        tool_calls: None,
+        tool_calls : None,
       }
     ],
-    stream: Some( false ),
-    options: None,
+    stream : Some( false ),
+    options : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tools: None,
+    tools : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tool_messages: None,
+    tool_messages : None,
   };
 
   // Make requests to change circuit breaker state
@@ -319,7 +319,7 @@ async fn test_explicit_circuit_breaker_methods()
   assert_eq!( client.circuit_breaker_state(), CircuitBreakerState::Open );
 
   // Wait for recovery
-  tokio::time::sleep( Duration::from_millis( 120 ) ).await;
+  tokio ::time::sleep( Duration::from_millis( 120 ) ).await;
 
   // Next request should allow half-open attempt
   let _result3 = client.chat( request.clone() ).await;
@@ -345,25 +345,25 @@ async fn test_circuit_breaker_multiple_http_methods()
   // Chat request failure
   let chat_request = ChatRequest
   {
-    model: "test".to_string(),
-    messages: vec!
+    model : "test".to_string(),
+    messages : vec!
     [
       ChatMessage
       {
-        role: MessageRole::User,
-        content: "Multi-method test".to_string(),
+        role : MessageRole::User,
+        content : "Multi-method test".to_string(),
         #[ cfg( feature = "vision_support" ) ]
-        images: None,
+        images : None,
         #[ cfg( feature = "tool_calling" ) ]
-        tool_calls: None,
+        tool_calls : None,
       }
     ],
-    stream: Some( false ),
-    options: None,
+    stream : Some( false ),
+    options : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tools: None,
+    tools : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tool_messages: None,
+    tool_messages : None,
   };
 
   let _result1 = client.chat( chat_request.clone() ).await;
@@ -373,7 +373,7 @@ async fn test_circuit_breaker_multiple_http_methods()
   let _result2 = client.chat( chat_request.clone() ).await;
 
   // Force a small delay to ensure circuit breaker state updates
-  tokio::time::sleep( Duration::from_millis( 10 ) ).await;
+  tokio ::time::sleep( Duration::from_millis( 10 ) ).await;
   assert_eq!( client.circuit_breaker_state(), CircuitBreakerState::Open );
 
   // All subsequent requests should be blocked

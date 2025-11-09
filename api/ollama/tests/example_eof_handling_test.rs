@@ -6,7 +6,7 @@
 //! Interactive examples using `io::stdin().read_line()` were not properly handling
 //! the EOF condition when running in non-interactive environments. When `read_line()`
 //! returns `Ok(0)` (indicating EOF), the original code would print a message but
-//! continue looping, causing infinite "You: " output.
+//! continue looping, causing infinite "You : " output.
 //!
 //! ### Why Not Caught
 //! 1. Examples are typically tested manually in interactive terminals where EOF doesn't occur
@@ -27,7 +27,7 @@
 //! ### Pitfall
 //! Interactive programs must always handle EOF explicitly. In Rust, `stdin().read_line()`
 //! returns `Ok(0)` on EOF, not an error. Code that only checks for `Err` cases will
-//! miss EOF and may loop infinitely. Always check the byte count returned: `if bytes_read == 0 { break; }`.
+//! miss EOF and may loop infinitely. Always check the byte count returned : `if bytes_read == 0 { break; }`.
 
 #[ cfg( feature = "enabled" ) ]
 mod private
@@ -55,12 +55,12 @@ mod private
 
     // Verify example exits gracefully
     assert!( stdout.contains( "EOF" ) || stdout.contains( "No input available" ),
-      "Example should detect EOF and exit gracefully. Got: {stdout}" );
+      "Example should detect EOF and exit gracefully. Got : {stdout}" );
 
-    // Verify no infinite "You: " loop (should appear max 2 times: initial + after empty read)
-    let you_count = stdout.matches( "You: " ).count();
+    // Verify no infinite "You : " loop (should appear max 2 times : initial + after empty read)
+    let you_count = stdout.matches( "You : " ).count();
     assert!( you_count <= 3,
-      "Example appears to loop infinitely. 'You: ' appeared {you_count} times. Output: {stdout}" );
+      "Example appears to loop infinitely. 'You : ' appeared {you_count} times. Output : {stdout}" );
   }
 
   /// Test that `ollama_chat_interactive` handles EOF gracefully.
@@ -82,11 +82,11 @@ mod private
     let stdout = String::from_utf8_lossy( &output.stdout );
 
     assert!( stdout.contains( "EOF" ) || stdout.contains( "No input available" ),
-      "Example should detect EOF. Got: {stdout}" );
+      "Example should detect EOF. Got : {stdout}" );
 
-    let you_count = stdout.matches( "You: " ).count();
+    let you_count = stdout.matches( "You : " ).count();
     assert!( you_count <= 3,
-      "Example appears to loop infinitely. 'You: ' appeared {you_count} times" );
+      "Example appears to loop infinitely. 'You : ' appeared {you_count} times" );
   }
 
   /// Test that `ollama_chat_cached_interactive` handles EOF gracefully.
@@ -108,7 +108,7 @@ mod private
     let stdout = String::from_utf8_lossy( &output.stdout );
 
     assert!( stdout.contains( "EOF" ) || stdout.contains( "No input available" ),
-      "Example should detect EOF. Got: {stdout}" );
+      "Example should detect EOF. Got : {stdout}" );
 
     // This example uses "> " as prompt
     let prompt_count = stdout.matches( "> " ).count();
@@ -135,11 +135,11 @@ mod private
     let stdout = String::from_utf8_lossy( &output.stdout );
 
     assert!( stdout.contains( "EOF" ) || stdout.contains( "No input available" ),
-      "Example should detect EOF. Got: {stdout}" );
+      "Example should detect EOF. Got : {stdout}" );
 
-    let you_count = stdout.matches( "You: " ).count();
+    let you_count = stdout.matches( "You : " ).count();
     assert!( you_count <= 3,
-      "Example appears to loop infinitely. 'You: ' appeared {you_count} times" );
+      "Example appears to loop infinitely. 'You : ' appeared {you_count} times" );
   }
 
   /// Test that `ollama_multimodal_vision` handles EOF gracefully.
@@ -178,7 +178,7 @@ mod private
   {
     let result = tokio::time::timeout(
       Duration::from_secs( 30 ), // Allow time for compilation + execution
-      tokio::task::spawn_blocking( ||
+      tokio ::task::spawn_blocking( ||
       {
         Command::new( "cargo" )
           .args( [ "run", "--all-features", "--example", "ollama_chat_assistant" ] )
@@ -197,8 +197,8 @@ mod private
         assert!( stdout.contains( "EOF" ) || stdout.contains( "No input available" ),
           "Example should detect EOF gracefully" );
       },
-      Ok( Err( e ) ) => panic!( "Example execution failed: {e}" ),
-      Err( e ) => panic!( "Example timed out after 30s - likely infinite loop bug not fixed: {e}" ),
+      Ok( Err( e ) ) => panic!( "Example execution failed : {e}" ),
+      Err( e ) => panic!( "Example timed out after 30s - likely infinite loop bug not fixed : {e}" ),
     }
   }
 }

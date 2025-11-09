@@ -78,7 +78,7 @@ mod dynamic_configuration_tests
       assert!( !serialized.is_empty() );
 
       // Test deserialization
-      let deserialized: ConfigValue = serde_json::from_str( &serialized )
+      let deserialized : ConfigValue = serde_json::from_str( &serialized )
         .expect( "Failed to deserialize value" );
 
       assert_eq!( value, deserialized );
@@ -137,7 +137,7 @@ mod dynamic_configuration_tests
     assert!( !serialized.is_empty() );
 
     // Test deserialization
-    let deserialized: ConfigSnapshot = serde_json::from_str( &serialized )
+    let deserialized : ConfigSnapshot = serde_json::from_str( &serialized )
       .expect( "Failed to deserialize snapshot" );
 
     assert_eq!( snapshot.version, deserialized.version );
@@ -443,9 +443,9 @@ mod dynamic_configuration_tests
     let ( sender, mut receiver ) = DynamicConfigManager::create_change_watcher();
 
     // Send event after a delay
-    tokio::spawn( async move
+    tokio ::spawn( async move
     {
-      time::sleep( Duration::from_millis( 25 ) ).await;
+      time ::sleep( Duration::from_millis( 25 ) ).await;
       let _ = sender.send_update(
         "async_key".to_string(),
         None,

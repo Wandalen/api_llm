@@ -84,7 +84,7 @@ impl Client
     /// * `config` - Custom media processing configuration
     #[ must_use ]
     #[ inline ]
-    pub fn optimized_media_with_config( &self, config: crate::models::MediaProcessingConfig ) -> OptimizedMediaApi< '_ >
+    pub fn optimized_media_with_config( &self, config : crate::models::MediaProcessingConfig ) -> OptimizedMediaApi< '_ >
     {
         OptimizedMediaApi::with_config( self, config )
     }
@@ -139,11 +139,11 @@ impl Client
     /// # async fn main() -> Result< (), Box< dyn std::error::Error > > {
     /// let client = Client::new()?;
     /// let config = OptimizedRetrievalConfig {
-    ///     index_type: OptimizedIndexType::OptimizedFlat { dimensions: 1536 },
-    ///     cache_config: CacheConfig {
-    ///         capacity: 50000,
-    ///         ttl_seconds: Some( 7200 ), // 2 hour TTL
-    ///         adaptive_sizing: true,
+    ///     index_type : OptimizedIndexType::OptimizedFlat { dimensions : 1536 },
+    ///     cache_config : CacheConfig {
+    ///         capacity : 50000,
+    ///         ttl_seconds : Some( 7200 ), // 2 hour TTL
+    ///         adaptive_sizing : true,
     ///         ..Default::default()
     ///     },
     ///     ..Default::default()
@@ -154,7 +154,7 @@ impl Client
     /// ```
     #[ must_use ]
     #[ inline ]
-    pub fn optimized_semantic_retrieval_with_config( &self, config: OptimizedRetrievalConfig ) -> OptimizedSemanticRetrievalApi< '_ >
+    pub fn optimized_semantic_retrieval_with_config( &self, config : OptimizedRetrievalConfig ) -> OptimizedSemanticRetrievalApi< '_ >
     {
         OptimizedSemanticRetrievalApi::with_config( self, config )
     }
@@ -210,14 +210,14 @@ impl Client
     /// # async fn main() -> Result< (), Box< dyn std::error::Error > > {
     /// let client = Client::new()?;
     /// let config = OptimizedWebSocketConfig {
-    ///     pool_config: ConnectionPoolConfig {
-    ///         max_connections_per_endpoint: 20,
-    ///         max_total_connections: 200,
+    ///     pool_config : ConnectionPoolConfig {
+    ///         max_connections_per_endpoint : 20,
+    ///         max_total_connections : 200,
     ///         ..Default::default()
     ///     },
-    ///     message_config: MessageOptimizationConfig {
-    ///         serialization_format: SerializationFormat::MessagePack,
-    ///         enable_compression: true,
+    ///     message_config : MessageOptimizationConfig {
+    ///         serialization_format : SerializationFormat::MessagePack,
+    ///         enable_compression : true,
     ///         ..Default::default()
     ///     },
     ///     ..Default::default()
@@ -228,7 +228,7 @@ impl Client
     /// ```
     #[ must_use ]
     #[ inline ]
-    pub fn optimized_websocket_streaming_with_config( &self, config: OptimizedWebSocketConfig ) -> OptimizedWebSocketStreamingApi< '_ >
+    pub fn optimized_websocket_streaming_with_config( &self, config : OptimizedWebSocketConfig ) -> OptimizedWebSocketStreamingApi< '_ >
     {
         OptimizedWebSocketStreamingApi::with_config( self, config )
     }
@@ -349,7 +349,7 @@ impl Client
     #[ inline ]
     pub fn batches( &self ) -> crate::batch_api::BatchApi< '_ >
     {
-        crate::batch_api::BatchApi::new( self )
+        crate ::batch_api::BatchApi::new( self )
     }
 
     /// Get a health check builder for explicit endpoint monitoring
@@ -361,7 +361,7 @@ impl Client
     #[ inline ]
     pub fn health( &self ) -> crate::models::health::HealthCheckBuilder
     {
-        crate::models::health::HealthCheckBuilder::new( self.clone() )
+        crate ::models::health::HealthCheckBuilder::new( self.clone() )
     }
 
     /// Get the base URL for this client

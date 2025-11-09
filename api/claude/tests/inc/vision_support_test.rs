@@ -8,8 +8,8 @@
 //! - Tests MUST FAIL IMMEDIATELY on any API endpoint errors
 //! - NO SILENT PASSES allowed when problems occur
 //!
-//! Run with: cargo test --features vision,integration
-//! Requires: Valid `ANTHROPIC_API_KEY` in environment or ../../secret/-secrets.sh
+//! Run with : cargo test --features vision,integration
+//! Requires : Valid `ANTHROPIC_API_KEY` in environment or ../../secret/-secrets.sh
 
 #[ allow( unused_imports ) ]
 use super::*;
@@ -87,7 +87,7 @@ async fn test_mixed_content_message()
   
   match message.role
   {
-    the_module::Role::User => {},
+    the_module ::Role::User => {},
     _ => panic!( "Expected User role" ),
   }
   
@@ -113,7 +113,7 @@ async fn test_image_only_message()
   
   match message.role
   {
-    the_module::Role::User => {},
+    the_module ::Role::User => {},
     _ => panic!( "Expected User role" ),
   }
   
@@ -204,14 +204,14 @@ async fn test_vision_conversation_flow()
   };
   
   let messages = vec![
-    the_module::Message::user_with_image( 
+    the_module ::Message::user_with_image( 
       "What's in this image?".to_string(), 
       image_content 
     ),
-    the_module::Message::assistant( 
+    the_module ::Message::assistant( 
       "I can see a beautiful landscape with mountains and trees.".to_string() 
     ),
-    the_module::Message::user( 
+    the_module ::Message::user( 
       "What time of day do you think it is?".to_string() 
     ),
   ];
@@ -270,7 +270,7 @@ async fn test_image_content_deserialization()
     }
   }"#;
   
-  let image_content: the_module::ImageContent = serde_json::from_str( json ).expect( "Should deserialize successfully" );
+  let image_content : the_module::ImageContent = serde_json::from_str( json ).expect( "Should deserialize successfully" );
   
   assert_eq!( image_content.r#type, "image" );
   assert_eq!( image_content.source.r#type, "base64" );
@@ -294,7 +294,7 @@ async fn test_vision_with_tools()
   };
   
   let tools = vec![
-    the_module::ToolDefinition
+    the_module ::ToolDefinition
     {
       name : "image_analyzer".to_string(),
       description : "Analyze image content and extract information".to_string(),
@@ -424,7 +424,7 @@ async fn test_mixed_content_serialization()
   // Test serialization of mixed content message
   let message = the_module::Message::user_with_image(
     "Analyze this".to_string(),
-    the_module::ImageContent
+    the_module ::ImageContent
     {
       r#type : "image".to_string(),
       source : the_module::ImageSource
@@ -468,7 +468,7 @@ async fn integration_vision_real_image_processing()
     model : "claude-sonnet-4-5-20250929".to_string(), // Vision-capable model
     max_tokens : 50,
     messages : vec![ 
-      the_module::Message::user_with_image(
+      the_module ::Message::user_with_image(
         "What color is this image?".to_string(),
         image_content
       )
@@ -488,7 +488,7 @@ async fn integration_vision_real_image_processing()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted - this confirms real API usage" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION: Vision API call must work: {err}" ),
+    Err( err ) => panic!( "INTEGRATION: Vision API call must work : {err}" ),
   };
 
   // Verify real API vision response
@@ -509,13 +509,13 @@ async fn integration_vision_real_image_processing()
     response_lower.contains( "color" ) || 
     response_lower.contains( "image" ) ||
     response_lower.contains( "pixel" ),
-    "Vision API should analyze image content, got: {content_text}"
+    "Vision API should analyze image content, got : {content_text}"
   );
   
   println!( "✅ Vision integration test passed!" );
-  println!( "   Vision response: {content_text}" );
-  println!( "   Input tokens: {}", response.usage.input_tokens );
-  println!( "   Output tokens: {}", response.usage.output_tokens );
+  println!( "   Vision response : {content_text}" );
+  println!( "   Input tokens : {}", response.usage.input_tokens );
+  println!( "   Output tokens : {}", response.usage.output_tokens );
 }
 
 #[ tokio::test ]
@@ -533,7 +533,7 @@ async fn integration_vision_mixed_content_real_api()
 
   // Test mixed text + image content
   let message = the_module::Message::user_with_image(
-    "I'm sending you an image and asking: What do you see in this small image? Please be specific about any colors or patterns.".to_string(),
+    "I'm sending you an image and asking : What do you see in this small image? Please be specific about any colors or patterns.".to_string(),
     image_content
   );
 
@@ -557,7 +557,7 @@ async fn integration_vision_mixed_content_real_api()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted - this confirms real API usage" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION: Mixed content vision API call must work: {err}" ),
+    Err( err ) => panic!( "INTEGRATION: Mixed content vision API call must work : {err}" ),
   };
 
   // Verify mixed content response
@@ -574,9 +574,9 @@ async fn integration_vision_mixed_content_real_api()
     response_lower.contains( "image" ) || response_lower.contains( "see" ) ||
     response_lower.contains( "blank" ) || response_lower.contains( "tint" ) ||
     response_lower.contains( "color" ) || response_lower.contains( "pixel" ),
-    "Mixed content should show vision processing, got: {content_text}"
+    "Mixed content should show vision processing, got : {content_text}"
   );
   
   println!( "✅ Vision mixed content integration test passed!" );
-  println!( "   Mixed content response: {content_text}" );
+  println!( "   Mixed content response : {content_text}" );
 }

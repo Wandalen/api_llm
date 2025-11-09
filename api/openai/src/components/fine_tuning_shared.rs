@@ -6,7 +6,7 @@ mod private
   // Use full paths from crate root for components
   use crate::components::common::{ Metadata, ParallelToolCalls };
   use crate::components::chat_shared::ChatCompletionResponseMessage;
-  // Corrected import: ChatCompletionTool is in tools.rs
+  // Corrected import : ChatCompletionTool is in tools.rs
   use crate::components::chat_shared::ChatCompletionTool;
 
   // Serde imports
@@ -38,11 +38,11 @@ mod private
   pub struct FineTuningJobHyperparameters
   {
     /// Number of examples in each batch (`auto` or integer 1-256).
-    pub batch_size : Value, // Represents oneOf: string("auto"), integer
+    pub batch_size : Value, // Represents oneOf : string("auto"), integer
     /// Scaling factor for the learning rate (`auto` or number > 0).
-    pub learning_rate_multiplier : Value, // Represents oneOf: string("auto"), number
+    pub learning_rate_multiplier : Value, // Represents oneOf : string("auto"), number
     /// The number of epochs to train the model for (`auto` or integer 1-50).
-    pub n_epochs : Value, // Represents oneOf: string("auto"), integer
+    pub n_epochs : Value, // Represents oneOf : string("auto"), integer
   }
 
   /// Represents the configuration for Weights & Biases integration.
@@ -98,13 +98,13 @@ mod private
   pub struct DPOHyperparameters
   {
     /// The beta value for the DPO method (`auto` or number > 0, <= 2).
-    pub beta : Value, // Represents oneOf: string("auto"), number
+    pub beta : Value, // Represents oneOf : string("auto"), number
     /// Number of examples in each batch (`auto` or integer 1-256).
-    pub batch_size : Value, // Represents oneOf: string("auto"), integer
+    pub batch_size : Value, // Represents oneOf : string("auto"), integer
     /// Scaling factor for the learning rate (`auto` or number > 0).
-    pub learning_rate_multiplier : Value, // Represents oneOf: string("auto"), number
+    pub learning_rate_multiplier : Value, // Represents oneOf : string("auto"), number
     /// The number of epochs to train the model for (`auto` or integer 1-50).
-    pub n_epochs : Value, // Represents oneOf: string("auto"), integer
+    pub n_epochs : Value, // Represents oneOf : string("auto"), integer
   }
 
   /// Configuration for the supervised fine-tuning method.
@@ -155,7 +155,7 @@ mod private
     pub fine_tuned_model : Option< String >,
     /// The Unix timestamp (in seconds) for when the fine-tuning job was finished. Null if the job is still running.
     pub finished_at : Option< i64 >,
-    /// Deprecated: The hyperparameters used for the fine-tuning job. See `method`.
+    /// Deprecated : The hyperparameters used for the fine-tuning job. See `method`.
     #[ deprecated( note = "Use method.hyperparameters instead" ) ]
     pub hyperparameters : Option< FineTuningJobHyperparameters >,
     /// The base model that is being fine-tuned.
@@ -167,7 +167,7 @@ mod private
     /// The compiled results file ID(s) for the fine-tuning job.
     pub result_files : Vec< String >,
     /// The current status of the fine-tuning job.
-    pub status : String, // Enum: validating_files, queued, running, succeeded, failed, cancelled
+    pub status : String, // Enum : validating_files, queued, running, succeeded, failed, cancelled
     /// The total number of billable tokens processed by this job. Null if the job is still running.
     pub trained_tokens : Option< i64 >,
     /// The file ID used for training.
@@ -412,7 +412,7 @@ mod private
 
 } // end mod private
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use 
   {

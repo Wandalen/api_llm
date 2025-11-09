@@ -7,13 +7,13 @@ mod private
   //!
   //! # Design Decisions
   //!
-  //! ## Why `Arc<Mutex<FailoverState>>`?
+  //! ## Why `Arc< Mutex< FailoverState > >`?
   //!
   //! The failover state must be shared between the Client and multiple concurrent
-  //! requests while allowing mutation of health metrics. Using Arc<Mutex<>> instead
+  //! requests while allowing mutation of health metrics. Using Arc< Mutex<> > instead
   //! of alternatives:
   //!
-  //! - **`Arc<RwLock<>>`**: Would provide better read concurrency, but failover
+  //! - **`Arc< RwLock<> >`**: Would provide better read concurrency, but failover
   //!   operations are fast (just index increments) and contention is rare since
   //!   most operations are reads of `current_endpoint` which we cache.
   //!
@@ -41,7 +41,7 @@ mod private
   //!
   //! ## Auto-Rotation vs Manual Control
   //!
-  //! Auto-rotation (`auto_rotate: true`) automatically switches to backup endpoints
+  //! Auto-rotation (`auto_rotate : true`) automatically switches to backup endpoints
   //! when the current one becomes unhealthy. This is disabled by default because:
   //!
   //! 1. **Explicit Control**: Aligns with "Thin Client, Rich API" principle - the
@@ -458,7 +458,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

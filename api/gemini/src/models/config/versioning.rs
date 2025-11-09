@@ -27,15 +27,15 @@ pub enum ConfigChangeType
 pub struct ConfigChangeEvent
 {
   /// Unique identifier for this configuration version
-  pub version_id: String,
+  pub version_id : String,
   /// Type of change that occurred
-  pub change_type: ConfigChangeType,
+  pub change_type : ConfigChangeType,
   /// When the change occurred
-  pub timestamp: SystemTime,
+  pub timestamp : SystemTime,
   /// Previous configuration (if any)
-  pub previous_config: Option< DynamicConfig >,
+  pub previous_config : Option< DynamicConfig >,
   /// New configuration after the change
-  pub new_config: DynamicConfig,
+  pub new_config : DynamicConfig,
 }
 
 /// Historical configuration entry for versioning with optimization metadata
@@ -43,23 +43,23 @@ pub struct ConfigChangeEvent
 pub struct ConfigHistoryEntry
 {
   /// Unique version identifier
-  pub version_id: String,
+  pub version_id : String,
   /// Configuration at this version
-  pub config: DynamicConfig,
+  pub config : DynamicConfig,
   /// When this version was created
-  pub timestamp: SystemTime,
+  pub timestamp : SystemTime,
   /// Type of change that created this version
-  pub change_type: ConfigChangeType,
+  pub change_type : ConfigChangeType,
   /// Hash of the configuration for quick comparison
-  pub config_hash: u64,
+  pub config_hash : u64,
   /// Size in bytes of the configuration when serialized (for memory tracking)
-  pub size_bytes: usize,
+  pub size_bytes : usize,
   /// Configuration differences from previous version (for compression)
-  pub delta: Option< ConfigDelta >,
+  pub delta : Option< ConfigDelta >,
   /// User or system that created this version
-  pub created_by: Option< String >,
+  pub created_by : Option< String >,
   /// Human-readable description of the change
-  pub description: Option< String >,
+  pub description : Option< String >,
 }
 
 /// Configuration difference data for efficient storage
@@ -67,19 +67,19 @@ pub struct ConfigHistoryEntry
 pub struct ConfigDelta
 {
   /// Fields that were changed
-  pub changed_fields: HashMap<  String, serde_json::Value  >,
+  pub changed_fields : HashMap<  String, serde_json::Value  >,
   /// Fields that were added
-  pub added_fields: HashMap<  String, serde_json::Value  >,
+  pub added_fields : HashMap<  String, serde_json::Value  >,
   /// Fields that were removed
-  pub removed_fields: Vec< String >,
+  pub removed_fields : Vec< String >,
   /// Tag changes
-  pub tag_changes: HashMap< String, Option< String > >, // None = removed, Some = added/changed
+  pub tag_changes : HashMap< String, Option< String > >, // None = removed, Some = added/changed
 }
 
 impl ConfigDelta
 {
   /// Create a delta between two configurations
-  pub fn create_delta( old_config: &DynamicConfig, new_config: &DynamicConfig ) -> Self
+  pub fn create_delta( old_config : &DynamicConfig, new_config : &DynamicConfig ) -> Self
   {
     let mut changed_fields = HashMap::new();
     let added_fields = HashMap::new();
@@ -155,7 +155,7 @@ impl ConfigDelta
   }
 
   /// Apply delta to a configuration to get the new configuration
-  pub fn apply_delta( &self, base_config: &DynamicConfig ) -> Result< DynamicConfig, serde_json::Error >
+  pub fn apply_delta( &self, base_config : &DynamicConfig ) -> Result< DynamicConfig, serde_json::Error >
   {
     let mut new_config = base_config.clone();
 
@@ -199,14 +199,14 @@ impl ConfigDelta
   /// Calculate memory footprint of this delta
   pub fn memory_footprint( &self ) -> usize
   {
-    serde_json::to_string( self ).unwrap_or_default().len()
+    serde_json ::to_string( self ).unwrap_or_default().len()
   }
 }
 
 impl ConfigHistoryEntry
 {
   /// Create a new history entry from a configuration
-  pub fn from_config( config: DynamicConfig, change_type: ConfigChangeType, version_id: String ) -> Self
+  pub fn from_config( config : DynamicConfig, change_type : ConfigChangeType, version_id : String ) -> Self
   {
     let config_hash = config.compute_hash();
     let size_bytes = serde_json::to_string( &config ).unwrap_or_default().len();
@@ -214,24 +214,24 @@ impl ConfigHistoryEntry
     Self {
       version_id,
       config,
-      timestamp: SystemTime::now(),
+      timestamp : SystemTime::now(),
       change_type,
       config_hash,
       size_bytes,
-      delta: None,
-      created_by: None,
-      description: None,
+      delta : None,
+      created_by : None,
+      description : None,
     }
   }
 
   /// Create a new history entry with delta compression
   pub fn from_config_with_delta(
-    config: DynamicConfig,
-    change_type: ConfigChangeType,
-    version_id: String,
-    previous_config: Option< &DynamicConfig >,
-    created_by: Option< String >,
-    description: Option< String >
+    config : DynamicConfig,
+    change_type : ConfigChangeType,
+    version_id : String,
+    previous_config : Option< &DynamicConfig >,
+    created_by : Option< String >,
+    description : Option< String >
   ) -> Self
   {
     let config_hash = config.compute_hash();
@@ -247,7 +247,7 @@ impl ConfigHistoryEntry
     Self {
       version_id,
       config,
-      timestamp: SystemTime::now(),
+      timestamp : SystemTime::now(),
       change_type,
       config_hash,
       size_bytes,
@@ -276,7 +276,7 @@ impl ConfigHistoryEntry
   }
 
   /// Reconstruct configuration from delta if available
-  pub fn reconstruct_config( &self, base_config: &DynamicConfig ) -> Result< DynamicConfig, serde_json::Error >
+  pub fn reconstruct_config( &self, base_config : &DynamicConfig ) -> Result< DynamicConfig, serde_json::Error >
   {
     if let Some( delta ) = &self.delta
     {

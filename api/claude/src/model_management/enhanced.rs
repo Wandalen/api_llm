@@ -7,8 +7,8 @@ mod private
 {
   use super::super::core::orphan::*;
   use crate::{
-    error::AnthropicResult,
-    client::Client,
+    error ::AnthropicResult,
+    client ::Client,
   };
   use serde::{ Serialize, Deserialize };
   use std::collections::HashMap;
@@ -214,9 +214,9 @@ mod private
       limitations.insert( "supported_image_formats".to_string(), "JPEG, PNG, GIF, WebP".to_string() );
 
       // Fix(issue-001): Correct Sonnet 4.5 capabilities
-      // Root cause: Sonnet 4.x family has different capabilities than 3.x family
-      // Sonnet 4.5 ("claude-sonnet-4-5-20250929") is text-only: no vision, no function calling, optimized for speed
-      // Pitfall: Don't assume newer models have all features - verify API capabilities
+      // Root cause : Sonnet 4.x family has different capabilities than 3.x family
+      // Sonnet 4.5 ("claude-sonnet-4-5-20250929") is text-only : no vision, no function calling, optimized for speed
+      // Pitfall : Don't assume newer models have all features - verify API capabilities
       let (supports_vision, supports_function_calling) = match model_id
       {
         "claude-3-5-haiku-20241022" => (false, true),
@@ -360,7 +360,7 @@ mod private
     /// Estimate tokens for text
     pub fn estimate_tokens( &self, text : &str ) -> u32
     {
-      // Simple estimation: ~4 characters per token
+      // Simple estimation : ~4 characters per token
       #[ allow( clippy::cast_possible_truncation ) ]
       {
         (text.len() as u32).div_ceil(4)
@@ -825,8 +825,8 @@ mod private
 
     /// Get models supporting a feature
     // Fix(issue-001): Correct Sonnet 4.5 feature support
-    // Root cause: Sonnet 4.5 is text-only and doesn't support vision or function calling
-    // Pitfall: Feature matrices must stay synchronized with EnhancedModelCapabilities
+    // Root cause : Sonnet 4.5 is text-only and doesn't support vision or function calling
+    // Pitfall : Feature matrices must stay synchronized with EnhancedModelCapabilities
     pub fn get_models_supporting( &self, feature : &str ) -> Vec< String >
     {
       match feature
@@ -844,9 +844,9 @@ mod private
 
     /// Get models supporting all features
     // Fix(issue-001): Correct models for vision+function_calling combo
-    // Root cause: Only Claude 3 Opus supports both vision and function calling
+    // Root cause : Only Claude 3 Opus supports both vision and function calling
     // Sonnet 4.5 is text-only, Haiku 3.5 has no vision
-    // Pitfall: Feature combinations must be validated against actual capabilities
+    // Pitfall : Feature combinations must be validated against actual capabilities
     pub fn get_models_supporting_all( &self, features : &Vec< &str > ) -> Vec< String >
     {
       if features.contains( &"vision" ) && features.contains( &"function_calling" )
@@ -972,7 +972,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use EnhancedModelDetails;
   exposed use EnhancedModelCapabilities;

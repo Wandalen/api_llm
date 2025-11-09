@@ -15,7 +15,7 @@ async fn test_streaming_chatbot_compiles_successfully()
   // 2. ✅ InputContentPart from api_openai::input  
   // 3. ✅ ResponseStreamEvent from api_openai::components::responses
   // 4. ✅ ResponseInput::Items instead of ResponseInput::Messages
-  // 5. ✅ String formatting fixed: println!("{}", "=".repeat(50))
+  // 5. ✅ String formatting fixed : println!("{}", "=".repeat(50))
   
   println!("✅ streaming_chatbot example compilation issues have been fixed");
   // The test passes if the code compiles successfully

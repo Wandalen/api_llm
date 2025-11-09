@@ -444,8 +444,8 @@ fn display_response_with_analysis(
   {
     println!( "\n🔍 System Instruction Analysis:" );
     println!( "{}", "-".repeat( 40 ) );
-    println!( "📋 Instruction Length: {} characters", system_instruction.len() );
-    println!( "📄 Instruction Word Count: {}", system_instruction.split_whitespace().count() );
+    println!( "📋 Instruction Length : {} characters", system_instruction.len() );
+    println!( "📄 Instruction Word Count : {}", system_instruction.split_whitespace().count() );
 
     // Analyze key instruction components
     let instruction_lower = system_instruction.to_lowercase();
@@ -455,10 +455,10 @@ fn display_response_with_analysis(
     let has_constraints = instruction_lower.contains( "don't" ) || instruction_lower.contains( "avoid" ) || instruction_lower.contains( "never" );
 
     println!( "✅ Components Present:" );
-    println!( "   📋 Role Definition: {}", if has_role_definition { "Yes" } else { "No" } );
-    println!( "   📝 Guidelines/Bullets: {}", if has_guidelines { "Yes" } else { "No" } );
-    println!( "   📚 Examples: {}", if has_examples { "Yes" } else { "No" } );
-    println!( "   ⚠️  Constraints: {}", if has_constraints { "Yes" } else { "No" } );
+    println!( "   📋 Role Definition : {}", if has_role_definition { "Yes" } else { "No" } );
+    println!( "   📝 Guidelines/Bullets : {}", if has_guidelines { "Yes" } else { "No" } );
+    println!( "   📚 Examples : {}", if has_examples { "Yes" } else { "No" } );
+    println!( "   ⚠️  Constraints : {}", if has_constraints { "Yes" } else { "No" } );
   }
 
   // Display token usage
@@ -468,15 +468,15 @@ fn display_response_with_analysis(
     println!( "{}", "-".repeat( 40 ) );
     if let Some( prompt_tokens ) = usage.prompt_token_count
     {
-      println!( "📥 Prompt tokens: {}", prompt_tokens );
+      println!( "📥 Prompt tokens : {}", prompt_tokens );
     }
     if let Some( candidates_tokens ) = usage.candidates_token_count
     {
-      println!( "📤 Response tokens: {}", candidates_tokens );
+      println!( "📤 Response tokens : {}", candidates_tokens );
     }
     if let Some( total_tokens ) = usage.total_token_count
     {
-      println!( "🔢 Total tokens: {}", total_tokens );
+      println!( "🔢 Total tokens : {}", total_tokens );
     }
   }
 }
@@ -498,7 +498,7 @@ async fn basic_system_instruction_demo(
   println!( "{}", system_instruction );
   println!();
 
-  println!( "💬 User Message: {}", user_message );
+  println!( "💬 User Message : {}", user_message );
   println!();
 
   let response = execute_with_system_instruction(
@@ -521,7 +521,7 @@ async fn role_based_instruction_demo(
 {
   let role = config.role.as_deref().unwrap_or( "teacher" );
 
-  println!( "🎭 Role-Based System Instruction Demo: {}", role );
+  println!( "🎭 Role-Based System Instruction Demo : {}", role );
   println!( "{}", "=".repeat( 80 ) );
 
   let ( system_instruction, test_message ) = match role
@@ -552,7 +552,7 @@ async fn role_based_instruction_demo(
   println!( "{}", system_instruction );
   println!();
 
-  println!( "💬 Test Message: {}", test_message );
+  println!( "💬 Test Message : {}", test_message );
   println!();
 
   let response = execute_with_system_instruction(
@@ -575,7 +575,7 @@ async fn interactive_instruction_demo(
 {
   let role = config.role.as_deref().unwrap_or( "assistant" );
 
-  println!( "💬 Interactive System Instruction Demo: {}", role );
+  println!( "💬 Interactive System Instruction Demo : {}", role );
   println!( "{}", "=".repeat( 80 ) );
 
   let system_instruction = match role
@@ -587,7 +587,7 @@ async fn interactive_instruction_demo(
     _ => InstructionTemplates::basic_assistant(),
   };
 
-  println!( "🎭 Active Role: {}", role );
+  println!( "🎭 Active Role : {}", role );
   println!( "📋 System instructions loaded. Type 'quit' to exit." );
   println!();
 
@@ -595,11 +595,11 @@ async fn interactive_instruction_demo(
 
   loop
   {
-    print!( "💬 You: " );
-    io::stdout().flush()?;
+    print!( "💬 You : " );
+    io ::stdout().flush()?;
 
     let mut input = String::new();
-    io::stdin().read_line( &mut input )?;
+    io ::stdin().read_line( &mut input )?;
     let input = input.trim();
 
     if input.is_empty()
@@ -653,14 +653,14 @@ async fn interactive_instruction_demo(
         }
       },
       Err( e ) => {
-        println!( "❌ Error: {}", e );
+        println!( "❌ Error : {}", e );
       }
     }
 
     println!();
   }
 
-  println!( "👋 Conversation ended. History length: {} turns", conversation_history.len() / 2 );
+  println!( "👋 Conversation ended. History length : {} turns", conversation_history.len() / 2 );
   Ok( () )
 }
 
@@ -676,7 +676,7 @@ async fn instruction_comparison_demo(
   let test_message = "How should I approach learning a new programming language?";
   let system_instruction = InstructionTemplates::teacher( "computer science" );
 
-  println!( "💬 Test Question: {}", test_message );
+  println!( "💬 Test Question : {}", test_message );
   println!();
 
   // Response without system instructions
@@ -746,9 +746,9 @@ async fn instruction_comparison_demo(
     println!( "Token Usage Comparison:" );
     if let ( Some( basic_total ), Some( instructed_total ) ) = ( basic_usage.total_token_count, instructed_usage.total_token_count )
     {
-      println!( "   Without instructions: {} tokens", basic_total );
-      println!( "   With instructions: {} tokens", instructed_total );
-      println!( "   Difference: {} tokens ({:.1}% increase)",
+      println!( "   Without instructions : {} tokens", basic_total );
+      println!( "   With instructions : {} tokens", instructed_total );
+      println!( "   Difference : {} tokens ({:.1}% increase)",
         instructed_total - basic_total,
         ( ( instructed_total - basic_total ) as f64 / basic_total as f64 ) * 100.0
       );
@@ -787,9 +787,9 @@ async fn template_demo(
     let line_count = template.lines().count();
 
     println!( "📊 Template Statistics:" );
-    println!( "   Characters: {}", char_count );
-    println!( "   Words: {}", word_count );
-    println!( "   Lines: {}", line_count );
+    println!( "   Characters : {}", char_count );
+    println!( "   Words : {}", word_count );
+    println!( "   Lines : {}", line_count );
   }
 
   Ok( () )

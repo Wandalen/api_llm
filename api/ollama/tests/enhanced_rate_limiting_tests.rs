@@ -15,7 +15,7 @@
 //!
 //! ## Test Determinism Under Workspace Load
 //!
-//! Critical insight: Integration tests that make timing assumptions MUST account for:
+//! Critical insight : Integration tests that make timing assumptions MUST account for:
 //! - **Workspace parallelism**: Multiple test binaries executing simultaneously
 //! - **System contention**: CPU, memory, and I/O competition between tests
 //! - **Network variance**: httpbin.org response times vary significantly (50ms-5000ms observed)
@@ -28,14 +28,14 @@
 //! **Lesson learned**: Refill rates that are significant relative to test duration create flakiness.
 //!
 //! - **Flaky example**: `refill_rate = 2.0 tokens/sec` with 250ms test duration
-//!   - Expected refill during test: ~0.5 tokens
-//!   - Under load: Test extends to 400ms → 0.8 tokens refilled
-//!   - Result: Non-deterministic rate limiting counts
+//!   - Expected refill during test : ~0.5 tokens
+//!   - Under load : Test extends to 400ms → 0.8 tokens refilled
+//!   - Result : Non-deterministic rate limiting counts
 //!
 //! - **Deterministic solution**: `refill_rate = 0.1 tokens/sec` with 250ms test duration
-//!   - Expected refill during test: ~0.025 tokens (negligible)
-//!   - Under load: Test extends to 400ms → 0.04 tokens (still negligible)
-//!   - Result: Refill is insignificant, behavior is deterministic
+//!   - Expected refill during test : ~0.025 tokens (negligible)
+//!   - Under load : Test extends to 400ms → 0.04 tokens (still negligible)
+//!   - Result : Refill is insignificant, behavior is deterministic
 //!
 //! **Rule**: For deterministic tests, use refill rates where `refill_rate * max_test_duration < 0.1`
 //!
@@ -53,12 +53,12 @@
 //! **Lesson learned**: Windows that can slide during test execution create flakiness.
 //!
 //! - **Flaky example**: `window_duration = 500ms` with 250ms test duration
-//!   - Under load: Test extends to 600ms due to slow HTTP responses
-//!   - Result: Window slides during execution, allowing more requests than expected
+//!   - Under load : Test extends to 600ms due to slow HTTP responses
+//!   - Result : Window slides during execution, allowing more requests than expected
 //!
 //! - **Deterministic solution**: `window_duration = 10,000ms` with 250ms test duration
-//!   - Under load: Test extends to 2000ms worst case
-//!   - Result: Window never slides during test, behavior remains deterministic
+//!   - Under load : Test extends to 2000ms worst case
+//!   - Result : Window never slides during test, behavior remains deterministic
 //!
 //! **Rule**: Use window durations at least 20x longer than maximum expected test duration
 //!
@@ -85,13 +85,13 @@
 #[ allow( clippy::std_instead_of_core ) ] // async/futures require std
 mod rate_limiting_tests
 {
-  // Note: This test module uses real HTTP requests via httpbin.org for authentic rate limiting testing
+  // Note : This test module uses real HTTP requests via httpbin.org for authentic rate limiting testing
 
   use std::
   {
-    sync::{ Arc, Mutex },
-    time::{ Duration, Instant },
-    collections::VecDeque,
+    sync ::{ Arc, Mutex },
+    time ::{ Duration, Instant },
+    collections ::VecDeque,
   };
 
   use serde::{ Serialize, Deserialize };
@@ -112,19 +112,19 @@ mod rate_limiting_tests
   pub struct EnhancedRateLimitingConfig
   {
     /// Maximum number of requests per time window
-    pub max_requests: u32,
+    pub max_requests : u32,
     /// Time window duration in milliseconds
-    pub window_duration_ms: u64,
+    pub window_duration_ms : u64,
     /// Maximum burst capacity (token bucket only)
-    pub burst_capacity: u32,
+    pub burst_capacity : u32,
     /// Token refill rate per second (token bucket only)
-    pub refill_rate: f64,
+    pub refill_rate : f64,
     /// Rate limiting algorithm to use
-    pub algorithm: RateLimitingAlgorithm,
+    pub algorithm : RateLimitingAlgorithm,
     /// Request timeout when rate limit exceeded
-    pub timeout_ms: u64,
+    pub timeout_ms : u64,
     /// Whether to enable per-endpoint rate limiting
-    pub per_endpoint: bool,
+    pub per_endpoint : bool,
   }
 
   impl Default for EnhancedRateLimitingConfig
@@ -133,13 +133,13 @@ mod rate_limiting_tests
     {
       Self
       {
-        max_requests: 100,
-        window_duration_ms: 60000, // 1 minute
-        burst_capacity: 10,
-        refill_rate: 1.67, // ~100 requests per minute
-        algorithm: RateLimitingAlgorithm::TokenBucket,
-        timeout_ms: 5000,
-        per_endpoint: false,
+        max_requests : 100,
+        window_duration_ms : 60000, // 1 minute
+        burst_capacity : 10,
+        refill_rate : 1.67, // ~100 requests per minute
+        algorithm : RateLimitingAlgorithm::TokenBucket,
+        timeout_ms : 5000,
+        per_endpoint : false,
       }
     }
   }
@@ -153,49 +153,49 @@ mod rate_limiting_tests
     }
 
     /// Set maximum requests per window
-    pub fn with_max_requests( mut self, max_requests: u32 ) -> Self
+    pub fn with_max_requests( mut self, max_requests : u32 ) -> Self
     {
       self.max_requests = max_requests;
       self
     }
 
     /// Set window duration
-    pub fn with_window_duration( mut self, duration_ms: u64 ) -> Self
+    pub fn with_window_duration( mut self, duration_ms : u64 ) -> Self
     {
       self.window_duration_ms = duration_ms;
       self
     }
 
     /// Set burst capacity for token bucket
-    pub fn with_burst_capacity( mut self, capacity: u32 ) -> Self
+    pub fn with_burst_capacity( mut self, capacity : u32 ) -> Self
     {
       self.burst_capacity = capacity;
       self
     }
 
     /// Set token refill rate
-    pub fn with_refill_rate( mut self, rate: f64 ) -> Self
+    pub fn with_refill_rate( mut self, rate : f64 ) -> Self
     {
       self.refill_rate = rate;
       self
     }
 
     /// Set rate limiting algorithm
-    pub fn with_algorithm( mut self, algorithm: RateLimitingAlgorithm ) -> Self
+    pub fn with_algorithm( mut self, algorithm : RateLimitingAlgorithm ) -> Self
     {
       self.algorithm = algorithm;
       self
     }
 
     /// Set timeout duration
-    pub fn with_timeout( mut self, timeout_ms: u64 ) -> Self
+    pub fn with_timeout( mut self, timeout_ms : u64 ) -> Self
     {
       self.timeout_ms = timeout_ms;
       self
     }
 
     /// Enable per-endpoint rate limiting
-    pub fn with_per_endpoint( mut self, per_endpoint: bool ) -> Self
+    pub fn with_per_endpoint( mut self, per_endpoint : bool ) -> Self
     {
       self.per_endpoint = per_endpoint;
       self
@@ -238,31 +238,31 @@ mod rate_limiting_tests
   pub struct TokenBucketState
   {
     /// Current number of tokens available
-    pub tokens: f64,
+    pub tokens : f64,
     /// Last time tokens were refilled
-    pub last_refill: Instant,
+    pub last_refill : Instant,
     /// Total number of requests processed
-    pub total_requests: u64,
+    pub total_requests : u64,
     /// Total number of rate limited requests
-    pub rate_limited_requests: u64,
+    pub rate_limited_requests : u64,
   }
 
   impl TokenBucketState
   {
     /// Create new token bucket state
-    pub fn new( initial_tokens: f64 ) -> Self
+    pub fn new( initial_tokens : f64 ) -> Self
     {
       Self
       {
-        tokens: initial_tokens,
-        last_refill: Instant::now(),
-        total_requests: 0,
-        rate_limited_requests: 0,
+        tokens : initial_tokens,
+        last_refill : Instant::now(),
+        total_requests : 0,
+        rate_limited_requests : 0,
       }
     }
 
     /// Refill tokens based on elapsed time
-    pub fn refill_tokens( &mut self, refill_rate: f64, burst_capacity: f64 )
+    pub fn refill_tokens( &mut self, refill_rate : f64, burst_capacity : f64 )
     {
       let now = Instant::now();
       let elapsed = now.duration_since( self.last_refill ).as_secs_f64();
@@ -295,11 +295,11 @@ mod rate_limiting_tests
   pub struct SlidingWindowState
   {
     /// Request timestamps within the current window
-    pub request_timestamps: VecDeque< Instant >,
+    pub request_timestamps : VecDeque< Instant >,
     /// Total number of requests processed
-    pub total_requests: u64,
+    pub total_requests : u64,
     /// Total number of rate limited requests
-    pub rate_limited_requests: u64,
+    pub rate_limited_requests : u64,
   }
 
   impl SlidingWindowState
@@ -309,14 +309,14 @@ mod rate_limiting_tests
     {
       Self
       {
-        request_timestamps: VecDeque::new(),
-        total_requests: 0,
-        rate_limited_requests: 0,
+        request_timestamps : VecDeque::new(),
+        total_requests : 0,
+        rate_limited_requests : 0,
       }
     }
 
     /// Clean up old timestamps outside the window
-    pub fn cleanup_old_timestamps( &mut self, window_duration: Duration )
+    pub fn cleanup_old_timestamps( &mut self, window_duration : Duration )
     {
       let cutoff_time = Instant::now().checked_sub(window_duration).unwrap();
 
@@ -334,7 +334,7 @@ mod rate_limiting_tests
     }
 
     /// Try to add a request to the window
-    pub fn try_add_request( &mut self, max_requests: u32 ) -> bool
+    pub fn try_add_request( &mut self, max_requests : u32 ) -> bool
     {
       self.total_requests += 1;
 
@@ -355,15 +355,15 @@ mod rate_limiting_tests
   #[ derive( Debug ) ]
   pub struct EnhancedRateLimiter
   {
-    config: EnhancedRateLimitingConfig,
-    token_bucket_state: Option< Arc< Mutex< TokenBucketState > > >,
-    sliding_window_state: Option< Arc< Mutex< SlidingWindowState > > >,
+    config : EnhancedRateLimitingConfig,
+    token_bucket_state : Option< Arc< Mutex< TokenBucketState > > >,
+    sliding_window_state : Option< Arc< Mutex< SlidingWindowState > > >,
   }
 
   impl EnhancedRateLimiter
   {
     /// Create new rate limiter with configuration
-    pub fn new( config: EnhancedRateLimitingConfig ) -> std::result::Result< Self, String >
+    pub fn new( config : EnhancedRateLimitingConfig ) -> std::result::Result< Self, String >
     {
       config.validate()?;
 
@@ -431,10 +431,10 @@ mod rate_limiting_tests
         let bucket = state.lock().unwrap();
         Some( TokenBucketState
         {
-          tokens: bucket.tokens,
-          last_refill: bucket.last_refill,
-          total_requests: bucket.total_requests,
-          rate_limited_requests: bucket.rate_limited_requests,
+          tokens : bucket.tokens,
+          last_refill : bucket.last_refill,
+          total_requests : bucket.total_requests,
+          rate_limited_requests : bucket.rate_limited_requests,
         } )
       }
       else
@@ -451,9 +451,9 @@ mod rate_limiting_tests
         let window = state.lock().unwrap();
         Some( SlidingWindowState
         {
-          request_timestamps: window.request_timestamps.clone(),
-          total_requests: window.total_requests,
-          rate_limited_requests: window.rate_limited_requests,
+          request_timestamps : window.request_timestamps.clone(),
+          total_requests : window.total_requests,
+          rate_limited_requests : window.rate_limited_requests,
         } )
       }
       else
@@ -480,13 +480,13 @@ mod rate_limiting_tests
   ///
   /// # Implementation Details
   ///
-  /// ## Endpoint Selection: `httpbin.org/delay/0`
+  /// ## Endpoint Selection : `httpbin.org/delay/0`
   ///
   /// - **Zero artificial delay**: Endpoint returns immediately after processing
   /// - **Minimal payload**: Small JSON response reduces network transfer time
   /// - **Reliable service**: httpbin.org is a stable, well-maintained test service
   ///
-  /// ## Timeout: 5 seconds
+  /// ## Timeout : 5 seconds
   ///
   /// Individual operation timeout is 5 seconds (vs 10 second test-level assertions):
   /// - Catches stuck connections faster than test-level timeout
@@ -570,23 +570,23 @@ mod rate_limiting_tests
     let valid_config = EnhancedRateLimitingConfig::default();
     assert!( valid_config.validate().is_ok() );
 
-    // Invalid: max_requests = 0
+    // Invalid : max_requests = 0
     let invalid_config = EnhancedRateLimitingConfig::default().with_max_requests( 0 );
     assert!( invalid_config.validate().is_err() );
 
-    // Invalid: window_duration_ms = 0
+    // Invalid : window_duration_ms = 0
     let invalid_config = EnhancedRateLimitingConfig::default().with_window_duration( 0 );
     assert!( invalid_config.validate().is_err() );
 
-    // Invalid: burst_capacity = 0
+    // Invalid : burst_capacity = 0
     let invalid_config = EnhancedRateLimitingConfig::default().with_burst_capacity( 0 );
     assert!( invalid_config.validate().is_err() );
 
-    // Invalid: refill_rate = 0
+    // Invalid : refill_rate = 0
     let invalid_config = EnhancedRateLimitingConfig::default().with_refill_rate( 0.0 );
     assert!( invalid_config.validate().is_err() );
 
-    // Invalid: timeout_ms = 0
+    // Invalid : timeout_ms = 0
     let invalid_config = EnhancedRateLimitingConfig::default().with_timeout( 0 );
     assert!( invalid_config.validate().is_err() );
   }
@@ -642,7 +642,7 @@ mod rate_limiting_tests
     let config = EnhancedRateLimitingConfig::new()
       .with_algorithm( RateLimitingAlgorithm::TokenBucket )
       .with_burst_capacity( 2 )
-      .with_refill_rate( 10.0 ); // Fast refill: 10 tokens per second
+      .with_refill_rate( 10.0 ); // Fast refill : 10 tokens per second
     let rate_limiter = EnhancedRateLimiter::new( config ).unwrap();
 
     // Consume all tokens
@@ -769,7 +769,7 @@ mod rate_limiting_tests
   /// This test validates token bucket behavior using real HTTP requests. The parameter choices
   /// are critical for test determinism under workspace load conditions.
   ///
-  /// ## Refill Rate Selection: 0.001 tokens/second
+  /// ## Refill Rate Selection : 0.001 tokens/second
   ///
   /// **Why this specific value?**
   ///
@@ -782,14 +782,14 @@ mod rate_limiting_tests
   /// This ensures refill remains insignificant even when HTTP operations experience 100x+ slowdown.
   ///
   /// **Previous failures**:
-  /// - Using 2.0 tokens/sec: Under 250ms = 0.5 refilled → flaky
-  /// - Using 0.1 tokens/sec: Under 25 seconds = 2.5 refilled → got 5 successful instead of 3!
-  /// - Current 0.001 tokens/sec: Under 30 seconds = 0.03 refilled → deterministic
+  /// - Using 2.0 tokens/sec : Under 250ms = 0.5 refilled → flaky
+  /// - Using 0.1 tokens/sec : Under 25 seconds = 2.5 refilled → got 5 successful instead of 3!
+  /// - Current 0.001 tokens/sec : Under 30 seconds = 0.03 refilled → deterministic
   ///
   /// ## Expected Behavior
   ///
   /// With `burst_capacity = 3` and negligible refill:
-  /// - First 3 requests: Consume all 3 tokens → SUCCESS
+  /// - First 3 requests : Consume all 3 tokens → SUCCESS
   /// - Requests 4-5: No tokens available → RATE LIMITED
   ///
   /// This behavior is deterministic regardless of system load or network variance.
@@ -846,7 +846,7 @@ mod rate_limiting_tests
   /// This test validates sliding window behavior using real HTTP requests. The window duration
   /// choice is critical for preventing window slide during test execution.
   ///
-  /// ## Window Duration Selection: 120,000ms (120 seconds)
+  /// ## Window Duration Selection : 120,000ms (120 seconds)
   ///
   /// **Why this specific value?**
   ///
@@ -859,9 +859,9 @@ mod rate_limiting_tests
   /// This ensures the window remains static even when HTTP operations experience 100x+ slowdown.
   ///
   /// **Previous failures**:
-  /// - Using 500ms window: Test extended to 600ms → window slid → 4-5 allowed instead of 3
-  /// - Using 10,000ms window: Test extended to 25+ seconds → window slid → 5 allowed instead of 3!
-  /// - Current 120,000ms window: Even at 30 seconds, provides 4x margin → deterministic
+  /// - Using 500ms window : Test extended to 600ms → window slid → 4-5 allowed instead of 3
+  /// - Using 10,000ms window : Test extended to 25+ seconds → window slid → 5 allowed instead of 3!
+  /// - Current 120,000ms window : Even at 30 seconds, provides 4x margin → deterministic
   ///
   /// ## Expected Behavior
   ///
@@ -878,7 +878,7 @@ mod rate_limiting_tests
   ///
   /// ## Design Rule
   ///
-  /// For sliding window tests: `window_duration >= 20 * max_expected_test_duration`
+  /// For sliding window tests : `window_duration >= 20 * max_expected_test_duration`
   ///
   /// This provides sufficient margin for system load variance while still testing
   /// the sliding window algorithm correctly.
@@ -978,7 +978,7 @@ mod rate_limiting_tests
   /// 1. Validates feature-gating ensures zero overhead when `rate_limiting` feature is disabled
   /// 2. Validates real HTTP operations complete within reasonable timeframes
   ///
-  /// ## Timeout Selection: 10 seconds
+  /// ## Timeout Selection : 10 seconds
   ///
   /// **Why this specific value?**
   ///
@@ -987,9 +987,9 @@ mod rate_limiting_tests
   /// **Observed latency distribution:**
   /// - Best case (cached): 50-100ms
   /// - Typical (uncached): 200-500ms
-  /// - Under moderate load: 1-2 seconds
-  /// - Under heavy load: 2-5 seconds
-  /// - Network issues: 5-10 seconds
+  /// - Under moderate load : 1-2 seconds
+  /// - Under heavy load : 2-5 seconds
+  /// - Network issues : 5-10 seconds
   ///
   /// **Previous failure**: Using 100ms timeout:
   /// - Failed frequently during workspace test runs (30%+ failure rate)
@@ -1020,7 +1020,7 @@ mod rate_limiting_tests
   #[ tokio::test ]
   async fn test_rate_limiting_zero_overhead_when_disabled()
   {
-    // Validates feature-gating: when rate_limiting is disabled, this test still compiles
+    // Validates feature-gating : when rate_limiting is disabled, this test still compiles
     // but tests without any rate limiting overhead
     let start = Instant::now();
 

@@ -8,8 +8,8 @@
 //! - Tests MUST FAIL IMMEDIATELY on any API endpoint errors
 //! - NO SILENT PASSES allowed when problems occur
 //!
-//! Run with: cargo test --features integration
-//! Requires: Valid `ANTHROPIC_API_KEY` in environment or ../../secret/-secrets.sh
+//! Run with : cargo test --features integration
+//! Requires : Valid `ANTHROPIC_API_KEY` in environment or ../../secret/-secrets.sh
 
 
 use super::*;
@@ -206,7 +206,7 @@ mod request_caching_functionality_tests
     assert!( cache.get( &request ).is_some(), "Response should be cached immediately" );
 
     // Wait for expiration (1+ seconds)
-    std::thread::sleep( Duration::from_millis( 1100 ) );
+    std ::thread::sleep( Duration::from_millis( 1100 ) );
 
     // Should be expired now
     assert!( cache.get( &request ).is_none(), "Response should be expired after TTL" );
@@ -223,7 +223,7 @@ mod request_caching_functionality_tests
 
     // Create 3 different requests
     let requests = vec![
-      the_module::CreateMessageRequest
+      the_module ::CreateMessageRequest
       {
         model : "claude-3-5-haiku-20241022".to_string(),
         max_tokens : 100,
@@ -236,7 +236,7 @@ mod request_caching_functionality_tests
         #[ cfg( feature = "tools" ) ]
         tool_choice : None,
       },
-      the_module::CreateMessageRequest
+      the_module ::CreateMessageRequest
       {
         model : "claude-3-5-haiku-20241022".to_string(),
         max_tokens : 100,
@@ -249,7 +249,7 @@ mod request_caching_functionality_tests
         #[ cfg( feature = "tools" ) ]
         tool_choice : None,
       },
-      the_module::CreateMessageRequest
+      the_module ::CreateMessageRequest
       {
         model : "claude-3-5-haiku-20241022".to_string(),
         max_tokens : 100,

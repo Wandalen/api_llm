@@ -12,10 +12,10 @@ use api_openai::ClientApiAccessors;
 use api_openai::
 {
   Client,
-  components::
+  components ::
   {
-    responses::{ CreateResponseRequest, ResponseInput },
-    input::{ InputItem, InputMessage, InputContentPart, InputText, InputImage },
+    responses ::{ CreateResponseRequest, ResponseInput },
+    input ::{ InputItem, InputMessage, InputContentPart, InputText, InputImage },
   },
 };
 
@@ -76,7 +76,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
 
   let response = client.responses().create( request ).await?;
 
-  println!( "Response: {response:#?}" );
+  println!( "Response : {response:#?}" );
 
   Ok( () )
 }

@@ -26,7 +26,7 @@ mod private
     ///
     /// Contains structured error information including message, error code,
     /// and error type from the API response.
-    #[ error( "API Error: {message} (code: {code:?}, type: {error_type:?})" ) ]
+    #[ error( "API Error : {message} (code : {code:?}, type : {error_type:?})" ) ]
     Api
     {
       /// Human-readable error message
@@ -40,82 +40,82 @@ mod private
     /// HTTP-level error.
     ///
     /// Generic HTTP failures that dont fit into more specific categories.
-    #[ error( "HTTP Error: {0}" ) ]
+    #[ error( "HTTP Error : {0}" ) ]
     Http( String ),
 
     /// Network connectivity error.
     ///
     /// Connection failures, DNS resolution errors, or other transport-level issues.
-    #[ error( "Network Error: {0}" ) ]
+    #[ error( "Network Error : {0}" ) ]
     Network( String ),
 
     /// Request timeout error.
     ///
     /// The request exceeded the configured timeout duration.
-    #[ error( "Timeout Error: {0}" ) ]
+    #[ error( "Timeout Error : {0}" ) ]
     Timeout( String ),
 
     /// SSE streaming error.
     ///
     /// Failures during Server-Sent Events streaming, including parse errors
     /// and connection interruptions.
-    #[ error( "Stream Error: {0}" ) ]
+    #[ error( "Stream Error : {0}" ) ]
     Stream( String ),
 
     /// Rate limit exceeded error.
     ///
     /// The API returned a 429 status indicating rate limiting is active.
     /// Client should implement exponential backoff.
-    #[ error( "Rate Limit Error: {0}" ) ]
+    #[ error( "Rate Limit Error : {0}" ) ]
     RateLimit( String ),
 
     /// Serialization or deserialization error.
     ///
     /// JSON parsing failures or serialization issues with request/response data.
-    #[ error( "Serialization Error: {0}" ) ]
+    #[ error( "Serialization Error : {0}" ) ]
     Serialization( String ),
 
     /// Invalid API key error.
     ///
     /// The provided API key is malformed or doesn't meet validation requirements.
-    #[ error( "Invalid API Key: {0}" ) ]
+    #[ error( "Invalid API Key : {0}" ) ]
     InvalidApiKey( String ),
 
     /// Environment configuration error.
     ///
     /// Issues with environment setup, missing variables, or invalid configuration.
-    #[ error( "Environment Error: {0}" ) ]
+    #[ error( "Environment Error : {0}" ) ]
     Environment( String ),
 
     /// URL parsing error.
     ///
     /// Invalid URL format in configuration or endpoint construction.
-    #[ error( "URL Parse Error: {0}" ) ]
+    #[ error( "URL Parse Error : {0}" ) ]
     UrlParse( String ),
 
     /// Circuit breaker open error.
     ///
     /// The circuit breaker is in open state, preventing requests to a failing endpoint.
     #[ cfg( feature = "circuit_breaker" ) ]
-    #[ error( "Circuit Breaker Open: {0}" ) ]
+    #[ error( "Circuit Breaker Open : {0}" ) ]
     CircuitBreakerOpen( String ),
 
     /// Invalid model error.
     ///
     /// The specified model name is not recognized or supported.
-    #[ error( "Invalid Model: {0}" ) ]
+    #[ error( "Invalid Model : {0}" ) ]
     InvalidModel( String ),
 
     /// Invalid parameter error.
     ///
     /// Request parameter validation failed.
-    #[ error( "Invalid Parameter: {0}" ) ]
+    #[ error( "Invalid Parameter : {0}" ) ]
     InvalidParameter( String ),
 
     /// Generic API error.
     ///
     /// Catch-all for API-related errors that dont fit other categories.
-    #[ error( "API Error: {0}" ) ]
+    #[ error( "API Error : {0}" ) ]
     ApiError( String ),
   }
 
@@ -144,7 +144,7 @@ mod private
         {
           if status.as_u16() == 429
           {
-            return XaiError::RateLimit( format!( "Rate limit exceeded: {status}" ) );
+            return XaiError::RateLimit( format!( "Rate limit exceeded : {status}" ) );
           }
         }
         XaiError::Http( error.to_string() )
@@ -179,12 +179,12 @@ mod private
   {
     fn from( error : reqwest::header::InvalidHeaderValue ) -> Self
     {
-      XaiError::Http( format!( "Invalid header value: {error}" ) )
+      XaiError::Http( format!( "Invalid header value : {error}" ) )
     }
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

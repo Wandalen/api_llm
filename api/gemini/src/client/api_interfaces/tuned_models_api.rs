@@ -49,42 +49,42 @@ impl TunedModelsApi< '_ >
   /// let tuned_models_api = client.tuned_models();
   ///
   /// let tuned_model = TunedModel {
-  ///   name: "projects/my-project/locations/us-central1/models/my-tuned-model".to_string(),
-  ///   display_name: Some("My Custom Model".to_string()),
-  ///   description: Some("A model tuned for specific tasks".to_string()),
-  ///   base_model: "models/gemini-1.5-pro-002".to_string(),
-  ///   state: None,
-  ///   create_time: None,
-  ///   update_time: None,
-  ///   tuning_task: None,
-  ///   tuned_model_source: None,
-  ///   temperature: Some(0.7),
-  ///   top_p: Some(0.9),
-  ///   top_k: Some(40),
+  ///   name : "projects/my-project/locations/us-central1/models/my-tuned-model".to_string(),
+  ///   display_name : Some("My Custom Model".to_string()),
+  ///   description : Some("A model tuned for specific tasks".to_string()),
+  ///   base_model : "models/gemini-1.5-pro-002".to_string(),
+  ///   state : None,
+  ///   create_time : None,
+  ///   update_time : None,
+  ///   tuning_task : None,
+  ///   tuned_model_source : None,
+  ///   temperature : Some(0.7),
+  ///   top_p : Some(0.9),
+  ///   top_k : Some(40),
   /// };
   ///
   /// let request = CreateTunedModelRequest {
   ///   tuned_model,
-  ///   tuned_model_id: Some("my-tuned-model".to_string()),
+  ///   tuned_model_id : Some("my-tuned-model".to_string()),
   /// };
   ///
   /// let response = tuned_models_api.create(&request).await?;
-  /// println!("Created tuned model: {}", response.name);
+  /// println!("Created tuned model : {}", response.name);
   /// # Ok( () )
   /// # }
   /// ```
   #[ inline ]
   pub async fn create(
     &self,
-    request: &crate::models::CreateTunedModelRequest
+    request : &crate::models::CreateTunedModelRequest
   ) -> Result< crate::models::TunedModel, Error >
   {
     let url = format!( "{}/v1beta/tunedModels", self.client.base_url );
 
-    crate::internal::http::execute_legacy::< crate::models::CreateTunedModelRequest, crate::models::TunedModel >
+    crate ::internal::http::execute_legacy::< crate::models::CreateTunedModelRequest, crate::models::TunedModel >
     (
       &self.client.http,
-      reqwest::Method::POST,
+      reqwest ::Method::POST,
       &url,
       &self.client.api_key,
       Some( request ),
@@ -127,15 +127,15 @@ impl TunedModelsApi< '_ >
   /// let tuned_models_api = client.tuned_models();
   ///
   /// let request = ListTunedModelsRequest {
-  ///   page_size: Some(10),
-  ///   page_token: None,
-  ///   filter: None,
+  ///   page_size : Some(10),
+  ///   page_token : None,
+  ///   filter : None,
   /// };
   ///
   /// let response = tuned_models_api.list(&request).await?;
   ///
   /// for model in response.tuned_models {
-  ///   println!("Tuned model: {} - {}", model.name, model.display_name.unwrap_or_default());
+  ///   println!("Tuned model : {} - {}", model.name, model.display_name.unwrap_or_default());
   /// }
   /// # Ok( () )
   /// # }
@@ -143,7 +143,7 @@ impl TunedModelsApi< '_ >
   #[ inline ]
   pub async fn list(
     &self,
-    request: &crate::models::ListTunedModelsRequest
+    request : &crate::models::ListTunedModelsRequest
   ) -> Result< crate::models::ListTunedModelsResponse, Error >
   {
     let mut url = format!( "{}/v1beta/tunedModels", self.client.base_url );
@@ -170,10 +170,10 @@ impl TunedModelsApi< '_ >
       url.push_str( &params.join( "&" ) );
     }
 
-    crate::internal::http::execute_legacy::< (), crate::models::ListTunedModelsResponse >
+    crate ::internal::http::execute_legacy::< (), crate::models::ListTunedModelsResponse >
     (
       &self.client.http,
-      reqwest::Method::GET,
+      reqwest ::Method::GET,
       &url,
       &self.client.api_key,
       None,
@@ -213,19 +213,19 @@ impl TunedModelsApi< '_ >
   /// let tuned_models_api = client.tuned_models();
   ///
   /// let model = tuned_models_api.get("tunedModels/my-model-id").await?;
-  /// println!("Model: {} - Status: {}", model.name, model.state.unwrap_or_default());
+  /// println!("Model : {} - Status : {}", model.name, model.state.unwrap_or_default());
   /// # Ok( () )
   /// # }
   /// ```
   #[ inline ]
-  pub async fn get( &self, name: &str ) -> Result< crate::models::TunedModel, Error >
+  pub async fn get( &self, name : &str ) -> Result< crate::models::TunedModel, Error >
   {
     let url = format!( "{}/v1beta/{}", self.client.base_url, name );
 
-    crate::internal::http::execute_legacy::< (), crate::models::TunedModel >
+    crate ::internal::http::execute_legacy::< (), crate::models::TunedModel >
     (
       &self.client.http,
-      reqwest::Method::GET,
+      reqwest ::Method::GET,
       &url,
       &self.client.api_key,
       None,
@@ -269,17 +269,17 @@ impl TunedModelsApi< '_ >
   /// # }
   /// ```
   #[ inline ]
-  pub async fn delete( &self, name: &str ) -> Result< (), Error >
+  pub async fn delete( &self, name : &str ) -> Result< (), Error >
   {
     let url = format!( "{}/v1beta/{}", self.client.base_url, name );
 
     let response = crate::internal::http::execute_raw
     (
       &self.client.http,
-      reqwest::Method::DELETE,
+      reqwest ::Method::DELETE,
       &url,
       &self.client.api_key,
-      None::<&()>,
+      None::< &()>,
     )
     .await?;
 
@@ -290,7 +290,7 @@ impl TunedModelsApi< '_ >
     else
     {
       let error_text = response.text().await.unwrap_or_else( |_| "Failed to read error response".to_string() );
-      Err( Error::ApiError( format!( "Failed to delete tuned model: {error_text}" ) ) )
+      Err( Error::ApiError( format!( "Failed to delete tuned model : {error_text}" ) ) )
     }
   }
 }

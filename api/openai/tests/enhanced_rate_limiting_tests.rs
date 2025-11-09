@@ -34,14 +34,14 @@ mod rate_limiting_tests
 {
   use api_openai::
   {
-    error::Result,
+    error ::Result,
   };
 
   use std::
   {
-    sync::{ Arc, Mutex },
-    time::Instant,
-    collections::VecDeque,
+    sync ::{ Arc, Mutex },
+    time ::Instant,
+    collections ::VecDeque,
   };
   use core::time::Duration;
 
@@ -389,7 +389,7 @@ mod rate_limiting_tests
     /// Check if request should be allowed based on rate limiting
     async fn should_allow_request( &self ) -> Result< bool >
     {
-      tokio::task::yield_now().await;
+      tokio ::task::yield_now().await;
       match self.config.algorithm
       {
         RateLimitingAlgorithm::TokenBucket =>
@@ -518,7 +518,7 @@ mod rate_limiting_tests
     /// Simulate HTTP request
     async fn make_request( &self ) -> Result< String >
     {
-      tokio::task::yield_now().await;
+      tokio ::task::yield_now().await;
       let mut count = self.call_count.lock().unwrap();
       *count += 1;
       let call_number = *count;
@@ -577,23 +577,23 @@ mod rate_limiting_tests
     let valid_config = EnhancedRateLimitingConfig::default();
     assert!( valid_config.validate().is_ok() );
 
-    // Invalid: max_requests = 0
+    // Invalid : max_requests = 0
     let invalid_config = EnhancedRateLimitingConfig::default().with_max_requests( 0 );
     assert!( invalid_config.validate().is_err() );
 
-    // Invalid: window_duration_ms = 0
+    // Invalid : window_duration_ms = 0
     let invalid_config = EnhancedRateLimitingConfig::default().with_window_duration( 0 );
     assert!( invalid_config.validate().is_err() );
 
-    // Invalid: burst_capacity = 0
+    // Invalid : burst_capacity = 0
     let invalid_config = EnhancedRateLimitingConfig::default().with_burst_capacity( 0 );
     assert!( invalid_config.validate().is_err() );
 
-    // Invalid: refill_rate = 0
+    // Invalid : refill_rate = 0
     let invalid_config = EnhancedRateLimitingConfig::default().with_refill_rate( 0.0 );
     assert!( invalid_config.validate().is_err() );
 
-    // Invalid: timeout_ms = 0
+    // Invalid : timeout_ms = 0
     let invalid_config = EnhancedRateLimitingConfig::default().with_timeout( 0 );
     assert!( invalid_config.validate().is_err() );
   }

@@ -3,7 +3,7 @@
 //! Comprehensive test suite for audio processing capabilities in the Ollama API client.
 //! Tests speech-to-text, text-to-speech, audio streaming, and real-time voice chat.
 //!
-//! Note: These tests focus on API structure and error handling rather than actual
+//! Note : These tests focus on API structure and error handling rather than actual
 //! audio processing, since the feature is not yet implemented in the Ollama API.
 
 #[ cfg( feature = "audio_processing" ) ]
@@ -29,11 +29,11 @@ mod audio_processing_tests
     // Test creating a valid speech-to-text request
     let speech_request = SpeechToTextRequest
     {
-      model: "whisper".to_string(),
-      audio_data: SAMPLE_AUDIO_WAV.to_vec(),
-      format: AudioFormat::Wav,
-      language: Some( "en".to_string() ),
-      options: None,
+      model : "whisper".to_string(),
+      audio_data : SAMPLE_AUDIO_WAV.to_vec(),
+      format : AudioFormat::Wav,
+      language : Some( "en".to_string() ),
+      options : None,
     };
 
     // Test request structure
@@ -58,12 +58,12 @@ mod audio_processing_tests
     // Create text-to-speech request
     let tts_request = TextToSpeechRequest
     {
-      model: "tts-1".to_string(),
-      text: "Hello, this is a test of text-to-speech functionality.".to_string(),
-      voice: Some( "alloy".to_string() ),
-      format: AudioFormat::Mp3,
-      speed: Some( 1.0 ),
-      options: None,
+      model : "tts-1".to_string(),
+      text : "Hello, this is a test of text-to-speech functionality.".to_string(),
+      voice : Some( "alloy".to_string() ),
+      format : AudioFormat::Mp3,
+      speed : Some( 1.0 ),
+      options : None,
     };
 
     // Test request structure validation
@@ -83,11 +83,11 @@ mod audio_processing_tests
     // Test response structure
     let response = TextToSpeechResponse
     {
-      audio_data: SAMPLE_AUDIO_MP3.to_vec(),
-      format: AudioFormat::Mp3,
-      duration: Some( 5.0 ),
-      sample_rate: Some( 44100 ),
-      metadata: None,
+      audio_data : SAMPLE_AUDIO_MP3.to_vec(),
+      format : AudioFormat::Mp3,
+      duration : Some( 5.0 ),
+      sample_rate : Some( 44100 ),
+      metadata : None,
     };
 
     assert!( !response.audio_data.is_empty() );
@@ -104,12 +104,12 @@ mod audio_processing_tests
     // Test WAV format streaming request
     let wav_request = AudioStreamRequest
     {
-      model: "whisper".to_string(),
-      audio_data: SAMPLE_AUDIO_WAV.to_vec(),
-      format: AudioFormat::Wav,
-      stream: true,
-      chunk_size: Some( 1024 ),
-      timeout: Some( 30 ),
+      model : "whisper".to_string(),
+      audio_data : SAMPLE_AUDIO_WAV.to_vec(),
+      format : AudioFormat::Wav,
+      stream : true,
+      chunk_size : Some( 1024 ),
+      timeout : Some( 30 ),
     };
 
     // Test request structure validation
@@ -124,12 +124,12 @@ mod audio_processing_tests
     // Test MP3 format streaming request
     let mp3_request = AudioStreamRequest
     {
-      model: "whisper".to_string(),
-      audio_data: SAMPLE_AUDIO_MP3.to_vec(),
-      format: AudioFormat::Mp3,
-      stream: true,
-      chunk_size: Some( 512 ),
-      timeout: Some( 30 ),
+      model : "whisper".to_string(),
+      audio_data : SAMPLE_AUDIO_MP3.to_vec(),
+      format : AudioFormat::Mp3,
+      stream : true,
+      chunk_size : Some( 512 ),
+      timeout : Some( 30 ),
     };
 
     assert_eq!( mp3_request.format, AudioFormat::Mp3 );
@@ -140,10 +140,10 @@ mod audio_processing_tests
     // Test audio stream chunk structure
     let chunk = AudioStreamChunk
     {
-      data: SAMPLE_AUDIO_WAV.to_vec(),
-      timestamp: 1.5,
-      is_final: false,
-      sequence: Some( 1 ),
+      data : SAMPLE_AUDIO_WAV.to_vec(),
+      timestamp : 1.5,
+      is_final : false,
+      sequence : Some( 1 ),
     };
 
     assert!( !chunk.data.is_empty() );
@@ -160,14 +160,14 @@ mod audio_processing_tests
     // Create voice chat session request
     let chat_request = VoiceChatRequest
     {
-      model: "llama3.2".to_string(),
-      audio_input: SAMPLE_AUDIO_WAV.to_vec(),
-      input_format: AudioFormat::Wav,
-      output_format: AudioFormat::Mp3,
-      conversation_id: Some( "test-chat-001".to_string() ),
-      real_time: true,
-      voice: Some( "alloy".to_string() ),
-      context: None,
+      model : "llama3.2".to_string(),
+      audio_input : SAMPLE_AUDIO_WAV.to_vec(),
+      input_format : AudioFormat::Wav,
+      output_format : AudioFormat::Mp3,
+      conversation_id : Some( "test-chat-001".to_string() ),
+      real_time : true,
+      voice : Some( "alloy".to_string() ),
+      context : None,
     };
 
     // Test request structure validation
@@ -183,12 +183,12 @@ mod audio_processing_tests
     // Test voice chat response structure
     let response = VoiceChatResponse
     {
-      audio_response: SAMPLE_AUDIO_MP3.to_vec(),
-      text_response: Some( "Hello! How can I help you today?".to_string() ),
-      output_format: AudioFormat::Mp3,
-      conversation_id: "test-chat-001".to_string(),
-      latency_ms: Some( 150 ),
-      metadata: None,
+      audio_response : SAMPLE_AUDIO_MP3.to_vec(),
+      text_response : Some( "Hello! How can I help you today?".to_string() ),
+      output_format : AudioFormat::Mp3,
+      conversation_id : "test-chat-001".to_string(),
+      latency_ms : Some( 150 ),
+      metadata : None,
     };
 
     assert!( !response.audio_response.is_empty() );
@@ -206,11 +206,11 @@ mod audio_processing_tests
     // Test with invalid audio data
     let invalid_request = SpeechToTextRequest
     {
-      model: "whisper".to_string(),
-      audio_data: b"INVALID_AUDIO_DATA".to_vec(),
-      format: AudioFormat::Wav,
-      language: None,
-      options: None,
+      model : "whisper".to_string(),
+      audio_data : b"INVALID_AUDIO_DATA".to_vec(),
+      format : AudioFormat::Wav,
+      language : None,
+      options : None,
     };
 
     // Test structure creation with invalid data
@@ -242,11 +242,11 @@ mod audio_processing_tests
     // Test speech-to-text request serialization performance
     let speech_request = SpeechToTextRequest
     {
-      model: "whisper".to_string(),
-      audio_data: SAMPLE_AUDIO_WAV.to_vec(),
-      format: AudioFormat::Wav,
-      language: Some( "en".to_string() ),
-      options: None,
+      model : "whisper".to_string(),
+      audio_data : SAMPLE_AUDIO_WAV.to_vec(),
+      format : AudioFormat::Wav,
+      language : Some( "en".to_string() ),
+      options : None,
     };
 
     let start_time = Instant::now();
@@ -259,12 +259,12 @@ mod audio_processing_tests
     // Test text-to-speech request serialization performance
     let tts_request = TextToSpeechRequest
     {
-      model: "tts-1".to_string(),
-      text: "Performance test".to_string(),
-      voice: Some( "alloy".to_string() ),
-      format: AudioFormat::Mp3,
-      speed: Some( 1.0 ),
-      options: None,
+      model : "tts-1".to_string(),
+      text : "Performance test".to_string(),
+      voice : Some( "alloy".to_string() ),
+      format : AudioFormat::Mp3,
+      speed : Some( 1.0 ),
+      options : None,
     };
 
     let start_time = Instant::now();
@@ -275,8 +275,8 @@ mod audio_processing_tests
     assert!( tts_latency < Duration::from_millis( 10 ) );
 
     println!( "✓ Audio processing serialization performance:" );
-    println!( "  Speech-to-text serialization latency: {speech_latency:?}" );
-    println!( "  Text-to-speech serialization latency: {tts_latency:?}" );
+    println!( "  Speech-to-text serialization latency : {speech_latency:?}" );
+    println!( "  Text-to-speech serialization latency : {tts_latency:?}" );
   }
 
   /// Test comprehensive audio format support
@@ -291,23 +291,23 @@ mod audio_processing_tests
       // Test format in request structures
       let speech_request = SpeechToTextRequest
       {
-        model: "whisper".to_string(),
-        audio_data: SAMPLE_AUDIO_WAV.to_vec(),
-        format: format.clone(),
-        language: Some( "en".to_string() ),
-        options: None,
+        model : "whisper".to_string(),
+        audio_data : SAMPLE_AUDIO_WAV.to_vec(),
+        format : format.clone(),
+        language : Some( "en".to_string() ),
+        options : None,
       };
 
       assert_eq!( speech_request.format, format );
 
       let tts_request = TextToSpeechRequest
       {
-        model: "tts-1".to_string(),
-        text: "Test".to_string(),
-        voice: Some( "alloy".to_string() ),
-        format: format.clone(),
-        speed: Some( 1.0 ),
-        options: None,
+        model : "tts-1".to_string(),
+        text : "Test".to_string(),
+        voice : Some( "alloy".to_string() ),
+        format : format.clone(),
+        speed : Some( 1.0 ),
+        options : None,
       };
 
       assert_eq!( tts_request.format, format );

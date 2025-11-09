@@ -10,8 +10,8 @@ use super::super::ModelApi;
 #[ derive( Debug ) ]
 pub struct GenerationRequestBuilder< 'a >
 {
-  model: &'a ModelApi< 'a >,
-  request: crate::models::GenerateContentRequest,
+  model : &'a ModelApi< 'a >,
+  request : crate::models::GenerateContentRequest,
 }
 
 impl< 'a > GenerationRequestBuilder< 'a >
@@ -19,18 +19,18 @@ impl< 'a > GenerationRequestBuilder< 'a >
   /// Creates a new request builder.
   #[ inline ]
   #[ must_use ]
-  pub fn new( model: &'a ModelApi< 'a > ) -> Self
+  pub fn new( model : &'a ModelApi< 'a > ) -> Self
   {
     Self {
       model,
-      request: crate::models::GenerateContentRequest {
-        contents: vec![],
-        generation_config: None,
-        safety_settings: None,
-        tools: None,
-        tool_config: None,
-        system_instruction: None,
-        cached_content: None,
+      request : crate::models::GenerateContentRequest {
+        contents : vec![],
+        generation_config : None,
+        safety_settings : None,
+        tools : None,
+        tool_config : None,
+        system_instruction : None,
+        cached_content : None,
       },
     }
   }
@@ -45,14 +45,14 @@ impl< 'a > GenerationRequestBuilder< 'a >
   /// * `prompt` - The text prompt for content generation
   #[ inline ]
   #[ must_use ]
-  pub fn with_prompt( mut self, prompt: &str ) -> Self
+  pub fn with_prompt( mut self, prompt : &str ) -> Self
   {
     self.request.contents = vec![ crate::models::Content {
-      parts: vec![ crate::models::Part {
-        text: Some( prompt.to_string() ),
+      parts : vec![ crate::models::Part {
+        text : Some( prompt.to_string() ),
         ..Default::default()
       } ],
-      role: "user".to_string(),
+      role : "user".to_string(),
     } ];
     self
   }
@@ -68,7 +68,7 @@ impl< 'a > GenerationRequestBuilder< 'a >
   /// * `temperature` - Value between 0.0 and 1.0
   #[ inline ]
   #[ must_use ]
-  pub fn with_temperature( mut self, temperature: f32 ) -> Self
+  pub fn with_temperature( mut self, temperature : f32 ) -> Self
   {
     self.ensure_generation_config();
     if let Some( ref mut config ) = self.request.generation_config
@@ -85,7 +85,7 @@ impl< 'a > GenerationRequestBuilder< 'a >
   /// * `max_tokens` - Maximum tokens to generate
   #[ inline ]
   #[ must_use ]
-  pub fn with_max_tokens( mut self, max_tokens: i32 ) -> Self
+  pub fn with_max_tokens( mut self, max_tokens : i32 ) -> Self
   {
     self.ensure_generation_config();
     if let Some( ref mut config ) = self.request.generation_config
@@ -102,7 +102,7 @@ impl< 'a > GenerationRequestBuilder< 'a >
   /// * `stop_sequences` - List of strings that stop generation when encountered
   #[ inline ]
   #[ must_use ]
-  pub fn with_stop_sequences( mut self, stop_sequences: Vec< String > ) -> Self
+  pub fn with_stop_sequences( mut self, stop_sequences : Vec< String > ) -> Self
   {
     self.ensure_generation_config();
     if let Some( ref mut config ) = self.request.generation_config

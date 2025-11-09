@@ -171,17 +171,17 @@ mod private
   pub struct CreateSpeechRequest
   {
     /// The TTS model to use for speech generation.
-    pub model: String,
+    pub model : String,
     /// The text to generate audio for. Max 4096 characters.
-    pub input: String,
+    pub input : String,
     /// The voice to use when generating the audio.
-    pub voice: SpeechVoice,
+    pub voice : SpeechVoice,
     /// The format to output the audio in.
     #[ serde( skip_serializing_if = "Option::is_none" ) ]
-    pub response_format: Option< SpeechResponseFormat >,
+    pub response_format : Option< SpeechResponseFormat >,
     /// The speed of the generated audio.
     #[ serde( skip_serializing_if = "Option::is_none" ) ]
-    pub speed: Option< f64 >,
+    pub speed : Option< f64 >,
   }
 
   /// Available voices for speech generation.
@@ -230,21 +230,21 @@ mod private
   pub struct CreateTranscriptionRequest
   {
     /// The audio file to transcribe.
-    pub file: Vec< u8 >,
+    pub file : Vec< u8 >,
     /// Filename for the audio file.
-    pub filename: String,
+    pub filename : String,
     /// The model to use for transcription.
-    pub model: String,
+    pub model : String,
     /// The language of the input audio (ISO-639-1 format).
-    pub language: Option< String >,
+    pub language : Option< String >,
     /// An optional text to guide the model's style.
-    pub prompt: Option< String >,
+    pub prompt : Option< String >,
     /// The format of the transcript output.
-    pub response_format: Option< TranscriptionResponseFormat >,
+    pub response_format : Option< TranscriptionResponseFormat >,
     /// The sampling temperature between 0 and 1.
-    pub temperature: Option< f64 >,
+    pub temperature : Option< f64 >,
     /// Word-level timestamps.
-    pub timestamp_granularities: Option< Vec< TimestampGranularity > >,
+    pub timestamp_granularities : Option< Vec< TimestampGranularity > >,
   }
 
   /// Request parameters for translating audio to English text.
@@ -255,17 +255,17 @@ mod private
   pub struct CreateTranslationRequest
   {
     /// The audio file to translate.
-    pub file: Vec< u8 >,
+    pub file : Vec< u8 >,
     /// Filename for the audio file.
-    pub filename: String,
+    pub filename : String,
     /// The model to use for translation.
-    pub model: String,
+    pub model : String,
     /// An optional text to guide the model's style.
-    pub prompt: Option< String >,
+    pub prompt : Option< String >,
     /// The format of the transcript output.
-    pub response_format: Option< TranscriptionResponseFormat >,
+    pub response_format : Option< TranscriptionResponseFormat >,
     /// The sampling temperature between 0 and 1.
-    pub temperature: Option< f64 >,
+    pub temperature : Option< f64 >,
   }
 
   /// Available response formats for transcription and translation.
@@ -297,7 +297,7 @@ mod private
   }
 } // end mod private
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

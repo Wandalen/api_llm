@@ -16,42 +16,42 @@ use super::buffer::StreamBuffer;
 pub( crate ) enum StreamCommand
 {
   /// Pause the stream
-  Pause { response_tx: oneshot::Sender< Result< (), crate::error::Error > >, start_time: Instant },
+  Pause { response_tx : oneshot::Sender< Result< (), crate::error::Error > >, start_time : Instant },
   /// Resume the stream
-  Resume { response_tx: oneshot::Sender< Result< (), crate::error::Error > >, start_time: Instant },
+  Resume { response_tx : oneshot::Sender< Result< (), crate::error::Error > >, start_time : Instant },
   /// Cancel the stream
-  Cancel { response_tx: oneshot::Sender< Result< (), crate::error::Error > >, start_time: Instant },
+  Cancel { response_tx : oneshot::Sender< Result< (), crate::error::Error > >, start_time : Instant },
   /// Get current state
   GetState( oneshot::Sender< StreamState > ),
   /// Get metrics snapshot
   GetMetrics( oneshot::Sender< StreamMetricsSnapshot > ),
   /// Update buffer configuration at runtime
-  UpdateConfig { new_config: StreamControlConfig, response_tx: oneshot::Sender< Result< (), crate::error::Error > > },
+  UpdateConfig { new_config : StreamControlConfig, response_tx : oneshot::Sender< Result< (), crate::error::Error > > },
 }
 
 /// A controllable stream that can be paused, resumed, and cancelled
 pub struct ControllableStream< T >
 {
   /// Channel for sending control commands
-  control_tx: mpsc::UnboundedSender< StreamCommand >,
+  control_tx : mpsc::UnboundedSender< StreamCommand >,
   /// Channel for receiving stream data
-  data_rx: mpsc::UnboundedReceiver< Result< T, crate::error::Error > >,
+  data_rx : mpsc::UnboundedReceiver< Result< T, crate::error::Error > >,
   /// Current stream state (atomic for efficient access)
-  state: Arc< AtomicU8 >, // StreamState as u8 for atomic operations
+  state : Arc< AtomicU8 >, // StreamState as u8 for atomic operations
   /// Stream configuration (can be updated at runtime)
-  config: Arc< Mutex< StreamControlConfig > >,
+  config : Arc< Mutex< StreamControlConfig > >,
   /// Stream metrics with atomic updates
-  metrics: Arc< StreamMetrics >,
+  metrics : Arc< StreamMetrics >,
   /// Notification for timeout events (more efficient than polling)
   #[ allow( dead_code ) ]
-  timeout_notify: Arc< Notify >,
+  timeout_notify : Arc< Notify >,
 }
 
 impl< T > std::fmt::Debug for ControllableStream< T >
 where
   T: Clone + Send + 'static,
 {
-  fn fmt( &self, f: &mut std::fmt::Formatter< '_ > ) -> std::fmt::Result
+  fn fmt( &self, f : &mut std::fmt::Formatter< '_ > ) -> std::fmt::Result
   {
     let current_state = StreamState::from_u8( self.state.load( Ordering::Relaxed ) );
     f.debug_struct( "ControllableStream" )
@@ -68,8 +68,8 @@ where
 {
   /// Create a new optimized controllable stream from a boxed stream
   pub fn new(
-    stream: std::pin::Pin< Box< dyn futures::Stream< Item = Result< T, crate::error::Error > > + Send > >,
-    config: StreamControlConfig
+    stream : std::pin::Pin< Box< dyn futures::Stream< Item = Result< T, crate::error::Error > > + Send > >,
+    config : StreamControlConfig
   ) -> Self
   {
     let ( control_tx, control_rx ) = mpsc::unbounded_channel();
@@ -87,7 +87,7 @@ where
     let config_clone = config_arc.clone();
     let timeout_notify_clone = timeout_notify.clone();
 
-    tokio::spawn( async move {
+    tokio ::spawn( async move {
       Self::manage_stream_optimized(
         stream,
         control_rx,
@@ -103,7 +103,7 @@ where
       control_tx,
       data_rx,
       state,
-      config: config_arc,
+      config : config_arc,
       metrics,
       timeout_notify,
     }
@@ -111,19 +111,19 @@ where
 
   /// Optimized stream management task with better performance and event-driven timeouts
   async fn manage_stream_optimized(
-    mut stream: std::pin::Pin< Box< dyn futures::Stream< Item = Result< T, crate::error::Error > > + Send > >,
-    mut control_rx: mpsc::UnboundedReceiver< StreamCommand >,
-    data_tx: mpsc::UnboundedSender< Result< T, crate::error::Error > >,
-    state: Arc< AtomicU8 >,
-    metrics: Arc< StreamMetrics >,
-    config: Arc< Mutex< StreamControlConfig > >,
-    timeout_notify: Arc< Notify >,
+    mut stream : std::pin::Pin< Box< dyn futures::Stream< Item = Result< T, crate::error::Error > > + Send > >,
+    mut control_rx : mpsc::UnboundedReceiver< StreamCommand >,
+    data_tx : mpsc::UnboundedSender< Result< T, crate::error::Error > >,
+    state : Arc< AtomicU8 >,
+    metrics : Arc< StreamMetrics >,
+    config : Arc< Mutex< StreamControlConfig > >,
+    timeout_notify : Arc< Notify >,
   )
   {
     let mut is_paused = false;
     let current_config = config.lock().unwrap().clone();
     let mut buffer = StreamBuffer::< T >::new( &current_config.buffer_strategy, None );
-    let mut pause_start: Option< Instant > = None;
+    let mut pause_start : Option< Instant > = None;
 
     // Event-driven timeout task
     let _timeout_task = if current_config.event_driven_timeouts
@@ -135,7 +135,7 @@ where
 
     let result = loop
     {
-      tokio::select! {
+      tokio ::select! {
         // Handle control commands with response tracking
         command = control_rx.recv() => {
           match command
@@ -163,7 +163,7 @@ where
                 Ok( () )
               } else {
                 Err( crate::error::Error::ApiError(
-                  format!( "Cannot pause stream in state: {:?}", current_state )
+                  format!( "Cannot pause stream in state : {:?}", current_state )
                 ) )
               };
               let _ = response_tx.send( result );
@@ -209,7 +209,7 @@ where
                 Ok( () )
               } else {
                 Err( crate::error::Error::ApiError(
-                  format!( "Cannot resume stream in state: {:?}", current_state )
+                  format!( "Cannot resume stream in state : {:?}", current_state )
                 ) )
               };
               let _ = response_tx.send( result );
@@ -249,7 +249,7 @@ where
                 let _ = response_tx.send( Ok( () ) );
               } else {
                 let _ = response_tx.send( Err( crate::error::Error::ApiError(
-                  "Unable to update config: config is locked".to_string()
+                  "Unable to update config : config is locked".to_string()
                 ) ) );
               }
             },
@@ -381,17 +381,17 @@ where
 
   /// Spawn a timeout monitoring task for event-driven timeout handling
   fn spawn_timeout_monitor(
-    state: Arc< AtomicU8 >,
-    timeout_notify: Arc< Notify >,
-    timeout_duration: Duration
+    state : Arc< AtomicU8 >,
+    timeout_notify : Arc< Notify >,
+    timeout_duration : Duration
   ) -> tokio::task::JoinHandle< () >
   {
-    tokio::spawn( async move {
-      let mut pause_start: Option< Instant > = None;
+    tokio ::spawn( async move {
+      let mut pause_start : Option< Instant > = None;
 
       loop
       {
-        tokio::time::sleep( Duration::from_millis( 100 ) ).await;
+        tokio ::time::sleep( Duration::from_millis( 100 ) ).await;
 
         let current_state = StreamState::from_u8( state.load( Ordering::Relaxed ) );
 
@@ -424,7 +424,7 @@ where
   }
 
   /// Update average response time using a running average
-  fn update_avg_response_time( metrics: &StreamMetrics, new_response_time: u64 )
+  fn update_avg_response_time( metrics : &StreamMetrics, new_response_time : u64 )
   {
     metrics.control_operations.fetch_add( 1, Ordering::Relaxed );
 
@@ -436,7 +436,7 @@ where
     {
       new_response_time
     } else {
-      // Weighted average: 90% old avg + 10% new sample
+      // Weighted average : 90% old avg + 10% new sample
       ( current_avg * 9 + new_response_time ) / 10
     };
 
@@ -458,7 +458,7 @@ where
       config_guard.control_operation_timeout
     };
 
-    tokio::time::timeout( config_timeout, response_rx )
+    tokio ::time::timeout( config_timeout, response_rx )
       .await
       .map_err( |_| crate::error::Error::ApiError( "Pause operation timed out".to_string() ) )?
       .map_err( |_| crate::error::Error::ApiError( "Pause operation channel closed".to_string() ) )?
@@ -479,7 +479,7 @@ where
       config_guard.control_operation_timeout
     };
 
-    tokio::time::timeout( config_timeout, response_rx )
+    tokio ::time::timeout( config_timeout, response_rx )
       .await
       .map_err( |_| crate::error::Error::ApiError( "Resume operation timed out".to_string() ) )?
       .map_err( |_| crate::error::Error::ApiError( "Resume operation channel closed".to_string() ) )?
@@ -500,7 +500,7 @@ where
       config_guard.control_operation_timeout
     };
 
-    tokio::time::timeout( config_timeout, response_rx )
+    tokio ::time::timeout( config_timeout, response_rx )
       .await
       .map_err( |_| crate::error::Error::ApiError( "Cancel operation timed out".to_string() ) )?
       .map_err( |_| crate::error::Error::ApiError( "Cancel operation channel closed".to_string() ) )?
@@ -531,7 +531,7 @@ where
   }
 
   /// Update stream configuration at runtime
-  pub async fn update_config( &mut self, new_config: StreamControlConfig ) -> Result< (), crate::error::Error >
+  pub async fn update_config( &mut self, new_config : StreamControlConfig ) -> Result< (), crate::error::Error >
   {
     let ( response_tx, response_rx ) = oneshot::channel();
 
@@ -543,7 +543,7 @@ where
       config_guard.control_operation_timeout
     };
 
-    tokio::time::timeout( config_timeout, response_rx )
+    tokio ::time::timeout( config_timeout, response_rx )
       .await
       .map_err( |_| crate::error::Error::ApiError( "Config update operation timed out".to_string() ) )?
       .map_err( |_| crate::error::Error::ApiError( "Config update operation channel closed".to_string() ) )?
@@ -561,45 +561,45 @@ where
 pub struct ControllableStreamBuilder< 'a >
 {
   #[ allow( dead_code ) ] // Used in build method but compiler doesnt detect it
-  model: &'a crate::models::api::ModelApi< 'a >,
-  request: crate::models::GenerateContentRequest,
-  config: StreamControlConfig,
+  model : &'a crate::models::api::ModelApi< 'a >,
+  request : crate::models::GenerateContentRequest,
+  config : StreamControlConfig,
 }
 
 impl< 'a > ControllableStreamBuilder< 'a >
 {
   /// Create a new controllable stream builder
-  pub fn new( model: &'a crate::models::api::ModelApi< 'a > ) -> Self
+  pub fn new( model : &'a crate::models::api::ModelApi< 'a > ) -> Self
   {
     Self {
       model,
-      request: crate::models::GenerateContentRequest::default(),
-      config: StreamControlConfig::default(),
+      request : crate::models::GenerateContentRequest::default(),
+      config : StreamControlConfig::default(),
     }
   }
 
   /// Add text content to the request
-  pub fn text( mut self, text: &str ) -> Self
+  pub fn text( mut self, text : &str ) -> Self
   {
     self.request.contents.push( crate::models::Content {
-      parts: vec![ crate::models::Part {
-        text: Some( text.to_string() ),
+      parts : vec![ crate::models::Part {
+        text : Some( text.to_string() ),
         ..Default::default()
       } ],
-      role: "user".to_string(),
+      role : "user".to_string(),
     } );
     self
   }
 
   /// Set buffer size for the controllable stream
-  pub fn buffer_size( mut self, size: usize ) -> Self
+  pub fn buffer_size( mut self, size : usize ) -> Self
   {
     self.config.buffer_size = size;
     self
   }
 
   /// Set pause timeout for the controllable stream
-  pub fn pause_timeout( mut self, timeout: Duration ) -> Self
+  pub fn pause_timeout( mut self, timeout : Duration ) -> Self
   {
     self.config.pause_timeout = timeout;
     self
@@ -625,24 +625,24 @@ impl< 'a > ControllableStreamBuilder< 'a >
 pub struct StreamingControlApi< 'a >
 {
   /// Reference to the Gemini client
-  client: &'a crate::client::Client,
+  client : &'a crate::client::Client,
   /// Default configuration for new controllable streams
-  config: StreamControlConfig,
+  config : StreamControlConfig,
 }
 
 impl< 'a > StreamingControlApi< 'a >
 {
   /// Create a new streaming control API instance
-  pub fn new( client: &'a crate::client::Client ) -> Self
+  pub fn new( client : &'a crate::client::Client ) -> Self
   {
     Self {
       client,
-      config: StreamControlConfig::default(),
+      config : StreamControlConfig::default(),
     }
   }
 
   /// Create a new streaming control API with custom configuration
-  pub fn with_config( client: &'a crate::client::Client, config: StreamControlConfig ) -> Self
+  pub fn with_config( client : &'a crate::client::Client, config : StreamControlConfig ) -> Self
   {
     Self {
       client,
@@ -653,17 +653,17 @@ impl< 'a > StreamingControlApi< 'a >
   /// Create a configuration builder for streaming control
   pub fn config_builder() -> super::StreamControlConfigBuilder
   {
-    super::StreamControlConfigBuilder::new()
+    super ::StreamControlConfigBuilder::new()
   }
 
   /// Create a controllable stream from a content generation request (SSE)
   #[ cfg( feature = "streaming" ) ]
   pub async fn create_stream_from_request(
     &self,
-    _request: &crate::models::GenerateContentRequest
+    _request : &crate::models::GenerateContentRequest
   ) -> Result< ControllableStream< crate::models::StreamingResponse >, crate::error::Error >
   {
-    // qqq: Implement streaming functionality once API structure is clarified
+    // qqq : Implement streaming functionality once API structure is clarified
     Err( crate::error::Error::ApiError( "Streaming functionality not yet implemented".to_string() ) )
   }
 
@@ -674,7 +674,7 @@ impl< 'a > StreamingControlApi< 'a >
   }
 
   /// Create a controllable stream builder for specific model
-  pub fn stream_builder_for_model( &self, model_name: &str ) -> StreamControlStreamBuilder< '_ >
+  pub fn stream_builder_for_model( &self, model_name : &str ) -> StreamControlStreamBuilder< '_ >
   {
     StreamControlStreamBuilder::new( self.client, model_name, self.config.clone() )
   }
@@ -682,7 +682,7 @@ impl< 'a > StreamingControlApi< 'a >
   /// Convert an existing stream to a controllable stream
   pub fn make_controllable< T >(
     &self,
-    stream: std::pin::Pin< Box< dyn futures::Stream< Item = Result< T, crate::error::Error > > + Send > >
+    stream : std::pin::Pin< Box< dyn futures::Stream< Item = Result< T, crate::error::Error > > + Send > >
   ) -> ControllableStream< T >
   where
     T: Clone + Send + 'static,
@@ -694,7 +694,7 @@ impl< 'a > StreamingControlApi< 'a >
   #[ cfg( all( feature = "websocket_streaming", feature = "streaming_control" ) ) ]
   pub async fn create_websocket_stream(
     &self,
-    endpoint: &str
+    endpoint : &str
   ) -> Result< ControllableWebSocketStream, crate::error::Error >
   {
     // Get WebSocket streaming API
@@ -718,7 +718,7 @@ impl< 'a > StreamingControlApi< 'a >
   }
 
   /// Update the default configuration
-  pub fn set_config( &mut self, config: StreamControlConfig )
+  pub fn set_config( &mut self, config : StreamControlConfig )
   {
     self.config = config;
   }
@@ -730,13 +730,13 @@ impl< 'a > StreamingControlApi< 'a >
 pub struct ControllableWebSocketStream
 {
   /// WebSocket session
-  session: std::sync::Arc< crate::websocket::WebSocketStreamSession >,
+  session : std::sync::Arc< crate::websocket::WebSocketStreamSession >,
   /// Stream configuration
-  config: StreamControlConfig,
+  config : StreamControlConfig,
   /// Current state
-  state: Arc< AtomicU8 >,
+  state : Arc< AtomicU8 >,
   /// Stream metrics
-  metrics: Arc< StreamMetrics >,
+  metrics : Arc< StreamMetrics >,
 }
 
 #[ cfg( all( feature = "websocket_streaming", feature = "streaming_control" ) ) ]
@@ -744,15 +744,15 @@ impl ControllableWebSocketStream
 {
   /// Create a new controllable WebSocket stream
   pub fn new(
-    session: std::sync::Arc< crate::websocket::WebSocketStreamSession >,
-    config: StreamControlConfig
+    session : std::sync::Arc< crate::websocket::WebSocketStreamSession >,
+    config : StreamControlConfig
   ) -> Self
   {
     Self {
       session,
       config,
-      state: Arc::new( AtomicU8::new( StreamState::Running.to_u8() ) ),
-      metrics: Arc::new( StreamMetrics::new() ),
+      state : Arc::new( AtomicU8::new( StreamState::Running.to_u8() ) ),
+      metrics : Arc::new( StreamMetrics::new() ),
     }
   }
 
@@ -798,7 +798,7 @@ impl ControllableWebSocketStream
   }
 
   /// Send a message through the WebSocket
-  pub async fn send_message( &self, message: crate::websocket::WebSocketStreamMessage ) -> Result< (), crate::error::Error >
+  pub async fn send_message( &self, message : crate::websocket::WebSocketStreamMessage ) -> Result< (), crate::error::Error >
   {
     if self.get_state() != StreamState::Running
     {
@@ -823,51 +823,51 @@ pub struct StreamControlStreamBuilder< 'a >
 {
   /// Reference to the Gemini client
   #[ allow( dead_code ) ] // Used in full implementation, currently stubbed
-  client: &'a crate::client::Client,
+  client : &'a crate::client::Client,
   /// Model name to use
   #[ allow( dead_code ) ] // Used in full implementation, currently stubbed
-  model_name: String,
+  model_name : String,
   /// Stream control configuration
-  config: StreamControlConfig,
+  config : StreamControlConfig,
   /// Request to be built
-  request: crate::models::GenerateContentRequest,
+  request : crate::models::GenerateContentRequest,
 }
 
 impl< 'a > StreamControlStreamBuilder< 'a >
 {
   /// Create a new stream control stream builder
-  pub fn new( client: &'a crate::client::Client, model_name: &str, config: StreamControlConfig ) -> Self
+  pub fn new( client : &'a crate::client::Client, model_name : &str, config : StreamControlConfig ) -> Self
   {
     Self {
       client,
-      model_name: model_name.to_string(),
+      model_name : model_name.to_string(),
       config,
-      request: crate::models::GenerateContentRequest::default(),
+      request : crate::models::GenerateContentRequest::default(),
     }
   }
 
   /// Add text content to the request
-  pub fn text( mut self, text: &str ) -> Self
+  pub fn text( mut self, text : &str ) -> Self
   {
     self.request.contents.push( crate::models::Content {
-      parts: vec![ crate::models::Part {
-        text: Some( text.to_string() ),
+      parts : vec![ crate::models::Part {
+        text : Some( text.to_string() ),
         ..Default::default()
       } ],
-      role: "user".to_string(),
+      role : "user".to_string(),
     } );
     self
   }
 
   /// Set buffer size for the controllable stream
-  pub fn buffer_size( mut self, size: usize ) -> Self
+  pub fn buffer_size( mut self, size : usize ) -> Self
   {
     self.config.buffer_size = size;
     self
   }
 
   /// Set pause timeout for the controllable stream
-  pub fn pause_timeout( mut self, timeout: Duration ) -> Self
+  pub fn pause_timeout( mut self, timeout : Duration ) -> Self
   {
     self.config.pause_timeout = timeout;
     self
@@ -877,7 +877,7 @@ impl< 'a > StreamControlStreamBuilder< 'a >
   #[ cfg( feature = "streaming" ) ]
   pub async fn create( self ) -> Result< ControllableStream< crate::models::StreamingResponse >, crate::error::Error >
   {
-    // qqq: Implement streaming functionality once API structure is clarified
+    // qqq : Implement streaming functionality once API structure is clarified
     Err( crate::error::Error::ApiError( "Streaming functionality not yet implemented".to_string() ) )
   }
 }

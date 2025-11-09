@@ -38,7 +38,7 @@ use std::sync::{ Arc, Mutex };
 ///
 /// // Start hot-reloading with callback
 /// let _handle = hot_reload_manager.start_hot_reloading( move | new_config | {
-///     println!( "Configuration updated: timeout = {:?}", new_config.timeout );
+///     println!( "Configuration updated : timeout = {:?}", new_config.timeout );
 /// } ).await?;
 ///
 /// // Hot-reloading is now active and will continue until _handle is dropped
@@ -50,15 +50,15 @@ use std::sync::{ Arc, Mutex };
 pub struct HotReloadManager
 {
   /// Configuration sources being watched
-  sources: Arc< Mutex< Vec< Box< dyn ConfigSource > > > >,
+  sources : Arc< Mutex< Vec< Box< dyn ConfigSource > > > >,
   /// Debounce interval to prevent excessive reloading
-  debounce_interval: Duration,
+  debounce_interval : Duration,
   /// Last merged configuration
-  last_config: Arc< Mutex< Option< DynamicConfig > > >,
+  last_config : Arc< Mutex< Option< DynamicConfig > > >,
   /// Hot-reloading metrics
-  metrics: Arc< HotReloadMetrics >,
+  metrics : Arc< HotReloadMetrics >,
   /// Whether hot-reloading is currently active
-  is_active: Arc< AtomicBool >,
+  is_active : Arc< AtomicBool >,
 }
 
 #[ cfg( feature = "dynamic_configuration" ) ]
@@ -69,14 +69,14 @@ impl HotReloadManager
   /// # Arguments
   ///
   /// * `debounce_interval` - Minimum time between configuration reloads
-  pub fn new( debounce_interval: Duration ) -> Self
+  pub fn new( debounce_interval : Duration ) -> Self
   {
     Self {
-      sources: Arc::new( Mutex::new( Vec::new() ) ),
+      sources : Arc::new( Mutex::new( Vec::new() ) ),
       debounce_interval,
-      last_config: Arc::new( Mutex::new( None ) ),
-      metrics: Arc::new( HotReloadMetrics::default() ),
-      is_active: Arc::new( AtomicBool::new( false ) ),
+      last_config : Arc::new( Mutex::new( None ) ),
+      metrics : Arc::new( HotReloadMetrics::default() ),
+      is_active : Arc::new( AtomicBool::new( false ) ),
     }
   }
 
@@ -85,7 +85,7 @@ impl HotReloadManager
   /// # Arguments
   ///
   /// * `source` - Configuration source to add
-  pub fn add_source( &mut self, source: Box< dyn ConfigSource > )
+  pub fn add_source( &mut self, source : Box< dyn ConfigSource > )
   {
     let mut sources = self.sources.lock().unwrap();
     sources.push( source );
@@ -130,7 +130,7 @@ impl HotReloadManager
   /// Returns a handle that stops hot-reloading when dropped.
   pub async fn start_hot_reloading< F >(
     &self,
-    on_config_update: F
+    on_config_update : F
   ) -> Result< HotReloadHandle, crate::error::Error >
   where
     F: Fn( DynamicConfig ) + Send + Sync + 'static,
@@ -217,7 +217,7 @@ impl HotReloadManager
             },
             Err( e ) => {
               metrics.record_failed_reload();
-              tracing::warn!( "Failed to reload configuration: {}", e );
+              tracing ::warn!( "Failed to reload configuration : {}", e );
             }
           }
         }
@@ -225,9 +225,9 @@ impl HotReloadManager
     } );
 
     Ok( HotReloadHandle {
-      _task_handle: task_handle,
-      is_active: self.is_active.clone(),
-      metrics: self.metrics.clone(),
+      _task_handle : task_handle,
+      is_active : self.is_active.clone(),
+      metrics : self.metrics.clone(),
     } )
   }
 
@@ -247,12 +247,12 @@ impl HotReloadManager
 
   /// Helper method to load and merge configurations from all sources
   fn load_and_merge_configs(
-    _sources: &Arc< Mutex< Vec< Box< dyn ConfigSource > > > >
+    _sources : &Arc< Mutex< Vec< Box< dyn ConfigSource > > > >
   ) -> Result< DynamicConfig, crate::error::Error >
   {
     let mut configs = Vec::new();
 
-    // Note: In a production implementation, we would use Arc< dyn ConfigSource >
+    // Note : In a production implementation, we would use Arc< dyn ConfigSource >
     // and a more sophisticated async-compatible locking mechanism.
     // For now, we use a simple sequential approach.
 
@@ -262,14 +262,14 @@ impl HotReloadManager
       .retry_attempts( 3 )
       .base_url( "https://generativelanguage.googleapis.com".to_string() )
       .build()
-      .map_err( | e | crate::error::Error::ConfigurationError( format!( "Failed to create default config: {}", e ) ) )?;
+      .map_err( | e | crate::error::Error::ConfigurationError( format!( "Failed to create default config : {}", e ) ) )?;
 
     configs.push( ( default_config, 0 ) ); // Lowest priority
 
     // For the MVP, we'll log that hot-reloading structure is in place
     // The actual async loading would be implemented in a future version
     // with a more sophisticated trait design (using Arc< dyn ConfigSource >)
-    tracing::info!( "Hot-reload configuration manager initialized with default configuration" );
+    tracing ::info!( "Hot-reload configuration manager initialized with default configuration" );
 
     if configs.is_empty()
     {
@@ -301,9 +301,9 @@ impl HotReloadManager
 #[ derive( Debug ) ]
 pub struct HotReloadHandle
 {
-  _task_handle: tokio::task::JoinHandle< () >,
-  is_active: Arc< AtomicBool >,
-  metrics: Arc< HotReloadMetrics >,
+  _task_handle : tokio::task::JoinHandle< () >,
+  is_active : Arc< AtomicBool >,
+  metrics : Arc< HotReloadMetrics >,
 }
 
 #[ cfg( feature = "dynamic_configuration" ) ]
@@ -322,19 +322,19 @@ impl Drop for HotReloadHandle
 pub struct HotReloadMetrics
 {
   /// Number of times hot-reloading was started
-  pub starts: AtomicU64,
+  pub starts : AtomicU64,
   /// Number of times hot-reloading was stopped
-  pub stops: AtomicU64,
+  pub stops : AtomicU64,
   /// Total number of reload attempts
-  pub reload_attempts: AtomicU64,
+  pub reload_attempts : AtomicU64,
   /// Number of successful reloads
-  pub successful_reloads: AtomicU64,
+  pub successful_reloads : AtomicU64,
   /// Number of failed reloads
-  pub failed_reloads: AtomicU64,
+  pub failed_reloads : AtomicU64,
   /// Number of reloads that resulted in no configuration change
-  pub no_change_reloads: AtomicU64,
+  pub no_change_reloads : AtomicU64,
   /// Timestamp of last reload attempt
-  pub last_reload_time: Mutex< Option< std::time::SystemTime > >,
+  pub last_reload_time : Mutex< Option< std::time::SystemTime > >,
 }
 
 #[ cfg( feature = "dynamic_configuration" ) ]
@@ -343,13 +343,13 @@ impl Default for HotReloadMetrics
   fn default() -> Self
   {
     Self {
-      starts: AtomicU64::new( 0 ),
-      stops: AtomicU64::new( 0 ),
-      reload_attempts: AtomicU64::new( 0 ),
-      successful_reloads: AtomicU64::new( 0 ),
-      failed_reloads: AtomicU64::new( 0 ),
-      no_change_reloads: AtomicU64::new( 0 ),
-      last_reload_time: Mutex::new( None ),
+      starts : AtomicU64::new( 0 ),
+      stops : AtomicU64::new( 0 ),
+      reload_attempts : AtomicU64::new( 0 ),
+      successful_reloads : AtomicU64::new( 0 ),
+      failed_reloads : AtomicU64::new( 0 ),
+      no_change_reloads : AtomicU64::new( 0 ),
+      last_reload_time : Mutex::new( None ),
     }
   }
 }
@@ -420,15 +420,15 @@ impl HotReloadMetrics
   pub fn generate_report( &self ) -> HotReloadMetricsReport
   {
     HotReloadMetricsReport {
-      starts: self.starts.load( Ordering::Relaxed ),
-      stops: self.stops.load( Ordering::Relaxed ),
-      reload_attempts: self.reload_attempts.load( Ordering::Relaxed ),
-      successful_reloads: self.successful_reloads.load( Ordering::Relaxed ),
-      failed_reloads: self.failed_reloads.load( Ordering::Relaxed ),
-      no_change_reloads: self.no_change_reloads.load( Ordering::Relaxed ),
-      success_rate: self.success_rate(),
-      is_active: self.is_active(),
-      last_reload_time: self.last_reload_time.lock().unwrap().clone(),
+      starts : self.starts.load( Ordering::Relaxed ),
+      stops : self.stops.load( Ordering::Relaxed ),
+      reload_attempts : self.reload_attempts.load( Ordering::Relaxed ),
+      successful_reloads : self.successful_reloads.load( Ordering::Relaxed ),
+      failed_reloads : self.failed_reloads.load( Ordering::Relaxed ),
+      no_change_reloads : self.no_change_reloads.load( Ordering::Relaxed ),
+      success_rate : self.success_rate(),
+      is_active : self.is_active(),
+      last_reload_time : self.last_reload_time.lock().unwrap().clone(),
     }
   }
 }
@@ -439,21 +439,21 @@ impl HotReloadMetrics
 pub struct HotReloadMetricsReport
 {
   /// Number of times hot-reloading was started
-  pub starts: u64,
+  pub starts : u64,
   /// Number of times hot-reloading was stopped
-  pub stops: u64,
+  pub stops : u64,
   /// Total number of reload attempts
-  pub reload_attempts: u64,
+  pub reload_attempts : u64,
   /// Number of successful reloads
-  pub successful_reloads: u64,
+  pub successful_reloads : u64,
   /// Number of failed reloads
-  pub failed_reloads: u64,
+  pub failed_reloads : u64,
   /// Number of reloads that resulted in no configuration change
-  pub no_change_reloads: u64,
+  pub no_change_reloads : u64,
   /// Success rate as percentage (0-100)
-  pub success_rate: f64,
+  pub success_rate : f64,
   /// Whether hot-reloading is currently active
-  pub is_active: bool,
+  pub is_active : bool,
   /// Timestamp of last reload attempt
-  pub last_reload_time: Option< std::time::SystemTime >,
+  pub last_reload_time : Option< std::time::SystemTime >,
 }

@@ -10,15 +10,15 @@ use core::time::Duration;
 pub struct CodeExecutionConfig
 {
   /// Runtime environment to use
-  pub runtime: CodeRuntime,
+  pub runtime : CodeRuntime,
   /// Execution timeout
-  pub timeout: Duration,
+  pub timeout : Duration,
   /// Memory limit in bytes
-  pub memory_limit: usize,
+  pub memory_limit : usize,
   /// Allowed imports/modules
-  pub allowed_imports: Vec< String >,
+  pub allowed_imports : Vec< String >,
   /// Security level for execution
-  pub security_level: SecurityLevel,
+  pub security_level : SecurityLevel,
 }
 
 impl Default for CodeExecutionConfig
@@ -28,17 +28,17 @@ impl Default for CodeExecutionConfig
   {
     Self
     {
-      runtime: CodeRuntime::Python,
-      timeout: Duration::from_secs( 30 ),
-      memory_limit: 128 * 1024 * 1024, // 128MB
-      allowed_imports: vec![
+      runtime : CodeRuntime::Python,
+      timeout : Duration::from_secs( 30 ),
+      memory_limit : 128 * 1024 * 1024, // 128MB
+      allowed_imports : vec![
         "os".to_string(),
         "sys".to_string(),
         "json".to_string(),
         "math".to_string(),
         "datetime".to_string(),
       ],
-      security_level: SecurityLevel::Sandbox,
+      security_level : SecurityLevel::Sandbox,
     }
   }
 }
@@ -59,9 +59,9 @@ pub enum CodeRuntime
   Custom
   {
     /// Runtime name
-    name: String,
+    name : String,
     /// Container image
-    image: String,
+    image : String,
   },
 }
 
@@ -82,13 +82,13 @@ pub enum SecurityLevel
 pub struct CodeExecutionResult
 {
   /// Standard output
-  pub output: String,
+  pub output : String,
   /// Error output if execution failed
-  pub error: Option< String >,
+  pub error : Option< String >,
   /// Execution time
-  pub execution_time: Duration,
+  pub execution_time : Duration,
   /// Memory used in bytes
-  pub memory_used: usize,
+  pub memory_used : usize,
   /// Process return code
-  pub return_code: i32,
+  pub return_code : i32,
 }

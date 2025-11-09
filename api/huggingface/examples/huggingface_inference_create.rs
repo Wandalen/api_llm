@@ -1,4 +1,4 @@
-//! Example: Text generation with `HuggingFace` Inference API
+//! Example : Text generation with `HuggingFace` Inference API
 //!
 //! This example demonstrates basic text generation using the `HuggingFace` API.
 //! 
@@ -11,20 +11,20 @@
 use api_huggingface::
 {
   Client,
-  environment::HuggingFaceEnvironmentImpl,
-  components::
+  environment ::HuggingFaceEnvironmentImpl,
+  components ::
   {
-  input::InferenceParameters,
-  models::Models,
+  input ::InferenceParameters,
+  models ::Models,
   },
-  secret::Secret,
+  secret ::Secret,
 };
 
 #[ tokio::main ]
 async fn main() -> Result< (), Box< dyn std::error::Error > >
 {
   // Initialize tracing for debugging
-  tracing_subscriber::fmt::init();
+  tracing_subscriber ::fmt::init();
   
   println!( "🤗 HuggingFace Inference API Example" );
   
@@ -44,7 +44,7 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
   .with_top_p( 0.9 );
   
   let model = Models::llama_3_3_70b_instruct();
-  println!( "🤖 Using model: {model}" );
+  println!( "🤖 Using model : {model}" );
   
   // Example prompts
   let prompts = [
@@ -62,11 +62,11 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
       Ok( response ) =>
       {
   let text = response.extract_text_or_default( "No response generated" );
-  println!( "💬 Response: {text}" );
+  println!( "💬 Response : {text}" );
       },
       Err( e ) =>
       {
-  eprintln!( "❌ Error: {e}" );
+  eprintln!( "❌ Error : {e}" );
       }
   }
   }

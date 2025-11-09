@@ -17,8 +17,8 @@ mod private
   use serde_json::{ json, Value };
   use core::time::Duration;
   use std::{
-    collections::HashMap,
-    sync::{ Arc, Mutex },
+    collections ::HashMap,
+    sync ::{ Arc, Mutex },
   };
   use tokio::sync::Semaphore;
   use error_tools::untyped::Result;
@@ -34,7 +34,7 @@ mod private
   {
     /// Returns the recommended default limit for batch job listing.
     ///
-    /// Following the governing principle: this provides information for explicit developer choice
+    /// Following the governing principle : this provides information for explicit developer choice
     /// rather than being an automatic default.
     #[ must_use ]
     #[ inline ]
@@ -45,7 +45,7 @@ mod private
 
     /// Returns the recommended default maximum retries for batch operations.
     ///
-    /// Following the governing principle: this provides information for explicit developer choice
+    /// Following the governing principle : this provides information for explicit developer choice
     /// rather than being an automatic default.
     #[ must_use ]
     #[ inline ]
@@ -241,7 +241,7 @@ mod private
     batch.cancelling_at = Some( chrono::Utc::now().timestamp() );
 
     // Simulate cancellation process
-    tokio::time::sleep( Duration::from_millis( 100 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 100 ) ).await;
 
     batch.status = "cancelled".to_string();
     batch.cancelled_at = Some( chrono::Utc::now().timestamp() );
@@ -377,7 +377,7 @@ mod private
             Duration::from_millis( 1000 * ( 2_u64.pow( retries ) ) )
           };
 
-          tokio::time::sleep( delay ).await;
+          tokio ::time::sleep( delay ).await;
         }
         else
         {
@@ -480,7 +480,7 @@ mod private
     // Wait for all batches to complete
     for handle in handles
     {
-      handle.await.map_err( | e | error_tools::Error::from( OpenAIError::Internal( format!( "Concurrent processing failed: {e}" ) ) ) )?;
+      handle.await.map_err( | e | error_tools::Error::from( OpenAIError::Internal( format!( "Concurrent processing failed : {e}" ) ) ) )?;
     }
 
     let final_results = results.lock().unwrap().clone();
@@ -504,7 +504,7 @@ mod private
     } );
 
     // In a real implementation, this would set up webhook subscriptions
-    tokio::time::sleep( Duration::from_millis( 100 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 100 ) ).await;
 
     Ok( () )
   }
@@ -593,7 +593,7 @@ mod private
   #[ inline ]
   pub async fn optimize_batch_performance( client : &Client< OpenaiEnvironmentImpl >, requests : Vec< EnhancedBatchRequest > ) -> Result< BatchProcessingMetrics >
   {
-    // Advanced optimization: group by endpoint, priority, and request similarity
+    // Advanced optimization : group by endpoint, priority, and request similarity
     let mut optimized_requests = requests;
 
     // Sort by endpoint first, then priority
@@ -669,7 +669,7 @@ mod private
       }
     }
 
-    // Note: cache_hits tracks the number of cache hits for optimization analysis
+    // Note : cache_hits tracks the number of cache hits for optimization analysis
     let _cache_efficiency = if total_requests > 0 { f64::from( cache_hits ) / total_requests as f64 } else { 0.0 };
 
     let processing_time = start_time.elapsed();
@@ -693,7 +693,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

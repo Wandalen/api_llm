@@ -300,13 +300,13 @@ mod private
     fn fmt( &self, f : &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result
     {
       let state = self.state.lock().unwrap();
-      write!( f, "Circuit breaker [state: {:?}, failures: {}]", state.current_state, state.failure_count )
+      write!( f, "Circuit breaker [state : {:?}, failures : {}]", state.current_state, state.failure_count )
     }
   }
 }
 
 #[ cfg( feature = "circuit_breaker" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use private::CircuitBreakerState;
   exposed use private::CircuitBreakerConfig;

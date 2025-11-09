@@ -343,7 +343,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use private::MessageStreamEvent;
   exposed use private::MessageCreatedEvent;

@@ -2,16 +2,16 @@ use api_openai::ClientApiAccessors;
 /*
 use api_openai::
 {
-  client::Client,
-  error::OpenAIError,
-  api::responses::
+  client ::Client,
+  error ::OpenAIError,
+  api ::responses::
   {
     CreateResponseRequest,
     ResponseInput,
   },
-  components::
+  components ::
   {
-    common::{ ModelIdsResponses, ListQuery },
+    common ::{ ModelIdsResponses, ListQuery },
   },
 };
 
@@ -51,7 +51,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
   let input_items = client.responses().list_input_items( &response_id, Some( query ) ).await?;
   println!( "Listed {} input items for response ID: {}", input_items.data.len(), response_id );
 
-  // Clean up: delete the created response
+  // Clean up : delete the created response
   client.responses().delete( &response_id ).await?;
 
   Ok( () )

@@ -24,9 +24,9 @@ use api_gemini::models::
 fn create_weather_function() -> FunctionDeclaration
 {
   FunctionDeclaration {
-    name: "get_weather".to_string(),
-    description: "Get current weather information for a location".to_string(),
-    parameters: Some( serde_json::json!({
+    name : "get_weather".to_string(),
+    description : "Get current weather information for a location".to_string(),
+    parameters : Some( serde_json::json!({
       "type": "object",
       "properties": {
         "location": {
@@ -62,39 +62,39 @@ async fn test_enhanced_function_calling_auto_mode() -> Result< (), Box< dyn std:
   let models_api = client.models();
 
   let function_calling_config = FunctionCallingConfig {
-    mode: FunctionCallingMode::Auto,
-    allowed_function_names: None,
+    mode : FunctionCallingMode::Auto,
+    allowed_function_names : None,
   };
 
   let tool_config = ToolConfig {
-    function_calling_config: Some( function_calling_config ),
-    code_execution: None,
+    function_calling_config : Some( function_calling_config ),
+    code_execution : None,
   };
 
   let tools = vec![ Tool {
-    function_declarations: Some( vec![ create_weather_function() ] ),
-    code_execution: None,
-    google_search_retrieval: None,
-    code_execution_tool: None,
+    function_declarations : Some( vec![ create_weather_function() ] ),
+    code_execution : None,
+    google_search_retrieval : None,
+    code_execution_tool : None,
   } ];
 
   let request = GenerateContentRequest {
-    contents: vec![ Content {
-      role: "user".to_string(),
-      parts: vec![ Part {
-        text: Some( "What's the weather like in San Francisco today?".to_string() ),
-        inline_data: None,
-        function_call: None,
-        function_response: None,
+    contents : vec![ Content {
+      role : "user".to_string(),
+      parts : vec![ Part {
+        text : Some( "What's the weather like in San Francisco today?".to_string() ),
+        inline_data : None,
+        function_call : None,
+        function_response : None,
         ..Default::default()
       } ],
     } ],
-    generation_config: None,
-    safety_settings: None,
-    tools: Some( tools ),
-    tool_config: Some( tool_config ),
-    system_instruction: None,
-    cached_content: None,
+    generation_config : None,
+    safety_settings : None,
+    tools : Some( tools ),
+    tool_config : Some( tool_config ),
+    system_instruction : None,
+    cached_content : None,
   };
 
   let response = models_api.by_name( "gemini-2.0-flash-experimental" ).generate_content( &request ).await?;
@@ -145,39 +145,39 @@ async fn test_enhanced_function_calling_any_mode() -> Result< (), Box< dyn std::
   let models_api = client.models();
 
   let function_calling_config = FunctionCallingConfig {
-    mode: FunctionCallingMode::Any,
-    allowed_function_names: Some( vec![ "get_weather".to_string() ] ),
+    mode : FunctionCallingMode::Any,
+    allowed_function_names : Some( vec![ "get_weather".to_string() ] ),
   };
 
   let tool_config = ToolConfig {
-    function_calling_config: Some( function_calling_config ),
-    code_execution: None,
+    function_calling_config : Some( function_calling_config ),
+    code_execution : None,
   };
 
   let tools = vec![ Tool {
-    function_declarations: Some( vec![ create_weather_function() ] ),
-    code_execution: None,
-    google_search_retrieval: None,
-    code_execution_tool: None,
+    function_declarations : Some( vec![ create_weather_function() ] ),
+    code_execution : None,
+    google_search_retrieval : None,
+    code_execution_tool : None,
   } ];
 
   let request = GenerateContentRequest {
-    contents: vec![ Content {
-      role: "user".to_string(),
-      parts: vec![ Part {
-        text: Some( "Tell me about the weather".to_string() ),
-        inline_data: None,
-        function_call: None,
-        function_response: None,
+    contents : vec![ Content {
+      role : "user".to_string(),
+      parts : vec![ Part {
+        text : Some( "Tell me about the weather".to_string() ),
+        inline_data : None,
+        function_call : None,
+        function_response : None,
         ..Default::default()
       } ],
     } ],
-    generation_config: None,
-    safety_settings: None,
-    tools: Some( tools ),
-    tool_config: Some( tool_config ),
-    system_instruction: None,
-    cached_content: None,
+    generation_config : None,
+    safety_settings : None,
+    tools : Some( tools ),
+    tool_config : Some( tool_config ),
+    system_instruction : None,
+    cached_content : None,
   };
 
   let response = models_api.by_name( "gemini-2.0-flash-experimental" ).generate_content( &request ).await?;
@@ -190,9 +190,9 @@ async fn test_enhanced_function_calling_any_mode() -> Result< (), Box< dyn std::
   let content = &first_candidate.content;
   let has_function_call = content.parts.iter().any( |part| part.function_call.is_some() );
 
-  // Note: This might not always force a function call depending on API behavior
+  // Note : This might not always force a function call depending on API behavior
   // The test verifies the request structure is correct
-  println!( "Function call forced: {}", has_function_call );
+  println!( "Function call forced : {}", has_function_call );
 
   println!( "✓ Enhanced function calling ANY mode test passed" );
   Ok( () )
@@ -215,39 +215,39 @@ async fn test_enhanced_function_calling_none_mode() -> Result< (), Box< dyn std:
   let models_api = client.models();
 
   let function_calling_config = FunctionCallingConfig {
-    mode: FunctionCallingMode::None,
-    allowed_function_names: None,
+    mode : FunctionCallingMode::None,
+    allowed_function_names : None,
   };
 
   let tool_config = ToolConfig {
-    function_calling_config: Some( function_calling_config ),
-    code_execution: None,
+    function_calling_config : Some( function_calling_config ),
+    code_execution : None,
   };
 
   let tools = vec![ Tool {
-    function_declarations: Some( vec![ create_weather_function() ] ),
-    code_execution: None,
-    google_search_retrieval: None,
-    code_execution_tool: None,
+    function_declarations : Some( vec![ create_weather_function() ] ),
+    code_execution : None,
+    google_search_retrieval : None,
+    code_execution_tool : None,
   } ];
 
   let request = GenerateContentRequest {
-    contents: vec![ Content {
-      role: "user".to_string(),
-      parts: vec![ Part {
-        text: Some( "What's the weather like in Tokyo? Please use the weather function.".to_string() ),
-        inline_data: None,
-        function_call: None,
-        function_response: None,
+    contents : vec![ Content {
+      role : "user".to_string(),
+      parts : vec![ Part {
+        text : Some( "What's the weather like in Tokyo? Please use the weather function.".to_string() ),
+        inline_data : None,
+        function_call : None,
+        function_response : None,
         ..Default::default()
       } ],
     } ],
-    generation_config: None,
-    safety_settings: None,
-    tools: Some( tools ),
-    tool_config: Some( tool_config ),
-    system_instruction: None,
-    cached_content: None,
+    generation_config : None,
+    safety_settings : None,
+    tools : Some( tools ),
+    tool_config : Some( tool_config ),
+    system_instruction : None,
+    cached_content : None,
   };
 
   let response = models_api.by_name( "gemini-2.0-flash-experimental" ).generate_content( &request ).await?;
@@ -263,7 +263,7 @@ async fn test_enhanced_function_calling_none_mode() -> Result< (), Box< dyn std:
 
   // Should have text response but no function calls
   assert!( has_text, "Should have text response in NONE mode" );
-  println!( "Function calls disabled: {}", !has_function_call );
+  println!( "Function calls disabled : {}", !has_function_call );
 
   println!( "✓ Enhanced function calling NONE mode test passed" );
   Ok( () )
@@ -287,33 +287,33 @@ async fn test_google_search_grounding() -> Result< (), Box< dyn std::error::Erro
   let models_api = client.models();
 
   let google_search_tool = GoogleSearchTool {
-    config: None, // Use default configuration
+    config : None, // Use default configuration
   };
 
   let tools = vec![ Tool {
-    function_declarations: None,
-    code_execution: None,
-    google_search_retrieval: Some( google_search_tool ),
-    code_execution_tool: None,
+    function_declarations : None,
+    code_execution : None,
+    google_search_retrieval : Some( google_search_tool ),
+    code_execution_tool : None,
   } ];
 
   let request = GenerateContentRequest {
-    contents: vec![ Content {
-      role: "user".to_string(),
-      parts: vec![ Part {
-        text: Some( "What are the latest developments in AI technology in 2024?".to_string() ),
-        inline_data: None,
-        function_call: None,
-        function_response: None,
+    contents : vec![ Content {
+      role : "user".to_string(),
+      parts : vec![ Part {
+        text : Some( "What are the latest developments in AI technology in 2024?".to_string() ),
+        inline_data : None,
+        function_call : None,
+        function_response : None,
         ..Default::default()
       } ],
     } ],
-    generation_config: None,
-    safety_settings: None,
-    tools: Some( tools ),
-    tool_config: None,
-    system_instruction: None,
-    cached_content: None,
+    generation_config : None,
+    safety_settings : None,
+    tools : Some( tools ),
+    tool_config : None,
+    system_instruction : None,
+    cached_content : None,
   };
 
   let response = models_api.by_name( "gemini-2.0-flash-experimental" ).generate_content( &request ).await?;
@@ -328,7 +328,7 @@ async fn test_google_search_grounding() -> Result< (), Box< dyn std::error::Erro
     if let Some( web_search_queries ) = &grounding_metadata.web_search_queries
     {
       assert!( !web_search_queries.is_empty(), "Should have web search queries" );
-      println!( "✓ Web search queries found: {:?}", web_search_queries );
+      println!( "✓ Web search queries found : {:?}", web_search_queries );
     }
 
     if let Some( grounding_chunks ) = &grounding_metadata.grounding_chunks
@@ -387,33 +387,33 @@ async fn test_system_instructions() -> Result< (), Box< dyn std::error::Error > 
   let models_api = client.models();
 
   let system_instruction = SystemInstruction {
-    role: "system".to_string(),
-    parts: vec![ Part {
-      text: Some( "You are a helpful assistant that always responds in a formal, professional tone. Always start your responses with 'Good day.'".to_string() ),
-      inline_data: None,
-      function_call: None,
-      function_response: None,
+    role : "system".to_string(),
+    parts : vec![ Part {
+      text : Some( "You are a helpful assistant that always responds in a formal, professional tone. Always start your responses with 'Good day.'".to_string() ),
+      inline_data : None,
+      function_call : None,
+      function_response : None,
       ..Default::default()
     } ],
   };
 
   let request = GenerateContentRequest {
-    contents: vec![ Content {
-      role: "user".to_string(),
-      parts: vec![ Part {
-        text: Some( "How are you doing today?".to_string() ),
-        inline_data: None,
-        function_call: None,
-        function_response: None,
+    contents : vec![ Content {
+      role : "user".to_string(),
+      parts : vec![ Part {
+        text : Some( "How are you doing today?".to_string() ),
+        inline_data : None,
+        function_call : None,
+        function_response : None,
         ..Default::default()
       } ],
     } ],
-    generation_config: None,
-    safety_settings: None,
-    tools: None,
-    tool_config: None,
-    system_instruction: Some( system_instruction ),
-    cached_content: None,
+    generation_config : None,
+    safety_settings : None,
+    tools : None,
+    tool_config : None,
+    system_instruction : Some( system_instruction ),
+    cached_content : None,
   };
 
   let response = models_api.by_name( "gemini-2.0-flash-experimental" ).generate_content( &request ).await?;
@@ -430,7 +430,7 @@ async fn test_system_instructions() -> Result< (), Box< dyn std::error::Error > 
     {
       // Check if response starts with "Good day." as instructed
       let starts_with_greeting = text.to_lowercase().starts_with( "good day" );
-      println!( "Response: {}", text );
+      println!( "Response : {}", text );
 
       if starts_with_greeting
       {
@@ -463,38 +463,38 @@ async fn test_code_execution_tool() -> Result< (), Box< dyn std::error::Error > 
   let models_api = client.models();
 
   let code_execution_config = CodeExecutionConfig {
-    timeout: Some( 30 ),
-    enable_network: Some( false ),
+    timeout : Some( 30 ),
+    enable_network : Some( false ),
   };
 
   let code_execution_tool = CodeExecutionTool {
-    config: Some( code_execution_config ),
+    config : Some( code_execution_config ),
   };
 
   let tools = vec![ Tool {
-    function_declarations: None,
-    code_execution: None,
-    google_search_retrieval: None,
-    code_execution_tool: Some( code_execution_tool ),
+    function_declarations : None,
+    code_execution : None,
+    google_search_retrieval : None,
+    code_execution_tool : Some( code_execution_tool ),
   } ];
 
   let request = GenerateContentRequest {
-    contents: vec![ Content {
-      role: "user".to_string(),
-      parts: vec![ Part {
-        text: Some( "Calculate the factorial of 5 using Python code and show me the result.".to_string() ),
-        inline_data: None,
-        function_call: None,
-        function_response: None,
+    contents : vec![ Content {
+      role : "user".to_string(),
+      parts : vec![ Part {
+        text : Some( "Calculate the factorial of 5 using Python code and show me the result.".to_string() ),
+        inline_data : None,
+        function_call : None,
+        function_response : None,
         ..Default::default()
       } ],
     } ],
-    generation_config: None,
-    safety_settings: None,
-    tools: Some( tools ),
-    tool_config: None,
-    system_instruction: None,
-    cached_content: None,
+    generation_config : None,
+    safety_settings : None,
+    tools : Some( tools ),
+    tool_config : None,
+    system_instruction : None,
+    cached_content : None,
   };
 
   let response = models_api.by_name( "gemini-2.0-flash-experimental" ).generate_content( &request ).await?;
@@ -516,7 +516,7 @@ async fn test_code_execution_tool() -> Result< (), Box< dyn std::error::Error > 
       let mentions_factorial = text.to_lowercase().contains( "factorial" );
       let mentions_120 = text.contains( "120" ); // 5! = 120
 
-      println!( "Response contains factorial: {}", mentions_factorial );
+      println!( "Response contains factorial : {}", mentions_factorial );
       println!( "Response contains 120: {}", mentions_120 );
 
       if mentions_120
@@ -547,56 +547,56 @@ async fn test_enhanced_features_combination() -> Result< (), Box< dyn std::error
 
   // System instruction for behavior
   let system_instruction = SystemInstruction {
-    role: "system".to_string(),
-    parts: vec![ Part {
-      text: Some( "You are a research assistant. Provide factual information with citations when possible.".to_string() ),
-      inline_data: None,
-      function_call: None,
-      function_response: None,
+    role : "system".to_string(),
+    parts : vec![ Part {
+      text : Some( "You are a research assistant. Provide factual information with citations when possible.".to_string() ),
+      inline_data : None,
+      function_call : None,
+      function_response : None,
       ..Default::default()
     } ],
   };
 
   // Google Search for grounding
   let google_search_tool = GoogleSearchTool {
-    config: None,
+    config : None,
   };
 
   // Function calling configuration
   let function_calling_config = FunctionCallingConfig {
-    mode: FunctionCallingMode::Auto,
-    allowed_function_names: None,
+    mode : FunctionCallingMode::Auto,
+    allowed_function_names : None,
   };
 
   let tool_config = ToolConfig {
-    function_calling_config: Some( function_calling_config ),
-    code_execution: None,
+    function_calling_config : Some( function_calling_config ),
+    code_execution : None,
   };
 
   let tools = vec![ Tool {
-    function_declarations: Some( vec![ create_weather_function() ] ),
-    code_execution: None,
-    google_search_retrieval: Some( google_search_tool ),
-    code_execution_tool: None,
+    function_declarations : Some( vec![ create_weather_function() ] ),
+    code_execution : None,
+    google_search_retrieval : Some( google_search_tool ),
+    code_execution_tool : None,
   } ];
 
   let request = GenerateContentRequest {
-    contents: vec![ Content {
-      role: "user".to_string(),
-      parts: vec![ Part {
-        text: Some( "Research the latest climate change impacts in 2024 and tell me about weather patterns.".to_string() ),
-        inline_data: None,
-        function_call: None,
-        function_response: None,
+    contents : vec![ Content {
+      role : "user".to_string(),
+      parts : vec![ Part {
+        text : Some( "Research the latest climate change impacts in 2024 and tell me about weather patterns.".to_string() ),
+        inline_data : None,
+        function_call : None,
+        function_response : None,
         ..Default::default()
       } ],
     } ],
-    generation_config: None,
-    safety_settings: None,
-    tools: Some( tools ),
-    tool_config: Some( tool_config ),
-    system_instruction: Some( system_instruction ),
-    cached_content: None,
+    generation_config : None,
+    safety_settings : None,
+    tools : Some( tools ),
+    tool_config : Some( tool_config ),
+    system_instruction : Some( system_instruction ),
+    cached_content : None,
   };
 
   let response = models_api.by_name( "gemini-2.0-flash-experimental" ).generate_content( &request ).await?;
@@ -615,10 +615,10 @@ async fn test_enhanced_features_combination() -> Result< (), Box< dyn std::error
   assert!( has_text, "Should have text response" );
 
   println!( "Enhanced features used:" );
-  println!( "  - System instruction: Yes (always applied)" );
-  println!( "  - Google Search grounding: {}", has_grounding );
-  println!( "  - Function calling available: Yes" );
-  println!( "  - Function called: {}", has_function_call );
+  println!( "  - System instruction : Yes (always applied)" );
+  println!( "  - Google Search grounding : {}", has_grounding );
+  println!( "  - Function calling available : Yes" );
+  println!( "  - Function called : {}", has_function_call );
 
   println!( "✓ Enhanced features combination test passed" );
   Ok( () )
@@ -635,32 +635,32 @@ async fn test_enhanced_features_error_handling() -> Result< (), Box< dyn std::er
 
   // Test with empty function declarations but function calling enabled
   let function_calling_config = FunctionCallingConfig {
-    mode: FunctionCallingMode::Any,
-    allowed_function_names: Some( vec![ "nonexistent_function".to_string() ] ),
+    mode : FunctionCallingMode::Any,
+    allowed_function_names : Some( vec![ "nonexistent_function".to_string() ] ),
   };
 
   let tool_config = ToolConfig {
-    function_calling_config: Some( function_calling_config ),
-    code_execution: None,
+    function_calling_config : Some( function_calling_config ),
+    code_execution : None,
   };
 
   let request = GenerateContentRequest {
-    contents: vec![ Content {
-      role: "user".to_string(),
-      parts: vec![ Part {
-        text: Some( "Test message".to_string() ),
-        inline_data: None,
-        function_call: None,
-        function_response: None,
+    contents : vec![ Content {
+      role : "user".to_string(),
+      parts : vec![ Part {
+        text : Some( "Test message".to_string() ),
+        inline_data : None,
+        function_call : None,
+        function_response : None,
         ..Default::default()
       } ],
     } ],
-    generation_config: None,
-    safety_settings: None,
-    tools: None, // No tools provided but function calling expected
-    tool_config: Some( tool_config ),
-    system_instruction: None,
-    cached_content: None,
+    generation_config : None,
+    safety_settings : None,
+    tools : None, // No tools provided but function calling expected
+    tool_config : Some( tool_config ),
+    system_instruction : None,
+    cached_content : None,
   };
 
   // This should either return an error or handle gracefully
@@ -677,7 +677,7 @@ async fn test_enhanced_features_error_handling() -> Result< (), Box< dyn std::er
     Err( error ) =>
     {
       // If error, should be meaningful
-      println!( "✓ Invalid configuration returned error: {:?}", error );
+      println!( "✓ Invalid configuration returned error : {:?}", error );
     }
   }
 

@@ -6,9 +6,9 @@
 use serde::{ Deserialize, Serialize };
 use std::
 {
-  collections::HashMap,
-  sync::{ Arc, Mutex },
-  time::Instant,
+  collections ::HashMap,
+  sync ::{ Arc, Mutex },
+  time ::Instant,
 };
 use core::time::Duration;
 use crate::error::Error;
@@ -303,7 +303,7 @@ impl QuotaManager
     let status = self.check_quota( request )?;
     if !matches!( status, QuotaStatus::Allowed )
     {
-      return Err( Error::QuotaExceeded( format!( "Quota exceeded: {status:?}" ) ) );
+      return Err( Error::QuotaExceeded( format!( "Quota exceeded : {status:?}" ) ) );
     }
 
     let mut tracker = self.usage_tracker.lock().unwrap();

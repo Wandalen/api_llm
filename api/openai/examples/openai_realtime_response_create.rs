@@ -7,16 +7,16 @@
 //! or have a `secret/-secret.sh` file with the key.
 //!
 //! **NOTE:** This is often not needed if using server-side VAD with
-//! `turn_detection.create_response: true` (the default). This example shows
+//! `turn_detection.create_response : true` (the default). This example shows
 //! how to manually trigger a response, potentially with overrides.
 
 use api_openai::ClientApiAccessors;
 use api_openai::
 {
-  client::Client,
-  error::OpenAIError,
-  api::realtime::{ RealtimeClient, ws::WsSession },
-  components::realtime_shared::
+  client ::Client,
+  error ::OpenAIError,
+  api ::realtime::{ RealtimeClient, ws::WsSession },
+  components ::realtime_shared::
   {
     RealtimeSessionCreateRequest,
     RealtimeConversationItemContent,
@@ -41,33 +41,33 @@ async fn main() -> Result< (), OpenAIError >
   .init();
 
   // Load environment variables
-  dotenv::from_filename( "./secret/-secret.sh" ).ok();
+  dotenv ::from_filename( "./secret/-secret.sh" ).ok();
 
   // 1. Create a new OpenAI client.
-  tracing::info!( "Initializing client..." );
+  tracing ::info!( "Initializing client..." );
   let client = Client::new();
 
   // 2. Create the request payload to initiate the session.
   //    May disable auto-response creation if explicitly triggering.
-  tracing::info!( "Building realtime session request..." );
+  tracing ::info!( "Building realtime session request..." );
   let request = RealtimeSessionCreateRequest::former()
   .model( "gpt-4o-realtime-preview".to_string() )
-  // Example: Configure VAD *not* to automatically create responses
+  // Example : Configure VAD *not* to automatically create responses
   // .turn_detection(RealtimeSessionTurnDetection::former().r#type("server_vad").create_response(false).form())
   .temperature( 0.7 )
   .output_audio_format( "pcm16" ) // Request audio output
   .form();
 
-  tracing::info!( "Sending request to OpenAI API to create session..." );
+  tracing ::info!( "Sending request to OpenAI API to create session..." );
   // 3. Call the API endpoint to get session details.
   let session = client.realtime().create( request ).await?;
 
-  tracing::info!( "Creating Realtime WebSocket Session Client..." );
+  tracing ::info!( "Creating Realtime WebSocket Session Client..." );
   let token = session.client_secret.value;
   // 4. Establish the WebSocket connection using the session token.
   let session_client  = WsSession::connect( client.environment().clone(), Some( &token ) ).await?;
 
-  // --- Optional: Create a user message first to provide context ---
+  // --- Optional : Create a user message first to provide context ---
   let content = RealtimeConversationItemContent::former()
   .r#type( "input_text" )
   .text( "What's the weather like in San Francisco?" )
@@ -80,10 +80,10 @@ async fn main() -> Result< (), OpenAIError >
   let cic_create = RealtimeClientEventConversationItemCreate::former()
   .item( ci_to_create )
   .form();
-  tracing::info!( "Sending preliminary conversation.item.create event..." );
+  tracing ::info!( "Sending preliminary conversation.item.create event..." );
   session_client.conversation_item_create( cic_create ).await?;
   // Wait briefly for the item to be potentially processed server-side
-  tokio::time::sleep( tokio::time::Duration::from_millis( 100 ) ).await;
+  tokio ::time::sleep( tokio::time::Duration::from_millis( 100 ) ).await;
 
 
   // 5. Prepare the client event to create a response.
@@ -91,23 +91,23 @@ async fn main() -> Result< (), OpenAIError >
   let response_params = RealtimeResponseCreateParams::former()
   .temperature( 0.9 ) // Override temperature for this response
   .modalities( vec![ "text".to_string(), "audio".to_string() ] ) // Specify expected modalities
-  // Example: Override context - use 'auto' (default) or 'none' or provide specific item references
+  // Example : Override context - use 'auto' (default) or 'none' or provide specific item references
   // .conversation("auto")
-  // .input(vec![RealtimeConversationItemWithReference::Reference { id: "user_item_id_123".to_string(), r#type: "item_reference".to_string() }])
+  // .input(vec![RealtimeConversationItemWithReference::Reference { id : "user_item_id_123".to_string(), r#type : "item_reference".to_string() }])
   .form();
 
   let rc_create = RealtimeClientEventResponseCreate::former()
   .response( response_params )
   .form();
 
-  tracing::info!( "Sending response.create event..." );
+  tracing ::info!( "Sending response.create event..." );
   // 6. Send the response create event over the WebSocket.
   session_client.response_create( rc_create ).await?;
 
   // 7. Loop to read responses, specifically looking for the ResponseCreated confirmation.
-  tracing::info!( "Waiting for response.created confirmation..." );
+  tracing ::info!( "Waiting for response.created confirmation..." );
   let mut confirmation_received = false;
-  let created_response_id = Arc::new( Mutex::new( None::<String> ) );
+  let created_response_id = Arc::new( Mutex::new( None::< String > ) );
 
   loop
   {
@@ -138,7 +138,7 @@ async fn main() -> Result< (), OpenAIError >
             {
               if done_event.response.id == expected
               {
-                println!( "Received response.done for the created response (ID: {}). Status: {}", expected, done_event.response.status );
+                println!( "Received response.done for the created response (ID: {}). Status : {}", expected, done_event.response.status );
                 // Now we can break, as the response is complete.
                 break;
               }
@@ -170,7 +170,7 @@ async fn main() -> Result< (), OpenAIError >
       }
       Err( e ) =>
       {
-        eprintln!( "\nError reading from WebSocket: {:?}", e );
+        eprintln!( "\nError reading from WebSocket : {:?}", e );
         return Err( e ); // Propagate the error
       }
     }
@@ -184,7 +184,7 @@ if created_response_id.lock().unwrap().is_none()
 {
       return Err( OpenAIError::WsInvalidMessage( "Did not receive expected response.created confirmation".to_string() ) );
     } else {
-      println!( "Warning: Response.created confirmation flag not set, but response ID was likely captured before loop exit." );
+      println!( "Warning : Response.created confirmation flag not set, but response ID was likely captured before loop exit." );
     }
   }
 

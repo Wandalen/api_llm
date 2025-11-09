@@ -20,13 +20,13 @@
 use api_huggingface::
 {
   Client,
-  environment::HuggingFaceEnvironmentImpl,
-  components::
+  environment ::HuggingFaceEnvironmentImpl,
+  components ::
   {
-  input::InferenceParameters,
-  models::Models,
+  input ::InferenceParameters,
+  models ::Models,
   },
-  secret::Secret,
+  secret ::Secret,
 };
 
 #[ tokio::main ]
@@ -54,20 +54,20 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
   .with_top_p( 0.9 );              // Nucleus sampling for response diversity
 
   println!( "📋 Configuration:" );
-  println!( "   Temperature: 0.7" );
-  println!( "   Max tokens: 150" );
-  println!( "   Top-p: 0.9\n" );
+  println!( "   Temperature : 0.7" );
+  println!( "   Max tokens : 150" );
+  println!( "   Top-p : 0.9\n" );
 
   // Step 4: Select a model
   // We're using Kimi-K2 - the recommended model for HuggingFace's new Router API
   // Excellent for reasoning, math, and conversational tasks
   let model = Models::kimi_k2_instruct();
-  println!( "🤖 Model: {model}\n" );
+  println!( "🤖 Model : {model}\n" );
 
   // Step 5: Ask a question
   // This is a static, predefined question for educational purposes
   let question = "What is artificial intelligence and how does it work?";
-  println!( "❓ Question: {question}\n" );
+  println!( "❓ Question : {question}\n" );
 
   // Step 6: Send request and receive response
   // The client sends an HTTP request to HuggingFace's API
@@ -88,7 +88,7 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
   Err( e ) =>
   {
       // If something goes wrong, display a helpful error message
-      eprintln!( "❌ Error: {e}" );
+      eprintln!( "❌ Error : {e}" );
       eprintln!( "\n💡 Troubleshooting:" );
       eprintln!( "   • Verify your HUGGINGFACE_API_KEY is set correctly" );
       eprintln!( "   • Check your internet connection" );

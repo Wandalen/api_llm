@@ -17,7 +17,7 @@
 use super::shared::{ *, IsolatedClient, should_run_real_api_tests };
 
 /// Tests environment details and configuration.
-/// Test Combination: E1.1
+/// Test Combination : E1.1
 /// Uses proper test isolation to prevent shared state issues.
 #[ tokio::test ]
 #[ allow( deprecated ) ]
@@ -47,6 +47,6 @@ async fn test_environment_details()
   
   println!("Environment test completed successfully");
   println!("Base URL: {}", base_url);
-  println!("Organization: {:?}", organization);
-  println!("Project: {:?}", project);
+  println!("Organization : {:?}", organization);
+  println!("Project : {:?}", project);
 }

@@ -2,16 +2,16 @@ use api_openai::ClientApiAccessors;
 /*
 use api_openai::
 {
-  client::Client,
-  error::OpenAIError,
-  api::responses::
+  client ::Client,
+  error ::OpenAIError,
+  api ::responses::
   {
     CreateResponseRequest,
     ResponseInput,
   },
-  components::
+  components ::
   {
-    common::ModelIdsResponses,
+    common ::ModelIdsResponses,
   },
 };
 

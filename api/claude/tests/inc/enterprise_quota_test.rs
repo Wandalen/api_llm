@@ -106,7 +106,7 @@ mod enterprise_quota_tests
     // 1000 input tokens, 500 output tokens
     let cost = pricing.calculate_cost( 1_000, 500 );
 
-    // Expected: (1000/1_000_000)*3.0 + (500/1_000_000)*15.0
+    // Expected : (1000/1_000_000)*3.0 + (500/1_000_000)*15.0
     //         = 0.003 + 0.0075 = 0.0105
     assert!( ( cost - 0.0105 ).abs() < 0.0001 );
   }

@@ -15,14 +15,14 @@
 //! ```no_run
 //! # use api_huggingface::reliability::{HealthChecker, HealthCheckConfig, HealthCheckStrategy};
 //! # use std::time::Duration;
-//! # async fn example( ) -> Result< ( ), Box< dyn std::error::Error >> {
+//! # async fn example( ) -> Result< ( ), Box< dyn std::error::Error > > {
 //! let health_checker = HealthChecker::new(
 //!   HealthCheckConfig {
-//!     endpoint: "https://api-inference.huggingface.co".to_string( ),
-//!     strategy: HealthCheckStrategy::LightweightApi,
-//!     check_interval: Duration::from_secs( 30 ),
-//!     timeout: Duration::from_secs( 5 ),
-//!     unhealthy_threshold: 3,
+//!     endpoint : "https://api-inference.huggingface.co".to_string( ),
+//!     strategy : HealthCheckStrategy::LightweightApi,
+//!     check_interval : Duration::from_secs( 30 ),
+//!     timeout : Duration::from_secs( 5 ),
+//!     unhealthy_threshold : 3,
 //!   }
 //! );
 //!
@@ -31,7 +31,7 @@
 //!
 //! // Check current health
 //! let status = health_checker.check_health( ).await?;
-//! println!( "Healthy: {}, Latency: {}ms", status.healthy, status.latency_ms );
+//! println!( "Healthy : {}, Latency : {}ms", status.healthy, status.latency_ms );
 //! # Ok( ( ))
 //! # }
 //! ```
@@ -132,7 +132,7 @@ pub struct HealthChecker
 {
   config : HealthCheckConfig,
   /// Internal health checker state ( public for testing )
-  pub state : Arc< RwLock< HealthCheckerState >>,
+  pub state : Arc< RwLock< HealthCheckerState > >,
 }
 
 impl HealthChecker 
@@ -283,7 +283,7 @@ impl HealthChecker
       .timeout( self.config.timeout )
       .build( )
       .map_err( |e| HealthCheckError::CheckFailed {
-  reason : format!( "Failed to create client: {e}" ),
+  reason : format!( "Failed to create client : {e}" ),
       } )?;
 
   let response = client
@@ -296,7 +296,7 @@ impl HealthChecker
           HealthCheckError::Timeout
   } else {
           HealthCheckError::CheckFailed {
-      reason : format!( "Ping failed: {e}" ),
+      reason : format!( "Ping failed : {e}" ),
           }
   }
       } )?;
@@ -306,7 +306,7 @@ impl HealthChecker
       Ok( ( ))
   } else {
       Err( HealthCheckError::CheckFailed {
-  reason : format!( "Ping returned status: {}", response.status( )),
+  reason : format!( "Ping returned status : {}", response.status( )),
       } )
   }
   }
@@ -319,7 +319,7 @@ impl HealthChecker
       .timeout( self.config.timeout )
       .build( )
       .map_err( |e| HealthCheckError::CheckFailed {
-  reason : format!( "Failed to create client: {e}" ),
+  reason : format!( "Failed to create client : {e}" ),
       } )?;
 
   let response = client
@@ -332,7 +332,7 @@ impl HealthChecker
           HealthCheckError::Timeout
   } else {
           HealthCheckError::CheckFailed {
-      reason : format!( "API check failed: {e}" ),
+      reason : format!( "API check failed : {e}" ),
           }
   }
       } )?;
@@ -342,7 +342,7 @@ impl HealthChecker
       Ok( ( ))
   } else {
       Err( HealthCheckError::CheckFailed {
-  reason : format!( "API returned status: {}", response.status( )),
+  reason : format!( "API returned status : {}", response.status( )),
       } )
   }
   }
@@ -355,7 +355,7 @@ impl HealthChecker
       .timeout( self.config.timeout )
       .build( )
       .map_err( |e| HealthCheckError::CheckFailed {
-  reason : format!( "Failed to create client: {e}" ),
+  reason : format!( "Failed to create client : {e}" ),
       } )?;
 
   // Simple test payload
@@ -374,7 +374,7 @@ impl HealthChecker
           HealthCheckError::Timeout
   } else {
           HealthCheckError::CheckFailed {
-      reason : format!( "Full endpoint check failed: {e}" ),
+      reason : format!( "Full endpoint check failed : {e}" ),
           }
   }
       } )?;
@@ -385,7 +385,7 @@ impl HealthChecker
       Ok( ( ))
   } else {
       Err( HealthCheckError::CheckFailed {
-  reason : format!( "Endpoint returned status: {}", response.status( )),
+  reason : format!( "Endpoint returned status : {}", response.status( )),
       } )
   }
   }
@@ -425,12 +425,12 @@ pub enum HealthCheckError
 impl core::fmt::Display for HealthCheckError 
 {
   #[ inline ]
-  fn fmt( &self, f : &mut core::fmt::Formatter<'_ > ) -> core::fmt::Result 
+  fn fmt( &self, f : &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result 
   {
   match self
   {
       Self::Timeout => write!( f, "Health check timed out" ),
-      Self::CheckFailed { reason } => write!( f, "Health check failed: {reason}" ),
+      Self::CheckFailed { reason } => write!( f, "Health check failed : {reason}" ),
   }
   }
 }

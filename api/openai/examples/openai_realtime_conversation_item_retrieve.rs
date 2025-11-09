@@ -10,10 +10,10 @@ use api_openai::ClientApiAccessors;
 #[ allow( unused_imports ) ]
 use api_openai::
 {
-  client::Client,
-  error::OpenAIError,
-  api::realtime::{ RealtimeClient, ws::WsSession },
-  components::realtime_shared::
+  client ::Client,
+  error ::OpenAIError,
+  api ::realtime::{ RealtimeClient, ws::WsSession },
+  components ::realtime_shared::
   {
     RealtimeSessionCreateRequest,
     RealtimeConversationItemContent,
@@ -22,7 +22,7 @@ use api_openai::
     RealtimeClientEventConversationItemRetrieve,
     RealtimeServerEvent,
   },
-  components::common::ModelIds,
+  components ::common::ModelIds,
 };
 
 use tracing_subscriber::{ EnvFilter, fmt }; // Added for logging
@@ -37,30 +37,30 @@ async fn main() -> Result< (), OpenAIError >
   .init();
 
   // Load environment variables
-  dotenv::from_filename( "./secret/-secret.sh" ).ok();
+  dotenv ::from_filename( "./secret/-secret.sh" ).ok();
 
   // 1. Create a new OpenAI client.
-  tracing::info!( "Initializing client..." );
+  tracing ::info!( "Initializing client..." );
   let client = Client::new();
 
   // 2. Create the request payload to initiate the session.
-  tracing::info!( "Building realtime session request..." );
+  tracing ::info!( "Building realtime session request..." );
   let request = RealtimeSessionCreateRequest::former()
   .model( "gpt-4o-realtime-preview".to_string() )
   .temperature( 0.7 )
   .form();
 
-  tracing::info!( "Sending request to OpenAI API to create session..." );
+  tracing ::info!( "Sending request to OpenAI API to create session..." );
   // 3. Call the API endpoint to get session details.
   let session = client.realtime().create( request ).await?;
 
-  tracing::info!( "Creating Realtime WebSocket Session Client..." );
+  tracing ::info!( "Creating Realtime WebSocket Session Client..." );
   let token = session.client_secret.value;
   // 4. Establish the WebSocket connection using the session token.
   let session_client  = WsSession::connect( client.environment().clone(), Some( &token ) ).await?;
 
   // --- Create an item first to get its ID ---
-  let item_id_to_retrieve = Arc::new( Mutex::new( None::<String> ) );
+  let item_id_to_retrieve = Arc::new( Mutex::new( None::< String > ) );
 
   // 5. Prepare the content for the conversation item to be created (and then retrieved).
   let content = RealtimeConversationItemContent::former()
@@ -80,12 +80,12 @@ async fn main() -> Result< (), OpenAIError >
   .item( ci_to_create )
   .form();
 
-  tracing::info!( "Sending conversation.item.create event to get an item ID..." );
+  tracing ::info!( "Sending conversation.item.create event to get an item ID..." );
   // 8. Send the create event over the WebSocket.
   session_client.conversation_item_create( cic_create ).await?;
 
   // 9. Loop to read responses, specifically looking for the creation confirmation.
-  tracing::info!( "Waiting for conversation.item.created confirmation to get ID..." );
+  tracing ::info!( "Waiting for conversation.item.created confirmation to get ID..." );
   loop
   {
     let response = session_client.read_event().await;
@@ -101,7 +101,7 @@ async fn main() -> Result< (), OpenAIError >
             println!( "{created_event:?}" );
             if let Some(id) = created_event.item.id
             {
-              println!( "Captured item ID for retrieval: {}", id );
+              println!( "Captured item ID for retrieval : {}", id );
               *item_id_to_retrieve.lock().unwrap() = Some( id );
               break; // Got the ID, break to proceed with retrieval
             }
@@ -122,7 +122,7 @@ async fn main() -> Result< (), OpenAIError >
       }
       Err( e ) =>
       {
-        eprintln!( "\nError reading from WebSocket: {:?}", e );
+        eprintln!( "\nError reading from WebSocket : {:?}", e );
         return Err( e );
       }
     }
@@ -142,12 +142,12 @@ if item_id.is_none()
   .item_id( &item_id )
   .form();
 
-  tracing::info!( item_id = %item_id, "Sending conversation.item.retrieve event..." );
+  tracing ::info!( item_id = %item_id, "Sending conversation.item.retrieve event..." );
   // 11. Send the retrieve event over the WebSocket.
   session_client.conversation_item_retrieve( cir_retrieve ).await?;
 
   // 12. Loop to read responses, specifically looking for the retrieval confirmation.
-  tracing::info!( "Waiting for conversation.item.retrieved confirmation..." );
+  tracing ::info!( "Waiting for conversation.item.retrieved confirmation..." );
   let mut confirmation_received = false;
   loop
   {
@@ -184,7 +184,7 @@ if item_id.is_none()
       }
       Err( e ) =>
       {
-        eprintln!( "\nError reading from WebSocket: {:?}", e );
+        eprintln!( "\nError reading from WebSocket : {:?}", e );
         return Err( e ); // Propagate the error
       }
     }

@@ -169,7 +169,7 @@ impl ChatCompletionRequestBuilder
   #[ inline ]
   pub fn max_tokens( mut self, max_tokens : i32 ) -> Self
   {
-    assert!( max_tokens > 0, "max_tokens must be positive, got: {max_tokens}" );
+    assert!( max_tokens > 0, "max_tokens must be positive, got : {max_tokens}" );
     self.max_tokens = Some( max_tokens );
     self
   }
@@ -183,7 +183,7 @@ impl ChatCompletionRequestBuilder
   #[ inline ]
   pub fn temperature( mut self, temperature : f32 ) -> Self
   {
-    assert!( ( 0.0..=2.0 ).contains( &temperature ), "Temperature must be between 0.0 and 2.0, got: {temperature}" );
+    assert!( ( 0.0..=2.0 ).contains( &temperature ), "Temperature must be between 0.0 and 2.0, got : {temperature}" );
     self.temperature = Some( temperature );
     self
   }
@@ -197,7 +197,7 @@ impl ChatCompletionRequestBuilder
   #[ inline ]
   pub fn top_p( mut self, top_p : f32 ) -> Self
   {
-    assert!( ( 0.0..=1.0 ).contains( &top_p ), "top_p must be between 0.0 and 1.0, got: {top_p}" );
+    assert!( ( 0.0..=1.0 ).contains( &top_p ), "top_p must be between 0.0 and 1.0, got : {top_p}" );
     self.top_p = Some( top_p );
     self
   }
@@ -211,7 +211,7 @@ impl ChatCompletionRequestBuilder
   #[ inline ]
   pub fn frequency_penalty( mut self, frequency_penalty : f32 ) -> Self
   {
-    assert!( ( -2.0..=2.0 ).contains( &frequency_penalty ), "frequency_penalty must be between -2.0 and 2.0, got: {frequency_penalty}" );
+    assert!( ( -2.0..=2.0 ).contains( &frequency_penalty ), "frequency_penalty must be between -2.0 and 2.0, got : {frequency_penalty}" );
     self.frequency_penalty = Some( frequency_penalty );
     self
   }
@@ -225,7 +225,7 @@ impl ChatCompletionRequestBuilder
   #[ inline ]
   pub fn presence_penalty( mut self, presence_penalty : f32 ) -> Self
   {
-    assert!( ( -2.0..=2.0 ).contains( &presence_penalty ), "presence_penalty must be between -2.0 and 2.0, got: {presence_penalty}" );
+    assert!( ( -2.0..=2.0 ).contains( &presence_penalty ), "presence_penalty must be between -2.0 and 2.0, got : {presence_penalty}" );
     self.presence_penalty = Some( presence_penalty );
     self
   }

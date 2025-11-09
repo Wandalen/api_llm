@@ -3,14 +3,14 @@
 use api_huggingface::
 {
   Client,
-  environment::HuggingFaceEnvironmentImpl,
-  secret::Secret,
-  components::
+  environment ::HuggingFaceEnvironmentImpl,
+  secret ::Secret,
+  components ::
   {
-  input::InferenceParameters,
-  inference_shared::{ InferenceRequest, InferenceOptions },
+  input ::InferenceParameters,
+  inference_shared ::{ InferenceRequest, InferenceOptions },
   },
-  error::{ HuggingFaceError, Result },
+  error ::{ HuggingFaceError, Result },
 };
 
 /// Helper function to create a test client
@@ -98,8 +98,8 @@ fn test_inference_parameters_validation_in_request()
 {
   // Setup - Create parameters with invalid values
   let invalid_params = InferenceParameters::new()
-  .with_temperature( -0.5 )  // Invalid: negative temperature
-  .with_max_new_tokens( 0 ); // Invalid: zero tokens
+  .with_temperature( -0.5 )  // Invalid : negative temperature
+  .with_max_new_tokens( 0 ); // Invalid : zero tokens
   
   // Execution & Verification
   let validation_result = invalid_params.validate();
@@ -173,7 +173,7 @@ fn test_input_text_validation()
   for input in valid_inputs
   {
   let result = validate_input_text( input );
-  assert!( result.is_ok(), "Input should be valid: '{input}'" );
+  assert!( result.is_ok(), "Input should be valid : '{input}'" );
   }
   
   // Setup & Execution & Verification - Invalid inputs
@@ -268,7 +268,7 @@ fn test_authentication_error_handling()
   let env_result = HuggingFaceEnvironmentImpl::build( empty_key, None );
   
   // Execution & Verification
-  // Note: The environment build might succeed but authentication will fail on API calls
+  // Note : The environment build might succeed but authentication will fail on API calls
   // This tests the error handling structure
   match env_result
   {
@@ -283,7 +283,7 @@ fn test_authentication_error_handling()
       match e
       {
   HuggingFaceError::Authentication( _ ) => {}, // Expected
-  other => panic!( "Expected Authentication error, got: {other:?}" ),
+  other => panic!( "Expected Authentication error, got : {other:?}" ),
       }
   }
   }
@@ -295,7 +295,7 @@ fn test_error_message_formatting()
 {
   // Setup - Create a validation error
   let invalid_params = InferenceParameters::new()
-  .with_temperature( 3.0 ); // Invalid: too high
+  .with_temperature( 3.0 ); // Invalid : too high
   
   // Execution
   let result = invalid_params.validate();

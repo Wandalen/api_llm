@@ -20,20 +20,20 @@ use api_openai::ClientApiAccessors;
 use api_openai::
 {
   Client,
-  error::OpenAIError,
-  environment::{ OpenaiEnvironment, OpenaiEnvironmentImpl, EnvironmentInterface },
-  secret::Secret,
-  sync::{ SyncClient, SyncEmbeddings, SyncChat, SyncModels },
+  error ::OpenAIError,
+  environment ::{ OpenaiEnvironment, OpenaiEnvironmentImpl, EnvironmentInterface },
+  secret ::Secret,
+  sync ::{ SyncClient, SyncEmbeddings, SyncChat, SyncModels },
 };
 use api_openai::components::
 {
-  chat_shared::{ ChatCompletionRequest, ChatCompletionRequestMessage, ChatCompletionRequestMessageContent },
-  embeddings_request::CreateEmbeddingRequest,
+  chat_shared ::{ ChatCompletionRequest, ChatCompletionRequestMessage, ChatCompletionRequestMessageContent },
+  embeddings_request ::CreateEmbeddingRequest,
 };
 use std::
 {
-  sync::{ Arc, atomic::{ AtomicU32, AtomicU64, Ordering }, Mutex },
-  time::{ Duration, Instant },
+  sync ::{ Arc, atomic::{ AtomicU32, AtomicU64, Ordering }, Mutex },
+  time ::{ Duration, Instant },
   thread,
 };
 use tokio::runtime::{ Runtime, Handle };
@@ -103,12 +103,12 @@ fn test_sync_embeddings_api()
   let result = sync_embeddings.create( request );
 
   // This should work with real implementation now
-  // Note: This may fail due to API key or network issues in test environment
+  // Note : This may fail due to API key or network issues in test environment
   match result
   {
     Ok( _response ) => assert!( true ), // Success case
     Err( error ) => {
-      panic!( "Real API call failed: {error:?}" );
+      panic!( "Real API call failed : {error:?}" );
     },
   }
 }
@@ -126,11 +126,11 @@ fn test_sync_chat_api()
   // Create a simple test message
   let message = ChatCompletionRequestMessage
   {
-    role: "user".to_string(),
-    content: Some( ChatCompletionRequestMessageContent::Text( "Say 'test' and nothing else".to_string() ) ),
-    name: None,
-    tool_calls: None,
-    tool_call_id: None,
+    role : "user".to_string(),
+    content : Some( ChatCompletionRequestMessageContent::Text( "Say 'test' and nothing else".to_string() ) ),
+    name : None,
+    tool_calls : None,
+    tool_call_id : None,
   };
 
   let request = ChatCompletionRequest
@@ -157,12 +157,12 @@ fn test_sync_chat_api()
   let result = sync_chat.create( request );
 
   // This should work with real implementation now
-  // Note: This may fail due to API key or network issues in test environment
+  // Note : This may fail due to API key or network issues in test environment
   match result
   {
     Ok( _response ) => assert!( true ), // Success case
     Err( error ) => {
-      panic!( "Real API call failed: {error:?}" );
+      panic!( "Real API call failed : {error:?}" );
     },
   }
 }
@@ -180,12 +180,12 @@ fn test_sync_models_api()
   let result = sync_models.list();
 
   // This should work with real implementation now
-  // Note: This may fail due to API key or network issues in test environment
+  // Note : This may fail due to API key or network issues in test environment
   match result
   {
     Ok( _response ) => assert!( true ), // Success case
     Err( error ) => {
-      panic!( "Real API call failed: {error:?}" );
+      panic!( "Real API call failed : {error:?}" );
     },
   }
 }
@@ -255,12 +255,12 @@ fn test_sync_api_runtime_management()
     let result = sync_embeddings.create( request );
 
     // This should work with real implementation now
-    // Note: This may fail due to API key or network issues in test environment
+    // Note : This may fail due to API key or network issues in test environment
     match result
     {
       Ok( _response ) => assert!( true ), // Success case
       Err( error ) => {
-      panic!( "Real API call failed: {error:?}" );
+      panic!( "Real API call failed : {error:?}" );
     },
     }
 
@@ -291,8 +291,8 @@ fn test_sync_api_timeout_behavior()
     secret,
     None,
     None,
-    api_openai::environment::OpenAIRecommended::base_url().to_string(),
-    api_openai::environment::OpenAIRecommended::realtime_base_url().to_string()
+    api_openai ::environment::OpenAIRecommended::base_url().to_string(),
+    api_openai ::environment::OpenAIRecommended::realtime_base_url().to_string()
   ).unwrap();
 
   let sync_client = SyncClient::new( env ).expect( "Sync client should be created" );
@@ -312,11 +312,11 @@ fn test_sync_api_timeout_behavior()
   {
     Ok( _response ) => assert!( true ), // Success case
     Err( error ) => {
-      panic!( "Real API call failed: {error:?}" );
+      panic!( "Real API call failed : {error:?}" );
     },
   }
   // Should complete in reasonable time (not hang indefinitely)
-  assert!( duration < Duration::from_secs( 30 ), "Request took too long: {:?}", duration );
+  assert!( duration < Duration::from_secs( 30 ), "Request took too long : {:?}", duration );
 }
 
 #[ test ]
@@ -342,7 +342,7 @@ fn test_sync_api_performance_overhead()
     let start = Instant::now();
     runtime.block_on( async {
       // Simulate async operation
-      tokio::time::sleep( Duration::from_micros( 100 ) ).await;
+      tokio ::time::sleep( Duration::from_micros( 100 ) ).await;
     });
     async_total += start.elapsed();
   }
@@ -366,7 +366,7 @@ fn test_sync_api_performance_overhead()
 
   // In test environment, sync wrapper may have higher overhead due to API call failures
   // Just ensure it doesn't crash and completes reasonably
-  assert!( overhead_ratio > 0.0, "Overhead ratio should be positive: {}x", overhead_ratio );
+  assert!( overhead_ratio > 0.0, "Overhead ratio should be positive : {}x", overhead_ratio );
   assert!( sync_avg < Duration::from_secs( 5 ), "Sync operations should complete in reasonable time" );
 }
 
@@ -391,12 +391,12 @@ fn test_sync_api_integration_with_rate_limiting()
     let result = sync_embeddings.create( request );
 
     // Should handle rate limiting gracefully
-    // Note: May fail due to API key or network issues in test environment
+    // Note : May fail due to API key or network issues in test environment
     match result
     {
       Ok( _response ) => assert!( true ), // Success case
       Err( error ) => {
-      panic!( "Real API call failed: {error:?}" );
+      panic!( "Real API call failed : {error:?}" );
     },
     }
   }
@@ -418,9 +418,9 @@ fn test_sync_api_integration_with_caching()
 
   // Both requests should have the same outcome (success or failure)
   // Fix(issue-003): Compare model lists by content, not order
-  // Root cause: OpenAI API can return models in different order between calls
+  // Root cause : OpenAI API can return models in different order between calls
   // This makes exact equality assertion fragile and causes spurious test failures
-  // Pitfall: Never assert exact equality on API responses that may have non-deterministic ordering
+  // Pitfall : Never assert exact equality on API responses that may have non-deterministic ordering
   match ( &result1, &result2 )
   {
     ( Ok( response1 ), Ok( response2 ) ) =>
@@ -452,12 +452,12 @@ fn test_sync_api_integration_with_retry_logic()
   let result = sync_embeddings.create( request );
 
   // Should handle retries gracefully within sync wrapper
-  // Note: May fail due to API key or network issues in test environment
+  // Note : May fail due to API key or network issues in test environment
   match result
   {
     Ok( _response ) => assert!( true ), // Success case
     Err( error ) => {
-      panic!( "Real API call failed: {error:?}" );
+      panic!( "Real API call failed : {error:?}" );
     },
   }
 }

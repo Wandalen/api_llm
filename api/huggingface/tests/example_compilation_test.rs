@@ -42,7 +42,7 @@
 //! **Pitfall:**
 //! Cargo silently ignores unregistered example files. When adding new examples,
 //! always add a corresponding `[[example]]` entry in Cargo.toml, otherwise the
-//! example will exist in the repo but be unusable. Use `cargo run --example <name >`
+//! example will exist in the repo but be unusable. Use `cargo run --example < name >`
 //! to verify the example is properly registered.
 
 use std::{ process::Command, fs, path::Path };
@@ -110,7 +110,7 @@ fn test_cargo_toml_examples_exist()
   {
   if line.trim().starts_with( "path = \"examples/" )
   {
-      // Extract path from: path = "examples/foo.rs"
+      // Extract path from : path = "examples/foo.rs"
       if let Some( start ) = line.find( "\"examples/" )
       {
   if let Some( end ) = line[ start + 1.. ].find( '"' )

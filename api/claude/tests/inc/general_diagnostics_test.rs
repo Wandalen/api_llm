@@ -203,8 +203,8 @@ mod general_diagnostics_functionality_tests
 
     let duration = start.elapsed();
 
-    // Performance expectation: 1000 collections should be under 50ms
-    assert!( duration.as_millis() < 50, "Diagnostics overhead should be minimal: {}ms", duration.as_millis() );
+    // Performance expectation : 1000 collections should be under 50ms
+    assert!( duration.as_millis() < 50, "Diagnostics overhead should be minimal : {}ms", duration.as_millis() );
   }
 
   /// Test real-time monitoring capabilities
@@ -367,7 +367,7 @@ mod general_diagnostics_integration_tests
     alerting.set_error_rate_threshold( 0.1 ); // 10% error rate
 
     let client = the_module::Client::new(
-      the_module::Secret::new_unchecked( "sk-ant-invalid-key".to_string() )
+      the_module ::Secret::new_unchecked( "sk-ant-invalid-key".to_string() )
     );
 
     // Generate requests that should trigger alerts

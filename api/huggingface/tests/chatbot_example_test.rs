@@ -6,13 +6,13 @@
 use api_huggingface::
 {
   Client,
-  environment::HuggingFaceEnvironmentImpl,
-  components::
+  environment ::HuggingFaceEnvironmentImpl,
+  components ::
   {
-  input::InferenceParameters,
-  models::Models,
+  input ::InferenceParameters,
+  models ::Models,
   },
-  secret::Secret,
+  secret ::Secret,
 };
 use std::collections::HashMap;
 use core::fmt::Write;

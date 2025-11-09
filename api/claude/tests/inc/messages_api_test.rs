@@ -8,8 +8,8 @@
 //! - Tests MUST FAIL IMMEDIATELY on any API endpoint errors
 //! - NO SILENT PASSES allowed when problems occur
 //!
-//! Run with: cargo test --features integration
-//! Requires: Valid `ANTHROPIC_API_KEY` in environment or ../../secret/-secrets.sh
+//! Run with : cargo test --features integration
+//! Requires : Valid `ANTHROPIC_API_KEY` in environment or ../../secret/-secrets.sh
 
 #[ allow( unused_imports ) ]
 use super::*;
@@ -22,7 +22,7 @@ async fn test_message_construction_user()
   
   match message.role
   {
-    the_module::Role::User => {},
+    the_module ::Role::User => {},
     _ => panic!( "Expected User role" ),
   }
   
@@ -39,7 +39,7 @@ async fn test_message_construction_assistant()
   
   match message.role
   {
-    the_module::Role::Assistant => {},
+    the_module ::Role::Assistant => {},
     _ => panic!( "Expected Assistant role" ),
   }
   
@@ -53,7 +53,7 @@ async fn test_create_message_request_basic()
 {
   // Test basic message request construction
   let messages = vec![
-    the_module::Message::user( "What is the capital of France?".to_string() )
+    the_module ::Message::user( "What is the capital of France?".to_string() )
   ];
   
   let request = the_module::CreateMessageRequest
@@ -81,7 +81,7 @@ async fn test_create_message_request_with_system_prompt()
 {
   // Test message request with system prompt
   let messages = vec![
-    the_module::Message::user( "Explain quantum physics".to_string() )
+    the_module ::Message::user( "Explain quantum physics".to_string() )
   ];
   
   let request = the_module::CreateMessageRequest
@@ -110,9 +110,9 @@ async fn test_create_message_request_conversation()
 {
   // Test multi-turn conversation
   let messages = vec![
-    the_module::Message::user( "Hello!".to_string() ),
-    the_module::Message::assistant( "Hi! How can I help you today?".to_string() ),
-    the_module::Message::user( "Can you explain machine learning?".to_string() ),
+    the_module ::Message::user( "Hello!".to_string() ),
+    the_module ::Message::assistant( "Hi! How can I help you today?".to_string() ),
+    the_module ::Message::user( "Can you explain machine learning?".to_string() ),
   ];
   
   let request = the_module::CreateMessageRequest
@@ -132,19 +132,19 @@ async fn test_create_message_request_conversation()
   // Verify conversation flow
   match request.messages[0].role
   {
-    the_module::Role::User => {},
+    the_module ::Role::User => {},
     _ => panic!( "Expected first message to be User" ),
   }
   
   match request.messages[1].role
   {
-    the_module::Role::Assistant => {},
+    the_module ::Role::Assistant => {},
     _ => panic!( "Expected second message to be Assistant" ),
   }
   
   match request.messages[2].role
   {
-    the_module::Role::User => {},
+    the_module ::Role::User => {},
     _ => panic!( "Expected third message to be User" ),
   }
 }
@@ -189,7 +189,7 @@ async fn test_create_message_request_validation()
   };
 
   // Test validation logic (if available)
-  // Note: This tests request structure validation, not API behavior
+  // Note : This tests request structure validation, not API behavior
   assert_eq!( request.model, "" );
   assert_eq!( request.max_tokens, 0 );
   assert!( request.messages.is_empty() );
@@ -224,11 +224,11 @@ async fn test_message_content_deserialization()
     ]
   }"#;
   
-  let message: the_module::Message = serde_json::from_str( json ).expect( "Should deserialize successfully" );
+  let message : the_module::Message = serde_json::from_str( json ).expect( "Should deserialize successfully" );
   
   match message.role
   {
-    the_module::Role::Assistant => {},
+    the_module ::Role::Assistant => {},
     _ => panic!( "Expected Assistant role" ),
   }
   
@@ -277,7 +277,7 @@ async fn test_create_message_response_structure()
     r#type : "message".to_string(),
     role : "assistant".to_string(),
     content : vec![
-      the_module::ResponseContent
+      the_module ::ResponseContent
       {
         r#type : "text".to_string(),
         text : Some( "Test response".to_string() ),
@@ -322,9 +322,9 @@ async fn integration_messages_api_real_request_response_structures()
     model : "claude-3-5-haiku-20241022".to_string(),
     max_tokens : 20,
     messages : vec![
-      the_module::Message::user( "What is 2+2?".to_string() ),
-      the_module::Message::assistant( "2+2 equals 4.".to_string() ),
-      the_module::Message::user( "What about 3+3?".to_string() ),
+      the_module ::Message::user( "What is 2+2?".to_string() ),
+      the_module ::Message::assistant( "2+2 equals 4.".to_string() ),
+      the_module ::Message::user( "What about 3+3?".to_string() ),
     ],
     system : Some( vec![ the_module::SystemContent::text( "You are a helpful math tutor." ) ] ),
     temperature : Some( 0.1 ),
@@ -341,7 +341,7 @@ async fn integration_messages_api_real_request_response_structures()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted - this confirms real API usage" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION: Complex messages API call must work: {err}" ),
+    Err( err ) => panic!( "INTEGRATION: Complex messages API call must work : {err}" ),
   };
 
   // Verify real API response structure matches our types
@@ -362,9 +362,9 @@ async fn integration_messages_api_real_request_response_structures()
   
   println!( "✅ Messages API integration test passed!" );
   println!( "   Message ID: {}", response.id );
-  println!( "   Input tokens: {}", response.usage.input_tokens );
-  println!( "   Output tokens: {}", response.usage.output_tokens );
-  println!( "   Stop reason: {:?}", response.stop_reason );
+  println!( "   Input tokens : {}", response.usage.input_tokens );
+  println!( "   Output tokens : {}", response.usage.output_tokens );
+  println!( "   Stop reason : {:?}", response.stop_reason );
 }
 
 #[ tokio::test ]
@@ -398,9 +398,9 @@ async fn integration_messages_api_real_serialization_roundtrip()
   let content_text = response.content[0].text.as_ref()
     .expect( "Response must have text content" );
   assert!( content_text.to_lowercase().contains( "hello" ), 
-    "API should respond with greeting, got: {content_text}" );
+    "API should respond with greeting, got : {content_text}" );
     
   println!( "✅ Messages API serialization integration test passed!" );
   println!( "   Request/response roundtrip successful" );
-  println!( "   Response: {content_text}" );
+  println!( "   Response : {content_text}" );
 }

@@ -60,9 +60,9 @@ fn load_secret_from_env( env_var : &str ) -> Result< String, String >
 fn load_secret_from_path( path : &Path ) -> Result< String, String >
 {
   let secret_string = fs::read_to_string( path )
-    .map_err( | e | format!( "Failed to read secret file: {e}" ) )?;
+    .map_err( | e | format!( "Failed to read secret file : {e}" ) )?;
   validate_api_key_format( secret_string.trim() )
-    .map_err( | e | format!( "Invalid secret format in file: {e}" ) )?;
+    .map_err( | e | format!( "Invalid secret format in file : {e}" ) )?;
   Ok( secret_string.trim().to_string() )
 }
 
@@ -167,7 +167,7 @@ fn test_api_key_validation_valid_characters()
   for valid_key in valid_keys
   {
     let result = validate_api_key_format( valid_key );
-    assert!( result.is_ok(), "Should accept valid key: {valid_key}" );
+    assert!( result.is_ok(), "Should accept valid key : {valid_key}" );
   }
 }
 
@@ -185,14 +185,14 @@ fn test_env_loading_missing_var()
 fn test_env_loading_invalid_format()
 {
   // Set invalid API key format in environment
-  std::env::set_var( "TEST_INVALID_API_KEY", "invalid_format" );
+  std ::env::set_var( "TEST_INVALID_API_KEY", "invalid_format" );
   
   let result = load_secret_from_env( "TEST_INVALID_API_KEY" );
   assert!( result.is_err(), "Should fail with invalid API key format" );
   assert!( result.unwrap_err().contains( "Invalid secret format" ), "Error should mention format validation" );
   
   // Clean up
-  std::env::remove_var( "TEST_INVALID_API_KEY" );
+  std ::env::remove_var( "TEST_INVALID_API_KEY" );
 }
 
 /// Test environment variable loading with valid format
@@ -200,13 +200,13 @@ fn test_env_loading_invalid_format()
 fn test_env_loading_valid_format()
 {
   // Set valid API key format in environment
-  std::env::set_var( "TEST_VALID_API_KEY", "sk-test1234567890" );
+  std ::env::set_var( "TEST_VALID_API_KEY", "sk-test1234567890" );
   
   let result = load_secret_from_env( "TEST_VALID_API_KEY" );
   assert!( result.is_ok(), "Should succeed with valid API key format" );
   
   // Clean up
-  std::env::remove_var( "TEST_VALID_API_KEY" );
+  std ::env::remove_var( "TEST_VALID_API_KEY" );
 }
 
 /// Test file loading with nonexistent file
@@ -225,7 +225,7 @@ fn test_file_loading_nonexistent_file()
 fn test_file_loading_invalid_format()
 {
   let temp_file = NamedTempFile::new().expect( "Failed to create temp file" );
-  fs::write( temp_file.path(), "invalid_api_key_format" ).expect( "Failed to write to temp file" );
+  fs ::write( temp_file.path(), "invalid_api_key_format" ).expect( "Failed to write to temp file" );
   
   let result = load_secret_from_path( temp_file.path() );
   assert!( result.is_err(), "Should fail with invalid format in file" );
@@ -237,7 +237,7 @@ fn test_file_loading_invalid_format()
 fn test_file_loading_valid_format()
 {
   let temp_file = NamedTempFile::new().expect( "Failed to create temp file" );
-  fs::write( temp_file.path(), "sk-test1234567890" ).expect( "Failed to write to temp file" );
+  fs ::write( temp_file.path(), "sk-test1234567890" ).expect( "Failed to write to temp file" );
   
   let result = load_secret_from_path( temp_file.path() );
   assert!( result.is_ok(), "Should succeed with valid format in file" );
@@ -257,7 +257,7 @@ fn test_file_loading_handles_whitespace()
   for ( key_with_whitespace, description ) in test_cases
   {
     let temp_file = NamedTempFile::new().expect( "Failed to create temp file" );
-    fs::write( temp_file.path(), key_with_whitespace ).expect( "Failed to write to temp file" );
+    fs ::write( temp_file.path(), key_with_whitespace ).expect( "Failed to write to temp file" );
     
     let result = load_secret_from_path( temp_file.path() );
     assert!( result.is_ok(), "Should handle {description}" );
@@ -269,7 +269,7 @@ fn test_file_loading_handles_whitespace()
 fn test_file_loading_empty_file()
 {
   let temp_file = NamedTempFile::new().expect( "Failed to create temp file" );
-  fs::write( temp_file.path(), "" ).expect( "Failed to write to temp file" );
+  fs ::write( temp_file.path(), "" ).expect( "Failed to write to temp file" );
   
   let result = load_secret_from_path( temp_file.path() );
   assert!( result.is_err(), "Should fail with empty file" );
@@ -290,7 +290,7 @@ fn test_file_loading_whitespace_only()
   for whitespace in whitespace_cases
   {
     let temp_file = NamedTempFile::new().expect( "Failed to create temp file" );
-    fs::write( temp_file.path(), whitespace ).expect( "Failed to write to temp file" );
+    fs ::write( temp_file.path(), whitespace ).expect( "Failed to write to temp file" );
     
     let result = load_secret_from_path( temp_file.path() );
     assert!( result.is_err(), "Should fail with whitespace-only file" );
@@ -328,6 +328,6 @@ fn test_error_message_quality()
     }
     
     // Error messages should not be too short (at least 20 characters)
-    assert!( error_msg.len() >= 20, "Error message for '{test_name}' should be descriptive: {error_msg}" );
+    assert!( error_msg.len() >= 20, "Error message for '{test_name}' should be descriptive : {error_msg}" );
   }
 }

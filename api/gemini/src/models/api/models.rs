@@ -49,9 +49,9 @@ impl ModelsApi< '_ >
   ///
   /// // Print model names and capabilities
   /// for model in &response.models {
-  ///   println!( "Model: {} - {}", model.name, model.display_name.as_deref().unwrap_or("N/A") );
+  ///   println!( "Model : {} - {}", model.name, model.display_name.as_deref().unwrap_or("N/A") );
   ///   if let Some( ref supported_generation_methods ) = model.supported_generation_methods {
-  ///     println!( "  Supported methods: {:?}", supported_generation_methods );
+  ///     println!( "  Supported methods : {:?}", supported_generation_methods );
   ///   }
   /// }
   /// # Ok( () )
@@ -62,7 +62,7 @@ impl ModelsApi< '_ >
   {
     let url = format!( "{}/v1beta/models", self.client.base_url );
 
-    http::execute_with_optional_retries::< (), ListModelsResponse >
+    http ::execute_with_optional_retries::< (), ListModelsResponse >
     (
       self.client,
       Method::GET,
@@ -83,16 +83,16 @@ impl ModelsApi< '_ >
   /// # Arguments
   ///
   /// * `model_id` - The model identifier. Can be:
-  ///   - Simple name: `"gemini-2.0-flash-experimental"`
-  ///   - Full name: `"models/gemini-2.0-flash-experimental"`
+  ///   - Simple name : `"gemini-2.0-flash-experimental"`
+  ///   - Full name : `"models/gemini-2.0-flash-experimental"`
   ///
   /// # Returns
   ///
   /// Returns a [`Model`] object containing detailed information about the model:
-  /// - Basic info: name, display name, description
-  /// - Capabilities: supported generation methods, modalities
-  /// - Limits: input/output token limits, rate limits
-  /// - Version info: version, creation date
+  /// - Basic info : name, display name, description
+  /// - Capabilities : supported generation methods, modalities
+  /// - Limits : input/output token limits, rate limits
+  /// - Version info : version, creation date
   ///
   /// # Errors
   ///
@@ -114,7 +114,7 @@ impl ModelsApi< '_ >
   ///
   /// // Get model by simple name
   /// let model = models_api.get( "gemini-2.0-flash-experimental" ).await?;
-  /// println!( "Model: {} - {}",
+  /// println!( "Model : {} - {}",
   ///   model.display_name.as_deref().unwrap_or( "N/A" ),
   ///   model.name
   /// );
@@ -129,16 +129,16 @@ impl ModelsApi< '_ >
   ///
   /// // Check token limits
   /// if let Some( input_limit ) = model.input_token_limit {
-  ///   println!( "Max input tokens: {}", input_limit );
+  ///   println!( "Max input tokens : {}", input_limit );
   /// }
   /// if let Some( output_limit ) = model.output_token_limit {
-  ///   println!( "Max output tokens: {}", output_limit );
+  ///   println!( "Max output tokens : {}", output_limit );
   /// }
   /// # Ok( () )
   /// # }
   /// ```
   #[ inline ]
-  pub async fn get( &self, model_id: &str ) -> Result< Model, Error >
+  pub async fn get( &self, model_id : &str ) -> Result< Model, Error >
   {
     // Remove "models/" prefix if already present for clean URL construction
     let clean_model_id = model_id.strip_prefix( "models/" ).unwrap_or( model_id );
@@ -153,7 +153,7 @@ impl ModelsApi< '_ >
 
     let url = format!( "{}/v1beta/models/{clean_model_id}", self.client.base_url );
 
-    http::execute_with_optional_retries::< (), Model >
+    http ::execute_with_optional_retries::< (), Model >
     (
       self.client,
       Method::GET,
@@ -192,12 +192,12 @@ impl ModelsApi< '_ >
   ///
   /// // Use the model handle for operations
   /// let request = GenerateContentRequest {
-  ///   contents: vec![ Content {
-  ///     parts: vec![ Part {
-  ///       text: Some( "Hello!".to_string() ),
+  ///   contents : vec![ Content {
+  ///     parts : vec![ Part {
+  ///       text : Some( "Hello!".to_string() ),
   ///       ..Default::default()
   ///     } ],
-  ///     role: "user".to_string(),
+  ///     role : "user".to_string(),
   ///   } ],
   ///   ..Default::default()
   /// };
@@ -208,37 +208,37 @@ impl ModelsApi< '_ >
   /// ```
   #[ must_use ]
   #[ inline ]
-  pub fn by_name( &self, model_id: &str ) -> ModelApi< '_ >
+  pub fn by_name( &self, model_id : &str ) -> ModelApi< '_ >
   {
     ModelApi {
-      client: self.client,
-      model_id: model_id.to_string(),
+      client : self.client,
+      model_id : model_id.to_string(),
     }
   }
 
   /// Enhance errors from list operation with additional context.
-  fn enhance_list_error( error: Error ) -> Error
+  fn enhance_list_error( error : Error ) -> Error
   {
     match error
     {
       Error::NetworkError( ref msg ) =>
         Error::NetworkError(
-          format!( "Failed to retrieve model list: {msg}. Please check your internet connection and try again." )
+          format!( "Failed to retrieve model list : {msg}. Please check your internet connection and try again." )
         ),
       Error::AuthenticationError( ref msg ) =>
         Error::AuthenticationError(
-          format!( "Authentication failed while listing models: {msg}. Please verify your API key." )
+          format!( "Authentication failed while listing models : {msg}. Please verify your API key." )
         ),
       Error::ServerError( ref msg ) =>
         Error::ServerError(
-          format!( "Gemini API server error while listing models: {msg}" )
+          format!( "Gemini API server error while listing models : {msg}" )
         ),
       other => other,
     }
   }
 
   /// Enhance errors from get operation with model-specific context.
-  fn enhance_get_error( model_id: &str, error: Error ) -> Error
+  fn enhance_get_error( model_id : &str, error : Error ) -> Error
   {
     match error
     {
@@ -292,21 +292,21 @@ impl ModelsApi< '_ >
   /// let models_api = client.models();
   ///
   /// let content = Content {
-  ///   parts: vec![ Part {
-  ///     text: Some( "Hello world".to_string() ),
+  ///   parts : vec![ Part {
+  ///     text : Some( "Hello world".to_string() ),
   ///     ..Default::default()
   ///   } ],
-  ///   role: "user".to_string(),
+  ///   role : "user".to_string(),
   /// };
   ///
   /// let request = CountTokensRequest {
-  ///   contents: vec![ content ],
-  ///   generate_content_request: None,
+  ///   contents : vec![ content ],
+  ///   generate_content_request : None,
   /// };
   ///
   /// // Direct token counting
   /// let response = models_api.count_tokens( "gemini-1.5-flash", &request ).await?;
-  /// println!( "Tokens: {}", response.total_tokens );
+  /// println!( "Tokens : {}", response.total_tokens );
   /// # Ok( () )
   /// # }
   /// ```
@@ -336,10 +336,10 @@ impl ModelApi< '_ >
   /// # Returns
   ///
   /// Returns a [`Model`] object containing:
-  /// - Basic information: name, display name, description
-  /// - Capabilities: supported generation methods, input/output modalities
-  /// - Limits: token limits, rate limits, safety settings
-  /// - Version: model version, creation date, update date
+  /// - Basic information : name, display name, description
+  /// - Capabilities : supported generation methods, input/output modalities
+  /// - Limits : token limits, rate limits, safety settings
+  /// - Version : model version, creation date, update date
   ///
   /// # Errors
   ///
@@ -361,7 +361,7 @@ impl ModelApi< '_ >
   /// let model = models_api.by_name( "gemini-2.0-flash-experimental" );
   ///
   /// let info = model.get().await?;
-  /// println!( "Model: {} ({})", info.display_name.as_deref().unwrap_or( "N/A" ), info.name );
+  /// println!( "Model : {} ({})", info.display_name.as_deref().unwrap_or( "N/A" ), info.name );
   ///
   /// // Check what the model can do
   /// if let Some( ref methods ) = info.supported_generation_methods {
@@ -377,7 +377,7 @@ impl ModelApi< '_ >
   ///
   /// // Check token limits
   /// if let Some( input_limit ) = info.input_token_limit {
-  ///   println!( "Max input tokens: {}", input_limit );
+  ///   println!( "Max input tokens : {}", input_limit );
   /// }
   /// # Ok( () )
   /// # }
@@ -390,7 +390,7 @@ impl ModelApi< '_ >
 
     let url = format!( "{}/v1beta/models/{clean_model_id}", self.client.base_url );
 
-    http::execute_with_optional_retries::< (), Model >
+    http ::execute_with_optional_retries::< (), Model >
     (
       self.client,
       Method::GET,
@@ -464,7 +464,7 @@ impl ModelApi< '_ >
   #[ inline ]
   pub fn websocket_stream( &self ) -> crate::models::websocket_streaming::WebSocketStreamBuilder< '_ >
   {
-    crate::models::websocket_streaming::WebSocketStreamBuilder::new( self )
+    crate ::models::websocket_streaming::WebSocketStreamBuilder::new( self )
   }
 
   /// Create a fine-tuning job for custom model training.
@@ -505,7 +505,7 @@ impl ModelApi< '_ >
   #[ inline ]
   pub fn fine_tune( &self ) -> crate::models::model_tuning::FineTuningBuilder< '_ >
   {
-    crate::models::model_tuning::FineTuningBuilder::new( self )
+    crate ::models::model_tuning::FineTuningBuilder::new( self )
   }
 
   /// Deploy a model to production environments.
@@ -535,7 +535,7 @@ impl ModelApi< '_ >
   #[ inline ]
   pub fn deploy( &self ) -> crate::models::model_deployment::DeploymentBuilder< '_ >
   {
-    crate::models::model_deployment::DeploymentBuilder::new( self )
+    crate ::models::model_deployment::DeploymentBuilder::new( self )
   }
 
   /// Counts the number of tokens in the provided content.
@@ -576,12 +576,12 @@ impl ModelApi< '_ >
   ///
   /// // Count tokens for simple text
   /// let request = CountTokensRequest {
-  ///   contents: vec![ Content {
-  ///     parts: vec![ Part {
-  ///       text: Some( "How many tokens is this?".to_string() ),
+  ///   contents : vec![ Content {
+  ///     parts : vec![ Part {
+  ///       text : Some( "How many tokens is this?".to_string() ),
   ///       ..Default::default()
   ///     } ],
-  ///     role: "user".to_string(),
+  ///     role : "user".to_string(),
   ///   } ],
   ///   ..Default::default()
   /// };
@@ -593,7 +593,7 @@ impl ModelApi< '_ >
   /// let model_info = model.get().await?;
   /// if let Some( limit ) = model_info.input_token_limit {
   ///   if response.total_tokens > limit {
-  ///     println!( "Warning: Input exceeds model limit of {} tokens", limit );
+  ///     println!( "Warning : Input exceeds model limit of {} tokens", limit );
   ///   }
   /// }
   /// # Ok( () )
@@ -622,7 +622,7 @@ impl ModelApi< '_ >
       self.model_id
     );
 
-    http::execute_with_optional_retries
+    http ::execute_with_optional_retries
     (
       self.client,
       Method::POST,
@@ -635,7 +635,7 @@ impl ModelApi< '_ >
   }
 
   /// Enhance errors from model operations with model-specific context.
-  pub( super ) fn enhance_model_operation_error( &self, operation: &str, error: Error ) -> Error
+  pub( super ) fn enhance_model_operation_error( &self, operation : &str, error : Error ) -> Error
   {
     match error
     {

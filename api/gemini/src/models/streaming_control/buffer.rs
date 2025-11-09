@@ -13,7 +13,7 @@ pub enum BufferStrategy
   /// Use a chunked buffer for large streams
   Chunked {
     /// Size of each chunk in the buffer
-    chunk_size: usize
+    chunk_size : usize
   },
 }
 
@@ -23,29 +23,29 @@ pub( crate ) enum StreamBuffer< T >
   Vector( Vec< Result< T, crate::error::Error > > ),
   Circular( VecDeque< Result< T, crate::error::Error > > ),
   Chunked {
-    chunks: Vec< Vec< Result< T, crate::error::Error > > >,
-    current_chunk: Vec< Result< T, crate::error::Error > >,
-    chunk_size: usize
+    chunks : Vec< Vec< Result< T, crate::error::Error > > >,
+    current_chunk : Vec< Result< T, crate::error::Error > >,
+    chunk_size : usize
   },
 }
 
 impl< T > StreamBuffer< T >
 {
-  pub fn new( strategy: &BufferStrategy, _chunk_size: Option< usize > ) -> Self
+  pub fn new( strategy : &BufferStrategy, _chunk_size : Option< usize > ) -> Self
   {
     match strategy
     {
       BufferStrategy::Vector => Self::Vector( Vec::new() ),
       BufferStrategy::Circular => Self::Circular( VecDeque::new() ),
       BufferStrategy::Chunked { chunk_size } => Self::Chunked {
-        chunks: Vec::new(),
-        current_chunk: Vec::new(),
-        chunk_size: *chunk_size,
+        chunks : Vec::new(),
+        current_chunk : Vec::new(),
+        chunk_size : *chunk_size,
       },
     }
   }
 
-  pub fn push( &mut self, item: Result< T, crate::error::Error > )
+  pub fn push( &mut self, item : Result< T, crate::error::Error > )
   {
     match self
     {
@@ -55,7 +55,7 @@ impl< T > StreamBuffer< T >
         if current_chunk.len() >= *chunk_size
         {
           let mut new_chunk = Vec::new();
-          std::mem::swap( current_chunk, &mut new_chunk );
+          std ::mem::swap( current_chunk, &mut new_chunk );
           chunks.push( new_chunk );
           current_chunk.clear();
         }

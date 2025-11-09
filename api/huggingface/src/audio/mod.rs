@@ -15,7 +15,7 @@
 //! # use api_huggingface::{Client, environment::HuggingFaceEnvironmentImpl, secret::Secret};
 //! # use api_huggingface::audio::AudioInput;
 //! # use std::fs;
-//! # async fn example() -> Result< (), Box< dyn std::error::Error >> {
+//! # async fn example() -> Result< (), Box< dyn std::error::Error > > {
 //! # let api_key = Secret::new("test".to_string());
 //! # let env = HuggingFaceEnvironmentImpl::build(api_key, None)?;
 //! # let client = Client::build(env)?;
@@ -26,7 +26,7 @@
 //!
 //! // Transcribe speech
 //! let result = audio.transcribe( input, "openai/whisper-base" ).await?;
-//! println!( "Transcription: {}", result );
+//! println!( "Transcription : {}", result );
 //! # Ok(())
 //! # }
 //! ```

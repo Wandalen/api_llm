@@ -12,13 +12,13 @@ use crate::error::Result;
 pub struct ApiConnectorConfig
 {
   /// Base URL for the API
-  pub base_url: String,
+  pub base_url : String,
   /// Authentication configuration
-  pub authentication: ApiAuthentication,
+  pub authentication : ApiAuthentication,
   /// Rate limiting configuration
-  pub rate_limits: Option< RateLimitConfig >,
+  pub rate_limits : Option< RateLimitConfig >,
   /// Retry configuration
-  pub retry_config: Option< RetryConfig >,
+  pub retry_config : Option< RetryConfig >,
 }
 
 /// Authentication methods for third-party APIs.
@@ -31,29 +31,29 @@ pub enum ApiAuthentication
   ApiKey
   {
     /// Header name
-    header: String,
+    header : String,
     /// API key value
-    key: String,
+    key : String,
   },
   /// Bearer token authentication
   Bearer
   {
     /// Bearer token
-    token: String,
+    token : String,
   },
   /// `OAuth2` authentication
   OAuth2
   {
     /// Client ID
-    client_id: String,
+    client_id : String,
     /// Client secret
-    client_secret: String,
+    client_secret : String,
   },
   /// Custom headers
   Custom
   {
     /// Custom headers
-    headers: HashMap<  String, String  >,
+    headers : HashMap<  String, String  >,
   },
 }
 
@@ -62,11 +62,11 @@ pub enum ApiAuthentication
 pub struct RateLimitConfig
 {
   /// Requests per minute
-  pub requests_per_minute: u32,
+  pub requests_per_minute : u32,
   /// Requests per hour
-  pub requests_per_hour: u32,
+  pub requests_per_hour : u32,
   /// Burst limit
-  pub burst_limit: u32,
+  pub burst_limit : u32,
 }
 
 /// Retry configuration.
@@ -74,18 +74,18 @@ pub struct RateLimitConfig
 pub struct RetryConfig
 {
   /// Maximum number of retries
-  pub max_retries: u32,
+  pub max_retries : u32,
   /// Base delay between retries
-  pub base_delay: Duration,
+  pub base_delay : Duration,
   /// Maximum delay between retries
-  pub max_delay: Duration,
+  pub max_delay : Duration,
   /// Exponential backoff factor
-  pub backoff_factor: f64,
+  pub backoff_factor : f64,
 }
 
 /// Trait for third-party API connectors.
 #[ async_trait::async_trait ]
-pub trait ApiConnector: Send + Sync
+pub trait ApiConnector : Send + Sync
 {
   /// Connector name
   fn name( &self ) -> &str;
@@ -96,8 +96,8 @@ pub trait ApiConnector: Send + Sync
   /// Make a request to the API
   async fn make_request(
     &self,
-    method: &str,
-    endpoint: &str,
-    body: Option< serde_json::Value >
+    method : &str,
+    endpoint : &str,
+    body : Option< serde_json::Value >
   ) -> Result< serde_json::Value >;
 }

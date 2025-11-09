@@ -19,7 +19,7 @@
 //!   - `"length"`: `max_tokens` limit reached
 //!
 //! - **Multi-Turn Conversation**: When sending tool results, must include
-//!   full conversation history: original user message, assistant's tool call
+//!   full conversation history : original user message, assistant's tool call
 //!   message, and tool result message(s).
 //!
 //! - **Tool Definition Format**: Uses JSON Schema for parameter specification.
@@ -90,7 +90,7 @@ async fn test_tool_calling_basic()
   // If it decides to call the function, finish_reason should be "tool_calls"
   if let Some( ref finish_reason ) = choice.finish_reason
   {
-    println!( "Finish reason: {finish_reason}" );
+    println!( "Finish reason : {finish_reason}" );
 
     if finish_reason == "tool_calls"
     {
@@ -113,8 +113,8 @@ async fn test_tool_calling_basic()
         .expect( "Arguments should be valid JSON" );
 
       println!( "Tool call ID: {}", tool_call.id );
-      println!( "Function name: {}", tool_call.function.name );
-      println!( "Arguments: {args}" );
+      println!( "Function name : {}", tool_call.function.name );
+      println!( "Arguments : {args}" );
 
       // Verify location is in arguments
       assert!( args[ "location" ].is_string(), "Location should be a string" );
@@ -182,7 +182,7 @@ async fn test_tool_calling_with_execution()
       let args : serde_json::Value = serde_json::from_str( &tool_call.function.arguments )
         .expect( "Arguments should be valid JSON" );
 
-      println!( "Model requested calculation: {args:?}" );
+      println!( "Model requested calculation : {args:?}" );
 
       // Simulate function execution
       let result = json!({
@@ -214,7 +214,7 @@ async fn test_tool_calling_with_execution()
       );
 
       let content = followup_choice.message.content.as_ref().unwrap();
-      println!( "Final response: {content}" );
+      println!( "Final response : {content}" );
 
       // Verify the response mentions the result
       assert!(
@@ -283,8 +283,8 @@ async fn test_tool_calling_multiple_tools()
 
     for tool_call in tool_calls
     {
-      println!( "Tool: {}", tool_call.function.name );
-      println!( "Arguments: {}", tool_call.function.arguments );
+      println!( "Tool : {}", tool_call.function.name );
+      println!( "Arguments : {}", tool_call.function.arguments );
     }
   }
 

@@ -26,24 +26,24 @@
 //!
 //! match result
 //! {
-//!   Ok( response ) => println!( "Response: {}", response.extract_text_or_default( "" ) ),
-//!   Err( e ) => eprintln!( "Error: {}", e ),
+//!   Ok( response ) => println!( "Response : {}", response.extract_text_or_default( "" ) ),
+//!   Err( e ) => eprintln!( "Error : {}", e ),
 //! }
 //! ```
 
 use crate::
 {
   Client,
-  environment::HuggingFaceEnvironmentImpl,
-  secret::Secret,
-  error::{ Result, HuggingFaceError },
-  components::
+  environment ::HuggingFaceEnvironmentImpl,
+  secret ::Secret,
+  error ::{ Result, HuggingFaceError },
+  components ::
   {
-  input::InferenceParameters,
-  inference_shared::InferenceResponse,
+  input ::InferenceParameters,
+  inference_shared ::InferenceResponse,
   },
-  token_counter::{ TokenCounter, CountingStrategy },
-  cache::{ Cache, CacheConfig },
+  token_counter ::{ TokenCounter, CountingStrategy },
+  cache ::{ Cache, CacheConfig },
 };
 
 use std::sync::Arc;
@@ -58,7 +58,7 @@ use tokio::sync::mpsc;
 ///
 /// ```no_run
 /// # use api_huggingface::{sync::SyncClient, components::input::InferenceParameters};
-/// # fn example() -> Result< (), Box< dyn std::error::Error >> {
+/// # fn example() -> Result< (), Box< dyn std::error::Error > > {
 /// # let client = SyncClient::new("hf_test".to_string())?;
 /// # let params = InferenceParameters::new();
 /// let stream = client.inference().create_stream( "Hello", "model", params )?;
@@ -68,7 +68,7 @@ use tokio::sync::mpsc;
 ///   match token_result
 ///   {
 ///     Ok( token ) => print!( "{token}" ),
-///     Err( e ) => eprintln!( "Error: {e}" ),
+///     Err( e ) => eprintln!( "Error : {e}" ),
 ///   }
 /// }
 /// # Ok(())
@@ -97,11 +97,11 @@ impl Iterator for SyncStream
 impl core::fmt::Debug for SyncStream
 {
   #[ inline ]
-  fn fmt( &self, f : &mut core::fmt::Formatter<'_ > ) -> core::fmt::Result
+  fn fmt( &self, f : &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result
   {
   f.debug_struct( "SyncStream" )
-      .field( "receiver", &"<Receiver >" )
-      .field( "runtime", &"<Runtime >" )
+      .field( "receiver", &"< Receiver >" )
+      .field( "runtime", &"< Runtime >" )
       .finish()
   }
 }
@@ -114,14 +114,14 @@ impl core::fmt::Debug for SyncStream
 ///
 /// ```no_run
 /// # use api_huggingface::sync::SyncClient;
-/// # fn example() -> Result< (), Box< dyn std::error::Error >> {
+/// # fn example() -> Result< (), Box< dyn std::error::Error > > {
 /// let client = SyncClient::new( "api_key".to_string() )?;
 /// let cache = client.cache();
 ///
 /// cache.insert( "key", "value", None );
 /// if let Some( value ) = cache.get( &"key" )
 /// {
-///   println!( "Cached: {value}" );
+///   println!( "Cached : {value}" );
 /// }
 /// # Ok(())
 /// # }
@@ -223,11 +223,11 @@ where
 impl< K, V > core::fmt::Debug for SyncCache< K, V >
 {
   #[ inline ]
-  fn fmt( &self, f : &mut core::fmt::Formatter<'_ > ) -> core::fmt::Result
+  fn fmt( &self, f : &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result
   {
   f.debug_struct( "SyncCache" )
-      .field( "cache", &"<Cache >" )
-      .field( "runtime", &"<Runtime >" )
+      .field( "cache", &"< Cache >" )
+      .field( "runtime", &"< Runtime >" )
       .finish()
   }
 }
@@ -283,7 +283,7 @@ impl SyncClient
   let client = Client::build( env )?;
 
   let runtime = tokio::runtime::Runtime::new()
-      .map_err( |e| HuggingFaceError::Generic( format!( "Failed to create runtime: {e}" ) ) )?;
+      .map_err( |e| HuggingFaceError::Generic( format!( "Failed to create runtime : {e}" ) ) )?;
 
   Ok( Self
   {
@@ -314,7 +314,7 @@ impl SyncClient
   let client = Client::build( env )?;
 
   let runtime = tokio::runtime::Runtime::new()
-      .map_err( |e| HuggingFaceError::Generic( format!( "Failed to create runtime: {e}" ) ) )?;
+      .map_err( |e| HuggingFaceError::Generic( format!( "Failed to create runtime : {e}" ) ) )?;
 
   Ok( Self
   {
@@ -329,7 +329,7 @@ impl SyncClient
   ///
   /// ```no_run
   /// # use api_huggingface::sync::SyncClient;
-  /// # fn example() -> Result< (), Box< dyn std::error::Error >> {
+  /// # fn example() -> Result< (), Box< dyn std::error::Error > > {
   /// let client = SyncClient::new( "api_key".to_string() )?;
   /// let _result = client.inference().create( "Hello", "model" );
   /// # Ok(())
@@ -355,11 +355,11 @@ impl SyncClient
   ///
   /// ```no_run
   /// # use api_huggingface::sync::SyncClient;
-  /// # fn example() -> Result< (), Box< dyn std::error::Error >> {
+  /// # fn example() -> Result< (), Box< dyn std::error::Error > > {
   /// let client = SyncClient::new( "api_key".to_string() )?;
   /// let counter = client.token_counter();
   /// let count = counter.count_tokens( "Hello world" );
-  /// println!( "Tokens: {}", count.total );
+  /// println!( "Tokens : {}", count.total );
   /// # Ok(())
   /// # }
   /// ```
@@ -380,7 +380,7 @@ impl SyncClient
   ///
   /// ```no_run
   /// # use api_huggingface::{sync::SyncClient, token_counter::CountingStrategy};
-  /// # fn example() -> Result< (), Box< dyn std::error::Error >> {
+  /// # fn example() -> Result< (), Box< dyn std::error::Error > > {
   /// let client = SyncClient::new( "api_key".to_string() )?;
   /// let counter = client.token_counter_with_strategy( CountingStrategy::CharacterBased );
   /// let count = counter.count_tokens( "Hello world" );
@@ -401,7 +401,7 @@ impl SyncClient
   ///
   /// ```no_run
   /// # use api_huggingface::sync::SyncClient;
-  /// # fn example() -> Result< (), Box< dyn std::error::Error >> {
+  /// # fn example() -> Result< (), Box< dyn std::error::Error > > {
   /// let client = SyncClient::new( "api_key".to_string() )?;
   /// let cache = client.cache::< String, String >();
   ///
@@ -435,7 +435,7 @@ impl SyncClient
   /// ```no_run
   /// # use api_huggingface::{sync::SyncClient, cache::CacheConfig};
   /// # use std::time::Duration;
-  /// # fn example() -> Result< (), Box< dyn std::error::Error >> {
+  /// # fn example() -> Result< (), Box< dyn std::error::Error > > {
   /// let client = SyncClient::new( "api_key".to_string() )?;
   /// let config = CacheConfig
   /// {
@@ -490,7 +490,7 @@ impl SyncInference
   ///
   /// ```no_run
   /// # use api_huggingface::sync::SyncClient;
-  /// # fn example() -> Result< (), Box< dyn std::error::Error >> {
+  /// # fn example() -> Result< (), Box< dyn std::error::Error > > {
   /// # let client = SyncClient::new("hf_test".to_string())?;
   /// let _result = client.inference().create(
   ///   "What is 2+2?",
@@ -528,7 +528,7 @@ impl SyncInference
   ///
   /// ```no_run
   /// # use api_huggingface::{sync::SyncClient, components::input::InferenceParameters};
-  /// # fn example() -> Result< (), Box< dyn std::error::Error >> {
+  /// # fn example() -> Result< (), Box< dyn std::error::Error > > {
   /// # let client = SyncClient::new("hf_test".to_string())?;
   /// let params = InferenceParameters::new()
   ///   .with_temperature( 0.7 )
@@ -579,7 +579,7 @@ impl SyncInference
   ///
   /// ```no_run
   /// # use api_huggingface::{sync::SyncClient, components::input::InferenceParameters};
-  /// # fn example() -> Result< (), Box< dyn std::error::Error >> {
+  /// # fn example() -> Result< (), Box< dyn std::error::Error > > {
   /// # let client = SyncClient::new("hf_test".to_string())?;
   /// let params = InferenceParameters::new()
   ///   .with_temperature( 0.7 )
@@ -596,7 +596,7 @@ impl SyncInference
   ///   match token_result
   ///   {
   ///     Ok( token ) => print!( "{token}" ),
-  ///     Err( e ) => eprintln!( "Error: {e}" ),
+  ///     Err( e ) => eprintln!( "Error : {e}" ),
   ///   }
   /// }
   /// # Ok(())

@@ -50,16 +50,16 @@ use super::super::Client;
     /// // Create multiple generation requests
     /// let requests = vec![
     ///   GenerateContentRequest {
-    ///     contents: vec![Content {
-    ///       role: "user".to_string(),
-    ///       parts: vec![Part { text: Some("Explain AI".to_string()), ..Default::default() }],
+    ///     contents : vec![Content {
+    ///       role : "user".to_string(),
+    ///       parts : vec![Part { text : Some("Explain AI".to_string()), ..Default::default() }],
     ///     }],
     ///     ..Default::default()
     ///   },
     ///   GenerateContentRequest {
-    ///     contents: vec![Content {
-    ///       role: "user".to_string(),
-    ///       parts: vec![Part { text: Some("Explain ML".to_string()), ..Default::default() }],
+    ///     contents : vec![Content {
+    ///       role : "user".to_string(),
+    ///       parts : vec![Part { text : Some("Explain ML".to_string()), ..Default::default() }],
     ///     }],
     ///     ..Default::default()
     ///   },
@@ -77,16 +77,16 @@ use super::super::Client;
     #[ inline ]
     pub async fn batch_generate_content(
       &self,
-      model_name: &str,
-      request: &crate::models::BatchGenerateContentRequest
+      model_name : &str,
+      request : &crate::models::BatchGenerateContentRequest
     ) -> Result< crate::models::BatchGenerateContentResponse, Error >
     {
       let url = format!( "{}/v1beta/models/{model_name}:batchGenerateContent", self.client.base_url );
 
-      crate::internal::http::execute_legacy::< crate::models::BatchGenerateContentRequest, crate::models::BatchGenerateContentResponse >
+      crate ::internal::http::execute_legacy::< crate::models::BatchGenerateContentRequest, crate::models::BatchGenerateContentResponse >
       (
         &self.client.http,
-        reqwest::Method::POST,
+        reqwest ::Method::POST,
         &url,
         &self.client.api_key,
         Some( request ),
@@ -132,16 +132,16 @@ use super::super::Client;
     /// // Create multiple embedding requests
     /// let requests = vec![
     ///   EmbedContentRequest {
-    ///     content: Content {
-    ///       role: "user".to_string(),
-    ///       parts: vec![Part { text: Some("Machine learning fundamentals".to_string()), ..Default::default() }],
+    ///     content : Content {
+    ///       role : "user".to_string(),
+    ///       parts : vec![Part { text : Some("Machine learning fundamentals".to_string()), ..Default::default() }],
     ///     },
     ///     ..Default::default()
     ///   },
     ///   EmbedContentRequest {
-    ///     content: Content {
-    ///       role: "user".to_string(),
-    ///       parts: vec![Part { text: Some("Deep learning concepts".to_string()), ..Default::default() }],
+    ///     content : Content {
+    ///       role : "user".to_string(),
+    ///       parts : vec![Part { text : Some("Deep learning concepts".to_string()), ..Default::default() }],
     ///     },
     ///     ..Default::default()
     ///   },
@@ -159,16 +159,16 @@ use super::super::Client;
     #[ inline ]
     pub async fn batch_embed_contents(
       &self,
-      model_name: &str,
-      request: &crate::models::BatchEmbedContentsRequest
+      model_name : &str,
+      request : &crate::models::BatchEmbedContentsRequest
     ) -> Result< crate::models::BatchEmbedContentsResponse, Error >
     {
       let url = format!( "{}/v1beta/models/{model_name}:batchEmbedContents", self.client.base_url );
 
-      crate::internal::http::execute_legacy::< crate::models::BatchEmbedContentsRequest, crate::models::BatchEmbedContentsResponse >
+      crate ::internal::http::execute_legacy::< crate::models::BatchEmbedContentsRequest, crate::models::BatchEmbedContentsResponse >
       (
         &self.client.http,
-        reqwest::Method::POST,
+        reqwest ::Method::POST,
         &url,
         &self.client.api_key,
         Some( request ),
@@ -214,16 +214,16 @@ use super::super::Client;
     /// // Create multiple token counting requests
     /// let requests = vec![
     ///   CountTokensRequest {
-    ///     contents: vec![Content {
-    ///       role: "user".to_string(),
-    ///       parts: vec![Part { text: Some("Explain machine learning".to_string()), ..Default::default() }],
+    ///     contents : vec![Content {
+    ///       role : "user".to_string(),
+    ///       parts : vec![Part { text : Some("Explain machine learning".to_string()), ..Default::default() }],
     ///     }],
     ///     ..Default::default()
     ///   },
     ///   CountTokensRequest {
-    ///     contents: vec![Content {
-    ///       role: "user".to_string(),
-    ///       parts: vec![Part { text: Some("What is deep learning?".to_string()), ..Default::default() }],
+    ///     contents : vec![Content {
+    ///       role : "user".to_string(),
+    ///       parts : vec![Part { text : Some("What is deep learning?".to_string()), ..Default::default() }],
     ///     }],
     ///     ..Default::default()
     ///   },
@@ -241,8 +241,8 @@ use super::super::Client;
     #[ inline ]
     pub async fn batch_count_tokens(
       &self,
-      model_name: &str,
-      request: &crate::models::BatchCountTokensRequest
+      model_name : &str,
+      request : &crate::models::BatchCountTokensRequest
     ) -> Result< crate::models::BatchCountTokensResponse, Error >
     {
       // Validate input parameters
@@ -254,15 +254,15 @@ use super::super::Client;
       // Validate the request structure
       if let Err( validation_error ) = crate::validation::validate_batch_count_tokens_request( request )
       {
-        return Err( Error::InvalidArgument( format!( "Invalid request: {validation_error}" ) ) );
+        return Err( Error::InvalidArgument( format!( "Invalid request : {validation_error}" ) ) );
       }
 
       let url = format!( "{}/v1beta/models/{model_name}:batchCountTokens", self.client.base_url );
 
-      crate::internal::http::execute_legacy::< crate::models::BatchCountTokensRequest, crate::models::BatchCountTokensResponse >
+      crate ::internal::http::execute_legacy::< crate::models::BatchCountTokensRequest, crate::models::BatchCountTokensResponse >
       (
         &self.client.http,
-        reqwest::Method::POST,
+        reqwest ::Method::POST,
         &url,
         &self.client.api_key,
         Some( request ),
@@ -309,29 +309,29 @@ use super::super::Client;
     /// let models_api = client.models();
     ///
     /// let request = AnalyzeTokensRequest {
-    ///   contents: vec![Content {
-    ///     role: "user".to_string(),
-    ///     parts: vec![Part { text: Some("Analyze this complex prompt with detailed explanations".to_string()), ..Default::default() }],
+    ///   contents : vec![Content {
+    ///     role : "user".to_string(),
+    ///     parts : vec![Part { text : Some("Analyze this complex prompt with detailed explanations".to_string()), ..Default::default() }],
     ///   }],
-    ///   generate_content_request: None,
-    ///   include_breakdown: Some(true),
-    ///   estimate_generation_tokens: Some(true),
+    ///   generate_content_request : None,
+    ///   include_breakdown : Some(true),
+    ///   estimate_generation_tokens : Some(true),
     /// };
     ///
     /// let response = models_api.analyze_tokens("gemini-2.0-flash-experimental", &request).await?;
     ///
-    /// println!("Total tokens: {}", response.total_tokens);
+    /// println!("Total tokens : {}", response.total_tokens);
     /// if let Some(breakdown) = response.token_breakdown {
     ///   if let Some(text_tokens) = breakdown.text_tokens {
-    ///     println!("Text tokens: {}", text_tokens);
+    ///     println!("Text tokens : {}", text_tokens);
     ///   }
     ///   if let Some(image_tokens) = breakdown.image_tokens {
-    ///     println!("Image tokens: {}", image_tokens);
+    ///     println!("Image tokens : {}", image_tokens);
     ///   }
     /// }
     /// if let Some(cost) = response.cost_estimate {
     ///   if let Some(total) = cost.total_cost {
-    ///     println!("Estimated cost: ${:.4}", total);
+    ///     println!("Estimated cost : ${:.4}", total);
     ///   }
     /// }
     /// # Ok( () )
@@ -340,8 +340,8 @@ use super::super::Client;
     #[ inline ]
     pub async fn analyze_tokens(
       &self,
-      model_name: &str,
-      request: &crate::models::AnalyzeTokensRequest
+      model_name : &str,
+      request : &crate::models::AnalyzeTokensRequest
     ) -> Result< crate::models::AnalyzeTokensResponse, Error >
     {
       // Validate input parameters
@@ -353,15 +353,15 @@ use super::super::Client;
       // Validate the request structure
       if let Err( validation_error ) = crate::validation::validate_analyze_tokens_request( request )
       {
-        return Err( Error::InvalidArgument( format!( "Invalid request: {validation_error}" ) ) );
+        return Err( Error::InvalidArgument( format!( "Invalid request : {validation_error}" ) ) );
       }
 
       let url = format!( "{}/v1beta/models/{model_name}:analyzeTokens", self.client.base_url );
 
-      crate::internal::http::execute_legacy::< crate::models::AnalyzeTokensRequest, crate::models::AnalyzeTokensResponse >
+      crate ::internal::http::execute_legacy::< crate::models::AnalyzeTokensRequest, crate::models::AnalyzeTokensResponse >
       (
         &self.client.http,
-        reqwest::Method::POST,
+        reqwest ::Method::POST,
         &url,
         &self.client.api_key,
         Some( request ),
@@ -405,22 +405,22 @@ use super::super::Client;
     /// let models_api = client.models();
     ///
     /// let request = CompareModelsRequest {
-    ///   model_names: vec![
+    ///   model_names : vec![
     ///     "gemini-2.0-flash-experimental".to_string(),
     ///     "gemini-1.5-pro-002".to_string(),
     ///     "text-embedding-004".to_string(),
     ///   ],
-    ///   criteria: Some(vec!["performance".to_string(), "cost".to_string()]),
-    ///   include_benchmarks: Some(true),
-    ///   include_cost_analysis: Some(true),
+    ///   criteria : Some(vec!["performance".to_string(), "cost".to_string()]),
+    ///   include_benchmarks : Some(true),
+    ///   include_cost_analysis : Some(true),
     /// };
     ///
     /// let response = models_api.compare_models(&request).await?;
     ///
     /// for comparison in response.comparisons {
-    ///   println!("Model: {}", comparison.model.name);
+    ///   println!("Model : {}", comparison.model.name);
     ///   if let Some(metrics) = comparison.performance_metrics {
-    ///     println!("  Quality Score: {:?}", metrics.quality_score);
+    ///     println!("  Quality Score : {:?}", metrics.quality_score);
     ///   }
     /// }
     /// # Ok( () )
@@ -429,21 +429,21 @@ use super::super::Client;
     #[ inline ]
     pub async fn compare_models(
       &self,
-      request: &crate::models::CompareModelsRequest
+      request : &crate::models::CompareModelsRequest
     ) -> Result< crate::models::CompareModelsResponse, Error >
     {
       // Validate the request structure
       if let Err( validation_error ) = crate::validation::validate_compare_models_request( request )
       {
-        return Err( Error::InvalidArgument( format!( "Invalid request: {validation_error}" ) ) );
+        return Err( Error::InvalidArgument( format!( "Invalid request : {validation_error}" ) ) );
       }
 
       let url = format!( "{}/v1beta/models:compare", self.client.base_url );
 
-      crate::internal::http::execute_legacy::< crate::models::CompareModelsRequest, crate::models::CompareModelsResponse >
+      crate ::internal::http::execute_legacy::< crate::models::CompareModelsRequest, crate::models::CompareModelsResponse >
       (
         &self.client.http,
-        reqwest::Method::POST,
+        reqwest ::Method::POST,
         &url,
         &self.client.api_key,
         Some( request ),
@@ -487,21 +487,21 @@ use super::super::Client;
     /// let models_api = client.models();
     ///
     /// let request = GetRecommendationsRequest {
-    ///   use_case: "Real-time chatbot for customer support".to_string(),
-    ///   input_size_range: Some("short".to_string()),
-    ///   performance_requirements: Some(vec!["low-latency".to_string(), "high-quality".to_string()]),
-    ///   budget_constraints: Some(100.0),
-    ///   real_time_required: Some(true),
+    ///   use_case : "Real-time chatbot for customer support".to_string(),
+    ///   input_size_range : Some("short".to_string()),
+    ///   performance_requirements : Some(vec!["low-latency".to_string(), "high-quality".to_string()]),
+    ///   budget_constraints : Some(100.0),
+    ///   real_time_required : Some(true),
     /// };
     ///
     /// let response = models_api.get_recommendations(&request).await?;
     ///
     /// for recommendation in response.recommendations {
-    ///   println!("Recommended: {} (confidence: {:.2})",
+    ///   println!("Recommended : {} (confidence : {:.2})",
     ///     recommendation.recommended_model,
     ///     recommendation.confidence_score
     ///   );
-    ///   println!("  Reasoning: {}", recommendation.reasoning);
+    ///   println!("  Reasoning : {}", recommendation.reasoning);
     /// }
     /// # Ok( () )
     /// # }
@@ -509,21 +509,21 @@ use super::super::Client;
     #[ inline ]
     pub async fn get_recommendations(
       &self,
-      request: &crate::models::GetRecommendationsRequest
+      request : &crate::models::GetRecommendationsRequest
     ) -> Result< crate::models::GetRecommendationsResponse, Error >
     {
       // Validate the request structure
       if let Err( validation_error ) = crate::validation::validate_get_recommendations_request( request )
       {
-        return Err( Error::InvalidArgument( format!( "Invalid request: {validation_error}" ) ) );
+        return Err( Error::InvalidArgument( format!( "Invalid request : {validation_error}" ) ) );
       }
 
       let url = format!( "{}/v1beta/models:recommend", self.client.base_url );
 
-      crate::internal::http::execute_legacy::< crate::models::GetRecommendationsRequest, crate::models::GetRecommendationsResponse >
+      crate ::internal::http::execute_legacy::< crate::models::GetRecommendationsRequest, crate::models::GetRecommendationsResponse >
       (
         &self.client.http,
-        reqwest::Method::POST,
+        reqwest ::Method::POST,
         &url,
         &self.client.api_key,
         Some( request ),
@@ -568,12 +568,12 @@ use super::super::Client;
     /// let models_api = client.models();
     ///
     /// let request = AdvancedFilterRequest {
-    ///   capabilities: Some(vec!["generateContent".to_string()]),
-    ///   max_cost_per_1k: Some(0.001),
-    ///   min_quality_score: Some(0.8),
-    ///   max_response_time: Some(1000.0),
-    ///   supports_streaming: Some(true),
-    ///   sort_by: Some("cost".to_string()),
+    ///   capabilities : Some(vec!["generateContent".to_string()]),
+    ///   max_cost_per_1k : Some(0.001),
+    ///   min_quality_score : Some(0.8),
+    ///   max_response_time : Some(1000.0),
+    ///   supports_streaming : Some(true),
+    ///   sort_by : Some("cost".to_string()),
     /// };
     ///
     /// let response = models_api.advanced_filter(&request).await?;
@@ -588,21 +588,21 @@ use super::super::Client;
     #[ inline ]
     pub async fn advanced_filter(
       &self,
-      request: &crate::models::AdvancedFilterRequest
+      request : &crate::models::AdvancedFilterRequest
     ) -> Result< crate::models::AdvancedFilterResponse, Error >
     {
       // Validate the request structure
       if let Err( validation_error ) = crate::validation::validate_advanced_filter_request( request )
       {
-        return Err( Error::InvalidArgument( format!( "Invalid request: {validation_error}" ) ) );
+        return Err( Error::InvalidArgument( format!( "Invalid request : {validation_error}" ) ) );
       }
 
       let url = format!( "{}/v1beta/models:filter", self.client.base_url );
 
-      crate::internal::http::execute_legacy::< crate::models::AdvancedFilterRequest, crate::models::AdvancedFilterResponse >
+      crate ::internal::http::execute_legacy::< crate::models::AdvancedFilterRequest, crate::models::AdvancedFilterResponse >
       (
         &self.client.http,
-        reqwest::Method::POST,
+        reqwest ::Method::POST,
         &url,
         &self.client.api_key,
         Some( request ),
@@ -646,19 +646,19 @@ use super::super::Client;
     /// let models_api = client.models();
     ///
     /// let request = ModelStatusRequest {
-    ///   model_names: vec![
+    ///   model_names : vec![
     ///     "gemini-2.0-flash-experimental".to_string(),
     ///     "gemini-1.5-pro-002".to_string(),
     ///   ],
-    ///   include_health_metrics: Some(true),
+    ///   include_health_metrics : Some(true),
     /// };
     ///
     /// let response = models_api.get_model_status(&request).await?;
     ///
     /// for status in response.model_statuses {
-    ///   println!("Model: {} - Status: {}", status.model_name, status.status);
+    ///   println!("Model : {} - Status : {}", status.model_name, status.status);
     ///   if let Some(health) = status.health_percentage {
-    ///     println!("  Health: {:.1}%", health);
+    ///     println!("  Health : {:.1}%", health);
     ///   }
     /// }
     /// # Ok( () )
@@ -667,21 +667,21 @@ use super::super::Client;
     #[ inline ]
     pub async fn get_model_status(
       &self,
-      request: &crate::models::ModelStatusRequest
+      request : &crate::models::ModelStatusRequest
     ) -> Result< crate::models::ModelStatusResponse, Error >
     {
       // Validate the request structure
       if let Err( validation_error ) = crate::validation::validate_model_status_request( request )
       {
-        return Err( Error::InvalidArgument( format!( "Invalid request: {validation_error}" ) ) );
+        return Err( Error::InvalidArgument( format!( "Invalid request : {validation_error}" ) ) );
       }
 
       let url = format!( "{}/v1beta/models:status", self.client.base_url );
 
-      crate::internal::http::execute_legacy::< crate::models::ModelStatusRequest, crate::models::ModelStatusResponse >
+      crate ::internal::http::execute_legacy::< crate::models::ModelStatusRequest, crate::models::ModelStatusResponse >
       (
         &self.client.http,
-        reqwest::Method::POST,
+        reqwest ::Method::POST,
         &url,
         &self.client.api_key,
         Some( request ),

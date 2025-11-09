@@ -84,17 +84,17 @@ pub use quota_management::
 use serde::{ Deserialize, Serialize };
 use std::
 {
-  collections::HashMap,
-  sync::Arc,
-  time::{ SystemTime, UNIX_EPOCH },
+  collections ::HashMap,
+  sync ::Arc,
+  time ::{ SystemTime, UNIX_EPOCH },
 };
 use tokio::sync::RwLock;
 
 use crate::
 {
-  client::Client,
-  environment::{ EnvironmentInterface, OpenaiEnvironment },
-  error::Result,
+  client ::Client,
+  environment ::{ EnvironmentInterface, OpenaiEnvironment },
+  error ::Result,
 };
 
 /// Time period definitions for analytics and reporting
@@ -114,9 +114,9 @@ pub enum TimePeriod
   /// Custom time range
   Custom {
     /// Start timestamp (Unix epoch)
-    start: u64,
+    start : u64,
     /// End timestamp (Unix epoch)
-    end: u64
+    end : u64
   },
 }
 
@@ -127,11 +127,11 @@ pub enum TimePeriod
 pub struct TimeSeriesPoint
 {
   /// Timestamp for this data point
-  pub timestamp: u64,
+  pub timestamp : u64,
   /// Value at this point
-  pub value: f64,
+  pub value : f64,
   /// Optional metadata
-  pub metadata: HashMap<  String, String  >,
+  pub metadata : HashMap<  String, String  >,
 }
 
 /// Cost trend data point for financial analytics
@@ -139,11 +139,11 @@ pub struct TimeSeriesPoint
 pub struct CostTrendPoint
 {
   /// Timestamp
-  pub timestamp: u64,
+  pub timestamp : u64,
   /// Cost value
-  pub cost: f64,
+  pub cost : f64,
   /// Request count
-  pub requests: u64,
+  pub requests : u64,
 }
 
 /// Comprehensive usage summary for a time period
@@ -151,17 +151,17 @@ pub struct CostTrendPoint
 pub struct UsageSummary
 {
   /// Time period for this summary
-  pub period: TimePeriod,
+  pub period : TimePeriod,
   /// Total requests in period
-  pub total_requests: u64,
+  pub total_requests : u64,
   /// Total cost in period
-  pub total_cost: f64,
+  pub total_cost : f64,
   /// Average requests per hour
-  pub avg_requests_per_hour: f64,
+  pub avg_requests_per_hour : f64,
   /// Peak requests in any hour
-  pub peak_requests_per_hour: u64,
+  pub peak_requests_per_hour : u64,
   /// Usage trend data
-  pub trend_data: Vec< TimeSeriesPoint >,
+  pub trend_data : Vec< TimeSeriesPoint >,
 }
 
 /// Detailed cost breakdown analysis for a time period
@@ -169,13 +169,13 @@ pub struct UsageSummary
 pub struct CostBreakdown
 {
   /// Total cost for the period
-  pub total_cost: f64,
+  pub total_cost : f64,
   /// Cost breakdown by service/model
-  pub service_costs: HashMap<  String, f64  >,
+  pub service_costs : HashMap<  String, f64  >,
   /// Daily cost trend
-  pub daily_trend: Vec< CostTrendPoint >,
+  pub daily_trend : Vec< CostTrendPoint >,
   /// Cost optimization opportunities
-  pub optimization_opportunities: Vec< String >,
+  pub optimization_opportunities : Vec< String >,
 }
 
 /// Comprehensive enterprise client wrapper
@@ -185,11 +185,11 @@ where
   E: OpenaiEnvironment + EnvironmentInterface + Send + Sync + 'static,
 {
   /// Base client
-  client: &'client Client< E >,
+  client : &'client Client< E >,
   /// Cost tracking
-  cost_tracker: Arc< RwLock< Option< CostTracker > > >,
+  cost_tracker : Arc< RwLock< Option< CostTracker > > >,
   /// Region configuration
-  region_config: Arc< RwLock< Option< RegionConfig > > >,
+  region_config : Arc< RwLock< Option< RegionConfig > > >,
 }
 
 impl< 'client, E > EnterpriseClient< 'client, E >
@@ -198,13 +198,13 @@ where
 {
   /// Create new enterprise client wrapper
   #[ inline ]
-  pub fn new( client: &'client Client< E > ) -> Self
+  pub fn new( client : &'client Client< E > ) -> Self
   {
     Self
     {
       client,
-      cost_tracker: Arc::new( RwLock::new( None ) ),
-      region_config: Arc::new( RwLock::new( None ) ),
+      cost_tracker : Arc::new( RwLock::new( None ) ),
+      region_config : Arc::new( RwLock::new( None ) ),
     }
   }
 
@@ -226,7 +226,7 @@ where
   ///
   /// May panic if system time calculations fail or if duration arithmetic overflows.
   #[ inline ]
-  pub fn get_usage_summary( &self, period: TimePeriod ) -> Result< UsageSummary >
+  pub fn get_usage_summary( &self, period : TimePeriod ) -> Result< UsageSummary >
   {
     // Generate realistic usage data based on time period
     let ( total_requests, base_cost ) = match period
@@ -236,7 +236,7 @@ where
       TimePeriod::Weekly => ( 8400, 875.00 ),
       TimePeriod::Monthly => ( 36_000, 3750.00 ),
       TimePeriod::Yearly => ( 432_000, 45000.00 ),
-      TimePeriod::Custom { start: _, end: _ } => ( 2400, 250.00 ), // Custom period default
+      TimePeriod::Custom { start : _, end : _ } => ( 2400, 250.00 ), // Custom period default
     };
 
     let time_points = match period
@@ -246,7 +246,7 @@ where
       TimePeriod::Weekly => 7,    // days
       TimePeriod::Monthly => 30,  // days
       TimePeriod::Yearly => 12,   // months
-      TimePeriod::Custom { start: _, end: _ } => 48, // Custom period time points
+      TimePeriod::Custom { start : _, end : _ } => 48, // Custom period time points
     };
 
     let mut trend_data = Vec::new();
@@ -258,9 +258,9 @@ where
 
       trend_data.push( TimeSeriesPoint
       {
-        timestamp: start_time,
+        timestamp : start_time,
         value,
-        metadata: HashMap::new(),
+        metadata : HashMap::new(),
       } );
     }
 
@@ -281,7 +281,7 @@ where
     {
       period,
       total_requests,
-      total_cost: base_cost,
+      total_cost : base_cost,
       avg_requests_per_hour,
       peak_requests_per_hour,
       trend_data,
@@ -298,12 +298,12 @@ where
   ///
   /// May panic if system time calculations fail or if duration arithmetic overflows.
   #[ inline ]
-  pub fn get_cost_breakdown( &self, period: &TimePeriod ) -> Result< CostBreakdown >
+  pub fn get_cost_breakdown( &self, period : &TimePeriod ) -> Result< CostBreakdown >
   {
     let base_cost = match period
     {
       TimePeriod::Hourly => 12.50,
-      TimePeriod::Daily | TimePeriod::Custom { start: _, end: _ } => 125.50, // Daily or custom default to daily equivalent
+      TimePeriod::Daily | TimePeriod::Custom { start : _, end : _ } => 125.50, // Daily or custom default to daily equivalent
       TimePeriod::Weekly => 875.00,
       TimePeriod::Monthly => 3750.00,
       TimePeriod::Yearly => 45000.00,
@@ -337,9 +337,9 @@ where
 
       daily_trend.push( CostTrendPoint
       {
-        timestamp: start_time,
-        cost: daily_cost,
-        requests: {
+        timestamp : start_time,
+        cost : daily_cost,
+        requests : {
           let request_value = ( daily_cost * 10.0 ).round().max( 0.0 );
           if request_value.is_finite() && request_value >= 0.0 && request_value <= u64::MAX as f64
           {
@@ -364,7 +364,7 @@ where
 
     Ok( CostBreakdown
     {
-      total_cost: base_cost,
+      total_cost : base_cost,
       service_costs,
       daily_trend,
       optimization_opportunities,
@@ -377,7 +377,7 @@ where
   ///
   /// Returns an error if the budget limits cannot be applied.
   #[ inline ]
-  pub async fn set_budget_limits( &self, limits: BudgetLimits ) -> Result< () >
+  pub async fn set_budget_limits( &self, limits : BudgetLimits ) -> Result< () >
   {
     let mut tracker = self.cost_tracker.write().await;
     if let Some( ref mut cost_tracker ) = *tracker
@@ -387,7 +387,7 @@ where
     else
     {
       let new_tracker = CostTracker {
-        budget_limits: limits,
+        budget_limits : limits,
         ..Default::default()
       };
       *tracker = Some( new_tracker );
@@ -420,7 +420,7 @@ where
   ///
   /// Returns an error if the region configuration cannot be applied.
   #[ inline ]
-  pub async fn set_region_config( &self, config: RegionConfig ) -> Result< () >
+  pub async fn set_region_config( &self, config : RegionConfig ) -> Result< () >
   {
     let mut region_config = self.region_config.write().await;
     *region_config = Some( config );
@@ -456,7 +456,7 @@ where
 
       // Add timeout to the request instead of the client
       let response = tokio::time::timeout(
-        core::time::Duration::from_secs( 5 ),
+        core ::time::Duration::from_secs( 5 ),
         http_client.get( &health_url ).send()
       ).await;
 
@@ -474,11 +474,11 @@ where
       {
         region,
         is_healthy,
-        latency_ms: latency_opt,
-        last_check: current_timestamp,
-        error_rate: if is_healthy { 0.0 } else { 1.0 },
-        current_load: 0.5, // Placeholder
-        details: if is_healthy { "Healthy".to_string() } else { "Connection failed".to_string() },
+        latency_ms : latency_opt,
+        last_check : current_timestamp,
+        error_rate : if is_healthy { 0.0 } else { 1.0 },
+        current_load : 0.5, // Placeholder
+        details : if is_healthy { "Healthy".to_string() } else { "Connection failed".to_string() },
       } );
     }
 
@@ -491,7 +491,7 @@ where
   ///
   /// Returns an error if failover cannot be performed or the target region is unavailable.
   #[ inline ]
-  pub async fn failover_to_region( &self, region: Region ) -> Result< () >
+  pub async fn failover_to_region( &self, region : Region ) -> Result< () >
   {
     let mut config = self.region_config.write().await;
     if let Some( ref mut region_config ) = *config
@@ -536,20 +536,20 @@ where
       {
         // Add some realistic variance to create a distribution
         all_latencies.extend( vec![
-          f64::from(latency),
-          f64::from(latency) * 0.8,  // Faster measurement
-          f64::from(latency) * 1.2,  // Slower measurement
-          f64::from(latency) * 0.9,  // Another variance
-          f64::from(latency) * 1.1,  // Another variance
+          f64 ::from(latency),
+          f64 ::from(latency) * 0.8,  // Faster measurement
+          f64 ::from(latency) * 1.2,  // Slower measurement
+          f64 ::from(latency) * 0.9,  // Another variance
+          f64 ::from(latency) * 1.1,  // Another variance
         ] );
 
         region_metrics.push( RegionLatencyMetrics
         {
-          region: status.region.clone(),
-          avg_latency_ms: f64::from(latency),
-          request_count: 100, // Placeholder
-          success_rate: if status.is_healthy { 1.0 } else { 0.0 },
-          last_updated: status.last_check,
+          region : status.region.clone(),
+          avg_latency_ms : f64::from(latency),
+          request_count : 100, // Placeholder
+          success_rate : if status.is_healthy { 1.0 } else { 0.0 },
+          last_updated : status.last_check,
         } );
       }
     }
@@ -559,16 +559,16 @@ where
       // Return default metrics if no data available
       Ok( LatencyMetrics
       {
-        avg_latency_ms: 0.0,
-        min_latency_ms: 0,
-        max_latency_ms: 0,
-        percentiles: LatencyPercentiles
+        avg_latency_ms : 0.0,
+        min_latency_ms : 0,
+        max_latency_ms : 0,
+        percentiles : LatencyPercentiles
         {
-          p50: 0.0,
-          p90: 0.0,
-          p95: 0.0,
-          p99: 0.0,
-          p999: 0.0,
+          p50 : 0.0,
+          p90 : 0.0,
+          p95 : 0.0,
+          p99 : 0.0,
+          p999 : 0.0,
         },
         region_metrics,
       } )
@@ -580,11 +580,11 @@ where
 
       let percentiles = LatencyPercentiles
       {
-        p50: all_latencies[ len / 2 ],
-        p90: all_latencies[ ( len * 90 ) / 100 ],
-        p95: all_latencies[ ( len * 95 ) / 100 ],
-        p99: all_latencies[ ( len * 99 ) / 100 ],
-        p999: all_latencies[ ( len * 999 ) / 1000 ],
+        p50 : all_latencies[ len / 2 ],
+        p90 : all_latencies[ ( len * 90 ) / 100 ],
+        p95 : all_latencies[ ( len * 95 ) / 100 ],
+        p99 : all_latencies[ ( len * 99 ) / 100 ],
+        p999 : all_latencies[ ( len * 999 ) / 1000 ],
       };
 
       let avg_latency = all_latencies.iter().sum::< f64 >() / all_latencies.len() as f64;
@@ -605,9 +605,9 @@ where
 
       Ok( LatencyMetrics
       {
-        avg_latency_ms: avg_latency,
-        min_latency_ms: min_latency,
-        max_latency_ms: max_latency,
+        avg_latency_ms : avg_latency,
+        min_latency_ms : min_latency,
+        max_latency_ms : max_latency,
         percentiles,
         region_metrics,
       } )
@@ -642,7 +642,7 @@ mod tests
       TimePeriod::Weekly,
       TimePeriod::Monthly,
       TimePeriod::Yearly,
-      TimePeriod::Custom { start: 1000, end: 2000 },
+      TimePeriod::Custom { start : 1000, end : 2000 },
     ];
 
     assert_eq!( periods.len(), 6 );
@@ -653,9 +653,9 @@ mod tests
   {
     let point = TimeSeriesPoint
     {
-      timestamp: 1_234_567_890,
-      value: 42.5,
-      metadata: HashMap::new(),
+      timestamp : 1_234_567_890,
+      value : 42.5,
+      metadata : HashMap::new(),
     };
 
     assert_eq!( point.timestamp, 1_234_567_890 );
@@ -670,10 +670,10 @@ mod tests
 
     let breakdown = CostBreakdown
     {
-      total_cost: 100.0,
+      total_cost : 100.0,
       service_costs,
-      daily_trend: Vec::new(),
-      optimization_opportunities: vec![ "Test opportunity".to_string() ],
+      daily_trend : Vec::new(),
+      optimization_opportunities : vec![ "Test opportunity".to_string() ],
     };
 
     assert!( (breakdown.total_cost - 100.0).abs() < f64::EPSILON, "Expected total_cost to be approximately 100.0, got {}", breakdown.total_cost );

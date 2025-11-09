@@ -43,7 +43,7 @@ fn test_sync_runtime_manager()
   assert!(manager.is_healthy());
 
   let handle = manager.spawn_blocking(|| {
-    thread::sleep(Duration::from_millis(100));
+    thread ::sleep(Duration::from_millis(100));
     42
   }).unwrap();
 
@@ -82,9 +82,9 @@ fn test_sync_with_timeout()
 fn test_sync_threading_safety()
 {
   let sync_client = SyncOllamaClient::new("http://localhost:11434", OllamaClient::recommended_timeout_fast()).unwrap();
-  let handles: Vec< _ > = ( 0..3 ).map( | _ | {
+  let handles : Vec< _ > = ( 0..3 ).map( | _ | {
     let client = sync_client.clone();
-    thread::spawn(move || {
+    thread ::spawn(move || {
       // Just test the client creation and configuration in threads
       client.timeout()
     })

@@ -8,7 +8,7 @@ mod tests
 {
   use api_ollama::
   {
-    enhanced_function_calling::{ ToolExecutor, ToolRegistry, ToolResult, helpers },
+    enhanced_function_calling ::{ ToolExecutor, ToolRegistry, ToolResult, helpers },
     ToolDefinition,
     ToolCall,
   };
@@ -119,7 +119,7 @@ mod tests
           }
           a / b
         },
-        _ => return Err( format!( "Unknown operation: {}", operation ) ),
+        _ => return Err( format!( "Unknown operation : {}", operation ) ),
       };
 
       Ok( format!( "{}", result ) )
@@ -310,7 +310,7 @@ mod tests
     assert!( result.unwrap_err().contains( "Division by zero" ) );
   }
 
-  /// Test helper: create_simple_tool
+  /// Test helper : create_simple_tool
   #[ test ]
   fn test_helper_create_simple_tool()
   {
@@ -338,7 +338,7 @@ mod tests
     assert_eq!( required[ 0 ], "param1" );
   }
 
-  /// Test helper: create_enum_tool
+  /// Test helper : create_enum_tool
   #[ test ]
   fn test_helper_create_enum_tool()
   {

@@ -416,7 +416,7 @@ impl ToolRegistry
       "web_search" => self.execute_web_search( args ).await,
       "search_flights" => self.execute_flight_search( args ).await,
       "query_database" => self.execute_database_query( args ).await,
-      _ => Err( format!( "Unknown function: {}", name ).into() ),
+      _ => Err( format!( "Unknown function : {}", name ).into() ),
     }
   }
 
@@ -431,7 +431,7 @@ impl ToolRegistry
       .unwrap_or( "celsius" );
 
     // Simulate API call delay
-    tokio::time::sleep( Duration::from_millis( 100 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 100 ) ).await;
 
     // Simulated weather data with more comprehensive information
     let weather_data : HashMap<  &str, ( f32, &str, u8, f32, &str )  > = HashMap::from([
@@ -476,7 +476,7 @@ impl ToolRegistry
       .unwrap_or( 2 ) as usize;
 
     // Simulate calculation processing
-    tokio::time::sleep( Duration::from_millis( 50 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 50 ) ).await;
 
     // Simple expression evaluator (for demo purposes)
     let result = self.evaluate_expression( expression )?;
@@ -591,7 +591,7 @@ impl ToolRegistry
         match e.parse::< f64 >()
         {
           Ok( num ) => Ok( num ),
-          Err( _ ) => Err( format!( "Unsupported expression: {}", e ).into() ),
+          Err( _ ) => Err( format!( "Unsupported expression : {}", e ).into() ),
         }
       }
     }
@@ -608,7 +608,7 @@ impl ToolRegistry
       .unwrap_or( 5 ) as usize;
 
     // Simulate search API delay
-    tokio::time::sleep( Duration::from_millis( 200 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 200 ) ).await;
 
     // Simulated search results
     let mut results = Vec::new();
@@ -654,7 +654,7 @@ impl ToolRegistry
       .unwrap_or( "economy" );
 
     // Simulate flight search API delay
-    tokio::time::sleep( Duration::from_millis( 300 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 300 ) ).await;
 
     let base_price = match ( from, to )
     {
@@ -728,7 +728,7 @@ impl ToolRegistry
       .unwrap_or( 10 ) as usize;
 
     // Simulate database query delay
-    tokio::time::sleep( Duration::from_millis( 150 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 150 ) ).await;
 
     let data = match query_type
     {
@@ -775,7 +775,7 @@ impl ToolRegistry
           "category": "electronics"
         })).collect::< Vec< _ > >()
       }),
-      _ => return Err( format!( "Unknown query type: {}", query_type ).into() ),
+      _ => return Err( format!( "Unknown query type : {}", query_type ).into() ),
     };
 
     Ok( json!({
@@ -845,8 +845,8 @@ impl FunctionCallingAgent
   {
     if self.config.logging_enabled
     {
-      println!( "Starting task execution: '{}'", task );
-      println!( "Available tools: {:?}", self.config.available_tools );
+      println!( "Starting task execution : '{}'", task );
+      println!( "Available tools : {:?}", self.config.available_tools );
     }
 
     // Initialize conversation
@@ -926,9 +926,9 @@ impl FunctionCallingAgent
 
             if self.config.logging_enabled
             {
-              println!( "Function call: {} with args: {}", 
+              println!( "Function call : {} with args : {}", 
                 function_call.name, 
-                serde_json::to_string_pretty( &function_call.args )? 
+                serde_json ::to_string_pretty( &function_call.args )? 
               );
             }
 
@@ -938,7 +938,7 @@ impl FunctionCallingAgent
               {
                 if self.config.logging_enabled
                 {
-                  println!( "Function result: {}", serde_json::to_string_pretty( &result )? );
+                  println!( "Function result : {}", serde_json::to_string_pretty( &result )? );
                 }
 
                 function_responses.push( Part
@@ -958,7 +958,7 @@ impl FunctionCallingAgent
               {
                 if self.config.logging_enabled
                 {
-                  println!( "Function error: {}", error );
+                  println!( "Function error : {}", error );
                 }
 
                 function_responses.push( Part
@@ -1027,7 +1027,7 @@ impl FunctionCallingAgent
   pub async fn run_interactive_mode( &mut self ) -> Result< (), Box< dyn std::error::Error > >
   {
     println!( "Interactive AI Agent Mode" );
-    println!( "Available tools: {:?}", self.config.available_tools );
+    println!( "Available tools : {:?}", self.config.available_tools );
     println!( "Type 'exit' to quit, 'tools' to list available tools" );
 
     loop
@@ -1035,7 +1035,7 @@ impl FunctionCallingAgent
       println!( "\nEnter your task or question:" );
       
       let mut input = String::new();
-      std::io::stdin().read_line( &mut input )?;
+      std ::io::stdin().read_line( &mut input )?;
       let input = input.trim();
 
       match input
@@ -1043,15 +1043,15 @@ impl FunctionCallingAgent
         "exit" => break,
         "tools" =>
         {
-          println!( "Available tools: {:?}", self.config.available_tools );
+          println!( "Available tools : {:?}", self.config.available_tools );
           continue;
         }
         task if !task.is_empty() =>
         {
           match self.execute_task( task ).await
           {
-            Ok( response ) => println!( "\nAgent: {}", response ),
-            Err( error ) => println!( "Error: {}", error ),
+            Ok( response ) => println!( "\nAgent : {}", response ),
+            Err( error ) => println!( "Error : {}", error ),
           }
         }
         _ => continue,
@@ -1070,7 +1070,7 @@ impl FunctionCallingAgent
       {
         let demo_task = "Get the weather for Tokyo and New York, then compare them and tell me which city has better weather for outdoor activities today.";
         println!( "Weather API Integration Demo" );
-        println!( "Task: {}", demo_task );
+        println!( "Task : {}", demo_task );
         
         let response = self.execute_task( demo_task ).await?;
         println!( "\nFinal Response:\n{}", response );
@@ -1079,7 +1079,7 @@ impl FunctionCallingAgent
       {
         let demo_task = "I want to plan a trip to Paris. Check the weather there, search for flights from New York for January 25th, and calculate what 15% tip would be on a $150 restaurant bill.";
         println!( "Multi-step Workflow Demo" );
-        println!( "Task: {}", demo_task );
+        println!( "Task : {}", demo_task );
         
         let response = self.execute_task( demo_task ).await?;
         println!( "\nFinal Response:\n{}", response );
@@ -1088,12 +1088,12 @@ impl FunctionCallingAgent
       {
         let demo_task = "Query the database for recent user analytics, then calculate the percentage increase if revenue grew by 15%, and search for information about industry benchmarks for conversion rates.";
         println!( "Data Analysis Demo" );
-        println!( "Task: {}", demo_task );
+        println!( "Task : {}", demo_task );
         
         let response = self.execute_task( demo_task ).await?;
         println!( "\nFinal Response:\n{}", response );
       }
-      _ => return Err( format!( "Unknown demo service: {}", service ).into() ),
+      _ => return Err( format!( "Unknown demo service : {}", service ).into() ),
     }
 
     Ok( () )
@@ -1208,13 +1208,13 @@ fn print_usage()
   println!( "  cargo run --example gemini_function_calling [OPTIONS]" );
   println!();
   println!( "Options:" );
-  println!( "  --agent-mode MODE     Set agent mode: interactive, automated" );
+  println!( "  --agent-mode MODE     Set agent mode : interactive, automated" );
   println!( "  --tools TOOLS         Comma-separated list of tools or 'all'" );
   println!( "  --task TASK          Execute specific task (sets mode to automated)" );
   println!( "  --demo               Run demonstration mode" );
-  println!( "  --service SERVICE    Demo service: weather_api, multi_step, data_analysis" );
-  println!( "  --max-iterations N   Maximum workflow iterations (default: 10)" );
-  println!( "  --timeout SECONDS    Function timeout in seconds (default: 30)" );
+  println!( "  --service SERVICE    Demo service : weather_api, multi_step, data_analysis" );
+  println!( "  --max-iterations N   Maximum workflow iterations (default : 10)" );
+  println!( "  --timeout SECONDS    Function timeout in seconds (default : 30)" );
   println!( "  --quiet              Disable logging output" );
   println!();
   println!( "Available tools:" );

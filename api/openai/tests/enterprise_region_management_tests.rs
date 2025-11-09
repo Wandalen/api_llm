@@ -32,7 +32,7 @@ async fn test_region_variants()
   for region in regions
   {
     let json = serde_json::to_string( &region ).expect( "Serialization should work" );
-    let deserialized: Region = serde_json::from_str( &json ).expect( "Deserialization should work" );
+    let deserialized : Region = serde_json::from_str( &json ).expect( "Deserialization should work" );
     assert_eq!( region, deserialized );
   }
 }
@@ -218,25 +218,25 @@ async fn test_region_score_calculation()
   // Create status with good metrics
   let _good_status = RegionStatus
   {
-    region: Region::UsEast1,
-    is_healthy: true,
-    latency_ms: Some( 100 ), // Within preferred latency
-    last_check: 1_234_567_890,
-    error_rate: 0.01,        // Low error rate
-    current_load: 0.3,       // Low load
-    details: "Good".to_string(),
+    region : Region::UsEast1,
+    is_healthy : true,
+    latency_ms : Some( 100 ), // Within preferred latency
+    last_check : 1_234_567_890,
+    error_rate : 0.01,        // Low error rate
+    current_load : 0.3,       // Low load
+    details : "Good".to_string(),
   };
 
   // Create status with poor metrics
   let _poor_status = RegionStatus
   {
-    region: Region::UsWest2,
-    is_healthy: true,
-    latency_ms: Some( 3000 ), // High latency
-    last_check: 1_234_567_890,
-    error_rate: 0.15,         // High error rate
-    current_load: 0.9,        // High load
-    details: "Poor".to_string(),
+    region : Region::UsWest2,
+    is_healthy : true,
+    latency_ms : Some( 3000 ), // High latency
+    last_check : 1_234_567_890,
+    error_rate : 0.15,         // High error rate
+    current_load : 0.9,        // High load
+    details : "Poor".to_string(),
   };
 
   // TODO: These tests require making calculate_region_score public or adding public accessors
@@ -250,37 +250,37 @@ async fn test_latency_metrics_structure()
 {
   let percentiles = LatencyPercentiles
   {
-    p50: 100.0,
-    p90: 200.0,
-    p95: 300.0,
-    p99: 500.0,
-    p999: 800.0,
+    p50 : 100.0,
+    p90 : 200.0,
+    p95 : 300.0,
+    p99 : 500.0,
+    p999 : 800.0,
   };
 
   let region_metrics = vec![
     RegionLatencyMetrics
     {
-      region: Region::UsEast1,
-      avg_latency_ms: 120.0,
-      request_count: 1000,
-      success_rate: 0.99,
-      last_updated: 1_234_567_890,
+      region : Region::UsEast1,
+      avg_latency_ms : 120.0,
+      request_count : 1000,
+      success_rate : 0.99,
+      last_updated : 1_234_567_890,
     },
     RegionLatencyMetrics
     {
-      region: Region::EuropeWest1,
-      avg_latency_ms: 180.0,
-      request_count: 500,
-      success_rate: 0.98,
-      last_updated: 1_234_567_890,
+      region : Region::EuropeWest1,
+      avg_latency_ms : 180.0,
+      request_count : 500,
+      success_rate : 0.98,
+      last_updated : 1_234_567_890,
     },
   ];
 
   let metrics = LatencyMetrics
   {
-    avg_latency_ms: 140.0,
-    min_latency_ms: 80,
-    max_latency_ms: 300,
+    avg_latency_ms : 140.0,
+    min_latency_ms : 80,
+    max_latency_ms : 300,
     percentiles,
     region_metrics,
   };
@@ -310,7 +310,7 @@ async fn test_region_config_serialization()
   let config = RegionConfig::default();
 
   let json = serde_json::to_string( &config ).expect( "Serialization should work" );
-  let deserialized: RegionConfig = serde_json::from_str( &json ).expect( "Deserialization should work" );
+  let deserialized : RegionConfig = serde_json::from_str( &json ).expect( "Deserialization should work" );
 
   assert_eq!( config.primary_region, deserialized.primary_region );
   assert_eq!( config.fallback_regions, deserialized.fallback_regions );

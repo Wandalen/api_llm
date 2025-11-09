@@ -34,7 +34,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     .form();
 
   println!( "📤 Streaming response from Grok-3...\n" );
-  print!( "🤖 Assistant: " );
+  print!( "🤖 Assistant : " );
 
   // Create streaming chat accessor
   let chat = client.chat();
@@ -63,8 +63,8 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
   let full_response = content_parts.join( "" );
 
   println!( "\n\n📊 Statistics:" );
-  println!( "   - Chunks received: {chunks_received}" );
-  println!( "   - Total characters: {}", full_response.len() );
+  println!( "   - Chunks received : {chunks_received}" );
+  println!( "   - Total characters : {}", full_response.len() );
 
   Ok( () )
 }
@@ -73,5 +73,5 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
 fn main()
 {
   eprintln!( "This example requires the 'streaming' feature." );
-  eprintln!( "Run with: cargo run --example streaming_chat --features integration,streaming" );
+  eprintln!( "Run with : cargo run --example streaming_chat --features integration,streaming" );
 }

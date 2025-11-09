@@ -15,12 +15,12 @@ use std::sync::{ Arc, Mutex };
 use std::time::Duration;
 use api_gemini::
 {
-  client::Client,
+  client ::Client,
 };
 use tracing::Level;
 use tracing_subscriber::
 {
-  fmt::{ self, format::FmtSpan },
+  fmt ::{ self, format::FmtSpan },
   Registry,
   EnvFilter,
 };
@@ -33,15 +33,15 @@ use tracing::{ Event, Subscriber, Instrument };
 pub struct LogEntry
 {
   /// Log level
-  pub level: Level,
+  pub level : Level,
   /// Log message
-  pub message: String,
+  pub message : String,
   /// Log target
-  pub target: String,
+  pub target : String,
   /// Structured fields
-  pub fields: std::collections::HashMap<  String, String  >,
+  pub fields : std::collections::HashMap<  String, String  >,
   /// Timestamp
-  pub timestamp: std::time::SystemTime,
+  pub timestamp : std::time::SystemTime,
 }
 
 /// Custom tracing layer that captures structured fields for testing
@@ -62,24 +62,24 @@ impl< S > Layer< S > for CaptureLayer
 where
   S: Subscriber,
 {
-  fn on_event( &self, event: &Event< '_ >, _ctx: tracing_subscriber::layer::Context< '_, S > )
+  fn on_event( &self, event : &Event< '_ >, _ctx : tracing_subscriber::layer::Context< '_, S > )
   {
     let mut fields = std::collections::HashMap::new();
     let mut message = String::new();
     
     // Create visitor to extract fields
-    let mut visitor = FieldVisitor { fields: &mut fields, message: &mut message };
+    let mut visitor = FieldVisitor { fields : &mut fields, message : &mut message };
     event.record( &mut visitor );
     
     // For now, skip span context extraction - this will be improved
     // The basic event logging is working correctly
     
     let entry = LogEntry {
-      level: *event.metadata().level(),
-      message: message.clone(),
-      target: event.metadata().target().to_string(),
+      level : *event.metadata().level(),
+      message : message.clone(),
+      target : event.metadata().target().to_string(),
       fields,
-      timestamp: std::time::SystemTime::now(),
+      timestamp : std::time::SystemTime::now(),
     };
     
     // Store the captured log entry
@@ -91,13 +91,13 @@ where
 #[ allow( dead_code ) ]
 struct FieldVisitor< 'a >
 {
-  fields: &'a mut std::collections::HashMap<  String, String  >,
-  message: &'a mut String,
+  fields : &'a mut std::collections::HashMap<  String, String  >,
+  message : &'a mut String,
 }
 
 impl tracing::field::Visit for FieldVisitor< '_ >
 {
-  fn record_debug( &mut self, field: &tracing::field::Field, value: &dyn core::fmt::Debug )
+  fn record_debug( &mut self, field : &tracing::field::Field, value : &dyn core::fmt::Debug )
   {
     if field.name() == "message"
     {
@@ -107,7 +107,7 @@ impl tracing::field::Visit for FieldVisitor< '_ >
     }
   }
   
-  fn record_str( &mut self, field: &tracing::field::Field, value: &str )
+  fn record_str( &mut self, field : &tracing::field::Field, value : &str )
   {
     if field.name() == "message"
     {
@@ -117,17 +117,17 @@ impl tracing::field::Visit for FieldVisitor< '_ >
     }
   }
   
-  fn record_f64( &mut self, field: &tracing::field::Field, value: f64 )
+  fn record_f64( &mut self, field : &tracing::field::Field, value : f64 )
   {
     self.fields.insert( field.name().to_string(), value.to_string() );
   }
   
-  fn record_u64( &mut self, field: &tracing::field::Field, value: u64 )
+  fn record_u64( &mut self, field : &tracing::field::Field, value : u64 )
   {
     self.fields.insert( field.name().to_string(), value.to_string() );
   }
   
-  fn record_i64( &mut self, field: &tracing::field::Field, value: i64 )
+  fn record_i64( &mut self, field : &tracing::field::Field, value : i64 )
   {
     self.fields.insert( field.name().to_string(), value.to_string() );
   }
@@ -138,7 +138,7 @@ impl tracing::field::Visit for FieldVisitor< '_ >
 pub struct TestLogCapture
 {
   /// Shared log entries storage for test verification
-  pub entries: Arc< Mutex< Vec< LogEntry > > >,
+  pub entries : Arc< Mutex< Vec< LogEntry > > >,
 }
 
 impl TestLogCapture
@@ -149,7 +149,7 @@ impl TestLogCapture
   {
     let entries = Arc::new( Mutex::new( Vec::new() ) );
     let capture = Self {
-      entries: entries.clone(),
+      entries : entries.clone(),
     };
     ( capture, entries )
   }
@@ -171,7 +171,7 @@ impl TestLogCapture
 fn create_logging_client() -> Client
 {
   // Set environment variable to enable HTTP logging
-  std::env::set_var( "GEMINI_ENABLE_HTTP_LOGGING", "1" );
+  std ::env::set_var( "GEMINI_ENABLE_HTTP_LOGGING", "1" );
 
   // Create client - logging will be enabled via environment variable
   Client::new()
@@ -219,7 +219,7 @@ async fn test_http_request_logging_basic()
       );
       assert!( success_log.is_some(), "Missing structured success log" );
     },
-    Err( e ) => panic!( "HTTP request failed: {e}" ),
+    Err( e ) => panic!( "HTTP request failed : {e}" ),
   }
 }
 
@@ -250,7 +250,7 @@ async fn test_error_logging_structured()
         entry.fields.contains_key( "url" ) &&
         entry.fields.contains_key( "duration_ms" )
       );
-      assert!( error_log.is_some(), "Missing structured error log: {logs:?}" );
+      assert!( error_log.is_some(), "Missing structured error log : {logs:?}" );
       
       // Verify error context is captured
       let error_entry = error_log.unwrap();
@@ -283,7 +283,7 @@ async fn test_performance_monitoring_logging()
       let logs = get_captured_logs();
       
       // Should have performance metrics
-      let perf_logs: Vec< _ > = logs.iter().filter( |entry|
+      let perf_logs : Vec< _ > = logs.iter().filter( |entry|
         entry.fields.contains_key( "duration_ms" ) &&
         entry.fields.contains_key( "operation" )
       ).collect();
@@ -294,11 +294,11 @@ async fn test_performance_monitoring_logging()
       for log in perf_logs
       {
         let duration_str = log.fields.get( "duration_ms" ).unwrap();
-        let duration: f64 = duration_str.parse().unwrap();
-        assert!( (0.0..30000.0).contains(&duration), "Invalid duration: {duration}" );
+        let duration : f64 = duration_str.parse().unwrap();
+        assert!( (0.0..30000.0).contains(&duration), "Invalid duration : {duration}" );
       }
     },
-    Err( e ) => panic!( "Embed text failed: {e}" ),
+    Err( e ) => panic!( "Embed text failed : {e}" ),
   }
 }
 
@@ -339,7 +339,7 @@ async fn test_streaming_logging()
   let model = models_api.by_name( "gemini-1.5-pro" );
   
   // Test streaming with logging - for now just use regular generate_text
-  // xxx: Implement generate_text_stream when streaming is enhanced
+  // xxx : Implement generate_text_stream when streaming is enhanced
   let result = model.generate_text( "Count from 1 to 3" ).await;
     
   match result
@@ -351,7 +351,7 @@ async fn test_streaming_logging()
       let logs = get_captured_logs();
       
       // Should have general request logs (streaming uses regular HTTP logging for now)
-      let request_logs: Vec< _ > = logs.iter().filter( |entry|
+      let request_logs : Vec< _ > = logs.iter().filter( |entry|
         entry.fields.contains_key( "operation" ) ||
         entry.fields.contains_key( "request_id" ) ||
         entry.message.contains( "HTTP request" )
@@ -362,7 +362,7 @@ async fn test_streaming_logging()
     Err( e ) => 
     {
       // If streaming isn't implemented yet, that's expected
-      println!( "Streaming not implemented yet: {e}" );
+      println!( "Streaming not implemented yet : {e}" );
     }
   }
 }
@@ -402,7 +402,7 @@ async fn test_batch_operations_logging()
       let logs = get_captured_logs();
       
       // Should have batch operation logs with correlation
-      let batch_logs: Vec< _ > = logs.iter().filter( |entry|
+      let batch_logs : Vec< _ > = logs.iter().filter( |entry|
         entry.fields.contains_key( "batch_id" ) ||
         entry.fields.contains_key( "batch_size" ) ||
         entry.message.contains( "batch" )
@@ -422,7 +422,7 @@ async fn test_batch_operations_logging()
         }
       }
     },
-    Err( e ) => panic!( "Batch embed failed: {e}" ),
+    Err( e ) => panic!( "Batch embed failed : {e}" ),
   }
 }
 
@@ -448,7 +448,7 @@ async fn test_sensitive_data_redaction()
     
     for value in log.fields.values()
     {
-      assert!( !value.contains( "AIza" ), "API key leaked in log field: {value}" );
+      assert!( !value.contains( "AIza" ), "API key leaked in log field : {value}" );
     }
   }
 }
@@ -484,7 +484,7 @@ async fn test_span_context_propagation()
       let logs = get_captured_logs();
       
       // Should have basic HTTP request logs (span context extraction not yet implemented)
-      let request_logs: Vec< _ > = logs.iter().filter( |entry|
+      let request_logs : Vec< _ > = logs.iter().filter( |entry|
         entry.fields.contains_key( "operation" ) ||
         entry.fields.contains_key( "request_id" ) ||
         entry.message.contains( "HTTP request" )
@@ -492,7 +492,7 @@ async fn test_span_context_propagation()
       
       assert!( !request_logs.is_empty(), "Missing HTTP request logs for operation" );
     },
-    Err( e ) => panic!( "Context propagation test failed: {e}" ),
+    Err( e ) => panic!( "Context propagation test failed : {e}" ),
   }
 }
 
@@ -514,7 +514,7 @@ async fn test_log_sampling()
     results.push( result );
     
     // Small delay to avoid overwhelming
-    tokio::time::sleep( Duration::from_millis( 10 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 10 ) ).await;
   }
   
   // All requests should succeed  
@@ -526,14 +526,14 @@ async fn test_log_sampling()
   let logs = get_captured_logs();
   
   // Should have reasonable number of logs (not excessive)
-  let request_logs: Vec< _ > = logs.iter().filter( |entry|
+  let request_logs : Vec< _ > = logs.iter().filter( |entry|
     entry.message.contains( "HTTP request" )
   ).collect();
   
   // Should have logs but reasonable amount (each request generates start + completion logs)
   assert!( !request_logs.is_empty(), "Should have some request logs" );
   // Each request generates 2 logs (start + completion), so 10 requests = ~20 logs, but allow some tolerance
-  assert!( request_logs.len() <= 35, "Too many logs - sampling may be needed: found {}", request_logs.len() );
+  assert!( request_logs.len() <= 35, "Too many logs - sampling may be needed : found {}", request_logs.len() );
 }
 
 // Helper functions for test setup
@@ -549,7 +549,7 @@ fn setup_test_logging() -> tracing::subscriber::DefaultGuard
 }
 
 #[ allow( dead_code ) ]
-fn setup_test_logging_with_level( level: Level ) -> tracing::subscriber::DefaultGuard
+fn setup_test_logging_with_level( level : Level ) -> tracing::subscriber::DefaultGuard
 {
   use tracing_subscriber::layer::SubscriberExt;
   
@@ -570,7 +570,7 @@ fn setup_test_logging_with_level( level: Level ) -> tracing::subscriber::Default
       .with_span_events( FmtSpan::CLOSE )
     );
   
-  tracing::subscriber::set_default( subscriber )
+  tracing ::subscriber::set_default( subscriber )
 }
 
 #[ allow( dead_code ) ]
@@ -581,14 +581,14 @@ fn get_captured_logs() -> Vec< LogEntry >
 
 // Helper to simulate HTTP operation logging - used for future test expansion
 #[ allow( dead_code ) ]
-fn simulate_http_log( level: Level, message: &str, fields: std::collections::HashMap<  String, String  > )
+fn simulate_http_log( level : Level, message : &str, fields : std::collections::HashMap<  String, String  > )
 {
   let entry = LogEntry {
     level,
-    message: message.to_string(),
-    target: "api_gemini::internal::http".to_string(),
+    message : message.to_string(),
+    target : "api_gemini::internal::http".to_string(),
     fields,
-    timestamp: std::time::SystemTime::now(),
+    timestamp : std::time::SystemTime::now(),
   };
   
   TEST_CAPTURE.with( |logs| logs.borrow_mut().push( entry ) );

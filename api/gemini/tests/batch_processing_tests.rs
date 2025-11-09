@@ -16,52 +16,52 @@ use common::create_integration_client;
 use api_gemini::models::*;
 
 /// Test helper for creating sample content
-fn create_sample_content( text: &str ) -> Content
+fn create_sample_content( text : &str ) -> Content
 {
   Content {
-    role: "user".to_string(),
-    parts: vec![
+    role : "user".to_string(),
+    parts : vec![
       Part {
-        text: Some( text.to_string() ),
-        inline_data: None,
-        file_data: None,
-        function_call: None,
-        function_response: None,
-        video_metadata: None,
+        text : Some( text.to_string() ),
+        inline_data : None,
+        file_data : None,
+        function_call : None,
+        function_response : None,
+        video_metadata : None,
       }
     ],
   }
 }
 
 /// Test helper for creating sample generate content request
-fn create_sample_generate_request( text: &str ) -> GenerateContentRequest
+fn create_sample_generate_request( text : &str ) -> GenerateContentRequest
 {
   GenerateContentRequest {
-    contents: vec![ create_sample_content( text ) ],
-    tools: None,
-    tool_config: None,
-    safety_settings: None,
-    system_instruction: None,
-    generation_config: Some( GenerationConfig {
-      temperature: Some( 0.7 ),
-      top_p: Some( 0.8 ),
-      top_k: Some( 40 ),
-      candidate_count: Some( 1 ),
-      max_output_tokens: Some( 100 ),
-      stop_sequences: None,
+    contents : vec![ create_sample_content( text ) ],
+    tools : None,
+    tool_config : None,
+    safety_settings : None,
+    system_instruction : None,
+    generation_config : Some( GenerationConfig {
+      temperature : Some( 0.7 ),
+      top_p : Some( 0.8 ),
+      top_k : Some( 40 ),
+      candidate_count : Some( 1 ),
+      max_output_tokens : Some( 100 ),
+      stop_sequences : None,
     }),
-    cached_content: None,
+    cached_content : None,
   }
 }
 
 /// Test helper for creating sample embed content request
-fn create_sample_embed_request( text: &str ) -> EmbedContentRequest
+fn create_sample_embed_request( text : &str ) -> EmbedContentRequest
 {
   EmbedContentRequest {
-    content: create_sample_content( text ),
-    task_type: Some( "RETRIEVAL_DOCUMENT".to_string() ),
-    title: Some( "Test Document".to_string() ),
-    output_dimensionality: None,
+    content : create_sample_content( text ),
+    task_type : Some( "RETRIEVAL_DOCUMENT".to_string() ),
+    title : Some( "Test Document".to_string() ),
+    output_dimensionality : None,
   }
 }
 
@@ -102,7 +102,7 @@ async fn test_batch_generate_content_single_request() -> Result< (), Box< dyn st
   if let Some( ref text ) = first_part.text
   {
     assert!( !text.is_empty(), "Generated text should not be empty" );
-    println!( "Generated text: {}", text );
+    println!( "Generated text : {}", text );
   }
 
   println!( "✅ Single batch generate content request successful" );
@@ -264,7 +264,7 @@ async fn test_batch_generate_content_empty_request() -> Result< (), Box< dyn std
   let models_api = client.models();
 
   // Create empty batch request
-  let batch_request = BatchGenerateContentRequest { requests: vec![] };
+  let batch_request = BatchGenerateContentRequest { requests : vec![] };
 
   let result = models_api.batch_generate_content( "gemini-2.0-flash-experimental", &batch_request ).await;
 
@@ -278,7 +278,7 @@ async fn test_batch_generate_content_empty_request() -> Result< (), Box< dyn std
     },
     Err( e ) =>
     {
-      println!( "✅ Empty batch request handled with error: {:?}", e );
+      println!( "✅ Empty batch request handled with error : {:?}", e );
       // This is also acceptable behavior
     }
   }
@@ -300,7 +300,7 @@ async fn test_batch_embed_contents_empty_request() -> Result< (), Box< dyn std::
   let models_api = client.models();
 
   // Create empty batch request
-  let batch_request = BatchEmbedContentsRequest { requests: vec![] };
+  let batch_request = BatchEmbedContentsRequest { requests : vec![] };
 
   let result = models_api.batch_embed_contents( "text-embedding-004", &batch_request ).await;
 
@@ -314,7 +314,7 @@ async fn test_batch_embed_contents_empty_request() -> Result< (), Box< dyn std::
     },
     Err( e ) =>
     {
-      println!( "✅ Empty batch embedding request handled with error: {:?}", e );
+      println!( "✅ Empty batch embedding request handled with error : {:?}", e );
       // This is also acceptable behavior
     }
   }
@@ -336,7 +336,7 @@ async fn test_batch_generate_content_large_batch() -> Result< (), Box< dyn std::
   let models_api = client.models();
 
   // Create a larger batch (10 requests) to test scalability
-  let requests: Vec< GenerateContentRequest > = ( 1..=10 )
+  let requests : Vec< GenerateContentRequest > = ( 1..=10 )
     .map( |i| create_sample_generate_request( &format!( "Explain concept number {} in one sentence.", i ) ) )
     .collect();
 
@@ -389,7 +389,7 @@ async fn test_batch_embed_contents_large_batch() -> Result< (), Box< dyn std::er
   let models_api = client.models();
 
   // Create a larger batch (10 requests) to test scalability
-  let requests: Vec< EmbedContentRequest > = ( 1..=10 )
+  let requests : Vec< EmbedContentRequest > = ( 1..=10 )
     .map( |i| create_sample_embed_request( &format!( "This is document number {} about various topics.", i ) ) )
     .collect();
 
@@ -455,7 +455,7 @@ async fn test_batch_generate_content_invalid_model() -> Result< (), Box< dyn std
 
   if let Err( e ) = result
   {
-    println!( "✅ Invalid model error handled correctly: {:?}", e );
+    println!( "✅ Invalid model error handled correctly : {:?}", e );
   }
 
   Ok( () )
@@ -487,7 +487,7 @@ async fn test_batch_embed_contents_invalid_model() -> Result< (), Box< dyn std::
 
   if let Err( e ) = result
   {
-    println!( "✅ Invalid embedding model error handled correctly: {:?}", e );
+    println!( "✅ Invalid embedding model error handled correctly : {:?}", e );
   }
 
   Ok( () )
@@ -529,7 +529,7 @@ async fn test_batch_vs_individual_performance() -> Result< (), Box< dyn std::err
   // Measure batch request
   let start_batch = std::time::Instant::now();
 
-  let requests: Vec< EmbedContentRequest > = test_texts.iter()
+  let requests : Vec< EmbedContentRequest > = test_texts.iter()
     .map( |text| create_sample_embed_request( text ) )
     .collect();
 
@@ -544,9 +544,9 @@ async fn test_batch_vs_individual_performance() -> Result< (), Box< dyn std::err
   // Batch should generally be faster or comparable
   let speedup_ratio = individual_duration.as_millis() as f64 / batch_duration.as_millis() as f64;
 
-  println!( "Individual requests: {}ms", individual_duration.as_millis() );
-  println!( "Batch request: {}ms", batch_duration.as_millis() );
-  println!( "Speedup ratio: {:.2}x", speedup_ratio );
+  println!( "Individual requests : {}ms", individual_duration.as_millis() );
+  println!( "Batch request : {}ms", batch_duration.as_millis() );
+  println!( "Speedup ratio : {:.2}x", speedup_ratio );
 
   // Batch should be at least as fast (or up to 20% slower due to overhead, which is acceptable)
   assert!( speedup_ratio >= 0.8, "Batch processing should not be significantly slower than individual requests" );

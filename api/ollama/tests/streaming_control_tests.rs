@@ -78,45 +78,45 @@ mod integration_tests
     let test_responses : Vec< Result< ChatResponse, String > > = vec![
       Ok( ChatResponse
       {
-        message: ChatMessage
+        message : ChatMessage
         {
-          role: MessageRole::Assistant,
-          content: "Test response 1".to_string(),
-          images: None,
+          role : MessageRole::Assistant,
+          content : "Test response 1".to_string(),
+          images : None,
           #[ cfg( feature = "tool_calling" ) ]
-          tool_calls: None,
+          tool_calls : None,
         },
-        done: false,
-        done_reason: None,
-        model: None,
-        created_at: None,
-        total_duration: None,
-        load_duration: None,
-        prompt_eval_count: None,
-        prompt_eval_duration: None,
-        eval_count: None,
-        eval_duration: None,
+        done : false,
+        done_reason : None,
+        model : None,
+        created_at : None,
+        total_duration : None,
+        load_duration : None,
+        prompt_eval_count : None,
+        prompt_eval_duration : None,
+        eval_count : None,
+        eval_duration : None,
       } ),
       Ok( ChatResponse
       {
-        message: ChatMessage
+        message : ChatMessage
         {
-          role: MessageRole::Assistant,
-          content: "Test response 2".to_string(),
-          images: None,
+          role : MessageRole::Assistant,
+          content : "Test response 2".to_string(),
+          images : None,
           #[ cfg( feature = "tool_calling" ) ]
-          tool_calls: None,
+          tool_calls : None,
         },
-        done: true,
-        done_reason: None,
-        model: None,
-        created_at: None,
-        total_duration: None,
-        load_duration: None,
-        prompt_eval_count: None,
-        prompt_eval_duration: None,
-        eval_count: None,
-        eval_duration: None,
+        done : true,
+        done_reason : None,
+        model : None,
+        created_at : None,
+        total_duration : None,
+        load_duration : None,
+        prompt_eval_count : None,
+        prompt_eval_duration : None,
+        eval_count : None,
+        eval_duration : None,
       } ),
     ];
     let test_stream = Box::pin( futures_util::stream::iter( test_responses ) );
@@ -149,7 +149,7 @@ mod integration_tests
     // Subscribe to state changes
     control.on_state_change( move | old_state, new_state | {
       let notifications = notifications_clone.clone();
-      tokio::spawn( async move {
+      tokio ::spawn( async move {
         notifications.lock().await.push( ( old_state, new_state ) );
       } );
     } ).await;
@@ -161,7 +161,7 @@ mod integration_tests
     control.cancel().await?;
 
     // Wait for notifications to process
-    tokio::time::sleep( Duration::from_millis( 50 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 50 ) ).await;
 
     let received_notifications = notifications.lock().await;
     assert!( received_notifications.len() >= 3 );
@@ -244,7 +244,7 @@ mod integration_tests
     control.pause().await?;
 
     // Wait for timeout to trigger
-    tokio::time::sleep( Duration::from_millis( 150 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 150 ) ).await;
 
     // Stream should be automatically cancelled due to timeout
     assert_eq!( control.state().await, StreamState::Cancelled );
@@ -284,9 +284,9 @@ mod integration_tests
 
     // Pause and resume to generate metrics
     control.pause().await?;
-    tokio::time::sleep( Duration::from_millis( 50 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 50 ) ).await;
     control.resume().await?;
-    tokio::time::sleep( Duration::from_millis( 50 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 50 ) ).await;
     control.pause().await?;
 
     let metrics = control.get_metrics().await;
@@ -348,12 +348,12 @@ mod unit_tests
   fn test_stream_control_error_types()
   {
     let invalid_transition = StreamControlError::InvalidStateTransition {
-      from: StreamState::Ready,
-      to: StreamState::Paused,
+      from : StreamState::Ready,
+      to : StreamState::Paused,
     };
 
     let timeout_error = StreamControlError::TimeoutError;
-    let buffer_overflow = StreamControlError::BufferOverflow { limit: 1024 };
+    let buffer_overflow = StreamControlError::BufferOverflow { limit : 1024 };
 
     assert!( format!( "{invalid_transition}" ).contains( "Ready" ) );
     assert!( format!( "{timeout_error}" ).contains( "timed out" ) );

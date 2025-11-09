@@ -11,14 +11,14 @@ mod private
 {
   use crate::
   {
-    error::{ OpenAIError, Result },
+    error ::{ OpenAIError, Result },
   };
 
   use core::time::Duration;
   use std::
   {
-    sync::{ Arc, Mutex },
-    time::Instant,
+    sync ::{ Arc, Mutex },
+    time ::Instant,
   };
 
   use serde::{ Serialize, Deserialize };
@@ -39,7 +39,7 @@ mod private
     pub max_elapsed_time_ms : u64,
     /// Jitter amount in milliseconds to add randomness
     pub jitter_ms : u64,
-    /// Multiplier for exponential backoff (default: 2.0)
+    /// Multiplier for exponential backoff (default : 2.0)
     pub backoff_multiplier : f64,
   }
 
@@ -117,20 +117,20 @@ mod private
     }
 
     /// Calculate retry delay with exponential backoff and jitter
-    /// Formula: `base_delay` * `backoff_multiplier`^attempt + random(0, `jitter_ms`)
+    /// Formula : `base_delay` * `backoff_multiplier`^attempt + random(0, `jitter_ms`)
     #[ must_use ]
     pub fn calculate_delay( &self, attempt : u32 ) -> Duration
     {
       let max_delay = Duration::from_millis( self.max_delay_ms );
 
-      // Calculate exponential backoff: base_delay * multiplier^attempt
+      // Calculate exponential backoff : base_delay * multiplier^attempt
       let base_delay_f64 = self.base_delay_ms as f64;
       let attempt_i32 = i32::try_from( attempt ).unwrap_or( i32::MAX );
       let exponential_f64 = base_delay_f64 * self.backoff_multiplier.powi( attempt_i32 );
       #[ allow(clippy::cast_possible_truncation, clippy::cast_sign_loss) ]
       let exponential_delay = exponential_f64.min( u64::MAX as f64 ).max( 0.0 ) as u64;
 
-      // Add jitter: random value between 0 and jitter_ms
+      // Add jitter : random value between 0 and jitter_ms
       let mut rng = rand::rng();
       let jitter = rng.random_range( 0..=self.jitter_ms );
 
@@ -138,7 +138,7 @@ mod private
       let total_delay = Duration::from_millis( total_delay_ms );
 
       // Ensure delay doesn't exceed maximum
-      core::cmp::min( total_delay, max_delay )
+      core ::cmp::min( total_delay, max_delay )
     }
 
     /// Check if an error is retryable
@@ -149,7 +149,7 @@ mod private
       {
         // Network, timeout, rate limiting, stream, and WebSocket errors are retryable
         OpenAIError::Network( _ ) | OpenAIError::Timeout( _ ) | OpenAIError::RateLimit( _ ) | OpenAIError::Stream( _ ) | OpenAIError::Ws( _ ) => true,
-        // HTTP errors: check if message contains server error or rate limiting
+        // HTTP errors : check if message contains server error or rate limiting
         OpenAIError::Http( message ) =>
         {
           message.contains( '5' ) || message.contains( "429" ) || message.contains( "500" ) || message.contains( "502" ) || message.contains( "503" ) || message.contains( "504" )
@@ -324,7 +324,7 @@ mod private
           let state = self.state.lock().unwrap();
           if state.is_elapsed_time_exceeded( max_elapsed_time )
           {
-            return Err( error_tools::untyped::Error::msg( format!( "Max elapsed time exceeded: {max_elapsed_time:?}" ) ) );
+            return Err( error_tools::untyped::Error::msg( format!( "Max elapsed time exceeded : {max_elapsed_time:?}" ) ) );
           }
         }
 
@@ -382,7 +382,7 @@ mod private
             // Log retry attempt (only when retry feature is enabled)
             #[ cfg( feature = "retry" ) ]
             {
-              tracing::debug!( "Retrying request attempt {} after {:?} delay", current_attempt, delay );
+              tracing ::debug!( "Retrying request attempt {} after {:?} delay", current_attempt, delay );
             }
 
             // Wait before next attempt
@@ -461,7 +461,7 @@ pub mod private
 pub use private::EnhancedRetryConfig;
 
 // Export for mod_interface
-crate::mod_interface!
+crate ::mod_interface!
 {
   #[ cfg( feature = "retry" ) ]
   exposed use

@@ -8,8 +8,8 @@
 //! - Tests MUST FAIL IMMEDIATELY on any API endpoint errors
 //! - NO SILENT PASSES allowed when problems occur
 //!
-//! Run with: cargo test --features integration
-//! Requires: Valid `ANTHROPIC_API_KEY` in environment or ../../secret/-secrets.sh
+//! Run with : cargo test --features integration
+//! Requires : Valid `ANTHROPIC_API_KEY` in environment or ../../secret/-secrets.sh
 
 #[ allow( unused_imports ) ]
 use super::*;
@@ -20,12 +20,12 @@ use std::env;
 #[ allow( clippy::too_many_lines ) ]
 fn test_error_handling_integration()
 {
-    println!("🧪 Manual Testing: Error Handling When No Secrets Available");
+    println!("🧪 Manual Testing : Error Handling When No Secrets Available");
     println!("==========================================================");
     
     // Test 1: Remove environment variable
     println!("\n🧹 Step 1: Removing environment variable...");
-    env::remove_var("ANTHROPIC_API_KEY");
+    env ::remove_var("ANTHROPIC_API_KEY");
     println!("✅ ANTHROPIC_API_KEY environment variable removed");
     
     // Test 2: Temporarily move workspace file
@@ -35,7 +35,7 @@ fn test_error_handling_integration()
     
     let file_existed = if secret_file.exists()
     {
-        std::fs::rename(secret_file, backup_file).expect("INTEGRATION: File operation must succeed");
+        std ::fs::rename(secret_file, backup_file).expect("INTEGRATION: File operation must succeed");
         println!("✅ Workspace secret file moved to backup");
         true
     } else {
@@ -48,11 +48,11 @@ fn test_error_handling_integration()
     match the_module::Secret::from_workspace()
     {
         Ok(_secret) => {
-            println!("❌ Unexpected: Secret::from_workspace() succeeded when no secrets should be available!");
+            println!("❌ Unexpected : Secret::from_workspace() succeeded when no secrets should be available!");
         },
         Err(e) => {
             println!("✅ Secret::from_workspace() correctly failed with error:");
-            println!("   📝 Error: {e}");
+            println!("   📝 Error : {e}");
             
             // Check error message contains helpful information
             let error_msg = e.to_string();
@@ -70,11 +70,11 @@ fn test_error_handling_integration()
     match the_module::Client::from_workspace()
     {
         Ok(_client) => {
-            println!("❌ Unexpected: Client::from_workspace() succeeded when no secrets should be available!");
+            println!("❌ Unexpected : Client::from_workspace() succeeded when no secrets should be available!");
         },
         Err(e) => {
             println!("✅ Client::from_workspace() correctly failed with error:");
-            println!("   📝 Error: {e}");
+            println!("   📝 Error : {e}");
         }
     }
     
@@ -83,11 +83,11 @@ fn test_error_handling_integration()
     match the_module::Secret::load_from_workspace("ANTHROPIC_API_KEY", "-nonexistent-file.sh")
     {
         Ok(_secret) => {
-            println!("❌ Unexpected: load_from_workspace succeeded with non-existent file!");
+            println!("❌ Unexpected : load_from_workspace succeeded with non-existent file!");
         },
         Err(e) => {
             println!("✅ load_from_workspace correctly failed with non-existent file:");
-            println!("   📝 Error: {e}");
+            println!("   📝 Error : {e}");
         }
     }
     
@@ -97,24 +97,24 @@ fn test_error_handling_integration()
     // First restore the file temporarily to test key lookup
     if file_existed
     {
-        std::fs::rename(backup_file, secret_file).expect("INTEGRATION: File operation must succeed");
+        std ::fs::rename(backup_file, secret_file).expect("INTEGRATION: File operation must succeed");
     }
     
     match the_module::Secret::load_from_workspace("INVALID_KEY_NAME", "-secrets.sh")
     {
         Ok(_secret) => {
-            println!("❌ Unexpected: load_from_workspace succeeded with invalid key name!");
+            println!("❌ Unexpected : load_from_workspace succeeded with invalid key name!");
         },
         Err(e) => {
             println!("✅ load_from_workspace correctly failed with invalid key name:");
-            println!("   📝 Error: {e}");
+            println!("   📝 Error : {e}");
         }
     }
     
     // Move file back to test state
     if file_existed
     {
-        std::fs::rename(secret_file, backup_file).expect("INTEGRATION: File operation must succeed");
+        std ::fs::rename(secret_file, backup_file).expect("INTEGRATION: File operation must succeed");
     }
     
     // Test 7: Test environment variable loading when no env var
@@ -122,11 +122,11 @@ fn test_error_handling_integration()
     match the_module::Secret::load_from_env("ANTHROPIC_API_KEY")
     {
         Ok(_secret) => {
-            println!("❌ Unexpected: load_from_env succeeded when no env var is set!");
+            println!("❌ Unexpected : load_from_env succeeded when no env var is set!");
         },
         Err(e) => {
             println!("✅ load_from_env correctly failed:");
-            println!("   📝 Error: {e}");
+            println!("   📝 Error : {e}");
         }
     }
     
@@ -134,7 +134,7 @@ fn test_error_handling_integration()
     if file_existed
     {
         println!("\n🔄 Step 8: Restoring workspace secret file...");
-        std::fs::rename(backup_file, secret_file).expect("INTEGRATION: File operation must succeed");
+        std ::fs::rename(backup_file, secret_file).expect("INTEGRATION: File operation must succeed");
         println!("✅ Workspace secret file restored");
         
         // Verify restoration worked
@@ -144,7 +144,7 @@ fn test_error_handling_integration()
                 println!("✅ Secret loading working again after restoration");
             },
             Err(e) => {
-                println!("⚠️ Secret loading still failing after restoration: {e}");
+                println!("⚠️ Secret loading still failing after restoration : {e}");
             }
         }
     }

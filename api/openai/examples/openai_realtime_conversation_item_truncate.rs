@@ -11,10 +11,10 @@ use api_openai::ClientApiAccessors;
 #[ allow( unused_imports ) ]
 use api_openai::
 {
-  client::Client,
-  error::OpenAIError,
-  api::realtime::{ RealtimeClient, ws::WsSession },
-  components::realtime_shared::
+  client ::Client,
+  error ::OpenAIError,
+  api ::realtime::{ RealtimeClient, ws::WsSession },
+  components ::realtime_shared::
   {
     RealtimeSessionCreateRequest,
     RealtimeConversationItemContent,
@@ -24,7 +24,7 @@ use api_openai::
     RealtimeClientEventConversationItemTruncate,
     RealtimeServerEvent,
   },
-  components::common::ModelIds,
+  components ::common::ModelIds,
 };
 
 
@@ -41,39 +41,39 @@ async fn main() -> Result< (), OpenAIError >
   .init();
 
   // Load environment variables
-  dotenv::from_filename( "./secret/-secret.sh" ).ok();
+  dotenv ::from_filename( "./secret/-secret.sh" ).ok();
 
   // 1. Create a new OpenAI client.
-  tracing::info!( "Initializing client..." );
+  tracing ::info!( "Initializing client..." );
   let client = Client::new();
 
   // 2. Create the request payload to initiate the session.
   //    - Request audio output using standard format string.
-  tracing::info!( "Building realtime session request..." );
+  tracing ::info!( "Building realtime session request..." );
   let request = RealtimeSessionCreateRequest::former()
   .model( "gpt-4o-realtime-preview".to_string() )
   .output_audio_format( "pcm16" )
   .temperature( 0.7 )
   .form();
 
-  tracing::info!( "Sending request to OpenAI API to create session..." );
+  tracing ::info!( "Sending request to OpenAI API to create session..." );
   // 3. Call the API endpoint to get session details.
   let session = client.realtime().create( request ).await?;
 
-  tracing::info!( "Creating Realtime WebSocket Session Client..." );
+  tracing ::info!( "Creating Realtime WebSocket Session Client..." );
   let token = session.client_secret.value;
   // 4. Establish the WebSocket connection using the session token.
   let session_client  = WsSession::connect( client.environment().clone(), Some( &token ) ).await?;
 
   // --- State for capturing the Assistant's Audio Item ID ---
-  let assistant_item_id = Arc::new( Mutex::new( None::<String> ) );
+  let assistant_item_id = Arc::new( Mutex::new( None::< String > ) );
   let assistant_item_id_clone = assistant_item_id.clone();
-  let response_id_arc = Arc::new( Mutex::new( None::<String> ) ); // To track current response
+  let response_id_arc = Arc::new( Mutex::new( None::< String > ) ); // To track current response
   let response_id_clone_for_listener = response_id_arc.clone();
 
 
   // --- Send User Message ---
-  let user_message_id_arc = Arc::new( Mutex::new( None::<String> ) );
+  let user_message_id_arc = Arc::new( Mutex::new( None::< String > ) );
   let user_message_id_clone = user_message_id_arc.clone();
 
   let content = RealtimeConversationItemContent::former()
@@ -89,11 +89,11 @@ async fn main() -> Result< (), OpenAIError >
   .item( ci_to_create )
   .form();
 
-  tracing::info!( "Sending conversation.item.create (user message)..." );
+  tracing ::info!( "Sending conversation.item.create (user message)..." );
   session_client.conversation_item_create( cic_create ).await?;
 
   // --- Wait for User Message Confirmation ---
-  tracing::info!( "Waiting for user message conversation.item.created confirmation..." );
+  tracing ::info!( "Waiting for user message conversation.item.created confirmation..." );
   loop
   {
     let response = session_client.read_event().await;
@@ -127,25 +127,25 @@ async fn main() -> Result< (), OpenAIError >
   }
   if user_message_id_arc.lock().unwrap().is_none()
   {
-    tracing::warn!( "Did not capture user message ID, proceeding anyway..." );
+    tracing ::warn!( "Did not capture user message ID, proceeding anyway..." );
   }
 
 
   // --- Explicitly Trigger Response ---
   let rc_create = RealtimeClientEventResponseCreate::former().form();
-  tracing::info!( "Sending explicit response.create event..." );
+  tracing ::info!( "Sending explicit response.create event..." );
   session_client.response_create( rc_create ).await?;
 
 
   // --- Wait for Assistant Item ID and Response Done ---
   // We need to capture the ID of the assistant's message item.
-  tracing::info!( "Waiting for response events (output_item.added and done)..." );
+  tracing ::info!( "Waiting for response events (output_item.added and done)..." );
   loop
   {
     // Check if we already got the ID and the response is done
     if assistant_item_id.lock().unwrap().is_some()
     {
-      tracing::info!( "Captured assistant item ID and response is done." );
+      tracing ::info!( "Captured assistant item ID and response is done." );
       break;
     }
 
@@ -184,7 +184,7 @@ async fn main() -> Result< (), OpenAIError >
             }
             else
             {
-              println!( "Already captured an assistant item ID, ignoring additional item: {:?}", added_event.item.id );
+              println!( "Already captured an assistant item ID, ignoring additional item : {:?}", added_event.item.id );
             }
           }
         }
@@ -196,7 +196,7 @@ async fn main() -> Result< (), OpenAIError >
           // Ensure this 'done' event matches the response we tracked
           if current_response_id.as_ref() == Some( &done_event.response.id )
           {
-            println!( "Response {} is done. Status: {}", done_event.response.id, done_event.response.status );
+            println!( "Response {} is done. Status : {}", done_event.response.id, done_event.response.status );
             // Now check if we can break (both ID captured and response done)
             if assistant_item_id.lock().unwrap().is_some()
             {
@@ -205,7 +205,7 @@ async fn main() -> Result< (), OpenAIError >
             else
             {
               // Response finished, but we never saw an assistant item added?
-              tracing::warn!( "Response finished, but no assistant item ID was captured." );
+              tracing ::warn!( "Response finished, but no assistant item ID was captured." );
               // Break here anyway, the next step will fail gracefully.
               break;
             }
@@ -228,7 +228,7 @@ async fn main() -> Result< (), OpenAIError >
       }
       Err( e ) =>
       {
-        eprintln!( "\nError reading from WebSocket: {:?}", e );
+        eprintln!( "\nError reading from WebSocket : {:?}", e );
         return Err( e );
       }
     }
@@ -246,7 +246,7 @@ async fn main() -> Result< (), OpenAIError >
   let audio_end_ms_target = 500; // Truncate audio up to 0.5 seconds
 
   // *** Add Delay Before Truncating ***
-  tracing::info!("Waiting briefly before sending truncate...");
+  tracing ::info!("Waiting briefly before sending truncate...");
   sleep( Duration::from_millis( 200 ) ).await;
 
   // 5. Prepare the client event to truncate the conversation item.
@@ -256,12 +256,12 @@ async fn main() -> Result< (), OpenAIError >
   .audio_end_ms( audio_end_ms_target )
   .form();
 
-  tracing::info!( item_id = %item_id_to_truncate, audio_end_ms = audio_end_ms_target, "Sending conversation.item.truncate event..." );
+  tracing ::info!( item_id = %item_id_to_truncate, audio_end_ms = audio_end_ms_target, "Sending conversation.item.truncate event..." );
   // 6. Send the truncate event over the WebSocket.
   session_client.conversation_item_truncate( cit_truncate ).await?;
 
   // 7. Loop to read responses, specifically looking for the truncation confirmation.
-  tracing::info!( "Waiting for conversation.item.truncated confirmation..." );
+  tracing ::info!( "Waiting for conversation.item.truncated confirmation..." );
   let mut confirmation_received = false;
   loop
   {
@@ -287,7 +287,7 @@ async fn main() -> Result< (), OpenAIError >
             }
             else
             {
-              println!( "Received truncation confirmation for a different item/parameters: {:?}", truncated_event );
+              println!( "Received truncation confirmation for a different item/parameters : {:?}", truncated_event );
             }
           }
           // Handle server errors (e.g., item not found, invalid time)
@@ -324,7 +324,7 @@ async fn main() -> Result< (), OpenAIError >
       }
       Err( e ) =>
       {
-        eprintln!( "\nError reading from WebSocket: {:?}", e );
+        eprintln!( "\nError reading from WebSocket : {:?}", e );
         return Err( e ); // Propagate the error
       }
     }

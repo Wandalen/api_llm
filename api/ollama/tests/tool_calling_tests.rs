@@ -25,13 +25,13 @@ use api_ollama::{ OllamaClient, ChatRequest, ChatMessage, MessageRole, ToolDefin
 #[ tokio::test ]
 async fn test_tool_calling_basic_function()
 {
-  with_test_server!(|mut client: OllamaClient, model: String| async move {
+  with_test_server!(|mut client : OllamaClient, model : String| async move {
     // Define a simple calculator tool
     let calculator_tool = ToolDefinition
     {
-      name: "calculate".to_string(),
-      description: "Perform basic arithmetic operations".to_string(),
-      parameters: serde_json::json!({
+      name : "calculate".to_string(),
+      description : "Perform basic arithmetic operations".to_string(),
+      parameters : serde_json::json!({
         "type": "object",
         "properties": {
           "operation": {
@@ -54,23 +54,23 @@ async fn test_tool_calling_basic_function()
 
     let message = ChatMessage
     {
-      role: MessageRole::User,
-      content: "Calculate 15 + 23".to_string(),
-      images: None,
+      role : MessageRole::User,
+      content : "Calculate 15 + 23".to_string(),
+      images : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tool_calls: None,
+      tool_calls : None,
     };
 
     let request = ChatRequest
     {
       model,
-      messages: vec![message],
-      stream: Some(false),
-      options: None,
+      messages : vec![message],
+      stream : Some(false),
+      options : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tools: Some(vec![calculator_tool]),
+      tools : Some(vec![calculator_tool]),
       #[ cfg( feature = "tool_calling" ) ]
-      tool_messages: None,
+      tool_messages : None,
     };
 
     let result = client.chat(request).await;
@@ -100,7 +100,7 @@ async fn test_tool_calling_basic_function()
         {
           println!("✓ Model doesn't support tools (expected): {error_str}");
         } else {
-          panic!("Unexpected error in tool calling: {error:?}");
+          panic!("Unexpected error in tool calling : {error:?}");
         }
       }
     }
@@ -110,13 +110,13 @@ async fn test_tool_calling_basic_function()
 #[ tokio::test ]
 async fn test_tool_calling_multiple_tools()
 {
-  with_test_server!(|mut client: OllamaClient, model: String| async move {
+  with_test_server!(|mut client : OllamaClient, model : String| async move {
     // Define multiple tools
     let weather_tool = ToolDefinition
     {
-      name: "get_weather".to_string(),
-      description: "Get current weather information for a location".to_string(),
-      parameters: serde_json::json!({
+      name : "get_weather".to_string(),
+      description : "Get current weather information for a location".to_string(),
+      parameters : serde_json::json!({
         "type": "object",
         "properties": {
           "location": {
@@ -135,9 +135,9 @@ async fn test_tool_calling_multiple_tools()
 
     let time_tool = ToolDefinition
     {
-      name: "get_current_time".to_string(),
-      description: "Get the current time in a specific timezone".to_string(),
-      parameters: serde_json::json!({
+      name : "get_current_time".to_string(),
+      description : "Get the current time in a specific timezone".to_string(),
+      parameters : serde_json::json!({
         "type": "object",
         "properties": {
           "timezone": {
@@ -151,23 +151,23 @@ async fn test_tool_calling_multiple_tools()
 
     let message = ChatMessage
     {
-      role: MessageRole::User,
-      content: "What's the weather like in New York and what time is it there?".to_string(),
-      images: None,
+      role : MessageRole::User,
+      content : "What's the weather like in New York and what time is it there?".to_string(),
+      images : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tool_calls: None,
+      tool_calls : None,
     };
 
     let request = ChatRequest
     {
       model,
-      messages: vec![message],
-      stream: Some(false),
-      options: None,
+      messages : vec![message],
+      stream : Some(false),
+      options : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tools: Some(vec![weather_tool, time_tool]),
+      tools : Some(vec![weather_tool, time_tool]),
       #[ cfg( feature = "tool_calling" ) ]
-      tool_messages: None,
+      tool_messages : None,
     };
 
     let result = client.chat(request).await;
@@ -183,7 +183,7 @@ async fn test_tool_calling_multiple_tools()
         {
           println!("✓ Model doesn't support tools (expected): {error_str}");
         } else {
-          panic!("Unexpected error in multiple tools: {error:?}");
+          panic!("Unexpected error in multiple tools : {error:?}");
         }
       }
     }
@@ -193,13 +193,13 @@ async fn test_tool_calling_multiple_tools()
 #[ tokio::test ]
 async fn test_tool_calling_with_response()
 {
-  with_test_server!(|mut client: OllamaClient, model: String| async move {
+  with_test_server!(|mut client : OllamaClient, model : String| async move {
     // First request with tool definition
     let calculator_tool = ToolDefinition
     {
-      name: "calculate".to_string(),
-      description: "Perform arithmetic operations".to_string(),
-      parameters: serde_json::json!({
+      name : "calculate".to_string(),
+      description : "Perform arithmetic operations".to_string(),
+      parameters : serde_json::json!({
         "type": "object",
         "properties": {
           "expression": {
@@ -213,29 +213,29 @@ async fn test_tool_calling_with_response()
 
     let user_message = ChatMessage
     {
-      role: MessageRole::User,
-      content: "What is 25 * 4?".to_string(),
-      images: None,
+      role : MessageRole::User,
+      content : "What is 25 * 4?".to_string(),
+      images : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tool_calls: None,
+      tool_calls : None,
     };
 
     // Simulate tool call response
     let tool_response = ToolMessage
     {
-      role: MessageRole::Tool,
-      content: "100".to_string(),
-      tool_call_id: "call_123".to_string(),
+      role : MessageRole::Tool,
+      content : "100".to_string(),
+      tool_call_id : "call_123".to_string(),
     };
 
     let assistant_message = ChatMessage
     {
-      role: MessageRole::Assistant,
-      content: "I'll calculate that for you.".to_string(),
-      images: None,
-      tool_calls: Some(vec![ToolCall {
-        id: "call_123".to_string(),
-        function: serde_json::json!({
+      role : MessageRole::Assistant,
+      content : "I'll calculate that for you.".to_string(),
+      images : None,
+      tool_calls : Some(vec![ToolCall {
+        id : "call_123".to_string(),
+        function : serde_json::json!({
           "name": "calculate",
           "arguments": "{\"expression\": \"25 * 4\"}"
         }),
@@ -245,13 +245,13 @@ async fn test_tool_calling_with_response()
     let request = ChatRequest
     {
       model,
-      messages: vec![user_message, assistant_message],
-      stream: Some(false),
-      options: None,
+      messages : vec![user_message, assistant_message],
+      stream : Some(false),
+      options : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tools: Some(vec![calculator_tool]),
+      tools : Some(vec![calculator_tool]),
       #[ cfg( feature = "tool_calling" ) ]
-      tool_messages: Some(vec![tool_response]),
+      tool_messages : Some(vec![tool_response]),
     };
 
     let result = client.chat(request).await;
@@ -267,7 +267,7 @@ async fn test_tool_calling_with_response()
         {
           println!("✓ Model doesn't support tools (expected): {error_str}");
         } else {
-          panic!("Unexpected error in tool response: {error:?}");
+          panic!("Unexpected error in tool response : {error:?}");
         }
       }
     }
@@ -277,13 +277,13 @@ async fn test_tool_calling_with_response()
 #[ tokio::test ]
 async fn test_tool_calling_invalid_schema()
 {
-  with_test_server!(|mut client: OllamaClient, model: String| async move {
+  with_test_server!(|mut client : OllamaClient, model : String| async move {
     // Define tool with invalid schema
     let invalid_tool = ToolDefinition
     {
-      name: "invalid_tool".to_string(),
-      description: "Tool with invalid schema".to_string(),
-      parameters: serde_json::json!({
+      name : "invalid_tool".to_string(),
+      description : "Tool with invalid schema".to_string(),
+      parameters : serde_json::json!({
         "type": "invalid_type", // Invalid type
         "properties": {},
       }),
@@ -291,23 +291,23 @@ async fn test_tool_calling_invalid_schema()
 
     let message = ChatMessage
     {
-      role: MessageRole::User,
-      content: "Use the invalid tool".to_string(),
-      images: None,
+      role : MessageRole::User,
+      content : "Use the invalid tool".to_string(),
+      images : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tool_calls: None,
+      tool_calls : None,
     };
 
     let request = ChatRequest
     {
       model,
-      messages: vec![message],
-      stream: Some(false),
-      options: None,
+      messages : vec![message],
+      stream : Some(false),
+      options : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tools: Some(vec![invalid_tool]),
+      tools : Some(vec![invalid_tool]),
       #[ cfg( feature = "tool_calling" ) ]
-      tool_messages: None,
+      tool_messages : None,
     };
 
     let result = client.chat(request).await;
@@ -322,9 +322,9 @@ async fn test_tool_calling_invalid_schema()
         let error_str = format!("{error}");
         assert!(
           error_str.contains("invalid") || error_str.contains("schema") || error_str.contains("tool") || error_str.contains("400"),
-          "Error should mention invalid, schema, tool, or 400 Bad Request: {error_str}"
+          "Error should mention invalid, schema, tool, or 400 Bad Request : {error_str}"
         );
-        println!("✓ Invalid tool schema error handling: {error_str}");
+        println!("✓ Invalid tool schema error handling : {error_str}");
       }
     }
   });
@@ -333,12 +333,12 @@ async fn test_tool_calling_invalid_schema()
 #[ tokio::test ]
 async fn test_tool_calling_streaming()
 {
-  with_test_server!(|mut client: OllamaClient, model: String| async move {
+  with_test_server!(|mut client : OllamaClient, model : String| async move {
     let simple_tool = ToolDefinition
     {
-      name: "get_info".to_string(),
-      description: "Get information".to_string(),
-      parameters: serde_json::json!({
+      name : "get_info".to_string(),
+      description : "Get information".to_string(),
+      parameters : serde_json::json!({
         "type": "object",
         "properties": {
           "query": {
@@ -352,23 +352,23 @@ async fn test_tool_calling_streaming()
 
     let message = ChatMessage
     {
-      role: MessageRole::User,
-      content: "Get info about Rust programming".to_string(),
-      images: None,
+      role : MessageRole::User,
+      content : "Get info about Rust programming".to_string(),
+      images : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tool_calls: None,
+      tool_calls : None,
     };
 
     let request = ChatRequest
     {
       model,
-      messages: vec![message],
-      stream: Some(true), // Enable streaming with tools
-      options: None,
+      messages : vec![message],
+      stream : Some(true), // Enable streaming with tools
+      options : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tools: Some(vec![simple_tool]),
+      tools : Some(vec![simple_tool]),
       #[ cfg( feature = "tool_calling" ) ]
-      tool_messages: None,
+      tool_messages : None,
     };
 
     let result = client.chat(request).await;
@@ -397,31 +397,31 @@ async fn test_tool_calling_streaming()
 #[ ignore = "Integration test disabled - requires stable server infrastructure" ]
 async fn test_tool_calling_no_tools_available()
 {
-  with_test_server!(|mut client: OllamaClient, model: String| async move {
+  with_test_server!(|mut client : OllamaClient, model : String| async move {
     // Request tool usage but provide no tools
     let message = ChatMessage
     {
-      role: MessageRole::User,
-      content: "Please calculate 10 + 5 using a calculator tool".to_string(),
-      images: None,
+      role : MessageRole::User,
+      content : "Please calculate 10 + 5 using a calculator tool".to_string(),
+      images : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tool_calls: None,
+      tool_calls : None,
     };
 
     let request = ChatRequest
     {
       model,
-      messages: vec![message],
-      stream: Some(false),
-      options: None,
+      messages : vec![message],
+      stream : Some(false),
+      options : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tools: None, // No tools provided
+      tools : None, // No tools provided
       #[ cfg( feature = "tool_calling" ) ]
-      tool_messages: None,
+      tool_messages : None,
     };
 
     let result = client.chat(request).await;
-    assert!(result.is_ok(), "Request without tools should succeed: {result:?}");
+    assert!(result.is_ok(), "Request without tools should succeed : {result:?}");
 
     let response = result.unwrap();
     // Model should respond normally without tool calls
@@ -436,13 +436,13 @@ async fn test_tool_calling_no_tools_available()
 #[ tokio::test ]
 async fn test_tool_calling_complex_parameters()
 {
-  with_test_server!(|mut client: OllamaClient, model: String| async move {
+  with_test_server!(|mut client : OllamaClient, model : String| async move {
     // Tool with complex nested parameters
     let complex_tool = ToolDefinition
     {
-      name: "process_data".to_string(),
-      description: "Process complex data structure".to_string(),
-      parameters: serde_json::json!({
+      name : "process_data".to_string(),
+      description : "Process complex data structure".to_string(),
+      parameters : serde_json::json!({
         "type": "object",
         "properties": {
           "data": {
@@ -480,23 +480,23 @@ async fn test_tool_calling_complex_parameters()
 
     let message = ChatMessage
     {
-      role: MessageRole::User,
-      content: "Process the sales data with items for Q1 results".to_string(),
-      images: None,
+      role : MessageRole::User,
+      content : "Process the sales data with items for Q1 results".to_string(),
+      images : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tool_calls: None,
+      tool_calls : None,
     };
 
     let request = ChatRequest
     {
       model,
-      messages: vec![message],
-      stream: Some(false),
-      options: None,
+      messages : vec![message],
+      stream : Some(false),
+      options : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tools: Some(vec![complex_tool]),
+      tools : Some(vec![complex_tool]),
       #[ cfg( feature = "tool_calling" ) ]
-      tool_messages: None,
+      tool_messages : None,
     };
 
     let result = client.chat(request).await;
@@ -512,7 +512,7 @@ async fn test_tool_calling_complex_parameters()
         {
           println!("✓ Model doesn't support tools (expected): {error_str}");
         } else {
-          panic!("Unexpected error in complex parameters: {error:?}");
+          panic!("Unexpected error in complex parameters : {error:?}");
         }
       }
     }
@@ -522,13 +522,13 @@ async fn test_tool_calling_complex_parameters()
 #[ tokio::test ]
 async fn test_tool_calling_non_tool_model()
 {
-  with_test_server!(|mut client: OllamaClient, model: String| async move {
+  with_test_server!(|mut client : OllamaClient, model : String| async move {
     // Try tool calling with a model that doesn't support tools
     let simple_tool = ToolDefinition
     {
-      name: "test_function".to_string(),
-      description: "Test function".to_string(),
-      parameters: serde_json::json!({
+      name : "test_function".to_string(),
+      description : "Test function".to_string(),
+      parameters : serde_json::json!({
         "type": "object",
         "properties": {},
       }),
@@ -536,23 +536,23 @@ async fn test_tool_calling_non_tool_model()
 
     let message = ChatMessage
     {
-      role: MessageRole::User,
-      content: "Use the test function".to_string(),
-      images: None,
+      role : MessageRole::User,
+      content : "Use the test function".to_string(),
+      images : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tool_calls: None,
+      tool_calls : None,
     };
 
     let request = ChatRequest
     {
       model, // Using regular model instead of tool-capable one
-      messages: vec![message],
-      stream: Some(false),
-      options: None,
+      messages : vec![message],
+      stream : Some(false),
+      options : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tools: Some(vec![simple_tool]),
+      tools : Some(vec![simple_tool]),
       #[ cfg( feature = "tool_calling" ) ]
-      tool_messages: None,
+      tool_messages : None,
     };
 
     let result = client.chat(request).await;
@@ -568,9 +568,9 @@ async fn test_tool_calling_non_tool_model()
         let error_str = format!("{error}");
         assert!(
           error_str.contains("tool") || error_str.contains("unsupported") || error_str.contains("model") || error_str.contains("400"),
-          "Error should mention tool, unsupported, model, or 400 Bad Request: {error_str}"
+          "Error should mention tool, unsupported, model, or 400 Bad Request : {error_str}"
         );
-        println!("✓ Non-tool model error handling: {error_str}");
+        println!("✓ Non-tool model error handling : {error_str}");
       }
     }
   });
@@ -583,7 +583,7 @@ async fn test_tool_calling_authentication()
   {
     use api_ollama::SecretStore;
     
-    with_test_server!(|client: OllamaClient, model: String| async move {
+    with_test_server!(|client : OllamaClient, model : String| async move {
       let mut secret_store = SecretStore::new();
       secret_store.set("api_key", "test-tool-api-key").expect("Failed to store test API key");
       
@@ -591,9 +591,9 @@ async fn test_tool_calling_authentication()
       
       let tool = ToolDefinition
       {
-        name: "auth_test".to_string(),
-        description: "Test tool with authentication".to_string(),
-        parameters: serde_json::json!({
+        name : "auth_test".to_string(),
+        description : "Test tool with authentication".to_string(),
+        parameters : serde_json::json!({
           "type": "object",
           "properties": {
             "message": {
@@ -607,23 +607,23 @@ async fn test_tool_calling_authentication()
 
       let message = ChatMessage
       {
-        role: MessageRole::User,
-        content: "Test authenticated tool calling".to_string(),
-        images: None,
+        role : MessageRole::User,
+        content : "Test authenticated tool calling".to_string(),
+        images : None,
         #[ cfg( feature = "tool_calling" ) ]
-        tool_calls: None,
+        tool_calls : None,
       };
 
       let request = ChatRequest
       {
         model,
-        messages: vec![message],
-        stream: Some(false),
-        options: None,
+        messages : vec![message],
+        stream : Some(false),
+        options : None,
         #[ cfg( feature = "tool_calling" ) ]
-        tools: Some(vec![tool]),
+        tools : Some(vec![tool]),
         #[ cfg( feature = "tool_calling" ) ]
-        tool_messages: None,
+        tool_messages : None,
       };
 
       let result = auth_client.chat(request).await;
@@ -639,7 +639,7 @@ async fn test_tool_calling_authentication()
           {
             println!("✓ Model doesn't support tools (expected): {error_str}");
           } else {
-            panic!("Unexpected error: {error:?}");
+            panic!("Unexpected error : {error:?}");
           }
         }
       }

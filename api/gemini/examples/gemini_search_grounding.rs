@@ -176,7 +176,7 @@ async fn basic_search_grounding(
   query : &str,
 ) -> Result< (), Box< dyn std::error::Error > >
 {
-  println!( "🔍 Basic Search Grounding: {}", query );
+  println!( "🔍 Basic Search Grounding : {}", query );
   println!( "{}", "=".repeat( 80 ) );
 
   // Configure Google Search tool
@@ -267,7 +267,7 @@ async fn basic_search_grounding(
         println!( "\n  Source {}:", i + 1 );
         if let Some( title ) = &chunk.title
         {
-          println!( "    📄 Title: {}", title );
+          println!( "    📄 Title : {}", title );
         }
         if let Some( uri ) = &chunk.uri
         {
@@ -275,11 +275,11 @@ async fn basic_search_grounding(
         }
         if let Some( domain ) = &chunk.domain
         {
-          println!( "    🌐 Domain: {}", domain );
+          println!( "    🌐 Domain : {}", domain );
         }
         if let Some( published_date ) = &chunk.published_date
         {
-          println!( "    📅 Published: {}", published_date );
+          println!( "    📅 Published : {}", published_date );
         }
         if let Some( content ) = &chunk.content
         {
@@ -289,7 +289,7 @@ async fn basic_search_grounding(
           } else {
             content.clone()
           };
-          println!( "    📖 Content: {}", preview );
+          println!( "    📖 Content : {}", preview );
         }
       }
     }
@@ -303,12 +303,12 @@ async fn basic_search_grounding(
         println!( "  Segment {}:", i + 1 );
         if let ( Some( start ), Some( end ) ) = ( support.start_index, support.end_index )
         {
-          println!( "    📍 Position: characters {} to {}", start, end );
+          println!( "    📍 Position : characters {} to {}", start, end );
         }
         println!( "    📊 Supported by {} sources", support.grounding_chunk_indices.len() );
         if let Some( confidence ) = support.confidence_score
         {
-          println!( "    🎯 Confidence: {:.2}%", confidence * 100.0 );
+          println!( "    🎯 Confidence : {:.2}%", confidence * 100.0 );
         }
       }
     }
@@ -337,15 +337,15 @@ async fn basic_search_grounding(
     println!( "{}", "-".repeat( 40 ) );
     if let Some( prompt_tokens ) = usage.prompt_token_count
     {
-      println!( "📥 Prompt tokens: {}", prompt_tokens );
+      println!( "📥 Prompt tokens : {}", prompt_tokens );
     }
     if let Some( candidates_tokens ) = usage.candidates_token_count
     {
-      println!( "📤 Response tokens: {}", candidates_tokens );
+      println!( "📤 Response tokens : {}", candidates_tokens );
     }
     if let Some( total_tokens ) = usage.total_token_count
     {
-      println!( "🔢 Total tokens: {}", total_tokens );
+      println!( "🔢 Total tokens : {}", total_tokens );
     }
   }
 
@@ -360,7 +360,7 @@ async fn news_search_grounding(
 {
   let query = format!( "What are the latest news and developments about {}? Please provide current information with sources.", topic );
 
-  println!( "📰 News Search Grounding: {}", topic );
+  println!( "📰 News Search Grounding : {}", topic );
   println!( "{}", "=".repeat( 80 ) );
 
   basic_search_grounding( client, &query ).await?;
@@ -378,7 +378,7 @@ async fn multi_query_synthesis(
   println!( "{}", "=".repeat( 80 ) );
 
   let combined_query = format!(
-    "Please research and synthesize information about the following topics: {}. \
+    "Please research and synthesize information about the following topics : {}. \
      Provide a comprehensive analysis with current information and sources for each topic.",
     queries.join( ", " )
   );
@@ -413,7 +413,7 @@ async fn analyze_search_quality(
   for ( i, query ) in test_queries.iter().enumerate()
   {
     println!( "\n🧪 Test Query {} of {}", i + 1, test_queries.len() );
-    println!( "Query: {}", query );
+    println!( "Query : {}", query );
     println!( "{}", "-".repeat( 60 ) );
 
     let search_tool = Tool {
@@ -500,13 +500,13 @@ async fn analyze_search_quality(
             if let Some( text ) = &part.text
             {
               let word_count = text.split_whitespace().count();
-              println!( "   response_words: {}", word_count );
+              println!( "   response_words : {}", word_count );
             }
           }
         }
       },
       Ok( Err( e ) ) => {
-        println!( "❌ API Error: {:?}", e );
+        println!( "❌ API Error : {:?}", e );
       },
       Err( _ ) => {
         println!( "⏰ Timeout after 30s" );
@@ -514,7 +514,7 @@ async fn analyze_search_quality(
     }
 
     // Brief pause between queries to avoid rate limiting
-    tokio::time::sleep( Duration::from_millis( 500 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 500 ) ).await;
   }
 
   Ok( () )

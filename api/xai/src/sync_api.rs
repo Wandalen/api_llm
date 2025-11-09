@@ -6,8 +6,8 @@ mod private
   //!
   //! # ⚠️ Design Warning
   //!
-  //! **This contradicts Rust async-first design.** Use cases: legacy integration, simple scripts, learning.
-  //! Not recommended due to: performance overhead, thread blocking, poor composability with async code.
+  //! **This contradicts Rust async-first design.** Use cases : legacy integration, simple scripts, learning.
+  //! Not recommended due to : performance overhead, thread blocking, poor composability with async code.
   //!
   //! ## Recommended Alternative
   //!
@@ -50,7 +50,7 @@ mod private
   /// # Examples
   ///
   /// ```no_run
-  /// # #[cfg(feature = "sync_api")]
+  /// # #[ cfg( feature = "sync_api") ]
   /// # {
   /// use api_xai::{ SyncClient, Client, Secret, XaiEnvironmentImpl, ChatCompletionRequest, Message };
   ///
@@ -69,7 +69,7 @@ mod private
   ///
   /// // Blocking call
   /// let response = sync_client.create( request )?;
-  /// println!( "Response: {:?}", response.choices[ 0 ].message.content );
+  /// println!( "Response : {:?}", response.choices[ 0 ].message.content );
   /// # Ok( () )
   /// # }
   /// # }
@@ -102,7 +102,7 @@ mod private
     /// # Examples
     ///
     /// ```no_run
-    /// # #[cfg(feature = "sync_api")]
+    /// # #[ cfg( feature = "sync_api") ]
     /// # {
     /// use api_xai::{ SyncClient, Client, Secret, XaiEnvironmentImpl };
     ///
@@ -119,7 +119,7 @@ mod private
     pub fn new( client : Client< E > ) -> Result< Self >
     {
       let runtime = Runtime::new()
-        .map_err( | e | crate::error::XaiError::ApiError( format!( "Runtime error: {e}" ) ) )?;
+        .map_err( | e | crate::error::XaiError::ApiError( format!( "Runtime error : {e}" ) ) )?;
 
       Ok
       (
@@ -150,7 +150,7 @@ mod private
     /// # Examples
     ///
     /// ```no_run
-    /// # #[cfg(feature = "sync_api")]
+    /// # #[ cfg( feature = "sync_api") ]
     /// # {
     /// use api_xai::{ SyncClient, Client, Secret, XaiEnvironmentImpl, ChatCompletionRequest, Message };
     ///
@@ -188,7 +188,7 @@ mod private
     /// # Examples
     ///
     /// ```no_run
-    /// # #[cfg(feature = "sync_api")]
+    /// # #[ cfg( feature = "sync_api") ]
     /// # {
     /// use api_xai::{ SyncClient, Client, Secret, XaiEnvironmentImpl };
     ///
@@ -201,7 +201,7 @@ mod private
     /// let response = sync_client.list_models()?;
     /// for model in response.data
     /// {
-    ///   println!( "Model: {}", model.id );
+    ///   println!( "Model : {}", model.id );
     /// }
     /// # Ok( () )
     /// # }
@@ -229,7 +229,7 @@ mod private
     /// # Examples
     ///
     /// ```no_run
-    /// # #[cfg(feature = "sync_api")]
+    /// # #[ cfg( feature = "sync_api") ]
     /// # {
     /// use api_xai::{ SyncClient, Client, Secret, XaiEnvironmentImpl };
     ///
@@ -240,7 +240,7 @@ mod private
     /// let sync_client = SyncClient::new( client )?;
     ///
     /// let model = sync_client.get_model( "grok-3" )?;
-    /// println!( "Model: {}", model.id );
+    /// println!( "Model : {}", model.id );
     /// # Ok( () )
     /// # }
     /// # }
@@ -271,13 +271,13 @@ mod private
   /// # Examples
   ///
   /// ```no_run
-  /// # #[cfg(all(feature = "sync_api", feature = "count_tokens"))]
+  /// # #[ cfg( all(feature = "sync_api", feature = "count_tokens")) ]
   /// # {
   /// use api_xai::sync_count_tokens;
   ///
   /// # fn example() -> Result< (), Box< dyn std::error::Error > > {
   /// let count = sync_count_tokens( "Hello, world!", "grok-3" )?;
-  /// println!( "Token count: {}", count );
+  /// println!( "Token count : {}", count );
   /// # Ok( () )
   /// # }
   /// # }
@@ -285,7 +285,7 @@ mod private
   #[ cfg( all( feature = "sync_api", feature = "count_tokens" ) ) ]
   pub fn sync_count_tokens( text : &str, model : &str ) -> Result< usize >
   {
-    crate::count_tokens( text, model )
+    crate ::count_tokens( text, model )
   }
 
   /// Synchronous wrapper for `count_tokens_for_request` (requires `count_tokens` feature).
@@ -307,7 +307,7 @@ mod private
   /// # Examples
   ///
   /// ```no_run
-  /// # #[cfg(all(feature = "sync_api", feature = "count_tokens"))]
+  /// # #[ cfg( all(feature = "sync_api", feature = "count_tokens")) ]
   /// # {
   /// use api_xai::{ sync_count_tokens_for_request, ChatCompletionRequest, Message };
   ///
@@ -318,7 +318,7 @@ mod private
   ///   .form();
   ///
   /// let count = sync_count_tokens_for_request( &request )?;
-  /// println!( "Total request tokens: {}", count );
+  /// println!( "Total request tokens : {}", count );
   /// # Ok( () )
   /// # }
   /// # }
@@ -326,7 +326,7 @@ mod private
   #[ cfg( all( feature = "sync_api", feature = "count_tokens" ) ) ]
   pub fn sync_count_tokens_for_request( request : &ChatCompletionRequest ) -> Result< usize >
   {
-    crate::count_tokens_for_request( request )
+    crate ::count_tokens_for_request( request )
   }
 
   /// Synchronous wrapper for `validate_request_size` (requires `count_tokens` feature).
@@ -349,7 +349,7 @@ mod private
   /// # Examples
   ///
   /// ```no_run
-  /// # #[cfg(all(feature = "sync_api", feature = "count_tokens"))]
+  /// # #[ cfg( all(feature = "sync_api", feature = "count_tokens")) ]
   /// # {
   /// use api_xai::{ sync_validate_request_size, ChatCompletionRequest, Message };
   ///
@@ -373,7 +373,7 @@ mod private
   )
   -> Result< () >
   {
-    crate::validate_request_size( request, max_tokens )
+    crate ::validate_request_size( request, max_tokens )
   }
 
   /// Synchronous wrapper for `cached_create` (requires `caching` feature).
@@ -410,7 +410,7 @@ mod private
     pub fn new( client : Client< E >, capacity : usize ) -> Result< Self >
     {
       let runtime = Runtime::new()
-        .map_err( | e | crate::error::XaiError::ApiError( format!( "Runtime error: {e}" ) ) )?;
+        .map_err( | e | crate::error::XaiError::ApiError( format!( "Runtime error : {e}" ) ) )?;
 
       let cached_client = crate::CachedClient::new( client, capacity );
 
@@ -464,7 +464,7 @@ mod private
 }
 
 #[ cfg( feature = "sync_api" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

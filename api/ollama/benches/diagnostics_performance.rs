@@ -39,10 +39,10 @@ fn benchmark_diagnostics_overhead()
   {
     let request_id = format!("warmup-{i}");
     let request = GenerateRequest {
-      model: "test".to_string(),
-      prompt: "test".to_string(),
-      stream: Some(false),
-      options: None,
+      model : "test".to_string(),
+      prompt : "test".to_string(),
+      stream : Some(false),
+      options : None,
     };
     collector_without.track_request_start(&request_id, &request);
     collector_without.track_request_success(&request_id, 100);
@@ -54,10 +54,10 @@ fn benchmark_diagnostics_overhead()
   {
     let request_id = format!("overhead-test-without-{i}");
     let request = GenerateRequest {
-      model: "test".to_string(),
-      prompt: "test".to_string(),
-      stream: Some(false),
-      options: None,
+      model : "test".to_string(),
+      prompt : "test".to_string(),
+      stream : Some(false),
+      options : None,
     };
     collector_without.track_request_start(&request_id, &request);
     collector_without.track_request_success(&request_id, 100);
@@ -70,10 +70,10 @@ fn benchmark_diagnostics_overhead()
   {
     let request_id = format!("overhead-test-with-{i}");
     let request = GenerateRequest {
-      model: "test".to_string(),
-      prompt: "test".to_string(),
-      stream: Some(false),
-      options: None,
+      model : "test".to_string(),
+      prompt : "test".to_string(),
+      stream : Some(false),
+      options : None,
     };
     collector_with.track_request_start_with_curl(&request_id, &request, "http://localhost:11434");
     collector_with.track_request_success(&request_id, 100);
@@ -83,16 +83,20 @@ fn benchmark_diagnostics_overhead()
   let overhead_ratio = duration_with.as_nanos() as f64 / duration_without.as_nanos() as f64;
 
   println!("\n=== Diagnostics Performance Benchmark ===");
-  println!("Iterations: {iterations}");
-  println!("Without diagnostics: {duration_without:?}");
-  println!("With diagnostics: {duration_with:?}");
-  println!("Overhead ratio: {overhead_ratio:.3}x");
+  println!("Iterations : {iterations}");
+  println!("Without diagnostics : {duration_without:?}");
+  println!("With diagnostics : {duration_with:?}");
+  println!("Overhead ratio : {overhead_ratio:.3}x");
 
   if overhead_ratio > 3.0 {
     println!("⚠️  WARNING: Overhead exceeds 3x threshold!");
-  } else if overhead_ratio > 2.0 {
+  }
+  else if overhead_ratio > 2.0
+  {
     println!("⚠️  CAUTION: Overhead exceeds 2x threshold");
-  } else {
+  }
+  else
+  {
     println!("✅ Overhead within acceptable range (< 2x)");
   }
 }

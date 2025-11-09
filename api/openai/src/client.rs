@@ -12,9 +12,9 @@ mod private
   // Use crate root for base access
   use crate::
   {
-    environment::{ OpenaiEnvironment, EnvironmentInterface },
-    diagnostics::DiagnosticsCollector,
-    request_cache::ApiRequestCache,
+    environment ::{ OpenaiEnvironment, EnvironmentInterface },
+    diagnostics ::DiagnosticsCollector,
+    request_cache ::ApiRequestCache,
   };
 
   // Import enhanced functionality when features are enabled
@@ -36,7 +36,7 @@ mod private
   /// Provides methods for accessing different API categories like
   /// assistants, chat, embeddings, etc.
   ///
-  /// # Governing Principle: "Thin Client, Rich API"
+  /// # Governing Principle : "Thin Client, Rich API"
   ///
   /// This client follows the "Thin Client, Rich API" principle - it exposes all
   /// server-side functionality transparently while maintaining zero client-side
@@ -49,7 +49,7 @@ mod private
   /// ```no_run
   /// use api_openai::{ Client, environment::{ OpenaiEnvironmentImpl, OpenAIRecommended }, Secret, ClientApiAccessors };
   ///
-  /// # async fn example() -> Result<(), Box< dyn core::error::Error >> {
+  /// # async fn example() -> Result<(), Box< dyn core::error::Error > > {
   /// let secret = Secret::load_from_env("OPENAI_API_KEY")?;
   /// let env = OpenaiEnvironmentImpl::build(secret, None, None, OpenAIRecommended::base_url().to_string(), OpenAIRecommended::realtime_base_url().to_string())?;
   /// let client = Client::build(env)?;
@@ -95,7 +95,7 @@ mod private
 
 } // end mod private
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   // Expose all structs defined in this module
   exposed use

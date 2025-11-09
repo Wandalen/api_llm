@@ -120,7 +120,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
 
     if let Some( finish_reason ) = &candidate.finish_reason
     {
-      println!( "\nFinish reason: {finish_reason}" );
+      println!( "\nFinish reason : {finish_reason}" );
     }
   }
   else
@@ -134,15 +134,15 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     println!( "\n=== Token Usage ===" );
     if let Some( prompt_tokens ) = usage.prompt_token_count
     {
-      println!( "Prompt tokens: {prompt_tokens}" );
+      println!( "Prompt tokens : {prompt_tokens}" );
     }
     if let Some( candidate_tokens ) = usage.candidates_token_count
     {
-      println!( "Response tokens: {candidate_tokens}" );
+      println!( "Response tokens : {candidate_tokens}" );
     }
     if let Some( total_tokens ) = usage.total_token_count
     {
-      println!( "Total tokens: {total_tokens}" );
+      println!( "Total tokens : {total_tokens}" );
     }
   }
 

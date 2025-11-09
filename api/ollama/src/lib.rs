@@ -47,7 +47,7 @@
 //! This crate provides HTTP client functionality for Ollama's local LLM runtime API,
 //! following the **"Thin Client, Rich API"** governing principle.
 //!
-//! ## Governing Principle: "Thin Client, Rich API"
+//! ## Governing Principle : "Thin Client, Rich API"
 //!
 //! This library exposes all server-side functionality transparently while maintaining
 //! zero client-side intelligence or **automatic** behaviors. This ensures:
@@ -249,23 +249,23 @@ mod private
   pub type OllamaResult< T > = Result< T >;
 }
 #[ cfg( feature = "enabled" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {
-    client::OllamaClient,
-    private::OllamaResult,
-    messages::Message,
-    messages::MessageRole,
-    messages::ChatMessage,
-    chat::ChatRequest,
-    chat::ChatResponse,
-    generate::GenerateRequest,
-    generate::GenerateResponse,
-    models_info::ModelInfo,
-    models_info::ModelDetails,
-    models_info::ModelEntry,
-    models_info::TagsResponse,
+    client ::OllamaClient,
+    private ::OllamaResult,
+    messages ::Message,
+    messages ::MessageRole,
+    messages ::ChatMessage,
+    chat ::ChatRequest,
+    chat ::ChatResponse,
+    generate ::GenerateRequest,
+    generate ::GenerateResponse,
+    models_info ::ModelInfo,
+    models_info ::ModelDetails,
+    models_info ::ModelEntry,
+    models_info ::TagsResponse,
   };
   #[ cfg( feature = "websocket_streaming" ) ]
   use websocket;
@@ -276,44 +276,44 @@ crate::mod_interface!
   #[ cfg( feature = "workspace" ) ]
   exposed use
   {
-    auth::WorkspaceConfig,
+    auth ::WorkspaceConfig,
   };
   #[ cfg( feature = "failover" ) ]
   exposed use
   {
-    failover::FailoverPolicy,
-    failover::FailoverStats,
-    failover::EndpointHealth,
-    failover::EndpointInfo,
-    failover::FailoverManager,
+    failover ::FailoverPolicy,
+    failover ::FailoverStats,
+    failover ::EndpointHealth,
+    failover ::EndpointInfo,
+    failover ::FailoverManager,
   };
   #[ cfg( feature = "secret_management" ) ]
   exposed use
   {
-    auth::SecretStore,
-    auth::SecretConfig,
+    auth ::SecretStore,
+    auth ::SecretConfig,
   };
   #[ cfg( all( feature = "workspace", feature = "secret_management" ) ) ]
   exposed use
   {
-    workspace::WorkspaceSecretStore,
+    workspace ::WorkspaceSecretStore,
   };
   #[ cfg( feature = "embeddings" ) ]
   exposed use
   {
-    embeddings::EmbeddingsRequest,
-    embeddings::EmbeddingsResponse,
+    embeddings ::EmbeddingsRequest,
+    embeddings ::EmbeddingsResponse,
   };
   #[ cfg( feature = "builder_patterns" ) ]
   exposed use
   {
-    builders::ChatRequestBuilder,
-    builders::GenerateRequestBuilder,
+    builders ::ChatRequestBuilder,
+    builders ::GenerateRequestBuilder,
   };
   #[ cfg( all( feature = "builder_patterns", feature = "embeddings" ) ) ]
   exposed use
   {
-    builders::EmbeddingsRequestBuilder,
+    builders ::EmbeddingsRequestBuilder,
   };
   // Enhanced retry logic exports (feature-gated)
   #[ cfg( feature = "retry" ) ]
@@ -357,111 +357,111 @@ crate::mod_interface!
   #[ cfg( feature = "tool_calling" ) ]
   exposed use
   {
-    messages::ToolDefinition,
-    messages::ToolCall,
-    messages::ToolMessage,
+    messages ::ToolDefinition,
+    messages ::ToolCall,
+    messages ::ToolMessage,
   };
 
   #[ cfg( feature = "circuit_breaker" ) ]
   exposed use
   {
-    circuit_breaker::CircuitBreaker,
-    circuit_breaker::CircuitBreakerConfig,
-    circuit_breaker::CircuitBreakerState,
+    circuit_breaker ::CircuitBreaker,
+    circuit_breaker ::CircuitBreakerConfig,
+    circuit_breaker ::CircuitBreakerState,
   };
 
   #[ cfg( feature = "rate_limiting" ) ]
   exposed use
   {
-    rate_limiter::RateLimiter,
-    rate_limiter::RateLimitingConfig,
-    rate_limiter::RateLimitingAlgorithm,
+    rate_limiter ::RateLimiter,
+    rate_limiter ::RateLimitingConfig,
+    rate_limiter ::RateLimitingAlgorithm,
   };
 
   #[ cfg( feature = "request_caching" ) ]
   exposed use
   {
-    request_cache::RequestCache,
-    request_cache::RequestCacheConfig,
-    request_cache::CacheEntry,
-    request_cache::CacheStats,
+    request_cache ::RequestCache,
+    request_cache ::RequestCacheConfig,
+    request_cache ::CacheEntry,
+    request_cache ::CacheStats,
   };
 
   #[ cfg( feature = "general_diagnostics" ) ]
   exposed use
   {
-    diagnostics::DiagnosticsConfig,
-    diagnostics::DiagnosticsCollector,
-    diagnostics::RequestMetrics,
-    diagnostics::ErrorAnalysis,
-    diagnostics::PerformanceReport,
-    diagnostics::ComprehensiveReport,
+    diagnostics ::DiagnosticsConfig,
+    diagnostics ::DiagnosticsCollector,
+    diagnostics ::RequestMetrics,
+    diagnostics ::ErrorAnalysis,
+    diagnostics ::PerformanceReport,
+    diagnostics ::ComprehensiveReport,
   };
 
   #[ cfg( feature = "model_details" ) ]
   exposed use
   {
-    models_enhanced::EnhancedModelDetails,
-    models_enhanced::ModelMetadata,
-    models_enhanced::ModelLifecycle,
-    models_enhanced::ModelOperation,
-    models_enhanced::ModelPerformanceMetrics,
-    models_operations::ShowModelRequest,
-    models_operations::PullModelRequest,
-    models_operations::PushModelRequest,
-    models_operations::DeleteModelRequest,
-    models_operations::ModelProgressUpdate,
-    models_operations::ModelProgressStream,
-    models_additional::ComprehensiveModelInfo,
-    models_additional::ModelRecommendation,
-    models_additional::ModelLifecycleStatus,
-    models_additional::ModelOperationHistoryEntry,
-    models_additional::ModelHealthCheck,
-    models_additional::LocalModelStorageInfo,
-    models_additional::ModelDiagnostics,
+    models_enhanced ::EnhancedModelDetails,
+    models_enhanced ::ModelMetadata,
+    models_enhanced ::ModelLifecycle,
+    models_enhanced ::ModelOperation,
+    models_enhanced ::ModelPerformanceMetrics,
+    models_operations ::ShowModelRequest,
+    models_operations ::PullModelRequest,
+    models_operations ::PushModelRequest,
+    models_operations ::DeleteModelRequest,
+    models_operations ::ModelProgressUpdate,
+    models_operations ::ModelProgressStream,
+    models_additional ::ComprehensiveModelInfo,
+    models_additional ::ModelRecommendation,
+    models_additional ::ModelLifecycleStatus,
+    models_additional ::ModelOperationHistoryEntry,
+    models_additional ::ModelHealthCheck,
+    models_additional ::LocalModelStorageInfo,
+    models_additional ::ModelDiagnostics,
   };
 
   #[ cfg( feature = "sync_api" ) ]
   exposed use
   {
-    sync_api::SyncOllamaClient,
-    sync_api::SyncApiConfig,
-    sync_api::SyncRuntimeManager,
-    sync_api::SyncApiConfigBuilder,
+    sync_api ::SyncOllamaClient,
+    sync_api ::SyncApiConfig,
+    sync_api ::SyncRuntimeManager,
+    sync_api ::SyncApiConfigBuilder,
   };
 
   #[ cfg( feature = "health_checks" ) ]
   exposed use
   {
-    health_checks::HealthCheckStrategy,
-    health_checks::HealthCheckConfig,
-    health_checks::HealthStatus,
-    health_checks::HealthMetrics,
+    health_checks ::HealthCheckStrategy,
+    health_checks ::HealthCheckConfig,
+    health_checks ::HealthStatus,
+    health_checks ::HealthMetrics,
   };
 
   #[ cfg( feature = "dynamic_config" ) ]
   exposed use
   {
-    dynamic_config::DynamicConfig,
-    dynamic_config::DynamicConfigManager,
-    dynamic_config::ConfigDiff,
-    dynamic_config::ConfigBackup,
-    dynamic_config::ConfigVersion,
+    dynamic_config ::DynamicConfig,
+    dynamic_config ::DynamicConfigManager,
+    dynamic_config ::ConfigDiff,
+    dynamic_config ::ConfigBackup,
+    dynamic_config ::ConfigVersion,
   };
 
   #[ cfg( feature = "streaming_control" ) ]
   exposed use
   {
-    stream_control::StreamState,
-    stream_control::StreamControlError,
-    stream_control::StreamMetrics,
-    stream_control::StreamBuffer,
-    stream_control::StreamControl,
+    stream_control ::StreamState,
+    stream_control ::StreamControlError,
+    stream_control ::StreamMetrics,
+    stream_control ::StreamBuffer,
+    stream_control ::StreamControl,
   };
   #[ cfg( all( feature = "streaming", feature = "streaming_control" ) ) ]
   exposed use
   {
-    stream_control::ControlledStream,
+    stream_control ::ControlledStream,
   };
   // EmbeddingsRequestBuilder is already exported above
 }

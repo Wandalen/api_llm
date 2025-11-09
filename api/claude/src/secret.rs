@@ -36,7 +36,7 @@ mod private
     fn fmt( &self, f : &mut std::fmt::Formatter< '_ > ) -> std::fmt::Result
     {
       f.debug_struct( "Secret" )
-        .field( "ANTHROPIC_API_KEY", &"<REDACTED>" )
+        .field( "ANTHROPIC_API_KEY", &"< REDACTED >" )
         .finish()
     }
   }
@@ -89,10 +89,10 @@ mod private
         .map_err( | e | error_tools::Error::msg(
           format!(
             "Missing environment variable '{env_var}'.\n\
-             Error: {e}\n\
-             Hint: Set the environment variable:\n\
-             - Linux/Mac: export {env_var}=\"your-api-key\"\n\
-             - Or source workspace secrets: source /path/to/workspace/secret/-secrets.sh"
+             Error : {e}\n\
+             Hint : Set the environment variable:\n\
+             - Linux/Mac : export {env_var}=\"your-api-key\"\n\
+             - Or source workspace secrets : source /path/to/workspace/secret/-secrets.sh"
           )
         ) )?;
 
@@ -108,7 +108,7 @@ mod private
     pub fn load_from_file( path : &Path ) -> Result< Self >
     {
       let api_key = std::fs::read_to_string( path )
-        .map_err( | e | error_tools::Error::msg( format!( "Failed to read secret file: {e}" ) ) )?;
+        .map_err( | e | error_tools::Error::msg( format!( "Failed to read secret file : {e}" ) ) )?;
       
       Self::new( api_key.trim().to_string() )
     }
@@ -133,10 +133,10 @@ mod private
         .map_err( | e | error_tools::Error::msg(
           format!(
             "Failed to read secrets file.\n\
-             Tried file: {}\n\
-             Secret directory: {}\n\
-             Error: {e}\n\
-             Hint: Ensure secret/ directory exists at workspace root with {} file",
+             Tried file : {}\n\
+             Secret directory : {}\n\
+             Error : {e}\n\
+             Hint : Ensure secret/ directory exists at workspace root with {} file",
             secret_file_abs.display(),
             secret_dir.display(),
             filename
@@ -162,8 +162,8 @@ mod private
         .ok_or_else( || error_tools::Error::msg(
           format!(
             "Key '{key_name}' not found in secrets file.\n\
-             Tried file: {}\n\
-             Hint: Add this line to the file:\n\
+             Tried file : {}\n\
+             Hint : Add this line to the file:\n\
              export {key_name}=\"your-api-key\"",
             secret_file_abs.display()
           )
@@ -202,14 +202,14 @@ mod private
         else
         {
           // If relative, resolve from current dir
-          std::env::current_dir()
+          std ::env::current_dir()
             .map_err( | e | error_tools::Error::msg(
-              format!( "Failed to get current directory: {e}" )
+              format!( "Failed to get current directory : {e}" )
             ) )?
             .join( ws_root )
             .canonicalize()
             .map_err( | e | error_tools::Error::msg(
-              format!( "Failed to canonicalize workspace root: {e}" )
+              format!( "Failed to canonicalize workspace root : {e}" )
             ) )?
         };
 
@@ -231,10 +231,10 @@ mod private
         }
       }
 
-      // Fallback: search upward from current directory
+      // Fallback : search upward from current directory
       let start_dir = std::env::current_dir()
         .map_err( | e | error_tools::Error::msg(
-          format!( "Failed to get current directory: {e}" )
+          format!( "Failed to get current directory : {e}" )
         ) )?;
 
       let mut current = start_dir.clone();
@@ -258,8 +258,8 @@ mod private
             return Err( error_tools::Error::msg(
               format!(
                 "Could not find secret/ directory.\n\
-                 Searched from: {}\n\
-                 Hint: Ensure secret/ directory exists at workspace root",
+                 Searched from : {}\n\
+                 Hint : Ensure secret/ directory exists at workspace root",
                 start_dir.display()
               )
             ) );
@@ -309,7 +309,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use Secret;
 }

@@ -35,16 +35,16 @@
 
 use api_openai::exposed::
 {
-  sync::{ SyncClient },
-  environment::OpenaiEnvironmentImpl,
-  secret::Secret,
+  sync ::{ SyncClient },
+  environment ::OpenaiEnvironmentImpl,
+  secret ::Secret,
 };
 use std::
 {
-  sync::{ Arc, atomic::{ AtomicU32, AtomicBool, Ordering }, Barrier },
-  time::{ Duration, Instant },
+  sync ::{ Arc, atomic::{ AtomicU32, AtomicBool, Ordering }, Barrier },
+  time ::{ Duration, Instant },
   thread,
-  collections::HashMap,
+  collections ::HashMap,
 };
 use tokio::runtime::Runtime;
 
@@ -53,17 +53,17 @@ use tokio::runtime::Runtime;
 pub struct AdvancedSyncMetrics
 {
   /// Total operations performed
-  pub total_operations: u64,
+  pub total_operations : u64,
   /// Average operation duration
-  pub avg_duration: Duration,
+  pub avg_duration : Duration,
   /// Peak concurrent operations
-  pub peak_concurrent: u32,
+  pub peak_concurrent : u32,
   /// Memory usage statistics
-  pub memory_usage: MemoryUsage,
+  pub memory_usage : MemoryUsage,
   /// Error rates by category
-  pub error_rates: HashMap< String, f64 >,
+  pub error_rates : HashMap< String, f64 >,
   /// Thread utilization statistics
-  pub thread_utilization: ThreadUtilization,
+  pub thread_utilization : ThreadUtilization,
 }
 
 /// Memory usage tracking for sync operations
@@ -71,13 +71,13 @@ pub struct AdvancedSyncMetrics
 pub struct MemoryUsage
 {
   /// Peak memory usage in bytes
-  pub peak_usage: u64,
+  pub peak_usage : u64,
   /// Average memory usage in bytes
-  pub avg_usage: u64,
+  pub avg_usage : u64,
   /// Memory allocation count
-  pub allocation_count: u64,
+  pub allocation_count : u64,
   /// Memory deallocation count
-  pub deallocation_count: u64,
+  pub deallocation_count : u64,
 }
 
 /// Thread utilization metrics
@@ -85,13 +85,13 @@ pub struct MemoryUsage
 pub struct ThreadUtilization
 {
   /// Number of threads created
-  pub threads_created: u32,
+  pub threads_created : u32,
   /// Number of threads destroyed
-  pub threads_destroyed: u32,
+  pub threads_destroyed : u32,
   /// Peak thread count
-  pub peak_thread_count: u32,
+  pub peak_thread_count : u32,
   /// Thread pool efficiency (0.0 to 1.0)
-  pub pool_efficiency: f64,
+  pub pool_efficiency : f64,
 }
 
 /// Utility function to create test environment
@@ -104,8 +104,8 @@ fn create_test_environment() -> OpenaiEnvironmentImpl
     secret,
     None, // organization_id
     None, // project_id
-    api_openai::environment::OpenAIRecommended::base_url().to_string(),
-    api_openai::environment::OpenAIRecommended::realtime_base_url().to_string(),
+    api_openai ::environment::OpenAIRecommended::base_url().to_string(),
+    api_openai ::environment::OpenAIRecommended::realtime_base_url().to_string(),
   ).expect("Failed to create test environment")
 }
 
@@ -149,14 +149,14 @@ fn test_advanced_runtime_lifecycle_management()
       // Each client should work independently
       // In a real test, we would make actual API calls here
       // For now, we just test that the client structure works
-      thread::sleep(Duration::from_millis(10));
+      thread ::sleep(Duration::from_millis(10));
       i
     });
     handles.push(handle);
   }
 
   // Wait for all threads to complete
-  let results: Vec<_> = handles.into_iter()
+  let results : Vec< _ > = handles.into_iter()
     .map(|h| h.join().expect("Thread should complete successfully"))
     .collect();
 
@@ -201,10 +201,10 @@ fn test_sync_operations_under_memory_pressure()
       }
 
       // Simulate memory-intensive operation
-      let _large_data: Vec< u8 > = vec![0; 1024 * 1024]; // 1MB allocation per operation
+      let _large_data : Vec< u8 > = vec![0; 1024 * 1024]; // 1MB allocation per operation
 
       // Simulate work
-      thread::sleep(Duration::from_millis(50));
+      thread ::sleep(Duration::from_millis(50));
 
       concurrent_ops_clone.fetch_sub(1, Ordering::SeqCst);
       i
@@ -214,12 +214,12 @@ fn test_sync_operations_under_memory_pressure()
     // Stagger thread creation to simulate realistic load
     if i % 10 == 0
     {
-      thread::sleep(Duration::from_millis(10));
+      thread ::sleep(Duration::from_millis(10));
     }
   }
 
   // Wait for all operations to complete
-  let results: Vec<_> = handles.into_iter()
+  let results : Vec< _ > = handles.into_iter()
     .map(|h| h.join().expect("Operation should complete"))
     .collect();
 
@@ -227,7 +227,7 @@ fn test_sync_operations_under_memory_pressure()
   let final_peak = peak_concurrent.load(Ordering::SeqCst);
 
   println!("Completed {} operations in {:?}", results.len(), total_duration);
-  println!("Peak concurrent operations: {}", final_peak);
+  println!("Peak concurrent operations : {}", final_peak);
 
   // Validate results
   assert_eq!(results.len(), operation_count);
@@ -243,7 +243,7 @@ fn test_advanced_error_handling_scenarios()
   let env = create_test_environment();
   let _client = SyncClient::new(env).expect("Failed to create sync client");
 
-  let error_scenarios: Vec< (&str, fn()) > = vec![
+  let error_scenarios : Vec< (&str, fn()) > = vec![
     ("timeout_simulation", simulate_timeout_error as fn()),
     ("network_failure", simulate_network_failure as fn()),
     ("rate_limit_exceeded", simulate_rate_limit_error as fn()),
@@ -271,7 +271,7 @@ fn test_advanced_error_handling_scenarios()
       }
 
       // Test recovery after error
-      thread::sleep(Duration::from_millis(10));
+      thread ::sleep(Duration::from_millis(10));
     }
 
     let error_rate = scenario_errors as f64 / 10.0;
@@ -321,7 +321,7 @@ fn test_external_runtime_management()
         operation_count_clone.fetch_add(1, Ordering::SeqCst);
 
         // Simulate work that would use the runtime
-        thread::sleep(Duration::from_millis(5));
+        thread ::sleep(Duration::from_millis(5));
       }
       i
     });
@@ -329,7 +329,7 @@ fn test_external_runtime_management()
   }
 
   // Wait for all operations to complete
-  let results: Vec<_> = handles.into_iter()
+  let results : Vec< _ > = handles.into_iter()
     .map(|h| h.join().expect("Thread should complete"))
     .collect();
 
@@ -347,11 +347,11 @@ fn test_sync_performance_optimization()
   let client = SyncClient::new(env).expect("Failed to create sync client");
 
   // Benchmark different operation patterns
-  let patterns: Vec<(&str, fn(&SyncClient<OpenaiEnvironmentImpl>) -> u32)> = vec![
-    ("sequential_operations", test_sequential_pattern as fn(&SyncClient<OpenaiEnvironmentImpl>) -> u32),
-    ("burst_operations", test_burst_pattern as fn(&SyncClient<OpenaiEnvironmentImpl>) -> u32),
-    ("steady_rate_operations", test_steady_rate_pattern as fn(&SyncClient<OpenaiEnvironmentImpl>) -> u32),
-    ("mixed_operation_types", test_mixed_operations_pattern as fn(&SyncClient<OpenaiEnvironmentImpl>) -> u32),
+  let patterns : Vec<(&str, fn(&SyncClient< OpenaiEnvironmentImpl >) -> u32)> = vec![
+    ("sequential_operations", test_sequential_pattern as fn(&SyncClient< OpenaiEnvironmentImpl >) -> u32),
+    ("burst_operations", test_burst_pattern as fn(&SyncClient< OpenaiEnvironmentImpl >) -> u32),
+    ("steady_rate_operations", test_steady_rate_pattern as fn(&SyncClient< OpenaiEnvironmentImpl >) -> u32),
+    ("mixed_operation_types", test_mixed_operations_pattern as fn(&SyncClient< OpenaiEnvironmentImpl >) -> u32),
   ];
 
   let mut performance_results = HashMap::new();
@@ -384,7 +384,7 @@ fn test_sync_performance_optimization()
 
   // Burst operations should generally be faster due to better resource utilization
   // (This is a simplified assumption for testing purposes)
-  println!("Sequential: {:.2}, Burst: {:.2}", sequential, burst);
+  println!("Sequential : {:.2}, Burst : {:.2}", sequential, burst);
 }
 
 /// Test advanced thread safety scenarios
@@ -424,20 +424,20 @@ fn test_advanced_thread_safety()
         {
           0 => {
             // Simulate embeddings operation
-            // In real implementation: client_clone.embeddings().create(request)
-            thread::sleep(Duration::from_micros(100));
+            // In real implementation : client_clone.embeddings().create(request)
+            thread ::sleep(Duration::from_micros(100));
             thread_completions += 1;
           },
           1 => {
             // Simulate chat operation
-            // In real implementation: client_clone.chat().create(request)
-            thread::sleep(Duration::from_micros(150));
+            // In real implementation : client_clone.chat().create(request)
+            thread ::sleep(Duration::from_micros(150));
             thread_completions += 1;
           },
           _ => {
             // Simulate models operation
-            // In real implementation: client_clone.models().list()
-            thread::sleep(Duration::from_micros(50));
+            // In real implementation : client_clone.models().list()
+            thread ::sleep(Duration::from_micros(50));
             thread_completions += 1;
           },
         }
@@ -460,7 +460,7 @@ fn test_advanced_thread_safety()
 
   // Wait for all threads to complete and collect results
   let start_time = Instant::now();
-  let results: Vec<_> = handles.into_iter()
+  let results : Vec< _ > = handles.into_iter()
     .map(|h| h.join().expect("Thread should complete successfully"))
     .collect();
   let total_duration = start_time.elapsed();
@@ -469,7 +469,7 @@ fn test_advanced_thread_safety()
   let total_errors = error_counter.load(Ordering::SeqCst);
 
   println!("Thread safety test completed in {:?}", total_duration);
-  println!("Total completions: {}, Total errors: {}", total_completions, total_errors);
+  println!("Total completions : {}, Total errors : {}", total_completions, total_errors);
 
   // Validate results
   assert_eq!(results.len(), thread_count);
@@ -506,7 +506,7 @@ fn test_resource_cleanup_and_memory_management()
       let handle = thread::spawn(move || {
         // Simulate resource usage
         tracker_clone.fetch_add(1, Ordering::SeqCst);
-        thread::sleep(Duration::from_millis(50));
+        thread ::sleep(Duration::from_millis(50));
         tracker_clone.fetch_sub(1, Ordering::SeqCst);
         i
       });
@@ -516,24 +516,24 @@ fn test_resource_cleanup_and_memory_management()
     // Use the clients briefly
     for (i, _client) in clients.iter().enumerate()
     {
-      // In real implementation: perform operations
+      // In real implementation : perform operations
       println!("Using client {}", i);
-      thread::sleep(Duration::from_millis(10));
+      thread ::sleep(Duration::from_millis(10));
     }
 
     // Wait for resource usage threads to complete
-    let _results: Vec<_> = client_handles.into_iter()
+    let _results : Vec< _ > = client_handles.into_iter()
       .map(|h| h.join().expect("Resource thread should complete"))
       .collect();
 
   } // Clients go out of scope here and should be dropped
 
   // Give some time for cleanup
-  thread::sleep(Duration::from_millis(100));
+  thread ::sleep(Duration::from_millis(100));
 
   let remaining_resources = resource_tracker.load(Ordering::SeqCst);
 
-  println!("Remaining resource count after cleanup: {}", remaining_resources);
+  println!("Remaining resource count after cleanup : {}", remaining_resources);
 
   // All resources should be cleaned up
   assert_eq!(remaining_resources, 0, "All resources should be cleaned up after client drop");
@@ -567,17 +567,17 @@ fn test_complex_async_workflow_integration()
     {
       &"load_embeddings" => {
         // Simulate embeddings operation
-        // In real implementation: sync_client.embeddings().create(request)
-        thread::sleep(Duration::from_millis(50));
+        // In real implementation : sync_client.embeddings().create(request)
+        thread ::sleep(Duration::from_millis(50));
       },
       &"process_chat_completion" => {
         // Simulate chat completion
-        // In real implementation: sync_client.chat().create(request)
-        thread::sleep(Duration::from_millis(100));
+        // In real implementation : sync_client.chat().create(request)
+        thread ::sleep(Duration::from_millis(100));
       },
       _ => {
         // Other workflow steps
-        thread::sleep(Duration::from_millis(25));
+        thread ::sleep(Duration::from_millis(25));
       }
     }
 
@@ -593,13 +593,13 @@ fn test_complex_async_workflow_integration()
 
 // Helper functions for performance testing patterns
 
-fn test_sequential_pattern(_client: &SyncClient<OpenaiEnvironmentImpl>) -> u32
+fn test_sequential_pattern(_client : &SyncClient< OpenaiEnvironmentImpl >) -> u32
 {
   let operations = 20;
   for i in 0..operations
   {
     // Simulate sequential operations
-    thread::sleep(Duration::from_micros(500));
+    thread ::sleep(Duration::from_micros(500));
     if i % 10 == 0
     {
       println!("Sequential operation {}", i);
@@ -608,7 +608,7 @@ fn test_sequential_pattern(_client: &SyncClient<OpenaiEnvironmentImpl>) -> u32
   operations
 }
 
-fn test_burst_pattern(_client: &SyncClient<OpenaiEnvironmentImpl>) -> u32
+fn test_burst_pattern(_client : &SyncClient< OpenaiEnvironmentImpl >) -> u32
 {
   let burst_size = 5;
   let burst_count = 4;
@@ -619,24 +619,24 @@ fn test_burst_pattern(_client: &SyncClient<OpenaiEnvironmentImpl>) -> u32
     // Quick burst of operations
     for _i in 0..burst_size
     {
-      thread::sleep(Duration::from_micros(100));
+      thread ::sleep(Duration::from_micros(100));
     }
     // Rest period between bursts
-    thread::sleep(Duration::from_millis(10));
+    thread ::sleep(Duration::from_millis(10));
     println!("Completed burst {}", burst);
   }
 
   total_operations
 }
 
-fn test_steady_rate_pattern(_client: &SyncClient<OpenaiEnvironmentImpl>) -> u32
+fn test_steady_rate_pattern(_client : &SyncClient< OpenaiEnvironmentImpl >) -> u32
 {
   let operations = 15;
   let interval = Duration::from_millis(5);
 
   for i in 0..operations
   {
-    thread::sleep(interval);
+    thread ::sleep(interval);
     if i % 5 == 0
     {
       println!("Steady rate operation {}", i);
@@ -646,7 +646,7 @@ fn test_steady_rate_pattern(_client: &SyncClient<OpenaiEnvironmentImpl>) -> u32
   operations
 }
 
-fn test_mixed_operations_pattern(_client: &SyncClient<OpenaiEnvironmentImpl>) -> u32
+fn test_mixed_operations_pattern(_client : &SyncClient< OpenaiEnvironmentImpl >) -> u32
 {
   let mut total_operations = 0;
 
@@ -657,17 +657,17 @@ fn test_mixed_operations_pattern(_client: &SyncClient<OpenaiEnvironmentImpl>) ->
     {
       0 => {
         // Fast operation
-        thread::sleep(Duration::from_micros(200));
+        thread ::sleep(Duration::from_micros(200));
         total_operations += 1;
       },
       1 => {
         // Medium operation
-        thread::sleep(Duration::from_millis(2));
+        thread ::sleep(Duration::from_millis(2));
         total_operations += 1;
       },
       _ => {
         // Slow operation
-        thread::sleep(Duration::from_millis(8));
+        thread ::sleep(Duration::from_millis(8));
         total_operations += 1;
       },
     }
@@ -680,30 +680,30 @@ fn test_mixed_operations_pattern(_client: &SyncClient<OpenaiEnvironmentImpl>) ->
 
 fn simulate_timeout_error()
 {
-  // In real implementation: configure client to timeout quickly
+  // In real implementation : configure client to timeout quickly
   println!("Simulating timeout error");
 }
 
 fn simulate_network_failure()
 {
-  // In real implementation: simulate network connectivity issues
+  // In real implementation : simulate network connectivity issues
   println!("Simulating network failure");
 }
 
 fn simulate_rate_limit_error()
 {
-  // In real implementation: trigger rate limiting
+  // In real implementation : trigger rate limiting
   println!("Simulating rate limit error");
 }
 
 fn simulate_invalid_request_error()
 {
-  // In real implementation: send malformed requests
+  // In real implementation : send malformed requests
   println!("Simulating invalid request error");
 }
 
 fn simulate_service_unavailable()
 {
-  // In real implementation: simulate 503 service unavailable
+  // In real implementation : simulate 503 service unavailable
   println!("Simulating service unavailable");
 }

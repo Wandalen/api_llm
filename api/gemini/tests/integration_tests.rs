@@ -6,10 +6,10 @@
 //! ## Test Matrix for Integration Tests
 //!
 //! **Test Factors:**
-//! - API Endpoints: `list_models`, `get_model`, `generate_content`, `embed_content`
-//! - Response Validation: Success cases, error cases, edge cases
-//! - Content Types: Text only, multimodal, function calling
-//! - Configuration: Default settings, custom parameters, safety settings
+//! - API Endpoints : `list_models`, `get_model`, `generate_content`, `embed_content`
+//! - Response Validation : Success cases, error cases, edge cases
+//! - Content Types : Text only, multimodal, function calling
+//! - Configuration : Default settings, custom parameters, safety settings
 //!
 //! **Test Combinations:**
 
@@ -65,10 +65,10 @@ fn create_test_client() -> Client
     Ok(client) => client,
     Err(error) => panic!(
       "\n❌ INTEGRATION TEST FAILURE: No valid API key found!\n\
-      \n🔑 Required: Set GEMINI_API_KEY environment variable or create secret/gemini_api_key file\n\
+      \n🔑 Required : Set GEMINI_API_KEY environment variable or create secret/gemini_api_key file\n\
       \n📋 Integration tests run by default and CANNOT be silently skipped\n\
-      \n🚫 Error details: {error:?}\n\
-      \n💡 To run only unit tests: cargo test --no-default-features\n"
+      \n🚫 Error details : {error:?}\n\
+      \n💡 To run only unit tests : cargo test --no-default-features\n"
     ),
   }
 }
@@ -83,7 +83,7 @@ macro_rules! setup_test_client
 }
 
 /// Test listing available models
-/// Test Combination: IT1.1
+/// Test Combination : IT1.1
 #[ tokio::test ]
 async fn test_list_models_integration()
 {
@@ -91,7 +91,7 @@ async fn test_list_models_integration()
   let result = client.models().list().await;
 
   // Integration test always expects success with real API
-  assert!( result.is_ok(), "Failed to list models: {:?}", result.err() );
+  assert!( result.is_ok(), "Failed to list models : {:?}", result.err() );
   let models = result.unwrap();
   assert!( !models.models.is_empty(), "No models returned" );
   
@@ -109,7 +109,7 @@ async fn test_list_models_integration()
 }
 
 /// Test getting specific model information
-/// Test Combination: IT1.2
+/// Test Combination : IT1.2
 #[ tokio::test ]
 async fn test_get_model_integration()
 {
@@ -117,7 +117,7 @@ async fn test_get_model_integration()
   let result = client.models().get( "models/gemini-2.5-pro" ).await;
 
   // Integration test - must make real API call and succeed
-  assert!( result.is_ok(), "Failed to get model: {:?}", result.err() );
+  assert!( result.is_ok(), "Failed to get model : {:?}", result.err() );
 
   let model = result.unwrap();
   assert_eq!( model.name, "models/gemini-2.5-pro" );
@@ -126,7 +126,7 @@ async fn test_get_model_integration()
 }
 
 /// Test simple text generation
-/// Test Combination: IT1.3
+/// Test Combination : IT1.3
 #[ tokio::test ]
 async fn test_generate_content_simple()
 {
@@ -166,7 +166,7 @@ async fn test_generate_content_simple()
   .generate_content( &request )
   .await;
 
-  assert!( result.is_ok(), "Failed to generate content: {:?}", result.err() );
+  assert!( result.is_ok(), "Failed to generate content : {:?}", result.err() );
 
   let response = result.unwrap();
   assert!( !response.candidates.is_empty() );
@@ -176,7 +176,7 @@ async fn test_generate_content_simple()
 }
 
 /// Test text generation with custom parameters
-/// Test Combination: IT1.4
+/// Test Combination : IT1.4
 #[ tokio::test ]
 async fn test_generate_content_with_parameters()
 {
@@ -230,7 +230,7 @@ async fn test_generate_content_with_parameters()
 }
 
 /// Test multimodal content (would need actual image data)
-/// Test Combination: IT1.5
+/// Test Combination : IT1.5
 #[ tokio::test ]
 async fn test_generate_content_multimodal()
 {
@@ -285,7 +285,7 @@ async fn test_generate_content_multimodal()
   .generate_content( &request )
   .await;
 
-  assert!( result.is_ok(), "Failed to generate multimodal content: {:?}", result.err() );
+  assert!( result.is_ok(), "Failed to generate multimodal content : {:?}", result.err() );
   let response = result.unwrap();
   assert!( !response.candidates.is_empty() );
 
@@ -295,7 +295,7 @@ async fn test_generate_content_multimodal()
 }
 
 /// Test function calling
-/// Test Combination: IT1.6
+/// Test Combination : IT1.6
 #[ tokio::test ]
 async fn test_generate_content_function_calling()
 {
@@ -382,7 +382,7 @@ async fn test_generate_content_function_calling()
 }
 
 /// Test text embeddings
-/// Test Combination: IT1.7
+/// Test Combination : IT1.7
 #[ tokio::test ]
 async fn test_embed_content()
 {
@@ -416,7 +416,7 @@ async fn test_embed_content()
   .embed_content( &request )
   .await;
 
-  assert!( result.is_ok(), "Failed to embed content: {:?}", result.err() );
+  assert!( result.is_ok(), "Failed to embed content : {:?}", result.err() );
 
   let response = result.unwrap();
   assert!( !response.embedding.values.is_empty() );
@@ -424,7 +424,7 @@ async fn test_embed_content()
 }
 
 /// Test invalid model name
-/// Test Combination: IT1.8
+/// Test Combination : IT1.8
 #[ tokio::test ]
 async fn test_invalid_model_error()
 {
@@ -470,12 +470,12 @@ async fn test_invalid_model_error()
   match result.err().unwrap()
   {
     Error::InvalidArgument( _ ) | Error::ApiError( _ ) => {},
-    other => panic!( "Expected InvalidArgument or ApiError, got: {other:?}" ),
+    other => panic!( "Expected InvalidArgument or ApiError, got : {other:?}" ),
   }
 }
 
 /// Test empty content error
-/// Test Combination: IT1.10
+/// Test Combination : IT1.10
 #[ tokio::test ]
 async fn test_empty_content_error()
 {
@@ -546,7 +546,7 @@ async fn test_safety_settings()
 
   // Safety settings requests can take longer than simple text generation
   let result = tokio::time::timeout(
-    core::time::Duration::from_secs(25),
+    core ::time::Duration::from_secs(25),
     client
     .models()
     .by_name( "gemini-flash-latest" )
@@ -555,8 +555,8 @@ async fn test_safety_settings()
 
   match result
   {
-    Ok(api_result) => assert!( api_result.is_ok(), "Safety settings API call failed: {:?}", api_result.err() ),
-    Err(timeout_err) => panic!("Safety settings API call timed out after 25 seconds - API may be overloaded: {timeout_err:?}"),
+    Ok(api_result) => assert!( api_result.is_ok(), "Safety settings API call failed : {:?}", api_result.err() ),
+    Err(timeout_err) => panic!("Safety settings API call timed out after 25 seconds - API may be overloaded : {timeout_err:?}"),
   }
 }
 
@@ -636,7 +636,7 @@ async fn test_multi_turn_conversation()
 }
 
 /// Test multiple candidates generation (merged from mock tests)
-/// Test Combination: IT1.11
+/// Test Combination : IT1.11
 #[ tokio::test ]
 async fn test_multiple_candidates_generation()
 {
@@ -684,10 +684,10 @@ async fn test_multiple_candidates_generation()
   .generate_content( &request )
   .await;
 
-  assert!( result.is_ok(), "Failed to generate multiple candidates: {:?}", result.err() );
+  assert!( result.is_ok(), "Failed to generate multiple candidates : {:?}", result.err() );
   let response = result.unwrap();
 
-  // Note: The actual API may return fewer candidates than requested
+  // Note : The actual API may return fewer candidates than requested
   assert!( !response.candidates.is_empty() );
 
   // Test that each candidate has content
@@ -699,7 +699,7 @@ async fn test_multiple_candidates_generation()
 }
 
 /// Test client builder validation (merged from mock tests)
-/// Test Combination: IT1.12
+/// Test Combination : IT1.12
 #[ test ]
 fn test_client_builder_validation()
 {

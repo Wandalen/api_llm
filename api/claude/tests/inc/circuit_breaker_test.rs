@@ -119,13 +119,13 @@ fn test_circuit_breaker_failure_detection()
 
   // Rate limiting should NOT trigger circuit breaker (temporary, recoverable)
   let rate_limit_error = the_module::AnthropicError::RateLimit(
-    the_module::RateLimitError::new( "Rate limited".to_string(), None, "requests".to_string() )
+    the_module ::RateLimitError::new( "Rate limited".to_string(), None, "requests".to_string() )
   );
   assert!( !breaker.is_failure( &rate_limit_error ) );
 
   // Authentication errors should NOT trigger circuit breaker (client-side issue)
   let auth_error = the_module::AnthropicError::Authentication(
-    the_module::AuthenticationError::new( "Invalid API key".to_string() )
+    the_module ::AuthenticationError::new( "Invalid API key".to_string() )
   );
   assert!( !breaker.is_failure( &auth_error ) );
 

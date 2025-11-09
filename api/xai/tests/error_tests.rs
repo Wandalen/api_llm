@@ -23,7 +23,7 @@ fn error_display_formats_http_error_correctly()
 {
   let error = XaiError::Http( "404 Not Found".to_string() );
   let display = format!( "{error}" );
-  assert_eq!( display, "HTTP Error: 404 Not Found" );
+  assert_eq!( display, "HTTP Error : 404 Not Found" );
 }
 
 #[ test ]
@@ -31,7 +31,7 @@ fn error_display_formats_network_error_correctly()
 {
   let error = XaiError::Network( "Connection refused".to_string() );
   let display = format!( "{error}" );
-  assert_eq!( display, "Network Error: Connection refused" );
+  assert_eq!( display, "Network Error : Connection refused" );
 }
 
 #[ test ]
@@ -39,7 +39,7 @@ fn error_display_formats_timeout_error_correctly()
 {
   let error = XaiError::Timeout( "Request timed out after 30s".to_string() );
   let display = format!( "{error}" );
-  assert_eq!( display, "Timeout Error: Request timed out after 30s" );
+  assert_eq!( display, "Timeout Error : Request timed out after 30s" );
 }
 
 #[ test ]
@@ -47,7 +47,7 @@ fn error_display_formats_stream_error_correctly()
 {
   let error = XaiError::Stream( "SSE parse error".to_string() );
   let display = format!( "{error}" );
-  assert_eq!( display, "Stream Error: SSE parse error" );
+  assert_eq!( display, "Stream Error : SSE parse error" );
 }
 
 #[ test ]
@@ -55,7 +55,7 @@ fn error_display_formats_rate_limit_error_correctly()
 {
   let error = XaiError::RateLimit( "Too many requests".to_string() );
   let display = format!( "{error}" );
-  assert_eq!( display, "Rate Limit Error: Too many requests" );
+  assert_eq!( display, "Rate Limit Error : Too many requests" );
 }
 
 #[ test ]
@@ -63,7 +63,7 @@ fn error_display_formats_serialization_error_correctly()
 {
   let error = XaiError::Serialization( "Invalid JSON".to_string() );
   let display = format!( "{error}" );
-  assert_eq!( display, "Serialization Error: Invalid JSON" );
+  assert_eq!( display, "Serialization Error : Invalid JSON" );
 }
 
 #[ test ]
@@ -71,7 +71,7 @@ fn error_display_formats_invalid_api_key_error_correctly()
 {
   let error = XaiError::InvalidApiKey( "Key must start with xai-".to_string() );
   let display = format!( "{error}" );
-  assert_eq!( display, "Invalid API Key: Key must start with xai-" );
+  assert_eq!( display, "Invalid API Key : Key must start with xai-" );
 }
 
 #[ test ]
@@ -79,7 +79,7 @@ fn error_display_formats_environment_error_correctly()
 {
   let error = XaiError::Environment( "XAI_API_KEY not set".to_string() );
   let display = format!( "{error}" );
-  assert_eq!( display, "Environment Error: XAI_API_KEY not set" );
+  assert_eq!( display, "Environment Error : XAI_API_KEY not set" );
 }
 
 #[ test ]
@@ -87,7 +87,7 @@ fn error_display_formats_url_parse_error_correctly()
 {
   let error = XaiError::UrlParse( "Invalid URL".to_string() );
   let display = format!( "{error}" );
-  assert_eq!( display, "URL Parse Error: Invalid URL" );
+  assert_eq!( display, "URL Parse Error : Invalid URL" );
 }
 
 #[ test ]
@@ -130,7 +130,7 @@ fn serde_json_error_converts_to_serialization_error()
   {
     XaiError::Serialization( msg ) =>
     {
-      eprintln!( "Actual error message: {msg}" );
+      eprintln!( "Actual error message : {msg}" );
       assert!( msg.contains( "expected" ) || msg.contains( "EOF" ) || msg.contains( "key must be a string" ) );
     }
     _ => panic!( "Expected Serialization error" ),

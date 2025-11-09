@@ -31,7 +31,7 @@ use api_ollama::{
 #[ tokio::test ]
 async fn test_integration_server_availability()
 {
-  with_test_server!(|mut client: OllamaClient, _model: String| async move {
+  with_test_server!(|mut client : OllamaClient, _model : String| async move {
     let is_available = client.is_available().await;
     assert!(is_available, "Managed test server should be available");
     println!("✓ Managed Ollama test server is available");
@@ -41,12 +41,12 @@ async fn test_integration_server_availability()
 #[ tokio::test ]
 async fn test_integration_list_models()
 {
-  with_test_server!(|mut client: OllamaClient, model: String| async move {
+  with_test_server!(|mut client : OllamaClient, model : String| async move {
     let result = client.list_models().await;
-    assert!(result.is_ok(), "Failed to list models: {result:?}");
+    assert!(result.is_ok(), "Failed to list models : {result:?}");
     
     let models = result.unwrap();
-    println!("Available models: {:?}", models.models);
+    println!("Available models : {:?}", models.models);
     
     // Should have our test model available
     assert!(!models.models.is_empty(), "No models available on test server");
@@ -58,9 +58,9 @@ async fn test_integration_list_models()
 #[ tokio::test ]
 async fn test_integration_model_info()
 {
-  with_test_server!(|mut client: OllamaClient, model: String| async move {
+  with_test_server!(|mut client : OllamaClient, model : String| async move {
     let result = client.model_info(model.clone()).await;
-    assert!(result.is_ok(), "Failed to get model info: {result:?}");
+    assert!(result.is_ok(), "Failed to get model info : {result:?}");
     
     let model_info = result.unwrap();
     assert!(!model_info.modified_at.is_empty(), "Model info should have modified_at timestamp");
@@ -84,23 +84,23 @@ async fn test_integration_model_info()
 #[ ignore = "Integration test disabled - requires stable server" ]
 async fn test_integration_simple_generation()
 {
-  with_test_server!(|mut client: OllamaClient, model: String| async move {
+  with_test_server!(|mut client : OllamaClient, model : String| async move {
     let request = GenerateRequest
     {
       model,
-      prompt: "Say hello in one word.".to_string(),
-      stream: Some(false),
-      options: None,
+      prompt : "Say hello in one word.".to_string(),
+      stream : Some(false),
+      options : None,
     };
     
     let result = client.generate(request).await;
-    assert!(result.is_ok(), "Failed to generate text: {result:?}");
+    assert!(result.is_ok(), "Failed to generate text : {result:?}");
     
     let response = result.unwrap();
     assert!(!response.response.is_empty(), "Generated response is empty");
     assert!(response.done, "Generation should be marked as done");
     
-    println!("Generated response: '{}'", response.response.trim());
+    println!("Generated response : '{}'", response.response.trim());
   });
 }
 
@@ -113,31 +113,31 @@ async fn test_integration_simple_generation()
 #[ ignore = "Integration test disabled - requires stable server infrastructure" ]
 async fn test_integration_simple_chat()
 {
-  with_test_server!(|mut client: OllamaClient, model: String| async move {
+  with_test_server!(|mut client : OllamaClient, model : String| async move {
     let request = ChatRequest
     {
       model,
-      messages: vec![
+      messages : vec![
         ChatMessage
         {
-          role: MessageRole::User,
-          content: "Say hello in one word.".to_string(),
-          images: None,
+          role : MessageRole::User,
+          content : "Say hello in one word.".to_string(),
+          images : None,
           #[ cfg( feature = "tool_calling" ) ]
-          tool_calls: None,
+          tool_calls : None,
         }
       ],
-      stream: Some(false),
-      options: None,
+      stream : Some(false),
+      options : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tools: None,
+      tools : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tool_messages: None,
+      tool_messages : None,
     };
     
     // Fix(issue-silent-failure-002): Fail loudly when server unavailable
-    // Root cause: Silent skip with println+return created false positive test results
-    // Pitfall: Integration tests MUST fail loudly when dependencies unavailable per codebase_hygiene.rulebook.md
+    // Root cause : Silent skip with println+return created false positive test results
+    // Pitfall : Integration tests MUST fail loudly when dependencies unavailable per codebase_hygiene.rulebook.md
     let response = client.chat(request).await
       .expect("Chat API must succeed - Ollama server must be available for integration tests");
     assert!(response.done, "Chat should be marked as done");
@@ -147,7 +147,7 @@ async fn test_integration_simple_chat()
       panic!("No message in chat response");
     } else {
       assert!(!response.message.content.is_empty(), "Chat response content is empty");
-      println!("Chat response: '{}'", response.message.content.trim());
+      println!("Chat response : '{}'", response.message.content.trim());
     }
   });
 }

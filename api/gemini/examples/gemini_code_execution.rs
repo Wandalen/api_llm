@@ -248,7 +248,7 @@ async fn execute_code_with_config(
   println!( "🐍 Executing code with configuration..." );
   if config.detailed_logging
   {
-    println!( "⚙️  Timeout: {}s, Network: {}", config.timeout_seconds, config.enable_network );
+    println!( "⚙️  Timeout : {}s, Network : {}", config.timeout_seconds, config.enable_network );
   }
 
   let start_time = std::time::Instant::now();
@@ -286,10 +286,10 @@ fn display_execution_results( response : &GenerateContentResponse, detailed : bo
       if let Some( function_call ) = &part.function_call
       {
         println!( "\n🔧 Function Call Detected:" );
-        println!( "Function: {}", function_call.name );
+        println!( "Function : {}", function_call.name );
         if detailed
         {
-          println!( "Arguments: {}", serde_json::to_string_pretty( &function_call.args ).unwrap_or_default() );
+          println!( "Arguments : {}", serde_json::to_string_pretty( &function_call.args ).unwrap_or_default() );
         }
       }
 
@@ -298,20 +298,20 @@ fn display_execution_results( response : &GenerateContentResponse, detailed : bo
       {
         println!( "\n🎯 Execution Result:" );
         println!( "{}", "-".repeat( 40 ) );
-        println!( "Function: {}", function_response.name );
+        println!( "Function : {}", function_response.name );
 
         // Try to parse the response as a structured result
         if let Ok( result ) = serde_json::from_value::< serde_json::Value >( function_response.response.clone() )
         {
           if detailed
           {
-            println!( "Full Result: {}", serde_json::to_string_pretty( &result ).unwrap_or_default() );
+            println!( "Full Result : {}", serde_json::to_string_pretty( &result ).unwrap_or_default() );
           }
 
           // Extract specific fields if they exist
           if let Some( outcome ) = result.get( "outcome" ).and_then( |v| v.as_str() )
           {
-            println!( "📊 Outcome: {}", outcome );
+            println!( "📊 Outcome : {}", outcome );
           }
 
           if let Some( output ) = result.get( "output" ).and_then( |v| v.as_str() )
@@ -328,10 +328,10 @@ fn display_execution_results( response : &GenerateContentResponse, detailed : bo
 
           if let Some( execution_time ) = result.get( "execution_time_ms" ).and_then( |v| v.as_i64() )
           {
-            println!( "⏱️  Execution Time: {}ms", execution_time );
+            println!( "⏱️  Execution Time : {}ms", execution_time );
           }
         } else {
-          println!( "Raw Response: {}", function_response.response );
+          println!( "Raw Response : {}", function_response.response );
         }
       }
     }
@@ -344,15 +344,15 @@ fn display_execution_results( response : &GenerateContentResponse, detailed : bo
     println!( "{}", "-".repeat( 40 ) );
     if let Some( prompt_tokens ) = usage.prompt_token_count
     {
-      println!( "📥 Prompt tokens: {}", prompt_tokens );
+      println!( "📥 Prompt tokens : {}", prompt_tokens );
     }
     if let Some( candidates_tokens ) = usage.candidates_token_count
     {
-      println!( "📤 Response tokens: {}", candidates_tokens );
+      println!( "📤 Response tokens : {}", candidates_tokens );
     }
     if let Some( total_tokens ) = usage.total_token_count
     {
-      println!( "🔢 Total tokens: {}", total_tokens );
+      println!( "🔢 Total tokens : {}", total_tokens );
     }
   }
 }
@@ -384,11 +384,11 @@ async fn mathematical_computation(
 
   println!( "🧮 Mathematical Computation Demo" );
   println!( "{}", "=".repeat( 80 ) );
-  println!( "Problem: {}", problem );
+  println!( "Problem : {}", problem );
   println!();
 
   let prompt = format!(
-    "Please solve this mathematical problem using Python code: {}. \
+    "Please solve this mathematical problem using Python code : {}. \
      Write efficient code, execute it, and explain your approach and results.",
     problem
   );
@@ -409,11 +409,11 @@ async fn data_analysis_demo(
 
   println!( "📊 Data Analysis Demo" );
   println!( "{}", "=".repeat( 80 ) );
-  println!( "Task: {}", task );
+  println!( "Task : {}", task );
   println!();
 
   let prompt = format!(
-    "Please perform this data analysis task using Python: {}. \
+    "Please perform this data analysis task using Python : {}. \
      Use appropriate libraries like pandas, numpy, and matplotlib if needed. \
      Show your code, execute it, and interpret the results.",
     task
@@ -436,12 +436,12 @@ async fn scientific_computing_demo(
 
   println!( "🔬 Scientific Computing Demo" );
   println!( "{}", "=".repeat( 80 ) );
-  println!( "Domain: {}", domain );
-  println!( "Problem: {}", problem );
+  println!( "Domain : {}", domain );
+  println!( "Problem : {}", problem );
   println!();
 
   let prompt = format!(
-    "Please solve this {} problem using Python: {}. \
+    "Please solve this {} problem using Python : {}. \
      Use scientific libraries like numpy, scipy, or matplotlib as appropriate. \
      Show your calculations, execute the code, and visualize results if possible.",
     domain, problem
@@ -462,16 +462,16 @@ async fn interactive_coding_session(
   println!( "💬 Interactive Coding Session" );
   println!( "{}", "=".repeat( 80 ) );
   println!( "Enter your coding requests. Type 'quit' to exit." );
-  println!( "Example: 'Create a function to calculate compound interest'" );
+  println!( "Example : 'Create a function to calculate compound interest'" );
   println!();
 
   loop
   {
-    print!( "🐍 Code Request: " );
-    io::stdout().flush()?;
+    print!( "🐍 Code Request : " );
+    io ::stdout().flush()?;
 
     let mut input = String::new();
-    io::stdin().read_line( &mut input )?;
+    io ::stdin().read_line( &mut input )?;
     let input = input.trim();
 
     if input.is_empty()
@@ -487,7 +487,7 @@ async fn interactive_coding_session(
     println!( "\n🔄 Processing request..." );
 
     let prompt = format!(
-      "Please write and execute Python code for the following request: {}. \
+      "Please write and execute Python code for the following request : {}. \
        Provide clear explanations and show the execution results.",
       input
     );
@@ -498,7 +498,7 @@ async fn interactive_coding_session(
         display_execution_results( &response, false ); // Less verbose in interactive mode
       },
       Err( e ) => {
-        println!( "❌ Error: {}", e );
+        println!( "❌ Error : {}", e );
       }
     }
 
@@ -527,7 +527,7 @@ async fn error_handling_demo(
 
   for ( scenario_name, prompt ) in error_scenarios
   {
-    println!( "\n🧪 Scenario: {}", scenario_name );
+    println!( "\n🧪 Scenario : {}", scenario_name );
     println!( "{}", "-".repeat( 60 ) );
 
     match execute_code_with_config( client, prompt, config ).await
@@ -536,12 +536,12 @@ async fn error_handling_demo(
         display_execution_results( &response, false );
       },
       Err( e ) => {
-        println!( "❌ Execution failed: {}", e );
+        println!( "❌ Execution failed : {}", e );
       }
     }
 
     // Brief pause between scenarios
-    tokio::time::sleep( Duration::from_millis( 1000 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 1000 ) ).await;
   }
 
   Ok( () )
@@ -556,7 +556,7 @@ async fn performance_demo(
   println!( "⚡ Performance and Optimization Demo" );
   println!( "{}", "=".repeat( 80 ) );
 
-  let prompt = "Please write two versions of a function to calculate fibonacci numbers: \
+  let prompt = "Please write two versions of a function to calculate fibonacci numbers : \
                 1. A naive recursive version \
                 2. An optimized version using memoization or iteration \
                 Execute both, compare their performance, and explain the differences.";

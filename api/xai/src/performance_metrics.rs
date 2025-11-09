@@ -60,7 +60,7 @@ mod private
   /// # Examples
   ///
   /// ```no_run
-  /// # #[cfg(feature = "performance_metrics")]
+  /// # #[ cfg( feature = "performance_metrics") ]
   /// # {
   /// use api_xai::MetricsCollector;
   /// use std::time::Duration;
@@ -105,11 +105,11 @@ mod private
     fn fmt( &self, f : &mut std::fmt::Formatter< '_ > ) -> std::fmt::Result
     {
       f.debug_struct( "MetricsCollector" )
-        .field( "registry", &"<Registry>" )
-        .field( "requests_total", &"<Counter>" )
-        .field( "requests_duration", &"<Histogram>" )
-        .field( "tokens_total", &"<Counter>" )
-        .field( "errors_total", &"<Counter>" )
+        .field( "registry", &"< Registry >" )
+        .field( "requests_total", &"< Counter >" )
+        .field( "requests_duration", &"< Histogram >" )
+        .field( "tokens_total", &"< Counter >" )
+        .field( "errors_total", &"< Counter >" )
         .finish()
     }
   }
@@ -124,7 +124,7 @@ mod private
     /// # Examples
     ///
     /// ```no_run
-    /// # #[cfg(feature = "performance_metrics")]
+    /// # #[ cfg( feature = "performance_metrics") ]
     /// # {
     /// use api_xai::MetricsCollector;
     ///
@@ -206,7 +206,7 @@ mod private
     /// # Examples
     ///
     /// ```no_run
-    /// # #[cfg(feature = "performance_metrics")]
+    /// # #[ cfg( feature = "performance_metrics") ]
     /// # {
     /// use api_xai::MetricsCollector;
     /// use std::time::Duration;
@@ -249,7 +249,7 @@ mod private
     /// # Examples
     ///
     /// ```no_run
-    /// # #[cfg(feature = "performance_metrics")]
+    /// # #[ cfg( feature = "performance_metrics") ]
     /// # {
     /// use api_xai::MetricsCollector;
     ///
@@ -287,7 +287,7 @@ mod private
     /// # Examples
     ///
     /// ```no_run
-    /// # #[cfg(feature = "performance_metrics")]
+    /// # #[ cfg( feature = "performance_metrics") ]
     /// # {
     /// use api_xai::MetricsCollector;
     ///
@@ -320,7 +320,7 @@ mod private
   /// # Examples
   ///
   /// ```no_run
-  /// # #[cfg(feature = "performance_metrics")]
+  /// # #[ cfg( feature = "performance_metrics") ]
   /// # {
   /// use api_xai::{ MetricsCollector, MetricGuard };
   /// use std::sync::Arc;
@@ -360,7 +360,7 @@ mod private
     /// # Examples
     ///
     /// ```no_run
-    /// # #[cfg(feature = "performance_metrics")]
+    /// # #[ cfg( feature = "performance_metrics") ]
     /// # {
     /// use api_xai::{ MetricsCollector, MetricGuard };
     /// use std::sync::Arc;
@@ -389,7 +389,7 @@ mod private
     /// # Examples
     ///
     /// ```no_run
-    /// # #[cfg(feature = "performance_metrics")]
+    /// # #[ cfg( feature = "performance_metrics") ]
     /// # {
     /// use api_xai::{ MetricsCollector, MetricGuard };
     /// use std::sync::Arc;
@@ -411,7 +411,7 @@ mod private
     /// # Examples
     ///
     /// ```no_run
-    /// # #[cfg(feature = "performance_metrics")]
+    /// # #[ cfg( feature = "performance_metrics") ]
     /// # {
     /// use api_xai::{ MetricsCollector, MetricGuard };
     /// use std::sync::Arc;
@@ -441,7 +441,7 @@ mod private
 }
 
 #[ cfg( feature = "performance_metrics" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

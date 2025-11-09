@@ -17,10 +17,10 @@ use api_openai::ClientApiAccessors;
 use api_openai::
 {
   Client,
-  components::
+  components ::
   {
-    responses::{ CreateResponseRequest, ResponseInput },
-    output::{ OutputItem, OutputContentPart },
+    responses ::{ CreateResponseRequest, ResponseInput },
+    output ::{ OutputItem, OutputContentPart },
   },
 };
 
@@ -40,17 +40,17 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
 use std::fs::File;
 use std::io::Read;
 
-pub fn read_config_file(filename: &str) -> String
+pub fn read_config_file(filename : &str) -> String
 {
-    let mut file = File::open(filename).unwrap(); // Issue: unwrap() can panic
+    let mut file = File::open(filename).unwrap(); // Issue : unwrap() can panic
     let mut contents = String::new();
-    file.read_to_string(&mut contents).unwrap(); // Issue: unwrap() can panic
+    file.read_to_string(&mut contents).unwrap(); // Issue : unwrap() can panic
     contents
 }
 
-pub fn calculate_discount(price: f64, discount_percent: f64) -> f64
+pub fn calculate_discount(price : f64, discount_percent : f64) -> f64
 {
-    if discount_percent > 100.0 {  // Issue: should also check < 0
+    if discount_percent > 100.0 {  // Issue : should also check < 0
         return price;
     }
     price - (price * discount_percent / 100.0)
@@ -58,15 +58,15 @@ pub fn calculate_discount(price: f64, discount_percent: f64) -> f64
 
 pub struct UserData
 {
-    pub password : String,  // Issue: storing plain text password
+    pub password : String,  // Issue : storing plain text password
     pub email : String,
 }
 
 impl UserData
 {
-    pub fn new(email: String, password: String) -> UserData
+    pub fn new(email : String, password : String) -> UserData
     {
-        UserData { email, password }  // Issue: no validation
+        UserData { email, password }  // Issue : no validation
     }
 }
 ";
@@ -126,9 +126,9 @@ impl UserData
   if let Some(usage) = response.usage
   {
     println!("\n📊 API Usage:");
-    println!("  Prompt tokens: {}", usage.prompt_tokens);
-    println!("  Completion tokens: {:?}", usage.completion_tokens); 
-    println!("  Total tokens: {}", usage.total_tokens);
+    println!("  Prompt tokens : {}", usage.prompt_tokens);
+    println!("  Completion tokens : {:?}", usage.completion_tokens); 
+    println!("  Total tokens : {}", usage.total_tokens);
   }
 
   Ok(())

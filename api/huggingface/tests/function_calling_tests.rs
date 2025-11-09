@@ -15,7 +15,7 @@
 //!
 //! ## Router API Function Calling Support
 //!
-//! Per `HuggingFace` documentation: <https://huggingface.co/docs/api-inference/tasks/chat-completion>
+//! Per `HuggingFace` documentation : <https://huggingface.co/docs/api-inference/tasks/chat-completion>
 //! - `tools`: List of tools the model may call (currently only functions supported)
 //! - `tool_choice`: Controls tool usage (auto, none, required, or specific function)
 //! - `tool_prompt`: Custom prompt appended before tools
@@ -32,13 +32,13 @@ mod tests
   use api_huggingface::
   {
   Client,
-  environment::HuggingFaceEnvironmentImpl,
-  components::
+  environment ::HuggingFaceEnvironmentImpl,
+  components ::
   {
-      tools::{ Tool, ToolParameters, ParameterProperty },
-      models::Models,
+      tools ::{ Tool, ToolParameters, ParameterProperty },
+      models ::Models,
   },
-  secret::Secret,
+  secret ::Secret,
   };
 
   /// Helper to create test client
@@ -119,7 +119,7 @@ mod tests
   Models::kimi_k2_instruct(),
   vec!
   [
-          api_huggingface::components::inference_shared::ChatMessage
+          api_huggingface ::components::inference_shared::ChatMessage
           {
       role : "user".to_string(),
       content : "What's the weather like in San Francisco?".to_string(),
@@ -128,14 +128,14 @@ mod tests
           }
   ],
   vec![ tool ],
-  None, // tool_choice: auto (default)
+  None, // tool_choice : auto (default)
   None, // max_tokens
   None, // temperature
   None, // top_p
       )
       .await;
 
-  assert!( response.is_ok(), "Function calling request failed: {:?}", response.err() );
+  assert!( response.is_ok(), "Function calling request failed : {:?}", response.err() );
 
   let response = response.expect( "[test_basic_function_calling] Response should be Ok after is_ok() check - check chat_completion_with_tools() implementation" );
 
@@ -171,7 +171,7 @@ mod tests
   Models::kimi_k2_instruct(),
   vec!
   [
-          api_huggingface::components::inference_shared::ChatMessage
+          api_huggingface ::components::inference_shared::ChatMessage
           {
       role : "user".to_string(),
       content : "What's the weather like in San Francisco?".to_string(),
@@ -180,18 +180,18 @@ mod tests
           }
   ],
   vec![ tool ],
-  Some( "none".to_string() ), // tool_choice: none - should not call tools
+  Some( "none".to_string() ), // tool_choice : none - should not call tools
   None,
   None,
   None,
       )
       .await;
 
-  assert!( response.is_ok(), "Request failed: {:?}", response.err() );
+  assert!( response.is_ok(), "Request failed : {:?}", response.err() );
 
   let response = response.expect( "[test_tool_choice_none] Response should be Ok after is_ok() check - check chat_completion_with_tools() with tool_choice='none' implementation" );
 
-  // With tool_choice: none, model should respond with text only
+  // With tool_choice : none, model should respond with text only
   assert!( response.choices[ 0 ].message.tool_calls.is_none(), "Model should not call tools when tool_choice is 'none'" );
   assert!( !response.choices[ 0 ].message.content.is_empty(), "Model should provide text response" );
   }
@@ -209,7 +209,7 @@ mod tests
   Models::kimi_k2_instruct(),
   vec!
   [
-          api_huggingface::components::inference_shared::ChatMessage
+          api_huggingface ::components::inference_shared::ChatMessage
           {
       role : "user".to_string(),
       content : "Tell me about San Francisco".to_string(),
@@ -218,18 +218,18 @@ mod tests
           }
   ],
   vec![ tool ],
-  Some( "required".to_string() ), // tool_choice: required - must call a tool
+  Some( "required".to_string() ), // tool_choice : required - must call a tool
   None,
   None,
   None,
       )
       .await;
 
-  assert!( response.is_ok(), "Request failed: {:?}", response.err() );
+  assert!( response.is_ok(), "Request failed : {:?}", response.err() );
 
   let response = response.expect( "[test_tool_choice_required] Response should be Ok after is_ok() check - check chat_completion_with_tools() with tool_choice='required' implementation" );
 
-  // With tool_choice: required, model must call a tool
+  // With tool_choice : required, model must call a tool
   assert!( response.choices[ 0 ].message.tool_calls.is_some(), "Model must call tool when tool_choice is 'required'" );
   }
 
@@ -247,7 +247,7 @@ mod tests
   Models::kimi_k2_instruct(),
   vec!
   [
-          api_huggingface::components::inference_shared::ChatMessage
+          api_huggingface ::components::inference_shared::ChatMessage
           {
       role : "user".to_string(),
       content : "What is 15 multiplied by 3?".to_string(),
@@ -263,7 +263,7 @@ mod tests
       )
       .await;
 
-  assert!( response.is_ok(), "Request failed: {:?}", response.err() );
+  assert!( response.is_ok(), "Request failed : {:?}", response.err() );
 
   let response = response.expect( "[test_multiple_tools] Response should be Ok after is_ok() check - check chat_completion_with_tools() with multiple tools implementation" );
 
@@ -289,7 +289,7 @@ mod tests
   Models::kimi_k2_instruct(),
   vec!
   [
-          api_huggingface::components::inference_shared::ChatMessage
+          api_huggingface ::components::inference_shared::ChatMessage
           {
       role : "user".to_string(),
       content : "What's the weather in Tokyo?".to_string(),
@@ -319,7 +319,7 @@ mod tests
   Models::kimi_k2_instruct(),
   vec!
   [
-          api_huggingface::components::inference_shared::ChatMessage
+          api_huggingface ::components::inference_shared::ChatMessage
           {
       role : "user".to_string(),
       content : "What's the weather in Tokyo?".to_string(),
@@ -327,7 +327,7 @@ mod tests
       tool_call_id : None,
           },
           response1.choices[ 0 ].message.clone(),
-          api_huggingface::components::inference_shared::ChatMessage
+          api_huggingface ::components::inference_shared::ChatMessage
           {
       role : "tool".to_string(),
       content : r#"{"temperature": 22, "condition": "sunny", "unit": "celsius"}"#.to_string(),

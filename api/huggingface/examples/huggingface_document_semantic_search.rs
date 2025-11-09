@@ -12,31 +12,31 @@
 //!
 //! ## Commands
 //!
-//! - `/add <title > <content >` - Add a document to the search index
-//! - `/search <query >` - Search for relevant documents
+//! - `/add < title > < content >` - Add a document to the search index
+//! - `/search < query >` - Search for relevant documents
 //! - `/list` - List all indexed documents
 //! - `/stats` - Show search engine statistics
 //! - `/clear` - Clear all documents from index
-//! - `/model <model >` - Change embedding model
+//! - `/model < model >` - Change embedding model
 //! - `/help` - Show available commands
 //! - `/quit` - Exit the search engine
 
 use api_huggingface::
 {
   Client,
-  environment::HuggingFaceEnvironmentImpl,
-  components::
+  environment ::HuggingFaceEnvironmentImpl,
+  components ::
   {
-  embeddings::EmbeddingResponse,
-  models::Models,
+  embeddings ::EmbeddingResponse,
+  models ::Models,
   },
-  secret::Secret,
+  secret ::Secret,
 };
 use std::
 {
-  collections::HashMap,
-  io::{ self, Write as IoWrite },
-  time::{ Instant, SystemTime, UNIX_EPOCH },
+  collections ::HashMap,
+  io ::{ self, Write as IoWrite },
+  time ::{ Instant, SystemTime, UNIX_EPOCH },
   fmt,
 };
 
@@ -539,7 +539,7 @@ impl SearchCLI
   println!( "🔍 Document Semantic Search Engine" );
   println!( "==================================" );
   println!( "Type '/help' for commands or start adding documents!" );
-  println!( "Current model: {}", self.engine.embedding_model );
+  println!( "Current model : {}", self.engine.embedding_model );
   println!();
 
   let stdin = io::stdin();
@@ -569,7 +569,7 @@ impl SearchCLI
   {
           Ok( Some( response ) ) => println!( "{response}" ),
           Ok( None ) => {}, // Command handled without output
-          Err( e ) => println!( "❌ Error: {e}" ),
+          Err( e ) => println!( "❌ Error : {e}" ),
   }
   continue;
       }
@@ -602,7 +602,7 @@ impl SearchCLI
         .as_secs();
         
               println!(
-        "{}. {} (similarity: {:.3})\n   Content: {}\n   Created: {} seconds ago\n",
+        "{}. {} (similarity : {:.3})\n   Content : {}\n   Created : {} seconds ago\n",
         result.rank,
         result.document.title,
         result.similarity,
@@ -617,7 +617,7 @@ impl SearchCLI
       }
           }
   },
-  Err( e ) => println!( "❌ Search failed: {e}" ),
+  Err( e ) => println!( "❌ Search failed : {e}" ),
       }
 
       println!();
@@ -676,7 +676,7 @@ impl SearchCLI
   match self.engine.add_documents_batch( sample_docs ).await
   {
       Ok( ids ) => println!( "✅ Added {} sample documents", ids.len() ),
-      Err( e ) => println!( "⚠️ Failed to add sample documents: {e}" ),
+      Err( e ) => println!( "⚠️ Failed to add sample documents : {e}" ),
   }
 
   Ok( () )
@@ -700,20 +700,20 @@ impl SearchCLI
       "quit" | "exit" => 
       {
   println!( "👋 Goodbye!" );
-  std::process::exit( 0 );
+  std ::process::exit( 0 );
       },
       
       "add" =>
       {
   if parts.len() < 2
   {
-          return Ok( Some( "Usage: /add <title > <content >".to_string() ) );
+          return Ok( Some( "Usage : /add < title > < content >".to_string() ) );
   }
   
   let parts : Vec< &str > = parts[ 1 ].splitn( 2, ' ' ).collect();
   if parts.len() < 2
   {
-          return Ok( Some( "Usage: /add <title > <content >".to_string() ) );
+          return Ok( Some( "Usage : /add < title > < content >".to_string() ) );
   }
   
   let title = parts[ 0 ];
@@ -738,7 +738,7 @@ impl SearchCLI
   match self.engine.add_document( document ).await
   {
           Ok( _ ) => Ok( Some( format!( "✅ Document '{title}' added successfully" ) ) ),
-          Err( e ) => Ok( Some( format!( "❌ Failed to add document: {e}" ) ) ),
+          Err( e ) => Ok( Some( format!( "❌ Failed to add document : {e}" ) ) ),
   }
       },
       
@@ -772,11 +772,11 @@ impl SearchCLI
   let stats = self.engine.get_stats();
   let result = format!(
           "📊 Search Engine Statistics:\n\
-           Documents: {}\n\
-           Queries: {}\n\
-           Avg Query Time: {:.2}ms\n\
-           Embedding Model: {}\n\
-           Total Embeddings: {}",
+           Documents : {}\n\
+           Queries : {}\n\
+           Avg Query Time : {:.2}ms\n\
+           Embedding Model : {}\n\
+           Total Embeddings : {}",
           stats.total_documents,
           stats.total_queries,
           stats.avg_query_time_ms,
@@ -796,15 +796,15 @@ impl SearchCLI
       {
   if parts.len() < 2
   {
-          return Ok( Some( format!( "Current model: {}\nUsage: /model <model-name >", self.engine.embedding_model ) ) );
+          return Ok( Some( format!( "Current model : {}\nUsage : /model < model-name >", self.engine.embedding_model ) ) );
   }
   
   let model = parts[ 1 ].to_string();
   self.engine.set_embedding_model( model.clone() );
-  Ok( Some( format!( "🔧 Changed embedding model to: {model}" ) ) )
+  Ok( Some( format!( "🔧 Changed embedding model to : {model}" ) ) )
       },
       
-      _ => Ok( Some( format!( "Unknown command: /{}\nType '/help' for available commands.", parts[ 0 ] ) ) ),
+      _ => Ok( Some( format!( "Unknown command : /{}\nType '/help' for available commands.", parts[ 0 ] ) ) ),
   }
   }
 
@@ -814,12 +814,12 @@ impl SearchCLI
   r#"Available Commands:
 ===================
 
-/add <title > <content > - Add a document to the search index
-/search <query >        - Search for relevant documents (or just type without /)
+/add < title > < content > - Add a document to the search index
+/search < query >        - Search for relevant documents (or just type without /)
 /list                  - List all indexed documents
 /stats                 - Show search engine statistics
 /clear                 - Clear all documents from index
-/model <model >         - Change embedding model
+/model < model >         - Change embedding model
 /help                  - Show this help message
 /quit or /exit         - Exit the search engine
 
@@ -833,7 +833,7 @@ Search Tips:
   - "artificial intelligence and learning"
   - "environmental changes and global warming"
 
-Current embedding model: "#.to_string() + &self.engine.embedding_model
+Current embedding model : "#.to_string() + &self.engine.embedding_model
   }
 }
 

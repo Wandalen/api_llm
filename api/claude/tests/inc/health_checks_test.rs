@@ -51,23 +51,23 @@ fn test_health_check_config_validation()
     .with_unhealthy_threshold_ms( 3000 );
   assert!( valid_config.is_valid() );
 
-  // Invalid: zero timeout
+  // Invalid : zero timeout
   let invalid_config = the_module::HealthCheckConfig::new()
     .with_timeout_ms( 0 );
   assert!( !invalid_config.is_valid() );
 
-  // Invalid: zero degraded threshold
+  // Invalid : zero degraded threshold
   let invalid_config = the_module::HealthCheckConfig::new()
     .with_degraded_threshold_ms( 0 );
   assert!( !invalid_config.is_valid() );
 
-  // Invalid: unhealthy threshold less than degraded threshold
+  // Invalid : unhealthy threshold less than degraded threshold
   let invalid_config = the_module::HealthCheckConfig::new()
     .with_degraded_threshold_ms( 2000 )
     .with_unhealthy_threshold_ms( 1000 );
   assert!( !invalid_config.is_valid() );
 
-  // Invalid: timeout less than unhealthy threshold
+  // Invalid : timeout less than unhealthy threshold
   let invalid_config = the_module::HealthCheckConfig::new()
     .with_timeout_ms( 2000 )
     .with_unhealthy_threshold_ms( 5000 );
@@ -164,7 +164,7 @@ fn test_health_metrics_empty()
 fn test_health_metrics_single_result()
 {
   let results = vec![
-    the_module::HealthCheckResult
+    the_module ::HealthCheckResult
     {
       endpoint_url : "https://api.anthropic.com".to_string(),
       status : the_module::EndpointHealthStatus::Healthy,
@@ -192,7 +192,7 @@ fn test_health_metrics_single_result()
 fn test_health_metrics_multiple_results()
 {
   let results = vec![
-    the_module::HealthCheckResult
+    the_module ::HealthCheckResult
     {
       endpoint_url : "https://api1.anthropic.com".to_string(),
       status : the_module::EndpointHealthStatus::Healthy,
@@ -200,7 +200,7 @@ fn test_health_metrics_multiple_results()
       error_message : None,
       timestamp : std::time::SystemTime::now(),
     },
-    the_module::HealthCheckResult
+    the_module ::HealthCheckResult
     {
       endpoint_url : "https://api2.anthropic.com".to_string(),
       status : the_module::EndpointHealthStatus::Degraded,
@@ -208,7 +208,7 @@ fn test_health_metrics_multiple_results()
       error_message : None,
       timestamp : std::time::SystemTime::now(),
     },
-    the_module::HealthCheckResult
+    the_module ::HealthCheckResult
     {
       endpoint_url : "https://api3.anthropic.com".to_string(),
       status : the_module::EndpointHealthStatus::Unhealthy,
@@ -216,7 +216,7 @@ fn test_health_metrics_multiple_results()
       error_message : Some( "Timeout".to_string() ),
       timestamp : std::time::SystemTime::now(),
     },
-    the_module::HealthCheckResult
+    the_module ::HealthCheckResult
     {
       endpoint_url : "https://api4.anthropic.com".to_string(),
       status : the_module::EndpointHealthStatus::Healthy,
@@ -233,15 +233,15 @@ fn test_health_metrics_multiple_results()
   assert_eq!( metrics.degraded_count, 1 );
   assert_eq!( metrics.unhealthy_count, 1 );
 
-  // Average: (200 + 1200 + 5000 + 400) / 4 = 1700
+  // Average : (200 + 1200 + 5000 + 400) / 4 = 1700
   assert_eq!( metrics.average_response_time_ms, 1700 );
   assert_eq!( metrics.min_response_time_ms, 200 );
   assert_eq!( metrics.max_response_time_ms, 5000 );
 
-  // Healthy percentage: 2/4 = 50%
+  // Healthy percentage : 2/4 = 50%
   assert!( ( metrics.healthy_percentage() - 50.0 ).abs() < 0.01 );
 
-  // Available percentage: (2+1)/4 = 75%
+  // Available percentage : (2+1)/4 = 75%
   assert!( ( metrics.available_percentage() - 75.0 ).abs() < 0.01 );
 }
 
@@ -251,7 +251,7 @@ fn test_health_metrics_percentages()
 {
   // All healthy
   let all_healthy = vec![
-    the_module::HealthCheckResult
+    the_module ::HealthCheckResult
     {
       endpoint_url : "https://api1.com".to_string(),
       status : the_module::EndpointHealthStatus::Healthy,
@@ -259,7 +259,7 @@ fn test_health_metrics_percentages()
       error_message : None,
       timestamp : std::time::SystemTime::now(),
     },
-    the_module::HealthCheckResult
+    the_module ::HealthCheckResult
     {
       endpoint_url : "https://api2.com".to_string(),
       status : the_module::EndpointHealthStatus::Healthy,
@@ -275,7 +275,7 @@ fn test_health_metrics_percentages()
 
   // All unhealthy
   let all_unhealthy = vec![
-    the_module::HealthCheckResult
+    the_module ::HealthCheckResult
     {
       endpoint_url : "https://api1.com".to_string(),
       status : the_module::EndpointHealthStatus::Unhealthy,
@@ -291,7 +291,7 @@ fn test_health_metrics_percentages()
 
   // Mixed with degraded
   let mixed = vec![
-    the_module::HealthCheckResult
+    the_module ::HealthCheckResult
     {
       endpoint_url : "https://api1.com".to_string(),
       status : the_module::EndpointHealthStatus::Degraded,
@@ -299,7 +299,7 @@ fn test_health_metrics_percentages()
       error_message : None,
       timestamp : std::time::SystemTime::now(),
     },
-    the_module::HealthCheckResult
+    the_module ::HealthCheckResult
     {
       endpoint_url : "https://api2.com".to_string(),
       status : the_module::EndpointHealthStatus::Degraded,
@@ -367,7 +367,7 @@ fn test_health_check_result_serialization()
 fn test_health_metrics_serialization()
 {
   let results = vec![
-    the_module::HealthCheckResult
+    the_module ::HealthCheckResult
     {
       endpoint_url : "https://api.anthropic.com".to_string(),
       status : the_module::EndpointHealthStatus::Healthy,

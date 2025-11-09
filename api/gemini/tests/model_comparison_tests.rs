@@ -4,7 +4,7 @@
 
 use api_gemini::
 {
-  client::Client,
+  client ::Client,
   GenerateContentRequest,
   Content,
   Part,
@@ -14,10 +14,9 @@ use api_gemini::
 async fn test_comparator_creation()
 {
   let client = Client::new().expect( "Failed to create client" );
-  let comparator = client.comparator();
+  let _comparator = client.comparator();
 
   // Verify comparator was created (just structural test)
-  drop( comparator );
 }
 
 #[ tokio::test ]
@@ -81,6 +80,18 @@ async fn test_compare_models_parallel()
 #[ tokio::test ]
 async fn test_comparison_results_analysis()
 {
+  // Check if API key is available
+  let _api_key = match std::env::var( "GEMINI_API_KEY" )
+    .or_else( |_| std::fs::read_to_string( "secret/gemini_api_key" ).map( |s| s.trim().to_string() ) )
+  {
+    Ok( key ) => key,
+    Err( _ ) =>
+    {
+      eprintln!( "⚠️  Skipping test - API key not available" );
+      return;
+    }
+  };
+
   let client = Client::new().expect( "Failed to create client" );
   let comparator = client.comparator();
 
@@ -155,6 +166,18 @@ async fn test_comparison_fastest_slowest()
 #[ tokio::test ]
 async fn test_comparison_success_rate()
 {
+  // Check if API key is available
+  let _api_key = match std::env::var( "GEMINI_API_KEY" )
+    .or_else( |_| std::fs::read_to_string( "secret/gemini_api_key" ).map( |s| s.trim().to_string() ) )
+  {
+    Ok( key ) => key,
+    Err( _ ) =>
+    {
+      eprintln!( "⚠️  Skipping test - API key not available" );
+      return;
+    }
+  };
+
   let client = Client::new().expect( "Failed to create client" );
   let comparator = client.comparator();
 

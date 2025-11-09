@@ -4,19 +4,19 @@ mod private
 {
 use crate::
 {
-  client::Client,
-  components::
+  client ::Client,
+  components ::
   {
-  inference_shared::
+  inference_shared ::
   {
       InferenceRequest, InferenceResponse, InferenceOptions,
       ChatCompletionRequest, ChatCompletionResponse, ChatMessage,
   },
-  input::InferenceParameters,
-  output::InferenceOutput,
+  input ::InferenceParameters,
+  output ::InferenceOutput,
   },
-  error::{ Result, HuggingFaceError },
-  validation::{ validate_input_text, validate_model_identifier },
+  error ::{ Result, HuggingFaceError },
+  validation ::{ validate_input_text, validate_model_identifier },
 };
 
 #[ cfg( feature = "env-config" ) ]
@@ -283,10 +283,10 @@ fn convert_chat_response_to_inference( chat_response : &ChatCompletionResponse )
 
 } // end mod private
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use 
   {
-  private::Inference,
+  private ::Inference,
   };
 }

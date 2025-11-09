@@ -11,14 +11,14 @@ use super::*;
 /// # Returns
 ///
 /// Returns `Ok(())` if the request is valid, or a validation error.
-pub fn validate_create_tuned_model_request( request: &CreateTunedModelRequest ) -> Result< (), ValidationError >
+pub fn validate_create_tuned_model_request( request : &CreateTunedModelRequest ) -> Result< (), ValidationError >
 {
   // Validate the tuned model
   validate_tuned_model( &request.tuned_model )
     .map_err( |e| ValidationError::InvalidFieldValue {
-      field: "tuned_model".to_string(),
-      value: "TunedModel".to_string(),
-      reason: e.to_string(),
+      field : "tuned_model".to_string(),
+      value : "TunedModel".to_string(),
+      reason : e.to_string(),
     } )?;
 
   // Validate tuned model ID if provided
@@ -27,8 +27,8 @@ pub fn validate_create_tuned_model_request( request: &CreateTunedModelRequest ) 
     if tuned_model_id.trim().is_empty()
     {
       return Err( ValidationError::RequiredFieldMissing {
-        field: "tuned_model_id".to_string(),
-        context: "CreateTunedModelRequest".to_string(),
+        field : "tuned_model_id".to_string(),
+        context : "CreateTunedModelRequest".to_string(),
       } );
     }
 
@@ -36,9 +36,9 @@ pub fn validate_create_tuned_model_request( request: &CreateTunedModelRequest ) 
     if !tuned_model_id.chars().all( |c| c.is_alphanumeric() || c == '-' || c == '_' )
     {
       return Err( ValidationError::InvalidFieldValue {
-        field: "tuned_model_id".to_string(),
-        value: tuned_model_id.clone(),
-        reason: "Tuned model ID should contain only alphanumeric characters, hyphens, and underscores".to_string(),
+        field : "tuned_model_id".to_string(),
+        value : tuned_model_id.clone(),
+        reason : "Tuned model ID should contain only alphanumeric characters, hyphens, and underscores".to_string(),
       } );
     }
   }
@@ -55,22 +55,22 @@ pub fn validate_create_tuned_model_request( request: &CreateTunedModelRequest ) 
 /// # Returns
 ///
 /// Returns `Ok(())` if the model is valid, or a validation error.
-pub fn validate_tuned_model( model: &TunedModel ) -> Result< (), ValidationError >
+pub fn validate_tuned_model( model : &TunedModel ) -> Result< (), ValidationError >
 {
   // Validate base model
   if model.base_model.trim().is_empty()
   {
     return Err( ValidationError::RequiredFieldMissing {
-      field: "base_model".to_string(),
-      context: "TunedModel".to_string(),
+      field : "base_model".to_string(),
+      context : "TunedModel".to_string(),
     } );
   }
 
   validate_model_name( &model.base_model )
     .map_err( |e| ValidationError::InvalidFieldValue {
-      field: "base_model".to_string(),
-      value: model.base_model.clone(),
-      reason: e.to_string(),
+      field : "base_model".to_string(),
+      value : model.base_model.clone(),
+      reason : e.to_string(),
     } )?;
 
   // Validate display name if provided
@@ -79,8 +79,8 @@ pub fn validate_tuned_model( model: &TunedModel ) -> Result< (), ValidationError
     if display_name.trim().is_empty()
     {
       return Err( ValidationError::RequiredFieldMissing {
-        field: "display_name".to_string(),
-        context: "TunedModel".to_string(),
+        field : "display_name".to_string(),
+        context : "TunedModel".to_string(),
       } );
     }
   }
@@ -90,9 +90,9 @@ pub fn validate_tuned_model( model: &TunedModel ) -> Result< (), ValidationError
   {
     validate_tuning_task( tuning_task )
       .map_err( |e| ValidationError::InvalidFieldValue {
-        field: "tuning_task".to_string(),
-        value: "TuningTask".to_string(),
-        reason: e.to_string(),
+        field : "tuning_task".to_string(),
+        value : "TuningTask".to_string(),
+        reason : e.to_string(),
       } )?;
   }
 
@@ -102,10 +102,10 @@ pub fn validate_tuned_model( model: &TunedModel ) -> Result< (), ValidationError
     if temperature < 0.0 || temperature > 2.0
     {
       return Err( ValidationError::ValueOutOfRange {
-        field: "temperature".to_string(),
-        value: temperature,
-        min: Some( 0.0 ),
-        max: Some( 2.0 ),
+        field : "temperature".to_string(),
+        value : temperature,
+        min : Some( 0.0 ),
+        max : Some( 2.0 ),
       } );
     }
   }
@@ -116,10 +116,10 @@ pub fn validate_tuned_model( model: &TunedModel ) -> Result< (), ValidationError
     if top_p < 0.0 || top_p > 1.0
     {
       return Err( ValidationError::ValueOutOfRange {
-        field: "top_p".to_string(),
-        value: top_p,
-        min: Some( 0.0 ),
-        max: Some( 1.0 ),
+        field : "top_p".to_string(),
+        value : top_p,
+        min : Some( 0.0 ),
+        max : Some( 1.0 ),
       } );
     }
   }
@@ -130,10 +130,10 @@ pub fn validate_tuned_model( model: &TunedModel ) -> Result< (), ValidationError
     if top_k <= 0
     {
       return Err( ValidationError::ValueOutOfRange {
-        field: "top_k".to_string(),
-        value: top_k as f64,
-        min: Some( 1.0 ),
-        max: None,
+        field : "top_k".to_string(),
+        value : top_k as f64,
+        min : Some( 1.0 ),
+        max : None,
       } );
     }
   }
@@ -150,16 +150,16 @@ pub fn validate_tuned_model( model: &TunedModel ) -> Result< (), ValidationError
 /// # Returns
 ///
 /// Returns `Ok(())` if the task is valid, or a validation error.
-pub fn validate_tuning_task( task: &TuningTask ) -> Result< (), ValidationError >
+pub fn validate_tuning_task( task : &TuningTask ) -> Result< (), ValidationError >
 {
   // Validate training data if provided
   if let Some( training_data ) = &task.training_data
   {
     validate_dataset( training_data )
       .map_err( |e| ValidationError::InvalidFieldValue {
-        field: "training_data".to_string(),
-        value: "Dataset".to_string(),
-        reason: e.to_string(),
+        field : "training_data".to_string(),
+        value : "Dataset".to_string(),
+        reason : e.to_string(),
       } )?;
   }
 
@@ -168,9 +168,9 @@ pub fn validate_tuning_task( task: &TuningTask ) -> Result< (), ValidationError 
   {
     validate_hyperparameters( hyperparameters )
       .map_err( |e| ValidationError::InvalidFieldValue {
-        field: "hyperparameters".to_string(),
-        value: "Hyperparameters".to_string(),
-        reason: e.to_string(),
+        field : "hyperparameters".to_string(),
+        value : "Hyperparameters".to_string(),
+        reason : e.to_string(),
       } )?;
   }
 
@@ -186,7 +186,7 @@ pub fn validate_tuning_task( task: &TuningTask ) -> Result< (), ValidationError 
 /// # Returns
 ///
 /// Returns `Ok(())` if the dataset is valid, or a validation error.
-pub fn validate_dataset( dataset: &Dataset ) -> Result< (), ValidationError >
+pub fn validate_dataset( dataset : &Dataset ) -> Result< (), ValidationError >
 {
   // Validate examples if provided
   if let Some( tuning_examples ) = &dataset.examples
@@ -194,17 +194,17 @@ pub fn validate_dataset( dataset: &Dataset ) -> Result< (), ValidationError >
     if tuning_examples.examples.is_empty()
     {
       return Err( ValidationError::EmptyCollection {
-        field: "examples".to_string(),
-        context: "Dataset".to_string(),
+        field : "examples".to_string(),
+        context : "Dataset".to_string(),
       } );
     }
 
     if tuning_examples.examples.len() > MAX_TUNING_EXAMPLES
     {
       return Err( ValidationError::CollectionTooLarge {
-        field: "examples".to_string(),
-        size: tuning_examples.examples.len(),
-        max: MAX_TUNING_EXAMPLES,
+        field : "examples".to_string(),
+        size : tuning_examples.examples.len(),
+        max : MAX_TUNING_EXAMPLES,
       } );
     }
 
@@ -213,9 +213,9 @@ pub fn validate_dataset( dataset: &Dataset ) -> Result< (), ValidationError >
     {
       validate_tuning_example( example )
         .map_err( |e| ValidationError::InvalidFieldValue {
-          field: format!( "examples[{}]", i ),
-          value: "TuningExample".to_string(),
-          reason: e.to_string(),
+          field : format!( "examples[{}]", i ),
+          value : "TuningExample".to_string(),
+          reason : e.to_string(),
         } )?;
     }
   }
@@ -232,7 +232,7 @@ pub fn validate_dataset( dataset: &Dataset ) -> Result< (), ValidationError >
 /// # Returns
 ///
 /// Returns `Ok(())` if the example is valid, or a validation error.
-pub fn validate_tuning_example( example: &TuningExample ) -> Result< (), ValidationError >
+pub fn validate_tuning_example( example : &TuningExample ) -> Result< (), ValidationError >
 {
   // At least one of input or output should be provided
   let has_input = example.text_input.as_ref().map_or( false, |input| !input.trim().is_empty() );
@@ -241,8 +241,8 @@ pub fn validate_tuning_example( example: &TuningExample ) -> Result< (), Validat
   if !has_input && !has_output
   {
     return Err( ValidationError::RequiredFieldMissing {
-      field: "text_input_or_output".to_string(),
-      context: "TuningExample must have at least text_input or output".to_string(),
+      field : "text_input_or_output".to_string(),
+      context : "TuningExample must have at least text_input or output".to_string(),
     } );
   }
 
@@ -258,7 +258,7 @@ pub fn validate_tuning_example( example: &TuningExample ) -> Result< (), Validat
 /// # Returns
 ///
 /// Returns `Ok(())` if the hyperparameters are valid, or a validation error.
-pub fn validate_hyperparameters( hyperparameters: &Hyperparameters ) -> Result< (), ValidationError >
+pub fn validate_hyperparameters( hyperparameters : &Hyperparameters ) -> Result< (), ValidationError >
 {
   // Validate learning rate if provided
   if let Some( learning_rate ) = hyperparameters.learning_rate
@@ -266,10 +266,10 @@ pub fn validate_hyperparameters( hyperparameters: &Hyperparameters ) -> Result< 
     if learning_rate <= 0.0 || learning_rate > 1.0
     {
       return Err( ValidationError::ValueOutOfRange {
-        field: "learning_rate".to_string(),
-        value: learning_rate,
-        min: Some( 0.000_001 ),
-        max: Some( 1.0 ),
+        field : "learning_rate".to_string(),
+        value : learning_rate,
+        min : Some( 0.000_001 ),
+        max : Some( 1.0 ),
       } );
     }
   }
@@ -280,10 +280,10 @@ pub fn validate_hyperparameters( hyperparameters: &Hyperparameters ) -> Result< 
     if epoch_count <= 0 || epoch_count > 100
     {
       return Err( ValidationError::ValueOutOfRange {
-        field: "epoch_count".to_string(),
-        value: epoch_count as f64,
-        min: Some( 1.0 ),
-        max: Some( 100.0 ),
+        field : "epoch_count".to_string(),
+        value : epoch_count as f64,
+        min : Some( 1.0 ),
+        max : Some( 100.0 ),
       } );
     }
   }
@@ -294,10 +294,10 @@ pub fn validate_hyperparameters( hyperparameters: &Hyperparameters ) -> Result< 
     if batch_size <= 0 || batch_size > 1024
     {
       return Err( ValidationError::ValueOutOfRange {
-        field: "batch_size".to_string(),
-        value: batch_size as f64,
-        min: Some( 1.0 ),
-        max: Some( 1024.0 ),
+        field : "batch_size".to_string(),
+        value : batch_size as f64,
+        min : Some( 1.0 ),
+        max : Some( 1024.0 ),
       } );
     }
   }
@@ -308,10 +308,10 @@ pub fn validate_hyperparameters( hyperparameters: &Hyperparameters ) -> Result< 
     if learning_rate_multiplier <= 0.0 || learning_rate_multiplier > 10.0
     {
       return Err( ValidationError::ValueOutOfRange {
-        field: "learning_rate_multiplier".to_string(),
-        value: learning_rate_multiplier,
-        min: Some( 0.1 ),
-        max: Some( 10.0 ),
+        field : "learning_rate_multiplier".to_string(),
+        value : learning_rate_multiplier,
+        min : Some( 0.1 ),
+        max : Some( 10.0 ),
       } );
     }
   }
@@ -328,7 +328,7 @@ pub fn validate_hyperparameters( hyperparameters: &Hyperparameters ) -> Result< 
 /// # Returns
 ///
 /// Returns `Ok(())` if the request is valid, or a validation error.
-pub fn validate_list_tuned_models_request( request: &ListTunedModelsRequest ) -> Result< (), ValidationError >
+pub fn validate_list_tuned_models_request( request : &ListTunedModelsRequest ) -> Result< (), ValidationError >
 {
   // Validate page size if provided
   if let Some( page_size ) = request.page_size
@@ -336,10 +336,10 @@ pub fn validate_list_tuned_models_request( request: &ListTunedModelsRequest ) ->
     if page_size <= 0 || page_size > 1000
     {
       return Err( ValidationError::ValueOutOfRange {
-        field: "page_size".to_string(),
-        value: page_size as f64,
-        min: Some( 1.0 ),
-        max: Some( 1000.0 ),
+        field : "page_size".to_string(),
+        value : page_size as f64,
+        min : Some( 1.0 ),
+        max : Some( 1000.0 ),
       } );
     }
   }

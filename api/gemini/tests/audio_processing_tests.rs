@@ -14,9 +14,9 @@
 
 use api_gemini::
 {
-  client::Client,
-  models::*,
-  error::Error,
+  client ::Client,
+  models ::*,
+  error ::Error,
 };
 
 /// Test basic audio transcription with MP3 format
@@ -36,38 +36,38 @@ async fn test_audio_transcription_mp3()
   
   let request = GenerateContentRequest 
   {
-    contents: vec![ Content 
+    contents : vec![ Content 
     {
-      parts: vec![
+      parts : vec![
         Part
         {
-          text: Some( "Please transcribe this audio and describe what you hear.".to_string() ),
-          inline_data: None,
-          function_call: None,
-          function_response: None,
+          text : Some( "Please transcribe this audio and describe what you hear.".to_string() ),
+          inline_data : None,
+          function_call : None,
+          function_response : None,
           ..Default::default()
         },
         Part
         {
-          text: None,
-          inline_data: Some( Blob
+          text : None,
+          inline_data : Some( Blob
           {
-            mime_type: "audio/mp3".to_string(),
-            data: audio_data,
+            mime_type : "audio/mp3".to_string(),
+            data : audio_data,
           } ),
-          function_call: None,
-          function_response: None,
+          function_call : None,
+          function_response : None,
           ..Default::default()
         }
       ],
-      role: "user".to_string(),
+      role : "user".to_string(),
     } ],
-    tools: None,
-    tool_config: None,
-    system_instruction: None,
-    safety_settings: None,
-    generation_config: None,
-    cached_content: None,
+    tools : None,
+    tool_config : None,
+    system_instruction : None,
+    safety_settings : None,
+    generation_config : None,
+    cached_content : None,
   };
   
   let result = model.generate_content( &request ).await;
@@ -86,7 +86,7 @@ async fn test_audio_transcription_mp3()
       if let Some( text ) = &content.parts[ 0 ].text
       {
         assert!( !text.is_empty() );
-        println!( "Audio transcription result: {text}" );
+        println!( "Audio transcription result : {text}" );
       }
     },
     Err( e ) => 
@@ -99,7 +99,7 @@ async fn test_audio_transcription_mp3()
         Error::InvalidArgument( _ ) | Error::ApiError( _ ) => {
           // These are acceptable failures for unsupported features
         },
-        _ => panic!( "Unexpected error type: {e}" ),
+        _ => panic!( "Unexpected error type : {e}" ),
       }
     }
   }
@@ -121,38 +121,38 @@ async fn test_audio_analysis_wav()
   
   let request = GenerateContentRequest 
   {
-    contents: vec![ Content 
+    contents : vec![ Content 
     {
-      parts: vec![
+      parts : vec![
         Part 
         {
-          text: Some( "Analyze the emotional tone and content of this audio recording.".to_string() ),
-          inline_data: None,
-          function_call: None,
-          function_response: None,
+          text : Some( "Analyze the emotional tone and content of this audio recording.".to_string() ),
+          inline_data : None,
+          function_call : None,
+          function_response : None,
           ..Default::default()
         },
         Part 
         {
-          text: None,
-          inline_data: Some( Blob 
+          text : None,
+          inline_data : Some( Blob 
           {
-            mime_type: "audio/wav".to_string(),
-            data: audio_data,
+            mime_type : "audio/wav".to_string(),
+            data : audio_data,
           } ),
-          function_call: None,
-          function_response: None,
+          function_call : None,
+          function_response : None,
           ..Default::default()
         }
       ],
-      role: "user".to_string(),
+      role : "user".to_string(),
     } ],
-    tools: None,
-    tool_config: None,
-    system_instruction: None,
-    safety_settings: None,
-    generation_config: None,
-    cached_content: None,
+    tools : None,
+    tool_config : None,
+    system_instruction : None,
+    safety_settings : None,
+    generation_config : None,
+    cached_content : None,
   };
   
   let result = model.generate_content( &request ).await;
@@ -169,7 +169,7 @@ async fn test_audio_analysis_wav()
       if let Some( text ) = &content.parts[ 0 ].text
       {
         assert!( !text.is_empty() );
-        println!( "Audio analysis result: {text}" );
+        println!( "Audio analysis result : {text}" );
       }
     },
     Err( e ) => 
@@ -180,7 +180,7 @@ async fn test_audio_analysis_wav()
         Error::InvalidArgument( _ ) | Error::ApiError( _ ) => {
           // Acceptable failures for unsupported features
         },
-        _ => panic!( "Unexpected error type: {e}" ),
+        _ => panic!( "Unexpected error type : {e}" ),
       }
     }
   }
@@ -209,38 +209,38 @@ async fn test_multiple_audio_formats()
   {
     let request = GenerateContentRequest 
     {
-      contents: vec![ Content 
+      contents : vec![ Content 
       {
-        parts: vec![
+        parts : vec![
           Part 
           {
-            text: Some( format!( "Process this {mime_type} audio file." ) ),
-            inline_data: None,
-            function_call: None,
-            function_response: None,
+            text : Some( format!( "Process this {mime_type} audio file." ) ),
+            inline_data : None,
+            function_call : None,
+            function_response : None,
           ..Default::default()
           },
           Part 
           {
-            text: None,
-            inline_data: Some( Blob 
+            text : None,
+            inline_data : Some( Blob 
             {
-              mime_type: mime_type.to_string(),
-              data: audio_data,
+              mime_type : mime_type.to_string(),
+              data : audio_data,
             } ),
-            function_call: None,
-            function_response: None,
+            function_call : None,
+            function_response : None,
           ..Default::default()
           }
         ],
-        role: "user".to_string(),
+        role : "user".to_string(),
       } ],
-      tools: None,
-      tool_config: None,
-      system_instruction: None,
-      safety_settings: None,
-      generation_config: None,
-      cached_content: None,
+      tools : None,
+      tool_config : None,
+      system_instruction : None,
+      safety_settings : None,
+      generation_config : None,
+      cached_content : None,
     };
     
     let result = model.generate_content( &request ).await;
@@ -282,42 +282,42 @@ async fn test_audio_safety_filtering()
   // Test audio content with safety settings
   let request = GenerateContentRequest 
   {
-    contents: vec![ Content 
+    contents : vec![ Content 
     {
-      parts: vec![
+      parts : vec![
         Part 
         {
-          text: Some( "Analyze this audio for content safety.".to_string() ),
-          inline_data: None,
-          function_call: None,
-          function_response: None,
+          text : Some( "Analyze this audio for content safety.".to_string() ),
+          inline_data : None,
+          function_call : None,
+          function_response : None,
           ..Default::default()
         },
         Part 
         {
-          text: None,
-          inline_data: Some( Blob 
+          text : None,
+          inline_data : Some( Blob 
           {
-            mime_type: "audio/wav".to_string(),
-            data: create_test_wav_data(),
+            mime_type : "audio/wav".to_string(),
+            data : create_test_wav_data(),
           } ),
-          function_call: None,
-          function_response: None,
+          function_call : None,
+          function_response : None,
           ..Default::default()
         }
       ],
-      role: "user".to_string(),
+      role : "user".to_string(),
     } ],
-    tools: None,
-    safety_settings: Some( vec![ SafetySetting 
+    tools : None,
+    safety_settings : Some( vec![ SafetySetting 
     {
-      category: "HARM_CATEGORY_HARASSMENT".to_string(),
-      threshold: "BLOCK_MEDIUM_AND_ABOVE".to_string(),
+      category : "HARM_CATEGORY_HARASSMENT".to_string(),
+      threshold : "BLOCK_MEDIUM_AND_ABOVE".to_string(),
     } ] ),
-    tool_config: None,
-    system_instruction: None,
-    generation_config: None,
-    cached_content: None,
+    tool_config : None,
+    system_instruction : None,
+    generation_config : None,
+    cached_content : None,
   };
   
   let result = model.generate_content( &request ).await;
@@ -344,7 +344,7 @@ async fn test_audio_safety_filtering()
         Error::InvalidArgument( _ ) | Error::ApiError( _ ) => {
           // Expected for unsupported features
         },
-        _ => panic!( "Unexpected error type: {e}" ),
+        _ => panic!( "Unexpected error type : {e}" ),
       }
     }
   }
@@ -366,38 +366,38 @@ async fn test_large_audio_file()
   
   let request = GenerateContentRequest 
   {
-    contents: vec![ Content 
+    contents : vec![ Content 
     {
-      parts: vec![
+      parts : vec![
         Part 
         {
-          text: Some( "Summarize this long audio recording.".to_string() ),
-          inline_data: None,
-          function_call: None,
-          function_response: None,
+          text : Some( "Summarize this long audio recording.".to_string() ),
+          inline_data : None,
+          function_call : None,
+          function_response : None,
           ..Default::default()
         },
         Part 
         {
-          text: None,
-          inline_data: Some( Blob 
+          text : None,
+          inline_data : Some( Blob 
           {
-            mime_type: "audio/mp3".to_string(),
-            data: large_audio_data,
+            mime_type : "audio/mp3".to_string(),
+            data : large_audio_data,
           } ),
-          function_call: None,
-          function_response: None,
+          function_call : None,
+          function_response : None,
           ..Default::default()
         }
       ],
-      role: "user".to_string(),
+      role : "user".to_string(),
     } ],
-    tools: None,
-    tool_config: None,
-    system_instruction: None,
-    safety_settings: None,
-    generation_config: None,
-    cached_content: None,
+    tools : None,
+    tool_config : None,
+    system_instruction : None,
+    safety_settings : None,
+    generation_config : None,
+    cached_content : None,
   };
   
   let result = model.generate_content( &request ).await;
@@ -411,14 +411,14 @@ async fn test_large_audio_file()
     },
     Err( e ) => 
     {
-      println!( "Large audio test failed: {e}" );
+      println!( "Large audio test failed : {e}" );
       // Could fail due to size limits or unsupported feature
       match e
       {
         Error::InvalidArgument( _ ) | Error::ApiError( _ ) | Error::NetworkError( _ ) => {
           // Expected failures
         },
-        _ => panic!( "Unexpected error type: {e}" ),
+        _ => panic!( "Unexpected error type : {e}" ),
       }
     }
   }
@@ -438,38 +438,38 @@ async fn test_invalid_audio_format()
   // Test with corrupted/invalid audio data
   let request = GenerateContentRequest 
   {
-    contents: vec![ Content 
+    contents : vec![ Content 
     {
-      parts: vec![
+      parts : vec![
         Part 
         {
-          text: Some( "Process this audio.".to_string() ),
-          inline_data: None,
-          function_call: None,
-          function_response: None,
+          text : Some( "Process this audio.".to_string() ),
+          inline_data : None,
+          function_call : None,
+          function_response : None,
           ..Default::default()
         },
         Part 
         {
-          text: None,
-          inline_data: Some( Blob 
+          text : None,
+          inline_data : Some( Blob 
           {
-            mime_type: "audio/mp3".to_string(),
-            data: "invalid_audio_data".to_string(), // Invalid base64 data
+            mime_type : "audio/mp3".to_string(),
+            data : "invalid_audio_data".to_string(), // Invalid base64 data
           } ),
-          function_call: None,
-          function_response: None,
+          function_call : None,
+          function_response : None,
           ..Default::default()
         }
       ],
-      role: "user".to_string(),
+      role : "user".to_string(),
     } ],
-    tools: None,
-    tool_config: None,
-    system_instruction: None,
-    safety_settings: None,
-    generation_config: None,
-    cached_content: None,
+    tools : None,
+    tool_config : None,
+    system_instruction : None,
+    safety_settings : None,
+    generation_config : None,
+    cached_content : None,
   };
   
   let result = model.generate_content( &request ).await;
@@ -484,9 +484,9 @@ async fn test_invalid_audio_format()
       match e
       {
         Error::InvalidArgument( _ ) | Error::DeserializationError( _ ) | Error::ApiError( _ ) => {
-          println!( "Correctly rejected invalid audio data: {e}" );
+          println!( "Correctly rejected invalid audio data : {e}" );
         },
-        _ => panic!( "Unexpected error type for invalid audio: {e}" ),
+        _ => panic!( "Unexpected error type for invalid audio : {e}" ),
       }
     }
   }
@@ -523,57 +523,57 @@ async fn test_batch_audio_processing()
   {
     let request = GenerateContentRequest 
     {
-      contents: vec![ Content 
+      contents : vec![ Content 
       {
-        parts: vec![
+        parts : vec![
           Part 
           {
-            text: Some( format!( "Analyze audio file #{}", index + 1 ) ),
-            inline_data: None,
-            function_call: None,
-            function_response: None,
+            text : Some( format!( "Analyze audio file #{}", index + 1 ) ),
+            inline_data : None,
+            function_call : None,
+            function_response : None,
           ..Default::default()
           },
           Part 
           {
-            text: None,
-            inline_data: Some( Blob 
+            text : None,
+            inline_data : Some( Blob 
             {
-              mime_type: match index
+              mime_type : match index
               {
                 0 => "audio/mp3",
                 1 => "audio/wav", 
                 _ => "audio/ogg",
               }.to_string(),
-              data: audio_data,
+              data : audio_data,
             } ),
-            function_call: None,
-            function_response: None,
+            function_call : None,
+            function_response : None,
           ..Default::default()
           }
         ],
-        role: "user".to_string(),
+        role : "user".to_string(),
       } ],
-      tools: None,
-      tool_config: None,
-      system_instruction: None,
-      safety_settings: None,
-      generation_config: None,
-      cached_content: None,
+      tools : None,
+      tool_config : None,
+      system_instruction : None,
+      safety_settings : None,
+      generation_config : None,
+      cached_content : None,
     };
     
     let result = model.generate_content( &request ).await;
     results.push( result );
     
     // Add small delay between requests to avoid rate limiting
-    tokio::time::sleep( core::time::Duration::from_millis( 100 ) ).await;
+    tokio ::time::sleep( core::time::Duration::from_millis( 100 ) ).await;
   }
   
   // Verify batch processing results
   let successful = results.iter().filter( | r | r.is_ok() ).count();
   let failed = results.iter().filter( | r | r.is_err() ).count();
   
-  println!( "Batch audio processing: {successful} successful, {failed} failed" );
+  println!( "Batch audio processing : {successful} successful, {failed} failed" );
   
   // At minimum, we expect proper error handling even if audio isn't supported
   assert_eq!( successful + failed, 3 );
@@ -588,7 +588,7 @@ fn create_test_mp3_data() -> String
   // In a real implementation, this would be actual audio data
   use base64::Engine;
   let mp3_header = vec![ 0xFF, 0xFB, 0x90, 0x00 ]; // Basic MP3 sync frame
-  base64::engine::general_purpose::STANDARD.encode( &mp3_header )
+  base64 ::engine::general_purpose::STANDARD.encode( &mp3_header )
 }
 
 /// Create test WAV data (minimal WAV header for testing)
@@ -597,7 +597,7 @@ fn create_test_wav_data() -> String
   // Minimal WAV file header
   use base64::Engine;
   let wav_header = b"RIFF\x24\x00\x00\x00WAVEfmt \x10\x00\x00\x00";
-  base64::engine::general_purpose::STANDARD.encode( wav_header )
+  base64 ::engine::general_purpose::STANDARD.encode( wav_header )
 }
 
 /// Create test OGG data (minimal OGG header for testing)
@@ -606,7 +606,7 @@ fn create_test_ogg_data() -> String
   // Minimal OGG file header
   use base64::Engine;
   let ogg_header = b"OggS\x00\x02\x00\x00\x00\x00\x00\x00\x00\x00";
-  base64::engine::general_purpose::STANDARD.encode( ogg_header )
+  base64 ::engine::general_purpose::STANDARD.encode( ogg_header )
 }
 
 /// Create test FLAC data (minimal FLAC header for testing)
@@ -615,7 +615,7 @@ fn create_test_flac_data() -> String
   // Minimal FLAC file header
   use base64::Engine;
   let flac_header = b"fLaC\x00\x00\x00\x22";
-  base64::engine::general_purpose::STANDARD.encode( flac_header )
+  base64 ::engine::general_purpose::STANDARD.encode( flac_header )
 }
 
 /// Create test M4A data (minimal M4A header for testing)
@@ -624,7 +624,7 @@ fn create_test_m4a_data() -> String
   // Minimal M4A/MP4 file header
   use base64::Engine;
   let m4a_header = b"\x00\x00\x00\x20ftypM4A ";
-  base64::engine::general_purpose::STANDARD.encode( m4a_header )
+  base64 ::engine::general_purpose::STANDARD.encode( m4a_header )
 }
 
 /// Create larger test audio data for size limit testing
@@ -643,5 +643,5 @@ fn create_large_test_audio_data() -> String
     large_data.extend_from_slice( &[ 0x00, 0x01, 0x02, 0x03 ] );
   }
   
-  base64::engine::general_purpose::STANDARD.encode( &large_data )
+  base64 ::engine::general_purpose::STANDARD.encode( &large_data )
 }

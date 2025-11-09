@@ -10,10 +10,10 @@
 use api_openai::ClientApiAccessors;
 use api_openai::
 {
-  client::Client,
-  error::OpenAIError,
-  api::realtime::{ RealtimeClient, ws::WsSession },
-  components::realtime_shared::
+  client ::Client,
+  error ::OpenAIError,
+  api ::realtime::{ RealtimeClient, ws::WsSession },
+  components ::realtime_shared::
   {
     RealtimeSessionCreateRequest,
     RealtimeConversationItemContent,
@@ -38,30 +38,30 @@ async fn main() -> Result< (), OpenAIError >
   .init();
 
   // Load environment variables
-  dotenv::from_filename( "./secret/-secret.sh" ).ok();
+  dotenv ::from_filename( "./secret/-secret.sh" ).ok();
 
   // 1. Create a new OpenAI client.
-  tracing::info!( "Initializing client..." );
+  tracing ::info!( "Initializing client..." );
   let client = Client::new();
 
   // 2. Create the request payload to initiate the session.
-  tracing::info!( "Building realtime session request..." );
+  tracing ::info!( "Building realtime session request..." );
   let request = RealtimeSessionCreateRequest::former()
   .model( "gpt-4o-realtime-preview".to_string() )
   .temperature( 0.7 )
   .form();
 
-  tracing::info!( "Sending request to OpenAI API to create session..." );
+  tracing ::info!( "Sending request to OpenAI API to create session..." );
   // 3. Call the API endpoint to get session details.
   let session = client.realtime().create( request ).await?;
 
-  tracing::info!( "Creating Realtime WebSocket Session Client..." );
+  tracing ::info!( "Creating Realtime WebSocket Session Client..." );
   let token = session.client_secret.value;
   // 4. Establish the WebSocket connection using the session token.
   let session_client  = WsSession::connect( client.environment().clone(), Some( &token ) ).await?;
 
   // --- Send User Message (but don't expect automatic response) ---
-  let user_message_id_arc = Arc::new( Mutex::new( None::<String> ) );
+  let user_message_id_arc = Arc::new( Mutex::new( None::< String > ) );
   let user_message_id_clone = user_message_id_arc.clone();
 
   // 5. Prepare the content for the user message.
@@ -82,12 +82,12 @@ async fn main() -> Result< (), OpenAIError >
   .item( ci_to_create )
   .form();
 
-  tracing::info!( "Sending conversation.item.create (user message)..." );
+  tracing ::info!( "Sending conversation.item.create (user message)..." );
   // 8. Send the create event over the WebSocket.
   session_client.conversation_item_create( cic_create ).await?;
 
   // --- Wait for User Message Confirmation ---
-  tracing::info!( "Waiting for user message conversation.item.created confirmation..." );
+  tracing ::info!( "Waiting for user message conversation.item.created confirmation..." );
   loop
   {
       let response = session_client.read_event().await;
@@ -117,19 +117,19 @@ if let Some(id) = created_event.item.id
               return Err(OpenAIError::WsConnectionClosed);
           }
           Err(e) => {
-              eprintln!("\nError reading from WebSocket: {:?}", e);
+              eprintln!("\nError reading from WebSocket : {:?}", e);
               return Err(e);
           }
       }
   }
 if user_message_id_arc.lock().unwrap().is_none()
 {
-       tracing::warn!("Did not capture user message ID, proceeding anyway...");
+       tracing ::warn!("Did not capture user message ID, proceeding anyway...");
   }
 
 
   // --- Explicitly Trigger Response ---
-  let response_id_to_cancel = Arc::new( Mutex::new( None::<String> ) );
+  let response_id_to_cancel = Arc::new( Mutex::new( None::< String > ) );
   let response_id_clone = response_id_to_cancel.clone();
 
   // 9. Prepare the client event to explicitly create a response.
@@ -137,13 +137,13 @@ if user_message_id_arc.lock().unwrap().is_none()
       // No specific overrides needed for this example, use session defaults
       .form();
 
-  tracing::info!("Sending explicit response.create event...");
+  tracing ::info!("Sending explicit response.create event...");
   // 10. Send the response create event.
   session_client.response_create(rc_create).await?;
 
 
   // --- Wait for ResponseCreated to get the Response ID ---
-  tracing::info!( "Waiting for EXPLICIT response.created event to capture response ID..." );
+  tracing ::info!( "Waiting for EXPLICIT response.created event to capture response ID..." );
   loop
   {
     let response = session_client.read_event().await;
@@ -153,7 +153,7 @@ if user_message_id_arc.lock().unwrap().is_none()
             println!("\n--- Explicit Response Created Event Received ---");
             println!("{created_event:?}");
             let response_id = created_event.response.id;
-            println!("Captured response ID for cancellation: {}", response_id);
+            println!("Captured response ID for cancellation : {}", response_id);
             *response_id_clone.lock().unwrap() = Some(response_id);
             break; // Got the ID, proceed to cancel
         }
@@ -166,7 +166,7 @@ if user_message_id_arc.lock().unwrap().is_none()
             return Err(OpenAIError::WsConnectionClosed);
         }
         Err(e) => {
-            eprintln!("\nError reading from WebSocket: {:?}", e);
+            eprintln!("\nError reading from WebSocket : {:?}", e);
             return Err(e);
         }
     }
@@ -180,19 +180,19 @@ if response_id.is_none()
   let response_id = response_id.unwrap();
 
   // Introduce a small delay to ensure the response is likely generating output before cancelling
-  tokio::time::sleep( tokio::time::Duration::from_millis( 500 ) ).await;
+  tokio ::time::sleep( tokio::time::Duration::from_millis( 500 ) ).await;
 
   // 11. Prepare the client event to cancel the response.
   let rc_cancel = RealtimeClientEventResponseCancel::former()
   .response_id( &response_id ) // Specify the ID of the response to cancel
   .form();
 
-  tracing::info!( response_id = %response_id, "Sending response.cancel event..." );
+  tracing ::info!( response_id = %response_id, "Sending response.cancel event..." );
   // 12. Send the cancel event over the WebSocket.
   session_client.response_cancel( rc_cancel ).await?;
 
   // 13. Loop to read responses, specifically looking for the ResponseDone event confirming cancellation.
-  tracing::info!( "Waiting for response.done confirmation (status: cancelled)..." );
+  tracing ::info!( "Waiting for response.done confirmation (status : cancelled)..." );
   let mut confirmation_received = false;
   loop
   {
@@ -244,7 +244,7 @@ if response_id.is_none()
       }
       Err( e ) =>
       {
-        eprintln!( "\nError reading from WebSocket: {:?}", e );
+        eprintln!( "\nError reading from WebSocket : {:?}", e );
         return Err( e ); // Propagate the error
       }
     }
@@ -252,7 +252,7 @@ if response_id.is_none()
 
   if !confirmation_received
   {
-    eprintln!("Loop finished without receiving response.done (status: cancelled) confirmation for response {}.", response_id);
+    eprintln!("Loop finished without receiving response.done (status : cancelled) confirmation for response {}.", response_id);
     return Err( OpenAIError::WsInvalidMessage( "Did not receive expected cancellation confirmation".to_string() ) );
   }
 

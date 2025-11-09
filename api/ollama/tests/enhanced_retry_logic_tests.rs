@@ -34,20 +34,20 @@ use std::sync::{ Arc, Mutex };
 #[ derive( Debug, Clone ) ]
 struct RetryTestClient
 {
-  request_count: Arc< Mutex< u32 > >,
-  failure_threshold: u32,
-  client: reqwest::Client,
+  request_count : Arc< Mutex< u32 > >,
+  failure_threshold : u32,
+  client : reqwest::Client,
 }
 
 impl RetryTestClient
 {
-  fn new( failure_threshold: u32 ) -> Self
+  fn new( failure_threshold : u32 ) -> Self
   {
     Self
     {
-      request_count: Arc::new( Mutex::new( 0 ) ),
+      request_count : Arc::new( Mutex::new( 0 ) ),
       failure_threshold,
-      client: reqwest::Client::new(),
+      client : reqwest::Client::new(),
     }
   }
 
@@ -113,7 +113,7 @@ impl RetryTestClient
       *count
     };
 
-    tokio::time::sleep( Duration::from_millis( 100 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 100 ) ).await;
     Err( format!( "timeout on attempt {attempt}" ) )
   }
 
@@ -127,11 +127,11 @@ impl RetryTestClient
 #[ derive( Debug, Clone ) ]
 struct RetryConfig
 {
-  max_attempts: u32,
-  base_delay_ms: u64,
-  max_elapsed_time: Duration,
-  jitter_ms: u64,
-  backoff_multiplier: f64,
+  max_attempts : u32,
+  base_delay_ms : u64,
+  max_elapsed_time : Duration,
+  jitter_ms : u64,
+  backoff_multiplier : f64,
 }
 
 impl Default for RetryConfig
@@ -140,11 +140,11 @@ impl Default for RetryConfig
   {
     Self
     {
-      max_attempts: 3,
-      base_delay_ms: 100,
-      max_elapsed_time: Duration::from_secs( 10 ),
-      jitter_ms: 50,
-      backoff_multiplier: 2.0,
+      max_attempts : 3,
+      base_delay_ms : 100,
+      max_elapsed_time : Duration::from_secs( 10 ),
+      jitter_ms : 50,
+      backoff_multiplier : 2.0,
     }
   }
 }
@@ -158,7 +158,7 @@ enum ErrorType
   Timeout,
 }
 
-fn classify_error( error: &str ) -> ErrorType
+fn classify_error( error : &str ) -> ErrorType
 {
   if error.contains( "timeout" ) || error.contains( "connection" )
   {
@@ -180,7 +180,7 @@ fn classify_error( error: &str ) -> ErrorType
 
 /// Calculate backoff delay with jitter
 #[ allow(clippy::cast_possible_wrap, clippy::cast_possible_truncation, clippy::cast_sign_loss) ]
-fn calculate_backoff_delay( attempt: u32, config: &RetryConfig ) -> Duration
+fn calculate_backoff_delay( attempt : u32, config : &RetryConfig ) -> Duration
 {
   use fastrand;
 
@@ -193,8 +193,8 @@ fn calculate_backoff_delay( attempt: u32, config: &RetryConfig ) -> Duration
 
 /// Test retry execution helper
 async fn execute_with_retries< F, T, E >(
-  operation: F,
-  config: RetryConfig
+  operation : F,
+  config : RetryConfig
 ) -> Result< T, E >
 where
   F: Fn() -> std::pin::Pin< Box< dyn std::future::Future< Output = Result< T, E > > + Send > > + Send + Sync,
@@ -231,7 +231,7 @@ where
         if attempt < config.max_attempts - 1
         {
           let delay = calculate_backoff_delay( attempt, &config );
-          tokio::time::sleep( delay ).await;
+          tokio ::time::sleep( delay ).await;
         }
       }
     }
@@ -266,7 +266,7 @@ async fn test_exponential_backoff_calculation()
   let delay2 = calculate_backoff_delay( 2, &config );
 
   // Delays should increase exponentially (with jitter variance)
-  // Base delay: 100ms, multiplier: 2.0, jitter: 0-50ms
+  // Base delay : 100ms, multiplier : 2.0, jitter : 0-50ms
   assert!( delay0.as_millis() >= 100 ); // 100 + 0-50 jitter
   assert!( delay0.as_millis() <= 150 );
 
@@ -276,7 +276,7 @@ async fn test_exponential_backoff_calculation()
   assert!( delay2.as_millis() >= 400 ); // 400 + 0-50 jitter
   assert!( delay2.as_millis() <= 450 );
 
-  println!("✓ Exponential backoff with jitter: {delay0:?}, {delay1:?}, {delay2:?}");
+  println!("✓ Exponential backoff with jitter : {delay0:?}, {delay1:?}, {delay2:?}");
 }
 
 /// Test error classification for retry decisions
@@ -307,11 +307,11 @@ async fn test_retry_configuration()
 {
   let config = RetryConfig
   {
-    max_attempts: 5,
-    base_delay_ms: 200,
-    max_elapsed_time: Duration::from_secs( 30 ),
-    jitter_ms: 100,
-    backoff_multiplier: 1.5,
+    max_attempts : 5,
+    base_delay_ms : 200,
+    max_elapsed_time : Duration::from_secs( 30 ),
+    jitter_ms : 100,
+    backoff_multiplier : 1.5,
   };
 
   assert_eq!( config.max_attempts, 5 );
@@ -328,9 +328,9 @@ async fn test_retry_configuration()
   println!("✓ Retry configuration validation successful");
 }
 
-// Removed: test_successful_retry_after_failures
-// Reason: Flaky external dependency (httpbin.org unreliability)
-// Coverage: Retry-after-failure behavior is adequately tested by:
+// Removed : test_successful_retry_after_failures
+// Reason : Flaky external dependency (httpbin.org unreliability)
+// Coverage : Retry-after-failure behavior is adequately tested by:
 //   - test_retry_exhaustion (tests failure handling)
 //   - test_http_retry_integration (tests retry with unreachable endpoint)
 //   - test_max_elapsed_time_enforcement (tests retry timing)
@@ -354,11 +354,11 @@ async fn test_retry_exhaustion()
 
   let config = RetryConfig
   {
-    max_attempts: 3,
-    base_delay_ms: 10,
-    max_elapsed_time: Duration::from_secs( 30 ), // Generous timeout for 3 real HTTP requests to httpbin.org
-    jitter_ms: 5,
-    backoff_multiplier: 2.0,
+    max_attempts : 3,
+    base_delay_ms : 10,
+    max_elapsed_time : Duration::from_secs( 30 ), // Generous timeout for 3 real HTTP requests to httpbin.org
+    jitter_ms : 5,
+    backoff_multiplier : 2.0,
   };
 
   let start_time = Instant::now();
@@ -370,7 +370,7 @@ async fn test_retry_exhaustion()
   // Verify error message indicates final attempt (may vary due to network errors)
   let error_msg = result.unwrap_err();
   assert!( error_msg.contains( "attempt 3" ) || error_msg.contains( "timeout" ) || error_msg.contains( "connection" ),
-    "Expected error to indicate retry exhaustion, got: {error_msg}" );
+    "Expected error to indicate retry exhaustion, got : {error_msg}" );
 
   // Verify all attempts were made
   let final_count = client.get_request_count();
@@ -412,7 +412,7 @@ async fn test_non_retryable_error_bypass()
   let final_count = client.get_request_count();
   assert_eq!( final_count, 1, "Expected single attempt without retries for non-retryable error" );
 
-  // Timing check: Should complete faster than if retries occurred (with generous margin for httpbin.org variance)
+  // Timing check : Should complete faster than if retries occurred (with generous margin for httpbin.org variance)
   assert!( elapsed < Duration::from_secs( 15 ), "Single HTTP request took {elapsed:?}, exceeds reasonable timeout" );
 
   println!("✓ Non-retryable error bypassed retry logic (1 attempt) in {elapsed:?}");
@@ -437,11 +437,11 @@ async fn test_max_elapsed_time_enforcement()
 
   let config = RetryConfig
   {
-    max_attempts: 10, // High attempt count
-    base_delay_ms: 50,
-    max_elapsed_time: Duration::from_millis( 300 ), // Short max time
-    jitter_ms: 10,
-    backoff_multiplier: 2.0,
+    max_attempts : 10, // High attempt count
+    base_delay_ms : 50,
+    max_elapsed_time : Duration::from_millis( 300 ), // Short max time
+    jitter_ms : 10,
+    backoff_multiplier : 2.0,
   };
 
   let start_time = Instant::now();
@@ -458,7 +458,7 @@ async fn test_max_elapsed_time_enforcement()
   let final_count = client.get_request_count();
   assert!( final_count < 10 );
 
-  println!("✓ Max elapsed time enforced: stopped after {final_count} attempts in {elapsed:?}");
+  println!("✓ Max elapsed time enforced : stopped after {final_count} attempts in {elapsed:?}");
 }
 
 /// Test thread-safe retry state management
@@ -501,11 +501,11 @@ async fn test_thread_safe_retry_state()
 
       let config = RetryConfig
       {
-        max_attempts: 10,
-        base_delay_ms: 5,
-        max_elapsed_time: Duration::from_secs( 2 ),
-        jitter_ms: 2,
-        backoff_multiplier: 1.5,
+        max_attempts : 10,
+        base_delay_ms : 5,
+        max_elapsed_time : Duration::from_secs( 2 ),
+        jitter_ms : 2,
+        backoff_multiplier : 1.5,
       };
 
       execute_with_retries( operation, config ).await
@@ -530,9 +530,9 @@ async fn test_thread_safe_retry_state()
   println!("✓ Thread-safe retry state management validated with concurrent operations");
 }
 
-// Removed: test_retry_metrics_and_counting
-// Reason: Flaky external dependency (httpbin.org unreliability)
-// Coverage: Retry metrics and counting are adequately tested by:
+// Removed : test_retry_metrics_and_counting
+// Reason : Flaky external dependency (httpbin.org unreliability)
+// Coverage : Retry metrics and counting are adequately tested by:
 //   - test_thread_safe_retry_state (tests concurrent retry tracking)
 //   - test_retry_exhaustion (tests retry attempt counting)
 //   - Other passing retry tests validate metrics indirectly
@@ -544,11 +544,11 @@ async fn test_configurable_backoff_multipliers()
   // Test linear backoff (multiplier = 1.0)
   let linear_config = RetryConfig
   {
-    max_attempts: 3,
-    base_delay_ms: 100,
-    max_elapsed_time: Duration::from_secs( 5 ),
-    jitter_ms: 0, // No jitter for predictable testing
-    backoff_multiplier: 1.0,
+    max_attempts : 3,
+    base_delay_ms : 100,
+    max_elapsed_time : Duration::from_secs( 5 ),
+    jitter_ms : 0, // No jitter for predictable testing
+    backoff_multiplier : 1.0,
   };
 
   let delay0 = calculate_backoff_delay( 0, &linear_config );
@@ -563,11 +563,11 @@ async fn test_configurable_backoff_multipliers()
   // Test aggressive exponential backoff (multiplier = 3.0)
   let aggressive_config = RetryConfig
   {
-    max_attempts: 3,
-    base_delay_ms: 50,
-    max_elapsed_time: Duration::from_secs( 5 ),
-    jitter_ms: 0,
-    backoff_multiplier: 3.0,
+    max_attempts : 3,
+    base_delay_ms : 50,
+    max_elapsed_time : Duration::from_secs( 5 ),
+    jitter_ms : 0,
+    backoff_multiplier : 3.0,
   };
 
   let delay0_agg = calculate_backoff_delay( 0, &aggressive_config );
@@ -579,7 +579,7 @@ async fn test_configurable_backoff_multipliers()
   assert_eq!( delay1_agg.as_millis(), 150 );  // 50 * 3^1 = 150
   assert_eq!( delay2_agg.as_millis(), 450 );  // 50 * 3^2 = 450
 
-  println!("✓ Configurable backoff multipliers: linear {delay0:?}, exponential {delay0_agg:?}→{delay1_agg:?}→{delay2_agg:?}");
+  println!("✓ Configurable backoff multipliers : linear {delay0:?}, exponential {delay0_agg:?}→{delay1_agg:?}→{delay2_agg:?}");
 }
 
 /// Test graceful degradation when retry config is None
@@ -603,7 +603,7 @@ async fn test_graceful_degradation_no_config()
   assert!( result.is_err() );
   assert!( elapsed < Duration::from_millis( 10 ) ); // Should fail immediately
 
-  println!("✓ Graceful degradation without retry config: failed immediately in {elapsed:?}");
+  println!("✓ Graceful degradation without retry config : failed immediately in {elapsed:?}");
 }
 
 /// Test zero overhead when retry feature disabled (compile-time test)
@@ -619,7 +619,7 @@ async fn test_zero_overhead_verification()
   println!("✓ Retry feature and dependencies are properly available");
 }
 
-/// Integration test: validate HTTP layer retry behavior
+/// Integration test : validate HTTP layer retry behavior
 #[ tokio::test ]
 async fn test_http_retry_integration()
 {
@@ -649,7 +649,7 @@ async fn test_http_retry_integration()
     tool_messages : None,
   };
 
-  // Note: Since the actual retry implementation doesn't exist yet (Task 670),
+  // Note : Since the actual retry implementation doesn't exist yet (Task 670),
   // this test validates the error behavior that will be enhanced with retry logic
   let start_time = Instant::now();
   let result = client.chat( request ).await;
@@ -657,8 +657,8 @@ async fn test_http_retry_integration()
 
   assert!( result.is_err() );
 
-  // Current behavior: should fail quickly without retries
-  // After Task 670 implementation: will have configurable retry behavior
+  // Current behavior : should fail quickly without retries
+  // After Task 670 implementation : will have configurable retry behavior
   assert!( elapsed < Duration::from_millis( 200 ) );
 
   let error_str = result.unwrap_err().to_string();
@@ -667,5 +667,5 @@ async fn test_http_retry_integration()
   // Verify error would be classified as retryable
   assert!( error_type == ErrorType::Retryable || error_type == ErrorType::Timeout );
 
-  println!("✓ HTTP layer error classification ready for retry integration: {error_type:?}");
+  println!("✓ HTTP layer error classification ready for retry integration : {error_type:?}");
 }

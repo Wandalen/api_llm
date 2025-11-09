@@ -26,26 +26,26 @@ pub use crate::test_isolation::{ IsolatedClient, should_run_real_api_tests };
 // Core API imports that most tests need
 pub use api_openai::{
   Client,
-  error::OpenAIError,
-  environment::{ EnvironmentInterface, OpenaiEnvironment, OpenaiEnvironmentImpl },
-  secret::Secret,
-  components::{
-    responses::{
+  error ::OpenAIError,
+  environment ::{ EnvironmentInterface, OpenaiEnvironment, OpenaiEnvironmentImpl },
+  secret ::Secret,
+  components ::{
+    responses ::{
       CreateResponseRequest,
       ResponseObject,
       ResponseInput,
       ResponseStreamEvent,
       ResponseItemList,
     },
-    input::{
+    input ::{
       InputItem,
       InputMessage,
       InputContentPart,
       InputText,
     },
-    common::{ ModelIdsResponses, ListQuery },
-    tools::{ Tool, ToolChoice, FunctionTool, FunctionParameters },
-    output::{ OutputItem, OutputContentPart },
+    common ::{ ModelIdsResponses, ListQuery },
+    tools ::{ Tool, ToolChoice, FunctionTool, FunctionParameters },
+    output ::{ OutputItem, OutputContentPart },
   }
 };
 
@@ -58,7 +58,7 @@ pub use tokio::sync::mpsc;
 // Re-export test isolation utilities (already imported above)
 
 /// Common assertion helper for response validation
-pub fn assert_valid_response(response: &ResponseObject) 
+pub fn assert_valid_response(response : &ResponseObject) 
 {
   assert!(!response.id.is_empty(), "Response should have an id field");
   assert!(!response.output.is_empty(), "Response should have output");  
@@ -76,17 +76,17 @@ pub fn create_basic_test_request() -> CreateResponseRequest
       vec![
         InputItem::Message(
           InputMessage {
-            r#type: "message".to_string(),
-            role: "user".to_string(),
-            content: vec![
+            r#type : "message".to_string(),
+            role : "user".to_string(),
+            content : vec![
               InputContentPart::Text(
                 InputText {
-                  text: "Hello, how are you?".to_string(),
+                  text : "Hello, how are you?".to_string(),
                 }
               ),
             ],
-            status: None,
-            id: None,
+            status : None,
+            id : None,
           }
         ),
       ]
@@ -135,10 +135,10 @@ pub fn create_tools_test_request() -> CreateResponseRequest
 /// Panics if the test result indicates an unexpected error or validation failure.
 /// Always expects real API access - never falls back to mocks.
 #[ allow( clippy::std_instead_of_core ) ] // std::fmt::Debug is more idiomatic in tests
-pub fn handle_test_result<T, E: std::fmt::Debug>(
-  result: Result< T, E >,
-  test_name: &str,
-  success_validator: impl FnOnce(&T)
+pub fn handle_test_result< T, E: std::fmt::Debug >(
+  result : Result< T, E >,
+  test_name : &str,
+  success_validator : impl FnOnce(&T)
 ) {
   // REAL API ONLY - No mocking fallback allowed
   match result

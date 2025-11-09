@@ -36,11 +36,11 @@ use api_openai::ClientApiAccessors;
 use api_openai::
 {
   Client,
-  components::
+  components ::
   {
-    responses::{ CreateResponseRequest, ResponseInput, ResponseObject },
-    output::{ OutputItem, OutputContentPart },
-    common::ModelIdsResponses,
+    responses ::{ CreateResponseRequest, ResponseInput, ResponseObject },
+    output ::{ OutputItem, OutputContentPart },
+    common ::ModelIdsResponses,
   },
 };
 use core::fmt::Write;
@@ -59,8 +59,8 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
     secret,
     None,
     None,
-    api_openai::environment::OpenAIRecommended::base_url().to_string(),
-    api_openai::environment::OpenAIRecommended::realtime_base_url().to_string()
+    api_openai ::environment::OpenAIRecommended::base_url().to_string(),
+    api_openai ::environment::OpenAIRecommended::realtime_base_url().to_string()
   ).expect( "Failed to create environment" );
 
   let client = Client::build( env ).expect( "Failed to create client" );
@@ -72,9 +72,9 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
   println!( "🔄 Turn 1: Starting conversation about Japan travel\n" );
 
   let user_question_1 = "I'm planning a trip to Japan in spring. What are some must-visit places for cherry blossom viewing?";
-  writeln!( conversation_context, "User: {user_question_1}" ).unwrap();
+  writeln!( conversation_context, "User : {user_question_1}" ).unwrap();
 
-  println!( "User: {user_question_1}" );
+  println!( "User : {user_question_1}" );
 
   let request_1 = CreateResponseRequest::former()
     .model( ModelIdsResponses::from( "gpt-4o-mini".to_string() ) )
@@ -107,9 +107,9 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
   println!( "🔄 Turn 2: Follow-up question about timing\n" );
 
   let user_question_2 = "That sounds amazing! What's the best time in spring to visit? I want to catch the peak bloom.";
-  writeln!( conversation_context, "User: {user_question_2}" ).unwrap();
+  writeln!( conversation_context, "User : {user_question_2}" ).unwrap();
 
-  println!( "User: {user_question_2}" );
+  println!( "User : {user_question_2}" );
 
   let request_2 = CreateResponseRequest::former()
     .model( ModelIdsResponses::from( "gpt-4o-mini".to_string() ) )
@@ -142,9 +142,9 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
   println!( "🔄 Turn 3: Practical planning question\n" );
 
   let user_question_3 = "Perfect! How many days would you recommend for the trip, and should I book accommodations in advance?";
-  writeln!( conversation_context, "User: {user_question_3}" ).unwrap();
+  writeln!( conversation_context, "User : {user_question_3}" ).unwrap();
 
-  println!( "User: {user_question_3}" );
+  println!( "User : {user_question_3}" );
 
   let request_3 = CreateResponseRequest::former()
     .model( ModelIdsResponses::from( "gpt-4o-mini".to_string() ) )
@@ -175,8 +175,8 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
   // Show conversation summary
   println!( "📋 Conversation Summary" );
   println!( "======================" );
-  println!( "Total turns: 3" );
-  println!( "Conversation context length: {} characters", conversation_context.len() );
+  println!( "Total turns : 3" );
+  println!( "Conversation context length : {} characters", conversation_context.len() );
 
   if let ( Some( usage_1 ), Some( usage_2 ), Some( usage_3 ) ) = ( &response_1.usage, &response_2.usage, &response_3.usage )
   {

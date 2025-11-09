@@ -24,7 +24,7 @@
 //! ```
 //!
 //! Type your messages and press Enter. Type 'quit', 'exit', or 'bye' to end.
-//! Note: This is NOT for automated testing - it's for manual interactive use only.
+//! Note : This is NOT for automated testing - it's for manual interactive use only.
 //!
 //! ## What You'll Learn
 //!
@@ -75,8 +75,8 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
   loop
   {
     // Get user input
-    print!( "You: " );
-    io::stdout().flush()?;
+    print!( "You : " );
+    io ::stdout().flush()?;
 
     let mut input = String::new();
     let bytes_read = match io::stdin().read_line( &mut input )
@@ -84,7 +84,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
       Ok( n ) => n,
       Err( e ) =>
       {
-        println!( "\nError reading input: {e}" );
+        println!( "\nError reading input : {e}" );
         break;
       }
     };
@@ -93,8 +93,8 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     if bytes_read == 0
     {
       println!( "\n👋 No input available (EOF). Exiting gracefully." );
-      println!( "Note: Use this example in interactive terminal only." );
-      println!( "Run: cargo run --example ollama_chat_interactive" );
+      println!( "Note : Use this example in interactive terminal only." );
+      println!( "Run : cargo run --example ollama_chat_interactive" );
       break;
     }
 
@@ -138,7 +138,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     };
 
     print!( "\nAI: " );
-    io::stdout().flush()?;
+    io ::stdout().flush()?;
 
     // Use real streaming if available, otherwise fallback to regular generation
     #[ cfg( feature = "streaming" ) ]
@@ -158,7 +158,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
                 if !streaming_response.message.content.is_empty()
                 {
                   print!( "{}", streaming_response.message.content );
-                  io::stdout().flush()?;
+                  io ::stdout().flush()?;
                   full_response.push_str( &streaming_response.message.content );
                 }
 
@@ -170,7 +170,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
               }
               Err( e ) =>
               {
-                println!( "\nStreaming error: {e}" );
+                println!( "\nStreaming error : {e}" );
                 break;
               }
             }
@@ -194,7 +194,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
         }
         Err( e ) =>
         {
-          println!( "Streaming error: {e}" );
+          println!( "Streaming error : {e}" );
           println!( "Please try again or type 'quit' to exit.\n" );
         }
       }
@@ -230,8 +230,8 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
               {
                 print!( " " );
               }
-              io::stdout().flush()?;
-              tokio::time::sleep( tokio::time::Duration::from_millis( 80 ) ).await;
+              io ::stdout().flush()?;
+              tokio ::time::sleep( tokio::time::Duration::from_millis( 80 ) ).await;
             }
             println!( "\n" );
 
@@ -253,7 +253,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
         }
         Err( e ) =>
         {
-          println!( "Error: {}", e );
+          println!( "Error : {}", e );
           println!( "Please try again or type 'quit' to exit.\n" );
         }
       }

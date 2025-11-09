@@ -10,7 +10,7 @@ mod tests
   {
     ChatRequest,
     GenerateRequest,
-    input_validation::{ Validate, ValidationError },
+    input_validation ::{ Validate, ValidationError },
   };
 
   /// Test validation of empty model name

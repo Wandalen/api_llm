@@ -2,13 +2,13 @@
 
 use api_huggingface::
 {
-  models::{ Models, ModelStatus },
-  components::models::{ ModelInfo, Models as ModelConstants },
-  validation::validate_model_identifier,
+  models ::{ Models, ModelStatus },
+  components ::models::{ ModelInfo, Models as ModelConstants },
+  validation ::validate_model_identifier,
   Client,
-  environment::HuggingFaceEnvironmentImpl,
-  error::HuggingFaceError,
-  secret::Secret,
+  environment ::HuggingFaceEnvironmentImpl,
+  error ::HuggingFaceError,
+  secret ::Secret,
 };
 use core::time::Duration;
 
@@ -37,9 +37,9 @@ fn create_test_models() -> api_huggingface::error::Result< Models< HuggingFaceEn
 // ============================================================================
 
 // Fix(issue-004): Removed tests for deprecated llama_3_1 models
-// Root cause: Tests were using deprecated model functions that were replaced with llama_3_3_70b_instruct
+// Root cause : Tests were using deprecated model functions that were replaced with llama_3_3_70b_instruct
 // After sed replacement, duplicate test names were created
-// Pitfall: When models are deprecated, remove old tests instead of blindly renaming
+// Pitfall : When models are deprecated, remove old tests instead of blindly renaming
 
 #[ test ]
 fn test_model_constants_llama_3_3_70b_instruct()
@@ -408,7 +408,7 @@ mod integration_tests
           "Expected model ID '{model_id}' or ending with '/{model_id}'', got '{}'",
           model_info.id
   );
-  println!( "Retrieved model info for: {model_id} (actual ID: {})", model_info.id );
+  println!( "Retrieved model info for : {model_id} (actual ID: {})", model_info.id );
   println!( "Repository URL: {:?}", model_info.repository_url );
   // Repository URL may not always be present in API response
   // assert!( model_info.repository_url.is_some() );
@@ -431,11 +431,11 @@ mod integration_tests
   {
       Ok( available ) =>
       {
-  println!( "Model {model_id} availability: {available}" );
+  println!( "Model {model_id} availability : {available}" );
       },
       Err( e ) =>
       {
-  println!( "Model availability check failed: {e}" );
+  println!( "Model availability check failed : {e}" );
       }
   }
   }
@@ -450,7 +450,7 @@ mod integration_tests
   {
       Ok( status ) =>
       {
-  println!( "Model {model_id} status: {status:?}" );
+  println!( "Model {model_id} status : {status:?}" );
   // Status should be one of the valid enum variants
   match status
   {
@@ -459,7 +459,7 @@ mod integration_tests
       },
       Err( e ) =>
       {
-  println!( "Model status check failed: {e}" );
+  println!( "Model status check failed : {e}" );
       }
   }
   }
@@ -486,12 +486,12 @@ mod integration_tests
       // More flexible assertion - just check it mentions the model or timeout
       assert!(
   msg.contains( non_existent_model ) || msg.contains( "timeout" ) || msg.contains( "available" ) || msg.contains( "seconds" ),
-  "Expected timeout or model-related error message, got: '{msg}'"
+  "Expected timeout or model-related error message, got : '{msg}'"
       );
   }
   else
   {
-      panic!( "Expected ModelUnavailable error, got: {result:?}" );
+      panic!( "Expected ModelUnavailable error, got : {result:?}" );
   }
   }
 }

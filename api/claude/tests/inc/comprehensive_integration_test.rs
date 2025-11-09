@@ -8,8 +8,8 @@
 //! - Tests MUST FAIL IMMEDIATELY on any API endpoint errors
 //! - NO SILENT PASSES allowed when problems occur
 //!
-//! Run with: cargo test --features integration
-//! Requires: Valid `ANTHROPIC_API_KEY` in environment or ../../secret/-secrets.sh
+//! Run with : cargo test --features integration
+//! Requires : Valid `ANTHROPIC_API_KEY` in environment or ../../secret/-secrets.sh
 
 #[ allow( unused_imports ) ]
 use super::*;
@@ -38,7 +38,7 @@ fn find_secret_and_workspace_root() -> Option< ( std::path::PathBuf, std::path::
     }
   }
 
-  // Fallback: search upward from current directory
+  // Fallback : search upward from current directory
   let mut current = std::env::current_dir().ok()?;
 
   loop
@@ -74,8 +74,8 @@ fn test_comprehensive_integration()
         secret_file);
 
     println!("✅ Workspace structure verified");
-    println!("   📁 Root: {}", workspace_root.display());
-    println!("   🔐 Secrets: {}", secret_file.display());
+    println!("   📁 Root : {}", workspace_root.display());
+    println!("   🔐 Secrets : {}", secret_file.display());
     
     // Test 2: Raw secret file reading (using secret/ not .secret/)
     println!("\n🔧 Step 2: Testing direct secret file reading...");
@@ -97,7 +97,7 @@ fn test_comprehensive_integration()
       .expect("INTEGRATION: Must find ANTHROPIC_API_KEY in secrets file");
     println!("✅ Raw secret loading successful");
     let raw_secret_len = raw_secret.len();
-    println!("   📝 Raw secret length: {raw_secret_len}");
+    println!("   📝 Raw secret length : {raw_secret_len}");
     // SECURITY: Never log actual secret content
     println!("   🔐 Raw secret format validated (content masked)");
     
@@ -152,7 +152,7 @@ fn test_comprehensive_integration()
 
     // Verify client has expected properties
     let client_secret_matches = client.secret().ANTHROPIC_API_KEY == secret_from_workspace.ANTHROPIC_API_KEY;
-    println!("   📝 Client secret matches: {client_secret_matches}");
+    println!("   📝 Client secret matches : {client_secret_matches}");
     assert!(client_secret_matches, "INTEGRATION FAILURE: Client secret inconsistency");
 
     // Test 7: Performance check
@@ -168,7 +168,7 @@ fn test_comprehensive_integration()
 
     println!("✅ 10 secret loads completed in {duration:?}");
     let avg_duration = duration / 10;
-    println!("   📈 Average per load: {avg_duration:?}");
+    println!("   📈 Average per load : {avg_duration:?}");
 
     if duration.as_millis() < 1000
     {

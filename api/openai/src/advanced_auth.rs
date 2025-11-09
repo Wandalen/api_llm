@@ -20,17 +20,17 @@ mod private
 {
   use crate::
   {
-    environment::{ OpenaiEnvironmentImpl },
-    secret::Secret,
-    error::OpenAIError,
-    client::Client,
+    environment ::{ OpenaiEnvironmentImpl },
+    secret ::Secret,
+    error ::OpenAIError,
+    client ::Client,
   };
   use core::time::Duration;
   use std::
   {
-    collections::HashMap,
-    time::Instant,
-    sync::{ Arc, Mutex, RwLock },
+    collections ::HashMap,
+    time ::Instant,
+    sync ::{ Arc, Mutex, RwLock },
   };
   // use tokio::time::sleep; // Commented out as unused
   use serde::{ Deserialize, Serialize };
@@ -41,15 +41,15 @@ mod private
   pub struct OAuthTokenResponse
   {
     /// Access token for API requests
-    pub access_token: String,
+    pub access_token : String,
     /// Token type (usually "Bearer")
-    pub token_type: String,
+    pub token_type : String,
     /// Token expiration in seconds
-    pub expires_in: u64,
+    pub expires_in : u64,
     /// Refresh token for token renewal
-    pub refresh_token: Option< String >,
+    pub refresh_token : Option< String >,
     /// Scope of the access token
-    pub scope: Option< String >,
+    pub scope : Option< String >,
   }
 
   /// Multi-tenant authentication configuration
@@ -57,15 +57,15 @@ mod private
   pub struct MultiTenantConfig
   {
     /// Primary tenant organization ID
-    pub primary_org_id: String,
+    pub primary_org_id : String,
     /// Secondary tenant organization ID for cross-tenant scenarios
-    pub secondary_org_id: Option< String >,
+    pub secondary_org_id : Option< String >,
     /// Per-tenant API keys mapping
-    pub tenant_api_keys: HashMap<  String, String  >,
+    pub tenant_api_keys : HashMap<  String, String  >,
     /// Per-tenant rate limits
-    pub tenant_rate_limits: HashMap<  String, u32  >,
+    pub tenant_rate_limits : HashMap<  String, u32  >,
     /// Tenant isolation enforcement enabled
-    pub isolation_enforced: bool,
+    pub isolation_enforced : bool,
   }
 
   /// Authentication session information
@@ -73,34 +73,34 @@ mod private
   pub struct AuthSession
   {
     /// Session identifier
-    pub session_id: String,
+    pub session_id : String,
     /// Session creation timestamp
-    pub created_at: Instant,
+    pub created_at : Instant,
     /// Session last access timestamp
-    pub last_accessed: Instant,
+    pub last_accessed : Instant,
     /// Session timeout duration
-    pub timeout: Duration,
+    pub timeout : Duration,
     /// Whether session is expired
-    pub is_expired: bool,
+    pub is_expired : bool,
     /// Associated tenant ID if multi-tenant
-    pub tenant_id: Option< String >,
+    pub tenant_id : Option< String >,
   }
 
   impl AuthSession
   {
     /// Create a new authentication session
     #[ must_use ]
-    pub fn new(session_id: String, timeout: Duration) -> Self
+    pub fn new(session_id : String, timeout : Duration) -> Self
     {
       let now = Instant::now();
       Self
       {
         session_id,
-        created_at: now,
-        last_accessed: now,
+        created_at : now,
+        last_accessed : now,
         timeout,
-        is_expired: false,
-        tenant_id: None,
+        is_expired : false,
+        tenant_id : None,
       }
     }
 
@@ -135,17 +135,17 @@ mod private
   pub struct AuthAuditEntry
   {
     /// Timestamp of the authentication event
-    pub timestamp: Instant,
+    pub timestamp : Instant,
     /// Authentication event type
-    pub event_type: String,
+    pub event_type : String,
     /// Success or failure indicator
-    pub success: bool,
+    pub success : bool,
     /// User/client identifier
-    pub client_id: String,
+    pub client_id : String,
     /// IP address if available
-    pub ip_address: Option< String >,
+    pub ip_address : Option< String >,
     /// Additional context information
-    pub context: HashMap<  String, String  >,
+    pub context : HashMap<  String, String  >,
   }
 
   /// Advanced authentication configuration
@@ -153,29 +153,29 @@ mod private
   pub struct AdvancedAuthConfig
   {
     /// Primary API key for authentication
-    pub primary_api_key: String,
+    pub primary_api_key : String,
     /// Secondary API key for failover scenarios
-    pub secondary_api_key: Option< String >,
+    pub secondary_api_key : Option< String >,
     /// OAuth access token for OAuth scenarios
-    pub oauth_access_token: Option< String >,
+    pub oauth_access_token : Option< String >,
     /// OAuth refresh token for token refresh
-    pub oauth_refresh_token: Option< String >,
+    pub oauth_refresh_token : Option< String >,
     /// Token expiration timestamp (Unix epoch)
-    pub token_expires_at: Option< u64 >,
+    pub token_expires_at : Option< u64 >,
     /// Organization context for multi-tenant
-    pub organization_context: Option< String >,
+    pub organization_context : Option< String >,
     /// Project context for project-scoped authentication
-    pub project_context: Option< String >,
+    pub project_context : Option< String >,
     /// Authentication audit trail enabled
-    pub audit_trail_enabled: bool,
+    pub audit_trail_enabled : bool,
     /// Maximum authentication retries
-    pub max_auth_retries: u32,
+    pub max_auth_retries : u32,
     /// Authentication timeout duration
-    pub auth_timeout: Duration,
+    pub auth_timeout : Duration,
     /// Session management enabled
-    pub session_management_enabled: bool,
+    pub session_management_enabled : bool,
     /// Default session timeout
-    pub default_session_timeout: Duration,
+    pub default_session_timeout : Duration,
   }
 
   impl Default for AdvancedAuthConfig
@@ -184,18 +184,18 @@ mod private
     {
       Self
       {
-        primary_api_key: String::new(),
-        secondary_api_key: None,
-        oauth_access_token: None,
-        oauth_refresh_token: None,
-        token_expires_at: None,
-        organization_context: None,
-        project_context: None,
-        audit_trail_enabled: false,
-        max_auth_retries: 3,
-        auth_timeout: Duration::from_secs(30),
-        session_management_enabled: false,
-        default_session_timeout: Duration::from_secs(3600), // 1 hour
+        primary_api_key : String::new(),
+        secondary_api_key : None,
+        oauth_access_token : None,
+        oauth_refresh_token : None,
+        token_expires_at : None,
+        organization_context : None,
+        project_context : None,
+        audit_trail_enabled : false,
+        max_auth_retries : 3,
+        auth_timeout : Duration::from_secs(30),
+        session_management_enabled : false,
+        default_session_timeout : Duration::from_secs(3600), // 1 hour
       }
     }
   }
@@ -204,36 +204,36 @@ mod private
   pub struct AdvancedAuthManager
   {
     /// Current configuration
-    config: AdvancedAuthConfig,
+    config : AdvancedAuthConfig,
     /// Multi-tenant configuration if enabled
-    multi_tenant_config: Option< MultiTenantConfig >,
+    multi_tenant_config : Option< MultiTenantConfig >,
     /// Active authentication sessions
-    sessions: Arc< RwLock< HashMap<  String, AuthSession  > > >,
+    sessions : Arc< RwLock< HashMap<  String, AuthSession  > > >,
     /// Authentication audit log
-    audit_log: Arc< Mutex< Vec< AuthAuditEntry > > >,
+    audit_log : Arc< Mutex< Vec< AuthAuditEntry > > >,
     /// OAuth token refresh function
-    token_refresh_fn: Option< Box< dyn Fn() -> Result< OAuthTokenResponse > + Send + Sync > >,
+    token_refresh_fn : Option< Box< dyn Fn() -> Result< OAuthTokenResponse > + Send + Sync > >,
   }
 
   impl AdvancedAuthManager
   {
     /// Create a new advanced authentication manager
     #[ must_use ]
-    pub fn new(config: AdvancedAuthConfig) -> Self
+    pub fn new(config : AdvancedAuthConfig) -> Self
     {
       Self
       {
         config,
-        multi_tenant_config: None,
-        sessions: Arc::new(RwLock::new(HashMap::new())),
-        audit_log: Arc::new(Mutex::new(Vec::new())),
-        token_refresh_fn: None,
+        multi_tenant_config : None,
+        sessions : Arc::new(RwLock::new(HashMap::new())),
+        audit_log : Arc::new(Mutex::new(Vec::new())),
+        token_refresh_fn : None,
       }
     }
 
     /// Configure multi-tenant authentication
     #[ must_use ]
-    pub fn with_multi_tenant_config(mut self, config: MultiTenantConfig) -> Self
+    pub fn with_multi_tenant_config(mut self, config : MultiTenantConfig) -> Self
     {
       self.multi_tenant_config = Some(config);
       self
@@ -241,7 +241,7 @@ mod private
 
     /// Set OAuth token refresh function
     #[ must_use ]
-    pub fn with_oauth_refresh<F>(mut self, refresh_fn: F) -> Self
+    pub fn with_oauth_refresh< F >(mut self, refresh_fn : F) -> Self
     where
       F: Fn() -> Result< OAuthTokenResponse > + Send + Sync + 'static,
     {
@@ -299,7 +299,7 @@ mod private
     ///
     /// Returns an error if multi-tenant configuration is not enabled, tenant isolation
     /// verification fails, tenant has no configured API key, or client creation fails.
-    pub async fn create_tenant_client(&self, tenant_id: &str) -> Result< Client< OpenaiEnvironmentImpl > >
+    pub async fn create_tenant_client(&self, tenant_id : &str) -> Result< Client< OpenaiEnvironmentImpl > >
     {
       // Check if we have multi-tenant configuration
       let multi_tenant = self.multi_tenant_config.as_ref()
@@ -313,7 +313,7 @@ mod private
 
       // Get tenant-specific API key
       let tenant_api_key = multi_tenant.tenant_api_keys.get(tenant_id)
-        .ok_or_else(|| error_tools::Error::from(OpenAIError::InvalidArgument(format!("No API key configured for tenant: {tenant_id}"))))?;
+        .ok_or_else(|| error_tools::Error::from(OpenAIError::InvalidArgument(format!("No API key configured for tenant : {tenant_id}"))))?;
 
       // For simplicity, we'll create a new environment each time
       // In a real implementation, you might want caching for performance
@@ -322,8 +322,8 @@ mod private
         secret,
         Some(tenant_id.to_string()),
         None, // project_id
-        crate::environment::OpenAIRecommended::base_url().to_string(),
-        crate::environment::OpenAIRecommended::realtime_base_url().to_string(),
+        crate ::environment::OpenAIRecommended::base_url().to_string(),
+        crate ::environment::OpenAIRecommended::realtime_base_url().to_string(),
       )?;
 
       self.log_auth_event("tenant_client_created", true, tenant_id, None, HashMap::new()).await;
@@ -384,7 +384,7 @@ mod private
     /// # Panics
     ///
     /// Panics if the sessions lock is poisoned.
-    pub async fn create_session_client(&self, session_id: &str) -> Result< Client< OpenaiEnvironmentImpl > >
+    pub async fn create_session_client(&self, session_id : &str) -> Result< Client< OpenaiEnvironmentImpl > >
     {
       if !self.config.session_management_enabled
       {
@@ -451,18 +451,18 @@ mod private
         if !keep
         {
           // Log session cleanup
-          tokio::spawn({
+          tokio ::spawn({
             let audit_log = Arc::clone(&self.audit_log);
             let session_id = session_id.clone();
             async move {
               let entry = AuthAuditEntry
               {
-                timestamp: Instant::now(),
-                event_type: "session_cleanup".to_string(),
-                success: true,
-                client_id: session_id,
-                ip_address: None,
-                context: HashMap::new(),
+                timestamp : Instant::now(),
+                event_type : "session_cleanup".to_string(),
+                success : true,
+                client_id : session_id,
+                ip_address : None,
+                context : HashMap::new(),
               };
               audit_log.lock().unwrap().push(entry);
             }
@@ -487,46 +487,46 @@ mod private
       let success_rate = if total_events > 0 { successful_events as f64 / total_events as f64 } else { 0.0 };
 
       // Calculate recent performance (last 100 events)
-      let recent_events: Vec< _ > = audit_log.iter().rev().take( 100 ).collect();
+      let recent_events : Vec< _ > = audit_log.iter().rev().take( 100 ).collect();
       let recent_successful = recent_events.iter().filter(|e| e.success).count();
       let recent_success_rate = if recent_events.is_empty() { 0.0 } else { recent_successful as f64 / recent_events.len() as f64 };
 
       AuthPerformanceMetrics
       {
-        total_auth_attempts: total_events,
-        successful_auth_attempts: successful_events,
-        overall_success_rate: success_rate,
+        total_auth_attempts : total_events,
+        successful_auth_attempts : successful_events,
+        overall_success_rate : success_rate,
         recent_success_rate,
-        active_sessions: self.sessions.read().unwrap().len(),
-        cached_environments: 0, // Simplified implementation without caching
+        active_sessions : self.sessions.read().unwrap().len(),
+        cached_environments : 0, // Simplified implementation without caching
       }
     }
 
-    /// Private helper: Create client with specific API key
-    async fn create_client_with_key(&self, api_key: &str) -> Result< Client< OpenaiEnvironmentImpl > >
+    /// Private helper : Create client with specific API key
+    async fn create_client_with_key(&self, api_key : &str) -> Result< Client< OpenaiEnvironmentImpl > >
     {
       let secret = Secret::new(api_key.to_string())?;
       let environment = OpenaiEnvironmentImpl::build(
         secret,
         self.config.organization_context.clone(),
         self.config.project_context.clone(),
-        crate::environment::OpenAIRecommended::base_url().to_string(),
-        crate::environment::OpenAIRecommended::realtime_base_url().to_string(),
+        crate ::environment::OpenAIRecommended::base_url().to_string(),
+        crate ::environment::OpenAIRecommended::realtime_base_url().to_string(),
       )?;
 
       Client::build(environment)
     }
 
-    /// Private helper: Create client with OAuth token
-    async fn create_client_with_token(&self, token: &str) -> Result< Client< OpenaiEnvironmentImpl > >
+    /// Private helper : Create client with OAuth token
+    async fn create_client_with_token(&self, token : &str) -> Result< Client< OpenaiEnvironmentImpl > >
     {
       // In a real implementation, this would use the token as a Bearer token
       // For now, we'll treat it as an API key for simplicity
       self.create_client_with_key(token).await
     }
 
-    /// Private helper: Verify tenant isolation
-    async fn verify_tenant_isolation(&self, tenant_id: &str) -> Result< () >
+    /// Private helper : Verify tenant isolation
+    async fn verify_tenant_isolation(&self, tenant_id : &str) -> Result< () >
     {
       let multi_tenant = self.multi_tenant_config.as_ref().unwrap();
 
@@ -539,14 +539,14 @@ mod private
       Ok(())
     }
 
-    /// Private helper: Log authentication event
+    /// Private helper : Log authentication event
     async fn log_auth_event(
       &self,
-      event_type: &str,
-      success: bool,
-      client_id: &str,
-      ip_address: Option< String >,
-      context: HashMap< String, String >,
+      event_type : &str,
+      success : bool,
+      client_id : &str,
+      ip_address : Option< String >,
+      context : HashMap< String, String >,
     )
     {
       if !self.config.audit_trail_enabled
@@ -556,10 +556,10 @@ mod private
 
       let entry = AuthAuditEntry
       {
-        timestamp: Instant::now(),
-        event_type: event_type.to_string(),
+        timestamp : Instant::now(),
+        event_type : event_type.to_string(),
         success,
-        client_id: client_id.to_string(),
+        client_id : client_id.to_string(),
         ip_address,
         context,
       };
@@ -570,7 +570,7 @@ mod private
 
   impl core::fmt::Debug for AdvancedAuthManager
   {
-    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+    fn fmt(&self, f : &mut core::fmt::Formatter< '_ >) -> core::fmt::Result
     {
       f.debug_struct("AdvancedAuthManager")
         .field("config", &self.config)
@@ -587,17 +587,17 @@ mod private
   pub struct AuthPerformanceMetrics
   {
     /// Total authentication attempts
-    pub total_auth_attempts: usize,
+    pub total_auth_attempts : usize,
     /// Successful authentication attempts
-    pub successful_auth_attempts: usize,
+    pub successful_auth_attempts : usize,
     /// Overall success rate (0.0 to 1.0)
-    pub overall_success_rate: f64,
+    pub overall_success_rate : f64,
     /// Recent success rate (last 100 attempts)
-    pub recent_success_rate: f64,
+    pub recent_success_rate : f64,
     /// Number of active sessions
-    pub active_sessions: usize,
+    pub active_sessions : usize,
     /// Number of cached environment instances
-    pub cached_environments: usize,
+    pub cached_environments : usize,
   }
 
   /// Global advanced authentication manager instance
@@ -608,7 +608,7 @@ mod private
   /// # Errors
   ///
   /// Currently this function cannot fail, but returns `Result` for future extensibility.
-  pub fn initialize_advanced_auth(config: AdvancedAuthConfig) -> Result< () >
+  pub fn initialize_advanced_auth(config : AdvancedAuthConfig) -> Result< () >
   {
     let manager = AdvancedAuthManager::new(config);
     GLOBAL_AUTH_MANAGER.get_or_init(|| std::sync::Mutex::new(Some(manager)));
@@ -624,10 +624,10 @@ mod private
   {
     GLOBAL_AUTH_MANAGER.get_or_init(|| std::sync::Mutex::new(None))
       .lock()
-      .map_err(|e| error_tools::Error::from(OpenAIError::Internal(format!("Failed to lock auth manager: {e}"))))
+      .map_err(|e| error_tools::Error::from(OpenAIError::Internal(format!("Failed to lock auth manager : {e}"))))
   }
 
-  /// Convenience function: Create OAuth client using global manager
+  /// Convenience function : Create OAuth client using global manager
   ///
   /// # Errors
   ///
@@ -648,13 +648,13 @@ mod private
     temp_manager.create_oauth_client().await
   }
 
-  /// Convenience function: Create tenant client using global manager
+  /// Convenience function : Create tenant client using global manager
   ///
   /// # Errors
   ///
   /// Returns an error if the global authentication manager is not initialized,
   /// mutex is poisoned, or tenant client creation fails.
-  pub async fn create_tenant_client(tenant_id: &str) -> Result< Client< OpenaiEnvironmentImpl > >
+  pub async fn create_tenant_client(tenant_id : &str) -> Result< Client< OpenaiEnvironmentImpl > >
   {
     // Get config and multi-tenant config from the manager first
     let (config, multi_tenant_config) = {
@@ -673,7 +673,7 @@ mod private
     temp_manager.create_tenant_client(tenant_id).await
   }
 
-  /// Convenience function: Create failover client using global manager
+  /// Convenience function : Create failover client using global manager
   ///
   /// # Errors
   ///
@@ -722,7 +722,7 @@ mod private
     fn test_auth_session_expiration()
     {
       let mut session = AuthSession::new("test_session".to_string(), Duration::from_millis(1));
-      std::thread::sleep(Duration::from_millis(2));
+      std ::thread::sleep(Duration::from_millis(2));
       assert!(!session.is_valid());
 
       session.expire();
@@ -750,11 +750,11 @@ mod private
 
       let multi_tenant_config = MultiTenantConfig
       {
-        primary_org_id: "org_123".to_string(),
-        secondary_org_id: None,
-        tenant_api_keys: tenant_keys,
-        tenant_rate_limits: HashMap::new(),
-        isolation_enforced: true,
+        primary_org_id : "org_123".to_string(),
+        secondary_org_id : None,
+        tenant_api_keys : tenant_keys,
+        tenant_rate_limits : HashMap::new(),
+        isolation_enforced : true,
       };
 
       let config = AdvancedAuthConfig::default();
@@ -765,7 +765,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   orphan use OAuthTokenResponse;
   orphan use MultiTenantConfig;

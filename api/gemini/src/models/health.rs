@@ -25,15 +25,15 @@ pub enum HealthStatus
 pub struct HealthCheckResult
 {
   /// Current health status
-  pub status: HealthStatus,
+  pub status : HealthStatus,
   /// Response time for the health check
-  pub response_time: Option< Duration >,
+  pub response_time : Option< Duration >,
   /// Timestamp when the check was performed
-  pub checked_at: Option< SystemTime >,
+  pub checked_at : Option< SystemTime >,
   /// Endpoint that was checked
-  pub endpoint: String,
+  pub endpoint : String,
   /// Error message if check failed
-  pub error_message: Option< String >,
+  pub error_message : Option< String >,
 }
 
 /// Configuration for health check operations
@@ -41,9 +41,9 @@ pub struct HealthCheckResult
 pub struct HealthCheckConfig
 {
   /// Timeout for health check requests
-  pub timeout: Duration,
+  pub timeout : Duration,
   /// Strategy to use for health checking
-  pub strategy: HealthCheckStrategy,
+  pub strategy : HealthCheckStrategy,
 }
 
 /// Available health check strategies
@@ -62,8 +62,8 @@ impl Default for HealthCheckConfig
   fn default() -> Self
   {
     Self {
-      timeout: Duration::from_secs( 10 ),
-      strategy: HealthCheckStrategy::Ping,
+      timeout : Duration::from_secs( 10 ),
+      strategy : HealthCheckStrategy::Ping,
     }
   }
 }
@@ -72,8 +72,8 @@ impl Default for HealthCheckConfig
 #[ derive( Debug, Clone ) ]
 pub struct HealthCheckBuilder
 {
-  config: HealthCheckConfig,
-  client: crate::client::Client,
+  config : HealthCheckConfig,
+  client : crate::client::Client,
 }
 
 impl HealthCheckBuilder
@@ -81,10 +81,10 @@ impl HealthCheckBuilder
   /// Create a new health check builder
   #[ must_use ]
   #[ inline ]
-  pub fn new( client: crate::client::Client ) -> Self
+  pub fn new( client : crate::client::Client ) -> Self
   {
     Self {
-      config: HealthCheckConfig::default(),
+      config : HealthCheckConfig::default(),
       client,
     }
   }
@@ -92,7 +92,7 @@ impl HealthCheckBuilder
   /// Set the timeout for health checks
   #[ inline ]
   #[ must_use ]
-  pub fn timeout( mut self, timeout: Duration ) -> Self
+  pub fn timeout( mut self, timeout : Duration ) -> Self
   {
     self.config.timeout = timeout;
     self
@@ -101,7 +101,7 @@ impl HealthCheckBuilder
   /// Set the health check strategy
   #[ inline ]
   #[ must_use ]
-  pub fn strategy( mut self, strategy: HealthCheckStrategy ) -> Self
+  pub fn strategy( mut self, strategy : HealthCheckStrategy ) -> Self
   {
     self.config.strategy = strategy;
     self
@@ -131,18 +131,18 @@ impl HealthCheckBuilder
     match result
     {
       Ok( () ) => Ok( HealthCheckResult {
-        status: HealthStatus::Healthy,
+        status : HealthStatus::Healthy,
         response_time,
-        checked_at: Some( start_time ),
-        endpoint: self.client.base_url().to_string(),
-        error_message: None,
+        checked_at : Some( start_time ),
+        endpoint : self.client.base_url().to_string(),
+        error_message : None,
       } ),
       Err( e ) => Ok( HealthCheckResult {
-        status: HealthStatus::Unhealthy,
+        status : HealthStatus::Unhealthy,
         response_time,
-        checked_at: Some( start_time ),
-        endpoint: self.client.base_url().to_string(),
-        error_message: Some( e.to_string() ),
+        checked_at : Some( start_time ),
+        endpoint : self.client.base_url().to_string(),
+        error_message : Some( e.to_string() ),
       } ),
     }
   }
@@ -153,19 +153,19 @@ impl HealthCheckBuilder
     let client = reqwest::Client::builder()
       .timeout( self.config.timeout )
       .build()
-      .map_err( |e| crate::error::Error::Health( format!( "Failed to create HTTP client: {e}" ) ) )?;
+      .map_err( |e| crate::error::Error::Health( format!( "Failed to create HTTP client : {e}" ) ) )?;
 
     let response = client
       .head( self.client.base_url() )
       .send()
       .await
-      .map_err( |e| crate::error::Error::Health( format!( "Health check request failed: {e}" ) ) )?;
+      .map_err( |e| crate::error::Error::Health( format!( "Health check request failed : {e}" ) ) )?;
 
     if response.status().is_success() || response.status().is_redirection()
     {
       Ok( () )
     } else {
-      Err( crate::error::Error::Health( format!( "Health check failed with status: {}", response.status() ) ) )
+      Err( crate::error::Error::Health( format!( "Health check failed with status : {}", response.status() ) ) )
     }
   }
 

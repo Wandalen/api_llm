@@ -15,7 +15,7 @@
 //!
 //! let counter = TokenCounter::new( CountingStrategy::CharacterBased );
 //! let count = counter.count_tokens( "Your text here" );
-//! println!( "Tokens: {}", count.total );
+//! println!( "Tokens : {}", count.total );
 //! ```
 
 use crate::providers::ChatMessage;
@@ -24,11 +24,11 @@ use crate::providers::ChatMessage;
 #[ derive( Debug, Clone, Copy, PartialEq, Eq ) ]
 pub enum CountingStrategy 
 {
-  /// Fast estimation: characters / 4
+  /// Fast estimation : characters / 4
   Estimation,
-  /// Word-based: word count * 1.3
+  /// Word-based : word count * 1.3
   WordBased,
-  /// Character-based: characters / 3.5 ( more accurate )
+  /// Character-based : characters / 3.5 ( more accurate )
   CharacterBased,
 }
 
@@ -214,12 +214,12 @@ pub enum TokenCountError
 impl core::fmt::Display for TokenCountError 
 {
   #[ inline ]
-  fn fmt( &self, f : &mut core::fmt::Formatter<'_ > ) -> core::fmt::Result 
+  fn fmt( &self, f : &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result 
   {
   match self
   {
       Self::TextTooLarge { size, max_size } => {
-  write!( f, "Text too large: {size} characters ( max: {max_size} )" )
+  write!( f, "Text too large : {size} characters ( max : {max_size} )" )
       }
   }
   }
@@ -281,7 +281,7 @@ mod tests {
   let texts = vec!["Hello", "world" ];
   let count = counter.count_texts( &texts );
 
-  // Combined: "Helloworld" = 10 characters
+  // Combined : "Helloworld" = 10 characters
   assert_eq!( count.characters, 10 );
   assert_eq!( count.total, 3 ); // ceil( 10 / 4 ) = 3
   }

@@ -291,7 +291,7 @@ impl std::fmt::Display for CostQuotaExceededError
   #[ inline ]
   fn fmt( &self, f : &mut std::fmt::Formatter< '_ > ) -> std::fmt::Result
   {
-    write!( f, "Cost quota exceeded: {}", self.message )
+    write!( f, "Cost quota exceeded : {}", self.message )
   }
 }
 
@@ -496,7 +496,7 @@ impl CostQuotaManager
       "monthly" : self.monthly_usage(),
       "per_model" : self.all_model_usage(),
     });
-    serde_json::to_string_pretty( &data )
+    serde_json ::to_string_pretty( &data )
   }
 }
 
@@ -549,7 +549,7 @@ mod tests
   {
     let pricing = ModelPricing::for_model( "gemini-1.5-flash" );
     let cost = pricing.calculate_cost( 1_000_000, 500_000 );
-    // Expected: (1M/1M)*0.075 + (500k/1M)*0.30 = 0.075 + 0.15 = 0.225
+    // Expected : (1M/1M)*0.075 + (500k/1M)*0.30 = 0.075 + 0.15 = 0.225
     assert!( ( cost - 0.225 ).abs() < 0.0001 );
   }
 

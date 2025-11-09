@@ -72,7 +72,7 @@ mod private
   #[ allow(clippy::unnecessary_wraps) ]
   fn default_true() -> Option< bool > { Some(true) }
   #[ allow(clippy::ref_option, clippy::trivially_copy_pass_by_ref) ]
-  fn is_true(val: &Option< bool >) -> bool { val == &Some(true) }
+  fn is_true(val : &Option< bool >) -> bool { val == &Some(true) }
 
   /// Configuration for input audio noise reduction.
   ///
@@ -165,7 +165,7 @@ mod private
     /// Unique identifier for the session.
     pub id : String,
     /// The object type, always "realtime.session".
-    pub object: String,
+    pub object : String,
     /// The set of modalities the model can respond with.
     #[ serde( skip_serializing_if = "Option::is_none" ) ]
     pub modalities : Option< Vec< String > >,
@@ -257,7 +257,7 @@ mod private
 
 } // end mod private
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use 
   {

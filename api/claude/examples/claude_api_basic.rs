@@ -42,12 +42,12 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     .messages( vec![
       Message
       {
-        role: Role::User,
-        content: vec![ Content::Text {
-          r#type: "text".to_string(),
-          text: "Hello! Can you explain what artificial intelligence is in simple terms?".to_string(),
+        role : Role::User,
+        content : vec![ Content::Text {
+          r#type : "text".to_string(),
+          text : "Hello! Can you explain what artificial intelligence is in simple terms?".to_string(),
         } ],
-        cache_control: None,
+        cache_control : None,
       }
     ] )
     .temperature( 0.7 )
@@ -62,11 +62,11 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
   #[ cfg( feature = "curl-diagnostics" ) ]
   {
     println!( "=== Exact Curl Command Being Executed ===" );
-    // Note: Claude API doesn't have AsCurl trait yet, so this is a placeholder
+    // Note : Claude API doesn't have AsCurl trait yet, so this is a placeholder
     println!( "curl -X POST https://api.anthropic.com/v1/messages \\" );
-    println!( "  -H \"Content-Type: application/json\" \\" );
-    println!( "  -H \"x-api-key: $ANTHROPIC_API_KEY\" \\" );
-    println!( "  -H \"anthropic-version: 2023-06-01\" \\" );
+    println!( "  -H \"Content-Type : application/json\" \\" );
+    println!( "  -H \"x-api-key : $ANTHROPIC_API_KEY\" \\" );
+    println!( "  -H \"anthropic-version : 2023-06-01\" \\" );
     println!( "  -d '{}'", serde_json::to_string( &request )? );
     println!( "=== End Curl Command ===\n" );
   }
@@ -100,18 +100,18 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
   // Display stop reason if available
   if let Some( stop_reason ) = &response.stop_reason
   {
-    println!( "\nStop reason: {stop_reason}" );
+    println!( "\nStop reason : {stop_reason}" );
   }
 
   // Display usage metadata
   let usage = &response.usage;
   println!( "\n=== Token Usage ===" );
-  println!( "Input tokens: {}", usage.input_tokens );
-  println!( "Output tokens: {}", usage.output_tokens );
-  println!( "Total tokens: {}", usage.total_tokens() );
+  println!( "Input tokens : {}", usage.input_tokens );
+  println!( "Output tokens : {}", usage.output_tokens );
+  println!( "Total tokens : {}", usage.total_tokens() );
 
   // Display model information
-  println!( "\nModel used: {}", response.model );
+  println!( "\nModel used : {}", response.model );
 
   Ok( () )
 }

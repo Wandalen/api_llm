@@ -75,7 +75,7 @@ mod failover_tests
     );
 
     let initial_time = endpoint.last_checked;
-    time::sleep( Duration::from_millis( 10 ) ).await;
+    time ::sleep( Duration::from_millis( 10 ) ).await;
 
     endpoint.update_health( EndpointHealth::Healthy );
     assert_eq!( endpoint.health, EndpointHealth::Healthy );
@@ -98,7 +98,7 @@ mod failover_tests
     assert!( !serialized.is_empty() );
 
     // Test deserialization
-    let deserialized: FailoverEndpoint = serde_json::from_str( &serialized )
+    let deserialized : FailoverEndpoint = serde_json::from_str( &serialized )
       .expect( "Failed to deserialize endpoint" );
 
     assert_eq!( endpoint.id, deserialized.id );
@@ -141,7 +141,7 @@ mod failover_tests
     assert!( !serialized.is_empty() );
 
     // Test deserialization
-    let deserialized: FailoverConfig = serde_json::from_str( &serialized )
+    let deserialized : FailoverConfig = serde_json::from_str( &serialized )
       .expect( "Failed to deserialize config" );
 
     assert_eq!( config.strategy, deserialized.strategy );
@@ -156,7 +156,7 @@ mod failover_tests
     let valid_config = FailoverConfig::default();
     assert!( FailoverExecutor::validate_config( &valid_config ).is_ok() );
 
-    // Invalid: zero retries
+    // Invalid : zero retries
     let invalid_config1 = FailoverConfig
     {
       max_retries : 0,
@@ -164,7 +164,7 @@ mod failover_tests
     };
     assert!( FailoverExecutor::validate_config( &invalid_config1 ).is_err() );
 
-    // Invalid: zero retry delay
+    // Invalid : zero retry delay
     let invalid_config2 = FailoverConfig
     {
       retry_delay_ms : 0,
@@ -172,7 +172,7 @@ mod failover_tests
     };
     assert!( FailoverExecutor::validate_config( &invalid_config2 ).is_err() );
 
-    // Invalid: max delay less than base delay
+    // Invalid : max delay less than base delay
     let invalid_config3 = FailoverConfig
     {
       retry_delay_ms : 1000,
@@ -681,9 +681,9 @@ mod failover_tests
     let ( sender, mut receiver ) = FailoverExecutor::create_failover_notifier();
 
     // Send event after a delay
-    tokio::spawn( async move
+    tokio ::spawn( async move
     {
-      time::sleep( Duration::from_millis( 25 ) ).await;
+      time ::sleep( Duration::from_millis( 25 ) ).await;
       let _ = sender.send_failover_started( "async_test".to_string(), 1 );
     });
 

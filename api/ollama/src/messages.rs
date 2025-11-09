@@ -121,7 +121,7 @@ mod private
 }
 
 #[ cfg( feature = "enabled" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

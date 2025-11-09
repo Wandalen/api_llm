@@ -17,13 +17,13 @@ use tracing::{ warn, debug };
 pub struct RateLimitingConfig
 {
   /// Maximum requests per second
-  pub requests_per_second: f64,
+  pub requests_per_second : f64,
   /// Token bucket size (burst capacity)
-  pub bucket_size: usize,
+  pub bucket_size : usize,
   /// Rate limiting algorithm to use
-  pub algorithm: String,
+  pub algorithm : String,
   /// Whether to collect metrics
-  pub enable_metrics: bool,
+  pub enable_metrics : bool,
 }
 
 /// Rate limiting algorithms
@@ -34,15 +34,15 @@ pub enum RateLimiter
   TokenBucket
   {
     /// Current available tokens
-    tokens: f64,
+    tokens : f64,
     /// Last refill timestamp
-    last_refill: Instant,
+    last_refill : Instant,
   },
   /// Sliding window algorithm with request timestamps
   SlidingWindow
   {
     /// Queue of request timestamps
-    requests: VecDeque< Instant >,
+    requests : VecDeque< Instant >,
   },
 }
 
@@ -51,54 +51,54 @@ pub enum RateLimiter
 pub struct RateLimitingMetrics
 {
   /// Total number of requests processed
-  pub total_requests: u64,
+  pub total_requests : u64,
   /// Number of requests that were rate limited
-  pub limited_requests: u64,
+  pub limited_requests : u64,
   /// Number of requests allowed
-  pub allowed_requests: u64,
+  pub allowed_requests : u64,
   /// Current rate limiter state
-  pub current_algorithm: String,
+  pub current_algorithm : String,
   /// Current available tokens (for token bucket)
-  pub available_tokens: f64,
+  pub available_tokens : f64,
   /// Requests in current window (for sliding window)
-  pub window_requests: usize,
+  pub window_requests : usize,
 }
 
 /// Rate limiting instance with state management
 #[ derive( Debug ) ]
 pub struct RateLimit
 {
-  config: RateLimitingConfig,
-  limiter: Arc< Mutex< RateLimiter > >,
-  metrics: Arc< Mutex< RateLimitingMetrics > >,
+  config : RateLimitingConfig,
+  limiter : Arc< Mutex< RateLimiter > >,
+  metrics : Arc< Mutex< RateLimitingMetrics > >,
 }
 
 impl RateLimit
 {
   /// Create a new rate limiter with the given configuration
-  pub fn new( config: RateLimitingConfig ) -> Self
+  pub fn new( config : RateLimitingConfig ) -> Self
   {
     let limiter = match config.algorithm.as_str()
     {
       "sliding_window" => RateLimiter::SlidingWindow {
-        requests: VecDeque::new(),
+        requests : VecDeque::new(),
       },
       _ => RateLimiter::TokenBucket {
-        tokens: config.bucket_size as f64,
-        last_refill: Instant::now(),
+        tokens : config.bucket_size as f64,
+        last_refill : Instant::now(),
       },
     };
 
     Self {
-      config: config.clone(),
-      limiter: Arc::new( Mutex::new( limiter ) ),
-      metrics: Arc::new( Mutex::new( RateLimitingMetrics {
-        total_requests: 0,
-        limited_requests: 0,
-        allowed_requests: 0,
-        current_algorithm: config.algorithm,
-        available_tokens: config.bucket_size as f64,
-        window_requests: 0,
+      config : config.clone(),
+      limiter : Arc::new( Mutex::new( limiter ) ),
+      metrics : Arc::new( Mutex::new( RateLimitingMetrics {
+        total_requests : 0,
+        limited_requests : 0,
+        allowed_requests : 0,
+        current_algorithm : config.algorithm,
+        available_tokens : config.bucket_size as f64,
+        window_requests : 0,
       } ) ),
     }
   }
@@ -129,7 +129,7 @@ impl RateLimit
           true
         } else {
           #[ cfg( feature = "logging" ) ]
-          debug!( "Rate limit exceeded: {} tokens available", *tokens );
+          debug!( "Rate limit exceeded : {} tokens available", *tokens );
           metrics.available_tokens = *tokens;
           false
         }
@@ -156,7 +156,7 @@ impl RateLimit
           true
         } else {
           #[ cfg( feature = "logging" ) ]
-          debug!( "Rate limit exceeded: {} requests in window", requests.len() );
+          debug!( "Rate limit exceeded : {} requests in window", requests.len() );
           metrics.window_requests = requests.len();
           false
         }
@@ -207,13 +207,13 @@ impl RateLimit
 /// Execute an HTTP request with rate limiting protection
 pub async fn execute_with_rate_limiting< T, R >
 (
-  client: &Client,
-  method: Method,
-  url: &str,
-  api_key: &str,
-  body: Option< &T >,
-  config: &super::HttpConfig,
-  rate_limiter: Option< &RateLimit >,
+  client : &Client,
+  method : Method,
+  url : &str,
+  api_key : &str,
+  body : Option< &T >,
+  config : &super::HttpConfig,
+  rate_limiter : Option< &RateLimit >,
 )
 -> Result< R, Error >
 where
@@ -237,5 +237,5 @@ where
   }
 
   // Execute the request
-  super::execute( client, method, url, api_key, body, config ).await
+  super ::execute( client, method, url, api_key, body, config ).await
 }

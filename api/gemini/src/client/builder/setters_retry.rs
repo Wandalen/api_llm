@@ -66,7 +66,7 @@ impl ClientBuilder
   #[ inline ]
   pub fn backoff_multiplier( mut self, multiplier : f64 ) -> Self
   {
-    assert!( multiplier > 1.0, "Backoff multiplier must be greater than 1.0, got: {multiplier}" );
+    assert!( multiplier > 1.0, "Backoff multiplier must be greater than 1.0, got : {multiplier}" );
     self.backoff_multiplier = multiplier;
     self
   }

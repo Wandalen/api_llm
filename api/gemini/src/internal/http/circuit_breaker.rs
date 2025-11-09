@@ -16,13 +16,13 @@ use tracing::{ warn, debug, info };
 pub struct CircuitBreakerConfig
 {
   /// Maximum number of consecutive failures before opening the circuit
-  pub failure_threshold: u32,
+  pub failure_threshold : u32,
   /// Time to wait before transitioning from open to half-open
-  pub timeout: Duration,
+  pub timeout : Duration,
   /// Number of successful requests needed to close the circuit from half-open
-  pub success_threshold: u32,
+  pub success_threshold : u32,
   /// Whether to collect metrics
-  pub enable_metrics: bool,
+  pub enable_metrics : bool,
 }
 
 /// Circuit breaker state
@@ -42,47 +42,47 @@ pub enum CircuitBreakerState
 pub struct CircuitBreakerMetrics
 {
   /// Total number of requests processed
-  pub total_requests: u64,
+  pub total_requests : u64,
   /// Number of requests that failed
-  pub failed_requests: u64,
+  pub failed_requests : u64,
   /// Number of requests blocked by open circuit
-  pub blocked_requests: u64,
+  pub blocked_requests : u64,
   /// Number of state transitions
-  pub state_transitions: u64,
+  pub state_transitions : u64,
   /// Current circuit state
-  pub current_state: CircuitBreakerState,
+  pub current_state : CircuitBreakerState,
   /// Time circuit was last opened
-  pub last_opened: Option< Instant >,
+  pub last_opened : Option< Instant >,
 }
 
 /// Circuit breaker instance with state management
 #[ derive( Debug ) ]
 pub struct CircuitBreaker
 {
-  config: CircuitBreakerConfig,
-  state: Arc< Mutex< CircuitBreakerState > >,
-  consecutive_failures: Arc< Mutex< u32 > >,
-  consecutive_successes: Arc< Mutex< u32 > >,
-  metrics: Arc< Mutex< CircuitBreakerMetrics > >,
+  config : CircuitBreakerConfig,
+  state : Arc< Mutex< CircuitBreakerState > >,
+  consecutive_failures : Arc< Mutex< u32 > >,
+  consecutive_successes : Arc< Mutex< u32 > >,
+  metrics : Arc< Mutex< CircuitBreakerMetrics > >,
 }
 
 impl CircuitBreaker
 {
   /// Create a new circuit breaker with the given configuration
-  pub fn new( config: CircuitBreakerConfig ) -> Self
+  pub fn new( config : CircuitBreakerConfig ) -> Self
   {
     Self {
       config,
-      state: Arc::new( Mutex::new( CircuitBreakerState::Closed ) ),
-      consecutive_failures: Arc::new( Mutex::new( 0 ) ),
-      consecutive_successes: Arc::new( Mutex::new( 0 ) ),
-      metrics: Arc::new( Mutex::new( CircuitBreakerMetrics {
-        total_requests: 0,
-        failed_requests: 0,
-        blocked_requests: 0,
-        state_transitions: 0,
-        current_state: CircuitBreakerState::Closed,
-        last_opened: None,
+      state : Arc::new( Mutex::new( CircuitBreakerState::Closed ) ),
+      consecutive_failures : Arc::new( Mutex::new( 0 ) ),
+      consecutive_successes : Arc::new( Mutex::new( 0 ) ),
+      metrics : Arc::new( Mutex::new( CircuitBreakerMetrics {
+        total_requests : 0,
+        failed_requests : 0,
+        blocked_requests : 0,
+        state_transitions : 0,
+        current_state : CircuitBreakerState::Closed,
+        last_opened : None,
       } ) ),
     }
   }
@@ -205,7 +205,7 @@ impl CircuitBreaker
 }
 
 /// Classify if an error should trigger circuit breaker failure counting
-pub fn is_circuit_breaker_error( error: &Error ) -> bool
+pub fn is_circuit_breaker_error( error : &Error ) -> bool
 {
   matches!( error,
     Error::NetworkError( _ ) |
@@ -218,13 +218,13 @@ pub fn is_circuit_breaker_error( error: &Error ) -> bool
 /// Execute an HTTP request with circuit breaker protection
 pub async fn execute_with_circuit_breaker< T, R >
 (
-  client: &Client,
-  method: Method,
-  url: &str,
-  api_key: &str,
-  body: Option< &T >,
-  config: &super::HttpConfig,
-  circuit_breaker: Option< &CircuitBreaker >,
+  client : &Client,
+  method : Method,
+  url : &str,
+  api_key : &str,
+  body : Option< &T >,
+  config : &super::HttpConfig,
+  circuit_breaker : Option< &CircuitBreaker >,
 )
 -> Result< R, Error >
 where

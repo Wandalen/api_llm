@@ -40,7 +40,7 @@ mod curl_diagnostics_functionality_tests
     assert!( curl_command.contains( "curl" ), "Should contain curl command" );
     assert!( curl_command.contains( "--request POST" ), "Should use POST method" );
     assert!( curl_command.contains( "https://api.anthropic.com/v1/messages" ), "Should contain correct URL" );
-    assert!( curl_command.contains( "Content-Type: application/json" ), "Should set content type" );
+    assert!( curl_command.contains( "Content-Type : application/json" ), "Should set content type" );
     assert!( curl_command.contains( "claude-3-sonnet-20240229" ), "Should include model in request body" );
     assert!( curl_command.contains( "Hello, how are you?" ), "Should include message content" );
   }
@@ -57,13 +57,13 @@ mod curl_diagnostics_functionality_tests
 
     // Generate cURL with authentication
     let client = the_module::Client::new(
-      the_module::Secret::new_unchecked( "sk-ant-api03-test-key".to_string() )
+      the_module ::Secret::new_unchecked( "sk-ant-api03-test-key".to_string() )
     );
 
     let curl_command = client.as_curl_for_request( &request, "https://api.anthropic.com/v1/messages" );
 
     // Validate authentication headers
-    assert!( curl_command.contains( "x-api-key: sk-ant-api03-test-key" ), "Should include API key header" );
+    assert!( curl_command.contains( "x-api-key : sk-ant-api03-test-key" ), "Should include API key header" );
     assert!( curl_command.contains( "anthropic-version:" ), "Should include version header" );
     assert!( curl_command.contains( "User-Agent:" ), "Should include user agent" );
   }
@@ -96,7 +96,7 @@ mod curl_diagnostics_functionality_tests
     let tool = the_module::ToolDefinition::new(
       "get_weather",
       "Get current weather",
-      serde_json::json!({
+      serde_json ::json!({
         "type": "object",
         "properties": {
           "location": { "type": "string" }
@@ -210,8 +210,8 @@ mod curl_diagnostics_functionality_tests
 
     let duration = start.elapsed();
 
-    // Performance expectation: 100 generations should be under 50ms
-    assert!( duration.as_millis() < 50, "cURL generation should be fast: {}ms", duration.as_millis() );
+    // Performance expectation : 100 generations should be under 50ms
+    assert!( duration.as_millis() < 50, "cURL generation should be fast : {}ms", duration.as_millis() );
   }
 
   /// Test cURL generation with complex nested structures
@@ -220,9 +220,9 @@ mod curl_diagnostics_functionality_tests
   {
     // Complex request with multiple features
     let messages = vec![
-      the_module::Message::user( "Hello" ),
-      the_module::Message::assistant( "Hello! How can I help?" ),
-      the_module::Message::user( "Tell me about Rust" ),
+      the_module ::Message::user( "Hello" ),
+      the_module ::Message::assistant( "Hello! How can I help?" ),
+      the_module ::Message::user( "Tell me about Rust" ),
     ];
 
     let request = the_module::CreateMessageRequest::builder()
@@ -269,7 +269,7 @@ mod curl_diagnostics_integration_tests
     assert!( curl_command.contains( "claude-3-haiku-20240307" ), "Should contain model name" );
     assert!( curl_command.contains( "test successful" ), "Should contain message content" );
 
-    // Note: We don't actually execute the cURL command in tests
+    // Note : We don't actually execute the cURL command in tests
     // This would require shell execution and is beyond the scope of unit tests
     // The integration test validates that the generated command has correct structure
   }
@@ -286,7 +286,7 @@ mod curl_diagnostics_integration_tests
       .model( "claude-3-haiku-20240307" )
       .max_tokens( 100 )
       .temperature( 0.5 )
-      .messages( vec![ the_module::Message::user( "Complex test message with special chars: !@#$%^&*()" ) ] )
+      .messages( vec![ the_module::Message::user( "Complex test message with special chars : !@#$%^&*()" ) ] )
       .build();
 
     // Generate cURL
@@ -312,7 +312,7 @@ mod curl_diagnostics_integration_tests
   async fn test_curl_diagnostics_for_errors()
   {
     let client = the_module::Client::new(
-      the_module::Secret::new_unchecked( "sk-ant-invalid-key".to_string() )
+      the_module ::Secret::new_unchecked( "sk-ant-invalid-key".to_string() )
     );
 
     let request = the_module::CreateMessageRequest::builder()

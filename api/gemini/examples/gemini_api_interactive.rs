@@ -20,7 +20,7 @@
 //! ```
 //! 
 //! Type your messages and press Enter. Type 'quit', 'exit', or 'bye' to end.
-//! Note: This is NOT for automated testing - it's for manual interactive use only.
+//! Note : This is NOT for automated testing - it's for manual interactive use only.
 
 #[ cfg( feature = "streaming" ) ]
 use futures::StreamExt;
@@ -43,8 +43,8 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
   loop
   {
     // Get user input
-    print!( "You: " );
-    io::stdout().flush()?;
+    print!( "You : " );
+    io ::stdout().flush()?;
     
     let mut input = String::new();
     match io::stdin().read_line( &mut input )
@@ -53,13 +53,13 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
       {
         // EOF reached (e.g., when input is not available in non-interactive mode)
         println!( "\nNo input available. Use this example in interactive terminal only." );
-        println!( "Run: cargo run --example gemini_chat_interactive" );
+        println!( "Run : cargo run --example gemini_chat_interactive" );
         break;
       }
       Ok( _ ) => {}
       Err( e ) =>
       {
-        println!( "\nError reading input: {e}" );
+        println!( "\nError reading input : {e}" );
         break;
       }
     }
@@ -112,7 +112,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     };
     
     print!( "\nAI: " );
-    io::stdout().flush()?;
+    io ::stdout().flush()?;
     
     // Use real streaming if available, otherwise fallback to regular generation
     #[ cfg( feature = "streaming" ) ]
@@ -125,7 +125,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
           let mut response_content : Option< Content > = None;
           
           // Pin the stream to use it with StreamExt
-          futures::pin_mut!( stream );
+          futures ::pin_mut!( stream );
           
           while let Some( chunk ) = stream.next().await
           {
@@ -143,7 +143,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
                       if let Some( text ) = &part.text
                       {
                         print!( "{text}" );
-                        io::stdout().flush()?;
+                        io ::stdout().flush()?;
                         full_response.push_str( text );
                       }
                     }
@@ -157,7 +157,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
               }
               Err( e ) =>
               {
-                println!( "\nStreaming error: {e}" );
+                println!( "\nStreaming error : {e}" );
                 break;
               }
             }
@@ -172,7 +172,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
           }
           else if !full_response.is_empty()
           {
-            // Fallback: create content from accumulated text
+            // Fallback : create content from accumulated text
             conversation_history.push( Content
             {
               role : "model".to_string(),
@@ -189,7 +189,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
         }
         Err( e ) =>
         {
-          println!( "Streaming error: {e}" );
+          println!( "Streaming error : {e}" );
           println!( "Please try again or type 'quit' to exit.\n" );
         }
       }
@@ -216,8 +216,8 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
                   {
                     print!( " " );
                   }
-                  io::stdout().flush()?;
-                  tokio::time::sleep( tokio::time::Duration::from_millis( 80 ) ).await;
+                  io ::stdout().flush()?;
+                  tokio ::time::sleep( tokio::time::Duration::from_millis( 80 ) ).await;
                 }
                 println!( "\n" );
                 
@@ -241,7 +241,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
         }
         Err( e ) =>
         {
-          println!( "Error: {}", e );
+          println!( "Error : {}", e );
           println!( "Please try again or type 'quit' to exit.\n" );
         }
       }

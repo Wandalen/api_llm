@@ -39,9 +39,9 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
       .with_timeout( Duration::from_secs( 30 ) )  // Wait 30s before retry
       .with_success_threshold( 2 )      // Close after 2 successes
   );
-  println!( "   - Failure threshold: 5" );
-  println!( "   - Timeout: 30 seconds" );
-  println!( "   - Success threshold: 2\n" );
+  println!( "   - Failure threshold : 5" );
+  println!( "   - Timeout : 30 seconds" );
+  println!( "   - Success threshold : 2\n" );
 
   // === Retry Configuration ===
   println!( "🔄 Retry Configuration:" );
@@ -50,18 +50,18 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     .with_base_delay( Duration::from_millis( 100 ) )
     .with_max_delay( Duration::from_secs( 10 ) )
     .with_jitter( true );
-  println!( "   - Max attempts: 3" );
-  println!( "   - Base delay: 100ms" );
-  println!( "   - Max delay: 10 seconds" );
-  println!( "   - Jitter: enabled\n" );
+  println!( "   - Max attempts : 3" );
+  println!( "   - Base delay : 100ms" );
+  println!( "   - Max delay : 10 seconds" );
+  println!( "   - Jitter : enabled\n" );
 
   // === Rate Limiting ===
   println!( "⏱️  Rate Limiter Configuration:" );
   let rate_limiter = RateLimiter::new(
     RateLimiterConfig::per_minute( 60 )  // 60 requests per minute
   );
-  println!( "   - Rate: 60 requests/minute" );
-  println!( "   - Available tokens: {}\n", rate_limiter.available_tokens() );
+  println!( "   - Rate : 60 requests/minute" );
+  println!( "   - Available tokens : {}\n", rate_limiter.available_tokens() );
 
   // === Making Protected Requests ===
   println!( "📤 Making protected API requests...\n" );
@@ -108,13 +108,13 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
 
         if let Some( content ) = response.choices[ 0 ].message.content.as_ref()
         {
-          println!( "   🤖 Response: {}", content.split( '\n' ).next().unwrap_or( "" ) );
+          println!( "   🤖 Response : {}", content.split( '\n' ).next().unwrap_or( "" ) );
         }
       }
       Err( e ) =>
       {
         circuit_breaker.record_failure();
-        println!( "   ✗ Request failed: {e}" );
+        println!( "   ✗ Request failed : {e}" );
       }
     }
 
@@ -122,8 +122,8 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
   }
 
   println!( "📊 Final Statistics:" );
-  println!( "   - Circuit breaker state: {:?}", circuit_breaker.state() );
-  println!( "   - Available rate limit tokens: {}", rate_limiter.available_tokens() );
+  println!( "   - Circuit breaker state : {:?}", circuit_breaker.state() );
+  println!( "   - Available rate limit tokens : {}", rate_limiter.available_tokens() );
 
   Ok( () )
 }

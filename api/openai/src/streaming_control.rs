@@ -8,13 +8,13 @@ mod private
 {
   use std::
   {
-    sync::Arc,
-    time::Instant,
+    sync ::Arc,
+    time ::Instant,
   };
   use core::
   {
-    sync::atomic::{ AtomicBool, Ordering },
-    time::Duration,
+    sync ::atomic::{ AtomicBool, Ordering },
+    time ::Duration,
   };
   use serde::{ Deserialize, Serialize };
   use tokio::{ sync::mpsc, time };
@@ -82,7 +82,7 @@ mod private
         {
           return true;
         }
-        time::sleep( Duration::from_millis( 10 ) ).await;
+        time ::sleep( Duration::from_millis( 10 ) ).await;
       }
       false
     }
@@ -252,7 +252,7 @@ mod private
     {
       let operation_future = operation();
 
-      tokio::select!
+      tokio ::select!
       {
         result = operation_future =>
         {
@@ -277,7 +277,7 @@ mod private
     {
       while !token.is_cancelled()
       {
-        time::sleep( Duration::from_millis( 10 ) ).await;
+        time ::sleep( Duration::from_millis( 10 ) ).await;
       }
     }
 
@@ -289,9 +289,9 @@ mod private
       let token = CancellationToken::new();
       let token_clone = token.clone();
 
-      tokio::spawn( async move
+      tokio ::spawn( async move
       {
-        time::sleep( timeout ).await;
+        time ::sleep( timeout ).await;
         token_clone.cancel();
       });
 
@@ -306,7 +306,7 @@ mod private
       let combined = CancellationToken::new();
       let combined_clone = combined.clone();
 
-      tokio::spawn( async move
+      tokio ::spawn( async move
       {
         loop
         {
@@ -315,7 +315,7 @@ mod private
             combined_clone.cancel();
             break;
           }
-          time::sleep( Duration::from_millis( 10 ) ).await;
+          time ::sleep( Duration::from_millis( 10 ) ).await;
         }
       });
 
@@ -415,7 +415,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use private::StreamState;
   exposed use private::CancellationToken;

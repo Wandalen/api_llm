@@ -36,13 +36,13 @@ pub mod circuit_breaker_support
 {
   use api_openai::
   {
-    error::{ OpenAIError, Result },
+    error ::{ OpenAIError, Result },
   };
 
   use std::
   {
-    sync::{ Arc, Mutex },
-    time::Instant,
+    sync ::{ Arc, Mutex },
+    time ::Instant,
   };
   use core::time::Duration;
 
@@ -405,7 +405,7 @@ pub mod circuit_breaker_support
     /// Check if circuit breaker should allow request and update state
     async fn should_allow_request( &self ) -> Result< bool >
     {
-      tokio::task::yield_now().await;
+      tokio ::task::yield_now().await;
       let mut state = self.state.lock().unwrap();
 
       match state.state
@@ -469,7 +469,7 @@ pub mod circuit_breaker_support
     /// Record successful operation
     async fn record_success( &self )
     {
-      tokio::task::yield_now().await;
+      tokio ::task::yield_now().await;
       let mut state = self.state.lock().unwrap();
       state.record_success();
 
@@ -483,7 +483,7 @@ pub mod circuit_breaker_support
     /// Record failed operation and update state
     async fn record_failure( &self ) -> Result< () >
     {
-      tokio::task::yield_now().await;
+      tokio ::task::yield_now().await;
       let mut state = self.state.lock().unwrap();
       state.record_failure();
 
@@ -582,7 +582,7 @@ pub mod circuit_breaker_support
     /// Simulate HTTP request that may fail
     pub async fn make_request( &self ) -> Result< String >
     {
-      tokio::task::yield_now().await;
+      tokio ::task::yield_now().await;
       let mut count = self.call_count.lock().unwrap();
       *count += 1;
       let call_index = *count - 1;

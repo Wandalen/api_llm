@@ -8,9 +8,9 @@
 mod private
 {
   use crate::{ 
-    error::{ AnthropicError, AnthropicResult }, 
-    client::{ CreateMessageRequest, Client },
-    messages::Message,
+    error ::{ AnthropicError, AnthropicResult }, 
+    client ::{ CreateMessageRequest, Client },
+    messages ::Message,
   };
   use serde::{ Serialize, Deserialize };
   use core::time::Duration;
@@ -419,7 +419,7 @@ mod private
 }
 
 #[ cfg( feature = "content-generation" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {
@@ -433,7 +433,7 @@ crate::mod_interface!
 }
 
 #[ cfg( not( feature = "content-generation" ) ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   // Empty when content-generation feature is disabled
 }

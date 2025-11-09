@@ -33,10 +33,10 @@
 //! ```
 //!
 //! The program presents an interactive CLI with the following commands:
-//! - `/explain <concept >` - Generate detailed concept explanations
-//! - `/ask <question >` - Ask questions and receive tutoring responses  
-//! - `/student <action >` - Student management (register, switch, profile)
-//! - `/assess <subject >` - Generate and take assessments
+//! - `/explain < concept >` - Generate detailed concept explanations
+//! - `/ask < question >` - Ask questions and receive tutoring responses  
+//! - `/student < action >` - Student management (register, switch, profile)
+//! - `/assess < subject >` - Generate and take assessments
 //! - `/progress` - View learning progress and statistics
 //! - `/config` - Platform configuration and preferences
 //! - `/help` - Show detailed command help
@@ -53,19 +53,19 @@
 use api_huggingface::
 {
   Client,
-  environment::HuggingFaceEnvironmentImpl,
-  components::
+  environment ::HuggingFaceEnvironmentImpl,
+  components ::
   {
-  input::InferenceParameters,
+  input ::InferenceParameters,
   },
-  secret::Secret,
+  secret ::Secret,
 };
 
 use std::
 {
-  collections::HashMap,
-  time::Instant,
-  io::{ self, Write },
+  collections ::HashMap,
+  time ::Instant,
+  io ::{ self, Write },
 };
 use serde::{ Serialize, Deserialize };
 
@@ -766,7 +766,7 @@ impl AITutorPlatform
           }
           else
           {
-      format!( "Incorrect. The correct answer is: {}", question.correct_answers[ 0 ] )
+      format!( "Incorrect. The correct answer is : {}", question.correct_answers[ 0 ] )
           },
           improvement_hints : if is_correct
           {
@@ -830,13 +830,13 @@ impl AITutorPlatform
   // Add context if provided
   if let Some( ref context ) = request.context
   {
-      prompt.push_str( &format!( "Context: {}. ", context ) );
+      prompt.push_str( &format!( "Context : {}. ", context ) );
   }
 
   // Add prerequisites
   if !request.prerequisites.is_empty()
   {
-      prompt.push_str( &format!( "Assume knowledge of: {}. ", request.prerequisites.join( ", " ) ) );
+      prompt.push_str( &format!( "Assume knowledge of : {}. ", request.prerequisites.join( ", " ) ) );
   }
 
   prompt.push_str( "\n\nExplanation:" );
@@ -848,7 +848,7 @@ impl AITutorPlatform
   fn build_question_prompt( &self, question : &StudentQuestion, student_id : Option< &str > ) -> Result< String, Box< dyn std::error::Error > >
   {
   let mut prompt = format!(
-      "A {} level student asks: '{}'\n",
+      "A {} level student asks : '{}'\n",
       question.complexity_level.name(),
       question.question_text
   );
@@ -858,14 +858,14 @@ impl AITutorPlatform
   {
       if let Some( profile ) = self.students.get( id )
       {
-  prompt.push_str( &format!( "Student learning style: {}. ", profile.learning_style.name() ) );
+  prompt.push_str( &format!( "Student learning style : {}. ", profile.learning_style.name() ) );
       }
   }
 
   // Add subject context if identified
   if let Some( subject ) = question.subject
   {
-      prompt.push_str( &format!( "Subject area: {}. ", subject.name() ) );
+      prompt.push_str( &format!( "Subject area : {}. ", subject.name() ) );
   }
 
   prompt.push_str( "\n\nProvide a helpful, educational answer:" );
@@ -992,7 +992,7 @@ impl AITutorPlatform
       ( Subject::Mathematics, ComplexityLevel::Elementary, QuestionType::MultipleChoice ) =>
   "What is 7 + 5? A) 10  B) 12  C) 14  D) 15".to_string(),
       ( Subject::Mathematics, ComplexityLevel::HighSchool, QuestionType::Mathematical ) =>
-  "Solve for x: 2x + 3 = 11".to_string(),
+  "Solve for x : 2x + 3 = 11".to_string(),
       ( Subject::Science, ComplexityLevel::MiddleSchool, QuestionType::TrueFalse ) =>
   "True or False : Plants produce oxygen during photosynthesis.".to_string(),
       ( Subject::History, ComplexityLevel::University, QuestionType::Essay ) =>
@@ -1067,10 +1067,10 @@ impl EducationalTutorCLI
   while self.session_active
   {
       print!( "🎓 AI Tutor > " );
-      io::stdout().flush()?;
+      io ::stdout().flush()?;
 
       let mut input = String::new();
-      io::stdin().read_line( &mut input )?;
+      io ::stdin().read_line( &mut input )?;
       let input = input.trim();
 
       if input.is_empty()
@@ -1081,7 +1081,7 @@ impl EducationalTutorCLI
       match self.process_command( input ).await
       {
   Ok( _ ) => {},
-  Err( e ) => println!( "❌ Error: {}", e ),
+  Err( e ) => println!( "❌ Error : {}", e ),
       }
   }
 
@@ -1106,7 +1106,7 @@ impl EducationalTutorCLI
       "/quit" | "/exit" => { self.session_active = false; Ok( () ) },
       _ => 
       {
-  println!( "❌ Unknown command: {}", command );
+  println!( "❌ Unknown command : {}", command );
   println!( "💡 Type /help for available commands" );
   Ok( () )
       }
@@ -1119,7 +1119,7 @@ impl EducationalTutorCLI
   if args.is_empty()
   {
       println!( "❌ Please provide a concept to explain" );
-      println!( "💡 Example: /explain photosynthesis" );
+      println!( "💡 Example : /explain photosynthesis" );
       return Ok( () );
   }
 
@@ -1154,7 +1154,7 @@ impl EducationalTutorCLI
       }
       Err( e ) =>
       {
-  println!( "❌ Failed to generate explanation: {}", e );
+  println!( "❌ Failed to generate explanation : {}", e );
       }
   }
 
@@ -1167,7 +1167,7 @@ impl EducationalTutorCLI
   if args.is_empty()
   {
       println!( "❌ Please provide a question to ask" );
-      println!( "💡 Example: /ask What is the Pythagorean theorem?" );
+      println!( "💡 Example : /ask What is the Pythagorean theorem?" );
       return Ok( () );
   }
 
@@ -1195,7 +1195,7 @@ impl EducationalTutorCLI
       }
       Err( e ) =>
       {
-  println!( "❌ Failed to answer question: {}", e );
+  println!( "❌ Failed to answer question : {}", e );
       }
   }
 
@@ -1217,13 +1217,13 @@ impl EducationalTutorCLI
       {
   println!( "📚 Student commands:" );
   println!( "  /student list     - List all registered students" );
-  println!( "  /student switch <id > - Switch to different student" );
+  println!( "  /student switch < id > - Switch to different student" );
   println!( "  /student profile  - Show current student profile" );
   println!( "  /student register - Register new student (interactive)" );
       }
       _ => 
       {
-  println!( "❌ Unknown student command: {}", parts[ 0 ] );
+  println!( "❌ Unknown student command : {}", parts[ 0 ] );
       }
   }
   
@@ -1244,8 +1244,8 @@ impl EducationalTutorCLI
       "" => Subject::General,
       _ => 
       {
-  println!( "❌ Unknown subject: {}", args );
-  println!( "💡 Available subjects: math, science, history, english, cs, art" );
+  println!( "❌ Unknown subject : {}", args );
+  println!( "💡 Available subjects : math, science, history, english, cs, art" );
   return Ok( () );
       }
   };
@@ -1276,7 +1276,7 @@ impl EducationalTutorCLI
   }
   else
   {
-      println!( "❌ No student selected. Use /student switch <id > to select a student" );
+      println!( "❌ No student selected. Use /student switch < id > to select a student" );
   }
 
   // Also show platform statistics
@@ -1288,11 +1288,11 @@ impl EducationalTutorCLI
   fn handle_config_command( &mut self ) -> Result< (), Box< dyn std::error::Error > >
   {
   println!( "⚙️  Platform Configuration:" );
-  println!( "   Default Model: {}", self.platform.config.default_model );
-  println!( "   Max Explanation Length: {} words", self.platform.config.max_explanation_length );
-  println!( "   Adaptive Difficulty: {}", if self.platform.config.enable_adaptive_difficulty { "Enabled" } else { "Disabled" } );
+  println!( "   Default Model : {}", self.platform.config.default_model );
+  println!( "   Max Explanation Length : {} words", self.platform.config.max_explanation_length );
+  println!( "   Adaptive Difficulty : {}", if self.platform.config.enable_adaptive_difficulty { "Enabled" } else { "Disabled" } );
   println!( "   Progress Update Frequency : Every {} questions", self.platform.config.progress_update_frequency );
-  println!( "   Default Learning Style: {}", self.platform.config.default_learning_style.name() );
+  println!( "   Default Learning Style : {}", self.platform.config.default_learning_style.name() );
   println!( "   Assessment Frequency : Every {} sessions", self.platform.config.assessment_frequency );
   
   Ok( () )
@@ -1301,7 +1301,7 @@ impl EducationalTutorCLI
   /// Display concept explanation
   fn display_concept_explanation( &self, explanation : &ConceptExplanation )
   {
-  println!( "\n📖 Concept: {}", explanation.concept );
+  println!( "\n📖 Concept : {}", explanation.concept );
   println!( "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" );
   
   println!( "\n💡 Explanation:" );
@@ -1335,9 +1335,9 @@ impl EducationalTutorCLI
   }
   
   println!( "\n📊 Quality Metrics:" );
-  println!( "   Effectiveness: {:.1}%", explanation.effectiveness_score * 100.0 );
-  println!( "   Complexity Appropriateness: {:.1}%", explanation.complexity_score * 100.0 );
-  println!( "   Generation Time: {}ms", explanation.generation_time_ms );
+  println!( "   Effectiveness : {:.1}%", explanation.effectiveness_score * 100.0 );
+  println!( "   Complexity Appropriateness : {:.1}%", explanation.complexity_score * 100.0 );
+  println!( "   Generation Time : {}ms", explanation.generation_time_ms );
   
   if !explanation.related_concepts.is_empty()
   {
@@ -1370,10 +1370,10 @@ impl EducationalTutorCLI
   }
   
   println!( "\n📊 Response Metrics:" );
-  println!( "   Confidence: {:.1}%", response.confidence * 100.0 );
-  println!( "   Educational Value: {:.1}%", response.educational_value * 100.0 );
-  println!( "   Understanding Assessment: {:.1}%", response.understanding_assessment * 100.0 );
-  println!( "   Response Time: {}ms", response.response_time_ms );
+  println!( "   Confidence : {:.1}%", response.confidence * 100.0 );
+  println!( "   Educational Value : {:.1}%", response.educational_value * 100.0 );
+  println!( "   Understanding Assessment : {:.1}%", response.understanding_assessment * 100.0 );
+  println!( "   Response Time : {}ms", response.response_time_ms );
   println!();
   }
 
@@ -1392,7 +1392,7 @@ impl EducationalTutorCLI
   {
       let current_marker = if Some( id ) == self.platform.current_student.as_ref() { "★ " } else { "  " };
       println!( "{}🎓 {} ({})", current_marker, student.name, id );
-      println!( "     Level: {} | Style: {}", student.complexity_level.name(), student.learning_style.name() );
+      println!( "     Level : {} | Style : {}", student.complexity_level.name(), student.learning_style.name() );
   }
   println!();
   }
@@ -1410,7 +1410,7 @@ impl EducationalTutorCLI
   {
       self.platform.set_current_student( Some( student_id.to_string() ) );
       let student = &self.platform.students[ student_id ];
-      println!( "✅ Switched to student: {} ({})", student.name, student_id );
+      println!( "✅ Switched to student : {} ({})", student.name, student_id );
   }
   else
   {
@@ -1426,20 +1426,20 @@ impl EducationalTutorCLI
   {
       println!( "\n👤 Current Student Profile:" );
       println!( "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" );
-      println!( "   Name: {}", student.name );
+      println!( "   Name : {}", student.name );
       println!( "   ID: {}", student.student_id );
-      println!( "   Complexity Level: {}", student.complexity_level.name() );
-      println!( "   Learning Style: {}", student.learning_style.name() );
-      println!( "   Learning Pace: {:.1}x average", student.learning_pace );
+      println!( "   Complexity Level : {}", student.complexity_level.name() );
+      println!( "   Learning Style : {}", student.learning_style.name() );
+      println!( "   Learning Pace : {:.1}x average", student.learning_pace );
       
       if !student.strong_subjects.is_empty()
       {
-  println!( "   Strong Subjects: {}", student.strong_subjects.iter().map( | s | s.name() ).collect::< Vec< _ > >().join( ", " ) );
+  println!( "   Strong Subjects : {}", student.strong_subjects.iter().map( | s | s.name() ).collect::< Vec< _ > >().join( ", " ) );
       }
       
       if !student.weak_subjects.is_empty()
       {
-  println!( "   Areas for Improvement: {}", student.weak_subjects.iter().map( | s | s.name() ).collect::< Vec< _ > >().join( ", " ) );
+  println!( "   Areas for Improvement : {}", student.weak_subjects.iter().map( | s | s.name() ).collect::< Vec< _ > >().join( ", " ) );
       }
       
       if !student.learning_goals.is_empty()
@@ -1454,7 +1454,7 @@ impl EducationalTutorCLI
   else
   {
       println!( "❌ No student currently selected" );
-      println!( "💡 Use '/student switch <id >' to select a student" );
+      println!( "💡 Use '/student switch < id >' to select a student" );
   }
   println!();
   }
@@ -1488,7 +1488,7 @@ impl EducationalTutorCLI
   {
   println!( "\n📝 {} Assessment - {} Level", assessment.subject.name(), assessment.difficulty_level.name() );
   println!( "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" );
-  println!( "Total Questions: {} | Total Points: {} | Time Limit: {} minutes", 
+  println!( "Total Questions : {} | Total Points : {} | Time Limit : {} minutes", 
              assessment.questions.len(), assessment.total_points, assessment.time_limit_minutes.unwrap_or( 0 ) );
   println!( "Type 'skip' to skip a question, or 'quit' to end assessment early.\n" );
   
@@ -1499,11 +1499,11 @@ impl EducationalTutorCLI
       println!( "Question {} ({} points):", i + 1, question.points );
       println!( "{}\n", question.question );
       
-      print!( "Your answer: " );
-      io::stdout().flush().unwrap_or( () );
+      print!( "Your answer : " );
+      io ::stdout().flush().unwrap_or( () );
       
       let mut answer = String::new();
-      io::stdin().read_line( &mut answer ).unwrap_or( 0 );
+      io ::stdin().read_line( &mut answer ).unwrap_or( 0 );
       let answer = answer.trim().to_string();
       
       if answer.to_lowercase() == "quit"
@@ -1524,12 +1524,12 @@ impl EducationalTutorCLI
   {
   println!( "\n🎯 Assessment Results:" );
   println!( "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" );
-  println!( "Score: {} points ({:.1}%)", result.score, result.percentage );
-  println!( "Time Taken: {:.1} minutes", result.time_taken );
-  println!( "Performance: {}\n", result.performance_summary );
+  println!( "Score : {} points ({:.1}%)", result.score, result.percentage );
+  println!( "Time Taken : {:.1} minutes", result.time_taken );
+  println!( "Performance : {}\n", result.performance_summary );
   
   let correct_count = result.question_feedback.iter().filter( | f | f.is_correct ).count();
-  println!( "Question Breakdown: {}/{} correct", correct_count, result.question_feedback.len() );
+  println!( "Question Breakdown : {}/{} correct", correct_count, result.question_feedback.len() );
   
   for ( i, feedback ) in result.question_feedback.iter().enumerate()
   {
@@ -1567,9 +1567,9 @@ impl EducationalTutorCLI
   {
       let accuracy = if prog.total_questions > 0 { ( prog.correct_answers as f32 / prog.total_questions as f32 ) * 100.0 } else { 0.0 };
       println!( "📚 {}:", subject.name() );
-      println!( "   Proficiency: {:.1}% | Accuracy: {:.1}% ({}/{})", 
+      println!( "   Proficiency : {:.1}% | Accuracy : {:.1}% ({}/{})", 
                prog.proficiency_level * 100.0, accuracy, prog.correct_answers, prog.total_questions );
-      println!( "   Concepts Mastered: {} | Last Updated: {}", prog.concepts_mastered, prog.last_updated );
+      println!( "   Concepts Mastered : {} | Last Updated : {}", prog.concepts_mastered, prog.last_updated );
   }
   println!();
   }
@@ -1581,10 +1581,10 @@ impl EducationalTutorCLI
   
   println!( "🎓 Platform Statistics:" );
   println!( "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" );
-  println!( "Students Served: {}", stats.students_served );
-  println!( "Total Explanations: {}", stats.total_explanations );
-  println!( "Questions Answered: {}", stats.total_questions_answered );
-  println!( "Total Learning Time: {} minutes", stats.total_learning_time );
+  println!( "Students Served : {}", stats.students_served );
+  println!( "Total Explanations : {}", stats.total_explanations );
+  println!( "Questions Answered : {}", stats.total_questions_answered );
+  println!( "Total Learning Time : {} minutes", stats.total_learning_time );
   
   if !stats.subject_popularity.is_empty()
   {
@@ -1646,10 +1646,10 @@ impl EducationalTutorCLI
   println!( "An intelligent tutoring system powered by HuggingFace's language models." );
   println!( "Personalized learning assistance across multiple subjects and complexity levels.\n" );
   println!( "Type /help for available commands or start with:" );
-  println!( "  • /explain <concept > - Get detailed explanations" );
-  println!( "  • /ask <question > - Ask questions and get tutoring responses" );
+  println!( "  • /explain < concept > - Get detailed explanations" );
+  println!( "  • /ask < question > - Ask questions and get tutoring responses" );
   println!( "  • /student list - See available students" );
-  println!( "  • /assess <subject > - Take subject assessments\n" );
+  println!( "  • /assess < subject > - Take subject assessments\n" );
   }
 
   /// Print help information
@@ -1659,20 +1659,20 @@ impl EducationalTutorCLI
   println!( "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" );
   
   println!( "\n📖 Learning Commands:" );
-  println!( "  /explain <concept >     - Generate detailed concept explanations" );
-  println!( "                          Example: /explain photosynthesis" );
-  println!( "  /ask <question >        - Ask questions and receive tutoring responses" );
-  println!( "                          Example: /ask What is the quadratic formula?" );
+  println!( "  /explain < concept >     - Generate detailed concept explanations" );
+  println!( "                          Example : /explain photosynthesis" );
+  println!( "  /ask < question >        - Ask questions and receive tutoring responses" );
+  println!( "                          Example : /ask What is the quadratic formula?" );
   
   println!( "\n👥 Student Management:" );
   println!( "  /student list          - List all registered students" );
-  println!( "  /student switch <id >   - Switch to different student profile" );
+  println!( "  /student switch < id >   - Switch to different student profile" );
   println!( "  /student profile       - Show current student details" );
   println!( "  /student register      - Register new student (demo mode)" );
   
   println!( "\n📝 Assessment & Progress:" );
-  println!( "  /assess <subject >      - Generate and take assessments" );
-  println!( "                          Subjects: math, science, history, english, cs, art" );
+  println!( "  /assess < subject >      - Generate and take assessments" );
+  println!( "                          Subjects : math, science, history, english, cs, art" );
   println!( "  /progress              - View learning progress and statistics" );
   
   println!( "\n⚙️  System Commands:" );

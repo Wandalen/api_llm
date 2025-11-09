@@ -23,21 +23,21 @@
 
 use api_openai::
 {
-  realtime::WsSession,
-  error::{ OpenAIError, Result },
+  realtime ::WsSession,
+  error ::{ OpenAIError, Result },
 };
 use std::
 {
-  collections::VecDeque,
-  sync::{ Arc, Mutex },
-  time::{ Duration, Instant },
+  collections ::VecDeque,
+  sync ::{ Arc, Mutex },
+  time ::{ Duration, Instant },
 };
 use tokio::
 {
-  sync::{ RwLock, Semaphore },
-  time::{ timeout, sleep, interval },
+  sync ::{ RwLock, Semaphore },
+  time ::{ timeout, sleep, interval },
 };
-// Note: Serialize/Deserialize removed since Instant doesn't support them
+// Note : Serialize/Deserialize removed since Instant doesn't support them
 
 /// Configuration for WebSocket reliability testing
 #[ derive( Debug, Clone ) ]
@@ -328,7 +328,7 @@ impl EnhancedWsSession
     let last_heartbeat = Arc::clone( &self.last_heartbeat );
     let current_session = Arc::clone( &self.current_session );
 
-    tokio::spawn( async move
+    tokio ::spawn( async move
     {
       let mut interval = interval( heartbeat_interval );
       loop
@@ -676,7 +676,7 @@ async fn test_connection_timeout_handling()
   {
     // Simulate slow connection
     sleep( Duration::from_millis( 1500 ) ).await;
-    Ok::<(), OpenAIError>( () )
+    Ok::<(), OpenAIError >( () )
   }).await;
 
   let elapsed = start.elapsed();
@@ -702,7 +702,7 @@ async fn test_heartbeat_interval_configuration()
 
   // Check if heartbeat was recorded (in real implementation)
   let _last_hb = session.last_heartbeat.lock().unwrap();
-  // Note: In this test, heartbeat might not be recorded since no real connection exists
+  // Note : In this test, heartbeat might not be recorded since no real connection exists
   // This test primarily validates the heartbeat monitoring can be started without panic
 }
 

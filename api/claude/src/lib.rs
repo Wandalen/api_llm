@@ -11,7 +11,7 @@
 //! This crate provides a comprehensive HTTP client for interacting with Anthropic's Claude API.
 //! It handles authentication, request/response serialization, and streaming support.
 //!
-//! # Governing Principle: "Thin Client, Rich API"
+//! # Governing Principle : "Thin Client, Rich API"
 //!
 //! This library follows the principle of **"Thin Client, Rich API"** - exposing all
 //! server-side functionality transparently while maintaining zero client-side intelligence
@@ -73,19 +73,19 @@
 //!   .max_tokens( 1000 )
 //!   .messages( vec![
 //!     Message {
-//!       role: Role::User,
-//!       content: vec![ Content::Text {
-//!         r#type: "text".to_string(),
-//!         text: "Hello, Claude! How are you?".to_string()
+//!       role : Role::User,
+//!       content : vec![ Content::Text {
+//!         r#type : "text".to_string(),
+//!         text : "Hello, Claude! How are you?".to_string()
 //!       } ],
-//!       cache_control: None,
+//!       cache_control : None,
 //!     }
 //!   ] )
 //!   .build();
 //!
 //! // Send the request
 //! let response = client.create_message( request ).await?;
-//! println!( "Claude responded: {:?}", response.content );
+//! println!( "Claude responded : {:?}", response.content );
 //! # Ok( () )
 //! # }
 //! ```
@@ -96,7 +96,7 @@ use mod_interface::mod_interface;
 mod private {}
 
 #[ cfg( feature = "enabled" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   #[ cfg( feature = "authentication" ) ]
   layer authentication;

@@ -33,24 +33,24 @@
 use api_openai::ClientApiAccessors;
 use api_openai::{
   Client,
-  components::{
-    responses::{ CreateResponseRequest, ResponseInput, ResponseObject },
-    input::{ InputItem, InputMessage, InputContentPart, InputText },
-    output::{ OutputItem, OutputContentPart },
-    common::ModelIdsResponses,
+  components ::{
+    responses ::{ CreateResponseRequest, ResponseInput, ResponseObject },
+    input ::{ InputItem, InputMessage, InputContentPart, InputText },
+    output ::{ OutputItem, OutputContentPart },
+    common ::ModelIdsResponses,
   },
 };
 use serde::{ Deserialize, Serialize };
 use std::{
-  collections::HashMap,
+  collections ::HashMap,
   env,
   fs,
-  io::{ self, Write },
-  path::PathBuf,
+  io ::{ self, Write },
+  path ::PathBuf,
 };
 use core::{
-  fmt::Write as FmtWrite,
-  time::Duration,
+  fmt ::Write as FmtWrite,
+  time ::Duration,
 };
 
 /// Chat session data structure containing conversation history and metadata
@@ -58,19 +58,19 @@ use core::{
 pub struct ChatSession
 {
   /// Unique identifier for the session
-  pub id: String,
+  pub id : String,
   /// Human-readable name for the session
-  pub name: String,
+  pub name : String,
   /// Conversation messages
-  pub messages: Vec< Message >,
+  pub messages : Vec< Message >,
   /// `OpenAI` model being used
-  pub model: String,
+  pub model : String,
   /// Optional system prompt
-  pub system_prompt: Option< String >,
+  pub system_prompt : Option< String >,
   /// Session creation timestamp
-  pub created_at: String,
+  pub created_at : String,
   /// Last update timestamp
-  pub last_updated: String,
+  pub last_updated : String,
 }
 
 impl ChatSession
@@ -80,7 +80,7 @@ impl ChatSession
   /// # Panics
   /// Panics if the system time is before the Unix epoch.
   #[ must_use ]
-  pub fn new( name: String, model: String, system_prompt: Option< String > ) -> Self
+  pub fn new( name : String, model : String, system_prompt : Option< String > ) -> Self
   {
     let now = std::time::SystemTime::now()
       .duration_since( std::time::UNIX_EPOCH )
@@ -89,13 +89,13 @@ impl ChatSession
       .to_string();
     Self
     {
-      id: uuid::Uuid::new_v4().to_string(),
+      id : uuid::Uuid::new_v4().to_string(),
       name,
-      messages: Vec::new(),
+      messages : Vec::new(),
       model,
       system_prompt,
-      created_at: now.clone(),
-      last_updated: now,
+      created_at : now.clone(),
+      last_updated : now,
     }
   }
 
@@ -103,7 +103,7 @@ impl ChatSession
   ///
   /// # Panics
   /// Panics if the system time is before the Unix epoch.
-  pub fn add_message( &mut self, message: Message )
+  pub fn add_message( &mut self, message : Message )
   {
     self.messages.push( message );
     self.last_updated = std::time::SystemTime::now()
@@ -123,9 +123,9 @@ impl ChatSession
   }
 
   /// Simple token estimation (rough approximation)
-  fn estimate_tokens( text: &str ) -> u32
+  fn estimate_tokens( text : &str ) -> u32
   {
-    // Rough approximation: 1 token per 4 characters
+    // Rough approximation : 1 token per 4 characters
     // Use safe conversion to avoid clippy warnings
     let char_count = text.len();
     if char_count == 0
@@ -160,15 +160,15 @@ impl ChatSession
 pub struct Message
 {
   /// Message role (user, assistant, system)
-  pub role: String,
+  pub role : String,
   /// Message content
-  pub content: String,
+  pub content : String,
   /// Message timestamp
-  pub timestamp: String,
+  pub timestamp : String,
   /// Token count for this message
-  pub token_count: Option< u32 >,
+  pub token_count : Option< u32 >,
   /// Whether response was served from cache
-  pub cached: bool,
+  pub cached : bool,
 }
 
 impl Message
@@ -178,39 +178,39 @@ impl Message
   /// # Panics
   /// Panics if the system time is before the Unix epoch.
   #[ must_use ]
-  pub fn new( role: String, content: String, cached: bool ) -> Self
+  pub fn new( role : String, content : String, cached : bool ) -> Self
   {
     Self
     {
       role,
       content,
-      timestamp: std::time::SystemTime::now()
+      timestamp : std::time::SystemTime::now()
         .duration_since( std::time::UNIX_EPOCH )
         .unwrap()
         .as_secs()
         .to_string(),
-      token_count: None,
+      token_count : None,
       cached,
     }
   }
 
   /// Create user message
   #[ must_use ]
-  pub fn user( content: String ) -> Self
+  pub fn user( content : String ) -> Self
   {
     Self::new( "user".to_string(), content, false )
   }
 
   /// Create assistant message
   #[ must_use ]
-  pub fn assistant( content: String, cached: bool ) -> Self
+  pub fn assistant( content : String, cached : bool ) -> Self
   {
     Self::new( "assistant".to_string(), content, cached )
   }
 
   /// Create system message
   #[ must_use ]
-  pub fn system( content: String ) -> Self
+  pub fn system( content : String ) -> Self
   {
     Self::new( "system".to_string(), content, false )
   }
@@ -220,9 +220,9 @@ impl Message
 pub struct ChatCache
 {
   /// In-memory cache of responses
-  cache: HashMap<  String, String  >,
+  cache : HashMap<  String, String  >,
   /// File system storage path
-  storage_path: PathBuf,
+  storage_path : PathBuf,
 }
 
 impl ChatCache
@@ -231,17 +231,17 @@ impl ChatCache
   ///
   /// # Errors
   /// Returns an error if cache directory creation fails or cache loading fails.
-  pub fn new( storage_path: PathBuf ) -> Result< Self, Box< dyn std::error::Error > >
+  pub fn new( storage_path : PathBuf ) -> Result< Self, Box< dyn std::error::Error > >
   {
     // Ensure cache directory exists
     if let Some( parent ) = storage_path.parent()
     {
-      fs::create_dir_all( parent )?;
+      fs ::create_dir_all( parent )?;
     }
 
     let mut cache = Self
     {
-      cache: HashMap::new(),
+      cache : HashMap::new(),
       storage_path,
     };
 
@@ -252,7 +252,7 @@ impl ChatCache
 
   /// Generate cache key from conversation context
   #[ must_use ]
-  pub fn generate_key( &self, messages: &[ Message ], model: &str ) -> String
+  pub fn generate_key( &self, messages : &[ Message ], model : &str ) -> String
   {
     use std::collections::hash_map::DefaultHasher;
     use core::hash::{ Hash, Hasher };
@@ -272,7 +272,7 @@ impl ChatCache
 
   /// Get cached response
   #[ must_use ]
-  pub fn get( &self, key: &str ) -> Option< String >
+  pub fn get( &self, key : &str ) -> Option< String >
   {
     self.cache.get( key ).cloned()
   }
@@ -281,7 +281,7 @@ impl ChatCache
   ///
   /// # Errors
   /// Returns an error if cache persistence to disk fails.
-  pub fn insert( &mut self, key: String, response: String ) -> Result< (), Box< dyn std::error::Error > >
+  pub fn insert( &mut self, key : String, response : String ) -> Result< (), Box< dyn std::error::Error > >
   {
     self.cache.insert( key, response );
     self.save_to_disk()?;
@@ -303,7 +303,7 @@ impl ChatCache
   fn save_to_disk( &self ) -> Result< (), Box< dyn std::error::Error > >
   {
     let content = serde_json::to_string_pretty( &self.cache )?;
-    fs::write( &self.storage_path, content )?;
+    fs ::write( &self.storage_path, content )?;
     Ok( () )
   }
 
@@ -324,19 +324,19 @@ impl ChatCache
 pub struct ChatConfig
 {
   /// Default model to use
-  pub default_model: String,
+  pub default_model : String,
   /// Maximum context tokens before truncation
-  pub max_context_tokens: u32,
+  pub max_context_tokens : u32,
   /// Whether caching is enabled
-  pub cache_enabled: bool,
+  pub cache_enabled : bool,
   /// Cache time-to-live
-  pub cache_ttl: Duration,
+  pub cache_ttl : Duration,
   /// Auto-save sessions
-  pub auto_save: bool,
+  pub auto_save : bool,
   /// Enable syntax highlighting
-  pub syntax_highlighting: bool,
+  pub syntax_highlighting : bool,
   /// Directory for session storage
-  pub session_directory: PathBuf,
+  pub session_directory : PathBuf,
 }
 
 impl Default for ChatConfig
@@ -345,13 +345,13 @@ impl Default for ChatConfig
   {
     Self
     {
-      default_model: "gpt-4".to_string(),
-      max_context_tokens: 4000,
-      cache_enabled: true,
-      cache_ttl: Duration::from_secs( 3600 ), // 1 hour
-      auto_save: true,
-      syntax_highlighting: true,
-      session_directory: PathBuf::from( ".chat_sessions" ),
+      default_model : "gpt-4".to_string(),
+      max_context_tokens : 4000,
+      cache_enabled : true,
+      cache_ttl : Duration::from_secs( 3600 ), // 1 hour
+      auto_save : true,
+      syntax_highlighting : true,
+      session_directory : PathBuf::from( ".chat_sessions" ),
     }
   }
 }
@@ -369,14 +369,14 @@ impl core::str::FromStr for ExportFormat
 {
   type Err = String;
 
-  fn from_str( s: &str ) -> Result< Self, Self::Err >
+  fn from_str( s : &str ) -> Result< Self, Self::Err >
   {
     match s.to_lowercase().as_str()
     {
       "json" => Ok( ExportFormat::Json ),
       "markdown" => Ok( ExportFormat::Markdown ),
       "plain" => Ok( ExportFormat::Plain ),
-      _ => Err( format!( "Unknown export format: {s}" ) ),
+      _ => Err( format!( "Unknown export format : {s}" ) ),
     }
   }
 }
@@ -406,9 +406,9 @@ impl ChatCommand
   ///
   /// # Errors
   /// Returns an error if the input is empty or contains an invalid command.
-  pub fn parse( input: &str ) -> Result< Self, String >
+  pub fn parse( input : &str ) -> Result< Self, String >
   {
-    let parts: Vec< &str > = input.split_whitespace().collect();
+    let parts : Vec< &str > = input.split_whitespace().collect();
     if parts.is_empty()
     {
       return Err( "Empty command".to_string() );
@@ -422,7 +422,7 @@ impl ChatCommand
       {
         if parts.len() < 2
         {
-          Err( "Usage: /load <session_name>".to_string() )
+          Err( "Usage : /load < session_name >".to_string() )
         }
         else
         {
@@ -435,12 +435,12 @@ impl ChatCommand
       {
         if parts.len() < 2
         {
-          Err( "Usage: /export <format> [filename]".to_string() )
+          Err( "Usage : /export < format > [filename]".to_string() )
         }
         else
         {
           let format = parts[ 1 ].parse::< ExportFormat >()
-            .map_err( | e | format!( "Invalid format: {e}" ) )?;
+            .map_err( | e | format!( "Invalid format : {e}" ) )?;
           let filename = parts.get( 2 ).map_or_else(|| PathBuf::from( format!( "conversation.{}", parts[ 1 ] ) ), PathBuf::from);
           Ok( ChatCommand::ExportSession( format, filename ) )
         }
@@ -449,7 +449,7 @@ impl ChatCommand
       {
         if parts.len() < 2
         {
-          Err( "Usage: /model <model_name>".to_string() )
+          Err( "Usage : /model < model_name >".to_string() )
         }
         else
         {
@@ -460,7 +460,7 @@ impl ChatCommand
       {
         if parts.len() < 2
         {
-          Err( "Usage: /system <prompt>".to_string() )
+          Err( "Usage : /system < prompt >".to_string() )
         }
         else
         {
@@ -475,7 +475,7 @@ impl ChatCommand
       {
         if parts.len() < 2
         {
-          Err( "Usage: /tokens <number>".to_string() )
+          Err( "Usage : /tokens < number >".to_string() )
         }
         else
         {
@@ -485,7 +485,7 @@ impl ChatCommand
         }
       },
       "/quit" | "/exit" | "/q" => Ok( ChatCommand::Quit ),
-      _ => Err( format!( "Unknown command: {}. Type /help for available commands.", parts[ 0 ] ) ),
+      _ => Err( format!( "Unknown command : {}. Type /help for available commands.", parts[ 0 ] ) ),
     }
   }
 }
@@ -502,26 +502,26 @@ pub enum UserInput
 /// Output formatter for rich text display
 pub struct OutputFormatter
 {
-  colors_enabled: bool,
+  colors_enabled : bool,
 }
 
 impl OutputFormatter
 {
   /// Create new formatter
   #[ must_use ]
-  pub fn new( colors_enabled: bool ) -> Self
+  pub fn new( colors_enabled : bool ) -> Self
   {
     Self { colors_enabled }
   }
 
   /// Format assistant message
   #[ must_use ]
-  pub fn format_assistant_message( &self, content: &str, cached: bool ) -> String
+  pub fn format_assistant_message( &self, content : &str, cached : bool ) -> String
   {
     if self.colors_enabled
     {
       let cache_indicator = if cached { " 🔄" } else { "" };
-      format!( "\x1b[36m🤖 Assistant{cache_indicator}\x1b[0m: {content}" )
+      format!( "\x1b[36m🤖 Assistant{cache_indicator}\x1b[0m : {content}" )
     }
     else
     {
@@ -532,49 +532,49 @@ impl OutputFormatter
 
   /// Format user message
   #[ must_use ]
-  pub fn format_user_message( &self, content: &str ) -> String
+  pub fn format_user_message( &self, content : &str ) -> String
   {
     if self.colors_enabled
     {
-      format!( "\x1b[32m👤 You\x1b[0m: {content}" )
+      format!( "\x1b[32m👤 You\x1b[0m : {content}" )
     }
     else
     {
-      format!( "You: {content}" )
+      format!( "You : {content}" )
     }
   }
 
   /// Format system message
   #[ must_use ]
-  pub fn format_system_message( &self, content: &str ) -> String
+  pub fn format_system_message( &self, content : &str ) -> String
   {
     if self.colors_enabled
     {
-      format!( "\x1b[33mℹ️  System\x1b[0m: {content}" )
+      format!( "\x1b[33mℹ️  System\x1b[0m : {content}" )
     }
     else
     {
-      format!( "System: {content}" )
+      format!( "System : {content}" )
     }
   }
 
   /// Format error message
   #[ must_use ]
-  pub fn format_error( &self, content: &str ) -> String
+  pub fn format_error( &self, content : &str ) -> String
   {
     if self.colors_enabled
     {
-      format!( "\x1b[31m❌ Error\x1b[0m: {content}" )
+      format!( "\x1b[31m❌ Error\x1b[0m : {content}" )
     }
     else
     {
-      format!( "Error: {content}" )
+      format!( "Error : {content}" )
     }
   }
 
   /// Format info message
   #[ must_use ]
-  pub fn format_info( &self, content: &str ) -> String
+  pub fn format_info( &self, content : &str ) -> String
   {
     if self.colors_enabled
     {
@@ -590,11 +590,11 @@ impl OutputFormatter
 /// Main interactive chat application
 pub struct InteractiveChatApp
 {
-  client: Client< api_openai::environment::OpenaiEnvironmentImpl >,
-  cache: ChatCache,
-  current_session: ChatSession,
-  config: ChatConfig,
-  formatter: OutputFormatter,
+  client : Client< api_openai::environment::OpenaiEnvironmentImpl >,
+  cache : ChatCache,
+  current_session : ChatSession,
+  config : ChatConfig,
+  formatter : OutputFormatter,
 }
 
 impl InteractiveChatApp
@@ -604,13 +604,13 @@ impl InteractiveChatApp
   /// # Errors
   /// Returns an error if cache directory creation fails or cache initialization fails.
   pub fn new(
-    client: Client< api_openai::environment::OpenaiEnvironmentImpl >,
-    config: ChatConfig,
-    session_name: Option< String >
+    client : Client< api_openai::environment::OpenaiEnvironmentImpl >,
+    config : ChatConfig,
+    session_name : Option< String >
   ) -> Result< Self, Box< dyn std::error::Error > >
   {
     // Create cache directory
-    fs::create_dir_all( &config.session_directory )?;
+    fs ::create_dir_all( &config.session_directory )?;
 
     let cache_path = config.session_directory.join( "cache.json" );
     let cache = ChatCache::new( cache_path )?;
@@ -677,7 +677,7 @@ impl InteractiveChatApp
   fn display_welcome( &self )
   {
     println!( "{}", self.formatter.format_info( "🚀 Welcome to OpenAI Interactive Chat!" ) );
-    println!( "{}", self.formatter.format_info( &format!( "Session: {} | Model: {}", self.current_session.name, self.current_session.model ) ) );
+    println!( "{}", self.formatter.format_info( &format!( "Session : {} | Model : {}", self.current_session.name, self.current_session.model ) ) );
     println!( "{}", self.formatter.format_info( "Type your message or use /help for commands." ) );
     println!();
   }
@@ -686,7 +686,7 @@ impl InteractiveChatApp
   fn read_user_input( &self ) -> Result< UserInput, Box< dyn std::error::Error > >
   {
     print!( "> " );
-    io::stdout().flush()?;
+    io ::stdout().flush()?;
 
     let stdin = io::stdin();
     let mut line = String::new();
@@ -718,7 +718,7 @@ impl InteractiveChatApp
   }
 
   /// Process user message and get AI response
-  async fn process_message( &mut self, content: String ) -> Result< (), Box< dyn std::error::Error > >
+  async fn process_message( &mut self, content : String ) -> Result< (), Box< dyn std::error::Error > >
   {
     // Add user message to session
     let user_message = Message::user( content );
@@ -813,7 +813,7 @@ impl InteractiveChatApp
       .form();
 
     // Send request
-    let response: ResponseObject = self.client.responses().create( request ).await?;
+    let response : ResponseObject = self.client.responses().create( request ).await?;
 
     // Extract response content
     if let Some( OutputItem::Message( message_struct ) ) = response.output.first()
@@ -834,7 +834,7 @@ impl InteractiveChatApp
   }
 
   /// Handle chat commands
-  async fn handle_command( &mut self, command: ChatCommand ) -> Result< bool, Box< dyn std::error::Error > >
+  async fn handle_command( &mut self, command : ChatCommand ) -> Result< bool, Box< dyn std::error::Error > >
   {
     match command
     {
@@ -863,16 +863,16 @@ impl InteractiveChatApp
 
 /help           - Show this help message
 /new [name]     - Start new conversation session
-/load <name>    - Load existing session
+/load < name >    - Load existing session
 /sessions       - List all saved sessions
 /save           - Save current session
-/export <fmt>   - Export conversation (json/markdown/plain)
-/model <name>   - Switch to different model
-/system <text>  - Set system prompt
+/export < fmt >   - Export conversation (json/markdown/plain)
+/model < name >   - Switch to different model
+/system < text >  - Set system prompt
 /clear          - Clear conversation history
 /stats          - Show session statistics
 /cache          - Toggle response caching
-/tokens <num>   - Set max context tokens
+/tokens < num >   - Set max context tokens
 /quit           - Exit application
 
 💡 Tips:
@@ -885,9 +885,9 @@ impl InteractiveChatApp
   }
 
   /// Create new session
-  async fn new_session( &mut self, name: Option< String > ) -> Result< (), Box< dyn std::error::Error > >
+  async fn new_session( &mut self, name : Option< String > ) -> Result< (), Box< dyn std::error::Error > >
   {
-    tokio::task::yield_now().await;
+    tokio ::task::yield_now().await;
     // Save current session if auto-save is enabled
     if self.config.auto_save
     {
@@ -895,7 +895,7 @@ impl InteractiveChatApp
     }
 
     let session_name = name.unwrap_or_else( || format!( "session_{}",
-      std::time::SystemTime::now()
+      std ::time::SystemTime::now()
         .duration_since( std::time::UNIX_EPOCH )
         .unwrap()
         .as_secs() ) );
@@ -905,14 +905,14 @@ impl InteractiveChatApp
       self.current_session.system_prompt.clone()
     );
 
-    println!( "{}", self.formatter.format_info( &format!( "Started new session: {session_name}" ) ) );
+    println!( "{}", self.formatter.format_info( &format!( "Started new session : {session_name}" ) ) );
     Ok( () )
   }
 
   /// Load existing session
-  async fn load_session( &mut self, name: String ) -> Result< (), Box< dyn std::error::Error > >
+  async fn load_session( &mut self, name : String ) -> Result< (), Box< dyn std::error::Error > >
   {
-    tokio::task::yield_now().await;
+    tokio ::task::yield_now().await;
     let session_path = self.config.session_directory.join( format!( "{name}.json" ) );
 
     if !session_path.exists()
@@ -929,8 +929,8 @@ impl InteractiveChatApp
     let content = fs::read_to_string( session_path )?;
     self.current_session = serde_json::from_str( &content )?;
 
-    println!( "{}", self.formatter.format_info( &format!( "Loaded session: {name}" ) ) );
-    println!( "{}", self.formatter.format_info( &format!( "Messages: {} | Model: {}",
+    println!( "{}", self.formatter.format_info( &format!( "Loaded session : {name}" ) ) );
+    println!( "{}", self.formatter.format_info( &format!( "Messages : {} | Model : {}",
       self.current_session.messages.len(), self.current_session.model ) ) );
     Ok( () )
   }
@@ -984,14 +984,14 @@ impl InteractiveChatApp
   {
     let session_path = self.config.session_directory.join( format!( "{}.json", self.current_session.name ) );
     let content = serde_json::to_string_pretty( &self.current_session )?;
-    fs::write( session_path, content )?;
+    fs ::write( session_path, content )?;
 
     println!( "{}", self.formatter.format_info( &format!( "Session '{}' saved.", self.current_session.name ) ) );
     Ok( () )
   }
 
   /// Export session in specified format
-  fn export_session( &self, format: ExportFormat, path: &std::path::Path ) -> Result< (), Box< dyn std::error::Error > >
+  fn export_session( &self, format : ExportFormat, path : &std::path::Path ) -> Result< (), Box< dyn std::error::Error > >
   {
     let content = match format
     {
@@ -1000,8 +1000,8 @@ impl InteractiveChatApp
       ExportFormat::Plain => self.to_plain_text(),
     };
 
-    fs::write( path, content )?;
-    println!( "{}", self.formatter.format_info( &format!( "Conversation exported to: {}", path.display() ) ) );
+    fs ::write( path, content )?;
+    println!( "{}", self.formatter.format_info( &format!( "Conversation exported to : {}", path.display() ) ) );
     Ok( () )
   }
 
@@ -1010,7 +1010,7 @@ impl InteractiveChatApp
   {
     let mut output = String::new();
 
-    write!( &mut output, "# Chat Session: {}\n\n", self.current_session.name ).unwrap();
+    write!( &mut output, "# Chat Session : {}\n\n", self.current_session.name ).unwrap();
     writeln!( &mut output, "**Model**: {}", self.current_session.model ).unwrap();
     writeln!( &mut output, "**Created**: {}", self.current_session.created_at ).unwrap();
     write!( &mut output, "**Last Updated**: {}\n\n", self.current_session.last_updated ).unwrap();
@@ -1047,14 +1047,14 @@ impl InteractiveChatApp
   {
     let mut output = String::new();
 
-    writeln!( &mut output, "Chat Session: {}", self.current_session.name ).unwrap();
-    writeln!( &mut output, "Model: {}", self.current_session.model ).unwrap();
-    writeln!( &mut output, "Created: {}", self.current_session.created_at ).unwrap();
-    write!( &mut output, "Last Updated: {}\n\n", self.current_session.last_updated ).unwrap();
+    writeln!( &mut output, "Chat Session : {}", self.current_session.name ).unwrap();
+    writeln!( &mut output, "Model : {}", self.current_session.model ).unwrap();
+    writeln!( &mut output, "Created : {}", self.current_session.created_at ).unwrap();
+    write!( &mut output, "Last Updated : {}\n\n", self.current_session.last_updated ).unwrap();
 
     if let Some( ref system_prompt ) = self.current_session.system_prompt
     {
-      write!( &mut output, "System Prompt: {system_prompt}\n\n" ).unwrap();
+      write!( &mut output, "System Prompt : {system_prompt}\n\n" ).unwrap();
     }
 
     output.push_str( &"=" .repeat( 50 ) );
@@ -1071,17 +1071,17 @@ impl InteractiveChatApp
   }
 
   /// Set model
-  fn set_model( &mut self, model: &str )
+  fn set_model( &mut self, model : &str )
   {
     self.current_session.model = model.to_string();
-    println!( "{}", self.formatter.format_info( &format!( "Model set to: {model}" ) ) );
+    println!( "{}", self.formatter.format_info( &format!( "Model set to : {model}" ) ) );
   }
 
   /// Set system prompt
-  fn set_system_prompt( &mut self, prompt: &str )
+  fn set_system_prompt( &mut self, prompt : &str )
   {
     self.current_session.system_prompt = Some( prompt.to_string() );
-    println!( "{}", self.formatter.format_info( &format!( "System prompt set: {prompt}" ) ) );
+    println!( "{}", self.formatter.format_info( &format!( "System prompt set : {prompt}" ) ) );
   }
 
   /// Clear conversation history
@@ -1103,24 +1103,24 @@ impl InteractiveChatApp
     let stats = format!( "
 📊 Session Statistics:
 
-Session: {}
-Model: {}
-Created: {}
-Last Updated: {}
+Session : {}
+Model : {}
+Created : {}
+Last Updated : {}
 
 Messages:
-  • Total: {}
-  • User: {}
-  • Assistant: {}
-  • Cached: {}
+  • Total : {}
+  • User : {}
+  • Assistant : {}
+  • Cached : {}
 
 Tokens:
-  • Estimated Total: {}
-  • Max Context: {}
-  • Remaining: {}
+  • Estimated Total : {}
+  • Max Context : {}
+  • Remaining : {}
 
-Cache: {}
-Auto-save: {}
+Cache : {}
+Auto-save : {}
 ",
       self.current_session.name,
       self.current_session.model,
@@ -1149,10 +1149,10 @@ Auto-save: {}
   }
 
   /// Set maximum tokens
-  fn set_max_tokens( &mut self, tokens: u32 )
+  fn set_max_tokens( &mut self, tokens : u32 )
   {
     self.config.max_context_tokens = tokens;
-    println!( "{}", self.formatter.format_info( &format!( "Max context tokens set to: {tokens}" ) ) );
+    println!( "{}", self.formatter.format_info( &format!( "Max context tokens set to : {tokens}" ) ) );
   }
 
   /// Manage context window - truncate old messages if needed
@@ -1163,7 +1163,7 @@ Auto-save: {}
     if estimated_tokens > self.config.max_context_tokens
     {
       // Keep system prompt and recent messages
-      let system_messages: Vec< _ > = self.current_session.messages
+      let system_messages : Vec< _ > = self.current_session.messages
         .iter()
         .filter( | m | m.role == "system" )
         .cloned()
@@ -1211,19 +1211,19 @@ Auto-save: {}
 #[ derive( Debug, Default ) ]
 struct CliArgs
 {
-  session: Option< String >,
-  model: Option< String >,
-  system: Option< String >,
-  no_cache: bool,
-  export: Option< String >,
-  max_tokens: Option< u32 >,
-  help: bool,
+  session : Option< String >,
+  model : Option< String >,
+  system : Option< String >,
+  no_cache : bool,
+  export : Option< String >,
+  max_tokens : Option< u32 >,
+  help : bool,
 }
 
 /// Parse command line arguments
 fn parse_args() -> CliArgs
 {
-  let args: Vec< String > = env::args().collect();
+  let args : Vec< String > = env::args().collect();
   let mut parsed = CliArgs::default();
 
   let mut i = 1;
@@ -1299,12 +1299,12 @@ fn show_cli_help()
   println!( "    cargo run --example openai_cached_interactive_chat [OPTIONS]" );
   println!();
   println!( "OPTIONS:" );
-  println!( "    -s, --session <NAME>      Load existing session or create new one" );
-  println!( "    -m, --model <MODEL>       OpenAI model to use (default: gpt-4)" );
-  println!( "        --system <PROMPT>     System prompt to use" );
+  println!( "    -s, --session < NAME >      Load existing session or create new one" );
+  println!( "    -m, --model < MODEL >       OpenAI model to use (default : gpt-4)" );
+  println!( "        --system < PROMPT >     System prompt to use" );
   println!( "        --no-cache            Disable response caching" );
-  println!( "        --export <FORMAT>     Export format (json, markdown, plain)" );
-  println!( "        --max-tokens <NUMBER> Maximum context tokens" );
+  println!( "        --export < FORMAT >     Export format (json, markdown, plain)" );
+  println!( "        --max-tokens < NUMBER > Maximum context tokens" );
   println!( "    -h, --help                Print help information" );
   println!();
   println!( "EXAMPLES:" );
@@ -1342,8 +1342,8 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
     secret,
     None,
     None,
-    api_openai::environment::OpenAIRecommended::base_url().to_string(),
-    api_openai::environment::OpenAIRecommended::realtime_base_url().to_string()
+    api_openai ::environment::OpenAIRecommended::base_url().to_string(),
+    api_openai ::environment::OpenAIRecommended::realtime_base_url().to_string()
   ).expect( "Failed to create environment" );
 
   let client = Client::build( env ).expect( "Failed to create client" );

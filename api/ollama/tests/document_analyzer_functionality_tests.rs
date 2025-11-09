@@ -97,7 +97,7 @@ and should be analyzable by the document analyzer.
 It has different topics and concepts that can be summarized.";
     
     // Create sample document
-    fs::write( test_file, sample_content ).expect( "Failed to write test document" );
+    fs ::write( test_file, sample_content ).expect( "Failed to write test document" );
     
     // Verify it exists
     assert!( Path::new( test_file ).exists() );
@@ -107,6 +107,6 @@ It has different topics and concepts that can be summarized.";
     assert_eq!( loaded_content, sample_content );
     
     // Clean up
-    fs::remove_file( test_file ).expect( "Failed to remove test document" );
+    fs ::remove_file( test_file ).expect( "Failed to remove test document" );
   }
 }

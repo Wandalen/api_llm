@@ -10,10 +10,10 @@ use api_openai::ClientApiAccessors;
 #[ allow( unused_imports ) ]
 use api_openai::
 {
-  client::Client,
-  error::OpenAIError,
-  api::realtime::{ RealtimeClient, ws::WsSession },
-  components::realtime_shared::
+  client ::Client,
+  error ::OpenAIError,
+  api ::realtime::{ RealtimeClient, ws::WsSession },
+  components ::realtime_shared::
   {
     RealtimeSessionCreateRequest,
     RealtimeConversationItemContent,
@@ -21,7 +21,7 @@ use api_openai::
     RealtimeClientEventConversationItemCreate,
     RealtimeServerEvent,
   },
-  components::common::ModelIds,
+  components ::common::ModelIds,
 };
 
 
@@ -37,25 +37,25 @@ async fn main() -> Result< (), OpenAIError >
 
   // Load environment variables (e.g., from .env file)
   // dotenv().ok();
-  dotenv::from_filename( "./secret/-secret.sh" ).ok();
+  dotenv ::from_filename( "./secret/-secret.sh" ).ok();
 
   // 1. Create a new OpenAI client.
   //    By default, it reads the API key from the OPENAI_API_KEY environment variable.
-  tracing::info!( "Initializing client..." );
+  tracing ::info!( "Initializing client..." );
   let client = Client::new();
 
   // 2. Create the request payload to initiate the session.
-  tracing::info!( "Building realtime session request..." );
+  tracing ::info!( "Building realtime session request..." );
   let request = RealtimeSessionCreateRequest::former()
   .model( "gpt-4o-realtime-preview".to_string() )
   .temperature( 0.7 )
   .form();
 
-  tracing::info!( "Sending request to OpenAI API to create session..." );
+  tracing ::info!( "Sending request to OpenAI API to create session..." );
   // 3. Call the API endpoint to get session details.
   let session = client.realtime().create( request ).await?;
 
-  tracing::info!( "Creating Realtime WebSocket Session Client..." );
+  tracing ::info!( "Creating Realtime WebSocket Session Client..." );
   let token = session.client_secret.value;
   // 4. Establish the WebSocket connection using the session token.
   let session_client  = WsSession::connect( client.environment().clone(), Some( &token ) ).await?;
@@ -78,12 +78,12 @@ async fn main() -> Result< (), OpenAIError >
   .item( ci )
   .form();
 
-  tracing::info!( "Sending conversation.item.create event..." );
+  tracing ::info!( "Sending conversation.item.create event..." );
   // 8. Send the event over the WebSocket.
   session_client.conversation_item_create( cic ).await?;
 
   // 9. Loop to read responses, specifically looking for the confirmation.
-  tracing::info!( "Waiting for conversation.item.created confirmation..." );
+  tracing ::info!( "Waiting for conversation.item.created confirmation..." );
   let mut confirmation_received = false;
   loop
   {
@@ -140,7 +140,7 @@ async fn main() -> Result< (), OpenAIError >
       // An error occurred while reading from the WebSocket or deserializing
       Err( e ) =>
       {
-        eprintln!( "\nError reading from WebSocket: {:?}", e );
+        eprintln!( "\nError reading from WebSocket : {:?}", e );
         return Err( e ); // Propagate the error
       }
     }

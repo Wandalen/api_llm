@@ -18,19 +18,19 @@ use std::time::{ Duration, Instant };
 pub struct CachedContentRequest
 {
   /// Unique identifier for the content to cache
-  pub content_id: String,
+  pub content_id : String,
   /// Model name associated with this content
-  pub model: String,
+  pub model : String,
   /// Content to be cached
-  pub content: String,
+  pub content : String,
   /// Content type for intelligent caching decisions
-  pub content_type: ContentType,
+  pub content_type : ContentType,
   /// Custom cache TTL for this content
-  pub ttl: Option< Duration >,
+  pub ttl : Option< Duration >,
   /// Cache priority level
-  pub priority: CachePriority,
+  pub priority : CachePriority,
   /// Additional metadata for cache optimization
-  pub metadata: Option< serde_json::Value >,
+  pub metadata : Option< serde_json::Value >,
 }
 
 /// Response structure for cached content operations
@@ -38,23 +38,23 @@ pub struct CachedContentRequest
 pub struct CachedContentResponse
 {
   /// Unique identifier for the cached content
-  pub content_id: String,
+  pub content_id : String,
   /// Cached content data
-  pub content: String,
+  pub content : String,
   /// Model name associated with the content
-  pub model: String,
+  pub model : String,
   /// Content type
-  pub content_type: ContentType,
+  pub content_type : ContentType,
   /// When the content was cached
-  pub cached_at: u64, // Unix timestamp
+  pub cached_at : u64, // Unix timestamp
   /// When the content expires (if applicable)
-  pub expires_at: Option< u64 >,
+  pub expires_at : Option< u64 >,
   /// Number of times this content has been accessed
-  pub access_count: u64,
+  pub access_count : u64,
   /// Cache hit performance metrics
-  pub performance_metrics: Option< CachePerformanceMetrics >,
+  pub performance_metrics : Option< CachePerformanceMetrics >,
   /// Additional cached metadata
-  pub metadata: Option< serde_json::Value >,
+  pub metadata : Option< serde_json::Value >,
 }
 
 /// Content types for intelligent caching decisions
@@ -100,19 +100,19 @@ pub enum CachePriority
 pub struct ContentCacheConfig
 {
   /// Maximum number of cached content items
-  max_content_items: usize,
+  max_content_items : usize,
   /// Default TTL for cached content
-  default_ttl: Duration,
+  default_ttl : Duration,
   /// Maximum size per content item (bytes)
-  max_content_size: usize,
+  max_content_size : usize,
   /// Total memory limit for cache (bytes)
-  memory_limit: usize,
+  memory_limit : usize,
   /// Enable intelligent cache management
-  intelligent_management: bool,
+  intelligent_management : bool,
   /// Auto-cleanup interval
-  cleanup_interval: Duration,
+  cleanup_interval : Duration,
   /// Performance tracking enabled
-  performance_tracking: bool,
+  performance_tracking : bool,
 }
 
 /// Request structure for cache invalidation operations
@@ -120,17 +120,17 @@ pub struct ContentCacheConfig
 pub struct CacheInvalidationRequest
 {
   /// Specific content IDs to invalidate (if any)
-  pub content_ids: Option< Vec< String > >,
+  pub content_ids : Option< Vec< String > >,
   /// Model name to invalidate all content for (if any)
-  pub model: Option< String >,
+  pub model : Option< String >,
   /// Content type to invalidate (if any)
-  pub content_type: Option< ContentType >,
+  pub content_type : Option< ContentType >,
   /// Invalidate content older than this timestamp
-  pub older_than: Option< u64 >,
+  pub older_than : Option< u64 >,
   /// Priority levels to invalidate
-  pub priorities: Option< Vec< CachePriority > >,
+  pub priorities : Option< Vec< CachePriority > >,
   /// Force invalidation (ignore critical priority)
-  pub force: bool,
+  pub force : bool,
 }
 
 /// Response structure for cache invalidation operations
@@ -138,17 +138,17 @@ pub struct CacheInvalidationRequest
 pub struct CacheInvalidationResponse
 {
   /// Number of content items invalidated
-  pub invalidated_count: u64,
+  pub invalidated_count : u64,
   /// Content IDs that were invalidated
-  pub invalidated_ids: Vec< String >,
+  pub invalidated_ids : Vec< String >,
   /// Total memory freed (bytes)
-  pub memory_freed: usize,
+  pub memory_freed : usize,
   /// Operation duration in milliseconds
-  pub duration_ms: u64,
+  pub duration_ms : u64,
   /// Whether all requested invalidations succeeded
-  pub success: bool,
+  pub success : bool,
   /// Error messages (if any)
-  pub errors: Vec< String >,
+  pub errors : Vec< String >,
 }
 
 /// Performance metrics for cache operations
@@ -156,41 +156,41 @@ pub struct CacheInvalidationResponse
 pub struct CachePerformanceMetrics
 {
   /// Cache hit ratio (0.0 to 1.0)
-  pub hit_ratio: f64,
+  pub hit_ratio : f64,
   /// Average retrieval time in microseconds
-  pub avg_retrieval_time_us: u64,
+  pub avg_retrieval_time_us : u64,
   /// Average storage time in microseconds
-  pub avg_storage_time_us: u64,
+  pub avg_storage_time_us : u64,
   /// Memory usage efficiency (0.0 to 1.0)
-  pub memory_efficiency: f64,
+  pub memory_efficiency : f64,
   /// Cache pressure level (0.0 to 1.0)
-  pub cache_pressure: f64,
+  pub cache_pressure : f64,
   /// Number of evictions in current session
-  pub evictions: u64,
+  pub evictions : u64,
 }
 
 /// Intelligent cache manager for advanced caching strategies
 #[ derive( Debug, Clone ) ]
 pub struct IntelligentCacheManager
 {
-  config: ContentCacheConfig,
-  content_store: HashMap<  String, CachedContentResponse  >,
-  access_patterns: HashMap<  String, AccessPattern  >,
-  performance_metrics: CachePerformanceMetrics,
+  config : ContentCacheConfig,
+  content_store : HashMap<  String, CachedContentResponse  >,
+  access_patterns : HashMap<  String, AccessPattern  >,
+  performance_metrics : CachePerformanceMetrics,
   #[ allow(dead_code) ]
-  last_cleanup: Instant,
+  last_cleanup : Instant,
 }
 
 /// Access pattern tracking for intelligent cache decisions
 #[ derive( Debug, Clone ) ]
 struct AccessPattern
 {
-  access_count: u64,
-  last_accessed: Instant,
-  access_frequency: f64, // Accesses per hour
+  access_count : u64,
+  last_accessed : Instant,
+  access_frequency : f64, // Accesses per hour
   #[ allow(dead_code) ]
-  content_type: ContentType,
-  priority: CachePriority,
+  content_type : ContentType,
+  priority : CachePriority,
 }
 
 impl CachedContentRequest
@@ -198,7 +198,7 @@ impl CachedContentRequest
   /// Create a new cached content request
   #[ inline ]
   #[ must_use ]
-  pub fn new( content_id: String, model: String, content: String, content_type: ContentType ) -> Self
+  pub fn new( content_id : String, model : String, content : String, content_type : ContentType ) -> Self
   {
     Self
     {
@@ -206,16 +206,16 @@ impl CachedContentRequest
       model,
       content,
       content_type,
-      ttl: None,
-      priority: CachePriority::Normal,
-      metadata: None,
+      ttl : None,
+      priority : CachePriority::Normal,
+      metadata : None,
     }
   }
 
   /// Set the cache TTL
   #[ inline ]
   #[ must_use ]
-  pub fn with_ttl( mut self, ttl: Duration ) -> Self
+  pub fn with_ttl( mut self, ttl : Duration ) -> Self
   {
     self.ttl = Some( ttl );
     self
@@ -224,7 +224,7 @@ impl CachedContentRequest
   /// Set the cache priority
   #[ inline ]
   #[ must_use ]
-  pub fn with_priority( mut self, priority: CachePriority ) -> Self
+  pub fn with_priority( mut self, priority : CachePriority ) -> Self
   {
     self.priority = priority;
     self
@@ -233,7 +233,7 @@ impl CachedContentRequest
   /// Set metadata
   #[ inline ]
   #[ must_use ]
-  pub fn with_metadata( mut self, metadata: serde_json::Value ) -> Self
+  pub fn with_metadata( mut self, metadata : serde_json::Value ) -> Self
   {
     self.metadata = Some( metadata );
     self
@@ -247,8 +247,8 @@ impl CachedContentRequest
     self.content_id.len() +
     self.model.len() +
     self.content.len() +
-    std::mem::size_of::< ContentType >() +
-    std::mem::size_of::< CachePriority >() +
+    std ::mem::size_of::< ContentType >() +
+    std ::mem::size_of::< CachePriority >() +
     self.metadata.as_ref().map_or( 0, | m | m.to_string().len() )
   }
 }
@@ -320,20 +320,20 @@ impl ContentCacheConfig
   {
     Self
     {
-      max_content_items: 1000,
-      default_ttl: Duration::from_secs( 1800 ), // 30 minutes
-      max_content_size: 1024 * 1024, // 1MB per item
-      memory_limit: 100 * 1024 * 1024, // 100MB total
-      intelligent_management: true,
-      cleanup_interval: Duration::from_secs( 300 ), // 5 minutes
-      performance_tracking: true,
+      max_content_items : 1000,
+      default_ttl : Duration::from_secs( 1800 ), // 30 minutes
+      max_content_size : 1024 * 1024, // 1MB per item
+      memory_limit : 100 * 1024 * 1024, // 100MB total
+      intelligent_management : true,
+      cleanup_interval : Duration::from_secs( 300 ), // 5 minutes
+      performance_tracking : true,
     }
   }
 
   /// Set maximum content items
   #[ inline ]
   #[ must_use ]
-  pub fn with_max_items( mut self, max_items: usize ) -> Self
+  pub fn with_max_items( mut self, max_items : usize ) -> Self
   {
     self.max_content_items = max_items;
     self
@@ -342,7 +342,7 @@ impl ContentCacheConfig
   /// Set default TTL
   #[ inline ]
   #[ must_use ]
-  pub fn with_default_ttl( mut self, ttl: Duration ) -> Self
+  pub fn with_default_ttl( mut self, ttl : Duration ) -> Self
   {
     self.default_ttl = ttl;
     self
@@ -351,7 +351,7 @@ impl ContentCacheConfig
   /// Set memory limit
   #[ inline ]
   #[ must_use ]
-  pub fn with_memory_limit( mut self, limit: usize ) -> Self
+  pub fn with_memory_limit( mut self, limit : usize ) -> Self
   {
     self.memory_limit = limit;
     self
@@ -360,7 +360,7 @@ impl ContentCacheConfig
   /// Enable or disable intelligent management
   #[ inline ]
   #[ must_use ]
-  pub fn with_intelligent_management( mut self, enabled: bool ) -> Self
+  pub fn with_intelligent_management( mut self, enabled : bool ) -> Self
   {
     self.intelligent_management = enabled;
     self
@@ -369,7 +369,7 @@ impl ContentCacheConfig
   /// Set cleanup interval
   #[ inline ]
   #[ must_use ]
-  pub fn with_cleanup_interval( mut self, interval: Duration ) -> Self
+  pub fn with_cleanup_interval( mut self, interval : Duration ) -> Self
   {
     self.cleanup_interval = interval;
     self
@@ -424,29 +424,29 @@ impl IntelligentCacheManager
   /// Create a new intelligent cache manager
   #[ inline ]
   #[ must_use ]
-  pub fn new( config: ContentCacheConfig ) -> Self
+  pub fn new( config : ContentCacheConfig ) -> Self
   {
     Self
     {
       config,
-      content_store: HashMap::new(),
-      access_patterns: HashMap::new(),
-      performance_metrics: CachePerformanceMetrics
+      content_store : HashMap::new(),
+      access_patterns : HashMap::new(),
+      performance_metrics : CachePerformanceMetrics
       {
-        hit_ratio: 0.0,
-        avg_retrieval_time_us: 0,
-        avg_storage_time_us: 0,
-        memory_efficiency: 1.0,
-        cache_pressure: 0.0,
-        evictions: 0,
+        hit_ratio : 0.0,
+        avg_retrieval_time_us : 0,
+        avg_storage_time_us : 0,
+        memory_efficiency : 1.0,
+        cache_pressure : 0.0,
+        evictions : 0,
       },
-      last_cleanup: Instant::now(),
+      last_cleanup : Instant::now(),
     }
   }
 
   /// Store content in the cache
   #[ inline ]
-  pub fn store_content( &mut self, request: CachedContentRequest ) -> Result< (), String >
+  pub fn store_content( &mut self, request : CachedContentRequest ) -> Result< (), String >
   {
     let start_time = Instant::now();
 
@@ -466,17 +466,17 @@ impl IntelligentCacheManager
     // Create cached content response
     let cached_content = CachedContentResponse
     {
-      content_id: request.content_id.clone(),
-      content: request.content,
-      model: request.model,
-      content_type: request.content_type.clone(),
-      cached_at: std::time::SystemTime::now().duration_since( std::time::UNIX_EPOCH ).unwrap().as_secs(),
-      expires_at: request.ttl.map( | ttl |
-        std::time::SystemTime::now().duration_since( std::time::UNIX_EPOCH ).unwrap().as_secs() + ttl.as_secs()
+      content_id : request.content_id.clone(),
+      content : request.content,
+      model : request.model,
+      content_type : request.content_type.clone(),
+      cached_at : std::time::SystemTime::now().duration_since( std::time::UNIX_EPOCH ).unwrap().as_secs(),
+      expires_at : request.ttl.map( | ttl |
+        std ::time::SystemTime::now().duration_since( std::time::UNIX_EPOCH ).unwrap().as_secs() + ttl.as_secs()
       ),
-      access_count: 0,
-      performance_metrics: None,
-      metadata: request.metadata,
+      access_count : 0,
+      performance_metrics : None,
+      metadata : request.metadata,
     };
 
     // Store content
@@ -485,11 +485,11 @@ impl IntelligentCacheManager
     // Update access patterns
     self.access_patterns.insert( request.content_id, AccessPattern
     {
-      access_count: 0,
-      last_accessed: Instant::now(),
-      access_frequency: 0.0,
-      content_type: request.content_type,
-      priority: request.priority,
+      access_count : 0,
+      last_accessed : Instant::now(),
+      access_frequency : 0.0,
+      content_type : request.content_type,
+      priority : request.priority,
     } );
 
     // Update performance metrics
@@ -500,7 +500,7 @@ impl IntelligentCacheManager
 
   /// Retrieve content from the cache
   #[ inline ]
-  pub fn retrieve_content( &mut self, content_id: &str ) -> Option< CachedContentResponse >
+  pub fn retrieve_content( &mut self, content_id : &str ) -> Option< CachedContentResponse >
   {
     let start_time = Instant::now();
 
@@ -550,7 +550,7 @@ impl IntelligentCacheManager
 
   /// Invalidate content based on criteria
   #[ inline ]
-  pub fn invalidate_content( &mut self, request: CacheInvalidationRequest ) -> CacheInvalidationResponse
+  pub fn invalidate_content( &mut self, request : CacheInvalidationRequest ) -> CacheInvalidationResponse
   {
     let start_time = Instant::now();
     let mut invalidated_ids = Vec::new();
@@ -642,11 +642,11 @@ impl IntelligentCacheManager
 
     CacheInvalidationResponse
     {
-      invalidated_count: invalidated_ids.len() as u64,
+      invalidated_count : invalidated_ids.len() as u64,
       invalidated_ids,
       memory_freed,
-      duration_ms: start_time.elapsed().as_millis() as u64,
-      success: errors.is_empty(),
+      duration_ms : start_time.elapsed().as_millis() as u64,
+      success : errors.is_empty(),
       errors,
     }
   }
@@ -673,7 +673,7 @@ impl IntelligentCacheManager
   /// Check if eviction is needed
   #[ inline ]
   #[ must_use ]
-  fn needs_eviction( &self, additional_size: usize ) -> bool
+  fn needs_eviction( &self, additional_size : usize ) -> bool
   {
     let current_items = self.content_store.len();
     let current_memory = self.estimate_memory_usage();
@@ -684,7 +684,7 @@ impl IntelligentCacheManager
 
   /// Perform intelligent eviction
   #[ inline ]
-  fn intelligent_eviction( &mut self, space_needed: usize ) -> Result< (), String >
+  fn intelligent_eviction( &mut self, space_needed : usize ) -> Result< (), String >
   {
     let mut eviction_candidates = Vec::new();
 
@@ -735,7 +735,7 @@ impl IntelligentCacheManager
     }
     else
     {
-      Err( format!( "Could not free enough space: needed {}, freed {}", space_needed, freed_space ) )
+      Err( format!( "Could not free enough space : needed {}, freed {}", space_needed, freed_space ) )
     }
   }
 
@@ -746,7 +746,7 @@ impl IntelligentCacheManager
   {
     self.content_store.iter().map( | ( id, content ) |
       id.len() + content.content.len() + content.model.len() +
-      std::mem::size_of::< CachedContentResponse >()
+      std ::mem::size_of::< CachedContentResponse >()
     ).sum()
   }
 }

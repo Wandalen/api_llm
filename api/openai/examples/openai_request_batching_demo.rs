@@ -6,11 +6,11 @@
 use api_openai::
 {
   Client,
-  environment::{ OpenaiEnvironmentImpl, OpenAIRecommended },
+  environment ::{ OpenaiEnvironmentImpl, OpenAIRecommended },
   Secret,
-  request_batching::BatchConfig,
-  enhanced_embeddings::{ EnhancedEmbeddings, analyze_embedding_batching_potential },
-  components::embeddings_request::CreateEmbeddingRequest,
+  request_batching ::BatchConfig,
+  enhanced_embeddings ::{ EnhancedEmbeddings, analyze_embedding_batching_potential },
+  components ::embeddings_request::CreateEmbeddingRequest,
 };
 use core::time::Duration;
 
@@ -34,7 +34,7 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
   // Demonstrate batching analysis
   demonstrate_batching_analysis();
 
-  println!( "\n⚠️  Note: Actual API calls are disabled in this demo to prevent timeouts." );
+  println!( "\n⚠️  Note : Actual API calls are disabled in this demo to prevent timeouts." );
   println!( "   The batching system works, but large-scale demos can take significant time." );
   println!( "   This demo shows the conceptual flow and expected output.\n" );
 
@@ -72,17 +72,17 @@ fn demonstrate_batching_analysis()
   let analysis = analyze_embedding_batching_potential( &sample_requests );
 
   println!( "📈 Batching Analysis Results:" );
-  println!( "   Total requests: {}", analysis.total_requests );
-  println!( "   Batchable requests: {}", analysis.batchable_requests );
-  println!( "   Potential batches: {}", analysis.potential_batches );
-  println!( "   HTTP requests saved: {}", analysis.http_requests_saved );
-  println!( "   Efficiency gain: {:.1}%", analysis.efficiency_gain * 100.0 );
-  println!( "   Recommended batch size: {}", analysis.recommended_batch_size );
+  println!( "   Total requests : {}", analysis.total_requests );
+  println!( "   Batchable requests : {}", analysis.batchable_requests );
+  println!( "   Potential batches : {}", analysis.potential_batches );
+  println!( "   HTTP requests saved : {}", analysis.http_requests_saved );
+  println!( "   Efficiency gain : {:.1}%", analysis.efficiency_gain * 100.0 );
+  println!( "   Recommended batch size : {}", analysis.recommended_batch_size );
 }
 
 /// Demonstrate enhanced embeddings with intelligent batching
 #[ allow( clippy::unused_async ) ]
-async fn demonstrate_enhanced_embeddings( client: &Client< OpenaiEnvironmentImpl > ) -> Result< (), Box< dyn std::error::Error > >
+async fn demonstrate_enhanced_embeddings( client : &Client< OpenaiEnvironmentImpl > ) -> Result< (), Box< dyn std::error::Error > >
 {
   println!( "\n🧠 Enhanced Embeddings Demo" );
   println!( "----------------------------" );
@@ -90,11 +90,11 @@ async fn demonstrate_enhanced_embeddings( client: &Client< OpenaiEnvironmentImpl
   // Configure intelligent batching
   let batch_config = BatchConfig
   {
-    max_batch_size: 50,
-    flush_timeout: Duration::from_millis( 100 ),
-    max_concurrent_batches: 5,
-    enable_smart_batching: true,
-    smart_batch_threshold: 3,
+    max_batch_size : 50,
+    flush_timeout : Duration::from_millis( 100 ),
+    max_concurrent_batches : 5,
+    enable_smart_batching : true,
+    smart_batch_threshold : 3,
   };
 
   let _enhanced_embeddings = EnhancedEmbeddings::new( client, batch_config );
@@ -115,9 +115,9 @@ async fn demonstrate_enhanced_embeddings( client: &Client< OpenaiEnvironmentImpl
   println!( "⚠️  Skipping actual API calls (demo mode)" );
   println!( "💡 With real API, {} requests would be optimally batched:", texts.len() );
   println!( "   - Requests would be grouped into batches of up to 50 items" );
-  println!( "   - Flush timeout: 100ms ensures low latency" );
+  println!( "   - Flush timeout : 100ms ensures low latency" );
   println!( "   - Smart batching combines similar requests" );
-  println!( "   - Expected HTTP requests saved: ~{}", texts.len().saturating_sub( 1 ).max( 1 ) );
+  println!( "   - Expected HTTP requests saved : ~{}", texts.len().saturating_sub( 1 ).max( 1 ) );
 
   /*
   // Actual API call - commented out for demo performance
@@ -130,15 +130,15 @@ async fn demonstrate_enhanced_embeddings( client: &Client< OpenaiEnvironmentImpl
 
       let metrics = enhanced_embeddings.get_metrics().await;
       println!( "📊 Batching Metrics:" );
-      println!( "   Total requests: {}", metrics.total_requests );
-      println!( "   Total batches: {}", metrics.total_batches );
-      println!( "   Average batch size: {:.1}", metrics.avg_batch_size );
-      println!( "   HTTP requests saved: {}", metrics.http_requests_saved );
-      println!( "   Efficiency improvement: {:.1}%", metrics.efficiency_improvement * 100.0 );
+      println!( "   Total requests : {}", metrics.total_requests );
+      println!( "   Total batches : {}", metrics.total_batches );
+      println!( "   Average batch size : {:.1}", metrics.avg_batch_size );
+      println!( "   HTTP requests saved : {}", metrics.http_requests_saved );
+      println!( "   Efficiency improvement : {:.1}%", metrics.efficiency_improvement * 100.0 );
     },
     Err( e ) =>
     {
-      println!( "⚠️  Batching demo error: {e}" );
+      println!( "⚠️  Batching demo error : {e}" );
       println!( "💡 With working API, {} requests would be optimally batched", texts.len() );
     }
   }
@@ -149,7 +149,7 @@ async fn demonstrate_enhanced_embeddings( client: &Client< OpenaiEnvironmentImpl
 
 /// Demonstrate bulk processing optimization
 #[ allow( clippy::unused_async ) ]
-async fn demonstrate_bulk_processing( client: &Client< OpenaiEnvironmentImpl > ) -> Result< (), Box< dyn std::error::Error > >
+async fn demonstrate_bulk_processing( client : &Client< OpenaiEnvironmentImpl > ) -> Result< (), Box< dyn std::error::Error > >
 {
   println!( "\n⚡ Bulk Processing Optimization Demo" );
   println!( "-----------------------------------" );
@@ -157,21 +157,21 @@ async fn demonstrate_bulk_processing( client: &Client< OpenaiEnvironmentImpl > )
   let _enhanced_embeddings = EnhancedEmbeddings::with_default_batching( client );
 
   // Simulate document collection (reduced from 100 to 10 for demo performance)
-  let documents: Vec< String > = ( 0..10 ).map( | i |
+  let documents : Vec< String > = ( 0..10 ).map( | i |
     format!( "This is document number {i} containing sample text for embedding analysis." )
   ).collect();
 
   println!( "📚 Processing {} documents with optimal batching strategy...", documents.len() );
-  println!( "   (Note: Reduced from 100 to 10 documents for demo performance)" );
+  println!( "   (Note : Reduced from 100 to 10 documents for demo performance)" );
 
   // NOTE: Actual API calls commented out to prevent demo timeouts
   println!( "⚠️  Skipping actual API calls (demo mode)" );
   println!( "💡 With real API, would intelligently batch {} documents:", documents.len() );
-  println!( "   - Short texts: 100 per batch" );
-  println!( "   - Medium texts: 50 per batch" );
-  println!( "   - Long texts: 25 per batch" );
-  println!( "   - Expected batches: ~{}", ( documents.len() + 49 ) / 50 );
-  println!( "   - Estimated performance: 3-5x faster than individual requests" );
+  println!( "   - Short texts : 100 per batch" );
+  println!( "   - Medium texts : 50 per batch" );
+  println!( "   - Long texts : 25 per batch" );
+  println!( "   - Expected batches : ~{}", ( documents.len() + 49 ) / 50 );
+  println!( "   - Estimated performance : 3-5x faster than individual requests" );
 
   /*
   // Actual API call - commented out for demo performance
@@ -185,11 +185,11 @@ async fn demonstrate_bulk_processing( client: &Client< OpenaiEnvironmentImpl > )
     {
       let processing_time = start_time.elapsed();
       println!( "✅ Processed {} documents in {:?}", results.len(), processing_time );
-      println!( "⚡ Estimated performance improvement: 3-5x faster than individual requests" );
+      println!( "⚡ Estimated performance improvement : 3-5x faster than individual requests" );
     },
     Err( e ) =>
     {
-      println!( "⚠️  Bulk processing demo error: {e}" );
+      println!( "⚠️  Bulk processing demo error : {e}" );
     }
   }
   */
@@ -199,7 +199,7 @@ async fn demonstrate_bulk_processing( client: &Client< OpenaiEnvironmentImpl > )
 
 /// Demonstrate cost optimization strategies
 #[ allow( clippy::unused_async ) ]
-async fn demonstrate_cost_optimization( client: &Client< OpenaiEnvironmentImpl > ) -> Result< (), Box< dyn std::error::Error > >
+async fn demonstrate_cost_optimization( client : &Client< OpenaiEnvironmentImpl > ) -> Result< (), Box< dyn std::error::Error > >
 {
   println!( "\n💰 Cost Optimization Demo" );
   println!( "-------------------------" );
@@ -207,14 +207,14 @@ async fn demonstrate_cost_optimization( client: &Client< OpenaiEnvironmentImpl >
   let _enhanced_embeddings = EnhancedEmbeddings::with_default_batching( client );
 
   // Simulate text processing with budget constraints (reduced from 50 to 5 for demo)
-  let texts: Vec< String > = ( 0..5 ).map( | i |
+  let texts : Vec< String > = ( 0..5 ).map( | i |
     format!( "Cost-optimized text processing for sample document {i} with efficient batching." )
   ).collect();
 
   let max_cost_per_batch = 0.10; // $0.10 per batch
 
   println!( "💡 Processing {} texts with cost optimization (max ${:.2} per batch)...", texts.len(), max_cost_per_batch );
-  println!( "   (Note: Reduced from 50 to 5 texts for demo performance)" );
+  println!( "   (Note : Reduced from 50 to 5 texts for demo performance)" );
 
   // NOTE: Actual API calls commented out to prevent demo timeouts
   println!( "⚠️  Skipping actual API calls (demo mode)" );
@@ -222,7 +222,7 @@ async fn demonstrate_cost_optimization( client: &Client< OpenaiEnvironmentImpl >
   println!( "   - Automatic batch sizing based on budget constraints" );
   println!( "   - Token estimation for cost prediction" );
   println!( "   - Smart chunking to maximize cost efficiency" );
-  println!( "   - Estimated cost savings: 40-60% through intelligent batching" );
+  println!( "   - Estimated cost savings : 40-60% through intelligent batching" );
 
   /*
   // Actual API call - commented out for demo performance
@@ -237,11 +237,11 @@ async fn demonstrate_cost_optimization( client: &Client< OpenaiEnvironmentImpl >
     {
       let processing_time = start_time.elapsed();
       println!( "✅ Cost-optimized processing completed in {processing_time:?}" );
-      println!( "💰 Estimated cost savings: 40-60% through intelligent batching" );
+      println!( "💰 Estimated cost savings : 40-60% through intelligent batching" );
     },
     Err( e ) =>
     {
-      println!( "⚠️  Cost optimization demo error: {e}" );
+      println!( "⚠️  Cost optimization demo error : {e}" );
     }
   }
   */
@@ -251,7 +251,7 @@ async fn demonstrate_cost_optimization( client: &Client< OpenaiEnvironmentImpl >
 
 /// Demonstrate comprehensive metrics collection
 #[ allow( clippy::unused_async ) ]
-async fn demonstrate_metrics_collection( client: &Client< OpenaiEnvironmentImpl > ) -> Result< (), Box< dyn std::error::Error > >
+async fn demonstrate_metrics_collection( client : &Client< OpenaiEnvironmentImpl > ) -> Result< (), Box< dyn std::error::Error > >
 {
   println!( "\n📊 Performance Metrics Demo" );
   println!( "---------------------------" );
@@ -260,17 +260,17 @@ async fn demonstrate_metrics_collection( client: &Client< OpenaiEnvironmentImpl 
 
   // NOTE: Metrics collection skipped since no actual API calls were made
   println!( "📈 Example Performance Metrics (typical results):" );
-  println!( "   Total Requests Processed: 20" );
-  println!( "   Total Batches Created: 2" );
-  println!( "   Average Batch Size: 10.0" );
-  println!( "   HTTP Requests Saved: 18" );
-  println!( "   Average Batch Processing Time: 150ms" );
-  println!( "   Overall Efficiency Improvement: 90.0%" );
+  println!( "   Total Requests Processed : 20" );
+  println!( "   Total Batches Created : 2" );
+  println!( "   Average Batch Size : 10.0" );
+  println!( "   HTTP Requests Saved : 18" );
+  println!( "   Average Batch Processing Time : 150ms" );
+  println!( "   Overall Efficiency Improvement : 90.0%" );
 
   println!( "\n🎯 Typical Optimization Summary:" );
-  println!( "   Request Reduction: 90.0%" );
-  println!( "   Estimated Cost Savings: 72.0%" );
-  println!( "   Estimated Speed Improvement: 2.8x" );
+  println!( "   Request Reduction : 90.0%" );
+  println!( "   Estimated Cost Savings : 72.0%" );
+  println!( "   Estimated Speed Improvement : 2.8x" );
 
   // Show what the batching system enables
   println!( "\n🌟 Key Batching Benefits:" );

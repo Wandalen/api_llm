@@ -13,11 +13,11 @@
 //!
 //! ## Commands
 //!
-//! - `/complete <language > <code >` - Get code completion suggestions
-//! - `/document <language > <code >` - Generate documentation for code
-//! - `/review <language > <code >` - Get code review and improvement suggestions
-//! - `/explain <code >` - Explain what code does
-//! - `/templates <language >` - Show code templates for language
+//! - `/complete < language > < code >` - Get code completion suggestions
+//! - `/document < language > < code >` - Generate documentation for code
+//! - `/review < language > < code >` - Get code review and improvement suggestions
+//! - `/explain < code >` - Explain what code does
+//! - `/templates < language >` - Show code templates for language
 //! - `/languages` - List supported programming languages
 //! - `/help` - Show available commands
 //! - `/quit` - Exit the code assistant
@@ -27,20 +27,20 @@
 use api_huggingface::
 {
   Client,
-  environment::HuggingFaceEnvironmentImpl,
-  components::
+  environment ::HuggingFaceEnvironmentImpl,
+  components ::
   {
-  input::InferenceParameters,
-  models::Models,
+  input ::InferenceParameters,
+  models ::Models,
   },
-  secret::Secret,
+  secret ::Secret,
 };
 use core::fmt;
 use std::
 {
-  collections::HashMap,
-  io::{ self, Write as IoWrite },
-  time::Instant,
+  collections ::HashMap,
+  io ::{ self, Write as IoWrite },
+  time ::Instant,
 };
 use serde::{ Deserialize, Serialize };
 
@@ -622,7 +622,7 @@ impl CodeAssistantPlatform
   };
 
   format!(
-      "Review the following {} code focusing on: {}. {strictness_instruction}. Provide specific, actionable feedback:\n\n```{}\n{}\n```\n\nCode review:",
+      "Review the following {} code focusing on : {}. {strictness_instruction}. Provide specific, actionable feedback:\n\n```{}\n{}\n```\n\nCode review:",
       request.language,
       focus_areas,
       request.language.syntax_id( ),
@@ -827,7 +827,7 @@ impl CodeAssistantCLI
   {
           Ok( Some( response ) ) => println!( "{response}" ),
           Ok( None ) => {}, // Command handled without output
-          Err( e ) => println!( "❌ Error: {e}" ),
+          Err( e ) => println!( "❌ Error : {e}" ),
   }
   continue;
       }
@@ -859,20 +859,20 @@ impl CodeAssistantCLI
       "quit" | "exit" => 
       {
   println!( "👋 Happy coding!" );
-  std::process::exit( 0 );
+  std ::process::exit( 0 );
       },
       
       "complete" =>
       {
   if parts.len( ) < 2
   {
-          return Ok( Some( "Usage: /complete <language > '<code >'".to_string( ) ) );
+          return Ok( Some( "Usage : /complete < language > '< code >'".to_string( ) ) );
   }
   
   let sub_parts : Vec< &str > = parts[ 1 ].splitn( 2, ' ' ).collect( );
   if sub_parts.len( ) < 2
   {
-          return Ok( Some( "Usage: /complete <language > '<code >'".to_string( ) ) );
+          return Ok( Some( "Usage : /complete < language > '< code >'".to_string( ) ) );
   }
   
   if let Some( language ) = ProgrammingLanguage::from_str( sub_parts[ 0 ] )
@@ -908,12 +908,12 @@ impl CodeAssistantCLI
                   let text = &suggestion.text;
                   let confidence = suggestion.confidence;
                   let description = &suggestion.description;
-                  writeln!( &mut result, "{idx}. {text} ( confidence: {confidence:.2} )\n   {description}\n" ).ok( );
+                  writeln!( &mut result, "{idx}. {text} ( confidence : {confidence:.2} )\n   {description}\n" ).ok( );
         }
         Ok( Some( result ) )
               }
       },
-      Err( e ) => Ok( Some( format!( "❌ Completion failed: {e}" ) ) ),
+      Err( e ) => Ok( Some( format!( "❌ Completion failed : {e}" ) ) ),
           }
   }
   else
@@ -926,13 +926,13 @@ impl CodeAssistantCLI
       {
   if parts.len( ) < 2
   {
-          return Ok( Some( "Usage: /document <language > '<code >'".to_string( ) ) );
+          return Ok( Some( "Usage : /document < language > '< code >'".to_string( ) ) );
   }
   
   let sub_parts : Vec< &str > = parts[ 1 ].splitn( 2, ' ' ).collect( );
   if sub_parts.len( ) < 2
   {
-          return Ok( Some( "Usage: /document <language > '<code >'".to_string( ) ) );
+          return Ok( Some( "Usage : /document < language > '< code >'".to_string( ) ) );
   }
   
   if let Some( language ) = ProgrammingLanguage::from_str( sub_parts[ 0 ] )
@@ -959,7 +959,7 @@ impl CodeAssistantCLI
               );
               Ok( Some( result ) )
       },
-      Err( e ) => Ok( Some( format!( "❌ Documentation generation failed: {e}" ) ) ),
+      Err( e ) => Ok( Some( format!( "❌ Documentation generation failed : {e}" ) ) ),
           }
   }
   else
@@ -972,13 +972,13 @@ impl CodeAssistantCLI
       {
   if parts.len( ) < 2
   {
-          return Ok( Some( "Usage: /review <language > '<code >'".to_string( ) ) );
+          return Ok( Some( "Usage : /review < language > '< code >'".to_string( ) ) );
   }
   
   let sub_parts : Vec< &str > = parts[ 1 ].splitn( 2, ' ' ).collect( );
   if sub_parts.len( ) < 2
   {
-          return Ok( Some( "Usage: /review <language > '<code >'".to_string( ) ) );
+          return Ok( Some( "Usage : /review < language > '< code >'".to_string( ) ) );
   }
   
   if let Some( language ) = ProgrammingLanguage::from_str( sub_parts[ 0 ] )
@@ -998,7 +998,7 @@ impl CodeAssistantCLI
           {
       Ok( review ) => 
       {
-              let mut result = format!( "✅ Code Review ( Score: {:.1}/1.0 ):\n\n", review.overall_score );
+              let mut result = format!( "✅ Code Review ( Score : {:.1}/1.0 ):\n\n", review.overall_score );
               
               if !review.issues.is_empty( )
               {
@@ -1024,7 +1024,7 @@ impl CodeAssistantCLI
               
               Ok( Some( result ) )
       },
-      Err( e ) => Ok( Some( format!( "❌ Code review failed: {e}" ) ) ),
+      Err( e ) => Ok( Some( format!( "❌ Code review failed : {e}" ) ) ),
           }
   }
   else
@@ -1037,7 +1037,7 @@ impl CodeAssistantCLI
       {
   if parts.len( ) < 2
   {
-          return Ok( Some( "Usage: /explain '<code >' ( assumes Rust, or specify language )".to_string( ) ) );
+          return Ok( Some( "Usage : /explain '< code >' ( assumes Rust, or specify language )".to_string( ) ) );
   }
   
   // Try to detect language or default to Rust
@@ -1049,7 +1049,7 @@ impl CodeAssistantCLI
   match self.assistant.explain_code( language, code ).await
   {
           Ok( explanation ) => Ok( Some( format!( "💡 Code Explanation:\n{explanation}" ) ) ),
-          Err( e ) => Ok( Some( format!( "❌ Explanation failed: {e}" ) ) ),
+          Err( e ) => Ok( Some( format!( "❌ Explanation failed : {e}" ) ) ),
   }
       },
       
@@ -1057,7 +1057,7 @@ impl CodeAssistantCLI
       {
   if parts.len( ) < 2
   {
-          return Ok( Some( "Usage: /templates <language >".to_string( ) ) );
+          return Ok( Some( "Usage : /templates < language >".to_string( ) ) );
   }
   
   if let Some( language ) = ProgrammingLanguage::from_str( parts[ 1 ] )
@@ -1074,7 +1074,7 @@ impl CodeAssistantCLI
               let tmpl = &template.template;
               writeln!( &mut result, "• {name} ( {category} )" ).ok( );
               writeln!( &mut result, "  {description}" ).ok( );
-              writeln!( &mut result, "  Template: {tmpl}\n" ).ok( );
+              writeln!( &mut result, "  Template : {tmpl}\n" ).ok( );
       }
       Ok( Some( result ) )
           }
@@ -1109,10 +1109,10 @@ impl CodeAssistantCLI
   let stats = self.assistant.get_stats( );
   let result = format!(
           "📊 Assistant Usage Statistics:\n\
-           Code Completions: {}\n\
-           Documentation Generated: {}\n\
-           Code Reviews: {}\n\
-           Average Response Time: {:.1}ms\n\
+           Code Completions : {}\n\
+           Documentation Generated : {}\n\
+           Code Reviews : {}\n\
+           Average Response Time : {:.1}ms\n\
            \n\
            By Language:\n{}",
           stats.total_completions,
@@ -1130,7 +1130,7 @@ impl CodeAssistantCLI
       _ =>
       {
   let cmd = parts[ 0 ];
-  Ok( Some( format!( "Unknown command: /{cmd}\nType '/help' for available commands." ) ) )
+  Ok( Some( format!( "Unknown command : /{cmd}\nType '/help' for available commands." ) ) )
       },
   }
   }
@@ -1141,11 +1141,11 @@ impl CodeAssistantCLI
   r"Available Commands:
 ===================
 
-/complete <lang > '<code >'  - Get code completion suggestions
-/document <lang > '<code >'  - Generate documentation for code
-/review <lang > '<code >'    - Get code review and suggestions
-/explain '<code >'          - Explain what code does
-/templates <lang >          - Show code templates for language
+/complete < lang > '< code >'  - Get code completion suggestions
+/document < lang > '< code >'  - Generate documentation for code
+/review < lang > '< code >'    - Get code review and suggestions
+/explain '< code >'          - Explain what code does
+/templates < lang >          - Show code templates for language
 /languages                 - List supported programming languages
 /stats                     - Show usage statistics
 /help                      - Show this help message

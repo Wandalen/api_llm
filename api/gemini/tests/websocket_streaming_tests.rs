@@ -60,7 +60,7 @@ mod integration_tests {
         match test_send_result
         {
           Ok( () ) => println!( "✓ Test message sent successfully" ),
-          Err( e ) => println!( "⚠ Test message failed: {}", e ),
+          Err( e ) => println!( "⚠ Test message failed : {}", e ),
         }
 
         // Clean up connection
@@ -72,7 +72,7 @@ mod integration_tests {
             println!( "✓ Connection closed successfully" );
           },
           Err( e ) => {
-            println!( "⚠ Connection close failed: {}", e );
+            println!( "⚠ Connection close failed : {}", e );
             // Don't assert on close failure in test environment
           }
         }
@@ -142,7 +142,7 @@ mod integration_tests {
         match receive_timeout
         {
           Ok( Some( received_message ) ) => {
-            println!( "✓ Received message: {:?}", received_message );
+            println!( "✓ Received message : {:?}", received_message );
           },
           Ok( None ) => {
             println!( "⚠ No message received (expected in test environment)" );
@@ -168,7 +168,7 @@ mod integration_tests {
         println!( "✓ Bidirectional messaging test completed successfully" );
       },
       Ok( Err( e ) ) => {
-        println!( "⚠ Bidirectional messaging test failed as expected: {}", e );
+        println!( "⚠ Bidirectional messaging test failed as expected : {}", e );
         assert!( true ); // Expected for HTTP fallback testing
       },
       Err( _ ) => {
@@ -204,7 +204,7 @@ mod integration_tests {
   {
     let client = Client::new()?;
 
-    // Test complete connection lifecycle: connect -> stream -> disconnect
+    // Test complete connection lifecycle : connect -> stream -> disconnect
     let models = client.models();
     let model = models.by_name( "gemini-pro" );
 
@@ -237,7 +237,7 @@ mod integration_tests {
         connection.send_message( WebSocketMessage::Text( "Lifecycle test message".to_string() ) ).await?;
 
         // Brief streaming period
-        tokio::time::sleep( Duration::from_millis( 100 ) ).await;
+        tokio ::time::sleep( Duration::from_millis( 100 ) ).await;
 
         // Phase 3: Graceful disconnection
         println!( "Phase 3: Closing connection..." );
@@ -272,7 +272,7 @@ mod integration_tests {
         println!( "✓ Connection lifecycle test completed successfully" );
       },
       Ok( Err( e ) ) => {
-        println!( "⚠ Connection lifecycle test failed as expected: {}", e );
+        println!( "⚠ Connection lifecycle test failed as expected : {}", e );
         assert!( true ); // Expected for HTTP fallback
       },
       Err( _ ) => {
@@ -295,7 +295,7 @@ mod integration_tests {
 
     // Test 1: Invalid configuration
     let invalid_config_result = WebSocketConfig::builder()
-      .heartbeat_interval( Duration::from_secs( 0 ) ) // Invalid: zero interval
+      .heartbeat_interval( Duration::from_secs( 0 ) ) // Invalid : zero interval
       .build();
     assert!( invalid_config_result.is_err() );
     println!( "✓ Invalid configuration properly rejected" );
@@ -379,7 +379,7 @@ mod integration_tests {
           {
             let message = WebSocketMessage::Text( format!( "Control test message {}", i ) );
             connection.send_message( message ).await?;
-            tokio::time::sleep( Duration::from_millis( 50 ) ).await;
+            tokio ::time::sleep( Duration::from_millis( 50 ) ).await;
           }
 
           // Test different message types
@@ -409,7 +409,7 @@ mod integration_tests {
         println!( "✓ Streaming control test completed successfully" );
       },
       Ok( Err( e ) ) => {
-        println!( "⚠ Streaming control test failed as expected: {}", e );
+        println!( "⚠ Streaming control test failed as expected : {}", e );
         assert!( true ); // Expected for HTTP fallback
       },
       Err( _ ) => {
@@ -460,18 +460,18 @@ mod integration_tests {
         match send_result
         {
           Ok( () ) => println!( "✓ Message sent successfully via fallback" ),
-          Err( e ) => println!( "⚠ Message send failed as expected in fallback: {}", e ),
+          Err( e ) => println!( "⚠ Message send failed as expected in fallback : {}", e ),
         }
 
         let close_result = connection.close().await;
         match close_result
         {
           Ok( () ) => println!( "✓ Fallback connection closed successfully" ),
-          Err( e ) => println!( "⚠ Fallback connection close failed: {}", e ),
+          Err( e ) => println!( "⚠ Fallback connection close failed : {}", e ),
         }
       },
       Ok( Err( e ) ) => {
-        println!( "⚠ Fallback connection failed as expected: {}", e );
+        println!( "⚠ Fallback connection failed as expected : {}", e );
         assert!( true ); // This is acceptable - fallback may not be fully implemented
       },
       Err( _ ) => {
@@ -565,13 +565,13 @@ mod unit_tests {
   fn test_websocket_metrics()
   {
     let metrics = WebSocketMetrics {
-      messages_sent: 10,
-      messages_received: 15,
-      bytes_sent: 1024,
-      bytes_received: 2048,
-      connection_count: 1,
-      reconnection_count: 2,
-      error_count: 0,
+      messages_sent : 10,
+      messages_received : 15,
+      bytes_sent : 1024,
+      bytes_received : 2048,
+      connection_count : 1,
+      reconnection_count : 2,
+      error_count : 0,
     };
 
     assert_eq!( metrics.messages_sent, 10 );

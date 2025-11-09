@@ -39,7 +39,7 @@ mod private
   {
     /// Create new compression config with default settings
     ///
-    /// Default: level=6 (balanced), `min_size=1024` (1KB)
+    /// Default : level=6 (balanced), `min_size=1024` (1KB)
     #[ inline ]
     #[ must_use ]
     pub fn new() -> Self
@@ -68,7 +68,7 @@ mod private
     /// Set minimum size threshold for compression
     ///
     /// Bodies smaller than this size won't be compressed.
-    /// Default: 1024 bytes (1KB)
+    /// Default : 1024 bytes (1KB)
     #[ inline ]
     #[ must_use ]
     pub fn with_min_size( mut self, min_size : usize ) -> Self
@@ -160,8 +160,8 @@ mod private
   /// Add compression headers to request
   ///
   /// Adds:
-  /// - `Content-Encoding: gzip` if data is compressed
-  /// - `Accept-Encoding: gzip, deflate` to accept compressed responses
+  /// - `Content-Encoding : gzip` if data is compressed
+  /// - `Accept-Encoding : gzip, deflate` to accept compressed responses
   #[ inline ]
   pub fn add_compression_headers
   (
@@ -172,8 +172,8 @@ mod private
     // Always accept compressed responses
     headers.insert
     (
-      reqwest::header::ACCEPT_ENCODING,
-      reqwest::header::HeaderValue::from_static( "gzip, deflate" ),
+      reqwest ::header::ACCEPT_ENCODING,
+      reqwest ::header::HeaderValue::from_static( "gzip, deflate" ),
     );
 
     // Add content-encoding if we compressed the request
@@ -181,15 +181,15 @@ mod private
     {
       headers.insert
       (
-        reqwest::header::CONTENT_ENCODING,
-        reqwest::header::HeaderValue::from_static( "gzip" ),
+        reqwest ::header::CONTENT_ENCODING,
+        reqwest ::header::HeaderValue::from_static( "gzip" ),
       );
     }
   }
 }
 
 #[ cfg( feature = "compression" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

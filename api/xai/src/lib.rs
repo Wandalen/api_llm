@@ -11,7 +11,7 @@
 //! This crate provides a comprehensive HTTP client for interacting with X.AI's Grok API.
 //! It handles authentication, request/response serialization, and streaming support.
 //!
-//! # Governing Principle: "Thin Client, Rich API"
+//! # Governing Principle : "Thin Client, Rich API"
 //!
 //! This library follows the principle of **"Thin Client, Rich API"** - exposing all
 //! server-side functionality transparently while maintaining zero client-side intelligence
@@ -39,11 +39,11 @@
 //! The following enterprise reliability features are **explicitly allowed** when implemented
 //! with explicit configuration and transparent operation:
 //!
-//! - **Configurable Retry Logic**: Exponential backoff with explicit configuration (feature: `retry`)
-//! - **Circuit Breaker Pattern**: Failure threshold management with transparent state (feature: `circuit_breaker`)
-//! - **Rate Limiting**: Request throttling with explicit rate configuration (feature: `rate_limiting`)
-//! - **Failover Support**: Multi-endpoint configuration and automatic switching (feature: `failover`)
-//! - **Health Checks**: Periodic endpoint health verification and monitoring (feature: `health_checks`)
+//! - **Configurable Retry Logic**: Exponential backoff with explicit configuration (feature : `retry`)
+//! - **Circuit Breaker Pattern**: Failure threshold management with transparent state (feature : `circuit_breaker`)
+//! - **Rate Limiting**: Request throttling with explicit rate configuration (feature : `rate_limiting`)
+//! - **Failover Support**: Multi-endpoint configuration and automatic switching (feature : `failover`)
+//! - **Health Checks**: Periodic endpoint health verification and monitoring (feature : `health_checks`)
 //!
 //! ## State Management Policy
 //!
@@ -68,7 +68,7 @@
 //! This crate follows wTools ecosystem conventions by prioritizing `workspace_tools`
 //! for secret management over environment variables.
 //!
-//! ## Recommended: Automatic Fallback Chain
+//! ## Recommended : Automatic Fallback Chain
 //!
 //! The `Secret::load_with_fallbacks()` method tries multiple sources in priority order:
 //!
@@ -104,15 +104,15 @@
 //! ```no_run
 //! use api_xai::Secret;
 //!
-//! // Recommended: tries all sources (workspace-first)
+//! // Recommended : tries all sources (workspace-first)
 //! let secret = Secret::load_with_fallbacks( "XAI_API_KEY" )?;
 //!
-//! // Explicit: load from workspace only
+//! // Explicit : load from workspace only
 //! let secret = Secret::load_from_workspace( "XAI_API_KEY", "-secrets.sh" )?;
 //!
-//! // Explicit: load from environment only
+//! // Explicit : load from environment only
 //! let secret = Secret::load_from_env( "XAI_API_KEY" )?;
-//! # Ok::<(), Box<dyn std::error::Error>>(())
+//! # Ok::<(), Box< dyn std::error::Error > >(())
 //! ```
 //!
 //! # Examples
@@ -134,7 +134,7 @@
 //!
 //! // Send the request
 //! let response = client.chat().create( request ).await?;
-//! println!( "Grok responded: {:?}", response.choices[ 0 ].message.content );
+//! println!( "Grok responded : {:?}", response.choices[ 0 ].message.content );
 //! # Ok( () )
 //! # }
 //! ```
@@ -148,7 +148,7 @@ mod private {}
 pub use client_api_accessors::ClientApiAccessors;
 
 #[ cfg( feature = "enabled" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   /// Error types and result handling for XAI API operations.
   layer error;

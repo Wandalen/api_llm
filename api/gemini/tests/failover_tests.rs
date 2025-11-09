@@ -180,22 +180,22 @@ mod unit_tests {
   fn test_endpoint_health_status()
   {
     let healthy = EndpointHealth {
-      endpoint: "https://test.com".to_string(),
-      status: HealthStatus::Healthy,
-      last_check: SystemTime::now(),
-      response_time: Some( Duration::from_millis( 100 ) ),
-      consecutive_failures: 0,
+      endpoint : "https://test.com".to_string(),
+      status : HealthStatus::Healthy,
+      last_check : SystemTime::now(),
+      response_time : Some( Duration::from_millis( 100 ) ),
+      consecutive_failures : 0,
     };
 
     assert_eq!( healthy.status, HealthStatus::Healthy );
     assert_eq!( healthy.consecutive_failures, 0 );
 
     let unhealthy = EndpointHealth {
-      endpoint: "https://test.com".to_string(),
-      status: HealthStatus::Unhealthy,
-      last_check: SystemTime::now(),
-      response_time: None,
-      consecutive_failures: 3,
+      endpoint : "https://test.com".to_string(),
+      status : HealthStatus::Unhealthy,
+      last_check : SystemTime::now(),
+      response_time : None,
+      consecutive_failures : 3,
     };
 
     assert_eq!( unhealthy.status, HealthStatus::Unhealthy );

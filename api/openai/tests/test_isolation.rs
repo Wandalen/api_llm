@@ -33,7 +33,7 @@ impl TestIsolation
   pub fn new( test_name : &str ) -> Self
   {
     // Reset secret exposure counter for this test if available
-    // Note: reset_exposure_count is only available when the Secret module is compiled with cfg(test)
+    // Note : reset_exposure_count is only available when the Secret module is compiled with cfg(test)
     // Since we're in a test context, we'll skip this call for now
     
     Self
@@ -64,7 +64,7 @@ impl TestIsolation
     }
     
     // Set new value
-    std::env::set_var( key, value );
+    std ::env::set_var( key, value );
   }
   
   /// Remove an environment variable for this test with automatic cleanup
@@ -86,7 +86,7 @@ impl TestIsolation
     }
     
     // Remove variable
-    std::env::remove_var( key );
+    std ::env::remove_var( key );
   }
   
   /// Create isolated temporary directory for this test
@@ -110,10 +110,10 @@ impl TestIsolation
     self.temp_dir_path = Some( path.clone() );
     
     // Ensure directory exists and is accessible
-    std::fs::create_dir_all( &path )?;
+    std ::fs::create_dir_all( &path )?;
     
     // Leak the tempdir handle to prevent automatic cleanup during test
-    core::mem::forget( temp_dir );
+    core ::mem::forget( temp_dir );
     
     Ok( self.temp_dir_path.as_ref().unwrap() )
   }
@@ -318,14 +318,14 @@ impl IsolatedClient
       || api_key.len() < 20
     {
       let key_preview = &api_key[ ..core::cmp::min( 10, api_key.len() ) ];
-      return Err( format!( "INTEGRATION TEST FAILURE: Invalid API key detected. Real integration tests require valid OpenAI API credentials, got: {key_preview}..." ).into() );
+      return Err( format!( "INTEGRATION TEST FAILURE: Invalid API key detected. Real integration tests require valid OpenAI API credentials, got : {key_preview}..." ).into() );
     }
     
     let env = api_openai::environment::OpenaiEnvironmentImpl::build( secret, None, None, api_openai::environment::OpenAIRecommended::base_url().to_string(), api_openai::environment::OpenAIRecommended::realtime_base_url().to_string() )
-      .map_err( | e | -> Box< dyn core::error::Error > { format!( "INTEGRATION TEST FAILURE: Failed to build environment with real credentials: {e}" ).into() } )?;
+      .map_err( | e | -> Box< dyn core::error::Error > { format!( "INTEGRATION TEST FAILURE: Failed to build environment with real credentials : {e}" ).into() } )?;
     
-    api_openai::Client::build( env )
-      .map_err( | e | format!( "INTEGRATION TEST FAILURE: Failed to build client with real API environment: {e}" ).into() )
+    api_openai ::Client::build( env )
+      .map_err( | e | format!( "INTEGRATION TEST FAILURE: Failed to build client with real API environment : {e}" ).into() )
   }
   
 }

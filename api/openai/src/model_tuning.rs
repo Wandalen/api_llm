@@ -10,8 +10,8 @@ mod private
 {
   use std::
   {
-    collections::HashMap,
-    time::SystemTime,
+    collections ::HashMap,
+    time ::SystemTime,
   };
   use core::time::Duration;
   use serde::{ Deserialize, Serialize };
@@ -730,7 +730,7 @@ mod private
 
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use private::TuningStatus;
   exposed use private::TrainingObjective;

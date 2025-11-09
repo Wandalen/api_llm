@@ -8,9 +8,9 @@ use api_openai::ClientApiAccessors;
 use api_openai::
 {
   Client,
-  components::
+  components ::
   {
-    responses::{ CreateResponseRequest, ResponseInput, ResponseStreamEvent },
+    responses ::{ CreateResponseRequest, ResponseInput, ResponseStreamEvent },
   },
 };
 
@@ -30,9 +30,9 @@ async fn test_conversation_history_preservation() -> Result< (), Box< dyn std::e
   let system_instructions = "You are a helpful math assistant. Remember values that users give you and use them in calculations.".to_string();
   
   // Initialize conversation state
-  let mut previous_response_id: Option< String > = None;
+  let mut previous_response_id : Option< String > = None;
 
-  // First interaction: set x=13
+  // First interaction : set x=13
   let request1 = CreateResponseRequest::former()
     .model("gpt-4o-mini".to_string())
     .input(ResponseInput::String("x=13".to_string()))
@@ -42,7 +42,7 @@ async fn test_conversation_history_preservation() -> Result< (), Box< dyn std::e
   // No previous_response_id for first request
   let request1 = request1.form();
 
-  println!("Sending first request: {request1:?}");
+  println!("Sending first request : {request1:?}");
   let mut receiver1 = client.responses().create_stream(request1).await?;
   let mut response1 = String::new();
   println!("Started receiving first response...");
@@ -66,7 +66,7 @@ async fn test_conversation_history_preservation() -> Result< (), Box< dyn std::e
     }
   }
 
-  // Second interaction: ask for x*3 using previous_response_id for context
+  // Second interaction : ask for x*3 using previous_response_id for context
   let mut request2 = CreateResponseRequest::former()
     .model("gpt-4o-mini".to_string())
     .input(ResponseInput::String("Please calculate x times 3".to_string()))
@@ -81,7 +81,7 @@ async fn test_conversation_history_preservation() -> Result< (), Box< dyn std::e
   
   let request2 = request2.form();
 
-  println!("Sending second request: {request2:?}");
+  println!("Sending second request : {request2:?}");
   let mut receiver2 = client.responses().create_stream(request2).await?;
   println!("Started receiving second response...");
   let mut response2 = String::new();
@@ -96,7 +96,7 @@ async fn test_conversation_history_preservation() -> Result< (), Box< dyn std::e
     {
       ResponseStreamEvent::ResponseTextDelta(e) =>
       {
-        println!("Text delta: '{}'", e.delta);
+        println!("Text delta : '{}'", e.delta);
         response2.push_str(&e.delta);
       },
       ResponseStreamEvent::ResponseCompleted(_) =>
@@ -105,20 +105,20 @@ async fn test_conversation_history_preservation() -> Result< (), Box< dyn std::e
         break;
       },
       other => {
-        println!("Other event: {other:?}");
+        println!("Other event : {other:?}");
       }
     }
   }
-  println!("Total events received for second response: {events_received}");
+  println!("Total events received for second response : {events_received}");
 
-  println!("First response: {response1}");
-  println!("Second response: {response2}");
+  println!("First response : {response1}");
+  println!("Second response : {response2}");
 
   // This test should pass if conversation history is properly preserved via previous_response_id
   // The assistant should remember that x=13 from the first interaction and calculate x*3=39
   assert!(
     response2.contains("39") || response2.contains("thirty-nine"),
-    "Assistant should remember x=13 from previous interaction and calculate x*3=39. Got response: {response2}. Previous response ID was: {previous_response_id:?}"
+    "Assistant should remember x=13 from previous interaction and calculate x*3=39. Got response : {response2}. Previous response ID was : {previous_response_id:?}"
   );
 
   Ok(())

@@ -74,7 +74,7 @@ where
         // Special handling for rate limits
         if let api_gemini::error::Error::RateLimitError( msg ) = &error
         {
-          println!( "Rate limit hit: {msg}. Waiting longer..." );
+          println!( "Rate limit hit : {msg}. Waiting longer..." );
           delay = config.max_delay; // Use max delay for rate limits
         }
 
@@ -104,12 +104,12 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     Ok( _ ) => println!( "Client created successfully" ),
     Err( e ) => match e
     {
-      api_gemini::error::Error::AuthenticationError( msg ) =>
+      api_gemini ::error::Error::AuthenticationError( msg ) =>
       {
-        println!( "Authentication error as expected: {msg}" );
-        println!( "Solution: Set GEMINI_API_KEY environment variable or use .api_key()" );
+        println!( "Authentication error as expected : {msg}" );
+        println!( "Solution : Set GEMINI_API_KEY environment variable or use .api_key()" );
       },
-      _ => println!( "Unexpected error type: {e:?}" ),
+      _ => println!( "Unexpected error type : {e:?}" ),
     }
   }
 
@@ -167,12 +167,12 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     Ok( _ ) => println!( "Unexpected success" ),
     Err( e ) => match e
     {
-      api_gemini::error::Error::ApiError( msg ) =>
+      api_gemini ::error::Error::ApiError( msg ) =>
       {
         println!( "API error (invalid model): {msg}" );
-        println!( "Solution: Use client.models().list() to see available models" );
+        println!( "Solution : Use client.models().list() to see available models" );
       },
-      _ => println!( "Error type: {e:?}" ),
+      _ => println!( "Error type : {e:?}" ),
     }
   }
 
@@ -248,12 +248,12 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
         {
           if let Some( text ) = &part.text
           {
-            println!( "Response: {text}" );
+            println!( "Response : {text}" );
           }
         }
       }
     },
-    Err( e ) => println!( "Failed after {} attempts: {:?}", retry_config.max_attempts, e ),
+    Err( e ) => println!( "Failed after {} attempts : {:?}", retry_config.max_attempts, e ),
   }
 
   // Example 4: Handling malformed requests
@@ -279,16 +279,16 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     Ok( _ ) => println!( "Unexpected success" ),
     Err( e ) => match e
     {
-      api_gemini::error::Error::InvalidArgument( msg ) =>
+      api_gemini ::error::Error::InvalidArgument( msg ) =>
       {
-        println!( "Invalid argument error: {msg}" );
-        println!( "Solution: Ensure request has at least one content item" );
+        println!( "Invalid argument error : {msg}" );
+        println!( "Solution : Ensure request has at least one content item" );
       },
-      api_gemini::error::Error::ApiError( msg ) =>
+      api_gemini ::error::Error::ApiError( msg ) =>
       {
-        println!( "API rejected malformed request: {msg}" );
+        println!( "API rejected malformed request : {msg}" );
       },
-      _ => println!( "Error: {e:?}" ),
+      _ => println!( "Error : {e:?}" ),
     }
   }
 
@@ -308,7 +308,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
 
     for model in models
     {
-      println!( "Trying model: {model}" );
+      println!( "Trying model : {model}" );
 
       let request = GenerateContentRequest
       {
@@ -356,7 +356,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
             {
               if let Some( text ) = &part.text
               {
-                println!( "Success with model: {model}" );
+                println!( "Success with model : {model}" );
                 return Ok( text.clone() );
               }
             }
@@ -374,8 +374,8 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
 
   match generate_with_fallback( &client, "Tell me a short joke" ).await
   {
-    Ok( response ) => println!( "Fallback response: {response}" ),
-    Err( e ) => println!( "All fallback attempts failed: {e}" ),
+    Ok( response ) => println!( "Fallback response : {response}" ),
+    Err( e ) => println!( "All fallback attempts failed : {e}" ),
   }
 
   // Example 6: Error monitoring and logging patterns
@@ -404,8 +404,8 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
 
       match error
       {
-        api_gemini::error::Error::RateLimitError( _ ) => self.rate_limit_errors += 1,
-        api_gemini::error::Error::NetworkError( _ ) => self.network_errors += 1,
+        api_gemini ::error::Error::RateLimitError( _ ) => self.rate_limit_errors += 1,
+        api_gemini ::error::Error::NetworkError( _ ) => self.network_errors += 1,
         _ => self.other_errors += 1,
       }
     }
@@ -440,11 +440,11 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
   };
 
   println!( "Error Metrics:" );
-  println!( "  Total requests: {}", metrics.total_requests );
-  println!( "  Success rate: {:.1}%", metrics.success_rate() * 100.0 );
-  println!( "  Rate limit errors: {}", metrics.rate_limit_errors );
-  println!( "  Network errors: {}", metrics.network_errors );
-  println!( "  Other errors: {}", metrics.other_errors );
+  println!( "  Total requests : {}", metrics.total_requests );
+  println!( "  Success rate : {:.1}%", metrics.success_rate() * 100.0 );
+  println!( "  Rate limit errors : {}", metrics.rate_limit_errors );
+  println!( "  Network errors : {}", metrics.network_errors );
+  println!( "  Other errors : {}", metrics.other_errors );
 
   println!( "\n=== Best Practices for Error Handling ===" );
   println!( "1. Always handle authentication errors at startup" );

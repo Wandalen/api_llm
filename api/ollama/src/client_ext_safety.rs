@@ -26,8 +26,8 @@ mod private
     pub async fn configure_safety_settings( &mut self, config : crate::safety_settings::SafetyConfiguration ) -> OllamaResult< () >
     {
       // Validate configuration before applying
-      crate::safety_settings::validate_safety_configuration( &config )
-        .map_err( | e | format_err!( "Invalid safety configuration: {}", e ) )?;
+      crate ::safety_settings::validate_safety_configuration( &config )
+        .map_err( | e | format_err!( "Invalid safety configuration : {}", e ) )?;
 
       // For now, this is a placeholder implementation
       // In a real implementation, this would send the configuration to Ollama
@@ -75,16 +75,26 @@ mod private
 
       Ok( crate::safety_settings::ContentFilterResponse {
         is_safe,
-        passed_filters : if is_safe { request.filter_categories.clone() } else { Vec::new() },
-        failed_filters : if is_safe { Vec::new() } else { request.filter_categories.clone() },
-        risk_score : if is_safe { 0.1 } else { 0.9 },
-        recommended_action : if is_safe { crate::safety_settings::SafetyAction::Allow } else { crate::safety_settings::SafetyAction::Block },
+        passed_filters : if is_safe { request.filter_categories.clone() }
+ else
+ { Vec::new() },
+        failed_filters : if is_safe { Vec::new() }
+ else
+ { request.filter_categories.clone() },
+        risk_score : if is_safe { 0.1 }
+ else
+ { 0.9 },
+        recommended_action : if is_safe { crate::safety_settings::SafetyAction::Allow }
+ else
+ { crate::safety_settings::SafetyAction::Block },
         filter_results : request.filter_categories.iter().map( | category |
-          crate::safety_settings::FilterResult {
+          crate ::safety_settings::FilterResult {
             category : category.clone(),
             passed : is_safe,
             confidence : 0.85,
-            explanation : Some( if is_safe { "Content appears safe".to_string() } else { "Content flagged for safety review".to_string() } ),
+            explanation : Some( if is_safe { "Content appears safe".to_string() }
+ else
+ { "Content flagged for safety review".to_string() } ),
           }
         ).collect(),
         audit_id : Some( format!( "audit-{}", std::time::SystemTime::now().duration_since( std::time::UNIX_EPOCH ).unwrap().as_millis() ) ),
@@ -112,7 +122,9 @@ mod private
                    request.content.to_lowercase().contains( "science" ) ||
                    !request.content.contains( "UNSAFE_CONTENT_SIMULATION" );
 
-      let risk_score = if is_safe { 0.15 } else { 0.85 };
+      let risk_score = if is_safe { 0.15 }
+ else
+ { 0.85 };
 
       Ok( crate::safety_settings::HarmClassificationResponse {
         is_safe,
@@ -121,7 +133,7 @@ mod private
           Vec::new()
         } else {
           vec![
-            crate::safety_settings::HarmCategory {
+            crate ::safety_settings::HarmCategory {
               category : crate::safety_settings::HarmType::Violence,
               confidence : 0.75,
               severity : crate::safety_settings::SeverityLevel::Medium,
@@ -130,8 +142,12 @@ mod private
           ]
         },
         overall_risk_score : risk_score,
-        recommended_action : if is_safe { crate::safety_settings::SafetyAction::Allow } else { crate::safety_settings::SafetyAction::Block },
-        policy_violations : if is_safe { Vec::new() } else { vec![ "Content policy violation".to_string() ] },
+        recommended_action : if is_safe { crate::safety_settings::SafetyAction::Allow }
+ else
+ { crate::safety_settings::SafetyAction::Block },
+        policy_violations : if is_safe { Vec::new() }
+ else
+ { vec![ "Content policy violation".to_string() ] },
         audit_id : Some( format!( "harm-audit-{}", std::time::SystemTime::now().duration_since( std::time::UNIX_EPOCH ).unwrap().as_millis() ) ),
       } )
     }
@@ -226,7 +242,7 @@ mod private
 }
 
 #[ cfg( feature = "safety_settings" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use {};
 }

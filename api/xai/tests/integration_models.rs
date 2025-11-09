@@ -36,7 +36,7 @@ async fn test_list_models()
   println!( "✅ List models test passed" );
   println!( "Found {} models:", response.data.len() );
   for model in &response.data {
-    println!( "  - {} (created: {}, owned by: {})",
+    println!( "  - {} (created : {}, owned by : {})",
       model.id,
       model.created,
       model.owned_by
@@ -59,9 +59,9 @@ async fn test_get_specific_model_grok_beta()
   assert!( !model.owned_by.is_empty(), "Should have owner" );
 
   println!( "✅ Get grok-3 model test passed" );
-  println!( "Model: {}", model.id );
-  println!( "Created: {}", model.created );
-  println!( "Owned by: {}", model.owned_by );
+  println!( "Model : {}", model.id );
+  println!( "Created : {}", model.created );
+  println!( "Owned by : {}", model.owned_by );
 }
 
 #[ tokio::test ]
@@ -83,10 +83,10 @@ async fn test_get_nonexistent_model()
     error_str.contains( "not found" ) ||
     error_str.contains( "Not Found" );
 
-  assert!( is_not_found_error, "Error should indicate model not found, got: {error_str}" );
+  assert!( is_not_found_error, "Error should indicate model not found, got : {error_str}" );
 
   println!( "✅ Nonexistent model error handling test passed" );
-  println!( "Error: {error_str}" );
+  println!( "Error : {error_str}" );
 }
 
 #[ tokio::test ]
@@ -152,7 +152,7 @@ async fn test_list_models_response_is_consistent()
     .expect( "Second list models call should succeed" );
 
   // Should return same number of models (assuming no models were added/removed)
-  // Note: This might occasionally fail if models are updated during test run
+  // Note : This might occasionally fail if models are updated during test run
   assert_eq!(
     response1.data.len(),
     response2.data.len(),

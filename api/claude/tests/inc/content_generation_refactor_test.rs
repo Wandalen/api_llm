@@ -8,8 +8,8 @@
 //! - Tests MUST FAIL IMMEDIATELY on any API endpoint errors
 //! - NO SILENT PASSES allowed when problems occur
 //!
-//! Run with: cargo test --features content-generation,integration
-//! Requires: Valid `ANTHROPIC_API_KEY` in environment or ../../secret/-secrets.sh
+//! Run with : cargo test --features content-generation,integration
+//! Requires : Valid `ANTHROPIC_API_KEY` in environment or ../../secret/-secrets.sh
 
 #[ allow( unused_imports ) ]
 use super::*;
@@ -149,9 +149,9 @@ mod content_generation_refactor_tests
   {
     // Test handling multiple messages in conversation
     let messages = vec![
-      the_module::Message::user( "What is AI?".to_string() ),
-      the_module::Message::assistant( "AI stands for Artificial Intelligence...".to_string() ),
-      the_module::Message::user( "Can you give me an example?".to_string() ),
+      the_module ::Message::user( "What is AI?".to_string() ),
+      the_module ::Message::assistant( "AI stands for Artificial Intelligence...".to_string() ),
+      the_module ::Message::user( "Can you give me an example?".to_string() ),
     ];
 
     let request = the_module::ContentGenerationRequest::builder()
@@ -162,7 +162,7 @@ mod content_generation_refactor_tests
       .unwrap();
 
     assert_eq!( request.messages.len(), 3 );
-    // Note: Messages don't implement PartialEq, so we check length and structure
+    // Note : Messages don't implement PartialEq, so we check length and structure
     assert_eq!( request.messages.len(), messages.len() );
   }
 
@@ -302,7 +302,7 @@ async fn integration_content_generation_refactor_real_api()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted - this confirms real API usage" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION: Content generation must work: {err}" ),
+    Err( err ) => panic!( "INTEGRATION: Content generation must work : {err}" ),
   };
 
   // Verify response structure
@@ -314,6 +314,6 @@ async fn integration_content_generation_refactor_real_api()
   assert!( response.content.len() > 10, "Haiku should have some content" );
 
   println!( "✅ Content generation refactor integration test passed!" );
-  println!( "   Generated haiku: {}", response.content );
-  println!( "   Output tokens: {}", response.usage.output_tokens );
+  println!( "   Generated haiku : {}", response.content );
+  println!( "   Output tokens : {}", response.usage.output_tokens );
 }

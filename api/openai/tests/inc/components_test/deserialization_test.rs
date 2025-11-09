@@ -22,26 +22,26 @@ use api_openai::exposed::
 {
   Client,
   OpenAIError,
-  environment::EnvironmentInterface,
+  environment ::EnvironmentInterface,
   Secret,
-  components::
+  components ::
   {
-    responses::
+    responses ::
     {
       CreateResponseRequest,
       ResponseObject,
       ResponseInput,
       InputItem,
     },
-    input::
+    input ::
     {
       InputMessage,
       InputContentPart,
       InputText,
     },
-    common::{ ModelIds, ModelIdsResponses },
-    tools::{ FunctionTool, FunctionParameters },
-    chat_shared::{
+    common ::{ ModelIds, ModelIdsResponses },
+    tools ::{ FunctionTool, FunctionParameters },
+    chat_shared ::{
       CreateChatCompletionResponse,
       ChatCompletionRequest,
       ChatCompletionRequestMessage,
@@ -72,7 +72,7 @@ use api_openai::exposed::components::tools::{ ComputerToolCall, ComputerAction }
 use api_openai::exposed::components::tools::FunctionToolCall as FunctionToolCall2;
 
 /// Tests that a simple `ResponseObject` can be deserialized.
-/// Test Combination: D1.1
+/// Test Combination : D1.1
 #[ test ]
 fn response_simple_completed()
 {
@@ -110,7 +110,7 @@ fn response_simple_completed()
 }
 
 /// Tests that a `ResponseObject` with usage data can be deserialized.
-/// Test Combination: D1.2
+/// Test Combination : D1.2
 #[ test ]
 fn response_with_usage()
 {
@@ -143,7 +143,7 @@ fn response_with_usage()
 }
 
 /// Tests that a `ResponseObject` with refusal content can be deserialized.
-/// Test Combination: D1.3
+/// Test Combination : D1.3
 #[ test ]
 fn response_with_refusal()
 {
@@ -197,7 +197,7 @@ fn response_with_refusal()
 }
 
 /// Tests that a `ResponseObject` with a function call can be deserialized.
-/// Test Combination: D1.4
+/// Test Combination : D1.4
 #[ test ]
 fn response_with_function_call()
 {
@@ -240,7 +240,7 @@ fn response_with_function_call()
 }
 
 /// Tests that a `ResponseObject` with a file search call can be deserialized.
-/// Test Combination: D1.5
+/// Test Combination : D1.5
 #[ test ]
 fn response_with_file_search_call()
 {
@@ -298,7 +298,7 @@ fn response_with_file_search_call()
 }
 
 /// Tests that a `ResponseObject` with a web search call can be deserialized.
-/// Test Combination: D1.6
+/// Test Combination : D1.6
 #[ test ]
 fn response_with_web_search_call()
 {
@@ -336,7 +336,7 @@ fn response_with_web_search_call()
 }
 
 /// Tests that a `ResponseObject` with a computer call can be deserialized.
-/// Test Combination: D1.7
+/// Test Combination : D1.7
 #[ test ]
 fn response_with_computer_call()
 {
@@ -388,7 +388,7 @@ fn response_with_computer_call()
 }
 
 /// Tests that a failed `ResponseObject` can be deserialized.
-/// Test Combination: D1.8
+/// Test Combination : D1.8
 #[ test ]
 fn response_failed()
 {
@@ -419,7 +419,7 @@ fn response_failed()
 }
 
 /// Tests that an empty `ResponseItemList` can be deserialized.
-/// Test Combination: D1.9
+/// Test Combination : D1.9
 #[ test ]
 fn response_item_list_empty()
 {
@@ -443,7 +443,7 @@ fn response_item_list_empty()
 }
 
 /// Tests that a `ResponseItemList` with multiple items can be deserialized.
-/// Test Combination: D1.10
+/// Test Combination : D1.10
 #[ test ]
 fn response_item_list_multiple_items()
 {
@@ -495,7 +495,7 @@ fn response_item_list_multiple_items()
 }
 
 /// Tests that a `ResponseDeleted` object can be deserialized.
-/// Test Combination: D1.11
+/// Test Combination : D1.11
 #[ test ]
 fn response_deleted()
 {

@@ -6,7 +6,7 @@
 //!
 //! - File-based configuration watching
 //! - Runtime reload without restart
-//! - Thread-safe config updates via `Arc<RwLock<>>`
+//! - Thread-safe config updates via `Arc< RwLock<> >`
 //! - Configuration validation before applying
 //! - JSON configuration format
 //!
@@ -31,31 +31,31 @@ mod private
   #[ derive( Debug, Clone, Serialize, Deserialize, PartialEq ) ]
   pub struct RuntimeConfig
   {
-    /// Base URL for API requests (default: <https://api.anthropic.com>)
+    /// Base URL for API requests (default : < https://api.anthropic.com >)
     #[ serde( default = "default_base_url" ) ]
     pub base_url : String,
-    /// API version (default: "2023-06-01")
+    /// API version (default : "2023-06-01")
     #[ serde( default = "default_api_version" ) ]
     pub api_version : String,
-    /// Request timeout in milliseconds (default: 300000 = 5 minutes)
+    /// Request timeout in milliseconds (default : 300000 = 5 minutes)
     #[ serde( default = "default_timeout_ms" ) ]
     pub timeout_ms : u64,
-    /// Enable retry logic (default: true)
+    /// Enable retry logic (default : true)
     #[ serde( default = "default_true" ) ]
     pub enable_retry : bool,
-    /// Maximum retry attempts (default: 3)
+    /// Maximum retry attempts (default : 3)
     #[ serde( default = "default_max_retries" ) ]
     pub max_retries : u32,
-    /// Enable circuit breaker (default: true)
+    /// Enable circuit breaker (default : true)
     #[ serde( default = "default_true" ) ]
     pub enable_circuit_breaker : bool,
-    /// Circuit breaker failure threshold (default: 5)
+    /// Circuit breaker failure threshold (default : 5)
     #[ serde( default = "default_failure_threshold" ) ]
     pub circuit_breaker_threshold : u32,
-    /// Enable rate limiting (default: false)
+    /// Enable rate limiting (default : false)
     #[ serde( default ) ]
     pub enable_rate_limiting : bool,
-    /// Rate limit: requests per second (default: 10)
+    /// Rate limit : requests per second (default : 10)
     #[ serde( default = "default_rate_limit" ) ]
     pub rate_limit_rps : u32,
   }
@@ -246,7 +246,7 @@ mod private
           }
           Err( e ) =>
           {
-            eprintln!( "Watch error: {e:?}" );
+            eprintln!( "Watch error : {e:?}" );
           }
         }
       } )?;
@@ -325,7 +325,7 @@ mod private
 }
 
 #[ cfg( feature = "dynamic-config" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

@@ -22,17 +22,17 @@
 //! ```no_run
 //! # use api_huggingface::reliability::{CircuitBreaker, CircuitBreakerConfig};
 //! # use std::time::Duration;
-//! # async fn example( ) -> Result< ( ), Box< dyn std::error::Error >> {
+//! # async fn example( ) -> Result< ( ), Box< dyn std::error::Error > > {
 //! let circuit_breaker = CircuitBreaker::new(
 //!   CircuitBreakerConfig {
-//!     failure_threshold: 5,
-//!     success_threshold: 2,
-//!     timeout: Duration::from_secs( 60 ),
+//!     failure_threshold : 5,
+//!     success_threshold : 2,
+//!     timeout : Duration::from_secs( 60 ),
 //!   }
 //! );
 //!
 //! let _result = circuit_breaker.execute( async {
-//!   Ok::< String, Box< dyn std::error::Error >>( "response".to_string( ))
+//!   Ok::< String, Box< dyn std::error::Error > >( "response".to_string( ))
 //! } ).await;
 //! # Ok( ( ))
 //! # }
@@ -95,7 +95,7 @@ struct CircuitBreakerState
 pub struct CircuitBreaker 
 {
   config : CircuitBreakerConfig,
-  state : Arc< RwLock< CircuitBreakerState >>,
+  state : Arc< RwLock< CircuitBreakerState > >,
 }
 
 impl CircuitBreaker 
@@ -126,9 +126,9 @@ impl CircuitBreaker
   /// Returns `CircuitBreakerError::CircuitOpen` if the circuit is currently open.
   /// Returns `CircuitBreakerError::Operation( E )` if the operation fails with error `E`.
   #[ inline ]
-  pub async fn execute<F, T, E >( &self, f : F ) -> Result< T, CircuitBreakerError<E > >
+  pub async fn execute< F, T, E >( &self, f : F ) -> Result< T, CircuitBreakerError< E > >
   where
-  F: core::future::Future< Output = Result< T, E >>,
+  F: core::future::Future< Output = Result< T, E > >,
   {
   // Check if we should allow the request
   {
@@ -281,7 +281,7 @@ impl CircuitBreaker
 
 /// Circuit breaker errors
 #[ derive( Debug ) ]
-pub enum CircuitBreakerError<E > 
+pub enum CircuitBreakerError< E > 
 {
   /// Circuit is open, request rejected
   CircuitOpen,
@@ -290,22 +290,22 @@ pub enum CircuitBreakerError<E >
   Operation( E ),
 }
 
-impl<E > core::fmt::Display for CircuitBreakerError<E >
+impl< E > core::fmt::Display for CircuitBreakerError< E >
 where
   E: core::fmt::Display,
 {
   #[ inline ]
-  fn fmt( &self, f : &mut core::fmt::Formatter<'_ > ) -> core::fmt::Result 
+  fn fmt( &self, f : &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result 
   {
   match self
   {
       Self::CircuitOpen => write!( f, "Circuit breaker is open" ),
-      Self::Operation( e ) => write!( f, "Operation failed: {e}" ),
+      Self::Operation( e ) => write!( f, "Operation failed : {e}" ),
   }
   }
 }
 
-impl<E > std::error::Error for CircuitBreakerError<E >
+impl< E > std::error::Error for CircuitBreakerError< E >
 where
   E: std::error::Error + 'static,
 {
@@ -405,7 +405,7 @@ mod tests {
   assert!( cb.is_open( ).await );
 
   // Wait for timeout
-  tokio::time::sleep( Duration::from_millis( 150 )).await;
+  tokio ::time::sleep( Duration::from_millis( 150 )).await;
 
   // Next request should transition to half-open
   let _ = cb.execute( async { Ok::< _, String >( "success" ) } ).await;
@@ -431,7 +431,7 @@ mod tests {
   }
 
   // Wait for timeout
-  tokio::time::sleep( Duration::from_millis( 150 )).await;
+  tokio ::time::sleep( Duration::from_millis( 150 )).await;
 
   // Execute 2 successful operations ( success threshold )
   for _ in 0..2
@@ -460,7 +460,7 @@ mod tests {
   }
 
   // Wait for timeout
-  tokio::time::sleep( Duration::from_millis( 150 )).await;
+  tokio ::time::sleep( Duration::from_millis( 150 )).await;
 
   // One success ( transitions to half-open )
   let _ = cb.execute( async { Ok::< _, String >( "success" ) } ).await;

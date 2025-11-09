@@ -2,16 +2,16 @@ use api_openai::ClientApiAccessors;
 /*
 use api_openai::
 {
-  client::Client,
-  error::OpenAIError,
-  api::responses::
+  client ::Client,
+  error ::OpenAIError,
+  api ::responses::
   {
     CreateResponseRequest,
     ResponseInput,
   },
-  components::
+  components ::
   {
-    common::ModelIdsResponses,
+    common ::ModelIdsResponses,
   },
 };
 
@@ -48,7 +48,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
   let response = client.responses().get( &created_response.id ).await?;
   println!( "Retrieved response ID: {}", response.id );
 
-  // Clean up: delete the created response
+  // Clean up : delete the created response
   client.responses().delete( &created_response.id ).await?;
 
   Ok( () )

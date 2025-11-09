@@ -142,7 +142,7 @@ mod retry_execution_tests
 
     // Should fail due to max elapsed time, not max attempts
     let error_msg = result.unwrap_err().to_string();
-    assert!( error_msg.contains( "Max elapsed time exceeded" ), "Expected timeout error, got: {error_msg}" );
+    assert!( error_msg.contains( "Max elapsed time exceeded" ), "Expected timeout error, got : {error_msg}" );
 
     // Should have taken at least the max elapsed time
     assert!( elapsed >= Duration::from_millis( 250 ) );

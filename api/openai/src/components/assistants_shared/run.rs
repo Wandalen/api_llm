@@ -115,7 +115,7 @@ mod private
     /// The ID of the assistant used for execution.
     pub assistant_id : String,
     /// The status of the run.
-    pub status : String, // Enum: queued, in_progress, requires_action, cancelling, cancelled, failed, completed, incomplete, expired
+    pub status : String, // Enum : queued, in_progress, requires_action, cancelling, cancelled, failed, completed, incomplete, expired
     /// Details on the action required to continue the run. Null if no action is required.
     #[ serde( skip_serializing_if = "Option::is_none" ) ]
     pub required_action : Option< RequiredAction >,
@@ -414,7 +414,7 @@ mod private
     /// The type of run step (`message_creation` or `tool_calls`).
     pub r#type : String,
     /// The status of the run step.
-    pub status : String, // Enum: in_progress, cancelled, failed, completed, expired
+    pub status : String, // Enum : in_progress, cancelled, failed, completed, expired
     /// The details of the run step.
     pub step_details : RunStepDetails,
     /// The last error associated with this run step. Null if no errors.
@@ -460,7 +460,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use private::RunLastError;
   exposed use private::RequiredAction;

@@ -53,18 +53,18 @@ fn secret_accepts_longer_valid_key()
 #[ test ]
 fn secret_loads_from_env()
 {
-  std::env::set_var( "XAI_TEST_KEY_1", "xai-test-key-1234567890" );
+  std ::env::set_var( "XAI_TEST_KEY_1", "xai-test-key-1234567890" );
 
   let result = Secret::load_from_env( "XAI_TEST_KEY_1" );
   assert!( result.is_ok() );
 
-  std::env::remove_var( "XAI_TEST_KEY_1" );
+  std ::env::remove_var( "XAI_TEST_KEY_1" );
 }
 
 #[ test ]
 fn secret_fails_when_env_not_set()
 {
-  std::env::remove_var( "XAI_NONEXISTENT_KEY" );
+  std ::env::remove_var( "XAI_NONEXISTENT_KEY" );
 
   let result = Secret::load_from_env( "XAI_NONEXISTENT_KEY" );
   assert!( result.is_err() );
@@ -83,12 +83,12 @@ fn secret_fails_when_env_not_set()
 #[ test ]
 fn secret_fails_when_env_has_invalid_key()
 {
-  std::env::set_var( "XAI_INVALID_KEY", "sk-invalid" );
+  std ::env::set_var( "XAI_INVALID_KEY", "sk-invalid" );
 
   let result = Secret::load_from_env( "XAI_INVALID_KEY" );
   assert!( result.is_err() );
 
-  std::env::remove_var( "XAI_INVALID_KEY" );
+  std ::env::remove_var( "XAI_INVALID_KEY" );
 }
 
 #[ test ]
@@ -154,7 +154,7 @@ fn secret_load_with_fallbacks_uses_env_as_fallback()
 {
   // With workspace_tools priority, env vars are used as fallback
   // This test verifies env vars still work when workspace files don't exist
-  std::env::set_var( "XAI_FALLBACK_TEST", "xai-from-env-1234567890" );
+  std ::env::set_var( "XAI_FALLBACK_TEST", "xai-from-env-1234567890" );
 
   let result = Secret::load_with_fallbacks( "XAI_FALLBACK_TEST" );
   assert!( result.is_ok() );
@@ -162,13 +162,13 @@ fn secret_load_with_fallbacks_uses_env_as_fallback()
   let secret = result.unwrap();
   assert_eq!( secret.expose_secret(), "xai-from-env-1234567890" );
 
-  std::env::remove_var( "XAI_FALLBACK_TEST" );
+  std ::env::remove_var( "XAI_FALLBACK_TEST" );
 }
 
 #[ test ]
 fn secret_load_with_fallbacks_fails_when_all_sources_unavailable()
 {
-  std::env::remove_var( "XAI_COMPLETELY_MISSING_KEY" );
+  std ::env::remove_var( "XAI_COMPLETELY_MISSING_KEY" );
 
   let result = Secret::load_with_fallbacks( "XAI_COMPLETELY_MISSING_KEY" );
   assert!( result.is_err() );

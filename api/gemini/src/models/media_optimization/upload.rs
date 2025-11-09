@@ -16,15 +16,15 @@ use tokio::sync::Semaphore;
 pub struct MediaProcessingPipeline
 {
   /// Processing configuration
-  config: MediaProcessingConfig,
+  config : MediaProcessingConfig,
   /// Media cache for processed files
-  cache: Arc< MediaCache >,
+  cache : Arc< MediaCache >,
   /// Semaphore for controlling concurrent operations
-  operation_semaphore: Arc< Semaphore >,
+  operation_semaphore : Arc< Semaphore >,
   /// Processing metrics
-  metrics: Arc< MediaProcessingMetrics >,
+  metrics : Arc< MediaProcessingMetrics >,
   /// Thumbnail generator
-  thumbnail_generator: Option< ThumbnailGenerator >,
+  thumbnail_generator : Option< ThumbnailGenerator >,
 }
 
 /// Media processing metrics
@@ -32,17 +32,17 @@ pub struct MediaProcessingPipeline
 pub struct MediaProcessingMetrics
 {
   /// Total files processed
-  pub files_processed: AtomicU64,
+  pub files_processed : AtomicU64,
   /// Total bytes processed
-  pub bytes_processed: AtomicU64,
+  pub bytes_processed : AtomicU64,
   /// Total processing time in microseconds
-  pub total_processing_time_us: AtomicU64,
+  pub total_processing_time_us : AtomicU64,
   /// Number of failed operations
-  pub failed_operations: AtomicU64,
+  pub failed_operations : AtomicU64,
   /// Number of retries performed
-  pub retries_performed: AtomicU64,
+  pub retries_performed : AtomicU64,
   /// Memory usage high watermark
-  pub memory_high_watermark_bytes: AtomicUsize,
+  pub memory_high_watermark_bytes : AtomicUsize,
 }
 
 impl Default for MediaProcessingMetrics
@@ -51,12 +51,12 @@ impl Default for MediaProcessingMetrics
   fn default() -> Self
   {
     Self {
-      files_processed: AtomicU64::new( 0 ),
-      bytes_processed: AtomicU64::new( 0 ),
-      total_processing_time_us: AtomicU64::new( 0 ),
-      failed_operations: AtomicU64::new( 0 ),
-      retries_performed: AtomicU64::new( 0 ),
-      memory_high_watermark_bytes: AtomicUsize::new( 0 ),
+      files_processed : AtomicU64::new( 0 ),
+      bytes_processed : AtomicU64::new( 0 ),
+      total_processing_time_us : AtomicU64::new( 0 ),
+      failed_operations : AtomicU64::new( 0 ),
+      retries_performed : AtomicU64::new( 0 ),
+      memory_high_watermark_bytes : AtomicUsize::new( 0 ),
     }
   }
 }
@@ -66,7 +66,7 @@ impl MediaProcessingPipeline
   /// Create a new media processing pipeline
   #[ inline ]
   #[ must_use ]
-  pub fn new( config: MediaProcessingConfig ) -> Self
+  pub fn new( config : MediaProcessingConfig ) -> Self
   {
     let cache = Arc::new( MediaCache::new( config.clone() ) );
     let operation_semaphore = Arc::new( Semaphore::new( config.max_concurrent_operations ) );
@@ -76,7 +76,7 @@ impl MediaProcessingPipeline
       config,
       cache,
       operation_semaphore,
-      metrics: Arc::new( MediaProcessingMetrics::default() ),
+      metrics : Arc::new( MediaProcessingMetrics::default() ),
       thumbnail_generator,
     }
   }
@@ -85,9 +85,9 @@ impl MediaProcessingPipeline
   #[ inline ]
   pub async fn process_upload_bytes(
     &self,
-    file_data: Bytes,
-    mime_type: String,
-    display_name: Option< String >
+    file_data : Bytes,
+    mime_type : String,
+    display_name : Option< String >
   ) -> Result< ProcessedMediaResult, crate::error::Error >
   {
     let start_time = Instant::now();
@@ -104,17 +104,17 @@ impl MediaProcessingPipeline
     if let Some( ( cached_data, metadata ) ) = self.cache.get( &cache_key )
     {
       return Ok( ProcessedMediaResult {
-        processed_data: cached_data.clone(),
-        metadata: ProcessedMediaMetadata {
-          original_size: metadata.original_size,
-          processed_size: cached_data.len(),
-          mime_type: metadata.mime_type,
-          is_compressed: metadata.is_compressed,
-          compression_ratio: metadata.compression_ratio,
-          processing_time_ms: 0, // Cached result
-          thumbnail_data: None, // xxx: Cache thumbnails
+        processed_data : cached_data.clone(),
+        metadata : ProcessedMediaMetadata {
+          original_size : metadata.original_size,
+          processed_size : cached_data.len(),
+          mime_type : metadata.mime_type,
+          is_compressed : metadata.is_compressed,
+          compression_ratio : metadata.compression_ratio,
+          processing_time_ms : 0, // Cached result
+          thumbnail_data : None, // xxx : Cache thumbnails
         },
-        cache_hit: true,
+        cache_hit : true,
       } );
     }
 
@@ -141,9 +141,9 @@ impl MediaProcessingPipeline
   /// Process file in memory (for smaller files)
   async fn process_in_memory(
     &self,
-    file_data: Bytes,
-    mime_type: String,
-    _display_name: Option< String >
+    file_data : Bytes,
+    mime_type : String,
+    _display_name : Option< String >
   ) -> Result< ProcessedMediaResult, crate::error::Error >
   {
     let start_time = Instant::now();
@@ -172,25 +172,25 @@ impl MediaProcessingPipeline
 
     Ok( ProcessedMediaResult {
       processed_data,
-      metadata: ProcessedMediaMetadata {
+      metadata : ProcessedMediaMetadata {
         original_size,
         processed_size,
         mime_type,
-        is_compressed: false,
-        compression_ratio: 1.0,
-        processing_time_ms: start_time.elapsed().as_millis() as u64,
+        is_compressed : false,
+        compression_ratio : 1.0,
+        processing_time_ms : start_time.elapsed().as_millis() as u64,
         thumbnail_data,
       },
-      cache_hit: false,
+      cache_hit : false,
     } )
   }
 
   /// Process large file with streaming (for files exceeding memory limit)
   async fn process_large_file(
     &self,
-    file_data: Bytes,
-    mime_type: String,
-    _display_name: Option< String >
+    file_data : Bytes,
+    mime_type : String,
+    _display_name : Option< String >
   ) -> Result< ProcessedMediaResult, crate::error::Error >
   {
     let start_time = Instant::now();
@@ -215,22 +215,22 @@ impl MediaProcessingPipeline
     let processed_data = combined.freeze();
 
     Ok( ProcessedMediaResult {
-      processed_data: processed_data.clone(),
-      metadata: ProcessedMediaMetadata {
+      processed_data : processed_data.clone(),
+      metadata : ProcessedMediaMetadata {
         original_size,
-        processed_size: processed_data.len(),
+        processed_size : processed_data.len(),
         mime_type,
-        is_compressed: false,
-        compression_ratio: 1.0,
-        processing_time_ms: start_time.elapsed().as_millis() as u64,
-        thumbnail_data: None, // Skip thumbnails for large files
+        is_compressed : false,
+        compression_ratio : 1.0,
+        processing_time_ms : start_time.elapsed().as_millis() as u64,
+        thumbnail_data : None, // Skip thumbnails for large files
       },
-      cache_hit: false,
+      cache_hit : false,
     } )
   }
 
   /// Validate file format and detect potential issues
-  fn validate_file_format( &self, file_data: &Bytes, declared_mime_type: &str ) -> Result< (), crate::error::Error >
+  fn validate_file_format( &self, file_data : &Bytes, declared_mime_type : &str ) -> Result< (), crate::error::Error >
   {
     // Basic file signature validation
     if file_data.is_empty()
@@ -255,7 +255,7 @@ impl MediaProcessingPipeline
           return Ok( () );
         }
         return Err( crate::error::Error::ApiError(
-          format!( "File signature doesn't match declared MIME type: {}", declared_mime_type )
+          format!( "File signature doesn't match declared MIME type : {}", declared_mime_type )
         ) );
       }
     }
@@ -269,13 +269,13 @@ impl MediaProcessingPipeline
   }
 
   /// Check if MIME type is an image
-  fn is_image_type( &self, mime_type: &str ) -> bool
+  fn is_image_type( &self, mime_type : &str ) -> bool
   {
     mime_type.starts_with( "image/" )
   }
 
   /// Generate cache key for file
-  fn generate_cache_key( &self, file_data: &Bytes, mime_type: &str ) -> String
+  fn generate_cache_key( &self, file_data : &Bytes, mime_type : &str ) -> String
   {
     let mut hasher = DefaultHasher::new();
     file_data.hash( &mut hasher );
@@ -284,7 +284,7 @@ impl MediaProcessingPipeline
   }
 
   /// Update memory usage high watermark
-  fn update_memory_watermark( &self, current_usage: usize )
+  fn update_memory_watermark( &self, current_usage : usize )
   {
     let current_watermark = self.metrics.memory_high_watermark_bytes.load( Ordering::Relaxed );
     if current_usage > current_watermark
@@ -307,12 +307,12 @@ impl MediaProcessingPipeline
 
     MediaProcessingMetricsReport {
       files_processed,
-      bytes_processed: self.metrics.bytes_processed.load( Ordering::Relaxed ),
+      bytes_processed : self.metrics.bytes_processed.load( Ordering::Relaxed ),
       avg_processing_time_ms,
-      failed_operations: self.metrics.failed_operations.load( Ordering::Relaxed ),
-      retries_performed: self.metrics.retries_performed.load( Ordering::Relaxed ),
-      memory_high_watermark_bytes: self.metrics.memory_high_watermark_bytes.load( Ordering::Relaxed ),
-      cache_stats: self.cache.get_stats(),
+      failed_operations : self.metrics.failed_operations.load( Ordering::Relaxed ),
+      retries_performed : self.metrics.retries_performed.load( Ordering::Relaxed ),
+      memory_high_watermark_bytes : self.metrics.memory_high_watermark_bytes.load( Ordering::Relaxed ),
+      cache_stats : self.cache.get_stats(),
     }
   }
 
@@ -329,11 +329,11 @@ impl MediaProcessingPipeline
   }
 
   /// Process upload from file path
-  pub async fn process_upload( &self, file_path: &Path ) -> Result< ProcessedMediaResult, crate::error::Error >
+  pub async fn process_upload( &self, file_path : &Path ) -> Result< ProcessedMediaResult, crate::error::Error >
   {
     // Read file data
     let file_data = std::fs::read( file_path )
-      .map_err( | e | crate::error::Error::ApiError( format!( "Failed to read file: {}", e ) ) )?;
+      .map_err( | e | crate::error::Error::ApiError( format!( "Failed to read file : {}", e ) ) )?;
 
     // Detect MIME type from file extension
     let mime_type = match file_path.extension().and_then( | ext | ext.to_str() )
@@ -353,7 +353,7 @@ impl MediaProcessingPipeline
   }
 
   /// Process download to file path
-  pub async fn process_download( &self, _file_id: &str, _destination: &Path ) -> Result< ProcessedMediaResult, crate::error::Error >
+  pub async fn process_download( &self, _file_id : &str, _destination : &Path ) -> Result< ProcessedMediaResult, crate::error::Error >
   {
     // For now, return a placeholder implementation
     // In a real implementation, this would fetch the file from the API
@@ -363,8 +363,8 @@ impl MediaProcessingPipeline
   /// Process data stream
   pub async fn process_stream< S >(
     &self,
-    mut _stream: S,
-    _metadata: ProcessedMediaMetadata
+    mut _stream : S,
+    _metadata : ProcessedMediaMetadata
   ) -> Result< ProcessedMediaResult, crate::error::Error >
   where
     S: Stream< Item = Result< Bytes, crate::error::Error > > + Send + Unpin,

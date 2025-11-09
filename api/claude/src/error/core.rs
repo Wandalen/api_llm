@@ -35,34 +35,34 @@ mod private
   pub struct HttpError
   {
     /// HTTP status code
-    status_code: Option< u16 >,
+    status_code : Option< u16 >,
     /// Error message
-    message: String,
+    message : String,
     /// Request URL (if available)
-    url: Option< String >,
+    url : Option< String >,
     /// Request method
-    method: Option< String >,
+    method : Option< String >,
     /// Response headers (if available)
-    headers: Option< Vec< ( String, String ) > >,
+    headers : Option< Vec< ( String, String ) > >,
   }
 
   impl HttpError
   {
     /// Create new HTTP error
-    pub fn new( message: String ) -> Self
+    pub fn new( message : String ) -> Self
     {
       Self {
-        status_code: None,
+        status_code : None,
         message,
-        url: None,
-        method: None,
-        headers: None,
+        url : None,
+        method : None,
+        headers : None,
       }
     }
 
     /// Create HTTP error with status code
     #[ must_use ]
-    pub fn with_status_code( mut self, status_code: u16 ) -> Self
+    pub fn with_status_code( mut self, status_code : u16 ) -> Self
     {
       self.status_code = Some( status_code );
       self
@@ -70,7 +70,7 @@ mod private
 
     /// Add request information
     #[ must_use ]
-    pub fn with_request_info( mut self, method: String, url: String ) -> Self
+    pub fn with_request_info( mut self, method : String, url : String ) -> Self
     {
       self.method = Some( method );
       self.url = Some( url );
@@ -108,16 +108,16 @@ mod private
 
   impl fmt::Display for HttpError
   {
-    fn fmt( &self, f: &mut fmt::Formatter<'_> ) -> fmt::Result
+    fn fmt( &self, f : &mut fmt::Formatter< '_ > ) -> fmt::Result
     {
       match ( &self.status_code, &self.method, &self.url )
       {
         ( Some( code ), Some( method ), Some( url ) ) =>
           write!( f, "HTTP {} error for {} {}: {}", code, method, url, self.message ),
         ( Some( code ), _, _ ) =>
-          write!( f, "HTTP {} error: {}", code, self.message ),
+          write!( f, "HTTP {} error : {}", code, self.message ),
         _ =>
-          write!( f, "HTTP error: {}", self.message ),
+          write!( f, "HTTP error : {}", self.message ),
       }
     }
   }
@@ -160,26 +160,26 @@ mod private
 
   impl fmt::Display for AnthropicError
   {
-    fn fmt( &self, f : &mut fmt::Formatter<'_> ) -> fmt::Result
+    fn fmt( &self, f : &mut fmt::Formatter< '_ > ) -> fmt::Result
     {
       match self
       {
         AnthropicError::Http( err ) => write!( f, "{err}" ),
-        AnthropicError::Api( err ) => write!( f, "API error: {err}" ),
-        AnthropicError::InvalidArgument( msg ) => write!( f, "Invalid argument: {msg}" ),
-        AnthropicError::InvalidRequest( msg ) => write!( f, "Invalid request: {msg}" ),
-        AnthropicError::MissingEnvironment( msg ) => write!( f, "Missing environment: {msg}" ),
-        AnthropicError::Authentication( err ) => write!( f, "Authentication error: {err}" ),
-        AnthropicError::RateLimit( err ) => write!( f, "Rate limit error: {err}" ),
-        AnthropicError::File( msg ) => write!( f, "File error: {msg}" ),
-        AnthropicError::Internal( msg ) => write!( f, "Internal error: {msg}" ),
-        AnthropicError::Stream( msg ) => write!( f, "Stream error: {msg}" ),
-        AnthropicError::Parsing( msg ) => write!( f, "Parsing error: {msg}" ),
-        AnthropicError::NotImplemented( msg ) => write!( f, "Not implemented: {msg}" ),
+        AnthropicError::Api( err ) => write!( f, "API error : {err}" ),
+        AnthropicError::InvalidArgument( msg ) => write!( f, "Invalid argument : {msg}" ),
+        AnthropicError::InvalidRequest( msg ) => write!( f, "Invalid request : {msg}" ),
+        AnthropicError::MissingEnvironment( msg ) => write!( f, "Missing environment : {msg}" ),
+        AnthropicError::Authentication( err ) => write!( f, "Authentication error : {err}" ),
+        AnthropicError::RateLimit( err ) => write!( f, "Rate limit error : {err}" ),
+        AnthropicError::File( msg ) => write!( f, "File error : {msg}" ),
+        AnthropicError::Internal( msg ) => write!( f, "Internal error : {msg}" ),
+        AnthropicError::Stream( msg ) => write!( f, "Stream error : {msg}" ),
+        AnthropicError::Parsing( msg ) => write!( f, "Parsing error : {msg}" ),
+        AnthropicError::NotImplemented( msg ) => write!( f, "Not implemented : {msg}" ),
         #[ cfg( feature = "circuit-breaker" ) ]
-        AnthropicError::CircuitOpen( msg ) => write!( f, "Circuit breaker open: {msg}" ),
+        AnthropicError::CircuitOpen( msg ) => write!( f, "Circuit breaker open : {msg}" ),
         #[ cfg( feature = "error-handling" ) ]
-        AnthropicError::Enhanced( err ) => write!( f, "Enhanced error: {}", err.message() ),
+        AnthropicError::Enhanced( err ) => write!( f, "Enhanced error : {}", err.message() ),
       }
     }
   }
@@ -253,7 +253,7 @@ mod private
           }
         },
         AnthropicError::MissingEnvironment( msg ) => vec![
-          format!( "Set the required environment variable: {}", msg ),
+          format!( "Set the required environment variable : {}", msg ),
           "Check your .env file or environment configuration".to_string(),
         ],
         _ => vec![ "Check error message for specific guidance".to_string() ],
@@ -261,19 +261,19 @@ mod private
     }
 
     /// Create structured HTTP error
-    pub fn http_error( message: String ) -> Self
+    pub fn http_error( message : String ) -> Self
     {
       Self::Http( HttpError::new( message ) )
     }
 
     /// Create HTTP error with status code
-    pub fn http_error_with_status( message: String, status_code: u16 ) -> Self
+    pub fn http_error_with_status( message : String, status_code : u16 ) -> Self
     {
       Self::Http( HttpError::new( message ).with_status_code( status_code ) )
     }
 
     /// Create HTTP error with full request info
-    pub fn http_error_with_request( message: String, status_code: u16, method: String, url: String ) -> Self
+    pub fn http_error_with_request( message : String, status_code : u16, method : String, url : String ) -> Self
     {
       Self::Http(
         HttpError::new( message )
@@ -379,7 +379,7 @@ mod private
 
   impl fmt::Display for AnthropicApiError
   {
-    fn fmt( &self, f : &mut fmt::Formatter<'_> ) -> fmt::Result
+    fn fmt( &self, f : &mut fmt::Formatter< '_ > ) -> fmt::Result
     {
       write!( f, "{}: {}", self.r#type, self.message )
     }
@@ -473,7 +473,7 @@ mod private
   
   impl fmt::Display for AuthenticationError
   {
-    fn fmt( &self, f : &mut fmt::Formatter<'_> ) -> fmt::Result
+    fn fmt( &self, f : &mut fmt::Formatter< '_ > ) -> fmt::Result
     {
       write!( f, "{}", self.message )
     }
@@ -628,7 +628,7 @@ mod private
   
   impl fmt::Display for RateLimitError
   {
-    fn fmt( &self, f : &mut fmt::Formatter<'_> ) -> fmt::Result
+    fn fmt( &self, f : &mut fmt::Formatter< '_ > ) -> fmt::Result
     {
       write!( f, "{}", self.message )?;
 
@@ -641,11 +641,11 @@ mod private
       {
         if let ( Some( remaining ), Some( limit ) ) = ( info.requests_remaining, info.requests_limit )
         {
-          write!( f, " [requests: {remaining}/{limit}]" )?;
+          write!( f, " [requests : {remaining}/{limit}]" )?;
         }
         if let ( Some( remaining ), Some( limit ) ) = ( info.tokens_remaining, info.tokens_limit )
         {
-          write!( f, " [tokens: {remaining}/{limit}]" )?;
+          write!( f, " [tokens : {remaining}/{limit}]" )?;
         }
       }
 
@@ -673,7 +673,7 @@ mod private
   {
     fn from( error : serde_json::Error ) -> Self
     {
-      Self::Internal( format!( "JSON error: {error}" ) )
+      Self::Internal( format!( "JSON error : {error}" ) )
     }
   }
 
@@ -685,7 +685,7 @@ mod private
   /// Map deserialization error to `AnthropicError`
   pub fn map_deserialization_error( error : &serde_json::Error ) -> AnthropicError
   {
-    AnthropicError::Parsing( format!( "Failed to deserialize response: {error}" ) )
+    AnthropicError::Parsing( format!( "Failed to deserialize response : {error}" ) )
   }
 
   // Enhanced Error Handling System
@@ -811,7 +811,7 @@ mod private
 
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use HttpError;
   exposed use AnthropicError;

@@ -6,12 +6,12 @@
 use api_huggingface::
 {
   Client,
-  environment::HuggingFaceEnvironmentImpl,
-  components::
+  environment ::HuggingFaceEnvironmentImpl,
+  components ::
   {
-  input::InferenceParameters,
+  input ::InferenceParameters,
   },
-  secret::Secret,
+  secret ::Secret,
 };
 use std::{ collections::HashMap, time::Instant };
 use serde::{ Serialize, Deserialize };
@@ -711,7 +711,7 @@ impl AITutorPlatform
           }
           else
           {
-      format!( "Incorrect. The correct answer is: {}", question.correct_answers[ 0 ] )
+      format!( "Incorrect. The correct answer is : {}", question.correct_answers[ 0 ] )
           },
           improvement_hints : if is_correct
           {
@@ -778,7 +778,7 @@ impl AITutorPlatform
   // Add context if provided
   if let Some( ref context ) = request.context
   {
-      prompt.push_str( "Context: " );
+      prompt.push_str( "Context : " );
       prompt.push_str( context );
       prompt.push_str( ". " );
   }
@@ -787,7 +787,7 @@ impl AITutorPlatform
   if !request.prerequisites.is_empty()
   {
       let prereqs_joined = request.prerequisites.join( ", " );
-      prompt.push_str( "Assume knowledge of: " );
+      prompt.push_str( "Assume knowledge of : " );
       prompt.push_str( &prereqs_joined );
       prompt.push_str( ". " );
   }
@@ -802,7 +802,7 @@ impl AITutorPlatform
   fn build_question_prompt( &self, question : &StudentQuestion, student_id : Option< &str > ) -> String
   {
   let mut prompt = format!(
-      "A {} level student asks: '{}'\n",
+      "A {} level student asks : '{}'\n",
       question.complexity_level.name(),
       question.question_text
   );
@@ -813,7 +813,7 @@ impl AITutorPlatform
       if let Some( profile ) = self.students.get( id )
       {
   let learning_style = profile.learning_style.name();
-  prompt.push_str( "Student learning style: " );
+  prompt.push_str( "Student learning style : " );
   prompt.push_str( learning_style );
   prompt.push_str( ". " );
       }
@@ -823,7 +823,7 @@ impl AITutorPlatform
   if let Some( subject ) = question.subject
   {
       let subject_name = subject.name();
-      prompt.push_str( "Subject area: " );
+      prompt.push_str( "Subject area : " );
       prompt.push_str( subject_name );
       prompt.push_str( ". " );
   }
@@ -951,7 +951,7 @@ impl AITutorPlatform
 // Helper function to get API key for testing
 fn get_api_key_for_testing() -> Option< String >
 {
-  std::env::var( "HUGGINGFACE_API_KEY" ).ok()
+  std ::env::var( "HUGGINGFACE_API_KEY" ).ok()
 }
 
 // Helper function to create test client

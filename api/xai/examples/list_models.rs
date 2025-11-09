@@ -29,16 +29,16 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
   for ( idx, model ) in models_response.data.iter().enumerate()
   {
     println!( "{}. Model ID: {}", idx + 1, model.id );
-    println!( "   - Object: {}", model.object );
-    println!( "   - Created: {}", model.created );
-    println!( "   - Owned by: {}", model.owned_by );
+    println!( "   - Object : {}", model.object );
+    println!( "   - Created : {}", model.created );
+    println!( "   - Owned by : {}", model.owned_by );
     println!();
   }
 
   // Get specific model details
   if let Some( first_model ) = models_response.data.first()
   {
-    println!( "📋 Fetching details for: {}\n", first_model.id );
+    println!( "📋 Fetching details for : {}\n", first_model.id );
 
     match client.models().get( &first_model.id ).await
     {
@@ -46,13 +46,13 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
       {
         println!( "✅ Model Details:" );
         println!( "   - ID: {}", model_details.id );
-        println!( "   - Object: {}", model_details.object );
-        println!( "   - Created: {}", model_details.created );
-        println!( "   - Owned by: {}", model_details.owned_by );
+        println!( "   - Object : {}", model_details.object );
+        println!( "   - Created : {}", model_details.created );
+        println!( "   - Owned by : {}", model_details.owned_by );
       }
       Err( e ) =>
       {
-        println!( "⚠️  Could not fetch model details: {e}" );
+        println!( "⚠️  Could not fetch model details : {e}" );
       }
     }
   }

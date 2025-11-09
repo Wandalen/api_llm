@@ -14,23 +14,23 @@ pub enum DeploymentStrategy
   /// Rolling update strategy
   Rolling {
     /// Maximum percentage of pods that can be unavailable
-    max_unavailable_percentage: f64,
+    max_unavailable_percentage : f64,
     /// Maximum percentage of pods that can be created above desired count
-    max_surge_percentage: f64,
+    max_surge_percentage : f64,
   },
   /// Blue-green deployment strategy
   BlueGreen {
     /// Percentage of traffic to switch to new version
-    switch_traffic_percentage: f64,
+    switch_traffic_percentage : f64,
     /// Whether to automatically rollback on failure
-    rollback_on_failure: bool,
+    rollback_on_failure : bool,
   },
   /// Canary deployment strategy
   Canary {
     /// Initial percentage of traffic for canary
-    traffic_percentage: f64,
+    traffic_percentage : f64,
     /// Criteria for promoting canary to full deployment
-    promotion_criteria: Vec< String >,
+    promotion_criteria : Vec< String >,
   },
 }
 
@@ -39,33 +39,33 @@ pub enum DeploymentStrategy
 pub struct DeploymentCache
 {
   /// Maximum cache size
-  max_size: usize,
+  max_size : usize,
   /// Cache TTL in seconds
-  ttl_seconds: u64,
+  ttl_seconds : u64,
   /// Cached deployment summaries with timestamps
-  cache: Arc< RwLock< HashMap<  String, ( DeploymentSummary, SystemTime )  > > >,
+  cache : Arc< RwLock< HashMap<  String, ( DeploymentSummary, SystemTime )  > > >,
   /// Cache hit count
-  hits: AtomicU64,
+  hits : AtomicU64,
   /// Cache miss count
-  misses: AtomicU64,
+  misses : AtomicU64,
 }
 
 impl DeploymentCache
 {
   /// Create a new deployment cache
-  pub fn new( max_size: usize, ttl_seconds: u64 ) -> Self
+  pub fn new( max_size : usize, ttl_seconds : u64 ) -> Self
   {
     Self {
       max_size,
       ttl_seconds,
-      cache: Arc::new( RwLock::new( HashMap::new() ) ),
-      hits: AtomicU64::new( 0 ),
-      misses: AtomicU64::new( 0 ),
+      cache : Arc::new( RwLock::new( HashMap::new() ) ),
+      hits : AtomicU64::new( 0 ),
+      misses : AtomicU64::new( 0 ),
     }
   }
 
   /// Get a deployment summary from cache
-  pub fn get( &self, deployment_id: &str ) -> Option< DeploymentSummary >
+  pub fn get( &self, deployment_id : &str ) -> Option< DeploymentSummary >
   {
     let cache = self.cache.read().unwrap();
     if let Some( ( deployment_summary, timestamp ) ) = cache.get( deployment_id )
@@ -87,7 +87,7 @@ impl DeploymentCache
   }
 
   /// Put a deployment summary in cache
-  pub fn put( &self, deployment_id: String, deployment_summary: DeploymentSummary )
+  pub fn put( &self, deployment_id : String, deployment_summary : DeploymentSummary )
   {
     let mut cache = self.cache.write().unwrap();
 

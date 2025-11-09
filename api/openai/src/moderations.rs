@@ -10,9 +10,9 @@ mod private
   // Use crate root for base access
   use crate::
   {
-    client::Client,
-    error::Result,
-    environment::{ OpenaiEnvironment, EnvironmentInterface },
+    client ::Client,
+    error ::Result,
+    environment ::{ OpenaiEnvironment, EnvironmentInterface },
   };
   use crate::components::moderations::
   {
@@ -60,7 +60,7 @@ mod private
   }
 } // end mod private
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   // Expose all structs defined in this module
   exposed use 

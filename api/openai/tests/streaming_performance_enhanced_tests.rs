@@ -22,18 +22,18 @@ use api_openai::ClientApiAccessors;
 use api_openai::
 {
   Client,
-  environment::OpenaiEnvironmentImpl,
-  secret::Secret,
-  components::
+  environment ::OpenaiEnvironmentImpl,
+  secret ::Secret,
+  components ::
   {
-    responses::{ CreateResponseRequest, ResponseInput, ResponseStreamEvent },
+    responses ::{ CreateResponseRequest, ResponseInput, ResponseStreamEvent },
   },
 };
 
 use std::
 {
-  sync::{ Arc, Mutex },
-  time::{ Duration, Instant },
+  sync ::{ Arc, Mutex },
+  time ::{ Duration, Instant },
 };
 use tokio::{ sync::{ mpsc, Semaphore }, time::timeout };
 
@@ -222,7 +222,7 @@ async fn test_streaming_performance_metrics_calculation()
   monitor.record_memory_usage( 2048 * 1024 );
 
   // Wait a bit to ensure measurable duration
-  tokio::time::sleep( Duration::from_millis( 100 ) ).await;
+  tokio ::time::sleep( Duration::from_millis( 100 ) ).await;
 
   let metrics = monitor.get_metrics();
 
@@ -257,7 +257,7 @@ async fn test_streaming_throughput_measurement()
   }
 
   // Small delay to ensure measurable duration
-  tokio::time::sleep( Duration::from_millis( 10 ) ).await;
+  tokio ::time::sleep( Duration::from_millis( 10 ) ).await;
 
   let metrics = monitor.get_metrics();
 
@@ -286,7 +286,7 @@ async fn test_streaming_latency_tracking()
 
   let metrics = monitor.get_metrics();
 
-  // Expected average: (5+15+25+35)/4 = 20ms
+  // Expected average : (5+15+25+35)/4 = 20ms
   assert_eq!( metrics.average_latency, Duration::from_millis( 20 ) );
   assert_eq!( metrics.total_events, test_latencies.len() );
 }
@@ -321,7 +321,7 @@ async fn test_streaming_performance_thresholds()
     monitor.record_event( Duration::from_millis( 10 ) ); // Under threshold
   }
 
-  tokio::time::sleep( Duration::from_millis( 100 ) ).await;
+  tokio ::time::sleep( Duration::from_millis( 100 ) ).await;
 
   let metrics = monitor.get_metrics();
 
@@ -349,7 +349,7 @@ async fn test_concurrent_streaming_simulation()
         let event_start = Instant::now();
 
         // Simulate event processing
-        tokio::time::sleep( Duration::from_millis( 5 ) ).await;
+        tokio ::time::sleep( Duration::from_millis( 5 ) ).await;
 
         let latency = event_start.elapsed();
         monitor_clone.record_event( latency );
@@ -407,7 +407,7 @@ async fn test_streaming_backpressure_handling()
       let processing_start = Instant::now();
 
       // Simulate processing delay
-      tokio::time::sleep( Duration::from_millis( 50 ) ).await;
+      tokio ::time::sleep( Duration::from_millis( 50 ) ).await;
 
       let latency = processing_start.elapsed();
       monitor_clone.record_event( latency );
@@ -468,7 +468,7 @@ async fn test_streaming_performance_real_api()
             {
               ResponseStreamEvent::ResponseTextDelta( delta ) =>
               {
-                println!( "Received text delta: '{}'", delta.delta );
+                println!( "Received text delta : '{}'", delta.delta );
               },
               ResponseStreamEvent::ResponseCompleted( _ ) =>
               {
@@ -484,7 +484,7 @@ async fn test_streaming_performance_real_api()
           },
           Err( e ) =>
           {
-            println!( "Stream error: {:?}", e );
+            println!( "Stream error : {:?}", e );
             break;
           }
         }
@@ -500,11 +500,11 @@ async fn test_streaming_performance_real_api()
       let metrics = monitor.get_metrics();
 
       println!( "Streaming Performance Results:" );
-      println!( "  Total events: {}", metrics.total_events );
-      println!( "  Duration: {:?}", metrics.total_duration );
-      println!( "  Events/sec: {:.2}", metrics.events_per_second );
-      println!( "  Average latency: {:?}", metrics.average_latency );
-      println!( "  Peak memory: {} bytes", metrics.peak_memory_bytes );
+      println!( "  Total events : {}", metrics.total_events );
+      println!( "  Duration : {:?}", metrics.total_duration );
+      println!( "  Events/sec : {:.2}", metrics.events_per_second );
+      println!( "  Average latency : {:?}", metrics.average_latency );
+      println!( "  Peak memory : {} bytes", metrics.peak_memory_bytes );
 
       // Performance assertions
       assert!( event_count > 0, "Should receive at least one event" );
@@ -614,7 +614,7 @@ async fn test_concurrent_streaming_performance()
     match timeout( Duration::from_secs( 30 ), handle ).await
     {
       Ok( Ok( events ) ) => total_stream_events += events,
-      Ok( Err( e ) ) => println!( "Stream task failed: {:?}", e ),
+      Ok( Err( e ) ) => println!( "Stream task failed : {:?}", e ),
       Err( _ ) => println!( "Stream task timed out" ),
     }
   }
@@ -623,12 +623,12 @@ async fn test_concurrent_streaming_performance()
   metrics.concurrent_streams = num_concurrent;
 
   println!( "Concurrent Streaming Performance Results:" );
-  println!( "  Concurrent streams: {}", metrics.concurrent_streams );
-  println!( "  Total events across all streams: {}", metrics.total_events );
-  println!( "  Stream events: {}", total_stream_events );
-  println!( "  Overall duration: {:?}", metrics.total_duration );
-  println!( "  Events/sec: {:.2}", metrics.events_per_second );
-  println!( "  Average latency: {:?}", metrics.average_latency );
+  println!( "  Concurrent streams : {}", metrics.concurrent_streams );
+  println!( "  Total events across all streams : {}", metrics.total_events );
+  println!( "  Stream events : {}", total_stream_events );
+  println!( "  Overall duration : {:?}", metrics.total_duration );
+  println!( "  Events/sec : {:.2}", metrics.events_per_second );
+  println!( "  Average latency : {:?}", metrics.average_latency );
 
   // MANDATORY FAILING BEHAVIOR - fail hard if no events received
   assert!( total_stream_events > 0, "MANDATORY FAILURE: Should receive events from concurrent streams" );
@@ -694,10 +694,10 @@ async fn test_streaming_memory_efficiency()
       let metrics = monitor.get_metrics();
 
       println!( "Memory Efficiency Results:" );
-      println!( "  Total content length: {} bytes", total_content_length );
-      println!( "  Peak event size: {} bytes", peak_event_size );
-      println!( "  Peak memory usage: {} bytes", metrics.peak_memory_bytes );
-      println!( "  Memory per event: {:.2} bytes", metrics.peak_memory_bytes as f64 / metrics.total_events as f64 );
+      println!( "  Total content length : {} bytes", total_content_length );
+      println!( "  Peak event size : {} bytes", peak_event_size );
+      println!( "  Peak memory usage : {} bytes", metrics.peak_memory_bytes );
+      println!( "  Memory per event : {:.2} bytes", metrics.peak_memory_bytes as f64 / metrics.total_events as f64 );
 
       // MANDATORY FAILING BEHAVIOR - fail hard if no content received
       assert!( total_content_length > 0, "MANDATORY FAILURE: Should receive content" );

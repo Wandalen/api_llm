@@ -20,7 +20,7 @@ use std::env;
 /// Configuration source trait for multiple configuration sources
 #[ cfg( feature = "dynamic_configuration" ) ]
 #[ async_trait::async_trait ]
-pub trait ConfigSource: Send + Sync
+pub trait ConfigSource : Send + Sync
 {
   /// Load configuration from this source
   async fn load_config( &self ) -> Result< DynamicConfig, crate::error::Error >;
@@ -35,7 +35,7 @@ pub trait ConfigSource: Send + Sync
   fn supports_watching( &self ) -> bool { false }
 
   /// Start watching for configuration changes (if supported)
-  async fn start_watching( &self, _sender: Sender< ConfigSourceEvent > ) -> Result< (), crate::error::Error >
+  async fn start_watching( &self, _sender : Sender< ConfigSourceEvent > ) -> Result< (), crate::error::Error >
   {
     Err( crate::error::Error::NotImplemented( "Watching not supported for this source".to_string() ) )
   }
@@ -47,13 +47,13 @@ pub trait ConfigSource: Send + Sync
 pub struct ConfigSourceEvent
 {
   /// Source that generated the event
-  pub source_id: String,
+  pub source_id : String,
   /// Type of change
-  pub event_type: ConfigSourceEventType,
+  pub event_type : ConfigSourceEventType,
   /// New configuration (if available)
-  pub config: Option< DynamicConfig >,
+  pub config : Option< DynamicConfig >,
   /// Error message (if event_type is Error)
-  pub error: Option< String >,
+  pub error : Option< String >,
 }
 
 /// Type of configuration source event
@@ -77,18 +77,18 @@ pub enum ConfigSourceEventType
 pub struct FileConfigSource
 {
   /// Path to the configuration file
-  file_path: std::path::PathBuf,
+  file_path : std::path::PathBuf,
   /// Source priority
-  priority: u8,
+  priority : u8,
   /// Source identifier
-  source_id: String,
+  source_id : String,
 }
 
 #[ cfg( feature = "dynamic_configuration" ) ]
 impl FileConfigSource
 {
   /// Create a new file configuration source
-  pub fn new< P: AsRef< std::path::Path > >( file_path: P, priority: u8 ) -> Self
+  pub fn new< P: AsRef< std::path::Path > >( file_path : P, priority : u8 ) -> Self
   {
     let file_path = file_path.as_ref().to_path_buf();
     let source_id = format!( "file:{}", file_path.display() );
@@ -125,7 +125,7 @@ impl ConfigSource for FileConfigSource
     true
   }
 
-  async fn start_watching( &self, sender: Sender< ConfigSourceEvent > ) -> Result< (), crate::error::Error >
+  async fn start_watching( &self, sender : Sender< ConfigSourceEvent > ) -> Result< (), crate::error::Error >
   {
     let file_path = self.file_path.clone();
     let file_path_async = self.file_path.clone(); // Clone for async task
@@ -135,7 +135,7 @@ impl ConfigSource for FileConfigSource
     let ( sync_tx, sync_rx ) = mpsc::channel();
 
     // Spawn sync thread for file watching
-    thread::spawn( move || {
+    thread ::spawn( move || {
       let tx = sync_tx;
       let watcher = notify::recommended_watcher( move | res | {
         let _ = tx.send( res );
@@ -150,7 +150,7 @@ impl ConfigSource for FileConfigSource
             // Keep the watcher alive by blocking the thread
             loop
             {
-              std::thread::sleep( std::time::Duration::from_secs( 1 ) );
+              std ::thread::sleep( std::time::Duration::from_secs( 1 ) );
             }
           }
         }
@@ -158,7 +158,7 @@ impl ConfigSource for FileConfigSource
     } );
 
     // Spawn async task to bridge sync -> async
-    tokio::spawn( async move {
+    tokio ::spawn( async move {
       while let Ok( res ) = sync_rx.recv()
       {
         match res
@@ -167,10 +167,10 @@ impl ConfigSource for FileConfigSource
             if paths.contains( &file_path_async )
             {
               let event = ConfigSourceEvent {
-                source_id: source_id.clone(),
-                event_type: ConfigSourceEventType::ConfigChanged,
-                config: None,
-                error: None,
+                source_id : source_id.clone(),
+                event_type : ConfigSourceEventType::ConfigChanged,
+                config : None,
+                error : None,
               };
 
               if sender.send( event ).await.is_err()
@@ -181,10 +181,10 @@ impl ConfigSource for FileConfigSource
           }
           Err( e ) => {
             let event = ConfigSourceEvent {
-              source_id: source_id.clone(),
-              event_type: ConfigSourceEventType::LoadError,
-              config: None,
-              error: Some( format!( "File watch error: {}", e ) ),
+              source_id : source_id.clone(),
+              event_type : ConfigSourceEventType::LoadError,
+              config : None,
+              error : Some( format!( "File watch error : {}", e ) ),
             };
 
             if sender.send( event ).await.is_err()
@@ -206,18 +206,18 @@ impl ConfigSource for FileConfigSource
 pub struct EnvironmentConfigSource
 {
   /// Environment variable prefix
-  prefix: String,
+  prefix : String,
   /// Source priority
-  priority: u8,
+  priority : u8,
   /// Source identifier
-  source_id: String,
+  source_id : String,
 }
 
 #[ cfg( feature = "dynamic_configuration" ) ]
 impl EnvironmentConfigSource
 {
   /// Create a new environment configuration source
-  pub fn new( prefix: String, priority: u8 ) -> Self
+  pub fn new( prefix : String, priority : u8 ) -> Self
   {
     let source_id = format!( "env:{}", prefix );
 
@@ -294,24 +294,24 @@ impl ConfigSource for EnvironmentConfigSource
 pub struct RemoteConfigSource
 {
   /// Remote endpoint URL
-  endpoint_url: String,
+  endpoint_url : String,
   /// Source priority
-  priority: u8,
+  priority : u8,
   /// Source identifier
-  source_id: String,
+  source_id : String,
   /// HTTP client for making requests
-  http_client: reqwest::Client,
+  http_client : reqwest::Client,
   /// Polling interval for checking updates
-  poll_interval: Duration,
+  poll_interval : Duration,
   /// Authentication headers (if needed)
-  auth_headers: HashMap<  String, String  >,
+  auth_headers : HashMap<  String, String  >,
 }
 
 #[ cfg( feature = "dynamic_configuration" ) ]
 impl RemoteConfigSource
 {
   /// Create a new remote configuration source
-  pub fn new( endpoint_url: String, priority: u8 ) -> Self
+  pub fn new( endpoint_url : String, priority : u8 ) -> Self
   {
     let source_id = format!( "remote:{}", endpoint_url );
     let http_client = reqwest::Client::builder()
@@ -324,13 +324,13 @@ impl RemoteConfigSource
       priority,
       source_id,
       http_client,
-      poll_interval: Duration::from_secs( 60 ), // Default 1 minute polling
-      auth_headers: HashMap::new(),
+      poll_interval : Duration::from_secs( 60 ), // Default 1 minute polling
+      auth_headers : HashMap::new(),
     }
   }
 
   /// Create a new remote configuration source with custom polling interval
-  pub fn with_poll_interval( endpoint_url: String, priority: u8, poll_interval: Duration ) -> Self
+  pub fn with_poll_interval( endpoint_url : String, priority : u8, poll_interval : Duration ) -> Self
   {
     let mut source = Self::new( endpoint_url, priority );
     source.poll_interval = poll_interval;
@@ -338,21 +338,21 @@ impl RemoteConfigSource
   }
 
   /// Add authentication header
-  pub fn with_auth_header( mut self, key: String, value: String ) -> Self
+  pub fn with_auth_header( mut self, key : String, value : String ) -> Self
   {
     self.auth_headers.insert( key, value );
     self
   }
 
   /// Add multiple authentication headers
-  pub fn with_auth_headers( mut self, headers: HashMap<  String, String  > ) -> Self
+  pub fn with_auth_headers( mut self, headers : HashMap<  String, String  > ) -> Self
   {
     self.auth_headers.extend( headers );
     self
   }
 
   /// Set polling interval for configuration updates
-  pub fn set_poll_interval( &mut self, interval: Duration )
+  pub fn set_poll_interval( &mut self, interval : Duration )
   {
     self.poll_interval = interval;
   }
@@ -374,20 +374,20 @@ impl ConfigSource for RemoteConfigSource
 
     // Make the request
     let response = request.send().await
-      .map_err( | e | crate::error::Error::NetworkError( format!( "Failed to fetch remote config: {}", e ) ) )?;
+      .map_err( | e | crate::error::Error::NetworkError( format!( "Failed to fetch remote config : {}", e ) ) )?;
 
     if !response.status().is_success()
     {
       return Err( crate::error::Error::ServerError(
-        format!( "Remote config request failed with status: {}", response.status() )
+        format!( "Remote config request failed with status : {}", response.status() )
       ) );
     }
 
     // Parse the response as JSON
     let config_json = response.text().await
-      .map_err( | e | crate::error::Error::NetworkError( format!( "Failed to read remote config response: {}", e ) ) )?;
+      .map_err( | e | crate::error::Error::NetworkError( format!( "Failed to read remote config response : {}", e ) ) )?;
 
-    let mut config: DynamicConfig = serde_json::from_str( &config_json )
+    let mut config : DynamicConfig = serde_json::from_str( &config_json )
       .map_err( | e | crate::error::Error::DeserializationError( format!( "Failed to parse remote config JSON: {}", e ) ) )?;
 
     // Set source priority and metadata
@@ -413,7 +413,7 @@ impl ConfigSource for RemoteConfigSource
     true
   }
 
-  async fn start_watching( &self, sender: Sender< ConfigSourceEvent > ) -> Result< (), crate::error::Error >
+  async fn start_watching( &self, sender : Sender< ConfigSourceEvent > ) -> Result< (), crate::error::Error >
   {
     let endpoint_url = self.endpoint_url.clone();
     let source_id = self.source_id.clone();
@@ -421,8 +421,8 @@ impl ConfigSource for RemoteConfigSource
     let auth_headers = self.auth_headers.clone();
     let poll_interval = self.poll_interval;
 
-    tokio::spawn( async move {
-      let mut last_config_hash: Option< u64 > = None;
+    tokio ::spawn( async move {
+      let mut last_config_hash : Option< u64 > = None;
       let mut interval = tokio::time::interval( poll_interval );
 
       loop
@@ -441,10 +441,10 @@ impl ConfigSource for RemoteConfigSource
               last_config_hash = Some( current_hash );
 
               let event = ConfigSourceEvent {
-                source_id: source_id.clone(),
-                event_type: ConfigSourceEventType::ConfigChanged,
-                config: Some( config ),
-                error: None,
+                source_id : source_id.clone(),
+                event_type : ConfigSourceEventType::ConfigChanged,
+                config : Some( config ),
+                error : None,
               };
 
               if sender.send( event ).await.is_err()
@@ -455,10 +455,10 @@ impl ConfigSource for RemoteConfigSource
           },
           Err( e ) => {
             let event = ConfigSourceEvent {
-              source_id: source_id.clone(),
-              event_type: ConfigSourceEventType::LoadError,
-              config: None,
-              error: Some( format!( "Failed to fetch remote config: {}", e ) ),
+              source_id : source_id.clone(),
+              event_type : ConfigSourceEventType::LoadError,
+              config : None,
+              error : Some( format!( "Failed to fetch remote config : {}", e ) ),
             };
 
             if sender.send( event ).await.is_err()
@@ -479,9 +479,9 @@ impl RemoteConfigSource
 {
   /// Helper method to fetch configuration from remote endpoint
   async fn fetch_config(
-    http_client: &reqwest::Client,
-    endpoint_url: &str,
-    auth_headers: &HashMap<  String, String  >
+    http_client : &reqwest::Client,
+    endpoint_url : &str,
+    auth_headers : &HashMap<  String, String  >
   ) -> Result< DynamicConfig, crate::error::Error >
   {
     let mut request = http_client.get( endpoint_url );
@@ -494,20 +494,20 @@ impl RemoteConfigSource
 
     // Make the request
     let response = request.send().await
-      .map_err( | e | crate::error::Error::NetworkError( format!( "HTTP request failed: {}", e ) ) )?;
+      .map_err( | e | crate::error::Error::NetworkError( format!( "HTTP request failed : {}", e ) ) )?;
 
     if !response.status().is_success()
     {
       return Err( crate::error::Error::ServerError(
-        format!( "HTTP request failed with status: {}", response.status() )
+        format!( "HTTP request failed with status : {}", response.status() )
       ) );
     }
 
     // Parse the response as JSON
     let config_json = response.text().await
-      .map_err( | e | crate::error::Error::NetworkError( format!( "Failed to read response: {}", e ) ) )?;
+      .map_err( | e | crate::error::Error::NetworkError( format!( "Failed to read response : {}", e ) ) )?;
 
-    let config: DynamicConfig = serde_json::from_str( &config_json )
+    let config : DynamicConfig = serde_json::from_str( &config_json )
       .map_err( | e | crate::error::Error::DeserializationError( format!( "Failed to parse JSON: {}", e ) ) )?;
 
     Ok( config )

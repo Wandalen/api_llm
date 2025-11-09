@@ -5,8 +5,8 @@
 
 use api_openai::
 {
-  secret::Secret,
-  environment::{ OpenaiEnvironmentImpl, OpenaiEnvironment },
+  secret ::Secret,
+  environment ::{ OpenaiEnvironmentImpl, OpenaiEnvironment },
 };
 
 /// Test that Secret creation and validation uses untyped Result properly
@@ -33,7 +33,7 @@ fn test_environment_error_handling_consistency()
     None,
     None,
     "invalid-url".to_string(),
-    api_openai::environment::OpenAIRecommended::realtime_base_url().to_string()
+    api_openai ::environment::OpenAIRecommended::realtime_base_url().to_string()
   );
   assert!( result.is_err() );
 }
@@ -47,8 +47,8 @@ fn test_environment_methods_error_handling_consistency()
     secret,
     None,
     None,
-    api_openai::environment::OpenAIRecommended::base_url().to_string(),
-    api_openai::environment::OpenAIRecommended::realtime_base_url().to_string()
+    api_openai ::environment::OpenAIRecommended::base_url().to_string(),
+    api_openai ::environment::OpenAIRecommended::realtime_base_url().to_string()
   ).expect( "Should build environment successfully" );
 
   // Test headers method uses untyped Result

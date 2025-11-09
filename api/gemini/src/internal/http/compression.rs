@@ -52,12 +52,12 @@ impl Default for CompressionAlgorithm
 pub struct CompressionConfig
 {
   /// Compression algorithm to use
-  pub algorithm: CompressionAlgorithm,
+  pub algorithm : CompressionAlgorithm,
   /// Compression level (0-9 for gzip/deflate, 0-11 for brotli)
-  pub level: u32,
+  pub level : u32,
   /// Minimum payload size to compress (bytes)
   /// Payloads smaller than this won't be compressed
-  pub min_size: usize,
+  pub min_size : usize,
 }
 
 impl CompressionConfig
@@ -69,15 +69,15 @@ impl CompressionConfig
   pub fn new() -> Self
   {
     Self {
-      algorithm: CompressionAlgorithm::Gzip,
-      level: 6,
-      min_size: 1024,
+      algorithm : CompressionAlgorithm::Gzip,
+      level : 6,
+      min_size : 1024,
     }
   }
 
   /// Set compression algorithm
   #[ must_use ]
-  pub fn algorithm( mut self, algorithm: CompressionAlgorithm ) -> Self
+  pub fn algorithm( mut self, algorithm : CompressionAlgorithm ) -> Self
   {
     self.algorithm = algorithm;
     self
@@ -85,10 +85,10 @@ impl CompressionConfig
 
   /// Set compression level
   ///
-  /// - For gzip/deflate: 0-9 (0=none, 1=fastest, 9=best compression)
-  /// - For brotli: 0-11 (0=none, 1=fastest, 11=best compression)
+  /// - For gzip/deflate : 0-9 (0=none, 1=fastest, 9=best compression)
+  /// - For brotli : 0-11 (0=none, 1=fastest, 11=best compression)
   #[ must_use ]
-  pub fn level( mut self, level: u32 ) -> Self
+  pub fn level( mut self, level : u32 ) -> Self
   {
     self.level = level;
     self
@@ -96,7 +96,7 @@ impl CompressionConfig
 
   /// Set minimum payload size to compress
   #[ must_use ]
-  pub fn min_size( mut self, min_size: usize ) -> Self
+  pub fn min_size( mut self, min_size : usize ) -> Self
   {
     self.min_size = min_size;
     self
@@ -117,7 +117,7 @@ impl Default for CompressionConfig
 /// # Errors
 ///
 /// Returns error if compression fails
-pub fn compress( data: &[ u8 ], config: &CompressionConfig ) -> Result< Vec< u8 >, Error >
+pub fn compress( data : &[ u8 ], config : &CompressionConfig ) -> Result< Vec< u8 >, Error >
 {
   // Skip compression for small payloads
   if data.len() < config.min_size
@@ -130,21 +130,21 @@ pub fn compress( data: &[ u8 ], config: &CompressionConfig ) -> Result< Vec< u8 
     CompressionAlgorithm::Gzip => {
       let mut encoder = GzEncoder::new( Vec::new(), FlateLevel::new( config.level ) );
       encoder.write_all( data )
-        .map_err( | e | Error::ConfigurationError( format!( "Gzip compression failed: {}", e ) ) )?;
+        .map_err( | e | Error::ConfigurationError( format!( "Gzip compression failed : {}", e ) ) )?;
       encoder.finish()
-        .map_err( | e | Error::ConfigurationError( format!( "Gzip compression finish failed: {}", e ) ) )
+        .map_err( | e | Error::ConfigurationError( format!( "Gzip compression finish failed : {}", e ) ) )
     },
     CompressionAlgorithm::Deflate => {
       let mut encoder = DeflateEncoder::new( Vec::new(), FlateLevel::new( config.level ) );
       encoder.write_all( data )
-        .map_err( | e | Error::ConfigurationError( format!( "Deflate compression failed: {}", e ) ) )?;
+        .map_err( | e | Error::ConfigurationError( format!( "Deflate compression failed : {}", e ) ) )?;
       encoder.finish()
-        .map_err( | e | Error::ConfigurationError( format!( "Deflate compression finish failed: {}", e ) ) )
+        .map_err( | e | Error::ConfigurationError( format!( "Deflate compression finish failed : {}", e ) ) )
     },
     CompressionAlgorithm::Brotli => {
       use brotli::enc::BrotliEncoderParams;
       let params = BrotliEncoderParams {
-        quality: config.level as i32,
+        quality : config.level as i32,
         ..Default::default()
       };
       let mut output = Vec::new();
@@ -155,7 +155,7 @@ pub fn compress( data: &[ u8 ], config: &CompressionConfig ) -> Result< Vec< u8 
           &params
         );
         compressor.write_all( data )
-          .map_err( | e | Error::ConfigurationError( format!( "Brotli compression failed: {}", e ) ) )?;
+          .map_err( | e | Error::ConfigurationError( format!( "Brotli compression failed : {}", e ) ) )?;
       }
       Ok( output )
     },
@@ -168,7 +168,7 @@ pub fn compress( data: &[ u8 ], config: &CompressionConfig ) -> Result< Vec< u8 
 /// # Errors
 ///
 /// Returns error if decompression fails
-pub fn decompress( data: &[ u8 ], algorithm: CompressionAlgorithm ) -> Result< Vec< u8 >, Error >
+pub fn decompress( data : &[ u8 ], algorithm : CompressionAlgorithm ) -> Result< Vec< u8 >, Error >
 {
   match algorithm
   {
@@ -176,14 +176,14 @@ pub fn decompress( data: &[ u8 ], algorithm: CompressionAlgorithm ) -> Result< V
       let mut decoder = GzDecoder::new( data );
       let mut output = Vec::new();
       decoder.read_to_end( &mut output )
-        .map_err( | e | Error::ConfigurationError( format!( "Gzip decompression failed: {}", e ) ) )?;
+        .map_err( | e | Error::ConfigurationError( format!( "Gzip decompression failed : {}", e ) ) )?;
       Ok( output )
     },
     CompressionAlgorithm::Deflate => {
       let mut decoder = DeflateDecoder::new( data );
       let mut output = Vec::new();
       decoder.read_to_end( &mut output )
-        .map_err( | e | Error::ConfigurationError( format!( "Deflate decompression failed: {}", e ) ) )?;
+        .map_err( | e | Error::ConfigurationError( format!( "Deflate decompression failed : {}", e ) ) )?;
       Ok( output )
     },
     CompressionAlgorithm::Brotli => {
@@ -191,7 +191,7 @@ pub fn decompress( data: &[ u8 ], algorithm: CompressionAlgorithm ) -> Result< V
       {
         let mut decompressor = brotli::Decompressor::new( data, 4096 );
         decompressor.read_to_end( &mut output )
-          .map_err( | e | Error::ConfigurationError( format!( "Brotli decompression failed: {}", e ) ) )?;
+          .map_err( | e | Error::ConfigurationError( format!( "Brotli decompression failed : {}", e ) ) )?;
       }
       Ok( output )
     },

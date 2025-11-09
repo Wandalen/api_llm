@@ -4,7 +4,7 @@
 use criterion::{ criterion_group, criterion_main, Criterion };
 use std::collections::VecDeque;
 
-fn benchmark_buffer_allocation( c: &mut Criterion )
+fn benchmark_buffer_allocation( c : &mut Criterion )
 {
   c.bench_function( "allocate_stream_buffer", |b|
   {
@@ -16,14 +16,14 @@ fn benchmark_buffer_allocation( c: &mut Criterion )
   } );
 }
 
-fn benchmark_buffer_push( c: &mut Criterion )
+fn benchmark_buffer_push( c : &mut Criterion )
 {
   c.bench_function( "push_to_stream_buffer", |b|
   {
     b.iter( ||
     {
       let mut buffer = VecDeque::< String >::with_capacity( 1024 );
-      let chunk = "data: {\"text\":\"Hello\"}\n\n".to_string();
+      let chunk = "data : {\"text\":\"Hello\"}\n\n".to_string();
 
       // Simulate pushing to buffer
       buffer.push_back( chunk );
@@ -32,14 +32,14 @@ fn benchmark_buffer_push( c: &mut Criterion )
   } );
 }
 
-fn benchmark_buffer_pop( c: &mut Criterion )
+fn benchmark_buffer_pop( c : &mut Criterion )
 {
   c.bench_function( "pop_from_stream_buffer", |b|
   {
     b.iter( ||
     {
       let mut buffer = VecDeque::< String >::with_capacity( 1024 );
-      buffer.push_back( "data: {\"text\":\"Hello\"}\n\n".to_string() );
+      buffer.push_back( "data : {\"text\":\"Hello\"}\n\n".to_string() );
 
       // Simulate popping from buffer
       buffer.pop_front()
@@ -47,16 +47,16 @@ fn benchmark_buffer_pop( c: &mut Criterion )
   } );
 }
 
-fn benchmark_sse_parsing( c: &mut Criterion )
+fn benchmark_sse_parsing( c : &mut Criterion )
 {
-  let sse_line = "data: {\"candidates\":[{\"content\":{\"parts\":[{\"text\":\"Hello\"}]}}]}\n\n";
+  let sse_line = "data : {\"candidates\":[{\"content\":{\"parts\":[{\"text\":\"Hello\"}]}}]}\n\n";
 
   c.bench_function( "parse_sse_line", |b|
   {
     b.iter( ||
     {
       // Simulate SSE line parsing
-      if let Some( data ) = sse_line.strip_prefix( "data: " )
+      if let Some( data ) = sse_line.strip_prefix( "data : " )
       {
         let json_str = data.trim();
         !json_str.is_empty()
@@ -67,7 +67,7 @@ fn benchmark_sse_parsing( c: &mut Criterion )
   } );
 }
 
-fn benchmark_json_chunk_parsing( c: &mut Criterion )
+fn benchmark_json_chunk_parsing( c : &mut Criterion )
 {
   let json_chunk = r#"{"candidates":[{"content":{"parts":[{"text":"Hello"}]}}]}"#;
 
@@ -76,12 +76,12 @@ fn benchmark_json_chunk_parsing( c: &mut Criterion )
     b.iter( ||
     {
       // Simulate JSON parsing of streaming chunk
-      serde_json::from_str::< serde_json::Value >( json_chunk ).ok()
+      serde_json ::from_str::< serde_json::Value >( json_chunk ).ok()
     } );
   } );
 }
 
-fn benchmark_chunk_accumulation( c: &mut Criterion )
+fn benchmark_chunk_accumulation( c : &mut Criterion )
 {
   c.bench_function( "accumulate_partial_chunks", |b|
   {
@@ -99,7 +99,7 @@ fn benchmark_chunk_accumulation( c: &mut Criterion )
   } );
 }
 
-fn benchmark_buffer_size_check( c: &mut Criterion )
+fn benchmark_buffer_size_check( c : &mut Criterion )
 {
   c.bench_function( "check_buffer_size_limit", |b|
   {
@@ -109,25 +109,25 @@ fn benchmark_buffer_size_check( c: &mut Criterion )
     b.iter( ||
     {
       // Simulate buffer size checking
-      let total_size: usize = buffer.iter().map( | s | s.len() ).sum();
+      let total_size : usize = buffer.iter().map( | s | s.len() ).sum();
       total_size < max_buffer_size
     } );
   } );
 }
 
-fn benchmark_event_type_classification( c: &mut Criterion )
+fn benchmark_event_type_classification( c : &mut Criterion )
 {
   c.bench_function( "classify_stream_event_type", |b|
   {
-    let line = "data: {\"text\":\"content\"}";
+    let line = "data : {\"text\":\"content\"}";
 
     b.iter( ||
     {
       // Simulate event type classification
-      if line.starts_with( "data: " )
+      if line.starts_with( "data : " )
       {
         EventType::Data
-      } else if line.starts_with( "event: " )
+      } else if line.starts_with( "event : " )
       {
         EventType::Event
       } else if line.starts_with( ": " )

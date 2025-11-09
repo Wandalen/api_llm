@@ -34,8 +34,8 @@ async fn handle_streaming_response(
   conversation_history : &mut Vec< ChatMessage >
 ) -> Result< (), Box< dyn core::error::Error > >
 {
-  print!( "🤖 Assistant: " );
-  io::stdout().flush()?;
+  print!( "🤖 Assistant : " );
+  io ::stdout().flush()?;
   
   // Stream the response
   let mut full_response = String::new();
@@ -53,13 +53,13 @@ async fn handle_streaming_response(
             {
               let content = response.message.content;
               print!( "{content}" );
-              io::stdout().flush()?;
+              io ::stdout().flush()?;
               full_response.push_str( &content );
             }
           }
           Err( e ) =>
           {
-            eprintln!( "\n❌ Stream error: {e}" );
+            eprintln!( "\n❌ Stream error : {e}" );
             break;
           }
         }
@@ -81,7 +81,7 @@ async fn handle_streaming_response(
     }
     Err( e ) =>
     {
-      eprintln!( "\n❌ Error: {e}" );
+      eprintln!( "\n❌ Error : {e}" );
     }
   }
   
@@ -98,7 +98,7 @@ async fn setup_client_and_model() -> Result< ( OllamaClient, String ), Box< dyn 
   if !client.is_available().await
   {
     eprintln!( "❌ Ollama server is not available. Please start Ollama and try again." );
-    std::process::exit( 1 );
+    std ::process::exit( 1 );
   }
   
   // Get available models
@@ -106,8 +106,8 @@ async fn setup_client_and_model() -> Result< ( OllamaClient, String ), Box< dyn 
   if models.models.is_empty()
   {
     eprintln!( "❌ No models available. Please install a model first." );
-    eprintln!( "   Install with: ollama pull llama3.2" );
-    std::process::exit( 1 );
+    eprintln!( "   Install with : ollama pull llama3.2" );
+    std ::process::exit( 1 );
   }
   
   // Prefer smarter models over tinyllama  
@@ -118,7 +118,7 @@ async fn setup_client_and_model() -> Result< ( OllamaClient, String ), Box< dyn 
     .find( |&preferred| models.models.iter().any( |m| m.name == *preferred ) )
     .map_or_else(|| models.models[ 0 ].name.clone(), |&name| name.to_string());
     
-  println!( "✅ Using model: {model_name}" );
+  println!( "✅ Using model : {model_name}" );
   
   Ok( ( client, model_name ) )
 }
@@ -152,8 +152,8 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
   loop
   {
     // Get user input
-    print!( "You: " );
-    io::stdout().flush()?;
+    print!( "You : " );
+    io ::stdout().flush()?;
 
     let mut user_input = String::new();
     let bytes_read = io::stdin().read_line( &mut user_input )?;
@@ -162,7 +162,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     if bytes_read == 0
     {
       println!( "\n👋 No input available (EOF). Exiting gracefully." );
-      println!( "Note: Use this example in interactive terminal only." );
+      println!( "Note : Use this example in interactive terminal only." );
       break;
     }
 
@@ -248,11 +248,11 @@ async fn run_demo_scenarios( client : &mut OllamaClient, model_name : &str ) -> 
   
   for ( scenario_name, prompt ) in demo_scenarios
   {
-    println!( "\n🎬 Scenario: {scenario_name}" );
-    println!( "Prompt: {prompt}" );
+    println!( "\n🎬 Scenario : {scenario_name}" );
+    println!( "Prompt : {prompt}" );
     println!( "─────────────────────────────────────────" );
-    print!( "🤖 Streaming Response: " );
-    io::stdout().flush().unwrap();
+    print!( "🤖 Streaming Response : " );
+    io ::stdout().flush().unwrap();
     
     let request = ChatRequest
     {
@@ -287,15 +287,15 @@ async fn run_demo_scenarios( client : &mut OllamaClient, model_name : &str ) -> 
               {
                 let content = &response.message.content;
                 print!( "{content}" );
-                io::stdout().flush().unwrap();
+                io ::stdout().flush().unwrap();
                 
                 // Add small delay to make streaming effect more visible
-                tokio::time::sleep( tokio::time::Duration::from_millis( 10 ) ).await;
+                tokio ::time::sleep( tokio::time::Duration::from_millis( 10 ) ).await;
               }
             }
             Err( e ) =>
             {
-              eprintln!( "\n❌ Stream error: {e}" );
+              eprintln!( "\n❌ Stream error : {e}" );
               break;
             }
           }
@@ -304,7 +304,7 @@ async fn run_demo_scenarios( client : &mut OllamaClient, model_name : &str ) -> 
       }
       Err( e ) =>
       {
-        eprintln!( "❌ Error in demo scenario: {e}" );
+        eprintln!( "❌ Error in demo scenario : {e}" );
       }
     }
   }
@@ -323,7 +323,7 @@ async fn run_demo_scenarios( client : &mut OllamaClient, model_name : &str ) -> 
 async fn main() -> Result< (), Box< dyn core::error::Error > >
 {
   println!( "❌ This example requires the 'streaming' feature to be enabled." );
-  println!( "Please run with: cargo run --example streaming_chat --features streaming" );
+  println!( "Please run with : cargo run --example streaming_chat --features streaming" );
   println!( "Or use --all-features to enable all features." );
   
   Ok( () )

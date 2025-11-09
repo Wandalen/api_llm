@@ -54,16 +54,16 @@ impl ModelApi< '_ >
   ///
   /// // Create embedding for search query
   /// let request = EmbedContentRequest {
-  ///   content: Content {
-  ///     parts: vec![ Part {
-  ///       text: Some( "How to learn Rust programming".to_string() ),
+  ///   content : Content {
+  ///     parts : vec![ Part {
+  ///       text : Some( "How to learn Rust programming".to_string() ),
   ///       ..Default::default()
   ///     } ],
-  ///     role: "user".to_string(),
+  ///     role : "user".to_string(),
   ///   },
-  ///   task_type: Some( "RETRIEVAL_QUERY".to_string() ),
-  ///   title: Some( "Search Query".to_string() ),
-  ///   output_dimensionality: None,
+  ///   task_type : Some( "RETRIEVAL_QUERY".to_string() ),
+  ///   title : Some( "Search Query".to_string() ),
+  ///   output_dimensionality : None,
   /// };
   ///
   /// let response = model.embed_content( &request ).await?;
@@ -72,7 +72,7 @@ impl ModelApi< '_ >
   /// println!( "Generated embedding with {} dimensions", embedding.values.len() );
   ///
   /// // Use embedding for similarity comparison, search indexing, etc.
-  /// // Example: calculate similarity with other embeddings
+  /// // Example : calculate similarity with other embeddings
   /// // let similarity = cosine_similarity( &embedding.values, &other_embedding );
   /// # Ok( () )
   /// # }
@@ -112,7 +112,7 @@ impl ModelApi< '_ >
       self.model_id
     );
 
-    http::execute_with_optional_retries
+    http ::execute_with_optional_retries
     (
       self.client,
       Method::POST,
@@ -161,19 +161,19 @@ impl ModelApi< '_ >
   ///
   /// [`embed_content`]: ModelApi::embed_content
   #[ inline ]
-  pub async fn embed_text( &self, text: &str ) -> Result< Vec< f32 >, Error >
+  pub async fn embed_text( &self, text : &str ) -> Result< Vec< f32 >, Error >
   {
     let request = crate::models::EmbedContentRequest {
-      content: crate::models::Content {
-        parts: vec![ crate::models::Part {
-          text: Some( text.to_string() ),
+      content : crate::models::Content {
+        parts : vec![ crate::models::Part {
+          text : Some( text.to_string() ),
           ..Default::default()
         } ],
-        role: "user".to_string(),
+        role : "user".to_string(),
       },
-      task_type: None,
-      title: None,
-      output_dimensionality: None,
+      task_type : None,
+      title : None,
+      output_dimensionality : None,
     };
 
     let response = self.embed_content( &request ).await?;
@@ -228,7 +228,7 @@ impl ModelApi< '_ >
   ///   "RETRIEVAL_DOCUMENT"
   /// ).await?;
   /// 
-  /// println!( "Query embedding: {} dims, Doc embedding: {} dims", 
+  /// println!( "Query embedding : {} dims, Doc embedding : {} dims", 
   ///   query_embedding.len(), doc_embedding.len() );
   /// # Ok( () )
   /// # }
@@ -243,23 +243,23 @@ impl ModelApi< '_ >
   pub async fn embed_text_with_task
   (
     &self,
-    text: &str,
-    task_type: &str,
+    text : &str,
+    task_type : &str,
   )
   ->
   Result< Vec< f32 >, Error >
   {
     let request = crate::models::EmbedContentRequest {
-      content: crate::models::Content {
-        parts: vec![ crate::models::Part {
-          text: Some( text.to_string() ),
+      content : crate::models::Content {
+        parts : vec![ crate::models::Part {
+          text : Some( text.to_string() ),
           ..Default::default()
         } ],
-        role: "user".to_string(),
+        role : "user".to_string(),
       },
-      task_type: Some( task_type.to_string() ),
-      title: None,
-      output_dimensionality: None,
+      task_type : Some( task_type.to_string() ),
+      title : None,
+      output_dimensionality : None,
     };
 
     let response = self.embed_content( &request ).await?;
@@ -334,8 +334,8 @@ impl ModelApi< '_ >
   pub async fn embed_texts
   (
     &self,
-    texts: Vec< String >,
-    task_type: Option< &str >,
+    texts : Vec< String >,
+    task_type : Option< &str >,
   )
   ->
   Result< Vec< Vec< f32 > >, Error >
@@ -400,8 +400,8 @@ impl ModelApi< '_ >
   /// let similarity_related = model.cosine_similarity( &embed1, &embed2 )?;
   /// let similarity_unrelated = model.cosine_similarity( &embed1, &embed3 )?;
   /// 
-  /// println!( "ML vs AI similarity: {:.3}", similarity_related );
-  /// println!( "ML vs Cooking similarity: {:.3}", similarity_unrelated );
+  /// println!( "ML vs AI similarity : {:.3}", similarity_related );
+  /// println!( "ML vs Cooking similarity : {:.3}", similarity_unrelated );
   /// # Ok( () )
   /// # }
   /// ```
@@ -409,8 +409,8 @@ impl ModelApi< '_ >
   pub fn cosine_similarity
   (
     &self,
-    embedding1: &[ f32 ],
-    embedding2: &[ f32 ],
+    embedding1 : &[ f32 ],
+    embedding2 : &[ f32 ],
   )
   ->
   Result< f32, Error >
@@ -418,7 +418,7 @@ impl ModelApi< '_ >
     if embedding1.len() != embedding2.len()
     {
       return Err( Error::InvalidArgument( 
-        format!( "Embedding dimensions must match: {} vs {}", 
+        format!( "Embedding dimensions must match : {} vs {}", 
           embedding1.len(), embedding2.len() )
       ) );
     }
@@ -431,14 +431,14 @@ impl ModelApi< '_ >
     }
 
     // Calculate dot product
-    let dot_product: f32 = embedding1.iter()
+    let dot_product : f32 = embedding1.iter()
       .zip( embedding2.iter() )
       .map( |(a, b)| a * b )
       .sum();
 
     // Calculate magnitudes
-    let magnitude1: f32 = embedding1.iter().map( |x| x * x ).sum::< f32 >().sqrt();
-    let magnitude2: f32 = embedding2.iter().map( |x| x * x ).sum::< f32 >().sqrt();
+    let magnitude1 : f32 = embedding1.iter().map( |x| x * x ).sum::< f32 >().sqrt();
+    let magnitude2 : f32 = embedding2.iter().map( |x| x * x ).sum::< f32 >().sqrt();
 
     // Handle zero vectors
     if magnitude1 == 0.0 || magnitude2 == 0.0
@@ -539,13 +539,13 @@ impl ModelApi< '_ >
   /// # }
   /// ```
   #[ inline ]
-  pub async fn batch_embed_texts( &self, texts: &[ &str ] ) -> Result< Vec< Vec< f32 > >, Error >
+  pub async fn batch_embed_texts( &self, texts : &[ &str ] ) -> Result< Vec< Vec< f32 > >, Error >
   {
     // Validate input
     if texts.is_empty()
     {
       return Err( Error::ValidationError { 
-        message: "Cannot process empty text list".to_string() 
+        message : "Cannot process empty text list".to_string() 
       } );
     }
 
@@ -554,14 +554,14 @@ impl ModelApi< '_ >
     let batch_id = format!( "batch-{:08x}", rand::random::< u32 >() );
     
     #[ cfg( feature = "logging" ) ]
-    tracing::info!(
+    tracing ::info!(
       batch_id = %batch_id,
       batch_size = texts.len(),
       "Starting batch embedding operation"
     );
 
     // For now, process texts individually
-    // qqq: Implement actual batch API when available from Gemini
+    // qqq : Implement actual batch API when available from Gemini
     let mut embeddings = Vec::with_capacity( texts.len() );
     let mut successful = 0;
     let mut failed = 0;
@@ -569,7 +569,7 @@ impl ModelApi< '_ >
     for ( index, text ) in texts.iter().enumerate()
     {
       #[ cfg( feature = "logging" ) ]
-      tracing::debug!(
+      tracing ::debug!(
         batch_id = %batch_id,
         batch_index = index,
         "Processing batch item"
@@ -596,7 +596,7 @@ impl ModelApi< '_ >
           let remaining = texts.len() - successful - failed;
           
           #[ cfg( feature = "logging" ) ]
-          tracing::error!(
+          tracing ::error!(
             batch_id = %batch_id,
             successful = successful,
             failed = failed + remaining,
@@ -605,15 +605,15 @@ impl ModelApi< '_ >
           
           return Err( Error::BatchProcessingError {
             successful,
-            failed: failed + remaining,
-            message: format!( "Batch processing failed on text '{text}': {e}" ),
+            failed : failed + remaining,
+            message : format!( "Batch processing failed on text '{text}': {e}" ),
           } );
         }
       }
     }
 
     #[ cfg( feature = "logging" ) ]
-    tracing::info!(
+    tracing ::info!(
       batch_id = %batch_id,
       successful = successful,
       failed = failed,
@@ -654,12 +654,12 @@ impl ModelApi< '_ >
   /// 
   /// let contents = vec![
   ///   Content {
-  ///     parts: vec![ Part { text: Some( "First content".to_string() ), ..Default::default() } ],
-  ///     role: "user".to_string(),
+  ///     parts : vec![ Part { text : Some( "First content".to_string() ), ..Default::default() } ],
+  ///     role : "user".to_string(),
   ///   },
   ///   Content {
-  ///     parts: vec![ Part { text: Some( "Second content".to_string() ), ..Default::default() } ],
-  ///     role: "user".to_string(),
+  ///     parts : vec![ Part { text : Some( "Second content".to_string() ), ..Default::default() } ],
+  ///     role : "user".to_string(),
   ///   },
   /// ];
   /// 
@@ -669,18 +669,18 @@ impl ModelApi< '_ >
   /// # }
   /// ```
   #[ inline ]
-  pub async fn batch_embed_contents( &self, contents: &[ Content ] ) -> Result< Vec< Vec< f32 > >, Error >
+  pub async fn batch_embed_contents( &self, contents : &[ Content ] ) -> Result< Vec< Vec< f32 > >, Error >
   {
     // Validate input
     if contents.is_empty()
     {
       return Err( Error::ValidationError { 
-        message: "Cannot process empty content list".to_string() 
+        message : "Cannot process empty content list".to_string() 
       } );
     }
 
     // For now, process contents individually
-    // qqq: Implement actual batch API when available from Gemini
+    // qqq : Implement actual batch API when available from Gemini
     let mut embeddings = Vec::with_capacity( contents.len() );
     let mut successful = 0;
     let mut failed = 0;
@@ -688,10 +688,10 @@ impl ModelApi< '_ >
     for content in contents
     {
       let embed_request = EmbedContentRequest {
-        content: content.clone(),
-        task_type: None,
-        title: None,
-        output_dimensionality: None,
+        content : content.clone(),
+        task_type : None,
+        title : None,
+        output_dimensionality : None,
       };
 
       match self.embed_content( &embed_request ).await
@@ -709,8 +709,8 @@ impl ModelApi< '_ >
           let remaining = contents.len() - successful - failed;
           return Err( Error::BatchProcessingError {
             successful,
-            failed: failed + remaining,
-            message: format!( "Batch processing failed on content: {e}" ),
+            failed : failed + remaining,
+            message : format!( "Batch processing failed on content : {e}" ),
           } );
         }
       }

@@ -38,29 +38,29 @@ impl AudioFormat
   /// * `None` if format cannot be determined
   #[ inline ]
   #[ must_use ]
-  pub fn detect_format( data: &[ u8 ] ) -> Option< Self >
+  pub fn detect_format( data : &[ u8 ] ) -> Option< Self >
   {
     if data.len() < 12
     {
       return None;
     }
 
-    // Check for WAV format: "RIFF" header + "WAVE" identifier
+    // Check for WAV format : "RIFF" header + "WAVE" identifier
     if data.starts_with( b"RIFF" ) && &data[ 8..12 ] == b"WAVE"
     {
       Some( AudioFormat::Wav )
     }
-    // Check for MP3 format: Frame sync patterns
+    // Check for MP3 format : Frame sync patterns
     else if data.starts_with( b"\xFF\xFB" ) || data.starts_with( b"\xFF\xFA" )
     {
       Some( AudioFormat::Mp3 )
     }
-    // Check for FLAC format: "fLaC" signature
+    // Check for FLAC format : "fLaC" signature
     else if data.starts_with( b"fLaC" )
     {
       Some( AudioFormat::Flac )
     }
-    // Check for OGG format: "OggS" signature
+    // Check for OGG format : "OggS" signature
     else if data.starts_with( b"OggS" )
     {
       Some( AudioFormat::Ogg )
@@ -105,15 +105,15 @@ impl AudioFormat
 pub struct SpeechToTextRequest
 {
   /// Model name to use for speech recognition (e.g., "whisper")
-  pub model: String,
+  pub model : String,
   /// Raw audio data bytes
-  pub audio_data: Vec< u8 >,
+  pub audio_data : Vec< u8 >,
   /// Audio format specification
-  pub format: AudioFormat,
+  pub format : AudioFormat,
   /// Optional language hint for recognition (ISO 639-1 code)
-  pub language: Option< String >,
+  pub language : Option< String >,
   /// Additional model-specific options
-  pub options: Option< serde_json::Value >,
+  pub options : Option< serde_json::Value >,
 }
 
 /// Response structure for speech-to-text conversion
@@ -121,15 +121,15 @@ pub struct SpeechToTextRequest
 pub struct SpeechToTextResponse
 {
   /// Transcribed text from the audio
-  pub text: String,
+  pub text : String,
   /// Confidence score for the transcription (0.0 to 1.0)
-  pub confidence: Option< f64 >,
+  pub confidence : Option< f64 >,
   /// Detected or specified language of the audio
-  pub language: Option< String >,
+  pub language : Option< String >,
   /// Processing duration in seconds
-  pub duration: Option< f64 >,
+  pub duration : Option< f64 >,
   /// Additional metadata from the model
-  pub metadata: Option< serde_json::Value >,
+  pub metadata : Option< serde_json::Value >,
 }
 
 /// Request structure for text-to-speech generation
@@ -137,17 +137,17 @@ pub struct SpeechToTextResponse
 pub struct TextToSpeechRequest
 {
   /// Model name to use for speech synthesis (e.g., "tts-1")
-  pub model: String,
+  pub model : String,
   /// Text to convert to speech
-  pub text: String,
+  pub text : String,
   /// Voice selection (model-dependent)
-  pub voice: Option< String >,
+  pub voice : Option< String >,
   /// Output audio format
-  pub format: AudioFormat,
+  pub format : AudioFormat,
   /// Speech speed multiplier (1.0 = normal)
-  pub speed: Option< f64 >,
+  pub speed : Option< f64 >,
   /// Additional synthesis options
-  pub options: Option< serde_json::Value >,
+  pub options : Option< serde_json::Value >,
 }
 
 /// Response structure for text-to-speech generation
@@ -155,15 +155,15 @@ pub struct TextToSpeechRequest
 pub struct TextToSpeechResponse
 {
   /// Generated audio data bytes
-  pub audio_data: Vec< u8 >,
+  pub audio_data : Vec< u8 >,
   /// Audio format of the output
-  pub format: AudioFormat,
+  pub format : AudioFormat,
   /// Duration of the generated audio in seconds
-  pub duration: Option< f64 >,
+  pub duration : Option< f64 >,
   /// Sample rate of the generated audio
-  pub sample_rate: Option< u32 >,
+  pub sample_rate : Option< u32 >,
   /// Additional metadata from synthesis
-  pub metadata: Option< serde_json::Value >,
+  pub metadata : Option< serde_json::Value >,
 }
 
 /// Request structure for audio streaming operations
@@ -171,17 +171,17 @@ pub struct TextToSpeechResponse
 pub struct AudioStreamRequest
 {
   /// Model name for audio processing
-  pub model: String,
+  pub model : String,
   /// Audio data to stream
-  pub audio_data: Vec< u8 >,
+  pub audio_data : Vec< u8 >,
   /// Input audio format
-  pub format: AudioFormat,
+  pub format : AudioFormat,
   /// Enable streaming mode
-  pub stream: bool,
+  pub stream : bool,
   /// Chunk size for streaming (bytes)
-  pub chunk_size: Option< usize >,
+  pub chunk_size : Option< usize >,
   /// Stream timeout in seconds
-  pub timeout: Option< u64 >,
+  pub timeout : Option< u64 >,
 }
 
 /// Individual chunk in an audio stream
@@ -189,13 +189,13 @@ pub struct AudioStreamRequest
 pub struct AudioStreamChunk
 {
   /// Audio data for this chunk
-  pub data: Vec< u8 >,
+  pub data : Vec< u8 >,
   /// Timestamp within the overall audio stream
-  pub timestamp: f64,
+  pub timestamp : f64,
   /// Whether this is the final chunk in the stream
-  pub is_final: bool,
+  pub is_final : bool,
   /// Sequence number for ordering
-  pub sequence: Option< u64 >,
+  pub sequence : Option< u64 >,
 }
 
 /// Request structure for voice chat functionality
@@ -203,21 +203,21 @@ pub struct AudioStreamChunk
 pub struct VoiceChatRequest
 {
   /// Model name for conversation processing
-  pub model: String,
+  pub model : String,
   /// Input audio from the user
-  pub audio_input: Vec< u8 >,
+  pub audio_input : Vec< u8 >,
   /// Format of the input audio
-  pub input_format: AudioFormat,
+  pub input_format : AudioFormat,
   /// Desired format for the response audio
-  pub output_format: AudioFormat,
+  pub output_format : AudioFormat,
   /// Conversation session identifier
-  pub conversation_id: Option< String >,
+  pub conversation_id : Option< String >,
   /// Enable real-time processing
-  pub real_time: bool,
+  pub real_time : bool,
   /// Voice selection for response
-  pub voice: Option< String >,
+  pub voice : Option< String >,
   /// Additional chat context
-  pub context: Option< serde_json::Value >,
+  pub context : Option< serde_json::Value >,
 }
 
 /// Response structure for voice chat functionality
@@ -225,17 +225,17 @@ pub struct VoiceChatRequest
 pub struct VoiceChatResponse
 {
   /// Audio response from the model
-  pub audio_response: Vec< u8 >,
+  pub audio_response : Vec< u8 >,
   /// Text version of the response (optional)
-  pub text_response: Option< String >,
+  pub text_response : Option< String >,
   /// Format of the output audio
-  pub output_format: AudioFormat,
+  pub output_format : AudioFormat,
   /// Conversation session identifier
-  pub conversation_id: String,
+  pub conversation_id : String,
   /// Processing latency in milliseconds
-  pub latency_ms: Option< u64 >,
+  pub latency_ms : Option< u64 >,
   /// Additional response metadata
-  pub metadata: Option< serde_json::Value >,
+  pub metadata : Option< serde_json::Value >,
 }
 
 /// Configuration for audio processing operations
@@ -243,15 +243,15 @@ pub struct VoiceChatResponse
 pub struct AudioProcessingConfig
 {
   /// Audio sample rate in Hz
-  sample_rate: u32,
+  sample_rate : u32,
   /// Bit depth for audio processing
-  bit_depth: u16,
+  bit_depth : u16,
   /// Number of audio channels
-  channels: u8,
+  channels : u8,
   /// Buffer size for processing
-  buffer_size: usize,
+  buffer_size : usize,
   /// Default timeout for audio operations
-  timeout: Duration,
+  timeout : Duration,
 }
 
 impl AudioProcessingConfig
@@ -261,18 +261,18 @@ impl AudioProcessingConfig
   {
     Self
     {
-      sample_rate: 44100,
-      bit_depth: 16,
-      channels: 1,
-      buffer_size: 512,
-      timeout: Duration::from_secs( 30 ),
+      sample_rate : 44100,
+      bit_depth : 16,
+      channels : 1,
+      buffer_size : 512,
+      timeout : Duration::from_secs( 30 ),
     }
   }
 
   /// Set the sample rate
   #[ inline ]
   #[ must_use ]
-  pub fn with_sample_rate( mut self, rate: u32 ) -> Self
+  pub fn with_sample_rate( mut self, rate : u32 ) -> Self
   {
     self.sample_rate = rate;
     self
@@ -281,7 +281,7 @@ impl AudioProcessingConfig
   /// Set the bit depth
   #[ inline ]
   #[ must_use ]
-  pub fn with_bit_depth( mut self, depth: u16 ) -> Self
+  pub fn with_bit_depth( mut self, depth : u16 ) -> Self
   {
     self.bit_depth = depth;
     self
@@ -290,7 +290,7 @@ impl AudioProcessingConfig
   /// Set the number of channels
   #[ inline ]
   #[ must_use ]
-  pub fn with_channels( mut self, channels: u8 ) -> Self
+  pub fn with_channels( mut self, channels : u8 ) -> Self
   {
     self.channels = channels;
     self
@@ -299,7 +299,7 @@ impl AudioProcessingConfig
   /// Set the buffer size
   #[ inline ]
   #[ must_use ]
-  pub fn with_buffer_size( mut self, size: usize ) -> Self
+  pub fn with_buffer_size( mut self, size : usize ) -> Self
   {
     self.buffer_size = size;
     self
@@ -308,7 +308,7 @@ impl AudioProcessingConfig
   /// Set the timeout duration
   #[ inline ]
   #[ must_use ]
-  pub fn with_timeout( mut self, timeout: Duration ) -> Self
+  pub fn with_timeout( mut self, timeout : Duration ) -> Self
   {
     self.timeout = timeout;
     self
@@ -354,16 +354,16 @@ pub struct AudioStreamReceiver
 {
   // Internal stream handling - implementation depends on the streaming backend
   // This would typically wrap a tokio::sync::mpsc::Receiver or similar
-  inner: tokio::sync::mpsc::Receiver< Result< AudioStreamChunk, String > >,
+  inner : tokio::sync::mpsc::Receiver< Result< AudioStreamChunk, String > >,
 }
 
 impl AudioStreamReceiver
 {
   /// Create a new audio stream receiver
   #[ allow( dead_code ) ]
-  pub( crate ) fn new( receiver: tokio::sync::mpsc::Receiver< Result< AudioStreamChunk, String > > ) -> Self
+  pub( crate ) fn new( receiver : tokio::sync::mpsc::Receiver< Result< AudioStreamChunk, String > > ) -> Self
   {
-    Self { inner: receiver }
+    Self { inner : receiver }
   }
 
   /// Receive the next chunk from the audio stream

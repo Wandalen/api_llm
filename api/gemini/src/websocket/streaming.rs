@@ -15,17 +15,17 @@ use std::time::Instant;
 pub struct WebSocketStreamBuilder
 {
   /// Target endpoint URL
-  endpoint: Option< String >,
+  endpoint : Option< String >,
   /// Stream direction
-  direction: StreamDirection,
+  direction : StreamDirection,
   /// Configuration
-  config: WebSocketConfig,
+  config : WebSocketConfig,
   /// Authentication token
-  auth_token: Option< String >,
+  auth_token : Option< String >,
   /// Initial metadata
-  metadata: HashMap<  String, String  >,
+  metadata : HashMap<  String, String  >,
   /// Auto-reconnect setting
-  auto_reconnect: bool,
+  auto_reconnect : bool,
 }
 
 impl WebSocketStreamBuilder
@@ -34,59 +34,59 @@ impl WebSocketStreamBuilder
   pub fn new() -> Self
   {
     Self {
-      endpoint: None,
-      direction: StreamDirection::Bidirectional,
-      config: WebSocketConfig::default(),
-      auth_token: None,
-      metadata: HashMap::new(),
-      auto_reconnect: true,
+      endpoint : None,
+      direction : StreamDirection::Bidirectional,
+      config : WebSocketConfig::default(),
+      auth_token : None,
+      metadata : HashMap::new(),
+      auto_reconnect : true,
     }
   }
 
   /// Set the endpoint URL
-  pub fn endpoint( mut self, endpoint: &str ) -> Self
+  pub fn endpoint( mut self, endpoint : &str ) -> Self
   {
     self.endpoint = Some( endpoint.to_string() );
     self
   }
 
   /// Set the stream direction
-  pub fn direction( mut self, direction: StreamDirection ) -> Self
+  pub fn direction( mut self, direction : StreamDirection ) -> Self
   {
     self.direction = direction;
     self
   }
 
   /// Set the configuration
-  pub fn config( mut self, config: WebSocketConfig ) -> Self
+  pub fn config( mut self, config : WebSocketConfig ) -> Self
   {
     self.config = config;
     self
   }
 
   /// Set authentication token
-  pub fn auth_token( mut self, token: &str ) -> Self
+  pub fn auth_token( mut self, token : &str ) -> Self
   {
     self.auth_token = Some( token.to_string() );
     self
   }
 
   /// Add metadata
-  pub fn metadata( mut self, key: &str, value: &str ) -> Self
+  pub fn metadata( mut self, key : &str, value : &str ) -> Self
   {
     self.metadata.insert( key.to_string(), value.to_string() );
     self
   }
 
   /// Set auto-reconnect behavior
-  pub fn auto_reconnect( mut self, enabled: bool ) -> Self
+  pub fn auto_reconnect( mut self, enabled : bool ) -> Self
   {
     self.auto_reconnect = enabled;
     self
   }
 
   /// Build and start the WebSocket stream
-  pub async fn build( self, manager: &WebSocketConnectionManager ) -> Result< String, Error >
+  pub async fn build( self, manager : &WebSocketConnectionManager ) -> Result< String, Error >
   {
     let endpoint = self.endpoint.ok_or_else( || Error::InvalidArgument( "Endpoint is required".to_string() ) )?;
 
@@ -99,7 +99,7 @@ impl WebSocketStreamBuilder
       {
         let auth_message = WebSocketStreamMessage::Auth {
           token,
-          scope: None,
+          scope : None,
         };
         session.send_message( auth_message ).await?;
       }
@@ -122,27 +122,27 @@ impl Default for WebSocketStreamBuilder
 pub struct WebSocketStreamingApi< 'a >
 {
   /// Reference to the Gemini client
-  client: &'a crate::client::Client,
+  client : &'a crate::client::Client,
   /// Basic connection manager
-  manager: Arc< WebSocketConnectionManager >,
+  manager : Arc< WebSocketConnectionManager >,
   /// Optimized connection pool for high-performance scenarios
-  optimized_pool: Arc< OptimizedConnectionPool >,
+  optimized_pool : Arc< OptimizedConnectionPool >,
   /// Optimization configuration
-  optimization_config: OptimizedWebSocketConfig,
+  optimization_config : OptimizedWebSocketConfig,
   /// Performance metrics tracker
-  performance_metrics: Arc< RwLock< EnhancedStreamingMetrics > >,
+  performance_metrics : Arc< RwLock< EnhancedStreamingMetrics > >,
 }
 
 impl< 'a > WebSocketStreamingApi< 'a >
 {
   /// Create a new enhanced WebSocket streaming API with basic configuration
-  pub fn new( client: &'a crate::client::Client ) -> Self
+  pub fn new( client : &'a crate::client::Client ) -> Self
   {
     Self::with_optimization_config( client, OptimizedWebSocketConfig::default() )
   }
 
   /// Create WebSocket streaming API with custom optimization configuration
-  pub fn with_optimization_config( client: &'a crate::client::Client, config: OptimizedWebSocketConfig ) -> Self
+  pub fn with_optimization_config( client : &'a crate::client::Client, config : OptimizedWebSocketConfig ) -> Self
   {
     let pool_config = WebSocketPoolConfig::default();
     let manager = Arc::new( WebSocketConnectionManager::new( pool_config ) );
@@ -152,26 +152,26 @@ impl< 'a > WebSocketStreamingApi< 'a >
       client,
       manager,
       optimized_pool,
-      optimization_config: config,
-      performance_metrics: Arc::new( RwLock::new( EnhancedStreamingMetrics {
-        basic_metrics: WebSocketMetrics::default(),
-        streaming_metrics: StreamingMetrics::default(),
-        pool_stats: ConnectionPoolStats {
-          total_connections: 0,
-          active_connections: 0,
-          idle_connections: 0,
-          connections_created: 0,
-          connections_reused: 0,
-          hit_ratio: 0.0,
-          avg_connection_age_seconds: 0.0,
+      optimization_config : config,
+      performance_metrics : Arc::new( RwLock::new( EnhancedStreamingMetrics {
+        basic_metrics : WebSocketMetrics::default(),
+        streaming_metrics : StreamingMetrics::default(),
+        pool_stats : ConnectionPoolStats {
+          total_connections : 0,
+          active_connections : 0,
+          idle_connections : 0,
+          connections_created : 0,
+          connections_reused : 0,
+          hit_ratio : 0.0,
+          avg_connection_age_seconds : 0.0,
         },
-        performance_benchmarks: PerformanceBenchmarks::default(),
+        performance_benchmarks : PerformanceBenchmarks::default(),
       } ) ),
     }
   }
 
   /// Create a new streaming session with automatic optimization selection
-  pub async fn create_stream( &self, endpoint: &str ) -> Result< String, Error >
+  pub async fn create_stream( &self, endpoint : &str ) -> Result< String, Error >
   {
     // Measure connection time for performance benchmarks
     let start_time = Instant::now();
@@ -189,7 +189,7 @@ impl< 'a > WebSocketStreamingApi< 'a >
   }
 
   /// Create a stream with custom configuration and optimization features
-  pub async fn create_stream_with_config( &self, endpoint: &str, config: WebSocketConfig ) -> Result< String, Error >
+  pub async fn create_stream_with_config( &self, endpoint : &str, config : WebSocketConfig ) -> Result< String, Error >
   {
     let start_time = Instant::now();
     let result = self.manager.create_session( endpoint, config ).await;
@@ -203,7 +203,7 @@ impl< 'a > WebSocketStreamingApi< 'a >
   }
 
   /// Create an optimized streaming connection using the connection pool
-  pub async fn create_optimized_stream( &self, endpoint: &str ) -> Result< Arc< OptimizedWebSocketConnection >, Error >
+  pub async fn create_optimized_stream( &self, endpoint : &str ) -> Result< Arc< OptimizedWebSocketConnection >, Error >
   {
     let start_time = Instant::now();
     let connection = self.optimized_pool.get_connection( endpoint ).await?;
@@ -229,26 +229,26 @@ impl< 'a > WebSocketStreamingApi< 'a >
   }
 
   /// Get a session by ID
-  pub fn get_session( &self, session_id: &str ) -> Option< Arc< WebSocketStreamSession > >
+  pub fn get_session( &self, session_id : &str ) -> Option< Arc< WebSocketStreamSession > >
   {
     self.manager.get_session( session_id )
   }
 
   /// Get a stream controller for a session
-  pub fn get_controller( &self, session_id: &str ) -> Option< StreamController >
+  pub fn get_controller( &self, session_id : &str ) -> Option< StreamController >
   {
     self.manager.get_session( session_id )
       .map( | session | StreamController::new( session ) )
   }
 
   /// Close a streaming session
-  pub async fn close_stream( &self, session_id: &str ) -> Result< (), Error >
+  pub async fn close_stream( &self, session_id : &str ) -> Result< (), Error >
   {
     self.manager.remove_session( session_id ).await
   }
 
   /// Return an optimized connection to the pool
-  pub async fn return_optimized_connection( &self, connection: Arc< OptimizedWebSocketConnection > ) -> Result< (), Error >
+  pub async fn return_optimized_connection( &self, connection : Arc< OptimizedWebSocketConnection > ) -> Result< (), Error >
   {
     let result = self.optimized_pool.return_connection( connection ).await;
     self.update_pool_metrics().await;
@@ -321,13 +321,13 @@ impl< 'a > WebSocketStreamingApi< 'a >
   }
 
   /// Update optimization configuration
-  pub fn update_optimization_config( &mut self, config: OptimizedWebSocketConfig )
+  pub fn update_optimization_config( &mut self, config : OptimizedWebSocketConfig )
   {
     self.optimization_config = config;
   }
 
   /// Private helper to update connection benchmark metrics
-  async fn update_connection_benchmark( &self, connection_time_ms: f64 )
+  async fn update_connection_benchmark( &self, connection_time_ms : f64 )
   {
     if let Ok( mut metrics ) = self.performance_metrics.write()
     {
@@ -358,104 +358,104 @@ impl< 'a > WebSocketStreamingApi< 'a >
 pub struct EnhancedWebSocketStreamBuilder< 'a >
 {
   /// Reference to the enhanced streaming API
-  api: &'a WebSocketStreamingApi< 'a >,
+  api : &'a WebSocketStreamingApi< 'a >,
   /// Target endpoint URL
-  endpoint: Option< String >,
+  endpoint : Option< String >,
   /// Stream direction
-  direction: StreamDirection,
+  direction : StreamDirection,
   /// Basic WebSocket configuration
-  basic_config: WebSocketConfig,
+  basic_config : WebSocketConfig,
   /// Optimization configuration
-  optimization_config: OptimizedWebSocketConfig,
+  optimization_config : OptimizedWebSocketConfig,
   /// Authentication token
-  auth_token: Option< String >,
+  auth_token : Option< String >,
   /// Initial metadata
-  metadata: HashMap<  String, String  >,
+  metadata : HashMap<  String, String  >,
   /// Auto-reconnect setting
-  auto_reconnect: bool,
+  auto_reconnect : bool,
   /// Use optimized connection pool
-  use_optimization: bool,
+  use_optimization : bool,
   /// Message serialization format
-  serialization_format: SerializationFormat,
+  serialization_format : SerializationFormat,
 }
 
 impl< 'a > EnhancedWebSocketStreamBuilder< 'a >
 {
   /// Create a new enhanced stream builder
-  pub fn new( api: &'a WebSocketStreamingApi< 'a > ) -> Self
+  pub fn new( api : &'a WebSocketStreamingApi< 'a > ) -> Self
   {
     Self {
       api,
-      endpoint: None,
-      direction: StreamDirection::Bidirectional,
-      basic_config: WebSocketConfig::default(),
-      optimization_config: api.optimization_config.clone(),
-      auth_token: None,
-      metadata: HashMap::new(),
-      auto_reconnect: true,
-      use_optimization: true,
-      serialization_format: SerializationFormat::BinaryJson,
+      endpoint : None,
+      direction : StreamDirection::Bidirectional,
+      basic_config : WebSocketConfig::default(),
+      optimization_config : api.optimization_config.clone(),
+      auth_token : None,
+      metadata : HashMap::new(),
+      auto_reconnect : true,
+      use_optimization : true,
+      serialization_format : SerializationFormat::BinaryJson,
     }
   }
 
   /// Set the endpoint URL
-  pub fn endpoint( mut self, endpoint: &str ) -> Self
+  pub fn endpoint( mut self, endpoint : &str ) -> Self
   {
     self.endpoint = Some( endpoint.to_string() );
     self
   }
 
   /// Set the stream direction
-  pub fn direction( mut self, direction: StreamDirection ) -> Self
+  pub fn direction( mut self, direction : StreamDirection ) -> Self
   {
     self.direction = direction;
     self
   }
 
   /// Set basic WebSocket configuration
-  pub fn basic_config( mut self, config: WebSocketConfig ) -> Self
+  pub fn basic_config( mut self, config : WebSocketConfig ) -> Self
   {
     self.basic_config = config;
     self
   }
 
   /// Set optimization configuration
-  pub fn optimization_config( mut self, config: OptimizedWebSocketConfig ) -> Self
+  pub fn optimization_config( mut self, config : OptimizedWebSocketConfig ) -> Self
   {
     self.optimization_config = config;
     self
   }
 
   /// Set authentication token
-  pub fn auth_token( mut self, token: &str ) -> Self
+  pub fn auth_token( mut self, token : &str ) -> Self
   {
     self.auth_token = Some( token.to_string() );
     self
   }
 
   /// Add metadata
-  pub fn metadata( mut self, key: &str, value: &str ) -> Self
+  pub fn metadata( mut self, key : &str, value : &str ) -> Self
   {
     self.metadata.insert( key.to_string(), value.to_string() );
     self
   }
 
   /// Set auto-reconnect behavior
-  pub fn auto_reconnect( mut self, enabled: bool ) -> Self
+  pub fn auto_reconnect( mut self, enabled : bool ) -> Self
   {
     self.auto_reconnect = enabled;
     self
   }
 
   /// Enable or disable optimization features
-  pub fn use_optimization( mut self, enabled: bool ) -> Self
+  pub fn use_optimization( mut self, enabled : bool ) -> Self
   {
     self.use_optimization = enabled;
     self
   }
 
   /// Set message serialization format for optimized connections
-  pub fn serialization_format( mut self, format: SerializationFormat ) -> Self
+  pub fn serialization_format( mut self, format : SerializationFormat ) -> Self
   {
     self.serialization_format = format.clone();
     self.optimization_config.message_config.serialization_format = format;
@@ -463,42 +463,42 @@ impl< 'a > EnhancedWebSocketStreamBuilder< 'a >
   }
 
   /// Enable message compression for optimized connections
-  pub fn enable_compression( mut self, enabled: bool ) -> Self
+  pub fn enable_compression( mut self, enabled : bool ) -> Self
   {
     self.optimization_config.message_config.enable_compression = enabled;
     self
   }
 
   /// Set compression level (1-9, higher = better compression)
-  pub fn compression_level( mut self, level: u8 ) -> Self
+  pub fn compression_level( mut self, level : u8 ) -> Self
   {
     self.optimization_config.message_config.compression_level = level.clamp( 1, 9 );
     self
   }
 
   /// Enable message batching for optimized connections
-  pub fn enable_batching( mut self, enabled: bool ) -> Self
+  pub fn enable_batching( mut self, enabled : bool ) -> Self
   {
     self.optimization_config.message_config.enable_batching = enabled;
     self
   }
 
   /// Set maximum batch size
-  pub fn max_batch_size( mut self, size: usize ) -> Self
+  pub fn max_batch_size( mut self, size : usize ) -> Self
   {
     self.optimization_config.message_config.max_batch_size = size;
     self
   }
 
   /// Set connection pool size
-  pub fn pool_size( mut self, max_connections: usize ) -> Self
+  pub fn pool_size( mut self, max_connections : usize ) -> Self
   {
     self.optimization_config.pool_config.max_connections_per_endpoint = max_connections;
     self
   }
 
   /// Enable performance monitoring
-  pub fn enable_metrics( mut self, enabled: bool ) -> Self
+  pub fn enable_metrics( mut self, enabled : bool ) -> Self
   {
     self.optimization_config.monitoring_config.enable_metrics = enabled;
     self
@@ -516,7 +516,7 @@ impl< 'a > EnhancedWebSocketStreamBuilder< 'a >
 
       Ok( EnhancedConnectionResult::Optimized {
         connection,
-        api: self.api,
+        api : self.api,
       } )
     } else {
       // Create basic connection
@@ -524,7 +524,7 @@ impl< 'a > EnhancedWebSocketStreamBuilder< 'a >
 
       Ok( EnhancedConnectionResult::Basic {
         session_id,
-        api: self.api,
+        api : self.api,
       } )
     }
   }
@@ -537,23 +537,23 @@ pub enum EnhancedConnectionResult< 'a >
   /// Optimized connection with advanced features
   Optimized {
     /// The optimized connection
-    connection: Arc< OptimizedWebSocketConnection >,
+    connection : Arc< OptimizedWebSocketConnection >,
     /// Reference to the API for returning the connection to pool
-    api: &'a WebSocketStreamingApi< 'a >,
+    api : &'a WebSocketStreamingApi< 'a >,
   },
   /// Basic connection for compatibility
   Basic {
     /// Session ID for the basic connection
-    session_id: String,
+    session_id : String,
     /// Reference to the API for managing the session
-    api: &'a WebSocketStreamingApi< 'a >,
+    api : &'a WebSocketStreamingApi< 'a >,
   },
 }
 
 impl< 'a > EnhancedConnectionResult< 'a >
 {
   /// Send a message through the connection
-  pub async fn send_message< T >( &self, message: &T ) -> Result< (), Error >
+  pub async fn send_message< T >( &self, message : &T ) -> Result< (), Error >
   where
     T: Serialize,
   {
@@ -569,9 +569,9 @@ impl< 'a > EnhancedConnectionResult< 'a >
           let json_data = serde_json::to_string( message )
             .map_err( | e | Error::SerializationError( e.to_string() ) )?;
           let ws_message = WebSocketStreamMessage::Data {
-            content: json_data,
-            message_type: "json".to_string(),
-            correlation_id: None,
+            content : json_data,
+            message_type : "json".to_string(),
+            correlation_id : None,
           };
           session.send_message( ws_message ).await
         } else {
@@ -588,13 +588,13 @@ impl< 'a > EnhancedConnectionResult< 'a >
     {
       EnhancedConnectionResult::Optimized { connection, .. } => {
         let metrics = connection.get_metrics();
-        serde_json::to_value( metrics ).map_err( | e | Error::SerializationError( e.to_string() ) )
+        serde_json ::to_value( metrics ).map_err( | e | Error::SerializationError( e.to_string() ) )
       },
       EnhancedConnectionResult::Basic { session_id, api } => {
         if let Some( session ) = api.get_session( session_id )
         {
           let metrics = session.get_metrics();
-          serde_json::to_value( metrics ).map_err( | e | Error::SerializationError( e.to_string() ) )
+          serde_json ::to_value( metrics ).map_err( | e | Error::SerializationError( e.to_string() ) )
         } else {
           Err( Error::ServerError( "Session not found".to_string() ) )
         }

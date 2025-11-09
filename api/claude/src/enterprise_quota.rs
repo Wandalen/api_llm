@@ -267,7 +267,7 @@ mod private
     #[ inline ]
     fn fmt( &self, f : &mut std::fmt::Formatter< '_ > ) -> std::fmt::Result
     {
-      write!( f, "Quota exceeded: {}", self.message )
+      write!( f, "Quota exceeded : {}", self.message )
     }
   }
 
@@ -466,13 +466,13 @@ mod private
         "monthly" : self.monthly_usage(),
         "per_model" : self.all_model_usage(),
       });
-      serde_json::to_string_pretty( &data )
+      serde_json ::to_string_pretty( &data )
     }
   }
 }
 
 #[ cfg( feature = "enterprise-quota" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

@@ -16,7 +16,7 @@
 #[ cfg( feature = "retry" ) ]
 mod private
 {
-  // Note: error_tools types not needed for this implementation
+  // Note : error_tools types not needed for this implementation
   use std::time::{ Duration, Instant };
   use std::sync::{ Arc, Mutex };
   use std::pin::Pin;
@@ -27,17 +27,17 @@ mod private
   pub struct RetryConfig
   {
     /// Maximum number of retry attempts
-    pub max_attempts: u32,
+    pub max_attempts : u32,
     /// Base delay in milliseconds before first retry
-    pub base_delay_ms: u64,
+    pub base_delay_ms : u64,
     /// Maximum total elapsed time for all retry attempts
-    pub max_elapsed_time: Duration,
+    pub max_elapsed_time : Duration,
     /// Maximum jitter in milliseconds to add to each delay
-    pub jitter_ms: u64,
+    pub jitter_ms : u64,
     /// Multiplier for exponential backoff (e.g., 2.0 for doubling)
-    pub backoff_multiplier: f64,
+    pub backoff_multiplier : f64,
     /// Whether to log retry attempts
-    pub log_attempts: bool,
+    pub log_attempts : bool,
   }
 
   impl Default for RetryConfig
@@ -47,12 +47,12 @@ mod private
     {
       Self
       {
-        max_attempts: 3,
-        base_delay_ms: 1000, // 1 second base delay
-        max_elapsed_time: Duration::from_secs( 30 ),
-        jitter_ms: 500, // Up to 500ms jitter
-        backoff_multiplier: 2.0, // Exponential doubling
-        log_attempts: true,
+        max_attempts : 3,
+        base_delay_ms : 1000, // 1 second base delay
+        max_elapsed_time : Duration::from_secs( 30 ),
+        jitter_ms : 500, // Up to 500ms jitter
+        backoff_multiplier : 2.0, // Exponential doubling
+        log_attempts : true,
       }
     }
   }
@@ -70,7 +70,7 @@ mod private
     /// Set maximum number of retry attempts
     #[ inline ]
     #[ must_use ]
-    pub fn with_max_attempts( mut self, max_attempts: u32 ) -> Self
+    pub fn with_max_attempts( mut self, max_attempts : u32 ) -> Self
     {
       self.max_attempts = max_attempts;
       self
@@ -79,7 +79,7 @@ mod private
     /// Set base delay in milliseconds
     #[ inline ]
     #[ must_use ]
-    pub fn with_base_delay_ms( mut self, base_delay_ms: u64 ) -> Self
+    pub fn with_base_delay_ms( mut self, base_delay_ms : u64 ) -> Self
     {
       self.base_delay_ms = base_delay_ms;
       self
@@ -88,7 +88,7 @@ mod private
     /// Set maximum elapsed time for all retry attempts
     #[ inline ]
     #[ must_use ]
-    pub fn with_max_elapsed_time( mut self, max_elapsed_time: Duration ) -> Self
+    pub fn with_max_elapsed_time( mut self, max_elapsed_time : Duration ) -> Self
     {
       self.max_elapsed_time = max_elapsed_time;
       self
@@ -97,7 +97,7 @@ mod private
     /// Set maximum jitter in milliseconds
     #[ inline ]
     #[ must_use ]
-    pub fn with_jitter_ms( mut self, jitter_ms: u64 ) -> Self
+    pub fn with_jitter_ms( mut self, jitter_ms : u64 ) -> Self
     {
       self.jitter_ms = jitter_ms;
       self
@@ -106,7 +106,7 @@ mod private
     /// Set backoff multiplier for exponential backoff
     #[ inline ]
     #[ must_use ]
-    pub fn with_backoff_multiplier( mut self, backoff_multiplier: f64 ) -> Self
+    pub fn with_backoff_multiplier( mut self, backoff_multiplier : f64 ) -> Self
     {
       self.backoff_multiplier = backoff_multiplier;
       self
@@ -115,7 +115,7 @@ mod private
     /// Enable or disable retry attempt logging
     #[ inline ]
     #[ must_use ]
-    pub fn with_logging( mut self, log_attempts: bool ) -> Self
+    pub fn with_logging( mut self, log_attempts : bool ) -> Self
     {
       self.log_attempts = log_attempts;
       self
@@ -139,13 +139,13 @@ mod private
   pub struct RetryMetrics
   {
     /// Total number of retry attempts made
-    pub total_attempts: Arc< Mutex< u64 > >,
+    pub total_attempts : Arc< Mutex< u64 > >,
     /// Number of operations that succeeded after retries
-    pub successful_retries: Arc< Mutex< u64 > >,
+    pub successful_retries : Arc< Mutex< u64 > >,
     /// Number of operations that failed after all retries
-    pub failed_operations: Arc< Mutex< u64 > >,
+    pub failed_operations : Arc< Mutex< u64 > >,
     /// Total delay time spent on retries
-    pub total_delay_ms: Arc< Mutex< u64 > >,
+    pub total_delay_ms : Arc< Mutex< u64 > >,
   }
 
   impl RetryMetrics
@@ -184,7 +184,7 @@ mod private
 
     /// Record delay time spent on retry
     #[ inline ]
-    pub fn record_delay( &self, delay: Duration )
+    pub fn record_delay( &self, delay : Duration )
     {
       let mut total_delay = self.total_delay_ms.lock().unwrap();
       *total_delay += delay.as_millis() as u64;
@@ -206,7 +206,7 @@ mod private
         successful_retries,
         failed_operations,
         total_delay_ms,
-        success_rate: if total_attempts > 0
+        success_rate : if total_attempts > 0
         {
           successful_retries as f64 / total_attempts as f64
         }
@@ -223,15 +223,15 @@ mod private
   pub struct RetryStats
   {
     /// Total retry attempts made
-    pub total_attempts: u64,
+    pub total_attempts : u64,
     /// Operations that succeeded after retries
-    pub successful_retries: u64,
+    pub successful_retries : u64,
     /// Operations that failed after all retries
-    pub failed_operations: u64,
+    pub failed_operations : u64,
     /// Total delay time in milliseconds
-    pub total_delay_ms: u64,
+    pub total_delay_ms : u64,
     /// Success rate (0.0 to 1.0)
-    pub success_rate: f64,
+    pub success_rate : f64,
   }
 
   /// Error classifier for determining retry eligibility
@@ -243,7 +243,7 @@ mod private
     /// Classify an error to determine if it should be retried
     #[ inline ]
     #[ must_use ]
-    pub fn classify( error_message: &str ) -> ErrorClassification
+    pub fn classify( error_message : &str ) -> ErrorClassification
     {
       let error_lower = error_message.to_lowercase();
 
@@ -296,16 +296,16 @@ mod private
 
   /// Calculate delay for retry attempt with exponential backoff and jitter
   #[ inline ]
-  pub fn calculate_retry_delay( attempt: u32, config: &RetryConfig ) -> Duration
+  pub fn calculate_retry_delay( attempt : u32, config : &RetryConfig ) -> Duration
   {
-    // Calculate exponential backoff: base_delay * multiplier^attempt
+    // Calculate exponential backoff : base_delay * multiplier^attempt
     let base_delay_f64 = config.base_delay_ms as f64;
     let exponential_delay = base_delay_f64 * config.backoff_multiplier.powi( attempt as i32 );
 
     // Add jitter to prevent thundering herd effect
     let jitter = if config.jitter_ms > 0
     {
-      fastrand::u64( 0..=config.jitter_ms )
+      fastrand ::u64( 0..=config.jitter_ms )
     }
     else
     {
@@ -317,9 +317,9 @@ mod private
 
   /// Execute an operation with retry logic
   pub async fn execute_with_retries< F, T, E >(
-    operation: F,
-    config: RetryConfig,
-    metrics: Option< &RetryMetrics >
+    operation : F,
+    config : RetryConfig,
+    metrics : Option< &RetryMetrics >
   ) -> std::result::Result< T, E >
   where
     F: Fn() -> Pin< Box< dyn Future< Output = std::result::Result< T, E > > + Send > > + Send + Sync,
@@ -335,7 +335,7 @@ mod private
       {
         if config.log_attempts
         {
-          println!( "⚠ Retry abandoned due to max elapsed time: {:?}", config.max_elapsed_time );
+          println!( "⚠ Retry abandoned due to max elapsed time : {:?}", config.max_elapsed_time );
         }
         break;
       }
@@ -371,7 +371,7 @@ mod private
 
           if config.log_attempts
           {
-            println!( "⚠ Attempt {} failed: {} (classification: {:?})", attempt + 1, error_str, classification );
+            println!( "⚠ Attempt {} failed : {} (classification : {:?})", attempt + 1, error_str, classification );
           }
 
           // Don't retry non-retryable errors
@@ -402,7 +402,7 @@ mod private
               m.record_delay( delay );
             }
 
-            tokio::time::sleep( delay ).await;
+            tokio ::time::sleep( delay ).await;
           }
         }
       }
@@ -428,9 +428,9 @@ mod private
   pub struct RetryableHttpClient
   {
     /// Retry configuration
-    pub config: Option< RetryConfig >,
+    pub config : Option< RetryConfig >,
     /// Retry metrics
-    pub metrics: Arc< RetryMetrics >,
+    pub metrics : Arc< RetryMetrics >,
   }
 
   impl RetryableHttpClient
@@ -438,17 +438,17 @@ mod private
     /// Create a new retryable HTTP client wrapper
     #[ inline ]
     #[ must_use ]
-    pub fn new( config: Option< RetryConfig > ) -> Self
+    pub fn new( config : Option< RetryConfig > ) -> Self
     {
       Self
       {
         config,
-        metrics: Arc::new( RetryMetrics::new() ),
+        metrics : Arc::new( RetryMetrics::new() ),
       }
     }
 
     /// Execute an HTTP operation with retries if configured
-    pub async fn execute< F, T, E >( &self, operation: F ) -> std::result::Result< T, E >
+    pub async fn execute< F, T, E >( &self, operation : F ) -> std::result::Result< T, E >
     where
       F: Fn() -> Pin< Box< dyn Future< Output = std::result::Result< T, E > > + Send > > + Send + Sync,
       E: std::fmt::Display + Send + Sync,
@@ -497,7 +497,7 @@ mod private
 
   /// Convenience function to create a retry operation from a closure
   #[ inline ]
-  pub fn retry_operation< F, T, E >( operation: F ) -> impl Fn() -> Pin< Box< dyn Future< Output = std::result::Result< T, E > > + Send > >
+  pub fn retry_operation< F, T, E >( operation : F ) -> impl Fn() -> Pin< Box< dyn Future< Output = std::result::Result< T, E > > + Send > >
   where
     F: Fn() -> Pin< Box< dyn Future< Output = std::result::Result< T, E > > + Send > > + Send + Sync + Clone,
   {
@@ -516,8 +516,8 @@ mod private
 
     /// Create a test operation that fails N times then succeeds
     pub fn test_operation_with_failures(
-      failure_count: u32,
-      success_message: String
+      failure_count : u32,
+      success_message : String
     ) -> impl Fn() -> Pin< Box< dyn Future< Output = std::result::Result< String, String > > + Send > >
     {
       use std::sync::atomic::{ AtomicU32, Ordering };
@@ -545,7 +545,7 @@ mod private
 
     /// Create a test operation that always fails with a specific error
     pub fn test_operation_always_fails(
-      error_message: String
+      error_message : String
     ) -> impl Fn() -> Pin< Box< dyn Future< Output = std::result::Result< String, String > > + Send > >
     {
       move ||
@@ -561,7 +561,7 @@ mod private
 }
 
 #[ cfg( feature = "retry" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use private::RetryConfig;
   exposed use private::ErrorClassification;

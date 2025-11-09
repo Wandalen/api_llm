@@ -29,7 +29,7 @@
 
     println!( "✓ Production deployment created successfully" );
     println!( "  - Deployment ID: {}", deployment.deployment_id );
-    println!( "  - State: {:?}", deployment.state().await );
+    println!( "  - State : {:?}", deployment.state().await );
 
     Ok( () )
   }
@@ -45,8 +45,8 @@
     let deployment_builder = model.deploy()
       .with_name( "blue-green-deployment" )
       .with_strategy( DeploymentStrategy::BlueGreen {
-        switch_traffic_percentage: 100.0,
-        rollback_on_failure: true,
+        switch_traffic_percentage : 100.0,
+        rollback_on_failure : true,
       } )
       .with_health_checks( DeploymentHealthCheckConfig::builder()
         .endpoint( "/health" )
@@ -58,8 +58,8 @@
     let canary_builder = model.deploy()
       .with_name( "canary-deployment" )
       .with_strategy( DeploymentStrategy::Canary {
-        traffic_percentage: 10.0,
-        promotion_criteria: vec![ "error_rate < 1%".to_string() ],
+        traffic_percentage : 10.0,
+        promotion_criteria : vec![ "error_rate < 1%".to_string() ],
       } );
 
     // Actually deploy blue-green and verify
@@ -142,9 +142,9 @@
     let deployment_builder = model.deploy()
       .with_name( "k8s-deployment" )
       .with_orchestration( OrchestrationConfig::Kubernetes {
-        namespace: "ml-models".to_string(),
-        cluster: "production".to_string(),
-        service_account: "model-deployer".to_string(),
+        namespace : "ml-models".to_string(),
+        cluster : "production".to_string(),
+        service_account : "model-deployer".to_string(),
       } )
       .with_container_config( ContainerConfig::builder()
         .image( "gcr.io/project/gemini-pro:latest" )
@@ -182,22 +182,22 @@
 
     // Initial state should be Active (started by deploy())
     assert_eq!( deployment.state().await, DeploymentState::Active );
-    println!( "✓ Initial deployment state: {:?}", deployment.state().await );
+    println!( "✓ Initial deployment state : {:?}", deployment.state().await );
 
     // Test scaling operation
     deployment.scale( 3 ).await?;
     assert_eq!( deployment.state().await, DeploymentState::Active );
-    println!( "✓ Post-scaling state: {:?}", deployment.state().await );
+    println!( "✓ Post-scaling state : {:?}", deployment.state().await );
 
     // Test rollback operation
     deployment.rollback().await?;
     assert_eq!( deployment.state().await, DeploymentState::Active ); // Rollback completes and returns to Active state
-    println!( "✓ Post-rollback state: {:?}", deployment.state().await );
+    println!( "✓ Post-rollback state : {:?}", deployment.state().await );
 
     // Test stop operation
     deployment.stop().await?;
     assert_eq!( deployment.state().await, DeploymentState::Terminated );
-    println!( "✓ Post-stop state: {:?}", deployment.state().await );
+    println!( "✓ Post-stop state : {:?}", deployment.state().await );
 
     Ok( () )
   }
@@ -233,13 +233,13 @@
     assert_eq!( metrics.uptime_percentage(), 100.0 );
 
     println!( "✓ Deployment metrics retrieved successfully:" );
-    println!( "  - Instances: {}", metrics.instance_count.load(std::sync::atomic::Ordering::Relaxed) );
+    println!( "  - Instances : {}", metrics.instance_count.load(std::sync::atomic::Ordering::Relaxed) );
     println!( "  - CPU: {}%", metrics.cpu_utilization() );
-    println!( "  - Memory: {}%", metrics.memory_utilization() );
-    println!( "  - Request rate: {} req/s", metrics.request_rate() );
-    println!( "  - Error rate: {}%", metrics.error_rate() );
-    println!( "  - Response time: {}ms", metrics.response_time_ms() );
-    println!( "  - Uptime: {}%", metrics.uptime_percentage() );
+    println!( "  - Memory : {}%", metrics.memory_utilization() );
+    println!( "  - Request rate : {} req/s", metrics.request_rate() );
+    println!( "  - Error rate : {}%", metrics.error_rate() );
+    println!( "  - Response time : {}ms", metrics.response_time_ms() );
+    println!( "  - Uptime : {}%", metrics.uptime_percentage() );
 
     Ok( () )
   }
@@ -266,7 +266,7 @@
     // Perform state-changing operation in background
     let deployment_clone = deployment;
     let scale_handle = tokio::spawn( async move {
-      tokio::time::sleep( Duration::from_millis( 100 ) ).await;
+      tokio ::time::sleep( Duration::from_millis( 100 ) ).await;
       deployment_clone.scale( 2 ).await.unwrap();
     } );
 
@@ -281,7 +281,7 @@
     match notification_result
     {
       Ok( Ok( state ) ) => {
-        println!( "✓ Received state change notification: {:?}", state );
+        println!( "✓ Received state change notification : {:?}", state );
         assert!( matches!( state, DeploymentState::Scaling | DeploymentState::Active ) );
       },
       Ok( Err( e ) ) => {
@@ -313,7 +313,7 @@
     {
       Err( Error::ApiError( msg ) ) => {
         assert!( msg.contains( "Deployment name is required" ) );
-        println!( "✓ Missing deployment name properly rejected: {}", msg );
+        println!( "✓ Missing deployment name properly rejected : {}", msg );
       },
       _ => panic!( "Deployment without name should fail" ),
     }
@@ -327,7 +327,7 @@
     match invalid_scaling
     {
       Err( Error::ConfigurationError( msg ) ) => {
-        println!( "✓ Invalid scaling configuration rejected: {}", msg );
+        println!( "✓ Invalid scaling configuration rejected : {}", msg );
       },
       _ => panic!( "Invalid scaling configuration should be rejected" ),
     }
@@ -463,8 +463,8 @@
       .with_version( "1.0.0" )
       .with_environment( DeploymentEnvironment::Staging )
       .with_strategy( DeploymentStrategy::BlueGreen {
-        switch_traffic_percentage: 100.0,
-        rollback_on_failure: true,
+        switch_traffic_percentage : 100.0,
+        rollback_on_failure : true,
       } )
       .with_scaling_config( scaling_config )
       .with_resource_config( resource_config )

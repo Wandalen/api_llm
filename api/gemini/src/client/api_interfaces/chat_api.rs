@@ -58,17 +58,17 @@ impl ChatApi< '_ >
       .await
       .map_err( | e | match e
       {
-        crate::error::Error::ApiError( msg ) if msg.contains( "400" ) => 
-          crate::error::Error::InvalidArgument( 
-            format!( "Chat completion request failed: {msg}. Please check message format and roles." )
+        crate ::error::Error::ApiError( msg ) if msg.contains( "400" ) => 
+          crate ::error::Error::InvalidArgument( 
+            format!( "Chat completion request failed : {msg}. Please check message format and roles." )
           ),
-        crate::error::Error::ApiError( msg ) if msg.contains( "401" ) || msg.contains( "403" ) => 
-          crate::error::Error::AuthenticationError( 
-            format!( "Chat completion authentication failed: {msg}. Please verify your API key has chat permissions." )
+        crate ::error::Error::ApiError( msg ) if msg.contains( "401" ) || msg.contains( "403" ) => 
+          crate ::error::Error::AuthenticationError( 
+            format!( "Chat completion authentication failed : {msg}. Please verify your API key has chat permissions." )
           ),
-        crate::error::Error::NetworkError( msg ) => 
-          crate::error::Error::NetworkError( 
-            format!( "Chat completion network error: {msg}. This may be temporary - please retry." )
+        crate ::error::Error::NetworkError( msg ) => 
+          crate ::error::Error::NetworkError( 
+            format!( "Chat completion network error : {msg}. This may be temporary - please retry." )
           ),
         other => other,
       } )?;
@@ -148,13 +148,13 @@ impl ChatApi< '_ >
         },
         invalid_role => {
           return Err( crate::error::Error::InvalidArgument( 
-            format!( "Invalid message role '{invalid_role}' at index {index}. Valid roles are: 'user', 'assistant', 'system'." )
+            format!( "Invalid message role '{invalid_role}' at index {index}. Valid roles are : 'user', 'assistant', 'system'." )
           ) );
         },
       }
     }
 
-    // Validate conversation state: must have at least one user message
+    // Validate conversation state : must have at least one user message
     if !request.messages.iter().any( | msg | msg.role == "user" )
     {
       return Err( crate::error::Error::InvalidArgument( 
@@ -173,7 +173,7 @@ impl ChatApi< '_ >
       {
         parts : vec![ Part
         {
-          text : Some( format!( "System: {system_content}" ) ),
+          text : Some( format!( "System : {system_content}" ) ),
           ..Default::default()
         } ],
         role : "user".to_string(),
@@ -216,7 +216,7 @@ impl ChatApi< '_ >
       temperature : request.temperature,
       max_output_tokens : request.max_tokens,
       top_p : request.top_p,
-      // Note: Gemini doesn't directly support frequency_penalty and presence_penalty
+      // Note : Gemini doesn't directly support frequency_penalty and presence_penalty
       // They would need custom handling in future versions
       ..Default::default()
     } )
@@ -287,7 +287,7 @@ impl ChatApi< '_ >
     // Generate deterministic but unique ID based on timestamp and content hash
     let timestamp = std::time::SystemTime::now()
       .duration_since( std::time::UNIX_EPOCH )
-      .map_err( | e | crate::error::Error::Io( format!( "System time error: {e}" ) ) )?
+      .map_err( | e | crate::error::Error::Io( format!( "System time error : {e}" ) ) )?
       .as_secs();
       
     let id = format!( "chatcmpl-{:x}{:x}", timestamp, rand::random::< u32 >() );
@@ -331,7 +331,7 @@ impl ChatApi< '_ >
     request : &crate::models::ChatCompletionRequest,
   )
   ->
-  Result< impl futures::Stream< Item = Result< crate::models::ChatCompletionResponse, crate::error::Error > > + use<'_>, crate::error::Error >
+  Result< impl futures::Stream< Item = Result< crate::models::ChatCompletionResponse, crate::error::Error > > + use< '_ >, crate::error::Error >
   {
     use futures::stream::StreamExt;
     
@@ -346,17 +346,17 @@ impl ChatApi< '_ >
       .await
       .map_err( | e | match e
       {
-        crate::error::Error::ApiError( msg ) if msg.contains( "400" ) => 
-          crate::error::Error::InvalidArgument( 
-            format!( "Chat streaming request failed: {msg}. Please check message format and roles." )
+        crate ::error::Error::ApiError( msg ) if msg.contains( "400" ) => 
+          crate ::error::Error::InvalidArgument( 
+            format!( "Chat streaming request failed : {msg}. Please check message format and roles." )
           ),
-        crate::error::Error::ApiError( msg ) if msg.contains( "401" ) || msg.contains( "403" ) => 
-          crate::error::Error::AuthenticationError( 
-            format!( "Chat streaming authentication failed: {msg}. Please verify your API key has streaming permissions." )
+        crate ::error::Error::ApiError( msg ) if msg.contains( "401" ) || msg.contains( "403" ) => 
+          crate ::error::Error::AuthenticationError( 
+            format!( "Chat streaming authentication failed : {msg}. Please verify your API key has streaming permissions." )
           ),
-        crate::error::Error::NetworkError( msg ) => 
-          crate::error::Error::NetworkError( 
-            format!( "Chat streaming network error: {msg}. Connection may be unstable - please retry." )
+        crate ::error::Error::NetworkError( msg ) => 
+          crate ::error::Error::NetworkError( 
+            format!( "Chat streaming network error : {msg}. Connection may be unstable - please retry." )
           ),
         other => other,
       } )?;
@@ -383,17 +383,17 @@ impl ChatApi< '_ >
     error : crate::error::Error,
   )
   ->
-  crate::error::Error
+  crate ::error::Error
   {
     match error
     {
-      crate::error::Error::NetworkError( msg ) => 
-        crate::error::Error::NetworkError( 
-          format!( "Streaming connection error: {msg}. This may indicate network instability or server-side issues." )
+      crate ::error::Error::NetworkError( msg ) => 
+        crate ::error::Error::NetworkError( 
+          format!( "Streaming connection error : {msg}. This may indicate network instability or server-side issues." )
         ),
-      crate::error::Error::SerializationError( msg ) => 
-        crate::error::Error::SerializationError( 
-          format!( "Streaming response parsing error: {msg}. This may indicate malformed server-sent events." )
+      crate ::error::Error::SerializationError( msg ) => 
+        crate ::error::Error::SerializationError( 
+          format!( "Streaming response parsing error : {msg}. This may indicate malformed server-sent events." )
         ),
       other => other,
     }

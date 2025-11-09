@@ -12,11 +12,11 @@ use api_openai::ClientApiAccessors;
 use api_openai::
 {
   Client,
-  components::
+  components ::
   {
-    responses::{ CreateResponseRequest, ResponseInput },
-    tools::{ Tool, ToolChoice, WebSearchTool },
-    output::{ OutputItem, OutputContentPart, Annotation },
+    responses ::{ CreateResponseRequest, ResponseInput },
+    tools ::{ Tool, ToolChoice, WebSearchTool },
+    output ::{ OutputItem, OutputContentPart, Annotation },
   },
 };
 
@@ -49,14 +49,14 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
 
   let response = client.responses().create( request ).await?;
 
-  println!( "Response Status: {:?}", response.status );
+  println!( "Response Status : {:?}", response.status );
   for item in response.output
   {
     match item
     {
       OutputItem::WebSearchCall( call ) =>
       {
-        println!( "Web Search Call: {call:?}" );
+        println!( "Web Search Call : {call:?}" );
       },
       OutputItem::Message( message ) =>
       {
@@ -65,18 +65,18 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
         {
           if let OutputContentPart::Text { text, annotations } = content_part
           {
-            println!( "  Text: {text}" );
+            println!( "  Text : {text}" );
             for annotation in annotations
             {
               if let Annotation::UrlCitation { url, title, start_index, end_index } = annotation
               {
-                println!( "    URL Citation: URL='{url}', Title='{title}', Start={start_index}, End={end_index}" );
+                println!( "    URL Citation : URL='{url}', Title='{title}', Start={start_index}, End={end_index}" );
               }
             }
           }
         }
       },
-      _ => println!( "Other Output Item: {item:?}" ),
+      _ => println!( "Other Output Item : {item:?}" ),
     }
   }
 

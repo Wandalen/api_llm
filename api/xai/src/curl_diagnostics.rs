@@ -57,7 +57,7 @@ mod private
   /// # Examples
   ///
   /// ```
-  /// # #[cfg(feature = "curl_diagnostics")]
+  /// # #[ cfg( feature = "curl_diagnostics") ]
   /// # {
   /// use api_xai::{ to_curl, ChatCompletionRequest, Message };
   ///
@@ -72,8 +72,8 @@ mod private
   ///
   /// // Output:
   /// // curl -X POST https://api.x.ai/v1/chat/completions \
-  /// //   -H "Authorization: Bearer $XAI_API_KEY" \
-  /// //   -H "Content-Type: application/json" \
+  /// //   -H "Authorization : Bearer $XAI_API_KEY" \
+  /// //   -H "Content-Type : application/json" \
   /// //   -d '{
   /// //   "model": "grok-3",
   /// //   "messages": [{"role": "user", "content": "Hello!"}],
@@ -90,8 +90,8 @@ mod private
     format!
     (
       "curl -X POST https://api.x.ai/v1/chat/completions \\\n  \
-       -H \"Authorization: Bearer $XAI_API_KEY\" \\\n  \
-       -H \"Content-Type: application/json\" \\\n  \
+       -H \"Authorization : Bearer $XAI_API_KEY\" \\\n  \
+       -H \"Content-Type : application/json\" \\\n  \
        -d '{json}'"
     )
   }
@@ -118,7 +118,7 @@ mod private
   /// # Examples
   ///
   /// ```
-  /// # #[cfg(feature = "curl_diagnostics")]
+  /// # #[ cfg( feature = "curl_diagnostics") ]
   /// # {
   /// use api_xai::{ to_curl_with_key, ChatCompletionRequest, Message };
   ///
@@ -143,8 +143,8 @@ mod private
     format!
     (
       "curl -X POST https://api.x.ai/v1/chat/completions \\\n  \
-       -H \"Authorization: Bearer {api_key}\" \\\n  \
-       -H \"Content-Type: application/json\" \\\n  \
+       -H \"Authorization : Bearer {api_key}\" \\\n  \
+       -H \"Content-Type : application/json\" \\\n  \
        -d '{json}'"
     )
   }
@@ -165,7 +165,7 @@ mod private
   /// # Examples
   ///
   /// ```
-  /// # #[cfg(feature = "curl_diagnostics")]
+  /// # #[ cfg( feature = "curl_diagnostics") ]
   /// # {
   /// use api_xai::{ to_curl_with_endpoint, ChatCompletionRequest, Message };
   ///
@@ -198,8 +198,8 @@ mod private
     format!
     (
       "curl -X POST {endpoint} \\\n  \
-       -H \"Authorization: Bearer $XAI_API_KEY\" \\\n  \
-       -H \"Content-Type: application/json\" \\\n  \
+       -H \"Authorization : Bearer $XAI_API_KEY\" \\\n  \
+       -H \"Content-Type : application/json\" \\\n  \
        -d '{json}'"
     )
   }
@@ -220,7 +220,7 @@ mod private
   /// # Examples
   ///
   /// ```
-  /// # #[cfg(feature = "curl_diagnostics")]
+  /// # #[ cfg( feature = "curl_diagnostics") ]
   /// # {
   /// use api_xai::{ to_curl_compact, ChatCompletionRequest, Message };
   ///
@@ -233,7 +233,7 @@ mod private
   /// println!( "{}", curl );
   ///
   /// // Output (single line):
-  /// // curl -X POST https://api.x.ai/v1/chat/completions -H "Authorization: Bearer $XAI_API_KEY" -H "Content-Type: application/json" -d '{"model":"grok-3","messages":[...]}'
+  /// // curl -X POST https://api.x.ai/v1/chat/completions -H "Authorization : Bearer $XAI_API_KEY" -H "Content-Type : application/json" -d '{"model":"grok-3","messages":[...]}'
   /// # }
   /// ```
   #[ cfg( feature = "curl_diagnostics" ) ]
@@ -244,13 +244,13 @@ mod private
 
     format!
     (
-      "curl -X POST https://api.x.ai/v1/chat/completions -H \"Authorization: Bearer $XAI_API_KEY\" -H \"Content-Type: application/json\" -d '{json}'"
+      "curl -X POST https://api.x.ai/v1/chat/completions -H \"Authorization : Bearer $XAI_API_KEY\" -H \"Content-Type : application/json\" -d '{json}'"
     )
   }
 }
 
 #[ cfg( feature = "curl_diagnostics" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

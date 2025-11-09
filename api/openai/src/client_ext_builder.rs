@@ -8,11 +8,11 @@ mod private
 {
   use crate::
   {
-    client::Client,
-    environment::{ OpenaiEnvironment, EnvironmentInterface },
-    error::Result,
-    diagnostics::DiagnosticsCollector,
-    request_cache::{ ApiRequestCache, CacheConfig },
+    client ::Client,
+    environment ::{ OpenaiEnvironment, EnvironmentInterface },
+    error ::Result,
+    diagnostics ::DiagnosticsCollector,
+    request_cache ::{ ApiRequestCache, CacheConfig },
   };
 
   #[ cfg( feature = "retry" ) ]
@@ -60,21 +60,21 @@ mod private
         http_client,
         environment,
         diagnostics,
-        cache: None,
+        cache : None,
 
         // Feature-gated fields initialization
         #[ cfg( feature = "retry" ) ]
-        retry_config: None,
+        retry_config : None,
 
         #[ cfg( feature = "circuit_breaker" ) ]
-        circuit_breaker_config: None,
+        circuit_breaker_config : None,
         #[ cfg( feature = "circuit_breaker" ) ]
-        circuit_breaker: None,
+        circuit_breaker : None,
 
         #[ cfg( feature = "rate_limiting" ) ]
-        rate_limiting_config: None,
+        rate_limiting_config : None,
         #[ cfg( feature = "rate_limiting" ) ]
-        rate_limiter: None,
+        rate_limiter : None,
       })
     }
 
@@ -90,7 +90,7 @@ mod private
     /// Enable request caching with custom configuration.
     #[ inline ]
     #[ must_use ]
-    pub fn with_cache_config( mut self, config: CacheConfig ) -> Self
+    pub fn with_cache_config( mut self, config : CacheConfig ) -> Self
     {
       self.cache = Some( Arc::new( ApiRequestCache::with_config( config ) ) );
       self
@@ -129,7 +129,7 @@ mod private
     #[ cfg( feature = "retry" ) ]
     #[ inline ]
     #[ must_use ]
-    pub fn with_retry_config( mut self, config: EnhancedRetryConfig ) -> Self
+    pub fn with_retry_config( mut self, config : EnhancedRetryConfig ) -> Self
     {
       self.retry_config = Some( config );
       self
@@ -166,7 +166,7 @@ mod private
     #[ cfg( feature = "circuit_breaker" ) ]
     #[ inline ]
     #[ must_use ]
-    pub fn with_circuit_breaker_config( mut self, config: EnhancedCircuitBreakerConfig ) -> Self
+    pub fn with_circuit_breaker_config( mut self, config : EnhancedCircuitBreakerConfig ) -> Self
     {
       self.circuit_breaker_config = Some( config.clone() );
       self.circuit_breaker = EnhancedCircuitBreaker::new( config ).ok();
@@ -199,7 +199,7 @@ mod private
     #[ cfg( feature = "rate_limiting" ) ]
     #[ inline ]
     #[ must_use ]
-    pub fn with_rate_limiting_config( mut self, config: EnhancedRateLimitingConfig ) -> Self
+    pub fn with_rate_limiting_config( mut self, config : EnhancedRateLimitingConfig ) -> Self
     {
       self.rate_limiting_config = Some( config.clone() );
       self.rate_limiter = EnhancedRateLimiter::new( config ).ok();

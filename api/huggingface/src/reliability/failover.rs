@@ -14,17 +14,17 @@
 //! ```no_run
 //! # use api_huggingface::reliability::{FailoverManager, FailoverConfig, FailoverStrategy};
 //! # use std::time::Duration;
-//! # async fn example( ) -> Result< ( ), Box< dyn std::error::Error >> {
+//! # async fn example( ) -> Result< ( ), Box< dyn std::error::Error > > {
 //! let failover = FailoverManager::new(
 //!   FailoverConfig {
-//!     endpoints: vec![
+//!     endpoints : vec![
 //!       "https://api-inference.huggingface.co".to_string( ),
 //!       "https://api-inference-backup.huggingface.co".to_string( ),
 //!     ],
-//!     strategy: FailoverStrategy::Priority,
-//!     max_retries: 3,
-//!     failure_window: Duration::from_secs( 300 ),
-//!     failure_threshold: 5,
+//!     strategy : FailoverStrategy::Priority,
+//!     max_retries : 3,
+//!     failure_window : Duration::from_secs( 300 ),
+//!     failure_threshold : 5,
 //!   }
 //! ).map_err( |e| format!( "{:?}", e ))?;
 //!
@@ -185,7 +185,7 @@ struct FailoverState
 pub struct FailoverManager 
 {
   config : FailoverConfig,
-  state : Arc< RwLock< FailoverState >>,
+  state : Arc< RwLock< FailoverState > >,
 }
 
 impl FailoverManager 
@@ -324,9 +324,9 @@ impl FailoverManager
   /// Returns `FailoverError::AllRetriesFailed` if all retry attempts fail.
   /// Returns `FailoverError::Operation` wrapping the underlying error if operation fails.
   #[ inline ]
-  pub async fn execute_with_failover<F, T, E >( &self, mut f : F ) -> Result< T, FailoverError<E > >
+  pub async fn execute_with_failover< F, T, E >( &self, mut f : F ) -> Result< T, FailoverError< E > >
   where
-  F : FnMut( String ) -> core::pin::Pin< Box< dyn core::future::Future< Output = Result< T, E >> + Send > >,
+  F : FnMut( String ) -> core::pin::Pin< Box< dyn core::future::Future< Output = Result< T, E > > + Send > >,
   E: core::fmt::Display,
   {
   let mut attempts = 0;
@@ -444,7 +444,7 @@ pub struct EndpointHealthStatus
 
 /// Failover errors
 #[ derive( Debug ) ]
-pub enum FailoverError<E = String > 
+pub enum FailoverError< E = String > 
 {
   /// No endpoints configured
   NoEndpoints,
@@ -463,27 +463,27 @@ pub enum FailoverError<E = String >
   Operation( E ),
 }
 
-impl<E > core::fmt::Display for FailoverError<E >
+impl< E > core::fmt::Display for FailoverError< E >
 where
   E: core::fmt::Display,
 {
   #[ inline ]
-  fn fmt( &self, f : &mut core::fmt::Formatter<'_ > ) -> core::fmt::Result 
+  fn fmt( &self, f : &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result 
   {
   match self
   {
       Self::NoEndpoints => write!( f, "No endpoints configured" ),
       Self::AllEndpointsUnhealthy => write!( f, "All endpoints are unhealthy" ),
-      Self::SelectionFailed( msg ) => write!( f, "Endpoint selection failed: {msg}" ),
+      Self::SelectionFailed( msg ) => write!( f, "Endpoint selection failed : {msg}" ),
       Self::AllRetriesFailed { attempts, last_error } => {
-  write!( f, "All {attempts} retry attempts failed, last error: {last_error}" )
+  write!( f, "All {attempts} retry attempts failed, last error : {last_error}" )
       }
-      Self::Operation( e ) => write!( f, "Operation failed: {e}" ),
+      Self::Operation( e ) => write!( f, "Operation failed : {e}" ),
   }
   }
 }
 
-impl<E > std::error::Error for FailoverError<E >
+impl< E > std::error::Error for FailoverError< E >
 where
   E: std::error::Error + 'static,
 {

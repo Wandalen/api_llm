@@ -13,19 +13,19 @@ mod enhanced_batch_operations_tests
   use api_openai::
   {
     Client,
-    environment::OpenaiEnvironmentImpl,
-    secret::Secret,
-    components::
+    environment ::OpenaiEnvironmentImpl,
+    secret ::Secret,
+    components ::
     {
-      common::Metadata,
+      common ::Metadata,
     },
-    enhanced_batch_operations::*,
+    enhanced_batch_operations ::*,
   };
   use serde_json::json;
   use std::
   {
-    sync::Arc,
-    collections::HashMap,
+    sync ::Arc,
+    collections ::HashMap,
   };
   use core::time::Duration;
 
@@ -136,24 +136,24 @@ mod enhanced_batch_operations_tests
 
     let enhanced_requests = vec![
       EnhancedBatchRequest {
-        custom_id: "req_1".to_string(),
-        method: "POST".to_string(),
-        url: "/v1/chat/completions".to_string(),
-        body: json!({"model": "gpt-4o-mini", "messages": [{"role": "user", "content": "Hello"}]}),
-        priority: BatchRequestPriority::High,
-        retry_config: Some(BatchRetryConfig {
-          max_retries: 3,
-          backoff_multiplier: 2.0,
-          max_delay: Duration::from_secs(60),
+        custom_id : "req_1".to_string(),
+        method : "POST".to_string(),
+        url : "/v1/chat/completions".to_string(),
+        body : json!({"model": "gpt-4o-mini", "messages": [{"role": "user", "content": "Hello"}]}),
+        priority : BatchRequestPriority::High,
+        retry_config : Some(BatchRetryConfig {
+          max_retries : 3,
+          backoff_multiplier : 2.0,
+          max_delay : Duration::from_secs(60),
         }),
       },
       EnhancedBatchRequest {
-        custom_id: "req_2".to_string(),
-        method: "POST".to_string(),
-        url: "/v1/embeddings".to_string(),
-        body: json!({"model": "text-embedding-ada-002", "input": "Test text"}),
-        priority: BatchRequestPriority::Normal,
-        retry_config: None,
+        custom_id : "req_2".to_string(),
+        method : "POST".to_string(),
+        url : "/v1/embeddings".to_string(),
+        body : json!({"model": "text-embedding-ada-002", "input": "Test text"}),
+        priority : BatchRequestPriority::Normal,
+        retry_config : None,
       },
     ];
 
@@ -178,14 +178,14 @@ mod enhanced_batch_operations_tests
 
     let large_batch_requests = (0..100)
       .map(|i| EnhancedBatchRequest {
-        custom_id: format!("req_{i}"),
-        method: "POST".to_string(),
-        url: "/v1/chat/completions".to_string(),
-        body: json!({"model": "gpt-4o-mini", "messages": [{"role": "user", "content": format!("Request {}", i)}]}),
-        priority: BatchRequestPriority::Normal,
-        retry_config: None,
+        custom_id : format!("req_{i}"),
+        method : "POST".to_string(),
+        url : "/v1/chat/completions".to_string(),
+        body : json!({"model": "gpt-4o-mini", "messages": [{"role": "user", "content": format!("Request {}", i)}]}),
+        priority : BatchRequestPriority::Normal,
+        retry_config : None,
       })
-      .collect::<Vec<_>>();
+      .collect::< Vec< _ > >();
 
     // This should succeed as batch optimization is implemented
     let result = optimize_and_chunk_batch(&client, large_batch_requests, 50).await;
@@ -269,9 +269,9 @@ mod enhanced_batch_operations_tests
 
     let failed_batch_id = "batch_failed_123";
     let retry_config = BatchRetryConfig {
-      max_retries: 5,
-      backoff_multiplier: 1.5,
-      max_delay: Duration::from_secs(300),
+      max_retries : 5,
+      backoff_multiplier : 1.5,
+      max_delay : Duration::from_secs(300),
     };
 
     // This should succeed as error recovery is implemented
@@ -329,12 +329,12 @@ mod enhanced_batch_operations_tests
 
   // Helper functions for test data creation
 
-  fn create_test_batch_config(name: &str, endpoint: &str) -> BatchJobConfig
+  fn create_test_batch_config(name : &str, endpoint : &str) -> BatchJobConfig
   {
     BatchJobConfig {
-      endpoint: endpoint.to_string(),
-      completion_window: "24h".to_string(),
-      metadata: Some(Metadata({
+      endpoint : endpoint.to_string(),
+      completion_window : "24h".to_string(),
+      metadata : Some(Metadata({
         let mut map = HashMap::new();
         map.insert("name".to_string(), name.to_string());
         map.insert("test".to_string(), "true".to_string());
@@ -343,42 +343,42 @@ mod enhanced_batch_operations_tests
     }
   }
 
-  fn create_performance_test_requests(count: usize) -> Vec< EnhancedBatchRequest >
+  fn create_performance_test_requests(count : usize) -> Vec< EnhancedBatchRequest >
   {
     (0..count)
       .map(|i| EnhancedBatchRequest {
-        custom_id: format!("perf_req_{i}"),
-        method: "POST".to_string(),
-        url: "/v1/chat/completions".to_string(),
-        body: json!({
+        custom_id : format!("perf_req_{i}"),
+        method : "POST".to_string(),
+        url : "/v1/chat/completions".to_string(),
+        body : json!({
           "model": "gpt-4o-mini",
           "messages": [{"role": "user", "content": format!("Performance test request {}", i)}],
           "max_tokens": 100
         }),
-        priority: if i % 3 == 0 { BatchRequestPriority::High } else { BatchRequestPriority::Normal },
-        retry_config: Some(BatchRetryConfig {
-          max_retries: 2,
-          backoff_multiplier: 1.5,
-          max_delay: Duration::from_secs(30),
+        priority : if i % 3 == 0 { BatchRequestPriority::High } else { BatchRequestPriority::Normal },
+        retry_config : Some(BatchRetryConfig {
+          max_retries : 2,
+          backoff_multiplier : 1.5,
+          max_delay : Duration::from_secs(30),
         }),
       })
       .collect()
   }
 
 
-  fn create_duplicate_batch_requests(count: usize) -> Vec< EnhancedBatchRequest >
+  fn create_duplicate_batch_requests(count : usize) -> Vec< EnhancedBatchRequest >
   {
     (0..count)
       .map(|i| EnhancedBatchRequest {
-        custom_id: format!("dup_req_{i}"),
-        method: "POST".to_string(),
-        url: "/v1/chat/completions".to_string(),
-        body: json!({
+        custom_id : format!("dup_req_{i}"),
+        method : "POST".to_string(),
+        url : "/v1/chat/completions".to_string(),
+        body : json!({
           "model": "gpt-4o-mini",
           "messages": [{"role": "user", "content": "Duplicate request"}] // Intentionally duplicate
         }),
-        priority: BatchRequestPriority::Normal,
-        retry_config: None,
+        priority : BatchRequestPriority::Normal,
+        retry_config : None,
       })
       .collect()
   }

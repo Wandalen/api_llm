@@ -3,9 +3,9 @@
 
 use api_huggingface::
 {
-  client::Client,
-  environment::HuggingFaceEnvironmentImpl,
-  providers::{ ChatMessage, Providers },
+  client ::Client,
+  environment ::HuggingFaceEnvironmentImpl,
+  providers ::{ ChatMessage, Providers },
   Secret,
 };
 
@@ -22,7 +22,7 @@ async fn find_working_model( providers : &Providers< HuggingFaceEnvironmentImpl 
   for ( i, model ) in pro_models.iter().enumerate()
   {
   println!( "🧪 Test {}: {}", i + 1, model );
-  println!( "📤 Input: {math_question:?}" );
+  println!( "📤 Input : {math_question:?}" );
 
   match providers.math_completion( model, math_question ).await
   {
@@ -31,7 +31,7 @@ async fn find_working_model( providers : &Providers< HuggingFaceEnvironmentImpl 
   if let Some( choice ) = response.choices.first()
   {
           println!( "✅ SUCCESS! Model {model} is available" );
-          println!( "📝 Response: {:?}", choice.message.content );
+          println!( "📝 Response : {:?}", choice.message.content );
           println!( "🎉 WORKING PRO MODEL FOUND: {model}" );
           println!( "================================================================================\n" );
           return Some( *model );
@@ -51,7 +51,7 @@ async fn find_working_model( providers : &Providers< HuggingFaceEnvironmentImpl 
 /// Test the working model with various scenarios
 async fn test_working_model( providers : &Providers< HuggingFaceEnvironmentImpl >, model : &str )
 {
-  println!( "🎊 SUCCESS : Found working Pro model: {model}" );
+  println!( "🎊 SUCCESS : Found working Pro model : {model}" );
   println!( "\n🧪 Testing simple chat with the working model..." );
 
   match providers.simple_chat( model, "Hello, how are you?" ).await
@@ -60,12 +60,12 @@ async fn test_working_model( providers : &Providers< HuggingFaceEnvironmentImpl 
   {
       if let Some( choice ) = response.choices.first()
       {
-  println!( "📝 Simple chat response: {:?}", choice.message.content );
+  println!( "📝 Simple chat response : {:?}", choice.message.content );
       }
   },
   Err( e ) =>
   {
-      println!( "❌ Simple chat failed: {e}" );
+      println!( "❌ Simple chat failed : {e}" );
   }
   }
 
@@ -95,12 +95,12 @@ async fn test_working_model( providers : &Providers< HuggingFaceEnvironmentImpl 
   {
       if let Some( choice ) = response.choices.first()
       {
-  println!( "📝 Math conversation response: {:?}", choice.message.content );
+  println!( "📝 Math conversation response : {:?}", choice.message.content );
       }
   },
   Err( e ) =>
   {
-      println!( "❌ Math conversation failed: {e}" );
+      println!( "❌ Math conversation failed : {e}" );
   }
   }
 }
@@ -116,7 +116,7 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
   Ok( s ) => s,
   Err( e ) =>
   {
-      eprintln!( "❌ Failed to load API key: {e}" );
+      eprintln!( "❌ Failed to load API key : {e}" );
       eprintln!( "💡 Please set HUGGINGFACE_API_KEY environment variable" );
       return Err( e.into() );
   }
@@ -129,7 +129,7 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
   println!( "✅ Client initialized successfully\n" );
 
   let math_question = "If x = 13, what is x * 3?";
-  println!( "🧪 Testing Pro models with math question: \"{math_question}\"" );
+  println!( "🧪 Testing Pro models with math question : \"{math_question}\"" );
   println!( "🔍 Using Inference Providers API (/v1/chat/completions)\n" );
 
   if let Some( model ) = find_working_model( &providers, math_question ).await

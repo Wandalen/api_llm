@@ -7,9 +7,9 @@ mod private
   //!
   //! # Design Decisions
   //!
-  //! ## Why Macros with #[cfg] Guards?
+  //! ## Why Macros with #[ cfg ] Guards?
   //!
-  //! This module uses `macro_rules!` with conditional compilation (`#[cfg(feature = "structured_logging")]`)
+  //! This module uses `macro_rules!` with conditional compilation (`#[ cfg( feature = "structured_logging") ]`)
   //! instead of regular functions for several reasons:
   //!
   //! 1. **Zero Runtime Overhead**: When the `structured_logging` feature is disabled,
@@ -19,7 +19,7 @@ mod private
   //! 2. **Ergonomic API**: Macros allow flexible argument patterns without trait bounds
   //!    or generic constraints that would complicate the API.
   //!
-  //! 3. **Compile-Time Feature Detection**: The `#[cfg]` guards ensure that tracing
+  //! 3. **Compile-Time Feature Detection**: The `#[ cfg ]` guards ensure that tracing
   //!    dependency and code only exist when explicitly enabled via cargo features.
   //!
   //! ## Alternatives Considered
@@ -30,7 +30,7 @@ mod private
   //!
   //! ## Known Pitfalls
   //!
-  //! ### Macro Invocation Syntax (Fix: issue-doctest-macro-syntax)
+  //! ### Macro Invocation Syntax (Fix : issue-doctest-macro-syntax)
   //!
   //! **Root Cause**: Rust macros require the `!` suffix for invocation. Documentation
   //! examples that call macros without `!` will fail during doc tests with error
@@ -63,7 +63,7 @@ mod private
   /// # Examples
   ///
   /// ```
-  /// # #[cfg(feature = "structured_logging")]
+  /// # #[ cfg( feature = "structured_logging") ]
   /// # {
   /// use api_xai::log_request;
   ///
@@ -77,7 +77,7 @@ mod private
     {
       #[ cfg( feature = "structured_logging" ) ]
       {
-        tracing::info!(
+        tracing ::info!(
           method = $method,
           path = $path,
           model = $model,
@@ -99,7 +99,7 @@ mod private
   /// # Examples
   ///
   /// ```
-  /// # #[cfg(feature = "structured_logging")]
+  /// # #[ cfg( feature = "structured_logging") ]
   /// # {
   /// use api_xai::log_response;
   ///
@@ -113,7 +113,7 @@ mod private
     {
       #[ cfg( feature = "structured_logging" ) ]
       {
-        tracing::info!(
+        tracing ::info!(
           status = $status,
           duration_ms = $duration_ms,
           "API response"
@@ -134,7 +134,7 @@ mod private
   /// # Examples
   ///
   /// ```
-  /// # #[cfg(feature = "structured_logging")]
+  /// # #[ cfg( feature = "structured_logging") ]
   /// # {
   /// use api_xai::log_error;
   ///
@@ -148,7 +148,7 @@ mod private
     {
       #[ cfg( feature = "structured_logging" ) ]
       {
-        tracing::error!(
+        tracing ::error!(
           error_type = $error_type,
           message = $message,
           "API error"
@@ -170,7 +170,7 @@ mod private
   /// # Examples
   ///
   /// ```
-  /// # #[cfg(feature = "structured_logging")]
+  /// # #[ cfg( feature = "structured_logging") ]
   /// # {
   /// use api_xai::log_retry;
   ///
@@ -184,7 +184,7 @@ mod private
     {
       #[ cfg( feature = "structured_logging" ) ]
       {
-        tracing::warn!(
+        tracing ::warn!(
           attempt = $attempt,
           max_attempts = $max_attempts,
           delay_ms = $delay_ms,
@@ -207,7 +207,7 @@ mod private
   /// # Examples
   ///
   /// ```
-  /// # #[cfg(feature = "structured_logging")]
+  /// # #[ cfg( feature = "structured_logging") ]
   /// # {
   /// use api_xai::log_circuit_breaker_state;
   ///
@@ -221,7 +221,7 @@ mod private
     {
       #[ cfg( feature = "structured_logging" ) ]
       {
-        tracing::warn!(
+        tracing ::warn!(
           from_state = $from_state,
           to_state = $to_state,
           reason = $reason,
@@ -244,7 +244,7 @@ mod private
   /// # Examples
   ///
   /// ```
-  /// # #[cfg(feature = "structured_logging")]
+  /// # #[ cfg( feature = "structured_logging") ]
   /// # {
   /// use api_xai::log_failover;
   ///
@@ -262,7 +262,7 @@ mod private
     {
       #[ cfg( feature = "structured_logging" ) ]
       {
-        tracing::warn!(
+        tracing ::warn!(
           from_endpoint = $from_endpoint,
           to_endpoint = $to_endpoint,
           reason = $reason,
@@ -284,7 +284,7 @@ mod private
   /// # Examples
   ///
   /// ```
-  /// # #[cfg(feature = "structured_logging")]
+  /// # #[ cfg( feature = "structured_logging") ]
   /// # {
   /// use api_xai::log_rate_limit;
   ///
@@ -298,7 +298,7 @@ mod private
     {
       #[ cfg( feature = "structured_logging" ) ]
       {
-        tracing::debug!(
+        tracing ::debug!(
           tokens_available = $tokens_available,
           tokens_requested = $tokens_requested,
           "Rate limit check"
@@ -324,7 +324,7 @@ mod private
   /// # Examples
   ///
   /// ```no_run
-  /// # #[cfg(feature = "structured_logging")]
+  /// # #[ cfg( feature = "structured_logging") ]
   /// # {
   /// use api_xai::create_operation_span;
   ///
@@ -339,7 +339,7 @@ mod private
     model : Option< &str >
   ) -> tracing::Span
   {
-    tracing::info_span!(
+    tracing ::info_span!(
       "api_operation",
       operation = name,
       model = model,
@@ -348,7 +348,7 @@ mod private
 }
 
 #[ cfg( feature = "structured_logging" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

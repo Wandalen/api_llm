@@ -83,8 +83,8 @@
 //!
 //! ```bash
 //! curl -X POST "https://router.huggingface.co/v1/chat/completions" \
-//!   -H "Authorization: Bearer YOUR_API_KEY_HERE" \
-//!   -H "Content-Type: application/json" \
+//!   -H "Authorization : Bearer YOUR_API_KEY_HERE" \
+//!   -H "Content-Type : application/json" \
 //!   -d '{...}'
 //! ```
 
@@ -291,13 +291,13 @@ mod curl_helpers
       if options.include_auth_header || options.api_key.is_some()
       {
   format!(
-          "curl -X POST \\\n  \"{url}\" \\\n  -H \"{auth_header}\" \\\n  -H \"Content-Type: application/json\" \\\n  -d \"{json_escaped}\""
+          "curl -X POST \\\n  \"{url}\" \\\n  -H \"{auth_header}\" \\\n  -H \"Content-Type : application/json\" \\\n  -d \"{json_escaped}\""
   )
       }
       else
       {
   format!(
-          "curl -X POST \\\n  \"{url}\" \\\n  -H \"Content-Type: application/json\" \\\n  -d \"{json_escaped}\""
+          "curl -X POST \\\n  \"{url}\" \\\n  -H \"Content-Type : application/json\" \\\n  -d \"{json_escaped}\""
   )
       }
   }
@@ -309,13 +309,13 @@ mod curl_helpers
       if options.include_auth_header || options.api_key.is_some()
       {
   format!(
-          "curl -X POST \"{url}\" -H \"{auth_header}\" -H \"Content-Type: application/json\" -d '{json_escaped}'"
+          "curl -X POST \"{url}\" -H \"{auth_header}\" -H \"Content-Type : application/json\" -d '{json_escaped}'"
   )
       }
       else
       {
   format!(
-          "curl -X POST \"{url}\" -H \"Content-Type: application/json\" -d '{json_escaped}'"
+          "curl -X POST \"{url}\" -H \"Content-Type : application/json\" -d '{json_escaped}'"
   )
       }
   }
@@ -324,8 +324,8 @@ mod curl_helpers
   /// Handle JSON serialization with error recovery
   pub fn safe_json_serialize< T : serde::Serialize >( value : &T ) -> String
   {
-  serde_json::to_string( value ).unwrap_or_else( |err| {
-      format!( "{{\"error\": \"Failed to serialize request: {err}\"}}" )
+  serde_json ::to_string( value ).unwrap_or_else( |err| {
+      format!( "{{\"error\": \"Failed to serialize request : {err}\"}}" )
   })
   }
 }
@@ -343,7 +343,7 @@ impl AsCurl for ChatCompletionRequest
   {
   let url = "https://router.huggingface.co/v1/chat/completions";
   let json_body = curl_helpers::safe_json_serialize( self );
-  curl_helpers::generate_curl_command( url, &json_body, options )
+  curl_helpers ::generate_curl_command( url, &json_body, options )
   }
 }
 

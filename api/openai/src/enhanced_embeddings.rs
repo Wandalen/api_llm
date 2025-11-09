@@ -9,12 +9,12 @@ mod private
 {
   use crate::
   {
-    client::Client,
-    client_api_accessors::ClientApiAccessors,
-    error::{ Result, OpenAIError },
-    environment::{ OpenaiEnvironment, EnvironmentInterface },
-    components::embeddings::CreateEmbeddingResponse,
-    components::embeddings_request::CreateEmbeddingRequest,
+    client ::Client,
+    client_api_accessors ::ClientApiAccessors,
+    error ::{ Result, OpenAIError },
+    environment ::{ OpenaiEnvironment, EnvironmentInterface },
+    components ::embeddings::CreateEmbeddingResponse,
+    components ::embeddings_request::CreateEmbeddingRequest,
   };
 
   // Feature-gated imports
@@ -107,7 +107,7 @@ mod private
     {
       // Create request signature for batching analysis
       let request_json = serde_json::to_vec( &request )
-        .map_err( | e | OpenAIError::Internal( format!( "Failed to serialize request: {e}" ) ) )?;
+        .map_err( | e | OpenAIError::Internal( format!( "Failed to serialize request : {e}" ) ) )?;
 
       let signature = RequestSignature::new( "POST", "embeddings", &request_json );
 
@@ -115,8 +115,8 @@ mod private
       let response_bytes = self.batcher.submit_request( signature, request ).await?;
 
       // Parse response
-      let response: CreateEmbeddingResponse = serde_json::from_slice( &response_bytes )
-        .map_err( | e | OpenAIError::Internal( format!( "Failed to parse response: {e}" ) ) )?;
+      let response : CreateEmbeddingResponse = serde_json::from_slice( &response_bytes )
+        .map_err( | e | OpenAIError::Internal( format!( "Failed to parse response : {e}" ) ) )?;
 
       Ok( response )
     }
@@ -204,7 +204,7 @@ mod private
       let batcher = Arc::clone( &self.batcher );
       let batch_size = self.calculate_optimal_batch_size( texts.len() );
 
-      tokio::spawn( async move
+      tokio ::spawn( async move
       {
         for chunk in texts.chunks( batch_size )
         {
@@ -214,7 +214,7 @@ mod private
             Ok( json ) => json,
             Err( e ) =>
             {
-              let _ = tx.send( Err( OpenAIError::Internal( format!( "Serialization failed: {e}" ) ) ) ).await;
+              let _ = tx.send( Err( OpenAIError::Internal( format!( "Serialization failed : {e}" ) ) ) ).await;
               continue;
             }
           };
@@ -236,7 +236,7 @@ mod private
                 },
                 Err( e ) =>
                 {
-                  let _ = tx.send( Err( OpenAIError::Internal( format!( "Parse failed: {e}" ) ) ) ).await;
+                  let _ = tx.send( Err( OpenAIError::Internal( format!( "Parse failed : {e}" ) ) ) ).await;
                 }
               }
             },
@@ -258,13 +258,13 @@ mod private
   #[ inline ]
   pub fn analyze_embedding_batching_potential( requests : &[ CreateEmbeddingRequest ] ) -> BatchingAnalysis
   {
-    let signatures: Vec< RequestSignature > = requests.iter().map( | req |
+    let signatures : Vec< RequestSignature > = requests.iter().map( | req |
     {
       let request_json = serde_json::to_vec( req ).unwrap_or_default();
       RequestSignature::new( "POST", "embeddings", &request_json )
     } ).collect();
 
-    crate::request_batching::BatchOptimizer::analyze_batching_potential( &signatures )
+    crate ::request_batching::BatchOptimizer::analyze_batching_potential( &signatures )
   }
 
   impl< E > EnhancedEmbeddings< '_, E >

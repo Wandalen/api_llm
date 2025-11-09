@@ -35,12 +35,12 @@ use test_isolation::{ TestIsolation, IsolatedClient, should_run_real_api_tests }
 use api_openai::
 {
   Client,
-  error::OpenAIError,
-  environment::{ EnvironmentInterface, OpenaiEnvironment, OpenaiEnvironmentImpl },
-  secret::Secret,
-  components::
+  error ::OpenAIError,
+  environment ::{ EnvironmentInterface, OpenaiEnvironment, OpenaiEnvironmentImpl },
+  secret ::Secret,
+  components ::
   {
-    responses::
+    responses ::
     {
       CreateResponseRequest,
       ResponseObject,
@@ -48,16 +48,16 @@ use api_openai::
       ResponseStreamEvent,
       ResponseItemList,
     },
-    input::
+    input ::
     {
       InputItem,
       InputMessage,
       InputContentPart,
       InputText,
     },
-    common::{ ModelIdsResponses, ListQuery },
-    tools::{ Tool, ToolChoice, FunctionTool, FunctionParameters },
-    output::{ OutputItem, OutputContentPart },
+    common ::{ ModelIdsResponses, ListQuery },
+    tools ::{ Tool, ToolChoice, FunctionTool, FunctionParameters },
+    output ::{ OutputItem, OutputContentPart },
   }
 };
 use serde_json::json;
@@ -143,16 +143,16 @@ fn ensure_secret_loaded() -> Result< (), OpenAIError >
   let api_key = secret.expose_secret();
   if api_key.is_empty() || api_key.contains("invalid") || api_key.len() < 20
   {
-    return Err( OpenAIError::InvalidArgument( format!("INTEGRATION TEST FAILURE: Invalid API key detected. Real integration tests require valid OpenAI API credentials, got: '{}'", &api_key[..core::cmp::min(10, api_key.len())]) ) );
+    return Err( OpenAIError::InvalidArgument( format!("INTEGRATION TEST FAILURE: Invalid API key detected. Real integration tests require valid OpenAI API credentials, got : '{}'", &api_key[..core::cmp::min(10, api_key.len())]) ) );
   }
 
   let len = api_key.len();
-  println!( "✅ Real API credentials loaded successfully (length: {len})" );
+  println!( "✅ Real API credentials loaded successfully (length : {len})" );
   Ok( () )
 }
 
 /// Tests that a basic response can be created successfully using the new API.
-/// Test Combination: R1.1
+/// Test Combination : R1.1
 /// Uses proper test isolation to prevent shared state issues.
 #[ tokio::test ]
 async fn create_response()
@@ -201,13 +201,13 @@ async fn create_response()
     },
     Err( e ) =>
     {
-      panic!( "API request failed with an error: {e:?}" );
+      panic!( "API request failed with an error : {e:?}" );
     }
   }
 }
 
 /// Tests that invalid model returns appropriate error.
-/// Test Combination: R1.2
+/// Test Combination : R1.2
 /// Uses proper test isolation to prevent shared state issues.
 #[ tokio::test ]
 async fn create_response_invalid_model()
@@ -228,7 +228,7 @@ async fn create_response_invalid_model()
 }
 
 /// Tests streaming response creation.
-/// Test Combination: R1.3
+/// Test Combination : R1.3
 /// Uses proper test isolation to prevent shared state issues.
 #[ tokio::test ]
 async fn create_response_stream()
@@ -279,17 +279,17 @@ async fn create_response_stream()
               ResponseStreamEvent::ResponseTextDelta( _ ) => println!( "Text delta received" ),
               ResponseStreamEvent::ResponseCompleted( event ) => {
                 let response_id = &event.response.id;
-                println!( "Response completed: {response_id}" );
+                println!( "Response completed : {response_id}" );
                 break;
               },
-              _ => println!( "Other event received: {event:?}" ),
+              _ => println!( "Other event received : {event:?}" ),
             }
           },
           Err( e ) =>
           {
             _error_received = true;
             // MANDATORY FAILING BEHAVIOR - fail hard on stream errors
-            eprintln!( "❌ Stream error occurred: {e:?}" );
+            eprintln!( "❌ Stream error occurred : {e:?}" );
             panic!( "Stream encountered error - MANDATORY FAILURE: {e:?}" );
           },
         }
@@ -307,7 +307,7 @@ async fn create_response_stream()
 }
 
 /// Tests response creation with tools.
-/// Test Combination: R1.4
+/// Test Combination : R1.4
 /// Uses proper test isolation to prevent shared state issues.
 #[ tokio::test ]
 async fn create_response_with_tools()
@@ -354,13 +354,13 @@ async fn create_response_with_tools()
     },
     Err( e ) =>
     {
-      panic!( "Request failed: {e:?}" );
+      panic!( "Request failed : {e:?}" );
     }
   }
 }
 
 /// Tests response retrieval by ID.
-/// Test Combination: R1.6
+/// Test Combination : R1.6
 #[ tokio::test ]
 #[ allow( deprecated ) ]
 async fn retrieve_response()
@@ -391,18 +391,18 @@ async fn retrieve_response()
           assert_eq!( created_response.id, retrieved_response.id, "Retrieved response ID should match" );
           assert_eq!( created_response.model, retrieved_response.model, "Model should match" );
         },
-        Err( e ) => eprintln!( "Retrieval failed: {e:?}" ),
+        Err( e ) => eprintln!( "Retrieval failed : {e:?}" ),
       }
     },
     Err( e ) =>
     {
-      eprintln!( "Create failed: {e:?}" );
+      eprintln!( "Create failed : {e:?}" );
     }
   }
 }
 
 /// Tests listing input items for a response.
-/// Test Combination: R1.7
+/// Test Combination : R1.7
 #[ tokio::test ]
 #[ allow( deprecated ) ]
 async fn list_response_input_items()
@@ -441,7 +441,7 @@ async fn list_response_input_items()
     Ok( response ) =>
     {
       let query = ListQuery {
-        limit: Some( 10 ),
+        limit : Some( 10 ),
       };
       
       let result = client.responses().list_input_items( &response.id, Some( query ) ).await;
@@ -453,18 +453,18 @@ async fn list_response_input_items()
           assert_eq!( item_list.object, "list", "Should return a list object" );
           assert!( !item_list.data.is_empty(), "Should have at least one input item" );
         },
-        Err( e ) => eprintln!( "List failed: {e:?}" ),
+        Err( e ) => eprintln!( "List failed : {e:?}" ),
       }
     },
     Err( e ) =>
     {
-      eprintln!( "Create failed: {e:?}" );
+      eprintln!( "Create failed : {e:?}" );
     }
   }
 }
 
 /// Tests response deletion.
-/// Test Combination: R1.8
+/// Test Combination : R1.8
 #[ tokio::test ]
 #[ allow( deprecated ) ]
 async fn delete_response()
@@ -493,24 +493,24 @@ async fn delete_response()
       {
         Ok( delete_result ) =>
         {
-          println!( "Response deleted successfully: {delete_result:?}" );
+          println!( "Response deleted successfully : {delete_result:?}" );
           
           // Verify deletion by trying to retrieve
           let retrieve_result = client.responses().retrieve( &response.id ).await;
           assert!( retrieve_result.is_err(), "Should not be able to retrieve deleted response" );
         },
-        Err( e ) => eprintln!( "Delete failed: {e:?}" ),
+        Err( e ) => eprintln!( "Delete failed : {e:?}" ),
       }
     },
     Err( e ) =>
     {
-      eprintln!( "Create failed: {e:?}" );
+      eprintln!( "Create failed : {e:?}" );
     }
   }
 }
 
 /// Tests response update.
-/// Test Combination: R1.9
+/// Test Combination : R1.9
 #[ tokio::test ]
 #[ allow( deprecated ) ]
 async fn update_response()
@@ -547,18 +547,18 @@ async fn update_response()
           assert_eq!( response.id, updated_response.id, "ID should remain the same" );
           assert!( updated_response.metadata.is_some(), "Metadata should be present" );
         },
-        Err( e ) => eprintln!( "Update failed: {e:?}" ),
+        Err( e ) => eprintln!( "Update failed : {e:?}" ),
       }
     },
     Err( e ) =>
     {
-      eprintln!( "Create failed: {e:?}" );
+      eprintln!( "Create failed : {e:?}" );
     }
   }
 }
 
 /// Tests response cancellation.
-/// Test Combination: R1.10
+/// Test Combination : R1.10
 #[ tokio::test ]
 #[ allow( deprecated ) ]
 async fn cancel_response()
@@ -598,19 +598,19 @@ async fn cancel_response()
               "Status should indicate cancellation"
             );
           },
-          Err( e ) => eprintln!( "Cancel failed: {e:?}" ),
+          Err( e ) => eprintln!( "Cancel failed : {e:?}" ),
         }
       }
     },
     Err( e ) =>
     {
-      eprintln!( "Stream creation failed: {e:?}" );
+      eprintln!( "Stream creation failed : {e:?}" );
     }
   }
 }
 
 /// Tests that environment details (API key, base URL) are correctly loaded.
-/// Test Combination: R1.11
+/// Test Combination : R1.11
 #[ tokio::test ]
 #[ allow( deprecated ) ]
 async fn test_environment_details()
@@ -630,7 +630,7 @@ async fn test_environment_details()
   println!( "Environment API Key (masked): {key_start}..." ); // Print first 5 chars for verification
 
   let headers = env.headers();
-  println!( "Environment Headers: {headers:?}" );
+  println!( "Environment Headers : {headers:?}" );
 
   assert_eq!( base_url.as_str(), "https://api.openai.com/v1/", "Base URL should be api.openai.com/v1/" );
   assert!( !api_key.is_empty(), "API key should not be empty" );

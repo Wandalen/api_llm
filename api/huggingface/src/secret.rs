@@ -40,7 +40,7 @@ impl Secret
   {
   let value = std::env::var( var_name )
       .map_err( | e | HuggingFaceError::Authentication( 
-  format!( "Environment variable '{var_name}' not found: {e}" ) 
+  format!( "Environment variable '{var_name}' not found : {e}" ) 
       ) )?;
   
   if value.trim().is_empty()
@@ -160,11 +160,11 @@ pub fn load_huggingface_api_key() -> Result< Secret >
 
 } // end mod private
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {
-  private::Secret,
-  private::load_huggingface_api_key,
+  private ::Secret,
+  private ::load_huggingface_api_key,
   };
 }

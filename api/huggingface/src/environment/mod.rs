@@ -113,7 +113,7 @@ impl HuggingFaceEnvironmentImpl
   /// Get the HuggingFace-recommended base URL
   ///
   /// Updated to use the new Router API (OpenAI-compatible chat completions format)
-  /// Note: Trailing slash is required for proper URL joining
+  /// Note : Trailing slash is required for proper URL joining
   #[ inline ]
   #[ must_use ]
   pub fn recommended_base_url() -> &'static str
@@ -172,7 +172,7 @@ impl HuggingFaceEnvironment for HuggingFaceEnvironmentImpl
       .map_err( | e | HuggingFaceError::InvalidArgument( format!( "Invalid base URL: {e}" ) ) )?;
   
   base.join( path )
-      .map_err( | e | HuggingFaceError::InvalidArgument( format!( "Invalid endpoint path: {e}" ) ) )
+      .map_err( | e | HuggingFaceError::InvalidArgument( format!( "Invalid endpoint path : {e}" ) ) )
   }
 }
 
@@ -186,12 +186,12 @@ impl EnvironmentInterface for HuggingFaceEnvironmentImpl
   // Add authorization header
   let auth_value = format!( "Bearer {}", self.api_key.expose_secret() );
   let auth_header = HeaderValue::from_str( &auth_value )
-      .map_err( | e | HuggingFaceError::Authentication( format!( "Invalid API key format: {e}" ) ) )?;
+      .map_err( | e | HuggingFaceError::Authentication( format!( "Invalid API key format : {e}" ) ) )?;
   headers.insert( AUTHORIZATION, auth_header );
   
   // Add user agent
   let user_agent_header = HeaderValue::from_str( &self.user_agent )
-      .map_err( | e | HuggingFaceError::InvalidArgument( format!( "Invalid user agent: {e}" ) ) )?;
+      .map_err( | e | HuggingFaceError::InvalidArgument( format!( "Invalid user agent : {e}" ) ) )?;
   headers.insert( USER_AGENT, user_agent_header );
   
   Ok( headers )
@@ -200,12 +200,12 @@ impl EnvironmentInterface for HuggingFaceEnvironmentImpl
 
 } // end mod private
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {
-  private::HuggingFaceEnvironment,
-  private::EnvironmentInterface,
-  private::HuggingFaceEnvironmentImpl,
+  private ::HuggingFaceEnvironment,
+  private ::EnvironmentInterface,
+  private ::HuggingFaceEnvironmentImpl,
   };
 }

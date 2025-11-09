@@ -75,7 +75,7 @@ mod private
       {
         // Get diagnostic information
         let current_dir = std::env::current_dir()
-          .map_or_else( | _ | "<unknown>".to_string(), | p | p.display().to_string() );
+          .map_or_else( | _ | "< unknown >".to_string(), | p | p.display().to_string() );
 
         let workspace_secret_path = workspace_tools::workspace()
           .ok()
@@ -85,17 +85,17 @@ mod private
             let path = root.join( "secret" ).join( "-secrets.sh" );
             path.canonicalize().ok().or( Some( path ) )
           })
-          .map_or_else( || "<not found>".to_string(), | p | p.display().to_string() );
+          .map_or_else( || "< not found >".to_string(), | p | p.display().to_string() );
 
         Err( error_tools::Error::msg(
           format!(
             "❌ ANTHROPIC_API_KEY not found in any source.\n\
              \n\
              Checked locations:\n\
-             1. Environment variable: ANTHROPIC_API_KEY (not set)\n\
-             2. Workspace secrets: {workspace_secret_path}\n\
+             1. Environment variable : ANTHROPIC_API_KEY (not set)\n\
+             2. Workspace secrets : {workspace_secret_path}\n\
              \n\
-             Current directory: {current_dir}\n\
+             Current directory : {current_dir}\n\
              \n\
              To fix this issue:\n\
              \n\
@@ -111,7 +111,7 @@ mod private
              Option 3: Source the secrets file manually:\n\
              $ source /path/to/workspace/secret/-secrets.sh\n\
              \n\
-             Original error: {e}"
+             Original error : {e}"
           )
         ))
       }
@@ -133,12 +133,12 @@ mod private
     {
       Ok( key ) if !key.is_empty() =>
       {
-        info.push_str( "✅ ANTHROPIC_API_KEY environment variable: SET\n" );
-        let _ = writeln!( &mut info, "   Value: {}...", &key[ ..key.len().min( 20 ) ] );
+        info.push_str( "✅ ANTHROPIC_API_KEY environment variable : SET\n" );
+        let _ = writeln!( &mut info, "   Value : {}...", &key[ ..key.len().min( 20 ) ] );
       }
       _ =>
       {
-        info.push_str( "❌ ANTHROPIC_API_KEY environment variable: NOT SET\n" );
+        info.push_str( "❌ ANTHROPIC_API_KEY environment variable : NOT SET\n" );
       }
     }
 
@@ -157,9 +157,9 @@ mod private
             let secret_file = secret_dir.join( "-secrets.sh" );
 
             info.push_str( "\n📁 Workspace Information:\n" );
-            let _ = writeln!( &mut info, "   Root: {}", workspace_root.display() );
-            let _ = writeln!( &mut info, "   Secret directory: {}", secret_dir.display() );
-            let _ = writeln!( &mut info, "   Secret file: {}", secret_file.display() );
+            let _ = writeln!( &mut info, "   Root : {}", workspace_root.display() );
+            let _ = writeln!( &mut info, "   Secret directory : {}", secret_dir.display() );
+            let _ = writeln!( &mut info, "   Secret file : {}", secret_file.display() );
 
         if secret_file.exists()
         {
@@ -175,7 +175,7 @@ mod private
             else
             {
               info.push_str( "   ❌ ANTHROPIC_API_KEY NOT found in secrets file\n" );
-              info.push_str( "      Hint: Add this line to the secrets file:\n" );
+              info.push_str( "      Hint : Add this line to the secrets file:\n" );
               info.push_str( "      export ANTHROPIC_API_KEY=\"sk-ant-api03-...\"\n" );
             }
           }
@@ -187,20 +187,20 @@ mod private
           }
           Err( e ) =>
           {
-            let _ = writeln!( &mut info, "\n❌ Failed to resolve workspace root: {e}" );
+            let _ = writeln!( &mut info, "\n❌ Failed to resolve workspace root : {e}" );
           }
         }
       }
       Err( e ) =>
       {
-        let _ = writeln!( &mut info, "\n❌ Workspace Error: {e}" );
+        let _ = writeln!( &mut info, "\n❌ Workspace Error : {e}" );
       }
     }
 
     // Current directory
     if let Ok( cwd ) = std::env::current_dir()
     {
-      let _ = writeln!( &mut info, "\n📂 Current Directory: {}", cwd.display() );
+      let _ = writeln!( &mut info, "\n📂 Current Directory : {}", cwd.display() );
     }
 
     info
@@ -214,13 +214,13 @@ mod private
   pub fn validate_workspace_structure() -> Result< PathBuf >
   {
     let ws = workspace_tools::workspace()
-      .map_err( | e | error_tools::Error::msg( format!( "Workspace error: {e}" ) ) )?;
+      .map_err( | e | error_tools::Error::msg( format!( "Workspace error : {e}" ) ) )?;
 
     // Use secret/ directory (NO dot prefix) as per codestyle rulebook
     // Canonicalize workspace root to get absolute path
     let workspace_root = ws.root().canonicalize()
       .map_err( | e | error_tools::Error::msg(
-        format!( "Failed to resolve workspace root to absolute path: {e}" )
+        format!( "Failed to resolve workspace root to absolute path : {e}" )
       ) )?;
 
     let secret_dir = workspace_root.join( "secret" );
@@ -229,8 +229,8 @@ mod private
     {
       return Err( error_tools::Error::msg(
         format!(
-          "Secrets directory does not exist: {}\n\
-           Expected location: workspace_root/secret/ (NO dot prefix)",
+          "Secrets directory does not exist : {}\n\
+           Expected location : workspace_root/secret/ (NO dot prefix)",
           secret_dir.display()
         )
       ));
@@ -241,7 +241,7 @@ mod private
     {
       return Err( error_tools::Error::msg(
         format!(
-          "Secrets file does not exist: {}\n\
+          "Secrets file does not exist : {}\n\
            Create this file and add your API keys.",
           secret_file.display()
         )
@@ -252,7 +252,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use Environment;
   exposed use validate_anthropic_secret;

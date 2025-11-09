@@ -10,9 +10,9 @@ mod private
   // Use crate root for base access
   use crate::
   {
-    client::Client,
-    error::Result,
-    environment::{ OpenaiEnvironment, EnvironmentInterface },
+    client ::Client,
+    error ::Result,
+    environment ::{ OpenaiEnvironment, EnvironmentInterface },
   };
   use crate::components::models::
   {
@@ -129,16 +129,16 @@ mod private
 
       let metadata = ResponseMetadata
       {
-        total_models: enhanced_models.len().try_into().unwrap_or( u32::MAX ),
-        active_models: active_count,
-        deprecated_models: deprecated_count,
-        beta_models: beta_count,
+        total_models : enhanced_models.len().try_into().unwrap_or( u32::MAX ),
+        active_models : active_count,
+        deprecated_models : deprecated_count,
+        beta_models : beta_count,
       };
 
       Ok( EnhancedListModelsResponse
       {
-        object: basic_response.object,
-        data: enhanced_models,
+        object : basic_response.object,
+        data : enhanced_models,
         metadata,
       })
     }
@@ -181,10 +181,10 @@ mod private
 
       EnhancedModel
       {
-        id: model.id,
-        created: model.created,
-        object: model.object,
-        owned_by: model.owned_by,
+        id : model.id,
+        created : model.created,
+        object : model.object,
+        owned_by : model.owned_by,
         pricing,
         capabilities,
         limitations,
@@ -201,31 +201,31 @@ mod private
       {
         id if id.starts_with( "gpt-4o" ) => Some( ModelPricing
         {
-          input_cost_per_1k_tokens: 0.005,
-          output_cost_per_1k_tokens: 0.015,
-          currency: "USD".to_string(),
-          effective_date: "2024-01-01".to_string(),
+          input_cost_per_1k_tokens : 0.005,
+          output_cost_per_1k_tokens : 0.015,
+          currency : "USD".to_string(),
+          effective_date : "2024-01-01".to_string(),
         }),
         id if id.starts_with( "gpt-4" ) => Some( ModelPricing
         {
-          input_cost_per_1k_tokens: 0.03,
-          output_cost_per_1k_tokens: 0.06,
-          currency: "USD".to_string(),
-          effective_date: "2024-01-01".to_string(),
+          input_cost_per_1k_tokens : 0.03,
+          output_cost_per_1k_tokens : 0.06,
+          currency : "USD".to_string(),
+          effective_date : "2024-01-01".to_string(),
         }),
         id if id.starts_with( "gpt-3.5" ) => Some( ModelPricing
         {
-          input_cost_per_1k_tokens: 0.001,
-          output_cost_per_1k_tokens: 0.002,
-          currency: "USD".to_string(),
-          effective_date: "2024-01-01".to_string(),
+          input_cost_per_1k_tokens : 0.001,
+          output_cost_per_1k_tokens : 0.002,
+          currency : "USD".to_string(),
+          effective_date : "2024-01-01".to_string(),
         }),
         id if id.contains( "embedding" ) => Some( ModelPricing
         {
-          input_cost_per_1k_tokens: 0.0001,
-          output_cost_per_1k_tokens: 0.0,
-          currency: "USD".to_string(),
-          effective_date: "2024-01-01".to_string(),
+          input_cost_per_1k_tokens : 0.0001,
+          output_cost_per_1k_tokens : 0.0,
+          currency : "USD".to_string(),
+          effective_date : "2024-01-01".to_string(),
         }),
         _ => None,
       }
@@ -238,57 +238,57 @@ mod private
       {
         id if id.starts_with( "gpt-4o" ) => ModelCapabilities
         {
-          supports_function_calling: true,
-          supports_vision: true,
-          supports_streaming: true,
-          max_context_window: 128_000,
-          max_output_tokens: 4096,
-          supported_formats: vec![ "text".to_string(), "image".to_string() ],
+          supports_function_calling : true,
+          supports_vision : true,
+          supports_streaming : true,
+          max_context_window : 128_000,
+          max_output_tokens : 4096,
+          supported_formats : vec![ "text".to_string(), "image".to_string() ],
         },
         id if id.starts_with( "gpt-4" ) && id.contains( "vision" ) => ModelCapabilities
         {
-          supports_function_calling: true,
-          supports_vision: true,
-          supports_streaming: true,
-          max_context_window: 8192,
-          max_output_tokens: 4096,
-          supported_formats: vec![ "text".to_string(), "image".to_string() ],
+          supports_function_calling : true,
+          supports_vision : true,
+          supports_streaming : true,
+          max_context_window : 8192,
+          max_output_tokens : 4096,
+          supported_formats : vec![ "text".to_string(), "image".to_string() ],
         },
         id if id.starts_with( "gpt-4" ) => ModelCapabilities
         {
-          supports_function_calling: true,
-          supports_vision: false,
-          supports_streaming: true,
-          max_context_window: 8192,
-          max_output_tokens: 4096,
-          supported_formats: vec![ "text".to_string() ],
+          supports_function_calling : true,
+          supports_vision : false,
+          supports_streaming : true,
+          max_context_window : 8192,
+          max_output_tokens : 4096,
+          supported_formats : vec![ "text".to_string() ],
         },
         id if id.starts_with( "gpt-3.5" ) => ModelCapabilities
         {
-          supports_function_calling: true,
-          supports_vision: false,
-          supports_streaming: true,
-          max_context_window: 4096,
-          max_output_tokens: 4096,
-          supported_formats: vec![ "text".to_string() ],
+          supports_function_calling : true,
+          supports_vision : false,
+          supports_streaming : true,
+          max_context_window : 4096,
+          max_output_tokens : 4096,
+          supported_formats : vec![ "text".to_string() ],
         },
         id if id.contains( "embedding" ) => ModelCapabilities
         {
-          supports_function_calling: false,
-          supports_vision: false,
-          supports_streaming: false,
-          max_context_window: 8192,
-          max_output_tokens: 0,
-          supported_formats: vec![ "text".to_string() ],
+          supports_function_calling : false,
+          supports_vision : false,
+          supports_streaming : false,
+          max_context_window : 8192,
+          max_output_tokens : 0,
+          supported_formats : vec![ "text".to_string() ],
         },
         _ => ModelCapabilities
         {
-          supports_function_calling: false,
-          supports_vision: false,
-          supports_streaming: false,
-          max_context_window: 2048,
-          max_output_tokens: 2048,
-          supported_formats: vec![ "text".to_string() ],
+          supports_function_calling : false,
+          supports_vision : false,
+          supports_streaming : false,
+          max_context_window : 2048,
+          max_output_tokens : 2048,
+          supported_formats : vec![ "text".to_string() ],
         },
       }
     }
@@ -300,27 +300,27 @@ mod private
       {
         id if id.starts_with( "gpt-4" ) => ModelLimitations
         {
-          rate_limit_rpm: Some( 500 ),
-          rate_limit_tpm: Some( 30000 ),
-          concurrent_requests: Some( 50 ),
+          rate_limit_rpm : Some( 500 ),
+          rate_limit_tpm : Some( 30000 ),
+          concurrent_requests : Some( 50 ),
         },
         id if id.starts_with( "gpt-3.5" ) => ModelLimitations
         {
-          rate_limit_rpm: Some( 3500 ),
-          rate_limit_tpm: Some( 90000 ),
-          concurrent_requests: Some( 200 ),
+          rate_limit_rpm : Some( 3500 ),
+          rate_limit_tpm : Some( 90000 ),
+          concurrent_requests : Some( 200 ),
         },
         id if id.contains( "embedding" ) => ModelLimitations
         {
-          rate_limit_rpm: Some( 3000 ),
-          rate_limit_tpm: Some( 1_000_000 ),
-          concurrent_requests: Some( 100 ),
+          rate_limit_rpm : Some( 3000 ),
+          rate_limit_tpm : Some( 1_000_000 ),
+          concurrent_requests : Some( 100 ),
         },
         _ => ModelLimitations
         {
-          rate_limit_rpm: Some( 1000 ),
-          rate_limit_tpm: Some( 50000 ),
-          concurrent_requests: Some( 20 ),
+          rate_limit_rpm : Some( 1000 ),
+          rate_limit_tpm : Some( 50000 ),
+          concurrent_requests : Some( 20 ),
         },
       }
     }
@@ -333,33 +333,33 @@ mod private
         // Deprecated models
         "text-davinci-003" | "text-davinci-002" | "code-davinci-002" => ModelLifecycle
         {
-          status: ModelStatus::Deprecated,
-          deprecation_date: Some( "2024-01-04".to_string() ),
-          sunset_date: Some( "2024-09-13".to_string() ),
-          replacement_model: Some( "gpt-3.5-turbo-instruct".to_string() ),
+          status : ModelStatus::Deprecated,
+          deprecation_date : Some( "2024-01-04".to_string() ),
+          sunset_date : Some( "2024-09-13".to_string() ),
+          replacement_model : Some( "gpt-3.5-turbo-instruct".to_string() ),
         },
         "text-embedding-ada-002" if model_id.contains( "001" ) => ModelLifecycle
         {
-          status: ModelStatus::Deprecated,
-          deprecation_date: Some( "2023-01-01".to_string() ),
-          sunset_date: Some( "2024-01-01".to_string() ),
-          replacement_model: Some( "text-embedding-ada-002".to_string() ),
+          status : ModelStatus::Deprecated,
+          deprecation_date : Some( "2023-01-01".to_string() ),
+          sunset_date : Some( "2024-01-01".to_string() ),
+          replacement_model : Some( "text-embedding-ada-002".to_string() ),
         },
         // Beta models
         id if id.contains( "preview" ) || id.contains( "beta" ) => ModelLifecycle
         {
-          status: ModelStatus::Beta,
-          deprecation_date: None,
-          sunset_date: None,
-          replacement_model: None,
+          status : ModelStatus::Beta,
+          deprecation_date : None,
+          sunset_date : None,
+          replacement_model : None,
         },
         // Active models (default)
         _ => ModelLifecycle
         {
-          status: ModelStatus::Active,
-          deprecation_date: None,
-          sunset_date: None,
-          replacement_model: None,
+          status : ModelStatus::Active,
+          deprecation_date : None,
+          sunset_date : None,
+          replacement_model : None,
         },
       }
     }
@@ -380,7 +380,7 @@ mod private
 
       // Add headers from environment (includes authorization, organization, project)
       let env_headers = self.client.environment.headers().map_err( |e|
-        crate::error::OpenAIError::Internal( format!( "Failed to get headers from environment: {e}" ) )
+        crate ::error::OpenAIError::Internal( format!( "Failed to get headers from environment : {e}" ) )
       )?;
 
       for ( key, value ) in &env_headers
@@ -414,7 +414,7 @@ mod private
 
       // Add headers from environment (includes authorization, organization, project)
       let env_headers = self.client.environment.headers().map_err( |e|
-        crate::error::OpenAIError::Internal( format!( "Failed to get headers from environment: {e}" ) )
+        crate ::error::OpenAIError::Internal( format!( "Failed to get headers from environment : {e}" ) )
       )?;
 
       for ( key, value ) in &env_headers
@@ -431,7 +431,7 @@ mod private
   }
 } // end mod private
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   // Expose all structs defined in this module
   exposed use 

@@ -223,7 +223,7 @@ fn failover_respects_retry_cooldown()
   assert_eq!( manager.current_index(), 1 );
 
   // Wait for cooldown to expire
-  std::thread::sleep( Duration::from_millis( 150 ) );
+  std ::thread::sleep( Duration::from_millis( 150 ) );
 
   // Now rotation should allow endpoint 0 (degraded state after cooldown)
   manager.rotate();

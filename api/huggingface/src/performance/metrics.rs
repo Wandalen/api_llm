@@ -457,10 +457,10 @@ impl PerformanceMetrics
 impl core::fmt::Debug for PerformanceMetrics
 {
   #[ inline ]
-  fn fmt( &self, f : &mut core::fmt::Formatter<'_ > ) -> core::fmt::Result
+  fn fmt( &self, f : &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result
   {
   f.debug_struct( "PerformanceMetrics" )
-      .field( "state", &"<MetricsState >" )
+      .field( "state", &"< MetricsState >" )
       .finish( )
   }
 }
@@ -582,7 +582,7 @@ mod tests
   {
   let metrics = PerformanceMetrics::new( MetricsConfig::default( ) );
 
-  // Add latencies: 100, 200, 300, 400, 500 ms
+  // Add latencies : 100, 200, 300, 400, 500 ms
   for i in 1..=5
   {
       metrics.record_request( Duration::from_millis( i * 100 ), true, 0 ).await;

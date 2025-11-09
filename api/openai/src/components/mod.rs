@@ -100,7 +100,7 @@ pub mod responses;
 pub mod tools;
 pub mod embeddings_request;
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use administration_shared;
   exposed use assistants_shared;

@@ -23,20 +23,20 @@ fn test_websearch_tool_deserialization_failure()
 
   // This should fail because WebSearchTool is currently defined as a unit struct
   // but the API returns a complex object with fields
-  let result: Result< Tool, _ > = serde_json::from_str( api_response_json );
+  let result : Result< Tool, _ > = serde_json::from_str( api_response_json );
   
   match result
   {
     Ok( tool ) =>
     {
-      println!( "✅ WebSearchTool deserialization succeeded: {tool:?}" );
+      println!( "✅ WebSearchTool deserialization succeeded : {tool:?}" );
       
       // Verify it's the correct tool type
       if let Tool::WebSearch( web_search_tool ) = tool
       {
         println!( "✅ Successfully parsed WebSearchTool with proper structure" );
-        println!( "   - search_context_size: {:?}", web_search_tool.search_context_size );
-        println!( "   - user_location: {:?}", web_search_tool.user_location );
+        println!( "   - search_context_size : {:?}", web_search_tool.search_context_size );
+        println!( "   - user_location : {:?}", web_search_tool.user_location );
         
         // Verify we captured the expected fields
         assert_eq!( web_search_tool.search_context_size, Some( "medium".to_string() ) );
@@ -56,11 +56,11 @@ fn test_websearch_tool_deserialization_failure()
     },
     Err( e ) =>
     {
-      println!( "❌ ISSUE: WebSearchTool deserialization failed: {e}" );
+      println!( "❌ ISSUE: WebSearchTool deserialization failed : {e}" );
       
       // Check if it's the specific unit struct issue
       let error_msg = e.to_string();
-      if error_msg.contains( "invalid type: map, expected unit struct" )
+      if error_msg.contains( "invalid type : map, expected unit struct" )
       {
         println!( "🔍 CONFIRMED: Issue is unit struct vs complex object mismatch" );
         println!( "🔧 FIX NEEDED: WebSearchTool needs to be changed from unit struct to struct with fields" );
@@ -68,7 +68,7 @@ fn test_websearch_tool_deserialization_failure()
       }
       else
       {
-        panic!( "❌ Unexpected deserialization error: {error_msg}" );
+        panic!( "❌ Unexpected deserialization error : {error_msg}" );
       }
     }
   }
@@ -81,7 +81,7 @@ fn test_websearch_tool_unit_struct_behavior()
   let unit_struct_json = r#"{"type": "web_search_preview"}"#;
   
   // This might work with just the type field
-  let result: Result< Tool, _ > = serde_json::from_str( unit_struct_json );
+  let result : Result< Tool, _ > = serde_json::from_str( unit_struct_json );
   
   match result
   {
@@ -91,7 +91,7 @@ fn test_websearch_tool_unit_struct_behavior()
     },
     Err( e ) =>
     {
-      println!( "❌ Even unit struct fails: {e}" );
+      println!( "❌ Even unit struct fails : {e}" );
     }
   }
 }

@@ -66,20 +66,20 @@ async fn test_request_lifecycle_tracking()
 
   let request_id = "test-request-001";
   let request = ChatRequest {
-    model: "llama2".to_string(),
-    messages: vec![ChatMessage {
-      role: MessageRole::User,
-      content: "Test request".to_string(),
-      images: None,
+    model : "llama2".to_string(),
+    messages : vec![ChatMessage {
+      role : MessageRole::User,
+      content : "Test request".to_string(),
+      images : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tool_calls: None,
+      tool_calls : None,
     }],
-    stream: Some(false),
-    options: None,
+    stream : Some(false),
+    options : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tools: None,
+    tools : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tool_messages: None,
+    tool_messages : None,
   };
 
   // Track request start
@@ -111,10 +111,10 @@ async fn test_error_tracking_and_analysis()
 
   let request_id = "test-request-error";
   let request = GenerateRequest {
-    model: "invalid-model".to_string(),
-    prompt: "Test prompt".to_string(),
-    stream: Some(false),
-    options: None,
+    model : "invalid-model".to_string(),
+    prompt : "Test prompt".to_string(),
+    stream : Some(false),
+    options : None,
   };
 
   // Track request start
@@ -124,7 +124,7 @@ async fn test_error_tracking_and_analysis()
   sleep(Duration::from_millis(50)).await;
 
   // Track failure
-  let error_message = "Model not found: invalid-model";
+  let error_message = "Model not found : invalid-model";
   let error_code = 404;
   collector.track_request_failure(request_id, error_code, error_message);
 
@@ -154,20 +154,20 @@ async fn test_performance_metrics_collection()
   {
     let request_id = format!("perf-test-{i}");
     let request = ChatRequest {
-      model: "llama2".to_string(),
-      messages: vec![ChatMessage {
-        role: MessageRole::User,
-        content: format!("Performance test {i}"),
-        images: None,
+      model : "llama2".to_string(),
+      messages : vec![ChatMessage {
+        role : MessageRole::User,
+        content : format!("Performance test {i}"),
+        images : None,
         #[ cfg( feature = "tool_calling" ) ]
-        tool_calls: None,
+        tool_calls : None,
       }],
-      stream: Some(false),
-      options: None,
+      stream : Some(false),
+      options : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tools: None,
+      tools : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tool_messages: None,
+      tool_messages : None,
     };
 
     collector.track_request_start(&request_id, &request);
@@ -196,20 +196,20 @@ async fn test_curl_command_generation()
 
   let request_id = "curl-test-001";
   let request = ChatRequest {
-    model: "llama2".to_string(),
-    messages: vec![ChatMessage {
-      role: MessageRole::User,
-      content: "Generate cURL command".to_string(),
-      images: None,
+    model : "llama2".to_string(),
+    messages : vec![ChatMessage {
+      role : MessageRole::User,
+      content : "Generate cURL command".to_string(),
+      images : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tool_calls: None,
+      tool_calls : None,
     }],
-    stream: Some(false),
-    options: None,
+    stream : Some(false),
+    options : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tools: None,
+    tools : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tool_messages: None,
+    tool_messages : None,
   };
 
   let base_url = "http://localhost:11434";
@@ -219,7 +219,7 @@ async fn test_curl_command_generation()
   assert!(curl_command.contains("curl"));
   assert!(curl_command.contains("-X POST"));
   assert!(curl_command.contains("http://localhost:11434/api/chat"));
-  assert!(curl_command.contains("Content-Type: application/json"));
+  assert!(curl_command.contains("Content-Type : application/json"));
   assert!(curl_command.contains("llama2"));
   assert!(curl_command.contains("Generate cURL command"));
 
@@ -238,10 +238,10 @@ async fn test_metrics_aggregation_and_reporting()
   {
     let request_id = format!("agg-test-{i}");
     let request = GenerateRequest {
-      model: if i % 3 == 0 { "invalid".to_string() } else { "llama2".to_string() },
-      prompt: format!("Aggregation test {i}"),
-      stream: Some(false),
-      options: None,
+      model : if i % 3 == 0 { "invalid".to_string() } else { "llama2".to_string() },
+      prompt : format!("Aggregation test {i}"),
+      stream : Some(false),
+      options : None,
     };
 
     collector.track_request_start(&request_id, &request);
@@ -288,20 +288,20 @@ async fn test_integration_with_ollama_client()
 
   // Create a request that will fail due to unreachable server
   let request = ChatRequest {
-    model: "test-model".to_string(),
-    messages: vec![ChatMessage {
-      role: MessageRole::User,
-      content: "Diagnostics integration test".to_string(),
-      images: None,
+    model : "test-model".to_string(),
+    messages : vec![ChatMessage {
+      role : MessageRole::User,
+      content : "Diagnostics integration test".to_string(),
+      images : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tool_calls: None,
+      tool_calls : None,
     }],
-    stream: Some(false),
-    options: None,
+    stream : Some(false),
+    options : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tools: None,
+    tools : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tool_messages: None,
+    tool_messages : None,
   };
 
   // Execute request (will fail)
@@ -322,13 +322,13 @@ async fn test_integration_with_ollama_client()
   // assert!(curl_commands[0].contains("test-model"));
 }
 
-// Note: Performance overhead test moved to benches/diagnostics_performance.rs
+// Note : Performance overhead test moved to benches/diagnostics_performance.rs
 //
 // Performance measurements were causing flaky test failures due to timing variability
 // across different systems and load conditions. Per test_organization.rulebook.md,
 // performance tests belong in benches/ directory, not in the functional test suite.
 //
-// Run with: cargo bench --bench diagnostics_performance --all-features
+// Run with : cargo bench --bench diagnostics_performance --all-features
 
 #[ tokio::test ]
 async fn test_diagnostics_memory_management()
@@ -344,10 +344,10 @@ async fn test_diagnostics_memory_management()
   {
     let request_id = format!("memory-test-{i}");
     let request = GenerateRequest {
-      model: "test".to_string(),
-      prompt: format!("Memory test {i}"),
-      stream: Some(false),
-      options: None,
+      model : "test".to_string(),
+      prompt : format!("Memory test {i}"),
+      stream : Some(false),
+      options : None,
     };
     collector.track_request_start(&request_id, &request);
     collector.track_request_success(&request_id, 100);
@@ -381,20 +381,20 @@ async fn test_diagnostics_concurrent_access()
       {
         let request_id = format!("concurrent-{thread_id}-{i}");
         let request = ChatRequest {
-          model: "llama2".to_string(),
-          messages: vec![ChatMessage {
-            role: MessageRole::User,
-            content: format!("Concurrent test {thread_id} {i}"),
-            images: None,
+          model : "llama2".to_string(),
+          messages : vec![ChatMessage {
+            role : MessageRole::User,
+            content : format!("Concurrent test {thread_id} {i}"),
+            images : None,
             #[ cfg( feature = "tool_calling" ) ]
-            tool_calls: None,
+            tool_calls : None,
           }],
-          stream: Some(false),
-          options: None,
+          stream : Some(false),
+          options : None,
           #[ cfg( feature = "tool_calling" ) ]
-          tools: None,
+          tools : None,
           #[ cfg( feature = "tool_calling" ) ]
-          tool_messages: None,
+          tool_messages : None,
         };
 
         collector.track_request_start(&request_id, &request);
@@ -426,11 +426,11 @@ async fn test_diagnostics_debug_and_display()
   // Test Debug implementation
   let debug_output = format!("{collector:?}");
   assert!(debug_output.contains("DiagnosticsCollector"));
-  assert!(debug_output.contains("total_requests: 0"));
+  assert!(debug_output.contains("total_requests : 0"));
 
   // Test Display implementation for reports
   let report = collector.generate_report();
   let display_output = format!("{report}");
   assert!(display_output.contains("Diagnostics Report"));
-  assert!(display_output.contains("Total Requests: 0"));
+  assert!(display_output.contains("Total Requests : 0"));
 }

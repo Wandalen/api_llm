@@ -35,17 +35,17 @@ mod private
   pub struct WebSocketConfig
   {
     /// Interval between heartbeat/keepalive messages
-    pub heartbeat_interval: Duration,
+    pub heartbeat_interval : Duration,
     /// Maximum size for incoming messages (in bytes)
-    pub max_message_size: usize,
+    pub max_message_size : usize,
     /// Whether to enable message compression
-    pub enable_compression: bool,
+    pub enable_compression : bool,
     /// Number of automatic reconnection attempts
-    pub reconnect_attempts: u32,
+    pub reconnect_attempts : u32,
     /// Connection timeout for initial establishment
-    pub connection_timeout: Duration,
+    pub connection_timeout : Duration,
     /// Whether to fallback to HTTP streaming if WebSocket fails
-    pub fallback_to_http: bool,
+    pub fallback_to_http : bool,
   }
 
   impl Default for WebSocketConfig
@@ -54,12 +54,12 @@ mod private
     fn default() -> Self
     {
       Self {
-        heartbeat_interval: Duration::from_secs( 30 ),
-        max_message_size: 1024 * 1024, // 1MB default
-        enable_compression: true,
-        reconnect_attempts: 3,
-        connection_timeout: Duration::from_secs( 10 ),
-        fallback_to_http: true,
+        heartbeat_interval : Duration::from_secs( 30 ),
+        max_message_size : 1024 * 1024, // 1MB default
+        enable_compression : true,
+        reconnect_attempts : 3,
+        connection_timeout : Duration::from_secs( 10 ),
+        fallback_to_http : true,
       }
     }
   }
@@ -68,7 +68,7 @@ mod private
   #[ derive( Debug, Clone ) ]
   pub struct WebSocketConfigBuilder
   {
-    config: WebSocketConfig,
+    config : WebSocketConfig,
   }
 
   impl Default for WebSocketConfigBuilder
@@ -77,7 +77,7 @@ mod private
     fn default() -> Self
     {
       Self {
-        config: WebSocketConfig::default(),
+        config : WebSocketConfig::default(),
       }
     }
   }
@@ -90,14 +90,14 @@ mod private
     pub fn new() -> Self
     {
       Self {
-        config: WebSocketConfig::default(),
+        config : WebSocketConfig::default(),
       }
     }
 
     /// Set the heartbeat interval
     #[ inline ]
     #[ must_use ]
-    pub fn heartbeat_interval( mut self, interval: Duration ) -> Self
+    pub fn heartbeat_interval( mut self, interval : Duration ) -> Self
     {
       self.config.heartbeat_interval = interval;
       self
@@ -106,7 +106,7 @@ mod private
     /// Set the maximum message size
     #[ inline ]
     #[ must_use ]
-    pub fn max_message_size( mut self, size: usize ) -> Self
+    pub fn max_message_size( mut self, size : usize ) -> Self
     {
       self.config.max_message_size = size;
       self
@@ -115,7 +115,7 @@ mod private
     /// Enable or disable compression
     #[ inline ]
     #[ must_use ]
-    pub fn enable_compression( mut self, enable: bool ) -> Self
+    pub fn enable_compression( mut self, enable : bool ) -> Self
     {
       self.config.enable_compression = enable;
       self
@@ -124,7 +124,7 @@ mod private
     /// Set the number of reconnection attempts
     #[ inline ]
     #[ must_use ]
-    pub fn reconnect_attempts( mut self, attempts: u32 ) -> Self
+    pub fn reconnect_attempts( mut self, attempts : u32 ) -> Self
     {
       self.config.reconnect_attempts = attempts;
       self
@@ -133,7 +133,7 @@ mod private
     /// Set the connection timeout
     #[ inline ]
     #[ must_use ]
-    pub fn connection_timeout( mut self, timeout: Duration ) -> Self
+    pub fn connection_timeout( mut self, timeout : Duration ) -> Self
     {
       self.config.connection_timeout = timeout;
       self
@@ -142,7 +142,7 @@ mod private
     /// Enable or disable fallback to HTTP streaming
     #[ inline ]
     #[ must_use ]
-    pub fn fallback_to_http( mut self, fallback: bool ) -> Self
+    pub fn fallback_to_http( mut self, fallback : bool ) -> Self
     {
       self.config.fallback_to_http = fallback;
       self
@@ -213,11 +213,11 @@ mod private
   pub struct WebSocketPoolConfig
   {
     /// Maximum number of concurrent connections
-    pub max_connections: usize,
+    pub max_connections : usize,
     /// Connection timeout for pool
-    pub connection_timeout: Duration,
+    pub connection_timeout : Duration,
     /// Idle timeout before closing connections
-    pub idle_timeout: Duration,
+    pub idle_timeout : Duration,
   }
 
   impl Default for WebSocketPoolConfig
@@ -226,9 +226,9 @@ mod private
     fn default() -> Self
     {
       Self {
-        max_connections: 10,
-        connection_timeout: Duration::from_secs( 30 ),
-        idle_timeout: Duration::from_secs( 300 ), // 5 minutes
+        max_connections : 10,
+        connection_timeout : Duration::from_secs( 30 ),
+        idle_timeout : Duration::from_secs( 300 ), // 5 minutes
       }
     }
   }
@@ -237,7 +237,7 @@ mod private
   #[ derive( Debug, Clone ) ]
   pub struct WebSocketPoolConfigBuilder
   {
-    config: WebSocketPoolConfig,
+    config : WebSocketPoolConfig,
   }
 
   impl WebSocketPoolConfigBuilder
@@ -248,26 +248,26 @@ mod private
     pub fn new() -> Self
     {
       Self {
-        config: WebSocketPoolConfig::default(),
+        config : WebSocketPoolConfig::default(),
       }
     }
 
     /// Set maximum connections
-    pub fn max_connections( mut self, max: usize ) -> Self
+    pub fn max_connections( mut self, max : usize ) -> Self
     {
       self.config.max_connections = max;
       self
     }
 
     /// Set connection timeout
-    pub fn connection_timeout( mut self, timeout: Duration ) -> Self
+    pub fn connection_timeout( mut self, timeout : Duration ) -> Self
     {
       self.config.connection_timeout = timeout;
       self
     }
 
     /// Set idle timeout
-    pub fn idle_timeout( mut self, timeout: Duration ) -> Self
+    pub fn idle_timeout( mut self, timeout : Duration ) -> Self
     {
       self.config.idle_timeout = timeout;
       self
@@ -317,19 +317,19 @@ mod private
   pub struct WebSocketMetrics
   {
     /// Total messages sent
-    pub messages_sent: u64,
+    pub messages_sent : u64,
     /// Total messages received
-    pub messages_received: u64,
+    pub messages_received : u64,
     /// Total bytes sent
-    pub bytes_sent: u64,
+    pub bytes_sent : u64,
     /// Total bytes received
-    pub bytes_received: u64,
+    pub bytes_received : u64,
     /// Number of connections established
-    pub connection_count: u32,
+    pub connection_count : u32,
     /// Number of reconnections performed
-    pub reconnection_count: u32,
+    pub reconnection_count : u32,
     /// Number of errors encountered
-    pub error_count: u32,
+    pub error_count : u32,
   }
 
   impl Default for WebSocketMetrics
@@ -337,13 +337,13 @@ mod private
     fn default() -> Self
     {
       Self {
-        messages_sent: 0,
-        messages_received: 0,
-        bytes_sent: 0,
-        bytes_received: 0,
-        connection_count: 0,
-        reconnection_count: 0,
-        error_count: 0,
+        messages_sent : 0,
+        messages_received : 0,
+        bytes_sent : 0,
+        bytes_received : 0,
+        connection_count : 0,
+        reconnection_count : 0,
+        error_count : 0,
       }
     }
   }
@@ -352,31 +352,31 @@ mod private
   pub struct WebSocketConnection
   {
     /// Connection state
-    state: Arc< Mutex< WebSocketConnectionState > >,
+    state : Arc< Mutex< WebSocketConnectionState > >,
     /// Configuration
-    config: WebSocketConfig,
+    config : WebSocketConfig,
     /// Metrics
-    metrics: Arc< Mutex< WebSocketMetrics > >,
+    metrics : Arc< Mutex< WebSocketMetrics > >,
     /// Message sender
-    message_tx: mpsc::UnboundedSender< WebSocketMessage >,
+    message_tx : mpsc::UnboundedSender< WebSocketMessage >,
     /// Message receiver
-    message_rx: mpsc::UnboundedReceiver< WebSocketMessage >,
+    message_rx : mpsc::UnboundedReceiver< WebSocketMessage >,
     /// Connection state change notifications
-    state_tx: broadcast::Sender< WebSocketConnectionState >,
+    state_tx : broadcast::Sender< WebSocketConnectionState >,
   }
 
   impl WebSocketConnection
   {
     /// Create a new WebSocket connection
-    pub fn new( config: WebSocketConfig ) -> Self
+    pub fn new( config : WebSocketConfig ) -> Self
     {
       let ( message_tx, message_rx ) = mpsc::unbounded_channel();
       let ( state_tx, _state_rx ) = broadcast::channel( 16 );
 
       Self {
-        state: Arc::new( Mutex::new( WebSocketConnectionState::Connecting ) ),
+        state : Arc::new( Mutex::new( WebSocketConnectionState::Connecting ) ),
         config,
-        metrics: Arc::new( Mutex::new( WebSocketMetrics::default() ) ),
+        metrics : Arc::new( Mutex::new( WebSocketMetrics::default() ) ),
         message_tx,
         message_rx,
         state_tx,
@@ -402,7 +402,7 @@ mod private
     }
 
     /// Send a message through the WebSocket
-    pub async fn send_message( &self, message: WebSocketMessage ) -> Result< (), crate::error::Error >
+    pub async fn send_message( &self, message : WebSocketMessage ) -> Result< (), crate::error::Error >
     {
       if !self.is_connected()
       {
@@ -440,7 +440,7 @@ mod private
     }
 
     /// Connect to a WebSocket endpoint
-    pub async fn connect( _endpoint: &str, config: WebSocketConfig ) -> Result< Self, crate::error::Error >
+    pub async fn connect( _endpoint : &str, config : WebSocketConfig ) -> Result< Self, crate::error::Error >
     {
       let connection = Self::new( config );
 
@@ -479,7 +479,7 @@ mod private
 
   impl std::fmt::Debug for WebSocketConnection
   {
-    fn fmt( &self, f: &mut std::fmt::Formatter< '_ > ) -> std::fmt::Result
+    fn fmt( &self, f : &mut std::fmt::Formatter< '_ > ) -> std::fmt::Result
     {
       f.debug_struct( "WebSocketConnection" )
         .field( "state", &self.state() )
@@ -494,38 +494,38 @@ mod private
   pub struct WebSocketStreamBuilder< 'a >
   {
     #[ allow( dead_code ) ]
-    model: &'a crate::models::api::ModelApi< 'a >,
-    message: Option< String >,
-    config: WebSocketConfig,
-    keepalive: Option< Duration >,
-    reconnect: bool,
-    fallback_to_http: bool,
+    model : &'a crate::models::api::ModelApi< 'a >,
+    message : Option< String >,
+    config : WebSocketConfig,
+    keepalive : Option< Duration >,
+    reconnect : bool,
+    fallback_to_http : bool,
   }
 
   impl< 'a > WebSocketStreamBuilder< 'a >
   {
     /// Create a new WebSocket stream builder
-    pub fn new( model: &'a crate::models::api::ModelApi< 'a > ) -> Self
+    pub fn new( model : &'a crate::models::api::ModelApi< 'a > ) -> Self
     {
       Self {
         model,
-        message: None,
-        config: WebSocketConfig::default(),
-        keepalive: None,
-        reconnect: true,
-        fallback_to_http: true,
+        message : None,
+        config : WebSocketConfig::default(),
+        keepalive : None,
+        reconnect : true,
+        fallback_to_http : true,
       }
     }
 
     /// Set the initial message to send
-    pub fn with_message( mut self, message: &str ) -> Self
+    pub fn with_message( mut self, message : &str ) -> Self
     {
       self.message = Some( message.to_string() );
       self
     }
 
     /// Set keepalive interval
-    pub fn with_keepalive( mut self, interval: Duration ) -> Self
+    pub fn with_keepalive( mut self, interval : Duration ) -> Self
     {
       self.keepalive = Some( interval );
       self.config.heartbeat_interval = interval;
@@ -533,14 +533,14 @@ mod private
     }
 
     /// Enable or disable automatic reconnection
-    pub fn with_reconnect( mut self, reconnect: bool ) -> Self
+    pub fn with_reconnect( mut self, reconnect : bool ) -> Self
     {
       self.reconnect = reconnect;
       self
     }
 
     /// Enable or disable fallback to HTTP streaming
-    pub fn with_fallback_to_http( mut self, fallback: bool ) -> Self
+    pub fn with_fallback_to_http( mut self, fallback : bool ) -> Self
     {
       self.fallback_to_http = fallback;
       self.config.fallback_to_http = fallback;
@@ -548,7 +548,7 @@ mod private
     }
 
     /// Set WebSocket configuration
-    pub fn with_config( mut self, config: WebSocketConfig ) -> Self
+    pub fn with_config( mut self, config : WebSocketConfig ) -> Self
     {
       self.config = config;
       self
@@ -556,7 +556,7 @@ mod private
 
     /// Create the WebSocket connection
     ///
-    /// Note: Since Gemini API uses HTTP/REST with Server-Sent Events,
+    /// Note : Since Gemini API uses HTTP/REST with Server-Sent Events,
     /// this implementation provides WebSocket-like functionality over HTTP streaming
     pub async fn connect( self ) -> Result< WebSocketConnection, crate::error::Error >
     {

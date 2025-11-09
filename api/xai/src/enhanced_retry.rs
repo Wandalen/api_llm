@@ -75,7 +75,7 @@ mod private
 
     /// Sets the base delay for exponential backoff.
     ///
-    /// The actual delay is calculated as: `base_delay * 2^attempt`
+    /// The actual delay is calculated as : `base_delay * 2^attempt`
     ///
     /// # Examples
     ///
@@ -143,10 +143,10 @@ mod private
     /// # Returns
     ///
     /// Duration to wait before the next retry attempt.
-    #[allow(clippy::cast_possible_truncation)]  // Bounded by min() operations
+    #[ allow( clippy::cast_possible_truncation) ]  // Bounded by min() operations
     pub fn delay_for_attempt( &self, attempt : usize ) -> Duration
     {
-      // Calculate exponential delay: base * 2^attempt
+      // Calculate exponential delay : base * 2^attempt
       // Use saturating conversions to handle overflow gracefully
       let base_ms = self.base_delay.as_millis().min( u128::from(u64::MAX) ) as u64;
       let attempt_u32 = attempt.min( u32::MAX as usize ) as u32;
@@ -160,7 +160,7 @@ mod private
       let final_delay_ms = if self.use_jitter
       {
         let jitter = ( rand::random::< f64 >() * 0.5 ) + 0.5; // 0.5 to 1.0
-        #[allow(clippy::cast_sign_loss)]  // jitter is always positive (0.5-1.0)
+        #[ allow( clippy::cast_sign_loss) ]  // jitter is always positive (0.5-1.0)
         let result = ( delay_ms as f64 * jitter ).min( u64::MAX as f64 ) as u64;
         result
       }
@@ -335,7 +335,7 @@ mod private
 
     thread_local!
     {
-      #[allow(clippy::cast_possible_truncation)]  // wrapping_rem ensures value fits in u64
+      #[ allow( clippy::cast_possible_truncation) ]  // wrapping_rem ensures value fits in u64
       static RNG_STATE : Cell< u64 > = Cell::new(
         SystemTime::now()
           .duration_since( UNIX_EPOCH )
@@ -365,7 +365,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

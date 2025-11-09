@@ -59,7 +59,7 @@ mod private
     #[ cfg( feature = "rate_limiting" ) ]
     #[ inline ]
     #[ must_use ]
-    pub fn with_rate_limiter( mut self, config: RateLimitingConfig ) -> Self
+    pub fn with_rate_limiter( mut self, config : RateLimitingConfig ) -> Self
     {
       self.rate_limiter = RateLimiter::new( config ).ok();
       self
@@ -161,7 +161,7 @@ mod private
       // Not in cache, make request
       let response = self.chat( request ).await?;
       let response_json = serde_json::to_string( &response )
-        .map_err( |e| error_tools::format_err!( "Failed to serialize response: {}", e ) )?;
+        .map_err( |e| error_tools::format_err!( "Failed to serialize response : {}", e ) )?;
 
       // Cache the response
       if let ( Some( key ), Some( ref cache ) ) = ( cache_key, &self.request_cache )
@@ -201,22 +201,22 @@ mod private
       {
         Some( collector ) => collector.generate_report(),
         None => ComprehensiveReport {
-          total_requests: 0,
-          successful_requests: 0,
-          failed_requests: 0,
-          error_rate: 0.0,
-          success_rate: 0.0,
-          average_response_time: Duration::from_secs( 0 ),
-          total_bytes_transferred: 0,
-          top_errors: Vec::new(),
-          performance_trends: Vec::new(),
+          total_requests : 0,
+          successful_requests : 0,
+          failed_requests : 0,
+          error_rate : 0.0,
+          success_rate : 0.0,
+          average_response_time : Duration::from_secs( 0 ),
+          total_bytes_transferred : 0,
+          top_errors : Vec::new(),
+          performance_trends : Vec::new(),
         },
       }
     }
 
     /// Get all CURL commands for diagnostics
     ///
-    /// Note: Currently returns empty vec. Individual curl commands can be retrieved
+    /// Note : Currently returns empty vec. Individual curl commands can be retrieved
     /// via DiagnosticsCollector::get_curl_command(request_id) for specific requests.
     #[ cfg( feature = "general_diagnostics" ) ]
     #[ inline ]

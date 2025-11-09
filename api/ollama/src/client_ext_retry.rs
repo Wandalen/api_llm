@@ -12,7 +12,7 @@ mod private
   {
     #[ cfg( feature = "retry" ) ]
     /// Execute chat request with retry logic (explicit retry method)
-    pub async fn chat_with_retries( &mut self, request: ChatRequest ) -> OllamaResult< ChatResponse >
+    pub async fn chat_with_retries( &mut self, request : ChatRequest ) -> OllamaResult< ChatResponse >
     {
       match &self.retry_client
       {
@@ -41,7 +41,7 @@ mod private
 
     #[ cfg( feature = "retry" ) ]
     /// Execute generate request with retry logic (explicit retry method)
-    pub async fn generate_with_retries( &mut self, request: GenerateRequest ) -> OllamaResult< GenerateResponse >
+    pub async fn generate_with_retries( &mut self, request : GenerateRequest ) -> OllamaResult< GenerateResponse >
     {
       match &self.retry_client
       {
@@ -98,7 +98,7 @@ mod private
 
     #[ cfg( feature = "retry" ) ]
     /// Execute model info request with retry logic (explicit retry method)
-    pub async fn model_info_with_retries( &mut self, model_name: String ) -> OllamaResult< ModelInfo >
+    pub async fn model_info_with_retries( &mut self, model_name : String ) -> OllamaResult< ModelInfo >
     {
       match &self.retry_client
       {

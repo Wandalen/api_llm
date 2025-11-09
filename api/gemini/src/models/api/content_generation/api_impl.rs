@@ -58,12 +58,12 @@ impl ModelApi< '_ >
   /// 
   /// // Simple text generation
   /// let request = GenerateContentRequest {
-  ///   contents: vec![ Content {
-  ///     parts: vec![ Part {
-  ///       text: Some( "Explain quantum computing in simple terms.".to_string() ),
+  ///   contents : vec![ Content {
+  ///     parts : vec![ Part {
+  ///       text : Some( "Explain quantum computing in simple terms.".to_string() ),
   ///       ..Default::default()
   ///     } ],
-  ///     role: "user".to_string(),
+  ///     role : "user".to_string(),
   ///   } ],
   ///   ..Default::default()
   /// };
@@ -75,14 +75,14 @@ impl ModelApi< '_ >
   ///   let content = &candidate.content;
   ///   for part in &content.parts {
   ///     if let Some( text ) = &part.text {
-  ///       println!( "Generated: {}", text );
+  ///       println!( "Generated : {}", text );
   ///     }
   ///   }
   /// }
   /// 
   /// // Check usage statistics
   /// if let Some( usage ) = response.usage_metadata {
-  ///   println!( "Tokens used - Input: {}, Output: {}", 
+  ///   println!( "Tokens used - Input : {}, Output : {}", 
   ///     usage.prompt_token_count.unwrap_or( 0 ),
   ///     usage.candidates_token_count.unwrap_or( 0 )
   ///   );
@@ -113,7 +113,7 @@ impl ModelApi< '_ >
       self.model_id
     );
 
-    http::execute_with_optional_retries
+    http ::execute_with_optional_retries
     (
       self.client,
       Method::POST,
@@ -166,10 +166,10 @@ impl ModelApi< '_ >
     // Create exponential backoff configuration using client settings
     let mut backoff = ExponentialBackoff
     {
-      initial_interval: self.client.base_delay,
-      max_interval: self.client.max_delay,
-      multiplier: self.client.backoff_multiplier,
-      max_elapsed_time: self.client.max_elapsed_time,
+      initial_interval : self.client.base_delay,
+      max_interval : self.client.max_delay,
+      multiplier : self.client.backoff_multiplier,
+      max_elapsed_time : self.client.max_elapsed_time,
       ..Default::default()
     };
 
@@ -283,12 +283,12 @@ impl ModelApi< '_ >
   /// let model = models_api.by_name( "gemini-2.0-flash-exp" );
   /// 
   /// let request = GenerateContentRequest {
-  ///   contents: vec![ Content {
-  ///     parts: vec![ Part {
-  ///       text: Some( "Write a long story about adventures".to_string() ),
+  ///   contents : vec![ Content {
+  ///     parts : vec![ Part {
+  ///       text : Some( "Write a long story about adventures".to_string() ),
   ///       ..Default::default()
   ///     } ],
-  ///     role: "user".to_string(),
+  ///     role : "user".to_string(),
   ///   } ],
   ///   ..Default::default()
   /// };
@@ -310,7 +310,7 @@ impl ModelApi< '_ >
   ///         }
   ///       }
   ///     }
-  ///     Err( e ) => eprintln!( "Stream error: {}", e ),
+  ///     Err( e ) => eprintln!( "Stream error : {}", e ),
   ///   }
   /// }
   /// # Ok( () )
@@ -344,7 +344,7 @@ impl ModelApi< '_ >
   ///
   /// ```rust,no_run
   /// # use api_gemini::{ client::Client, models::{ Content, Part } };
-  /// # async fn example() -> Result<(), Box< dyn std::error::Error >> {
+  /// # async fn example() -> Result<(), Box< dyn std::error::Error > > {
   /// let client = Client::builder()
   ///   .api_key( "your-api-key".to_string() )
   ///   .build()?;
@@ -366,7 +366,7 @@ impl ModelApi< '_ >
   #[ inline ]
   pub fn stream_builder( &self ) -> crate::models::StreamingRequestBuilder< '_ >
   {
-    crate::models::StreamingRequestBuilder::new( self )
+    crate ::models::StreamingRequestBuilder::new( self )
   }
 
   /// Create a controllable streaming request builder for fine-grained stream management.
@@ -378,7 +378,7 @@ impl ModelApi< '_ >
   ///
   /// ```rust,no_run
   /// # use api_gemini::{ client::Client };
-  /// # async fn example() -> Result<(), Box< dyn std::error::Error >> {
+  /// # async fn example() -> Result<(), Box< dyn std::error::Error > > {
   /// let client = Client::new()?;
   ///
   /// let mut controllable_stream = client
@@ -406,7 +406,7 @@ impl ModelApi< '_ >
   #[ inline ]
   pub fn stream_controllable( &self ) -> crate::models::streaming_control::ControllableStreamBuilder< '_ >
   {
-    crate::models::streaming_control::ControllableStreamBuilder::new( self )
+    crate ::models::streaming_control::ControllableStreamBuilder::new( self )
   }
 
   /// Generates content from a simple text prompt with default settings.
@@ -440,22 +440,22 @@ impl ModelApi< '_ >
 /// let model = models_api.by_name( "gemini-2.0-flash-experimental" );
   /// 
   /// let response = model.generate_text( "Explain quantum computing in simple terms" ).await?;
-  /// println!( "Generated: {}", response );
+  /// println!( "Generated : {}", response );
   /// # Ok( () )
   /// # }
   /// ```
   ///
   /// [`generate_content`]: ModelApi::generate_content
   #[ inline ]
-  pub async fn generate_text( &self, prompt: &str ) -> Result< String, Error >
+  pub async fn generate_text( &self, prompt : &str ) -> Result< String, Error >
   {
     let request = crate::models::GenerateContentRequest {
-      contents: vec![ crate::models::Content {
-        parts: vec![ crate::models::Part {
-          text: Some( prompt.to_string() ),
+      contents : vec![ crate::models::Content {
+        parts : vec![ crate::models::Part {
+          text : Some( prompt.to_string() ),
           ..Default::default()
         } ],
-        role: "user".to_string(),
+        role : "user".to_string(),
       } ],
       ..Default::default()
     };
@@ -506,7 +506,7 @@ impl ModelApi< '_ >
   ///   100   // Limit to 100 tokens
   /// ).await?;
   /// 
-  /// println!( "Creative haiku: {}", creative );
+  /// println!( "Creative haiku : {}", creative );
   /// # Ok( () )
   /// # }
   /// ```
@@ -520,24 +520,24 @@ impl ModelApi< '_ >
   pub async fn generate_text_with_config
   (
     &self,
-    prompt: &str,
-    temperature: f32,
-    max_output_tokens: i32,
+    prompt : &str,
+    temperature : f32,
+    max_output_tokens : i32,
   )
   ->
   Result< String, Error >
   {
     let request = crate::models::GenerateContentRequest {
-      contents: vec![ crate::models::Content {
-        parts: vec![ crate::models::Part {
-          text: Some( prompt.to_string() ),
+      contents : vec![ crate::models::Content {
+        parts : vec![ crate::models::Part {
+          text : Some( prompt.to_string() ),
           ..Default::default()
         } ],
-        role: "user".to_string(),
+        role : "user".to_string(),
       } ],
-      generation_config: Some( crate::models::GenerationConfig {
-        temperature: Some( temperature ),
-        max_output_tokens: Some( max_output_tokens ),
+      generation_config : Some( crate::models::GenerationConfig {
+        temperature : Some( temperature ),
+        max_output_tokens : Some( max_output_tokens ),
         ..Default::default()
       } ),
       ..Default::default()
@@ -592,7 +592,7 @@ impl ModelApi< '_ >
   ///   "What is machine learning?"
   /// ).await?;
   /// 
-  /// println!( "Assistant: {}", response );
+  /// println!( "Assistant : {}", response );
   /// conversation = updated_conv;
   /// 
   /// // User asks follow-up
@@ -601,7 +601,7 @@ impl ModelApi< '_ >
   ///   "Can you give me a simple example?"
   /// ).await?;
   /// 
-  /// println!( "Assistant: {}", response2 );
+  /// println!( "Assistant : {}", response2 );
   /// # Ok( () )
   /// # }
   /// ```
@@ -616,23 +616,23 @@ impl ModelApi< '_ >
   pub async fn continue_conversation
   (
     &self,
-    mut conversation_history: Vec< crate::models::Content >,
-    user_message: &str,
+    mut conversation_history : Vec< crate::models::Content >,
+    user_message : &str,
   )
   ->
   Result< ( Vec< crate::models::Content >, String ), Error >
   {
     // Add the new user message to conversation history
     conversation_history.push( crate::models::Content {
-      parts: vec![ crate::models::Part {
-        text: Some( user_message.to_string() ),
+      parts : vec![ crate::models::Part {
+        text : Some( user_message.to_string() ),
         ..Default::default()
       } ],
-      role: "user".to_string(),
+      role : "user".to_string(),
     } );
 
     let request = crate::models::GenerateContentRequest {
-      contents: conversation_history.clone(),
+      contents : conversation_history.clone(),
       ..Default::default()
     };
 
@@ -651,11 +651,11 @@ impl ModelApi< '_ >
 
     // Add assistant response to conversation history
     conversation_history.push( crate::models::Content {
-      parts: vec![ crate::models::Part {
-        text: Some( assistant_text.clone() ),
+      parts : vec![ crate::models::Part {
+        text : Some( assistant_text.clone() ),
         ..Default::default()
       } ],
-      role: "model".to_string(),
+      role : "model".to_string(),
     } );
 
     Ok( ( conversation_history, assistant_text ) )
@@ -690,7 +690,7 @@ impl ModelApi< '_ >
   ///   .execute()
   ///   .await?;
   ///
-  /// println!( "Generated story: {:?}", response );
+  /// println!( "Generated story : {:?}", response );
   /// # Ok( () )
   /// # }
   /// ```
@@ -741,18 +741,18 @@ impl ModelApi< '_ >
   /// # }
   /// ```
   #[ inline ]
-  pub async fn batch_generate_content( &self, prompts: &[ &str ] ) -> Result< Vec< GenerateContentResponse >, Error >
+  pub async fn batch_generate_content( &self, prompts : &[ &str ] ) -> Result< Vec< GenerateContentResponse >, Error >
   {
     // Validate input
     if prompts.is_empty()
     {
       return Err( Error::ValidationError { 
-        message: "Cannot process empty prompt list".to_string() 
+        message : "Cannot process empty prompt list".to_string() 
       } );
     }
 
     // For now, process prompts individually
-    // qqq: Implement actual batch API when available from Gemini
+    // qqq : Implement actual batch API when available from Gemini
     let mut responses = Vec::with_capacity( prompts.len() );
     let mut successful = 0;
     let mut failed = 0;
@@ -765,23 +765,23 @@ impl ModelApi< '_ >
           // Create a mock response structure for now
           // In a real implementation, we'd use the actual generate_content method
           let response = GenerateContentResponse {
-            candidates: vec![ Candidate {
-              content: Content {
-                parts: vec![ Part {
-                  text: Some( text ),
+            candidates : vec![ Candidate {
+              content : Content {
+                parts : vec![ Part {
+                  text : Some( text ),
                   ..Default::default()
                 } ],
-                role: "model".to_string(),
+                role : "model".to_string(),
               },
-              finish_reason: Some( "STOP".to_string() ),
-              safety_ratings: None,
-              citation_metadata: None,
-              token_count: None,
-              index: Some( 0 ),
+              finish_reason : Some( "STOP".to_string() ),
+              safety_ratings : None,
+              citation_metadata : None,
+              token_count : None,
+              index : Some( 0 ),
             } ],
-            prompt_feedback: None,
-            usage_metadata: None,
-            grounding_metadata: None,
+            prompt_feedback : None,
+            usage_metadata : None,
+            grounding_metadata : None,
           };
           responses.push( response );
           successful += 1;
@@ -795,8 +795,8 @@ impl ModelApi< '_ >
           let remaining = prompts.len() - successful - failed;
           return Err( Error::BatchProcessingError {
             successful,
-            failed: failed + remaining,
-            message: format!( "Batch processing failed on prompt '{prompt}': {e}" ),
+            failed : failed + remaining,
+            message : format!( "Batch processing failed on prompt '{prompt}': {e}" ),
           } );
         }
       }
@@ -856,11 +856,11 @@ impl ModelApi< '_ >
       
       let enhanced_error = match status.as_u16()
       {
-        429 => format!( "Rate limit exceeded for streaming requests. Please reduce request frequency. Details: {error_text}" ),
-        500..=599 => format!( "Server error during streaming request ({status}). This may be temporary - please retry. Details: {error_text}" ),
-        401 => format!( "Authentication failed for streaming request. Please check your API key. Details: {error_text}" ),
-        403 => format!( "Streaming requests not authorized for your API key. Please check permissions. Details: {error_text}" ),
-        _ => format!( "Streaming request failed with HTTP {status}. Details: {error_text}" ),
+        429 => format!( "Rate limit exceeded for streaming requests. Please reduce request frequency. Details : {error_text}" ),
+        500..=599 => format!( "Server error during streaming request ({status}). This may be temporary - please retry. Details : {error_text}" ),
+        401 => format!( "Authentication failed for streaming request. Please check your API key. Details : {error_text}" ),
+        403 => format!( "Streaming requests not authorized for your API key. Please check permissions. Details : {error_text}" ),
+        _ => format!( "Streaming request failed with HTTP {status}. Details : {error_text}" ),
       };
       
       return Err( Error::ApiError( enhanced_error ) );
@@ -887,16 +887,16 @@ impl ModelApi< '_ >
   ///
   /// ## NOT These Formats
   ///
-  /// - ❌ NOT SSE: `data: {...}\n\ndata: {...}\n\n`
+  /// - ❌ NOT SSE: `data : {...}\n\ndata : {...}\n\n`
   /// - ❌ NOT NDJSON: `{...}\n{...}\n`
   /// - ❌ NOT chunked JSON: Separate JSON objects
   ///
   /// ## Implementation Strategy
   ///
   /// 1. **Buffer entire response**: Call `response.bytes().await` to collect full body
-  /// 2. **Parse as array**: `serde_json::from_str::<Vec< GenerateContentResponse >>(&text)`
+  /// 2. **Parse as array**: `serde_json::from_str::< Vec< GenerateContentResponse > >(&text)`
   /// 3. **Emit as stream**: Use `async_stream::stream!` to yield array elements as chunks
-  /// 4. **Add final marker**: Emit terminal chunk with `is_final: true` after array exhausted
+  /// 4. **Add final marker**: Emit terminal chunk with `is_final : true` after array exhausted
   ///
   /// ## Why Not SSE Parser?
   ///
@@ -919,7 +919,7 @@ impl ModelApi< '_ >
   #[ inline ]
   fn process_streaming_response( response : reqwest::Response ) -> impl futures::Stream< Item = Result< crate::models::StreamingResponse, Error > >
   {
-    // Gemini API returns a JSON array: [{...response1...}, {...response2...}]
+    // Gemini API returns a JSON array : [{...response1...}, {...response2...}]
     // We need to buffer the entire response and parse as array
     //
     // DEVELOPMENT NOTE: Previous versions imported `futures::{StreamExt, stream}` here,
@@ -931,7 +931,7 @@ impl ModelApi< '_ >
     //
     // The unused imports were removed during test-clean cycle on 2025-10-12 when
     // `-D warnings` flag caught them during ctest3 verification.
-    async_stream::stream!
+    async_stream ::stream!
     {
       // Collect all bytes
       let bytes_result = response.bytes().await;
@@ -954,10 +954,10 @@ impl ModelApi< '_ >
                   .is_some();
 
                 let streaming_response = crate::models::StreamingResponse {
-                  candidates: Some( api_response.candidates ),
-                  usage_metadata: api_response.usage_metadata,
-                  is_final: Some( is_final ),
-                  error: None,
+                  candidates : Some( api_response.candidates ),
+                  usage_metadata : api_response.usage_metadata,
+                  is_final : Some( is_final ),
+                  error : None,
                 };
 
                 yield Ok( streaming_response );
@@ -965,19 +965,19 @@ impl ModelApi< '_ >
 
               // Emit final marker
               yield Ok( crate::models::StreamingResponse {
-                candidates: None,
-                usage_metadata: None,
-                is_final: Some( true ),
-                error: None,
+                candidates : None,
+                usage_metadata : None,
+                is_final : Some( true ),
+                error : None,
               } );
             },
             Err( parse_error ) => {
-              yield Err( Error::SerializationError( format!( "Failed to parse streaming response array: {parse_error}" ) ) );
+              yield Err( Error::SerializationError( format!( "Failed to parse streaming response array : {parse_error}" ) ) );
             }
           }
         },
         Err( network_error ) => {
-          yield Err( Error::NetworkError( format!( "Failed to read streaming response: {network_error}" ) ) );
+          yield Err( Error::NetworkError( format!( "Failed to read streaming response : {network_error}" ) ) );
         }
       }
     }

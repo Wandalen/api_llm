@@ -7,10 +7,10 @@ use api_openai::ClientApiAccessors;
 use api_openai::
 {
   Client,
-  components::
+  components ::
   {
-    responses::{ CreateResponseRequest, ResponseInput },
-    input::{ InputItem, InputMessage, InputContentPart, InputText, InputImage },
+    responses ::{ CreateResponseRequest, ResponseInput },
+    input ::{ InputItem, InputMessage, InputContentPart, InputText, InputImage },
   },
 };
 
@@ -71,7 +71,7 @@ async fn test_document_analyzer_vision_new_url_works()
     Err(e) =>
     {
       let error_msg = format!("{e:?}");
-      panic!("New URL failed unexpectedly: {error_msg}");
+      panic!("New URL failed unexpectedly : {error_msg}");
     }
   }
 }
@@ -136,7 +136,7 @@ async fn test_document_analyzer_vision_working_url()
     },
     Err(e) =>
     {
-      panic!("❌ Working URL should not fail: {e:?}");
+      panic!("❌ Working URL should not fail : {e:?}");
     }
   }
 }

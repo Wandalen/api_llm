@@ -11,9 +11,9 @@ mod circuit_breaker_integration_tests
   {
     Client,
     ClientApiAccessors,
-    environment::{ OpenaiEnvironmentImpl, OpenAIRecommended },
-    secret::Secret,
-    enhanced_circuit_breaker::{ EnhancedCircuitBreakerConfig },
+    environment ::{ OpenaiEnvironmentImpl, OpenAIRecommended },
+    secret ::Secret,
+    enhanced_circuit_breaker ::{ EnhancedCircuitBreakerConfig },
   };
 
   use core::time::Duration;
@@ -148,8 +148,8 @@ mod no_circuit_breaker_integration_tests
   use api_openai::
   {
     Client,
-    environment::{ OpenaiEnvironmentImpl, OpenAIRecommended },
-    secret::Secret,
+    environment ::{ OpenaiEnvironmentImpl, OpenAIRecommended },
+    secret ::Secret,
   };
 
   #[ tokio::test ]

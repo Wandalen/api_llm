@@ -64,7 +64,7 @@
 use std::{ fs, path::PathBuf };
 
 /// Known valid Claude model names as of 2025-01
-/// Source: https://docs.claude.com/en/docs/about-claude/models
+/// Source : https://docs.claude.com/en/docs/about-claude/models
 const VALID_CURRENT_MODELS: &[ &str ] = &
 [
   "claude-sonnet-4-5-20250929",
@@ -96,7 +96,7 @@ fn examples_use_valid_model_names()
 
   if !examples_dir.exists()
   {
-    panic!( "Examples directory not found: {}", examples_dir.display() );
+    panic!( "Examples directory not found : {}", examples_dir.display() );
   }
 
   let mut invalid_models = Vec::new();
@@ -118,7 +118,7 @@ fn examples_use_valid_model_names()
     let content = fs::read_to_string( &path )
       .unwrap_or_else( | e | panic!( "Failed to read file {}: {}", path.display(), e ) );
 
-    // Look for model names in the format: .model( "claude-..." ) or model: "claude-..."
+    // Look for model names in the format : .model( "claude-..." ) or model : "claude-..."
     // Using simple string matching instead of regex to avoid external dependency
     let lines : Vec< &str > = content.lines().collect();
     let mut models_in_file = Vec::new();
@@ -142,7 +142,7 @@ fn examples_use_valid_model_names()
         }
       }
 
-      // Match model: "claude-..." or model : "claude-..."
+      // Match model : "claude-..." or model : "claude-..."
       if line.contains( "model" ) && line.contains( ':' )
       {
         if let Some( colon_pos ) = line.find( ':' )
@@ -247,7 +247,7 @@ fn example_documentation_matches_filename()
     let content = fs::read_to_string( &path )
       .unwrap_or_else( | e | panic!( "Failed to read file {}: {}", path.display(), e ) );
 
-    // Look for cargo run --example <name> in documentation
+    // Look for cargo run --example < name > in documentation
     for line in content.lines()
     {
       if line.contains( "cargo run --example " ) || line.contains( "cargo_run_--example_" )
@@ -282,7 +282,7 @@ fn example_documentation_matches_filename()
     for ( filename, documented ) in &mismatches
     {
       error_msg.push_str( &format!(
-        "  - File: {}.rs, Documentation says: 'cargo run --example {}'\n",
+        "  - File : {}.rs, Documentation says : 'cargo run --example {}'\n",
         filename, documented
       ) );
     }

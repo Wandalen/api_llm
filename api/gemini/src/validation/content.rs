@@ -11,14 +11,14 @@ use super::*;
 /// # Returns
 ///
 /// Returns `Ok(())` if the request is valid, or a validation error.
-pub fn validate_enhanced_generate_content_request( request: &GenerateContentRequest ) -> Result< (), ValidationError >
+pub fn validate_enhanced_generate_content_request( request : &GenerateContentRequest ) -> Result< (), ValidationError >
 {
   // Basic validation
   if request.contents.is_empty()
   {
     return Err( ValidationError::EmptyCollection {
-      field: "contents".to_string(),
-      context: "GenerateContentRequest".to_string(),
+      field : "contents".to_string(),
+      context : "GenerateContentRequest".to_string(),
     } );
   }
 
@@ -27,9 +27,9 @@ pub fn validate_enhanced_generate_content_request( request: &GenerateContentRequ
   {
     validate_content( content )
       .map_err( |e| ValidationError::InvalidFieldValue {
-        field: format!( "contents[{i}]" ),
-        value: "Content".to_string(),
-        reason: e.to_string(),
+        field : format!( "contents[{i}]" ),
+        value : "Content".to_string(),
+        reason : e.to_string(),
       } )?;
   }
 
@@ -38,9 +38,9 @@ pub fn validate_enhanced_generate_content_request( request: &GenerateContentRequ
   {
     validate_tool_config( tool_config )
       .map_err( |e| ValidationError::InvalidFieldValue {
-        field: "tool_config".to_string(),
-        value: "ToolConfig".to_string(),
-        reason: e.to_string(),
+        field : "tool_config".to_string(),
+        value : "ToolConfig".to_string(),
+        reason : e.to_string(),
       } )?;
   }
 
@@ -49,9 +49,9 @@ pub fn validate_enhanced_generate_content_request( request: &GenerateContentRequ
   {
     validate_system_instruction( system_instruction )
       .map_err( |e| ValidationError::InvalidFieldValue {
-        field: "system_instruction".to_string(),
-        value: "SystemInstruction".to_string(),
-        reason: e.to_string(),
+        field : "system_instruction".to_string(),
+        value : "SystemInstruction".to_string(),
+        reason : e.to_string(),
       } )?;
   }
 
@@ -61,8 +61,8 @@ pub fn validate_enhanced_generate_content_request( request: &GenerateContentRequ
     if tools.is_empty()
     {
       return Err( ValidationError::EmptyCollection {
-        field: "tools".to_string(),
-        context: "GenerateContentRequest".to_string(),
+        field : "tools".to_string(),
+        context : "GenerateContentRequest".to_string(),
       } );
     }
 
@@ -70,9 +70,9 @@ pub fn validate_enhanced_generate_content_request( request: &GenerateContentRequ
     {
       validate_tool( tool )
         .map_err( |e| ValidationError::InvalidFieldValue {
-          field: format!( "tools[{}]", i ),
-          value: "Tool".to_string(),
-          reason: e.to_string(),
+          field : format!( "tools[{}]", i ),
+          value : "Tool".to_string(),
+          reason : e.to_string(),
         } )?;
     }
   }
@@ -89,16 +89,16 @@ pub fn validate_enhanced_generate_content_request( request: &GenerateContentRequ
 /// # Returns
 ///
 /// Returns `Ok(())` if the tool is valid, or a validation error.
-pub fn validate_tool( tool: &Tool ) -> Result< (), ValidationError >
+pub fn validate_tool( tool : &Tool ) -> Result< (), ValidationError >
 {
   // Validate code execution tool if provided
   if let Some( code_execution_tool ) = &tool.code_execution_tool
   {
     validate_code_execution_tool( code_execution_tool )
       .map_err( |e| ValidationError::InvalidFieldValue {
-        field: "code_execution_tool".to_string(),
-        value: "CodeExecutionTool".to_string(),
-        reason: e.to_string(),
+        field : "code_execution_tool".to_string(),
+        value : "CodeExecutionTool".to_string(),
+        reason : e.to_string(),
       } )?;
   }
 
@@ -108,8 +108,8 @@ pub fn validate_tool( tool: &Tool ) -> Result< (), ValidationError >
     if function_declarations.is_empty()
     {
       return Err( ValidationError::EmptyCollection {
-        field: "function_declarations".to_string(),
-        context: "Tool".to_string(),
+        field : "function_declarations".to_string(),
+        context : "Tool".to_string(),
       } );
     }
 
@@ -117,9 +117,9 @@ pub fn validate_tool( tool: &Tool ) -> Result< (), ValidationError >
     {
       validate_function_declaration( function_declaration )
         .map_err( |e| ValidationError::InvalidFieldValue {
-          field: format!( "function_declarations[{}]", i ),
-          value: "FunctionDeclaration".to_string(),
-          reason: e.to_string(),
+          field : format!( "function_declarations[{}]", i ),
+          value : "FunctionDeclaration".to_string(),
+          reason : e.to_string(),
         } )?;
     }
   }
@@ -136,14 +136,14 @@ pub fn validate_tool( tool: &Tool ) -> Result< (), ValidationError >
 /// # Returns
 ///
 /// Returns `Ok(())` if the declaration is valid, or a validation error.
-pub fn validate_function_declaration( declaration: &FunctionDeclaration ) -> Result< (), ValidationError >
+pub fn validate_function_declaration( declaration : &FunctionDeclaration ) -> Result< (), ValidationError >
 {
   // Validate function name
   if declaration.name.trim().is_empty()
   {
     return Err( ValidationError::RequiredFieldMissing {
-      field: "name".to_string(),
-      context: "FunctionDeclaration".to_string(),
+      field : "name".to_string(),
+      context : "FunctionDeclaration".to_string(),
     } );
   }
 
@@ -151,9 +151,9 @@ pub fn validate_function_declaration( declaration: &FunctionDeclaration ) -> Res
   if !declaration.name.chars().all( |c| c.is_alphanumeric() || c == '_' )
   {
     return Err( ValidationError::InvalidFieldValue {
-      field: "name".to_string(),
-      value: declaration.name.clone(),
-      reason: "Function name should contain only alphanumeric characters and underscores".to_string(),
+      field : "name".to_string(),
+      value : declaration.name.clone(),
+      reason : "Function name should contain only alphanumeric characters and underscores".to_string(),
     } );
   }
 

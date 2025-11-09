@@ -608,7 +608,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use private::MessageDeltaContentImageFileObject;
   exposed use private::MessageDeltaContentTextAnnotationsFileCitationObject;

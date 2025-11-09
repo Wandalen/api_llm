@@ -6,13 +6,13 @@
 use api_openai::ClientApiAccessors;
 use api_openai::
 {
-  environment::DevEnvironment,
-  chat::CreateChatCompletionRequest,
-  enhanced_client::{ EnhancedClient, EnhancedClientBuilder },
-  connection_manager::ConnectionConfig,
-  response_cache::CacheConfig,
-  enhanced_circuit_breaker::EnhancedCircuitBreakerConfig,
-  error::Result,
+  environment ::DevEnvironment,
+  chat ::CreateChatCompletionRequest,
+  enhanced_client ::{ EnhancedClient, EnhancedClientBuilder },
+  connection_manager ::ConnectionConfig,
+  response_cache ::CacheConfig,
+  enhanced_circuit_breaker ::EnhancedCircuitBreakerConfig,
+  error ::Result,
 };
 use std::time::Duration;
 
@@ -27,33 +27,33 @@ async fn main() -> Result< () >
   // Configure connection management for resilience
   let connection_config = ConnectionConfig
   {
-    max_connections_per_host: 5,
-    min_connections_per_host: 1,
-    idle_timeout: Duration::from_secs( 180 ),
-    adaptive_pooling: true,
-    enable_connection_warming: true,
-    health_check_interval: Duration::from_secs( 30 ),
+    max_connections_per_host : 5,
+    min_connections_per_host : 1,
+    idle_timeout : Duration::from_secs( 180 ),
+    adaptive_pooling : true,
+    enable_connection_warming : true,
+    health_check_interval : Duration::from_secs( 30 ),
   };
 
   // Configure response caching for efficiency
   let cache_config = CacheConfig
   {
-    max_entries: 50,
-    default_ttl: Duration::from_secs( 600 ), // 10 minutes
-    max_response_size: 512 * 1024, // 512KB
-    enable_compression: true,
-    cache_errors: false,
-    cleanup_interval: Duration::from_secs( 60 ),
+    max_entries : 50,
+    default_ttl : Duration::from_secs( 600 ), // 10 minutes
+    max_response_size : 512 * 1024, // 512KB
+    enable_compression : true,
+    cache_errors : false,
+    cleanup_interval : Duration::from_secs( 60 ),
   };
 
   // Configure circuit breaker for fault tolerance
   let circuit_breaker_config = EnhancedCircuitBreakerConfig
   {
-    failure_threshold: 3, // Open after 3 consecutive failures
-    recovery_timeout_ms: 5000, // Wait 5 seconds before attempting recovery
-    success_threshold: 2, // Close after 2 successful requests in half-open state
-    half_open_max_requests: 3, // Allow up to 3 requests in half-open state
-    half_open_timeout_ms: 10000, // Half-open state times out after 10 seconds
+    failure_threshold : 3, // Open after 3 consecutive failures
+    recovery_timeout_ms : 5000, // Wait 5 seconds before attempting recovery
+    success_threshold : 2, // Close after 2 successful requests in half-open state
+    half_open_max_requests : 3, // Allow up to 3 requests in half-open state
+    half_open_timeout_ms : 10000, // Half-open state times out after 10 seconds
   };
 
   // Build enhanced client using the builder pattern
@@ -69,16 +69,16 @@ async fn main() -> Result< () >
     .build( environment )?;
 
   println!( "✅ Enhanced client created with all reliability features:" );
-  println!( "   - Connection Management: Enabled" );
-  println!( "   - Response Caching: {}", if client.is_caching_enabled() { "Enabled" } else { "Disabled" } );
-  println!( "   - Circuit Breaker: {}", if client.is_circuit_breaker_enabled() { "Enabled" } else { "Disabled" } );
+  println!( "   - Connection Management : Enabled" );
+  println!( "   - Response Caching : {}", if client.is_caching_enabled() { "Enabled" } else { "Disabled" } );
+  println!( "   - Circuit Breaker : {}", if client.is_circuit_breaker_enabled() { "Enabled" } else { "Disabled" } );
 
   // Display initial circuit breaker state
   #[ cfg( feature = "circuit_breaker" ) ]
   {
     if let Some( cb_state ) = client.get_circuit_breaker_state().await
     {
-      println!( "   - Circuit Breaker State: {:?}", cb_state );
+      println!( "   - Circuit Breaker State : {:?}", cb_state );
     }
   }
 
@@ -117,14 +117,14 @@ async fn main() -> Result< () >
       Err( e ) =>
       {
         failed_requests += 1;
-        println!( "  ❌ Failed: {}", e );
+        println!( "  ❌ Failed : {}", e );
 
         // Check circuit breaker state after failure
         #[ cfg( feature = "circuit_breaker" ) ]
         {
           if let Some( cb_state ) = client.get_circuit_breaker_state().await
           {
-            println!( "  🔌 Circuit Breaker State: {:?}", cb_state );
+            println!( "  🔌 Circuit Breaker State : {:?}", cb_state );
           }
         }
       }
@@ -141,10 +141,10 @@ async fn main() -> Result< () >
         if let Some( cb_stats ) = client.get_circuit_breaker_stats().await
         {
           println!( "   Circuit Breaker:" );
-          println!( "     - Total Requests: {}", cb_stats.total_requests );
-          println!( "     - Total Failures: {}", cb_stats.total_failures );
-          println!( "     - Trip Count: {}", cb_stats.trip_count );
-          println!( "     - Current State: {:?}", cb_stats.state );
+          println!( "     - Total Requests : {}", cb_stats.total_requests );
+          println!( "     - Total Failures : {}", cb_stats.total_failures );
+          println!( "     - Trip Count : {}", cb_stats.trip_count );
+          println!( "     - Current State : {:?}", cb_stats.state );
         }
       }
 
@@ -152,41 +152,41 @@ async fn main() -> Result< () >
       if let Some( cache_stats ) = client.get_cache_statistics().await
       {
         println!( "   Response Cache:" );
-        println!( "     - Total Requests: {}", cache_stats.total_requests );
-        println!( "     - Cache Hits: {}", cache_stats.cache_hits );
-        println!( "     - Hit Ratio: {:.1}%", cache_stats.hit_ratio * 100.0 );
-        println!( "     - Current Entries: {}", cache_stats.current_entries );
+        println!( "     - Total Requests : {}", cache_stats.total_requests );
+        println!( "     - Cache Hits : {}", cache_stats.cache_hits );
+        println!( "     - Hit Ratio : {:.1}%", cache_stats.hit_ratio * 100.0 );
+        println!( "     - Current Entries : {}", cache_stats.current_entries );
       }
 
       // Connection statistics
       let conn_stats = client.get_connection_stats().await;
       println!( "   Connection Management:" );
-      println!( "     - Efficiency Score: {:.1}%", conn_stats.efficiency_score * 100.0 );
-      println!( "     - Total Requests: {}", conn_stats.total_requests_served );
-      println!( "     - Avg Response Time: {:.3}s", conn_stats.average_response_time_seconds );
+      println!( "     - Efficiency Score : {:.1}%", conn_stats.efficiency_score * 100.0 );
+      println!( "     - Total Requests : {}", conn_stats.total_requests_served );
+      println!( "     - Avg Response Time : {:.3}s", conn_stats.average_response_time_seconds );
 
       println!();
     }
 
     // Small delay between requests
-    tokio::time::sleep( Duration::from_millis( 500 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 500 ) ).await;
   }
 
   // Final comprehensive report
   println!( "\n📈 Final Error Recovery Report:" );
-  println!( "   Successful Requests: {}", successful_requests );
-  println!( "   Failed Requests: {}", failed_requests );
-  println!( "   Success Rate: {:.1}%", ( successful_requests as f64 / 10.0 ) * 100.0 );
+  println!( "   Successful Requests : {}", successful_requests );
+  println!( "   Failed Requests : {}", failed_requests );
+  println!( "   Success Rate : {:.1}%", ( successful_requests as f64 / 10.0 ) * 100.0 );
 
   #[ cfg( feature = "circuit_breaker" ) ]
   {
     if let Some( final_cb_stats ) = client.get_circuit_breaker_stats().await
     {
       println!( "\n🔌 Circuit Breaker Final Statistics:" );
-      println!( "   - Total Requests: {}", final_cb_stats.total_requests );
-      println!( "   - Total Failures: {}", final_cb_stats.total_failures );
-      println!( "   - Trip Count: {}", final_cb_stats.trip_count );
-      println!( "   - Final State: {:?}", final_cb_stats.state );
+      println!( "   - Total Requests : {}", final_cb_stats.total_requests );
+      println!( "   - Total Failures : {}", final_cb_stats.total_failures );
+      println!( "   - Trip Count : {}", final_cb_stats.trip_count );
+      println!( "   - Final State : {:?}", final_cb_stats.state );
 
       if final_cb_stats.trip_count > 0
       {
@@ -202,7 +202,7 @@ async fn main() -> Result< () >
   // Performance report
   let performance_report = client.generate_performance_report().await;
   println!( "\n📊 Performance Analysis:" );
-  println!( "   Overall Grade: {}", performance_report.analysis.grade );
+  println!( "   Overall Grade : {}", performance_report.analysis.grade );
 
   if !performance_report.analysis.kpis.is_empty()
   {
@@ -239,7 +239,7 @@ async fn main() -> Result< () >
       println!( "\n🔄 Circuit breaker has been reset to closed state" );
       if let Some( reset_state ) = client.get_circuit_breaker_state().await
       {
-        println!( "   New state: {:?}", reset_state );
+        println!( "   New state : {:?}", reset_state );
       }
     }
   }

@@ -26,8 +26,8 @@ use api_claude::
   CreateMessageRequest,
   SystemContent,
   CacheControl,
-  messages::Message,
-  secret::Secret,
+  messages ::Message,
+  secret ::Secret,
 };
 use std::io::{ self, Write as IoWrite };
 
@@ -68,7 +68,7 @@ impl CacheStats
 
   fn cost_with_cache( &self ) -> f64
   {
-    // Cache writes: $3.75/MTok, Cache reads: $0.30/MTok, Regular: $3/MTok, Output: $15/MTok
+    // Cache writes : $3.75/MTok, Cache reads : $0.30/MTok, Regular : $3/MTok, Output : $15/MTok
     let cache_write_cost = ( self.cache_creation_tokens as f64 / 1_000_000.0 ) * 3.75;
     let cache_read_cost = ( self.cache_read_tokens as f64 / 1_000_000.0 ) * 0.30;
     let regular_cost = ( self.regular_input_tokens as f64 / 1_000_000.0 ) * 3.0;
@@ -91,17 +91,17 @@ impl CacheStats
   {
     println!( "\n📊 Cache Statistics Summary" );
     println!( "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" );
-    println!( "Total Requests:           {}", self.total_requests );
+    println!( "Total Requests :           {}", self.total_requests );
     println!( "\nToken Usage:" );
-    println!( "  Cache Creation:         {:>8} tokens", self.cache_creation_tokens );
-    println!( "  Cache Reads:            {:>8} tokens", self.cache_read_tokens );
-    println!( "  Regular Input:          {:>8} tokens", self.regular_input_tokens );
-    println!( "  Output:                 {:>8} tokens", self.output_tokens );
-    println!( "  Total Input:            {:>8} tokens", self.total_input_tokens() );
+    println!( "  Cache Creation :         {:>8} tokens", self.cache_creation_tokens );
+    println!( "  Cache Reads :            {:>8} tokens", self.cache_read_tokens );
+    println!( "  Regular Input :          {:>8} tokens", self.regular_input_tokens );
+    println!( "  Output :                 {:>8} tokens", self.output_tokens );
+    println!( "  Total Input :            {:>8} tokens", self.total_input_tokens() );
     println!( "\nCost Analysis:" );
-    println!( "  Without Caching:        ${:.6}", self.cost_without_cache() );
-    println!( "  With Caching:           ${:.6}", self.cost_with_cache() );
-    println!( "  💰 Savings:             ${:.6} ({:.1}%)",
+    println!( "  Without Caching :        ${:.6}", self.cost_without_cache() );
+    println!( "  With Caching :           ${:.6}", self.cost_with_cache() );
+    println!( "  💰 Savings :             ${:.6} ({:.1}%)",
       self.cost_without_cache() - self.cost_with_cache(),
       self.savings_percentage()
     );
@@ -117,13 +117,13 @@ impl CacheStats
     {
       let cache_hit_rate = ( self.cache_read_tokens as f64 /
         ( self.cache_read_tokens + self.regular_input_tokens ) as f64 ) * 100.0;
-      println!( "  Cache Hit Rate:         {cache_hit_rate:.1}%" );
-      println!( "  Cache Misses:           {}", i32::from( self.cache_creation_tokens > 0 ) );
-      println!( "  Cache Hits:             {}", if self.cache_read_tokens > 0 { self.total_requests - 1 } else { 0 } );
+      println!( "  Cache Hit Rate :         {cache_hit_rate:.1}%" );
+      println!( "  Cache Misses :           {}", i32::from( self.cache_creation_tokens > 0 ) );
+      println!( "  Cache Hits :             {}", if self.cache_read_tokens > 0 { self.total_requests - 1 } else { 0 } );
     }
     else
     {
-      println!( "  Cache Status:           Initializing (first request)" );
+      println!( "  Cache Status :           Initializing (first request)" );
     }
     println!( "\nPricing Breakdown:" );
     println!( "  Cache Write ($3.75/MTok): ${:.6}", ( self.cache_creation_tokens as f64 / 1_000_000.0 ) * 3.75 );
@@ -187,11 +187,11 @@ The cache lasts for 5 minutes and significantly reduces input token costs.";
   loop
   {
     // Get user input
-    print!( "\n> " );
-    io::stdout().flush()?;
+    print!( "\n > " );
+    io ::stdout().flush()?;
 
     let mut input = String::new();
-    io::stdin().read_line( &mut input )?;
+    io ::stdin().read_line( &mut input )?;
     let input = input.trim();
 
     // Handle commands
@@ -273,7 +273,7 @@ The cache lasts for 5 minutes and significantly reduces input token costs.";
           .and_then( | c | c.text.clone() )
           .unwrap_or_else( || "[No response]".to_string() );
 
-        println!( "\n🤖 Claude: {assistant_text}" );
+        println!( "\n🤖 Claude : {assistant_text}" );
 
         // Update statistics
         stats.add_usage( &response.usage );
@@ -296,7 +296,7 @@ The cache lasts for 5 minutes and significantly reduces input token costs.";
       },
       Err( e ) =>
       {
-        eprintln!( "\n❌ Error: {e}" );
+        eprintln!( "\n❌ Error : {e}" );
         conversation.pop(); // Remove failed user message
       },
     }

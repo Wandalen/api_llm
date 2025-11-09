@@ -50,8 +50,8 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
 
     let text = "Hello, how are you today?";
     let token_count = count_tokens( text, "grok-3" )?;
-    println!( "   Text: \"{text}\"" );
-    println!( "   Tokens: {token_count}\n" );
+    println!( "   Text : \"{text}\"" );
+    println!( "   Tokens : {token_count}\n" );
 
     let request = ChatCompletionRequest::former()
       .model( "grok-3".to_string() )
@@ -59,7 +59,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
       .form();
 
     let request_tokens = count_tokens_for_request( &request )?;
-    println!( "   Request total tokens: {request_tokens}" );
+    println!( "   Request total tokens : {request_tokens}" );
 
     // Validate request fits in context window (Grok-3 has 131K tokens)
     validate_request_size( &request, 131_072 )?;
@@ -82,7 +82,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     match validate_request( &request )
     {
       Ok( () ) => println!( "   ✓ Request validation passed" ),
-      Err( e ) => println!( "   ✗ Validation failed: {e}" ),
+      Err( e ) => println!( "   ✗ Validation failed : {e}" ),
     }
 
     // Try invalid temperature
@@ -95,7 +95,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     match validate_request( &bad_request )
     {
       Ok( () ) => println!( "   ✗ Should have failed validation" ),
-      Err( e ) => println!( "   ✓ Correctly rejected invalid request: {e}\n" ),
+      Err( e ) => println!( "   ✓ Correctly rejected invalid request : {e}\n" ),
     }
   }
 
@@ -141,7 +141,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     let _response2 = cached_client.cached_create( request.clone() ).await?;
     let duration2 = start.elapsed();
     println!( "   ✓ Response received in {duration2:?}" );
-    println!( "   ⚡ Speedup: {:.0}x faster\n", duration1.as_secs_f64() / duration2.as_secs_f64().max( 0.000_001 ) );
+    println!( "   ⚡ Speedup : {:.0}x faster\n", duration1.as_secs_f64() / duration2.as_secs_f64().max( 0.000_001 ) );
   }
 
   // 5. Batch Operations
@@ -180,7 +180,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     println!( "   ✓ Completed {}/{} requests in {:?}", successes, results.len(), duration );
     #[ allow( clippy::cast_possible_truncation ) ]  // Small batch size in demo
     let avg = duration / results.len() as u32;
-    println!( "   Average: {avg:?} per request\n" );
+    println!( "   Average : {avg:?} per request\n" );
   }
 
   // 6. Performance Metrics

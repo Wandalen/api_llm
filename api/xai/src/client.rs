@@ -70,7 +70,7 @@ mod private
       let http_client = HttpClient::builder()
         .timeout( environment.timeout() )
         .build()
-        .map_err( |e| XaiError::Http( format!( "Failed to create HTTP client: {e}" ) ) )?;
+        .map_err( |e| XaiError::Http( format!( "Failed to create HTTP client : {e}" ) ) )?;
 
       Ok( Self
       {
@@ -88,7 +88,7 @@ mod private
     ///
     /// Panics if endpoints list is empty.
     #[ cfg( feature = "failover" ) ]
-    #[must_use]
+    #[ must_use ]
     pub fn with_failover( mut self, endpoints : Vec< String > ) -> Self
     {
       let config = crate::failover::FailoverConfig::default();
@@ -102,7 +102,7 @@ mod private
     ///
     /// Panics if endpoints list is empty.
     #[ cfg( feature = "failover" ) ]
-    #[must_use]
+    #[ must_use ]
     pub fn with_failover_config(
       mut self,
       endpoints : Vec< String >,
@@ -125,7 +125,7 @@ mod private
         {
           let endpoint_str = manager.current_endpoint();
           return url::Url::parse( &endpoint_str )
-            .map_err( | e | XaiError::UrlParse( format!( "Invalid failover endpoint: {e}" ) ).into() );
+            .map_err( | e | XaiError::UrlParse( format!( "Invalid failover endpoint : {e}" ) ).into() );
         }
       }
 
@@ -392,18 +392,18 @@ mod private
             }
 
             // Parse JSON from event data
-            serde_json::from_str::< O >( &event.data )
+            serde_json ::from_str::< O >( &event.data )
               .map_err( | e | XaiError::Serialization( e.to_string() ).into() )
           }
           Err( e ) => {
-            Err( XaiError::Stream( format!( "SSE error: {e}" ) ).into() )
+            Err( XaiError::Stream( format!( "SSE error : {e}" ) ).into() )
           }
         }
       });
 
       // Filter out the [DONE] marker errors
       let filtered_stream = mapped_stream.take_while( | result | {
-        futures_util::future::ready( match result {
+        futures_util ::future::ready( match result {
           Err( e ) => {
             // Check if this is the "Stream completed" sentinel error
             let error_str = format!( "{e:?}" );
@@ -437,7 +437,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

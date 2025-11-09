@@ -65,7 +65,7 @@ mod private
       let http_client = reqwest::Client::builder()
         .timeout( self.config().request_timeout )
         .build()
-        .map_err( | e | AnthropicError::http_error( format!( "Failed to build HTTP client: {e}" ) ) )?;
+        .map_err( | e | AnthropicError::http_error( format!( "Failed to build HTTP client : {e}" ) ) )?;
       
       // Make the streaming request
       let response = http_client
@@ -102,7 +102,7 @@ mod private
           Ok( text ) => text,
           Err( e ) =>
           {
-            let error = AnthropicError::http_error( format!( "Failed to read response: {e}" ) );
+            let error = AnthropicError::http_error( format!( "Failed to read response : {e}" ) );
             let _ = tx.send( Err( error ) );
             return;
           }
@@ -196,7 +196,7 @@ mod private
 
 
 #[ cfg( feature = "streaming" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   // Client impl only, no exposed types
 }

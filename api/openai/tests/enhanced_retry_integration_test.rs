@@ -10,9 +10,9 @@ async fn test_client_with_retry_configuration()
   use api_openai::
   {
     Client,
-    environment::{ OpenaiEnvironmentImpl, OpenAIRecommended },
-    secret::Secret,
-    enhanced_retry::EnhancedRetryConfig,
+    environment ::{ OpenaiEnvironmentImpl, OpenAIRecommended },
+    secret ::Secret,
+    enhanced_retry ::EnhancedRetryConfig,
   };
 
   // Create retry configuration with fast settings for testing
@@ -50,8 +50,8 @@ async fn test_client_with_default_retry()
   use api_openai::
   {
     Client,
-    environment::{ OpenaiEnvironmentImpl, OpenAIRecommended },
-    secret::Secret,
+    environment ::{ OpenaiEnvironmentImpl, OpenAIRecommended },
+    secret ::Secret,
   };
 
   // Create client with default retry configuration
@@ -82,8 +82,8 @@ async fn test_client_without_retry_feature()
   use api_openai::
   {
     Client,
-    environment::{ OpenaiEnvironmentImpl, OpenAIRecommended },
-    secret::Secret,
+    environment ::{ OpenaiEnvironmentImpl, OpenAIRecommended },
+    secret ::Secret,
   };
 
   // Create client without retry configuration (feature disabled)

@@ -29,9 +29,9 @@ mod private
   #[ derive( Debug ) ]
   struct ControlState
   {
-    state: StreamState,
-    buffer: VecDeque< StreamEvent >,
-    buffer_limit: usize,
+    state : StreamState,
+    buffer : VecDeque< StreamEvent >,
+    buffer_limit : usize,
   }
 
   /// Handle for controlling stream operations
@@ -40,20 +40,20 @@ mod private
   #[ derive( Debug, Clone ) ]
   pub struct StreamControl
   {
-    state: Arc< Mutex< ControlState > >,
+    state : Arc< Mutex< ControlState > >,
   }
 
   impl StreamControl
   {
     /// Create a new stream control handle
-    pub fn new( buffer_limit: usize ) -> Self
+    pub fn new( buffer_limit : usize ) -> Self
     {
       Self
       {
-        state: Arc::new( Mutex::new( ControlState
+        state : Arc::new( Mutex::new( ControlState
         {
-          state: StreamState::Running,
-          buffer: VecDeque::new(),
+          state : StreamState::Running,
+          buffer : VecDeque::new(),
           buffer_limit,
         } ) ),
       }
@@ -174,7 +174,7 @@ mod private
     }
 
     /// Buffer an event (called internally by `ControlledStream`)
-    fn buffer_event( &self, event: StreamEvent )
+    fn buffer_event( &self, event : StreamEvent )
     {
       let mut state = self.state.lock().unwrap();
       if state.buffer.len() >= state.buffer_limit
@@ -208,8 +208,8 @@ mod private
   where
     S: Stream< Item = Result< StreamEvent, crate::error::AnthropicError > > + Unpin,
   {
-    inner: S,
-    control: StreamControl,
+    inner : S,
+    control : StreamControl,
   }
 
   impl< S > ControlledStream< S >
@@ -222,13 +222,13 @@ mod private
     ///
     /// * `inner` - The underlying stream to control
     /// * `buffer_limit` - Maximum number of events to buffer when paused
-    pub fn new( inner: S, buffer_limit: usize ) -> ( Self, StreamControl )
+    pub fn new( inner : S, buffer_limit : usize ) -> ( Self, StreamControl )
     {
       let control = StreamControl::new( buffer_limit );
       let controlled = Self
       {
         inner,
-        control: control.clone(),
+        control : control.clone(),
       };
       ( controlled, control )
     }
@@ -246,7 +246,7 @@ mod private
   {
     type Item = Result< StreamEvent, crate::error::AnthropicError >;
 
-    fn poll_next( mut self: Pin< &mut Self >, cx: &mut Context< '_ > ) -> Poll< Option< Self::Item > >
+    fn poll_next( mut self : Pin< &mut Self >, cx : &mut Context< '_ > ) -> Poll< Option< Self::Item > >
     {
       // Check if cancelled
       if self.control.is_cancelled()
@@ -297,7 +297,7 @@ mod private
 }
 
 #[ cfg( feature = "streaming-control" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {
@@ -308,7 +308,7 @@ crate::mod_interface!
 }
 
 #[ cfg( not( feature = "streaming-control" ) ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   // Empty when streaming-control feature is disabled
 }

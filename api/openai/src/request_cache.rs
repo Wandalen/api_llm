@@ -11,14 +11,14 @@ mod private
 {
   use std::
   {
-    collections::HashMap,
-    sync::{ Arc, Mutex },
-    time::Instant,
+    collections ::HashMap,
+    sync ::{ Arc, Mutex },
+    time ::Instant,
   };
   use core::
   {
-    hash::{ Hash, Hasher },
-    time::Duration,
+    hash ::{ Hash, Hasher },
+    time ::Duration,
   };
   use tokio::sync::RwLock;
   use core::sync::atomic::{ AtomicU32, AtomicU64, Ordering };
@@ -30,13 +30,13 @@ mod private
   pub struct CacheConfig
   {
     /// Maximum number of entries to store in cache.
-    pub max_size: usize,
+    pub max_size : usize,
     /// Default time-to-live for cache entries.
-    pub default_ttl: Duration,
+    pub default_ttl : Duration,
     /// Whether to enable automatic cleanup of expired entries.
-    pub enable_cleanup: bool,
+    pub enable_cleanup : bool,
     /// Interval for automatic cleanup operations.
-    pub cleanup_interval: Duration,
+    pub cleanup_interval : Duration,
   }
 
   impl Default for CacheConfig
@@ -46,10 +46,10 @@ mod private
     {
       Self
       {
-        max_size: 1000,
-        default_ttl: Duration::from_secs( 300 ), // 5 minutes
-        enable_cleanup: true,
-        cleanup_interval: Duration::from_secs( 60 ), // 1 minute
+        max_size : 1000,
+        default_ttl : Duration::from_secs( 300 ), // 5 minutes
+        enable_cleanup : true,
+        cleanup_interval : Duration::from_secs( 60 ), // 1 minute
       }
     }
   }
@@ -59,13 +59,13 @@ mod private
   pub struct CacheStatistics
   {
     /// Total number of cache hits.
-    pub hits: Arc< AtomicU64 >,
+    pub hits : Arc< AtomicU64 >,
     /// Total number of cache misses.
-    pub misses: Arc< AtomicU64 >,
+    pub misses : Arc< AtomicU64 >,
     /// Total number of cache evictions.
-    pub evictions: Arc< AtomicU64 >,
+    pub evictions : Arc< AtomicU64 >,
     /// Current number of entries in cache.
-    pub entries: Arc< AtomicU32 >,
+    pub entries : Arc< AtomicU32 >,
   }
 
   impl Default for CacheStatistics
@@ -75,10 +75,10 @@ mod private
     {
       Self
       {
-        hits: Arc::new( AtomicU64::new( 0 ) ),
-        misses: Arc::new( AtomicU64::new( 0 ) ),
-        evictions: Arc::new( AtomicU64::new( 0 ) ),
-        entries: Arc::new( AtomicU32::new( 0 ) ),
+        hits : Arc::new( AtomicU64::new( 0 ) ),
+        misses : Arc::new( AtomicU64::new( 0 ) ),
+        evictions : Arc::new( AtomicU64::new( 0 ) ),
+        entries : Arc::new( AtomicU32::new( 0 ) ),
       }
     }
   }
@@ -110,31 +110,31 @@ mod private
   pub struct CacheEntry< T >
   {
     /// The cached value.
-    pub value: T,
+    pub value : T,
     /// When this entry was created.
-    pub timestamp: Instant,
+    pub timestamp : Instant,
     /// Time-to-live for this entry.
-    pub ttl: Duration,
+    pub ttl : Duration,
     /// Number of times this entry has been accessed.
-    pub access_count: Arc< AtomicU32 >,
+    pub access_count : Arc< AtomicU32 >,
     /// When this entry was last accessed.
-    pub last_accessed: Arc< Mutex< Instant > >,
+    pub last_accessed : Arc< Mutex< Instant > >,
   }
 
   impl< T > CacheEntry< T >
   {
     /// Create a new cache entry.
     #[ inline ]
-    pub fn new( value: T, ttl: Duration ) -> Self
+    pub fn new( value : T, ttl : Duration ) -> Self
     {
       let now = Instant::now();
       Self
       {
         value,
-        timestamp: now,
+        timestamp : now,
         ttl,
-        access_count: Arc::new( AtomicU32::new( 0 ) ),
-        last_accessed: Arc::new( Mutex::new( now ) ),
+        access_count : Arc::new( AtomicU32::new( 0 ) ),
+        last_accessed : Arc::new( Mutex::new( now ) ),
       }
     }
 
@@ -169,13 +169,13 @@ mod private
   pub struct RequestCacheKey
   {
     /// API endpoint path.
-    pub endpoint: String,
+    pub endpoint : String,
     /// HTTP method.
-    pub method: String,
+    pub method : String,
     /// Hash of request body.
-    pub body_hash: u64,
+    pub body_hash : u64,
     /// Hash of relevant headers.
-    pub headers_hash: u64,
+    pub headers_hash : u64,
   }
 
   impl RequestCacheKey
@@ -187,16 +187,16 @@ mod private
     /// Returns an error if serialization of the request body or headers fails.
     #[ inline ]
     pub fn new< T: Serialize >(
-      endpoint: &str,
-      method: &str,
-      body: Option< &T >,
-      headers: &HashMap<  String, String  >
+      endpoint : &str,
+      method : &str,
+      body : Option< &T >,
+      headers : &HashMap<  String, String  >
     ) -> crate::error::Result< Self >
     {
       let body_hash = if let Some( body ) = body
       {
         let json = serde_json::to_string( body ).map_err( |e|
-          crate::error::OpenAIError::Internal( format!( "Failed to serialize body for cache key: {e}" ) )
+          crate ::error::OpenAIError::Internal( format!( "Failed to serialize body for cache key : {e}" ) )
         )?;
         Self::hash_string( &json )
       }
@@ -206,27 +206,27 @@ mod private
       };
 
       // Only include relevant headers for caching
-      let relevant_headers: HashMap<  String, String  > = headers
+      let relevant_headers : HashMap<  String, String  > = headers
         .iter()
         .filter( |( key, _ )| Self::is_relevant_header( key ) )
         .map( |( k, v )| ( k.clone(), v.clone() ) )
         .collect();
 
       let headers_json = serde_json::to_string( &relevant_headers ).map_err( |e|
-        crate::error::OpenAIError::Internal( format!( "Failed to serialize headers for cache key: {e}" ) )
+        crate ::error::OpenAIError::Internal( format!( "Failed to serialize headers for cache key : {e}" ) )
       )?;
 
       Ok( Self
       {
-        endpoint: endpoint.to_string(),
-        method: method.to_string(),
+        endpoint : endpoint.to_string(),
+        method : method.to_string(),
         body_hash,
-        headers_hash: Self::hash_string( &headers_json ),
+        headers_hash : Self::hash_string( &headers_json ),
       })
     }
 
     /// Determine if a header is relevant for caching.
-    fn is_relevant_header( key: &str ) -> bool
+    fn is_relevant_header( key : &str ) -> bool
     {
       // Include headers that affect response content, exclude dynamic headers
       matches!( key.to_lowercase().as_str(),
@@ -235,7 +235,7 @@ mod private
     }
 
     /// Hash a string using the default hasher.
-    fn hash_string( s: &str ) -> u64
+    fn hash_string( s : &str ) -> u64
     {
       let mut hasher = DefaultHasher::new();
       s.hash( &mut hasher );
@@ -251,16 +251,16 @@ mod private
     V: Clone + Send + Sync + 'static,
   {
     /// Storage for cache entries.
-    entries: Arc< RwLock< HashMap< K, CacheEntry< V > > > >,
+    entries : Arc< RwLock< HashMap< K, CacheEntry< V > > > >,
     /// Maximum cache size.
-    max_size: usize,
+    max_size : usize,
     /// Default TTL for entries.
-    default_ttl: Duration,
+    default_ttl : Duration,
     /// Cache statistics.
-    statistics: CacheStatistics,
+    statistics : CacheStatistics,
     /// Configuration.
     #[ allow( dead_code ) ]
-    config: CacheConfig,
+    config : CacheConfig,
   }
 
   impl< K, V > RequestCache< K, V >
@@ -271,15 +271,15 @@ mod private
     /// Create a new request cache.
     #[ inline ]
     #[ must_use ]
-    pub fn new( max_size: usize, default_ttl: Duration ) -> Self
+    pub fn new( max_size : usize, default_ttl : Duration ) -> Self
     {
       Self
       {
-        entries: Arc::new( RwLock::new( HashMap::new() ) ),
+        entries : Arc::new( RwLock::new( HashMap::new() ) ),
         max_size,
         default_ttl,
-        statistics: CacheStatistics::default(),
-        config: CacheConfig
+        statistics : CacheStatistics::default(),
+        config : CacheConfig
         {
           max_size,
           default_ttl,
@@ -291,21 +291,21 @@ mod private
     /// Create a new request cache with custom configuration.
     #[ inline ]
     #[ must_use ]
-    pub fn with_config( config: CacheConfig ) -> Self
+    pub fn with_config( config : CacheConfig ) -> Self
     {
       Self
       {
-        entries: Arc::new( RwLock::new( HashMap::new() ) ),
-        max_size: config.max_size,
-        default_ttl: config.default_ttl,
-        statistics: CacheStatistics::default(),
+        entries : Arc::new( RwLock::new( HashMap::new() ) ),
+        max_size : config.max_size,
+        default_ttl : config.default_ttl,
+        statistics : CacheStatistics::default(),
         config,
       }
     }
 
     /// Get a value from the cache.
     #[ inline ]
-    pub async fn get( &self, key: &K ) -> Option< V >
+    pub async fn get( &self, key : &K ) -> Option< V >
     {
       let entries = self.entries.read().await;
 
@@ -337,14 +337,14 @@ mod private
 
     /// Insert a value into the cache.
     #[ inline ]
-    pub async fn insert( &self, key: K, value: V ) -> Option< V >
+    pub async fn insert( &self, key : K, value : V ) -> Option< V >
     {
       self.insert_with_ttl( key, value, self.default_ttl ).await
     }
 
     /// Insert a value with custom TTL.
     #[ inline ]
-    pub async fn insert_with_ttl( &self, key: K, value: V, ttl: Duration ) -> Option< V >
+    pub async fn insert_with_ttl( &self, key : K, value : V, ttl : Duration ) -> Option< V >
     {
       let mut entries = self.entries.write().await;
 
@@ -367,7 +367,7 @@ mod private
 
     /// Remove a value from the cache.
     #[ inline ]
-    pub async fn remove( &self, key: &K ) -> Option< V >
+    pub async fn remove( &self, key : &K ) -> Option< V >
     {
       let mut entries = self.entries.write().await;
       if let Some( entry ) = entries.remove( key )
@@ -383,7 +383,7 @@ mod private
 
     /// Check if the cache contains a key.
     #[ inline ]
-    pub async fn contains_key( &self, key: &K ) -> bool
+    pub async fn contains_key( &self, key : &K ) -> bool
     {
       let entries = self.entries.read().await;
       if let Some( entry ) = entries.get( key )
@@ -462,7 +462,7 @@ mod private
     }
 
     /// Evict the least recently used entry.
-    async fn evict_lru( &self, entries: &mut HashMap< K, CacheEntry< V > > )
+    async fn evict_lru( &self, entries : &mut HashMap< K, CacheEntry< V > > )
     {
       if entries.is_empty()
       {
@@ -515,16 +515,16 @@ mod private
     #[ inline ]
     pub async fn cache_response< I: Serialize, O: Serialize >(
       &self,
-      endpoint: &str,
-      method: &str,
-      request_body: Option< &I >,
-      headers: &HashMap<  String, String  >,
-      response: &O,
+      endpoint : &str,
+      method : &str,
+      request_body : Option< &I >,
+      headers : &HashMap<  String, String  >,
+      response : &O,
     ) -> crate::error::Result< () >
     {
       let key = RequestCacheKey::new( endpoint, method, request_body, headers )?;
       let value = serde_json::to_value( response ).map_err( |e|
-        crate::error::OpenAIError::Internal( format!( "Failed to serialize response for caching: {e}" ) )
+        crate ::error::OpenAIError::Internal( format!( "Failed to serialize response for caching : {e}" ) )
       )?;
 
       self.insert( key, value ).await;
@@ -539,10 +539,10 @@ mod private
     #[ inline ]
     pub async fn get_response< I: Serialize, O: for< 'de > Deserialize< 'de > >(
       &self,
-      endpoint: &str,
-      method: &str,
-      request_body: Option< &I >,
-      headers: &HashMap<  String, String  >,
+      endpoint : &str,
+      method : &str,
+      request_body : Option< &I >,
+      headers : &HashMap<  String, String  >,
     ) -> crate::error::Result< Option< O > >
     {
       let key = RequestCacheKey::new( endpoint, method, request_body, headers )?;
@@ -550,7 +550,7 @@ mod private
       if let Some( value ) = self.get( &key ).await
       {
         let response = serde_json::from_value( value ).map_err( |e|
-          crate::error::OpenAIError::Internal( format!( "Failed to deserialize cached response: {e}" ) )
+          crate ::error::OpenAIError::Internal( format!( "Failed to deserialize cached response : {e}" ) )
         )?;
         Ok( Some( response ) )
       }
@@ -563,7 +563,7 @@ mod private
 
 } // end mod private
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

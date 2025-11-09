@@ -5,7 +5,7 @@
 //! `HuggingFace's` Inference API. It handles authentication, request/response serialization,
 //! streaming support, and opt-in reliability features for production deployments.
 //!
-//! # Design Philosophy: "Thin Client, Rich API"
+//! # Design Philosophy : "Thin Client, Rich API"
 //!
 //! This library provides comprehensive opt-in features with explicit developer control.
 //! No automatic behaviors occur without explicit configuration.
@@ -40,9 +40,9 @@
 //! - Streaming - Server-sent events for real-time responses
 //!
 //! **Planned Expansion**:
-//! - Computer Vision APIs: Image classification, object detection, text-to-image, etc.
-//! - Audio APIs: ASR, audio classification, text-to-speech
-//! - Multimodal APIs: Document QA, visual QA, video-text-to-text
+//! - Computer Vision APIs : Image classification, object detection, text-to-image, etc.
+//! - Audio APIs : ASR, audio classification, text-to-speech
+//! - Multimodal APIs : Document QA, visual QA, video-text-to-text
 //!
 //! ## Historical Context
 //!
@@ -114,7 +114,7 @@ pub mod audio;
 #[ cfg( feature = "sync" ) ]
 pub mod sync;
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   // Always available core functionality
   exposed use error;

@@ -13,14 +13,14 @@ mod private
 {
   use std::
   {
-    collections::{ HashMap, VecDeque },
-    sync::Arc,
-    time::Instant,
+    collections ::{ HashMap, VecDeque },
+    sync ::Arc,
+    time ::Instant,
   };
   use core::
   {
-    hash::Hash,
-    time::Duration,
+    hash ::Hash,
+    time ::Duration,
   };
   use tokio::sync::{ RwLock, Notify };
   use blake3::{ Hash as Blake3Hash, Hasher as Blake3Hasher };
@@ -30,15 +30,15 @@ mod private
   pub struct BatchConfig
   {
     /// Maximum number of requests to batch together
-    pub max_batch_size: usize,
+    pub max_batch_size : usize,
     /// Maximum time to wait before flushing a partial batch
-    pub flush_timeout: Duration,
+    pub flush_timeout : Duration,
     /// Maximum concurrent batches processing
-    pub max_concurrent_batches: usize,
+    pub max_concurrent_batches : usize,
     /// Enable smart batching for similar requests
-    pub enable_smart_batching: bool,
+    pub enable_smart_batching : bool,
     /// Minimum requests to trigger smart batching
-    pub smart_batch_threshold: usize,
+    pub smart_batch_threshold : usize,
   }
 
   impl Default for BatchConfig
@@ -48,11 +48,11 @@ mod private
     {
       Self
       {
-        max_batch_size: 100,
-        flush_timeout: Duration::from_millis( 50 ),
-        max_concurrent_batches: 10,
-        enable_smart_batching: true,
-        smart_batch_threshold: 5,
+        max_batch_size : 100,
+        flush_timeout : Duration::from_millis( 50 ),
+        max_concurrent_batches : 10,
+        enable_smart_batching : true,
+        smart_batch_threshold : 5,
       }
     }
   }
@@ -62,11 +62,11 @@ mod private
   pub struct RequestSignature
   {
     /// HTTP method (GET, POST, etc.)
-    pub method: String,
+    pub method : String,
     /// API endpoint path
-    pub path: String,
+    pub path : String,
     /// Request structure hash (excluding variable data)
-    pub structure_hash: Blake3Hash,
+    pub structure_hash : Blake3Hash,
   }
 
   impl RequestSignature
@@ -74,7 +74,7 @@ mod private
     /// Create request signature for batching analysis
     #[ inline ]
     #[ must_use ]
-    pub fn new( method: &str, path: &str, body: &[u8] ) -> Self
+    pub fn new( method : &str, path : &str, body : &[u8] ) -> Self
     {
       let mut hasher = Blake3Hasher::new();
       hasher.update( method.as_bytes() );
@@ -84,8 +84,8 @@ mod private
 
       Self
       {
-        method: method.to_string(),
-        path: path.to_string(),
+        method : method.to_string(),
+        path : path.to_string(),
         structure_hash,
       }
     }
@@ -93,7 +93,7 @@ mod private
     /// Check if requests can be batched together
     #[ inline ]
     #[ must_use ]
-    pub fn is_batchable_with( &self, other: &RequestSignature ) -> bool
+    pub fn is_batchable_with( &self, other : &RequestSignature ) -> bool
     {
       self.method == other.method &&
       self.path == other.path &&
@@ -121,15 +121,15 @@ mod private
     T: Send + Sync,
   {
     /// Unique identifier for tracking
-    pub id: String,
+    pub id : String,
     /// Request signature for batching
-    pub signature: RequestSignature,
+    pub signature : RequestSignature,
     /// Request payload
-    pub payload: T,
+    pub payload : T,
     /// Response sender
-    pub response_sender: tokio::sync::oneshot::Sender< Result< Vec< u8 >, crate::error::OpenAIError > >,
+    pub response_sender : tokio::sync::oneshot::Sender< Result< Vec< u8 >, crate::error::OpenAIError > >,
     /// Timestamp when request was queued
-    pub queued_at: Instant,
+    pub queued_at : Instant,
   }
 
   /// Batch processing result
@@ -137,13 +137,13 @@ mod private
   pub struct BatchResult
   {
     /// Individual request results
-    pub results: Vec< Result< Vec< u8 >, crate::error::OpenAIError > >,
+    pub results : Vec< Result< Vec< u8 >, crate::error::OpenAIError > >,
     /// Total processing time
-    pub processing_time: Duration,
+    pub processing_time : Duration,
     /// Number of HTTP requests made
-    pub http_requests_count: usize,
+    pub http_requests_count : usize,
     /// Batch efficiency ratio (logical requests / HTTP requests)
-    pub efficiency_ratio: f64,
+    pub efficiency_ratio : f64,
   }
 
   /// Intelligent request batcher
@@ -153,15 +153,15 @@ mod private
     T: Send + Sync,
   {
     /// Batching configuration
-    config: BatchConfig,
+    config : BatchConfig,
     /// Pending requests grouped by signature
-    pending_requests: Arc< RwLock< HashMap< RequestSignature, VecDeque< BatchedRequest< T > > > > >,
+    pending_requests : Arc< RwLock< HashMap< RequestSignature, VecDeque< BatchedRequest< T > > > > >,
     /// Notification for batch processing
-    batch_notify: Arc< Notify >,
+    batch_notify : Arc< Notify >,
     /// Active batch count for concurrency control
-    active_batches: Arc< RwLock< usize > >,
+    active_batches : Arc< RwLock< usize > >,
     /// Batch processing metrics
-    metrics: Arc< RwLock< BatchMetrics > >,
+    metrics : Arc< RwLock< BatchMetrics > >,
   }
 
   /// Batching performance metrics
@@ -169,17 +169,17 @@ mod private
   pub struct BatchMetrics
   {
     /// Total requests processed
-    pub total_requests: u64,
+    pub total_requests : u64,
     /// Total batches created
-    pub total_batches: u64,
+    pub total_batches : u64,
     /// Average batch size
-    pub avg_batch_size: f64,
+    pub avg_batch_size : f64,
     /// Total HTTP requests saved through batching
-    pub http_requests_saved: u64,
+    pub http_requests_saved : u64,
     /// Average batch processing time
-    pub avg_batch_time: Duration,
+    pub avg_batch_time : Duration,
     /// Efficiency improvement ratio
-    pub efficiency_improvement: f64,
+    pub efficiency_improvement : f64,
   }
 
   impl< T > RequestBatcher< T >
@@ -189,15 +189,15 @@ mod private
     /// Create new request batcher
     #[ inline ]
     #[ must_use ]
-    pub fn new( config: BatchConfig ) -> Self
+    pub fn new( config : BatchConfig ) -> Self
     {
       Self
       {
         config,
-        pending_requests: Arc::new( RwLock::new( HashMap::new() ) ),
-        batch_notify: Arc::new( Notify::new() ),
-        active_batches: Arc::new( RwLock::new( 0 ) ),
-        metrics: Arc::new( RwLock::new( BatchMetrics::default() ) ),
+        pending_requests : Arc::new( RwLock::new( HashMap::new() ) ),
+        batch_notify : Arc::new( Notify::new() ),
+        active_batches : Arc::new( RwLock::new( 0 ) ),
+        metrics : Arc::new( RwLock::new( BatchMetrics::default() ) ),
       }
     }
 
@@ -209,8 +209,8 @@ mod private
     #[ inline ]
     pub async fn submit_request(
       &self,
-      signature: RequestSignature,
-      payload: T,
+      signature : RequestSignature,
+      payload : T,
     ) -> Result< Vec< u8 >, crate::error::OpenAIError >
     {
       if !self.config.enable_smart_batching || !signature.is_batch_compatible_endpoint()
@@ -224,11 +224,11 @@ mod private
 
       let batched_request = BatchedRequest
       {
-        id: request_id,
-        signature: signature.clone(),
+        id : request_id,
+        signature : signature.clone(),
         payload,
-        response_sender: tx,
-        queued_at: Instant::now(),
+        response_sender : tx,
+        queued_at : Instant::now(),
       };
 
       // Add to pending requests
@@ -252,7 +252,7 @@ mod private
     }
 
     /// Check if batch processing should be triggered
-    async fn should_trigger_batch_processing( &self, signature: &RequestSignature ) -> bool
+    async fn should_trigger_batch_processing( &self, signature : &RequestSignature ) -> bool
     {
       let pending = self.pending_requests.read().await;
       if let Some( queue ) = pending.get( signature )
@@ -278,7 +278,7 @@ mod private
         let metrics = Arc::clone( &self.metrics );
         let config = self.config.clone();
 
-        tokio::spawn( async move
+        tokio ::spawn( async move
         {
           // Increment active batch count
           {
@@ -341,8 +341,8 @@ mod private
 
     /// Extract ready batch for processing
     fn extract_ready_batch(
-      pending: &mut HashMap< RequestSignature, VecDeque< BatchedRequest< T > > >,
-      config: &BatchConfig,
+      pending : &mut HashMap< RequestSignature, VecDeque< BatchedRequest< T > > >,
+      config : &BatchConfig,
     ) -> Option< ( RequestSignature, Vec< BatchedRequest< T > > ) >
     {
       for ( signature, queue ) in pending.iter_mut()
@@ -369,8 +369,8 @@ mod private
 
     /// Process batch of requests
     fn process_batch_requests(
-      signature: &RequestSignature,
-      requests: Vec< BatchedRequest< T > >,
+      signature : &RequestSignature,
+      requests : Vec< BatchedRequest< T > >,
     ) -> BatchResult
     {
       let start_time = Instant::now();
@@ -382,7 +382,7 @@ mod private
       // 2. Process results and distribute back to individual request senders
       // 3. Handle errors appropriately
 
-      let results: Vec< Result< Vec< u8 >, crate::error::OpenAIError > > = requests.into_iter().map( | request |
+      let results : Vec< Result< Vec< u8 >, crate::error::OpenAIError > > = requests.into_iter().map( | request |
       {
         // Send mock success response
         let mock_response = b"{ \"batched\": true }".to_vec();
@@ -405,8 +405,8 @@ mod private
 
     /// Execute single request without batching
     fn execute_single_request(
-      _signature: RequestSignature,
-      _payload: T,
+      _signature : RequestSignature,
+      _payload : T,
     ) -> Vec< u8 >
     {
       // Execute single request immediately
@@ -446,7 +446,7 @@ mod private
     /// Analyze request patterns to optimize batching
     #[ inline ]
     #[ must_use ]
-    pub fn analyze_batching_potential( requests: &[ RequestSignature ] ) -> BatchingAnalysis
+    pub fn analyze_batching_potential( requests : &[ RequestSignature ] ) -> BatchingAnalysis
     {
       let mut signature_counts = HashMap::new();
       let mut total_batchable = 0;
@@ -468,17 +468,17 @@ mod private
 
       BatchingAnalysis
       {
-        total_requests: requests.len(),
-        batchable_requests: total_batchable,
+        total_requests : requests.len(),
+        batchable_requests : total_batchable,
         potential_batches,
         http_requests_saved,
         efficiency_gain,
-        recommended_batch_size: Self::calculate_optimal_batch_size( &signature_counts ),
+        recommended_batch_size : Self::calculate_optimal_batch_size( &signature_counts ),
       }
     }
 
     /// Calculate optimal batch size based on request patterns
-    fn calculate_optimal_batch_size( signature_counts: &HashMap<  RequestSignature, usize  > ) -> usize
+    fn calculate_optimal_batch_size( signature_counts : &HashMap<  RequestSignature, usize  > ) -> usize
     {
       if signature_counts.is_empty()
       {
@@ -506,17 +506,17 @@ mod private
   pub struct BatchingAnalysis
   {
     /// Total number of requests analyzed
-    pub total_requests: usize,
+    pub total_requests : usize,
     /// Number of requests that can be batched
-    pub batchable_requests: usize,
+    pub batchable_requests : usize,
     /// Number of batches that would be created
-    pub potential_batches: usize,
+    pub potential_batches : usize,
     /// Number of HTTP requests saved through batching
-    pub http_requests_saved: usize,
+    pub http_requests_saved : usize,
     /// Efficiency gain percentage (0.0 to 1.0)
-    pub efficiency_gain: f64,
+    pub efficiency_gain : f64,
     /// Recommended batch size for this pattern
-    pub recommended_batch_size: usize,
+    pub recommended_batch_size : usize,
   }
 }
 

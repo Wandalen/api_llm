@@ -4,7 +4,7 @@
 //! Tests multiple requests in single API calls, bulk processing capabilities, throughput
 //! optimization, and integration with the Ollama backend.
 //!
-//! Note: These tests focus on batch operation structure and optimization logic,
+//! Note : These tests focus on batch operation structure and optimization logic,
 //! using test data to verify batch handling API correctness.
 
 #![ allow( clippy::std_instead_of_core ) ] // std required for async operations and time measurements
@@ -20,37 +20,37 @@ mod batch_operations_tests
   use std::time::{ Duration, Instant };
 
   /// Helper function to create test chat requests
-  fn create_test_chat_requests( count: usize ) -> Vec< ChatRequest >
+  fn create_test_chat_requests( count : usize ) -> Vec< ChatRequest >
   {
     ( 0..count ).map( | i | ChatRequest
     {
-      model: "llama3.2".to_string(),
-      messages: vec![ ChatMessage
+      model : "llama3.2".to_string(),
+      messages : vec![ ChatMessage
       {
-        role: MessageRole::User,
-        content: format!( "Test message {}", i + 1 ),
-        images: None,
+        role : MessageRole::User,
+        content : format!( "Test message {}", i + 1 ),
+        images : None,
         #[ cfg( feature = "tool_calling" ) ]
-        tool_calls: None,
+        tool_calls : None,
       } ],
-      stream: None,
-      options: None,
+      stream : None,
+      options : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tools: None,
+      tools : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tool_messages: None,
+      tool_messages : None,
     } ).collect()
   }
 
   /// Helper function to create test generation requests
-  fn create_test_generate_requests( count: usize ) -> Vec< GenerateRequest >
+  fn create_test_generate_requests( count : usize ) -> Vec< GenerateRequest >
   {
     ( 0..count ).map( | i | GenerateRequest
     {
-      model: "llama3.2".to_string(),
-      prompt: format!( "Generate response for prompt {}", i + 1 ),
-      stream: None,
-      options: None,
+      model : "llama3.2".to_string(),
+      prompt : format!( "Generate response for prompt {}", i + 1 ),
+      stream : None,
+      options : None,
     } ).collect()
   }
 
@@ -62,11 +62,11 @@ mod batch_operations_tests
     let chat_requests = create_test_chat_requests( 3 );
     let batch_request = BatchChatRequest
     {
-      requests: chat_requests.clone(),
-      batch_config: None,
-      parallel_execution: true,
-      fail_fast: false,
-      timeout: Some( Duration::from_secs( 60 ) ),
+      requests : chat_requests.clone(),
+      batch_config : None,
+      parallel_execution : true,
+      fail_fast : false,
+      timeout : Some( Duration::from_secs( 60 ) ),
     };
 
     // Test batch request structure
@@ -91,11 +91,11 @@ mod batch_operations_tests
 
     let configured_request = BatchChatRequest
     {
-      requests: chat_requests,
-      batch_config: Some( batch_config ),
-      parallel_execution: true,
-      fail_fast: true,
-      timeout: Some( Duration::from_secs( 120 ) ),
+      requests : chat_requests,
+      batch_config : Some( batch_config ),
+      parallel_execution : true,
+      fail_fast : true,
+      timeout : Some( Duration::from_secs( 120 ) ),
     };
 
     assert!( configured_request.batch_config.is_some() );
@@ -111,11 +111,11 @@ mod batch_operations_tests
     let generate_requests = create_test_generate_requests( 5 );
     let batch_request = BatchGenerateRequest
     {
-      requests: generate_requests.clone(),
-      batch_config: None,
-      parallel_execution: false, // Sequential execution
-      fail_fast: true,
-      timeout: Some( Duration::from_secs( 300 ) ),
+      requests : generate_requests.clone(),
+      batch_config : None,
+      parallel_execution : false, // Sequential execution
+      fail_fast : true,
+      timeout : Some( Duration::from_secs( 300 ) ),
     };
 
     // Test batch request structure validation
@@ -202,14 +202,14 @@ mod batch_operations_tests
 
     let batch_response = BatchChatResponse
     {
-      results: successful_results.clone(),
-      total_requests: 3,
-      successful_requests: 3,
-      failed_requests: 0,
-      execution_time_ms: 1500,
-      throughput_requests_per_second: 2.0,
-      batch_optimizations: Some( vec![ "parallel_execution".to_string(), "connection_reuse".to_string() ] ),
-      errors: Vec::new(),
+      results : successful_results.clone(),
+      total_requests : 3,
+      successful_requests : 3,
+      failed_requests : 0,
+      execution_time_ms : 1500,
+      throughput_requests_per_second : 2.0,
+      batch_optimizations : Some( vec![ "parallel_execution".to_string(), "connection_reuse".to_string() ] ),
+      errors : Vec::new(),
     };
 
     // Test response structure validation
@@ -228,24 +228,24 @@ mod batch_operations_tests
     let mixed_results = vec![
       BatchResult::Success( serde_json::json!({ "message": { "role": "assistant", "content": "Success 1" } }) ),
       BatchResult::Error( BatchError {
-        request_index: 1,
-        error_code: "timeout".to_string(),
-        error_message: "Request timed out".to_string(),
-        recoverable: true,
+        request_index : 1,
+        error_code : "timeout".to_string(),
+        error_message : "Request timed out".to_string(),
+        recoverable : true,
       } ),
       BatchResult::Success( serde_json::json!({ "message": { "role": "assistant", "content": "Success 2" } }) ),
     ];
 
     let mixed_response = BatchChatResponse
     {
-      results: mixed_results,
-      total_requests: 3,
-      successful_requests: 2,
-      failed_requests: 1,
-      execution_time_ms: 2000,
-      throughput_requests_per_second: 1.5,
-      batch_optimizations: None,
-      errors: vec![ "One request failed due to timeout".to_string() ],
+      results : mixed_results,
+      total_requests : 3,
+      successful_requests : 2,
+      failed_requests : 1,
+      execution_time_ms : 2000,
+      throughput_requests_per_second : 1.5,
+      batch_optimizations : None,
+      errors : vec![ "One request failed due to timeout".to_string() ],
     };
 
     assert_eq!( mixed_response.successful_requests, 2 );
@@ -263,11 +263,11 @@ mod batch_operations_tests
     let normal_requests = create_test_chat_requests( 10 );
     let normal_batch = BatchChatRequest
     {
-      requests: normal_requests,
-      batch_config: Some( BatchOperationConfig::new().with_max_batch_size( 20 ) ),
-      parallel_execution: true,
-      fail_fast: false,
-      timeout: Some( Duration::from_secs( 60 ) ),
+      requests : normal_requests,
+      batch_config : Some( BatchOperationConfig::new().with_max_batch_size( 20 ) ),
+      parallel_execution : true,
+      fail_fast : false,
+      timeout : Some( Duration::from_secs( 60 ) ),
     };
 
     assert_eq!( normal_batch.requests.len(), 10 );
@@ -277,25 +277,25 @@ mod batch_operations_tests
     let large_requests = create_test_chat_requests( 100 );
     let large_batch = BatchChatRequest
     {
-      requests: large_requests,
-      batch_config: Some( BatchOperationConfig::new().with_max_batch_size( 50 ) ),
-      parallel_execution: true,
-      fail_fast: false,
-      timeout: Some( Duration::from_secs( 300 ) ),
+      requests : large_requests,
+      batch_config : Some( BatchOperationConfig::new().with_max_batch_size( 50 ) ),
+      parallel_execution : true,
+      fail_fast : false,
+      timeout : Some( Duration::from_secs( 300 ) ),
     };
 
     assert_eq!( large_batch.requests.len(), 100 );
-    // Note: In real implementation, this would be chunked according to max_batch_size
+    // Note : In real implementation, this would be chunked according to max_batch_size
     println!( "✓ Large batch size handling validation successful" );
 
     // Test empty batch
     let empty_batch = BatchChatRequest
     {
-      requests: Vec::new(),
-      batch_config: None,
-      parallel_execution: true,
-      fail_fast: false,
-      timeout: Some( Duration::from_secs( 60 ) ),
+      requests : Vec::new(),
+      batch_config : None,
+      parallel_execution : true,
+      fail_fast : false,
+      timeout : Some( Duration::from_secs( 60 ) ),
     };
 
     assert_eq!( empty_batch.requests.len(), 0 );
@@ -305,11 +305,11 @@ mod batch_operations_tests
     let single_requests = create_test_chat_requests( 1 );
     let single_batch = BatchChatRequest
     {
-      requests: single_requests,
-      batch_config: None,
-      parallel_execution: false, // No point in parallel for single request
-      fail_fast: true,
-      timeout: Some( Duration::from_secs( 30 ) ),
+      requests : single_requests,
+      batch_config : None,
+      parallel_execution : false, // No point in parallel for single request
+      fail_fast : true,
+      timeout : Some( Duration::from_secs( 30 ) ),
     };
 
     assert_eq!( single_batch.requests.len(), 1 );
@@ -324,10 +324,10 @@ mod batch_operations_tests
     // Test BatchError structure
     let error = BatchError
     {
-      request_index: 2,
-      error_code: "model_not_found".to_string(),
-      error_message: "The requested model 'invalid-model' was not found".to_string(),
-      recoverable: false,
+      request_index : 2,
+      error_code : "model_not_found".to_string(),
+      error_message : "The requested model 'invalid-model' was not found".to_string(),
+      recoverable : false,
     };
 
     assert_eq!( error.request_index, 2 );
@@ -348,10 +348,10 @@ mod batch_operations_tests
     {
       let error = BatchError
       {
-        request_index: i,
-        error_code: (*code).to_string(),
-        error_message: (*message).to_string(),
-        recoverable: *recoverable,
+        request_index : i,
+        error_code : (*code).to_string(),
+        error_message : (*message).to_string(),
+        recoverable : *recoverable,
       };
 
       assert_eq!( error.error_code, *code );
@@ -397,8 +397,8 @@ mod batch_operations_tests
 
     assert!( throughput_batch > throughput_single );
     println!( "✓ Throughput comparison validation successful" );
-    println!( "  Single request throughput: {throughput_single:.2} req/s" );
-    println!( "  Batch request throughput: {throughput_batch:.2} req/s" );
+    println!( "  Single request throughput : {throughput_single:.2} req/s" );
+    println!( "  Batch request throughput : {throughput_batch:.2} req/s" );
 
     // Test batch optimization tracking
     let optimizations = vec![
@@ -428,35 +428,35 @@ mod batch_operations_tests
     let batch_request = BatchChatRequest
     {
       requests,
-      batch_config: Some( BatchOperationConfig::new().with_concurrent_limit( 5 ) ),
-      parallel_execution: true,
-      fail_fast: false,
-      timeout: Some( Duration::from_secs( 60 ) ),
+      batch_config : Some( BatchOperationConfig::new().with_concurrent_limit( 5 ) ),
+      parallel_execution : true,
+      fail_fast : false,
+      timeout : Some( Duration::from_secs( 60 ) ),
     };
 
     // Simulate processing time
-    tokio::time::sleep( Duration::from_millis( 10 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 10 ) ).await;
     let processing_time = start_time.elapsed();
 
     // Test timing measurements
     assert!( processing_time > Duration::ZERO );
     assert!( processing_time < Duration::from_secs( 1 ) ); // Should be very fast for test data
 
-    println!( "✓ Batch operation timing measurement successful: {processing_time:?}" );
+    println!( "✓ Batch operation timing measurement successful : {processing_time:?}" );
 
     // Test throughput calculation
     let request_count = batch_request.requests.len();
     let throughput = request_count as f64 / processing_time.as_secs_f64();
 
     assert!( throughput > 0.0 );
-    println!( "✓ Throughput calculation successful: {throughput:.2} requests/second" );
+    println!( "✓ Throughput calculation successful : {throughput:.2} requests/second" );
 
     // Test performance baseline comparison
     let single_request_baseline = Duration::from_millis( 100 ); // Assumed baseline
     let expected_batch_time = single_request_baseline * u32::try_from(request_count).unwrap_or(1);
     let efficiency_gain = expected_batch_time.saturating_sub( processing_time ).as_millis() as f64 / expected_batch_time.as_millis() as f64;
 
-    println!( "✓ Efficiency gain calculation: {:.1}%", efficiency_gain * 100.0 );
+    println!( "✓ Efficiency gain calculation : {:.1}%", efficiency_gain * 100.0 );
   }
 
   /// Test concurrent execution limits and resource management
@@ -510,20 +510,20 @@ mod batch_operations_tests
     // Test that different batch types can coexist
     let chat_batch = BatchChatRequest
     {
-      requests: chat_requests,
-      batch_config: None,
-      parallel_execution: true,
-      fail_fast: false,
-      timeout: Some( Duration::from_secs( 60 ) ),
+      requests : chat_requests,
+      batch_config : None,
+      parallel_execution : true,
+      fail_fast : false,
+      timeout : Some( Duration::from_secs( 60 ) ),
     };
 
     let generate_batch = BatchGenerateRequest
     {
-      requests: generate_requests,
-      batch_config: None,
-      parallel_execution: false,
-      fail_fast: true,
-      timeout: Some( Duration::from_secs( 120 ) ),
+      requests : generate_requests,
+      batch_config : None,
+      parallel_execution : false,
+      fail_fast : true,
+      timeout : Some( Duration::from_secs( 120 ) ),
     };
 
     assert_eq!( chat_batch.requests.len(), 3 );
@@ -548,20 +548,20 @@ mod batch_operations_tests
 
     let chat_with_shared_config = BatchChatRequest
     {
-      requests: create_test_chat_requests( 5 ),
-      batch_config: Some( shared_config.clone() ),
-      parallel_execution: true,
-      fail_fast: false,
-      timeout: Some( Duration::from_secs( 60 ) ),
+      requests : create_test_chat_requests( 5 ),
+      batch_config : Some( shared_config.clone() ),
+      parallel_execution : true,
+      fail_fast : false,
+      timeout : Some( Duration::from_secs( 60 ) ),
     };
 
     let generate_with_shared_config = BatchGenerateRequest
     {
-      requests: create_test_generate_requests( 3 ),
-      batch_config: Some( shared_config ),
-      parallel_execution: true,
-      fail_fast: false,
-      timeout: Some( Duration::from_secs( 60 ) ),
+      requests : create_test_generate_requests( 3 ),
+      batch_config : Some( shared_config ),
+      parallel_execution : true,
+      fail_fast : false,
+      timeout : Some( Duration::from_secs( 60 ) ),
     };
 
     assert!( chat_with_shared_config.batch_config.is_some() );

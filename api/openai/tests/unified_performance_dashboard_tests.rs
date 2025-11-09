@@ -5,17 +5,17 @@
 #[ cfg( feature = "integration" ) ]
 use api_openai::
 {
-  environment::{ OpenaiEnvironmentImpl, OpenAIRecommended },
-  secret::Secret,
-  enhanced_client::
+  environment ::{ OpenaiEnvironmentImpl, OpenAIRecommended },
+  secret ::Secret,
+  enhanced_client ::
   {
     EnhancedClientBuilder,
     UnifiedPerformanceDashboard,
     ConnectionPerformanceReport,
     PerformanceAnalysis,
   },
-  response_cache::CacheConfig,
-  metrics_framework::MetricsConfig,
+  response_cache ::CacheConfig,
+  metrics_framework ::MetricsConfig,
 };
 
 #[ cfg( feature = "integration" ) ]
@@ -118,12 +118,12 @@ async fn test_cache_performance_integration()
 
   let cache_config = CacheConfig
   {
-    max_entries: 100,
-    default_ttl: core::time::Duration::from_secs( 300 ),
-    enable_compression: true,
-    max_response_size: 1024 * 1024, // 1MB
-    cache_errors: false,
-    cleanup_interval: core::time::Duration::from_secs( 60 ),
+    max_entries : 100,
+    default_ttl : core::time::Duration::from_secs( 300 ),
+    enable_compression : true,
+    max_response_size : 1024 * 1024, // 1MB
+    cache_errors : false,
+    cleanup_interval : core::time::Duration::from_secs( 60 ),
   };
 
   let enhanced_client = EnhancedClientBuilder::new()
@@ -160,15 +160,15 @@ async fn test_metrics_integration()
 
   let metrics_config = MetricsConfig
   {
-    collect_circuit_breaker_metrics: true,
-    collect_timing_metrics: true,
-    collect_error_metrics: true,
-    max_entries: 100,
-    collection_interval: core::time::Duration::from_secs( 60 ),
-    enable_streaming: false,
-    collect_cache_metrics: true,
-    collect_connection_metrics: true,
-    retention_period: core::time::Duration::from_secs( 3600 ),
+    collect_circuit_breaker_metrics : true,
+    collect_timing_metrics : true,
+    collect_error_metrics : true,
+    max_entries : 100,
+    collection_interval : core::time::Duration::from_secs( 60 ),
+    enable_streaming : false,
+    collect_cache_metrics : true,
+    collect_connection_metrics : true,
+    retention_period : core::time::Duration::from_secs( 3600 ),
   };
 
   let enhanced_client = EnhancedClientBuilder::new()
@@ -291,31 +291,31 @@ async fn test_unified_dashboard_serialization()
   // Create a mock dashboard for serialization testing
   let dashboard = UnifiedPerformanceDashboard
   {
-    overall_performance_score: 85.5,
-    connection_performance: ConnectionPerformanceReport
+    overall_performance_score : 85.5,
+    connection_performance : ConnectionPerformanceReport
     {
-      efficiency_metrics: api_openai::connection_manager::ConnectionEfficiencyMetrics
+      efficiency_metrics : api_openai::connection_manager::ConnectionEfficiencyMetrics
       {
-        efficiency_score: 0.85,
-        connection_reuse_ratio: 15.2,
-        average_pool_utilization: 0.65,
-        total_connections_created: 100,
-        total_requests_served: 1520,
-        total_connections_destroyed: 20,
-        active_pools: 3,
+        efficiency_score : 0.85,
+        connection_reuse_ratio : 15.2,
+        average_pool_utilization : 0.65,
+        total_connections_created : 100,
+        total_requests_served : 1520,
+        total_connections_destroyed : 20,
+        active_pools : 3,
       },
-      pool_stats: Vec::new(),
-      analysis: PerformanceAnalysis
+      pool_stats : Vec::new(),
+      analysis : PerformanceAnalysis
       {
-        grade: "B".to_string(),
-        kpis: vec![ "Efficiency Score: 85.0%".to_string() ],
-        recommendations: vec![ "Consider connection pooling optimization".to_string() ],
-        issues: Vec::new(),
+        grade : "B".to_string(),
+        kpis : vec![ "Efficiency Score : 85.0%".to_string() ],
+        recommendations : vec![ "Consider connection pooling optimization".to_string() ],
+        issues : Vec::new(),
       },
     },
-    cache_performance: None,
-    metrics_summary: None,
-    recommendations: vec![
+    cache_performance : None,
+    metrics_summary : None,
+    recommendations : vec![
       "Enable response caching for better performance".to_string(),
       "Enable metrics collection for better monitoring".to_string(),
     ],
@@ -323,7 +323,7 @@ async fn test_unified_dashboard_serialization()
 
   // Test serialization
   let json = serde_json::to_string( &dashboard ).expect( "Serialization should work" );
-  let deserialized: UnifiedPerformanceDashboard = serde_json::from_str( &json )
+  let deserialized : UnifiedPerformanceDashboard = serde_json::from_str( &json )
     .expect( "Deserialization should work" );
 
   assert!( ( dashboard.overall_performance_score - deserialized.overall_performance_score ).abs() < f64::EPSILON );

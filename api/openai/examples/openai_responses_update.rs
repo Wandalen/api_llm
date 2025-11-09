@@ -15,10 +15,10 @@ use api_openai::exposed::
 {
   Client,
   OpenAIError,
-  components::
+  components ::
   {
-    responses::{ CreateResponseRequest, ResponseInput, ResponseObject },
-    common::ModelIdsResponses,
+    responses ::{ CreateResponseRequest, ResponseInput, ResponseObject },
+    common ::ModelIdsResponses,
   },
 };
 use serde_json::json;
@@ -27,7 +27,7 @@ use serde_json::json;
 async fn main() -> Result< (), OpenAIError >
 {
   // Load environment variables
-  dotenv::from_filename("./secret/-secret.sh").ok();
+  dotenv ::from_filename("./secret/-secret.sh").ok();
 
   println!("Initializing client...");
   let secret = api_openai::exposed::Secret::load_from_env("OPENAI_API_KEY")
@@ -44,7 +44,7 @@ async fn main() -> Result< (), OpenAIError >
     .max_output_tokens(100)
     .form();
 
-  let response: ResponseObject = client.responses().create(create_request).await?;
+  let response : ResponseObject = client.responses().create(create_request).await?;
   println!("Created response with ID: {}", response.id);
 
   // 2. Update the response with new metadata
@@ -57,11 +57,11 @@ async fn main() -> Result< (), OpenAIError >
     }
   });
 
-  let updated_response: ResponseObject = client.responses().update(&response.id, update_data).await?;
+  let updated_response : ResponseObject = client.responses().update(&response.id, update_data).await?;
 
   println!("Response updated successfully!");
-  println!("Original metadata: {:?}", response.metadata);
-  println!("Updated metadata: {:?}", updated_response.metadata);
+  println!("Original metadata : {:?}", response.metadata);
+  println!("Updated metadata : {:?}", updated_response.metadata);
 
   // Verify the update
 if let Some(metadata) = updated_response.metadata

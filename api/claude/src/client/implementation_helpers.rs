@@ -19,7 +19,7 @@ impl RateLimitInfo
       remaining_requests : 1000, // Placeholder
       total_limit : 1000,        // Placeholder
       reset_time : None,         // Placeholder
-      window_duration : std::time::Duration::from_secs( 3600 ), // Placeholder: 1 hour
+      window_duration : std::time::Duration::from_secs( 3600 ), // Placeholder : 1 hour
     }
   }
 
@@ -67,7 +67,7 @@ impl RateLimitInfo
     else
     {
       let used = self.total_limit.saturating_sub( self.remaining_requests );
-      f64::from( used ) / f64::from( self.total_limit )
+      f64 ::from( used ) / f64::from( self.total_limit )
     }
   }
 
@@ -102,12 +102,12 @@ impl RateLimitInfo
   {
     if desired_requests_per_minute == 0
     {
-      std::time::Duration::from_secs( 60 ) // Safe fallback
+      std ::time::Duration::from_secs( 60 ) // Safe fallback
     }
     else
     {
       let seconds_per_request = 60.0 / f64::from( desired_requests_per_minute );
-      std::time::Duration::from_secs_f64( seconds_per_request )
+      std ::time::Duration::from_secs_f64( seconds_per_request )
     }
   }
 }
@@ -356,7 +356,7 @@ impl< 'a > ExplicitRetryBuilder< 'a >
           // Check if we should retry
           if attempt < max_attempts && should_retry( last_error.as_ref().unwrap(), attempt )
           {
-            tokio::time::sleep( delay ).await;
+            tokio ::time::sleep( delay ).await;
           }
           else
           {

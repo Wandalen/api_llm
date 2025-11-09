@@ -67,7 +67,7 @@ mod private
   /// # Examples
   ///
   /// ```no_run
-  /// # #[cfg(feature = "batch_operations")]
+  /// # #[ cfg( feature = "batch_operations") ]
   /// # {
   /// use api_xai::{ BatchProcessor, Client, Secret, XaiEnvironmentImpl, ChatCompletionRequest, Message };
   ///
@@ -133,7 +133,7 @@ mod private
     /// # Examples
     ///
     /// ```no_run
-    /// # #[cfg(feature = "batch_operations")]
+    /// # #[ cfg( feature = "batch_operations") ]
     /// # {
     /// use api_xai::{ BatchProcessor, Client, Secret, XaiEnvironmentImpl };
     ///
@@ -175,7 +175,7 @@ mod private
     /// # Examples
     ///
     /// ```no_run
-    /// # #[cfg(feature = "batch_operations")]
+    /// # #[ cfg( feature = "batch_operations") ]
     /// # {
     /// use api_xai::{ BatchProcessor, Client, Secret, XaiEnvironmentImpl, ChatCompletionRequest, Message };
     ///
@@ -200,7 +200,7 @@ mod private
     /// let results = processor.process_batch( requests ).await;
     ///
     /// let successes = results.iter().filter( | r | r.is_ok() ).count();
-    /// println!( "Successful: {}/{}", successes, results.len() );
+    /// println!( "Successful : {}/{}", successes, results.len() );
     /// # Ok( () )
     /// # }
     /// # }
@@ -253,9 +253,9 @@ mod private
             (
               Err
               (
-                crate::error::XaiError::ApiError
+                crate ::error::XaiError::ApiError
                 (
-                  format!( "Task join error: {e}" )
+                  format!( "Task join error : {e}" )
                 ).into()
               )
             );
@@ -283,7 +283,7 @@ mod private
     /// # Examples
     ///
     /// ```no_run
-    /// # #[cfg(feature = "batch_operations")]
+    /// # #[ cfg( feature = "batch_operations") ]
     /// # {
     /// use api_xai::{ BatchProcessor, Client, Secret, XaiEnvironmentImpl, ChatCompletionRequest, Message };
     ///
@@ -378,9 +378,9 @@ mod private
             (
               Err
               (
-                crate::error::XaiError::ApiError
+                crate ::error::XaiError::ApiError
                 (
-                  format!( "Task join error: {e}" )
+                  format!( "Task join error : {e}" )
                 ).into()
               )
             );
@@ -394,7 +394,7 @@ mod private
 }
 
 #[ cfg( feature = "batch_operations" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

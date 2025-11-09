@@ -39,18 +39,18 @@ mod unit_tests
   {
     // Test basic file metadata creation
     let metadata = FileMetadata {
-      name: "files/test-image-123".to_string(),
-      display_name: Some( "Test Image".to_string() ),
-      mime_type: "image/png".to_string(),
-      size_bytes: Some( 1024000 ),
-      create_time: Some( "2024-01-01T00:00:00Z".to_string() ),
-      update_time: Some( "2024-01-01T00:00:00Z".to_string() ),
-      expiration_time: None,
-      sha256_hash: Some( "abc123def456".to_string() ),
-      uri: Some( "https://generativelanguage.googleapis.com/v1beta/files/test-image-123".to_string() ),
-      state: Some( "ACTIVE".to_string() ),
-      error: None,
-      video_metadata: None,
+      name : "files/test-image-123".to_string(),
+      display_name : Some( "Test Image".to_string() ),
+      mime_type : "image/png".to_string(),
+      size_bytes : Some( 1024000 ),
+      create_time : Some( "2024-01-01T00:00:00Z".to_string() ),
+      update_time : Some( "2024-01-01T00:00:00Z".to_string() ),
+      expiration_time : None,
+      sha256_hash : Some( "abc123def456".to_string() ),
+      uri : Some( "https://generativelanguage.googleapis.com/v1beta/files/test-image-123".to_string() ),
+      state : Some( "ACTIVE".to_string() ),
+      error : None,
+      video_metadata : None,
     };
 
     assert_eq!( metadata.name, "files/test-image-123" );
@@ -69,9 +69,9 @@ mod unit_tests
   {
     // Valid upload request
     let valid_request = UploadFileRequest {
-      file_data: vec![ 1, 2, 3, 4, 5 ],
-      mime_type: "image/jpeg".to_string(),
-      display_name: Some( "Test Upload".to_string() ),
+      file_data : vec![ 1, 2, 3, 4, 5 ],
+      mime_type : "image/jpeg".to_string(),
+      display_name : Some( "Test Upload".to_string() ),
     };
 
     assert!( !valid_request.file_data.is_empty() );
@@ -80,9 +80,9 @@ mod unit_tests
 
     // Empty data should be invalid (validation in real API)
     let empty_request = UploadFileRequest {
-      file_data: vec![],
-      mime_type: "image/jpeg".to_string(),
-      display_name: Some( "Empty File".to_string() ),
+      file_data : vec![],
+      mime_type : "image/jpeg".to_string(),
+      display_name : Some( "Empty File".to_string() ),
     };
 
     assert!( empty_request.file_data.is_empty() );
@@ -142,8 +142,8 @@ mod unit_tests
 
     // Configured request
     let configured_request = ListFilesRequest {
-      page_size: Some( 50 ),
-      page_token: Some( "next_page_token_123".to_string() ),
+      page_size : Some( 50 ),
+      page_token : Some( "next_page_token_123".to_string() ),
     };
 
     assert_eq!( configured_request.page_size, Some( 50 ) );
@@ -157,7 +157,7 @@ mod unit_tests
   fn test_delete_request_structure()
   {
     let delete_request = DeleteFileRequest {
-      name: "files/test-file-123".to_string(),
+      name : "files/test-file-123".to_string(),
     };
 
     assert!( !delete_request.name.is_empty() );
@@ -173,7 +173,7 @@ mod unit_tests
     use api_gemini::models::VideoMetadata;
 
     let video_metadata = VideoMetadata {
-      video_duration: Some( "PT2M30S".to_string() ), // ISO 8601 duration format
+      video_duration : Some( "PT2M30S".to_string() ), // ISO 8601 duration format
     };
 
     assert!( video_metadata.video_duration.is_some() );
@@ -189,8 +189,8 @@ mod unit_tests
     let test_data = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==";
 
     let blob = Blob {
-      mime_type: "image/png".to_string(),
-      data: test_data.to_string(),
+      mime_type : "image/png".to_string(),
+      data : test_data.to_string(),
     };
 
     assert!( !blob.mime_type.is_empty() );

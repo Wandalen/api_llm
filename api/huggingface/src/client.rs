@@ -2,7 +2,7 @@
 //! It provides methods for making various API requests, handling authentication,
 //! and managing HTTP communication.
 //!
-//! ## Design Philosophy: "Thin Client, Rich API"
+//! ## Design Philosophy : "Thin Client, Rich API"
 //!
 //! This client provides comprehensive opt-in features with explicit developer control:
 //!
@@ -61,7 +61,7 @@ mod private
   // Use crate root for base access
   use crate::
   {
-  error::{ ApiErrorWrap, HuggingFaceError, Result, map_deserialization_error },
+  error ::{ ApiErrorWrap, HuggingFaceError, Result, map_deserialization_error },
   };
   
   #[ cfg( feature = "env-config" ) ]
@@ -88,7 +88,7 @@ mod private
   };
   use serde::
   {
-  de::DeserializeOwned,
+  de ::DeserializeOwned,
   Serialize,
   };
   #[ cfg( feature = "inference-streaming" ) ]
@@ -106,7 +106,7 @@ mod private
   /// ```no_run
   /// use api_huggingface::{ Client, environment::HuggingFaceEnvironmentImpl, Secret };
   ///
-  /// # async fn example() -> Result< (), Box< dyn core::error::Error >> {
+  /// # async fn example() -> Result< (), Box< dyn core::error::Error > > {
   /// let secret = Secret::load_from_env("HUGGINGFACE_API_KEY")?;
   /// let env = HuggingFaceEnvironmentImpl::build(secret, None)?;
   /// let client = Client::build(env)?;
@@ -443,7 +443,7 @@ mod private
       let jitter = ( rand::random::< u64 >() % ( retry_config.jitter_ms * 2 ) ).saturating_sub( retry_config.jitter_ms );
       let total_delay = delay.saturating_add( jitter ).min( retry_config.max_delay_ms );
 
-      tokio::time::sleep( tokio::time::Duration::from_millis( total_delay ) ).await;
+      tokio ::time::sleep( tokio::time::Duration::from_millis( total_delay ) ).await;
 
       // Update delay for next iteration with exponential backoff
       #[ allow( clippy::cast_possible_truncation, clippy::cast_sign_loss ) ]
@@ -492,7 +492,7 @@ mod private
       let jitter = ( rand::random::< u64 >() % ( retry_config.jitter_ms * 2 ) ).saturating_sub( retry_config.jitter_ms );
       let total_delay = delay.saturating_add( jitter ).min( retry_config.max_delay_ms );
 
-      tokio::time::sleep( tokio::time::Duration::from_millis( total_delay ) ).await;
+      tokio ::time::sleep( tokio::time::Duration::from_millis( total_delay ) ).await;
 
       // Update delay for next iteration with exponential backoff
       #[ allow( clippy::cast_possible_truncation, clippy::cast_sign_loss ) ]
@@ -590,7 +590,7 @@ mod private
       let byte_stream = response.bytes_stream();
       let event_stream = byte_stream.eventsource();
 
-      tokio::spawn( async move
+      tokio ::spawn( async move
       {
   use futures_util::StreamExt;
   let mut stream = event_stream;
@@ -699,7 +699,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use private::Client;
   exposed use private::ExplicitRetryConfig;

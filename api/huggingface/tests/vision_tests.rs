@@ -6,13 +6,13 @@
 use api_huggingface::
 {
   Client,
-  environment::HuggingFaceEnvironmentImpl,
-  secret::Secret,
-  vision::
+  environment ::HuggingFaceEnvironmentImpl,
+  secret ::Secret,
+  vision ::
   {
   ImageInput, ClassificationResult, DetectionResult, BoundingBox, CaptionResult,
   },
-  error::Result,
+  error ::Result,
 };
 use base64::Engine;
 
@@ -155,7 +155,7 @@ fn test_classification_result_creation()
   let score = 0.95;
 
   // Execution
-  let result = ClassificationResult { label: label.clone(), score };
+  let result = ClassificationResult { label : label.clone(), score };
 
   // Verification
   assert_eq!( result.label, label );

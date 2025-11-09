@@ -6,9 +6,9 @@
 use serde::{ Deserialize, Serialize };
 use std::
 {
-  collections::HashMap,
-  sync::{ Arc, Mutex },
-  time::Instant,
+  collections ::HashMap,
+  sync ::{ Arc, Mutex },
+  time ::Instant,
 };
 use core::time::Duration;
 use crate::error::{ Result, OpenAIError };
@@ -34,11 +34,11 @@ pub enum QuotaStatus
 pub struct QuotaReservation
 {
   /// Whether this reservation affects concurrent count
-  pub concurrent: bool,
+  pub concurrent : bool,
   /// Timestamp when reservation was made
-  pub timestamp: Instant,
+  pub timestamp : Instant,
   /// Estimated tokens for this request
-  pub estimated_tokens: Option< u64 >,
+  pub estimated_tokens : Option< u64 >,
 }
 
 /// Request metadata for quota calculations
@@ -46,15 +46,15 @@ pub struct QuotaReservation
 pub struct RequestMetadata
 {
   /// Estimated token count for the request
-  pub estimated_tokens: u64,
+  pub estimated_tokens : u64,
   /// Model being used
-  pub model: String,
+  pub model : String,
   /// Request type (chat, completion, etc.)
-  pub request_type: String,
+  pub request_type : String,
   /// Priority level (0-10, higher is more important)
-  pub priority: u8,
+  pub priority : u8,
   /// User identifier for per-user quotas
-  pub user_id: Option< String >,
+  pub user_id : Option< String >,
 }
 
 /// Usage tracking data
@@ -62,21 +62,21 @@ pub struct RequestMetadata
 pub struct QuotaUsageTracker
 {
   /// Daily request count
-  pub daily_requests: u64,
+  pub daily_requests : u64,
   /// Hourly request count
-  pub hourly_requests: u64,
+  pub hourly_requests : u64,
   /// Current concurrent requests
-  pub concurrent_requests: u64,
+  pub concurrent_requests : u64,
   /// Daily token count
-  pub daily_tokens: u64,
+  pub daily_tokens : u64,
   /// Hourly token count
-  pub hourly_tokens: u64,
+  pub hourly_tokens : u64,
   /// Per-user usage tracking
-  pub user_usage: HashMap<  String, UserUsage  >,
+  pub user_usage : HashMap<  String, UserUsage  >,
   /// Last reset timestamps
-  pub last_daily_reset: Instant,
+  pub last_daily_reset : Instant,
   /// Last hourly reset timestamp
-  pub last_hourly_reset: Instant,
+  pub last_hourly_reset : Instant,
 }
 
 /// Per-user usage tracking
@@ -84,13 +84,13 @@ pub struct QuotaUsageTracker
 pub struct UserUsage
 {
   /// User's daily requests
-  pub daily_requests: u64,
+  pub daily_requests : u64,
   /// User's hourly requests
-  pub hourly_requests: u64,
+  pub hourly_requests : u64,
   /// User's daily tokens
-  pub daily_tokens: u64,
+  pub daily_tokens : u64,
   /// User's hourly tokens
-  pub hourly_tokens: u64,
+  pub hourly_tokens : u64,
 }
 
 /// Comprehensive quota usage information
@@ -98,15 +98,15 @@ pub struct UserUsage
 pub struct QuotaUsage
 {
   /// Current daily usage
-  pub daily: QuotaUsageDetails,
+  pub daily : QuotaUsageDetails,
   /// Current hourly usage
-  pub hourly: QuotaUsageDetails,
+  pub hourly : QuotaUsageDetails,
   /// Current concurrent usage
-  pub concurrent: ConcurrentUsageDetails,
+  pub concurrent : ConcurrentUsageDetails,
   /// Per-user usage breakdown
-  pub per_user: HashMap<  String, UserQuotaUsage  >,
+  pub per_user : HashMap<  String, UserQuotaUsage  >,
   /// Usage efficiency metrics
-  pub efficiency_metrics: UsageEfficiencyMetrics,
+  pub efficiency_metrics : UsageEfficiencyMetrics,
 }
 
 /// Detailed quota usage for a time period
@@ -114,17 +114,17 @@ pub struct QuotaUsage
 pub struct QuotaUsageDetails
 {
   /// Requests used
-  pub requests_used: u64,
+  pub requests_used : u64,
   /// Requests limit
-  pub requests_limit: Option< u64 >,
+  pub requests_limit : Option< u64 >,
   /// Tokens used
-  pub tokens_used: u64,
+  pub tokens_used : u64,
   /// Tokens limit
-  pub tokens_limit: Option< u64 >,
+  pub tokens_limit : Option< u64 >,
   /// Usage percentage (0.0-1.0)
-  pub usage_percentage: f64,
+  pub usage_percentage : f64,
   /// Time until reset
-  pub time_until_reset_seconds: u64,
+  pub time_until_reset_seconds : u64,
 }
 
 /// Current concurrent usage details
@@ -132,13 +132,13 @@ pub struct QuotaUsageDetails
 pub struct ConcurrentUsageDetails
 {
   /// Current concurrent requests
-  pub current_requests: u64,
+  pub current_requests : u64,
   /// Maximum concurrent requests allowed
-  pub max_requests: Option< u64 >,
+  pub max_requests : Option< u64 >,
   /// Peak concurrent requests in current period
-  pub peak_requests: u64,
+  pub peak_requests : u64,
   /// Average concurrent requests
-  pub average_requests: f64,
+  pub average_requests : f64,
 }
 
 /// Per-user quota usage summary
@@ -146,17 +146,17 @@ pub struct ConcurrentUsageDetails
 pub struct UserQuotaUsage
 {
   /// User identifier
-  pub user_id: String,
+  pub user_id : String,
   /// Daily usage
-  pub daily_requests: u64,
+  pub daily_requests : u64,
   /// Hourly usage
-  pub hourly_requests: u64,
+  pub hourly_requests : u64,
   /// Daily tokens
-  pub daily_tokens: u64,
+  pub daily_tokens : u64,
   /// Hourly tokens
-  pub hourly_tokens: u64,
+  pub hourly_tokens : u64,
   /// Usage rank among all users (1 = highest usage)
-  pub usage_rank: u32,
+  pub usage_rank : u32,
 }
 
 /// Usage efficiency and optimization metrics
@@ -164,15 +164,15 @@ pub struct UserQuotaUsage
 pub struct UsageEfficiencyMetrics
 {
   /// Average tokens per request
-  pub avg_tokens_per_request: f64,
+  pub avg_tokens_per_request : f64,
   /// Peak usage efficiency (requests/hour at peak)
-  pub peak_efficiency: f64,
+  pub peak_efficiency : f64,
   /// Request success rate
-  pub success_rate: f64,
+  pub success_rate : f64,
   /// Average response time in milliseconds
-  pub avg_response_time_ms: f64,
+  pub avg_response_time_ms : f64,
   /// Quota utilization efficiency (0.0-1.0)
-  pub quota_utilization: f64,
+  pub quota_utilization : f64,
 }
 
 /// Main quota manager for enterprise usage control
@@ -180,17 +180,17 @@ pub struct UsageEfficiencyMetrics
 pub struct QuotaManager
 {
   /// Daily request limit
-  daily_request_limit: Option< u64 >,
+  daily_request_limit : Option< u64 >,
   /// Hourly request limit
-  hourly_request_limit: Option< u64 >,
+  hourly_request_limit : Option< u64 >,
   /// Concurrent request limit
-  concurrent_request_limit: Option< u64 >,
+  concurrent_request_limit : Option< u64 >,
   /// Daily token limit
-  daily_token_limit: Option< u64 >,
+  daily_token_limit : Option< u64 >,
   /// Hourly token limit
-  hourly_token_limit: Option< u64 >,
+  hourly_token_limit : Option< u64 >,
   /// Usage tracking
-  usage_tracker: Arc< Mutex< QuotaUsageTracker > >,
+  usage_tracker : Arc< Mutex< QuotaUsageTracker > >,
 }
 
 impl QuotaManager
@@ -199,11 +199,11 @@ impl QuotaManager
   #[ inline ]
   #[ must_use ]
   pub fn new(
-    daily_request_limit: Option< u64 >,
-    hourly_request_limit: Option< u64 >,
-    concurrent_request_limit: Option< u64 >,
-    daily_token_limit: Option< u64 >,
-    hourly_token_limit: Option< u64 >,
+    daily_request_limit : Option< u64 >,
+    hourly_request_limit : Option< u64 >,
+    concurrent_request_limit : Option< u64 >,
+    daily_token_limit : Option< u64 >,
+    hourly_token_limit : Option< u64 >,
   ) -> Self
   {
     Self
@@ -213,16 +213,16 @@ impl QuotaManager
       concurrent_request_limit,
       daily_token_limit,
       hourly_token_limit,
-      usage_tracker: Arc::new( Mutex::new( QuotaUsageTracker
+      usage_tracker : Arc::new( Mutex::new( QuotaUsageTracker
       {
-        daily_requests: 0,
-        hourly_requests: 0,
-        concurrent_requests: 0,
-        daily_tokens: 0,
-        hourly_tokens: 0,
-        user_usage: HashMap::new(),
-        last_daily_reset: Instant::now(),
-        last_hourly_reset: Instant::now(),
+        daily_requests : 0,
+        hourly_requests : 0,
+        concurrent_requests : 0,
+        daily_tokens : 0,
+        hourly_tokens : 0,
+        user_usage : HashMap::new(),
+        last_daily_reset : Instant::now(),
+        last_hourly_reset : Instant::now(),
       } ) ),
     }
   }
@@ -237,7 +237,7 @@ impl QuotaManager
   ///
   /// Panics if the usage tracker mutex is poisoned.
   #[ inline ]
-  pub fn check_quota( &self, request: &RequestMetadata ) -> Result< QuotaStatus >
+  pub fn check_quota( &self, request : &RequestMetadata ) -> Result< QuotaStatus >
   {
     let mut tracker = self.usage_tracker.lock().unwrap();
     Self::reset_counters_if_needed( &mut tracker );
@@ -298,12 +298,12 @@ impl QuotaManager
   ///
   /// Panics if the usage tracker mutex is poisoned.
   #[ inline ]
-  pub fn reserve_quota( &self, request: &RequestMetadata ) -> Result< QuotaReservation >
+  pub fn reserve_quota( &self, request : &RequestMetadata ) -> Result< QuotaReservation >
   {
     let status = self.check_quota( request )?;
     if !matches!( status, QuotaStatus::Allowed )
     {
-      return Err( OpenAIError::Internal( format!( "Quota exceeded: {status:?}" ) ).into() );
+      return Err( OpenAIError::Internal( format!( "Quota exceeded : {status:?}" ) ).into() );
     }
 
     let mut tracker = self.usage_tracker.lock().unwrap();
@@ -321,10 +321,10 @@ impl QuotaManager
       let user_usage = tracker.user_usage.entry( user_id.clone() )
         .or_insert( UserUsage
         {
-          daily_requests: 0,
-          hourly_requests: 0,
-          daily_tokens: 0,
-          hourly_tokens: 0,
+          daily_requests : 0,
+          hourly_requests : 0,
+          daily_tokens : 0,
+          hourly_tokens : 0,
         } );
 
       user_usage.daily_requests += 1;
@@ -335,9 +335,9 @@ impl QuotaManager
 
     Ok( QuotaReservation
     {
-      concurrent: true,
-      timestamp: Instant::now(),
-      estimated_tokens: Some( request.estimated_tokens ),
+      concurrent : true,
+      timestamp : Instant::now(),
+      estimated_tokens : Some( request.estimated_tokens ),
     } )
   }
 
@@ -347,7 +347,7 @@ impl QuotaManager
   ///
   /// Panics if the usage tracker mutex is poisoned.
   #[ inline ]
-  pub fn release_quota( &self, reservation: &QuotaReservation )
+  pub fn release_quota( &self, reservation : &QuotaReservation )
   {
     if reservation.concurrent
     {
@@ -394,37 +394,37 @@ impl QuotaManager
 
     Ok( QuotaUsage
     {
-      daily: QuotaUsageDetails
+      daily : QuotaUsageDetails
       {
-        requests_used: tracker.daily_requests,
-        requests_limit: self.daily_request_limit,
-        tokens_used: tracker.daily_tokens,
-        tokens_limit: self.daily_token_limit,
-        usage_percentage: daily_usage_pct,
-        time_until_reset_seconds: Self::time_until_daily_reset( &tracker ),
+        requests_used : tracker.daily_requests,
+        requests_limit : self.daily_request_limit,
+        tokens_used : tracker.daily_tokens,
+        tokens_limit : self.daily_token_limit,
+        usage_percentage : daily_usage_pct,
+        time_until_reset_seconds : Self::time_until_daily_reset( &tracker ),
       },
-      hourly: QuotaUsageDetails
+      hourly : QuotaUsageDetails
       {
-        requests_used: tracker.hourly_requests,
-        requests_limit: self.hourly_request_limit,
-        tokens_used: tracker.hourly_tokens,
-        tokens_limit: self.hourly_token_limit,
-        usage_percentage: hourly_usage_pct,
-        time_until_reset_seconds: Self::time_until_hourly_reset( &tracker ),
+        requests_used : tracker.hourly_requests,
+        requests_limit : self.hourly_request_limit,
+        tokens_used : tracker.hourly_tokens,
+        tokens_limit : self.hourly_token_limit,
+        usage_percentage : hourly_usage_pct,
+        time_until_reset_seconds : Self::time_until_hourly_reset( &tracker ),
       },
-      concurrent: ConcurrentUsageDetails
+      concurrent : ConcurrentUsageDetails
       {
-        current_requests: tracker.concurrent_requests,
-        max_requests: self.concurrent_request_limit,
-        peak_requests: tracker.concurrent_requests, // Simplified for now
-        average_requests: tracker.concurrent_requests as f64, // Simplified for now
+        current_requests : tracker.concurrent_requests,
+        max_requests : self.concurrent_request_limit,
+        peak_requests : tracker.concurrent_requests, // Simplified for now
+        average_requests : tracker.concurrent_requests as f64, // Simplified for now
       },
-      per_user: Self::build_per_user_usage( &tracker ),
-      efficiency_metrics: self.calculate_efficiency_metrics( &tracker ),
+      per_user : Self::build_per_user_usage( &tracker ),
+      efficiency_metrics : self.calculate_efficiency_metrics( &tracker ),
     } )
   }
 
-  fn reset_counters_if_needed( tracker: &mut QuotaUsageTracker )
+  fn reset_counters_if_needed( tracker : &mut QuotaUsageTracker )
   {
     let now = Instant::now();
 
@@ -459,34 +459,34 @@ impl QuotaManager
     }
   }
 
-  fn time_until_daily_reset( tracker: &QuotaUsageTracker ) -> u64
+  fn time_until_daily_reset( tracker : &QuotaUsageTracker ) -> u64
   {
     let elapsed = tracker.last_daily_reset.elapsed().as_secs();
     86400_u64.saturating_sub( elapsed )
   }
 
-  fn time_until_hourly_reset( tracker: &QuotaUsageTracker ) -> u64
+  fn time_until_hourly_reset( tracker : &QuotaUsageTracker ) -> u64
   {
     let elapsed = tracker.last_hourly_reset.elapsed().as_secs();
     3600_u64.saturating_sub( elapsed )
   }
 
-  fn build_per_user_usage( tracker: &QuotaUsageTracker ) -> HashMap<  String, UserQuotaUsage  >
+  fn build_per_user_usage( tracker : &QuotaUsageTracker ) -> HashMap<  String, UserQuotaUsage  >
   {
     let mut per_user = HashMap::new();
-    let mut users_by_usage: Vec< _ > = tracker.user_usage.iter().collect();
+    let mut users_by_usage : Vec< _ > = tracker.user_usage.iter().collect();
     users_by_usage.sort_by( | a, b | b.1.daily_requests.cmp( &a.1.daily_requests ) );
 
     for ( rank, ( user_id, usage ) ) in users_by_usage.iter().enumerate()
     {
       per_user.insert( (*user_id).clone(), UserQuotaUsage
       {
-        user_id: (*user_id).clone(),
-        daily_requests: usage.daily_requests,
-        hourly_requests: usage.hourly_requests,
-        daily_tokens: usage.daily_tokens,
-        hourly_tokens: usage.hourly_tokens,
-        usage_rank: u32::try_from( rank + 1 ).unwrap_or( u32::MAX ),
+        user_id : (*user_id).clone(),
+        daily_requests : usage.daily_requests,
+        hourly_requests : usage.hourly_requests,
+        daily_tokens : usage.daily_tokens,
+        hourly_tokens : usage.hourly_tokens,
+        usage_rank : u32::try_from( rank + 1 ).unwrap_or( u32::MAX ),
       } );
     }
 
@@ -494,7 +494,7 @@ impl QuotaManager
   }
 
   #[ inline ]
-  fn calculate_efficiency_metrics( &self, tracker: &QuotaUsageTracker ) -> UsageEfficiencyMetrics
+  fn calculate_efficiency_metrics( &self, tracker : &QuotaUsageTracker ) -> UsageEfficiencyMetrics
   {
     let avg_tokens_per_request = if tracker.daily_requests > 0
     {
@@ -517,9 +517,9 @@ impl QuotaManager
     UsageEfficiencyMetrics
     {
       avg_tokens_per_request,
-      peak_efficiency: tracker.hourly_requests as f64, // Simplified
-      success_rate: 0.95, // Placeholder - would need success/failure tracking
-      avg_response_time_ms: 1500.0, // Placeholder - would need timing tracking
+      peak_efficiency : tracker.hourly_requests as f64, // Simplified
+      success_rate : 0.95, // Placeholder - would need success/failure tracking
+      avg_response_time_ms : 1500.0, // Placeholder - would need timing tracking
       quota_utilization,
     }
   }
@@ -532,14 +532,14 @@ impl Default for QuotaUsageTracker
   {
     Self
     {
-      daily_requests: 0,
-      hourly_requests: 0,
-      concurrent_requests: 0,
-      daily_tokens: 0,
-      hourly_tokens: 0,
-      user_usage: HashMap::new(),
-      last_daily_reset: Instant::now(),
-      last_hourly_reset: Instant::now(),
+      daily_requests : 0,
+      hourly_requests : 0,
+      concurrent_requests : 0,
+      daily_tokens : 0,
+      hourly_tokens : 0,
+      user_usage : HashMap::new(),
+      last_daily_reset : Instant::now(),
+      last_hourly_reset : Instant::now(),
     }
   }
 }
@@ -565,11 +565,11 @@ mod tests
     let manager = QuotaManager::new( Some( 1000 ), Some( 100 ), Some( 10 ), None, None );
     let request = RequestMetadata
     {
-      estimated_tokens: 50,
-      model: "gpt-3.5-turbo".to_string(),
-      request_type: "chat".to_string(),
-      priority: 5,
-      user_id: Some( "user123".to_string() ),
+      estimated_tokens : 50,
+      model : "gpt-3.5-turbo".to_string(),
+      request_type : "chat".to_string(),
+      priority : 5,
+      user_id : Some( "user123".to_string() ),
     };
 
     let status = manager.check_quota( &request ).unwrap();
@@ -582,11 +582,11 @@ mod tests
     let manager = QuotaManager::new( Some( 1000 ), Some( 100 ), Some( 10 ), None, None );
     let request = RequestMetadata
     {
-      estimated_tokens: 50,
-      model: "gpt-3.5-turbo".to_string(),
-      request_type: "chat".to_string(),
-      priority: 5,
-      user_id: Some( "user123".to_string() ),
+      estimated_tokens : 50,
+      model : "gpt-3.5-turbo".to_string(),
+      request_type : "chat".to_string(),
+      priority : 5,
+      user_id : Some( "user123".to_string() ),
     };
 
     let reservation = manager.reserve_quota( &request ).unwrap();
@@ -608,11 +608,11 @@ mod tests
     {
       let request = RequestMetadata
       {
-        estimated_tokens: 50,
-        model: "gpt-3.5-turbo".to_string(),
-        request_type: "chat".to_string(),
-        priority: 5,
-        user_id: Some( format!( "user{i}" ) ),
+        estimated_tokens : 50,
+        model : "gpt-3.5-turbo".to_string(),
+        request_type : "chat".to_string(),
+        priority : 5,
+        user_id : Some( format!( "user{i}" ) ),
       };
 
       let reservation = manager.reserve_quota( &request ).unwrap();

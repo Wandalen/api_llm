@@ -13,11 +13,11 @@
 //!
 //! ## Commands
 //!
-//! - `/generate <type > <tone > <topic >` - Generate content with specified parameters
-//! - `/template <name >` - Use a specific template for generation
-//! - `/batch <count > <type > <topic >` - Generate multiple content pieces
-//! - `/quality <text >` - Assess content quality
-//! - `/export <format >` - Export last generated content
+//! - `/generate < type > < tone > < topic >` - Generate content with specified parameters
+//! - `/template < name >` - Use a specific template for generation
+//! - `/batch < count > < type > < topic >` - Generate multiple content pieces
+//! - `/quality < text >` - Assess content quality
+//! - `/export < format >` - Export last generated content
 //! - `/templates` - List available templates
 //! - `/types` - Show supported content types and tones
 //! - `/help` - Show available commands
@@ -26,21 +26,21 @@
 use api_huggingface::
 {
   Client,
-  environment::HuggingFaceEnvironmentImpl,
-  components::
+  environment ::HuggingFaceEnvironmentImpl,
+  components ::
   {
-  input::InferenceParameters,
-  models::Models,
+  input ::InferenceParameters,
+  models ::Models,
   },
-  secret::Secret,
+  secret ::Secret,
 };
 use core::fmt::Write as FmtWrite;
 use std::
 {
-  collections::HashMap,
+  collections ::HashMap,
   fmt,
-  io::{ self, Write as IoWrite },
-  time::{ Instant, SystemTime, UNIX_EPOCH },
+  io ::{ self, Write as IoWrite },
+  time ::{ Instant, SystemTime, UNIX_EPOCH },
   fs,
 };
 
@@ -522,13 +522,13 @@ impl ContentGenerationPlatform
   // Add audience information if provided
   if let Some( audience ) = &request.target_audience
   {
-      let _ = write!( &mut prompt, " Target audience: {audience}." );
+      let _ = write!( &mut prompt, " Target audience : {audience}." );
   }
 
   // Add additional context if provided
   if let Some( context ) = &request.context
   {
-      let _ = write!( &mut prompt, " Additional context: {context}" );
+      let _ = write!( &mut prompt, " Additional context : {context}" );
   }
 
   // Use template if provided
@@ -732,8 +732,8 @@ impl ContentGeneratorCLI
   println!( "✍️ Automated Content Generation Platform" );
   println!( "========================================" );
   println!( "Type '/help' for commands or start generating content!" );
-  println!( "Supported types: blog, marketing, creative, social, technical, email" );
-  println!( "Supported tones: professional, casual, enthusiastic, humorous, authoritative, empathetic" );
+  println!( "Supported types : blog, marketing, creative, social, technical, email" );
+  println!( "Supported tones : professional, casual, enthusiastic, humorous, authoritative, empathetic" );
   println!();
 
   let stdin = io::stdin();
@@ -760,12 +760,12 @@ impl ContentGeneratorCLI
   {
           Ok( Some( response ) ) => println!( "{response}" ),
           Ok( None ) => {}, // Command handled without output
-          Err( e ) => println!( "❌ Error: {e}" ),
+          Err( e ) => println!( "❌ Error : {e}" ),
   }
   continue;
       }
 
-      // Handle quick generation: "type tone topic"
+      // Handle quick generation : "type tone topic"
       let parts : Vec< &str > = input.splitn( 3, ' ' ).collect();
       if parts.len() >= 3
       {
@@ -793,12 +793,12 @@ impl ContentGeneratorCLI
               println!( "\n✅ Generated Content:" );
               println!( "===================" );
               println!( "{}", content.text );
-              println!( "\n📊 Stats: {} words | Quality: {:.2} | Model: {}", 
+              println!( "\n📊 Stats : {} words | Quality : {:.2} | Model : {}", 
         content.word_count, content.quality_score, content.model );
               
               self.last_generated = Some( content );
       },
-      Err( e ) => println!( "❌ Generation failed: {e}" ),
+      Err( e ) => println!( "❌ Generation failed : {e}" ),
           }
   }
   else
@@ -808,8 +808,8 @@ impl ContentGeneratorCLI
       }
       else
       {
-  println!( "💡 Usage: <type > <tone > <topic >" );
-  println!( "Example: blog professional 'artificial intelligence trends'" );
+  println!( "💡 Usage : < type > < tone > < topic >" );
+  println!( "Example : blog professional 'artificial intelligence trends'" );
   println!( "Or use commands like '/generate blog professional AI trends'" );
       }
 
@@ -839,20 +839,20 @@ impl ContentGeneratorCLI
       "quit" | "exit" => 
       {
   println!( "👋 Goodbye!" );
-  std::process::exit( 0 );
+  std ::process::exit( 0 );
       },
       
       "generate" =>
       {
   if parts.len() < 2
   {
-          return Ok( Some( "Usage: /generate <type > <tone > <topic >".to_string() ) );
+          return Ok( Some( "Usage : /generate < type > < tone > < topic >".to_string() ) );
   }
   
   let gen_parts : Vec< &str > = parts[ 1 ].splitn( 3, ' ' ).collect();
   if gen_parts.len() < 3
   {
-          return Ok( Some( "Usage: /generate <type > <tone > <topic >".to_string() ) );
+          return Ok( Some( "Usage : /generate < type > < tone > < topic >".to_string() ) );
   }
   
   if let ( Some( content_type ), Some( tone ) ) = ( 
@@ -878,11 +878,11 @@ impl ContentGeneratorCLI
       {
               self.last_generated = Some( content.clone() );
               Ok( Some( format!(
-        "✅ Generated Content:\n{}\n\n📊 Stats: {} words | Quality: {:.2} | Model: {}",
+        "✅ Generated Content:\n{}\n\n📊 Stats : {} words | Quality : {:.2} | Model : {}",
         content.text, content.word_count, content.quality_score, content.model
               ) ) )
       },
-      Err( e ) => Ok( Some( format!( "❌ Generation failed: {e}" ) ) ),
+      Err( e ) => Ok( Some( format!( "❌ Generation failed : {e}" ) ) ),
           }
   }
   else
@@ -895,13 +895,13 @@ impl ContentGeneratorCLI
       {
   if parts.len() < 2
   {
-          return Ok( Some( "Usage: /batch <count > <type > <topic >".to_string() ) );
+          return Ok( Some( "Usage : /batch < count > < type > < topic >".to_string() ) );
   }
   
   let batch_parts : Vec< &str > = parts[ 1 ].splitn( 3, ' ' ).collect();
   if batch_parts.len() < 3
   {
-          return Ok( Some( "Usage: /batch <count > <type > <topic >".to_string() ) );
+          return Ok( Some( "Usage : /batch < count > < type > < topic >".to_string() ) );
   }
   
   let count : usize = batch_parts[ 0 ].parse()
@@ -937,7 +937,7 @@ impl ContentGeneratorCLI
               }
               Ok( Some( result ) )
       },
-      Err( e ) => Ok( Some( format!( "❌ Batch generation failed: {e}" ) ) ),
+      Err( e ) => Ok( Some( format!( "❌ Batch generation failed : {e}" ) ) ),
           }
   }
   else
@@ -959,7 +959,7 @@ impl ContentGeneratorCLI
           for template in templates
           {
       let _ = writeln!( &mut result,
-              "• {} ({}) - {}\n  Default tone: {}\n",
+              "• {} ({}) - {}\n  Default tone : {}\n",
               template.name, template.content_type,
               template.content_type.description(), template.default_tone
       );
@@ -993,7 +993,7 @@ impl ContentGeneratorCLI
   {
           let format = parts.get( 1 ).unwrap_or( &"txt" );
           let filename = Self::export_content( content, format )?;
-          Ok( Some( format!( "✅ Content exported to: {filename}" ) ) )
+          Ok( Some( format!( "✅ Content exported to : {filename}" ) ) )
   }
   else
   {
@@ -1006,9 +1006,9 @@ impl ContentGeneratorCLI
   let stats = self.platform.get_stats();
   let result = format!(
           "📊 Generation Statistics:\n\
-           Total Generated: {}\n\
-           Total Words: {}\n\
-           Average Quality: {:.2}\n\
+           Total Generated : {}\n\
+           Total Words : {}\n\
+           Average Quality : {:.2}\n\
            \n\
            By Content Type:\n{}\n\
            By Tone:\n{}",
@@ -1027,7 +1027,7 @@ impl ContentGeneratorCLI
   Ok( Some( result ) )
       },
       
-      _ => Ok( Some( format!( "Unknown command: /{}\nType '/help' for available commands.", parts[ 0 ] ) ) ),
+      _ => Ok( Some( format!( "Unknown command : /{}\nType '/help' for available commands.", parts[ 0 ] ) ) ),
   }
   }
 
@@ -1052,18 +1052,18 @@ impl ContentGeneratorCLI
   content.quality_score, content.word_count, content.text
       ),
       "html" => format!(
-  "<!DOCTYPE html >\n<html >\n<head ><title >{}</title ></head >\n<body >\n<h1 >Generated Content</h1 >\n<p ><strong >Type:</strong > {}</p >\n<p ><strong >Tone:</strong > {}</p >\n<p ><strong >Topic:</strong > {}</p >\n<hr >\n<div >{}</div >\n</body >\n</html >\n",
+  "<!DOCTYPE html >\n< html >\n< head >< title >{}</title ></head >\n< body >\n< h1 >Generated Content</h1 >\n< p >< strong >Type:</strong > {}</p >\n< p >< strong >Tone:</strong > {}</p >\n< p >< strong >Topic:</strong > {}</p >\n< hr >\n< div >{}</div >\n</body >\n</html >\n",
   content.topic, content.content_type, content.tone, content.topic,
-  content.text.replace( '\n', "<br >\n" )
+  content.text.replace( '\n', "< br >\n" )
       ),
       _ => format!( 
-  "Generated Content\n================\nType: {}\nTone: {}\nTopic: {}\nQuality: {:.2}\nWords: {}\n\n{}\n",
+  "Generated Content\n================\nType : {}\nTone : {}\nTopic : {}\nQuality : {:.2}\nWords : {}\n\n{}\n",
   content.content_type, content.tone, content.topic, 
   content.quality_score, content.word_count, content.text
       ),
   };
   
-  fs::write( &filename, export_content )?;
+  fs ::write( &filename, export_content )?;
   Ok( filename )
   }
 
@@ -1073,11 +1073,11 @@ impl ContentGeneratorCLI
   r#"Available Commands:
 ===================
 
-/generate <type > <tone > <topic > - Generate content with specified parameters
-/batch <count > <type > <topic >   - Generate multiple content pieces (max 10)
+/generate < type > < tone > < topic > - Generate content with specified parameters
+/batch < count > < type > < topic >   - Generate multiple content pieces (max 10)
 /templates                      - List available content templates
 /types                          - Show supported content types and tones
-/export <format >                - Export last generated content (txt, md, html)
+/export < format >                - Export last generated content (txt, md, html)
 /stats                          - Show generation statistics
 /help                           - Show this help message
 /quit or /exit                  - Exit the content generator
@@ -1085,8 +1085,8 @@ impl ContentGeneratorCLI
 Quick Generation:
 =================
 
-Type: <type > <tone > <topic >
-Example: blog professional "sustainable energy solutions"
+Type : < type > < tone > < topic >
+Example : blog professional "sustainable energy solutions"
 
 Content Types:
 • blog, marketing, creative, social, technical, email

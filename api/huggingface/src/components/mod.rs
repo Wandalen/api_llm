@@ -43,7 +43,7 @@ pub mod embeddings;
 // === TOOLS ===
 pub mod tools;
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use common;
   exposed use embeddings;

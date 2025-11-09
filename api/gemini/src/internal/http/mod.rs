@@ -47,15 +47,15 @@ pub use enterprise::execute_with_optional_retries;
 #[ derive( Debug, Clone ) ]
 pub struct HttpConfig
 {
-  /// Request timeout in seconds (default: 30)
-  pub timeout_seconds: u64,
+  /// Request timeout in seconds (default : 30)
+  pub timeout_seconds : u64,
   /// Whether to enable verbose logging (requires 'logging' feature)
-  pub enable_logging: bool,
+  pub enable_logging : bool,
   /// Maximum content length for logging (to avoid logging huge responses)
-  pub max_log_content_length: usize,
+  pub max_log_content_length : usize,
   /// Compression configuration for request/response optimization
   #[ cfg( feature = "compression" ) ]
-  pub compression_config: Option< compression::CompressionConfig >,
+  pub compression_config : Option< compression::CompressionConfig >,
 }
 
 impl HttpConfig
@@ -66,18 +66,18 @@ impl HttpConfig
   pub fn new() -> Self
   {
     Self {
-      timeout_seconds: 30,
-      enable_logging: false,
-      max_log_content_length: 1024,
+      timeout_seconds : 30,
+      enable_logging : false,
+      max_log_content_length : 1024,
       #[ cfg( feature = "compression" ) ]
-      compression_config: None,
+      compression_config : None,
     }
   }
 
   /// Set request timeout
   #[ inline ]
   #[ must_use ]
-  pub fn with_timeout( mut self, timeout_seconds: u64 ) -> Self
+  pub fn with_timeout( mut self, timeout_seconds : u64 ) -> Self
   {
     self.timeout_seconds = timeout_seconds;
     self
@@ -96,7 +96,7 @@ impl HttpConfig
   #[ cfg( feature = "compression" ) ]
   #[ inline ]
   #[ must_use ]
-  pub fn with_compression( mut self, config: compression::CompressionConfig ) -> Self
+  pub fn with_compression( mut self, config : compression::CompressionConfig ) -> Self
   {
     self.compression_config = Some( config );
     self
@@ -157,7 +157,7 @@ impl Default for HttpConfig
 ///   Method::GET,
 ///   "https://api.example.com/endpoint",
 ///   "your-api-key",
-///   None::<&()>,
+///   None::< &()>,
 ///   &HttpConfig::new()
 /// ).await?;
 ///
@@ -205,7 +205,7 @@ where
   #[ cfg( feature = "logging" ) ]
   let request_id = if config.enable_logging
   {
-    format!( "req-{:08x}", rand::rng().random::<u32>() )
+    format!( "req-{:08x}", rand::rng().random::< u32 >() )
   } else {
     String::new()
   };
@@ -356,7 +356,7 @@ where
   {
     let json_body = serde_json::to_string( body )
       .map_err( |e| Error::SerializationError(
-        format!( "Failed to serialize request body: {e}" )
+        format!( "Failed to serialize request body : {e}" )
       ) )?;
 
     #[ cfg( feature = "logging" ) ]
@@ -368,7 +368,7 @@ where
       } else {
         json_body.clone()
       };
-      debug!( "Request body: {}", log_content );
+      debug!( "Request body : {}", log_content );
     }
 
     // Apply compression if configured
@@ -385,7 +385,7 @@ where
             if config.enable_logging
             {
               debug!(
-                "Compressed request body: {} bytes -> {} bytes ({}% reduction)",
+                "Compressed request body : {} bytes -> {} bytes ({}% reduction)",
                 json_body.len(),
                 compressed.len(),
                 100 - ( compressed.len() * 100 / json_body.len() )
@@ -402,7 +402,7 @@ where
           #[ cfg( feature = "logging" ) ]
           if config.enable_logging
           {
-            warn!( "Compression failed, using uncompressed body: {}", e );
+            warn!( "Compression failed, using uncompressed body : {}", e );
           }
           ( json_body.into_bytes(), false )
         }
@@ -434,7 +434,7 @@ where
 
   request_builder.build()
     .map_err( |e| Error::RequestBuilding(
-      format!( "Failed to build HTTP request: {e}" )
+      format!( "Failed to build HTTP request : {e}" )
     ) )
 }
 
@@ -468,15 +468,15 @@ async fn send_request
       // Enhanced error classification
       if e.is_timeout()
       {
-        Error::NetworkError( format!( "Request timeout after {}s: {}", config.timeout_seconds, e ) )
+        Error::NetworkError( format!( "Request timeout after {}s : {}", config.timeout_seconds, e ) )
       } else if e.is_connect()
       {
         Error::NetworkError( format!( "Connection failed to {url}: {e}" ) )
       } else if e.is_request()
       {
-        Error::RequestBuilding( format!( "Request configuration error: {e}" ) )
+        Error::RequestBuilding( format!( "Request configuration error : {e}" ) )
       } else {
-        Error::NetworkError( format!( "Network error: {e}" ) )
+        Error::NetworkError( format!( "Network error : {e}" ) )
       }
     } )
 }
@@ -504,13 +504,13 @@ where
   #[ cfg( feature = "logging" ) ]
   if config.enable_logging
   {
-    debug!( "Received response with status: {}", status );
+    debug!( "Received response with status : {}", status );
   }
 
   // Get response body text for processing
   let response_text = response.text().await
     .map_err( |e| Error::NetworkError(
-      format!( "Failed to read response body: {e}" )
+      format!( "Failed to read response body : {e}" )
     ) )?;
 
   #[ cfg( feature = "logging" ) ]
@@ -522,19 +522,19 @@ where
     } else {
       response_text.clone()
     };
-    debug!( "Response body: {}", log_content );
+    debug!( "Response body : {}", log_content );
   }
 
   if status.is_success()
   {
     // Successful response - deserialize JSON
-    serde_json::from_str( &response_text )
+    serde_json ::from_str( &response_text )
       .map_err( |e| {
         #[ cfg( feature = "logging" ) ]
-        error!( "Failed to deserialize successful response: {}", e );
+        error!( "Failed to deserialize successful response : {}", e );
 
         Error::DeserializationError(
-          format!( "Failed to parse successful response as JSON: {}. Response content: {}",
+          format!( "Failed to parse successful response as JSON: {}. Response content : {}",
             e,
             if response_text.len() > 200
             {
@@ -563,10 +563,10 @@ where
 /// - API error response structure
 /// - Error message content analysis
 /// - Authentication and authorization patterns
-fn classify_error_response( status_code: u16, response_text: &str ) -> Result< never, Error >
+fn classify_error_response( status_code : u16, response_text : &str ) -> Result< never, Error >
 {
   #[ cfg( feature = "logging" ) ]
-  debug!( "Classifying error response: HTTP {}", status_code );
+  debug!( "Classifying error response : HTTP {}", status_code );
 
   // Try to parse as structured API error response first
   if let Ok( api_error ) = serde_json::from_str::< ApiErrorResponse >( response_text )
@@ -574,7 +574,7 @@ fn classify_error_response( status_code: u16, response_text: &str ) -> Result< n
     let error_message = format!( "HTTP {}: {}", status_code, api_error.error.message );
 
     #[ cfg( feature = "logging" ) ]
-    debug!( "Parsed structured API error: {}", api_error.error.message );
+    debug!( "Parsed structured API error : {}", api_error.error.message );
 
     // Classify based on message content and status code
     if is_authentication_error( &api_error.error.message ) || matches!( status_code, 401 | 403 )
@@ -622,7 +622,7 @@ fn classify_error_response( status_code: u16, response_text: &str ) -> Result< n
 /// This function analyzes error messages for common authentication-related patterns
 /// to provide better error classification regardless of HTTP status codes.
 #[ inline ]
-fn is_authentication_error( message: &str ) -> bool
+fn is_authentication_error( message : &str ) -> bool
 {
   let msg_lower = message.to_lowercase();
 
@@ -673,7 +673,7 @@ where
 
 /// Extract operation name from URL for monitoring purposes
 #[ cfg( feature = "logging" ) ]
-fn extract_operation_from_url( url: &str ) -> String
+fn extract_operation_from_url( url : &str ) -> String
 {
   if let Some( path_start ) = url.find( "/v1beta/" )
   {

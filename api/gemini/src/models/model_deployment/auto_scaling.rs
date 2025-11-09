@@ -11,17 +11,17 @@ use super::health::DeploymentMetrics;
 pub struct ScalingConfig
 {
   /// Minimum number of instances
-  pub min_instances: usize,
+  pub min_instances : usize,
   /// Maximum number of instances
-  pub max_instances: usize,
+  pub max_instances : usize,
   /// Target CPU utilization percentage
-  pub target_cpu_utilization: f64,
+  pub target_cpu_utilization : f64,
   /// Target memory utilization percentage
-  pub target_memory_utilization: f64,
+  pub target_memory_utilization : f64,
   /// Cooldown period before scaling up
-  pub scale_up_cooldown: Duration,
+  pub scale_up_cooldown : Duration,
   /// Cooldown period before scaling down
-  pub scale_down_cooldown: Duration,
+  pub scale_down_cooldown : Duration,
 }
 
 impl Default for ScalingConfig
@@ -29,12 +29,12 @@ impl Default for ScalingConfig
   fn default() -> Self
   {
     Self {
-      min_instances: 1,
-      max_instances: 3,
-      target_cpu_utilization: 70.0,
-      target_memory_utilization: 80.0,
-      scale_up_cooldown: Duration::from_secs( 300 ),   // 5 minutes
-      scale_down_cooldown: Duration::from_secs( 600 ), // 10 minutes
+      min_instances : 1,
+      max_instances : 3,
+      target_cpu_utilization : 70.0,
+      target_memory_utilization : 80.0,
+      scale_up_cooldown : Duration::from_secs( 300 ),   // 5 minutes
+      scale_down_cooldown : Duration::from_secs( 600 ), // 10 minutes
     }
   }
 }
@@ -43,7 +43,7 @@ impl Default for ScalingConfig
 #[ derive( Debug, Clone ) ]
 pub struct ScalingConfigBuilder
 {
-  config: ScalingConfig,
+  config : ScalingConfig,
 }
 
 impl ScalingConfigBuilder
@@ -52,47 +52,47 @@ impl ScalingConfigBuilder
   pub fn new() -> Self
   {
     Self {
-      config: ScalingConfig::default(),
+      config : ScalingConfig::default(),
     }
   }
 
   /// Set minimum instances
-  pub fn min_instances( mut self, min: usize ) -> Self
+  pub fn min_instances( mut self, min : usize ) -> Self
   {
     self.config.min_instances = min;
     self
   }
 
   /// Set maximum instances
-  pub fn max_instances( mut self, max: usize ) -> Self
+  pub fn max_instances( mut self, max : usize ) -> Self
   {
     self.config.max_instances = max;
     self
   }
 
   /// Set target CPU utilization
-  pub fn target_cpu_utilization( mut self, cpu: f64 ) -> Self
+  pub fn target_cpu_utilization( mut self, cpu : f64 ) -> Self
   {
     self.config.target_cpu_utilization = cpu;
     self
   }
 
   /// Set target memory utilization
-  pub fn target_memory_utilization( mut self, memory: f64 ) -> Self
+  pub fn target_memory_utilization( mut self, memory : f64 ) -> Self
   {
     self.config.target_memory_utilization = memory;
     self
   }
 
   /// Set scale up cooldown
-  pub fn scale_up_cooldown( mut self, cooldown: Duration ) -> Self
+  pub fn scale_up_cooldown( mut self, cooldown : Duration ) -> Self
   {
     self.config.scale_up_cooldown = cooldown;
     self
   }
 
   /// Set scale down cooldown
-  pub fn scale_down_cooldown( mut self, cooldown: Duration ) -> Self
+  pub fn scale_down_cooldown( mut self, cooldown : Duration ) -> Self
   {
     self.config.scale_down_cooldown = cooldown;
     self
@@ -147,15 +147,15 @@ impl ScalingConfig
 pub struct ResourceConfig
 {
   /// Number of CPU cores
-  pub cpu_cores: f64,
+  pub cpu_cores : f64,
   /// Memory in GB
-  pub memory_gb: f64,
+  pub memory_gb : f64,
   /// Number of GPUs
-  pub gpu_count: usize,
+  pub gpu_count : usize,
   /// GPU memory in GB
-  pub gpu_memory_gb: f64,
+  pub gpu_memory_gb : f64,
   /// Storage in GB
-  pub storage_gb: f64,
+  pub storage_gb : f64,
 }
 
 impl Default for ResourceConfig
@@ -163,11 +163,11 @@ impl Default for ResourceConfig
   fn default() -> Self
   {
     Self {
-      cpu_cores: 1.0,
-      memory_gb: 2.0,
-      gpu_count: 0,
-      gpu_memory_gb: 0.0,
-      storage_gb: 10.0,
+      cpu_cores : 1.0,
+      memory_gb : 2.0,
+      gpu_count : 0,
+      gpu_memory_gb : 0.0,
+      storage_gb : 10.0,
     }
   }
 }
@@ -176,7 +176,7 @@ impl Default for ResourceConfig
 #[ derive( Debug, Clone ) ]
 pub struct ResourceConfigBuilder
 {
-  config: ResourceConfig,
+  config : ResourceConfig,
 }
 
 impl ResourceConfigBuilder
@@ -185,40 +185,40 @@ impl ResourceConfigBuilder
   pub fn new() -> Self
   {
     Self {
-      config: ResourceConfig::default(),
+      config : ResourceConfig::default(),
     }
   }
 
   /// Set CPU cores
-  pub fn cpu_cores( mut self, cores: f64 ) -> Self
+  pub fn cpu_cores( mut self, cores : f64 ) -> Self
   {
     self.config.cpu_cores = cores;
     self
   }
 
   /// Set memory in GB
-  pub fn memory_gb( mut self, memory: f64 ) -> Self
+  pub fn memory_gb( mut self, memory : f64 ) -> Self
   {
     self.config.memory_gb = memory;
     self
   }
 
   /// Set GPU count
-  pub fn gpu_count( mut self, count: usize ) -> Self
+  pub fn gpu_count( mut self, count : usize ) -> Self
   {
     self.config.gpu_count = count;
     self
   }
 
   /// Set GPU memory in GB
-  pub fn gpu_memory_gb( mut self, memory: f64 ) -> Self
+  pub fn gpu_memory_gb( mut self, memory : f64 ) -> Self
   {
     self.config.gpu_memory_gb = memory;
     self
   }
 
   /// Set storage in GB
-  pub fn storage_gb( mut self, storage: f64 ) -> Self
+  pub fn storage_gb( mut self, storage : f64 ) -> Self
   {
     self.config.storage_gb = storage;
     self
@@ -259,30 +259,30 @@ impl ResourceConfig
 pub struct IntelligentScaler
 {
   /// Scaling configuration
-  config: ScalingConfig,
+  config : ScalingConfig,
   /// Historical metrics for prediction
-  metrics_history: Arc< Mutex< Vec< ( SystemTime, DeploymentMetrics ) > > >,
+  metrics_history : Arc< Mutex< Vec< ( SystemTime, DeploymentMetrics ) > > >,
   /// Last scaling action timestamp
-  last_scaling_action: Arc< Mutex< Option< SystemTime > > >,
+  last_scaling_action : Arc< Mutex< Option< SystemTime > > >,
   /// Prediction model parameters
-  prediction_window_minutes: u64,
+  prediction_window_minutes : u64,
 }
 
 impl IntelligentScaler
 {
   /// Create a new intelligent scaler
-  pub fn new( config: ScalingConfig ) -> Self
+  pub fn new( config : ScalingConfig ) -> Self
   {
     Self {
       config,
-      metrics_history: Arc::new( Mutex::new( Vec::new() ) ),
-      last_scaling_action: Arc::new( Mutex::new( None ) ),
-      prediction_window_minutes: 15, // 15-minute prediction window
+      metrics_history : Arc::new( Mutex::new( Vec::new() ) ),
+      last_scaling_action : Arc::new( Mutex::new( None ) ),
+      prediction_window_minutes : 15, // 15-minute prediction window
     }
   }
 
   /// Record metrics for scaling decisions
-  pub fn record_metrics( &self, metrics: &DeploymentMetrics )
+  pub fn record_metrics( &self, metrics : &DeploymentMetrics )
   {
     let mut history = self.metrics_history.lock().unwrap();
     let now = SystemTime::now();
@@ -307,7 +307,7 @@ impl IntelligentScaler
   }
 
   /// Make scaling decision based on current metrics and prediction
-  pub fn should_scale( &self, current_metrics: &DeploymentMetrics ) -> Option< ScalingDecision >
+  pub fn should_scale( &self, current_metrics : &DeploymentMetrics ) -> Option< ScalingDecision >
   {
     let cpu_util = current_metrics.cpu_utilization();
     let memory_util = current_metrics.memory_utilization();
@@ -344,8 +344,8 @@ impl IntelligentScaler
         if recommended_instances > current_instances
         {
           return Some( ScalingDecision::ScaleUp {
-            target_instances: recommended_instances.min( self.config.max_instances ),
-            reason: format!( "CPU: {:.1}%, Memory: {:.1}%, Target CPU: {:.1}%",
+            target_instances : recommended_instances.min( self.config.max_instances ),
+            reason : format!( "CPU: {:.1}%, Memory : {:.1}%, Target CPU: {:.1}%",
               cpu_util, memory_util, self.config.target_cpu_utilization ),
           } );
         }
@@ -363,8 +363,8 @@ impl IntelligentScaler
         if recommended_instances < current_instances
         {
           return Some( ScalingDecision::ScaleDown {
-            target_instances: recommended_instances.max( self.config.min_instances ),
-            reason: format!( "CPU: {:.1}%, Memory: {:.1}%, low utilization detected",
+            target_instances : recommended_instances.max( self.config.min_instances ),
+            reason : format!( "CPU: {:.1}%, Memory : {:.1}%, low utilization detected",
               cpu_util, memory_util ),
           } );
         }
@@ -385,7 +385,7 @@ impl IntelligentScaler
     }
 
     // Simple linear trend prediction
-    let recent_metrics: Vec< _ > = history
+    let recent_metrics : Vec< _ > = history
       .iter()
       .rev()
       .take( 10 ) // Last 10 data points
@@ -396,19 +396,19 @@ impl IntelligentScaler
       return 1.0;
     }
 
-    let avg_cpu: f64 = recent_metrics
+    let avg_cpu : f64 = recent_metrics
       .iter()
       .map( | ( _, metrics ) | metrics.cpu_utilization() )
-      .sum::<f64>() / recent_metrics.len() as f64;
+      .sum::< f64 >() / recent_metrics.len() as f64;
 
     // Normalize load factor (simplified)
     ( avg_cpu / 100.0 ).max( 0.1 ).min( 2.0 )
   }
 
   /// Calculate optimal instance count based on predicted load
-  fn calculate_optimal_instances( &self, predicted_load: f64 ) -> usize
+  fn calculate_optimal_instances( &self, predicted_load : f64 ) -> usize
   {
-    // Simple calculation: scale instances proportionally to load
+    // Simple calculation : scale instances proportionally to load
     let base_instances = self.config.min_instances;
     let load_factor = predicted_load;
     let target_instances = ( base_instances as f64 * load_factor ).ceil() as usize;
@@ -432,15 +432,15 @@ pub enum ScalingDecision
   /// Scale up to target instance count
   ScaleUp {
     /// Target number of instances
-    target_instances: usize,
+    target_instances : usize,
     /// Reason for scaling up
-    reason: String,
+    reason : String,
   },
   /// Scale down to target instance count
   ScaleDown {
     /// Target number of instances
-    target_instances: usize,
+    target_instances : usize,
     /// Reason for scaling down
-    reason: String,
+    reason : String,
   },
 }

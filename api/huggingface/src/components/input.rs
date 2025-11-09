@@ -4,8 +4,8 @@ use serde::{ Deserialize, Serialize };
 use std::collections::HashMap;
 use crate::
 {
-  error::{ HuggingFaceError, Result },
-  validation::
+  error ::{ HuggingFaceError, Result },
+  validation ::
   {
   validate_temperature,
   validate_max_new_tokens,
@@ -277,7 +277,7 @@ impl InferenceParameters
   if !errors.is_empty()
   {
       return Err( HuggingFaceError::Validation(
-  format!( "Parameter validation failed: {}", errors.join( "; " ) )
+  format!( "Parameter validation failed : {}", errors.join( "; " ) )
       ) );
   }
 

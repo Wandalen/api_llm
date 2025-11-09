@@ -4,14 +4,14 @@
 use api_huggingface::
 {
   Client,
-  environment::HuggingFaceEnvironmentImpl,
-  secret::Secret,
-  inference::Inference,
-  error::HuggingFaceError,
-  components::
+  environment ::HuggingFaceEnvironmentImpl,
+  secret ::Secret,
+  inference ::Inference,
+  error ::HuggingFaceError,
+  components ::
   {
-  input::InferenceParameters,
-  models::Models as ModelConstants,
+  input ::InferenceParameters,
+  models ::Models as ModelConstants,
   },
 };
 
@@ -80,7 +80,7 @@ mod integration_tests
       },
       Ok( Some( Err( e ) ) ) =>
       {
-              println!( "Stream error: {e}" );
+              println!( "Stream error : {e}" );
               break;
       },
       Ok( None ) =>
@@ -101,7 +101,7 @@ mod integration_tests
   assert!( !total_text.is_empty(), "Should accumulate some text" );
   assert!( total_text.len() < 1000, "Should not receive excessive text for small request" );
   
-  println!( "Integration test - received {chunks_received} chunks, total text: '{total_text}'" );
+  println!( "Integration test - received {chunks_received} chunks, total text : '{total_text}'" );
       },
       Err( HuggingFaceError::Api( _ ) ) =>
       {
@@ -110,7 +110,7 @@ mod integration_tests
       },
       Err( e ) =>
       {
-  println!( "Unexpected error in streaming integration test: {e}" );
+  println!( "Unexpected error in streaming integration test : {e}" );
   // Don't fail the test - network issues are common in CI
       },
   }
@@ -139,7 +139,7 @@ mod integration_tests
       },
       Err( HuggingFaceError::Api( api_error ) ) =>
       {
-  println!( "Expected API error for invalid model: {api_error}" );
+  println!( "Expected API error for invalid model : {api_error}" );
   assert!( !api_error.to_string().is_empty(), "Error should have meaningful message" );
       },
       Err( HuggingFaceError::Validation( _ ) ) =>
@@ -148,7 +148,7 @@ mod integration_tests
       },
       Err( e ) =>
       {
-  println!( "Other error type for invalid model: {e}" );
+  println!( "Other error type for invalid model : {e}" );
   // Acceptable - different error types are valid
       },
   }
@@ -214,18 +214,18 @@ fn test_streaming_parameter_edge_cases()
   for ( case_name, params ) in test_cases
   {
   // Verify streaming is enabled
-  assert_eq!( params.stream, Some( true ), "Streaming should be enabled in case: {case_name}" );
+  assert_eq!( params.stream, Some( true ), "Streaming should be enabled in case : {case_name}" );
   
   // Verify serialization works
   let serialized = serde_json::to_string( &params );
-  assert!( serialized.is_ok(), "Should serialize case: {case_name}" );
+  assert!( serialized.is_ok(), "Should serialize case : {case_name}" );
   
   // Verify validation
   let validation_result = params.validate();
   match validation_result
   {
       Ok( () ) => println!( "Case '{case_name}' passed validation" ),
-      Err( e ) => println!( "Case '{case_name}' validation error: {e}" ),
+      Err( e ) => println!( "Case '{case_name}' validation error : {e}" ),
   }
   }
 }
@@ -255,7 +255,7 @@ async fn test_comprehensive_streaming_workflow()
   
   for ( workflow_name, input_prompt, max_tokens ) in test_workflows
   {
-  println!( "Testing {workflow_name} workflow: '{input_prompt}'" );
+  println!( "Testing {workflow_name} workflow : '{input_prompt}'" );
   
   let streaming_params = InferenceParameters::new()
       .with_streaming( true )
@@ -299,7 +299,7 @@ async fn test_comprehensive_streaming_workflow()
               },
               Err( e ) =>
               {
-        println!( "  Stream error in {workflow_name} workflow: {e}" );
+        println!( "  Stream error in {workflow_name} workflow : {e}" );
         break;
               },
       }
@@ -308,19 +308,19 @@ async fn test_comprehensive_streaming_workflow()
           let total_time = start_time.elapsed();
           
           println!( "  {workflow_name} workflow results:" );
-          println!( "    Chunks: {total_chunks}" );
-          println!( "    Characters: {total_chars}" );
-          println!( "    Total time: {total_time:?}" );
+          println!( "    Chunks : {total_chunks}" );
+          println!( "    Characters : {total_chars}" );
+          println!( "    Total time : {total_time:?}" );
           if let Some( first_time ) = first_chunk_time
           {
-      println!( "    First chunk time: {first_time:?}" );
+      println!( "    First chunk time : {first_time:?}" );
           }
           
           ( total_chunks, total_chars )
   },
   Err( e ) =>
   {
-          println!( "  {workflow_name} workflow failed to create stream: {e}" );
+          println!( "  {workflow_name} workflow failed to create stream : {e}" );
           ( 0, 0 )
   },
       }

@@ -11,17 +11,17 @@ use futures_util::Stream;
 pub struct OptimizedMediaApi< 'a >
 {
   /// Reference to the Gemini client
-  client: &'a crate::client::Client,
+  client : &'a crate::client::Client,
   /// Processing configuration
-  config: MediaProcessingConfig,
+  config : MediaProcessingConfig,
   /// Processing pipeline instance
-  pipeline: Arc< MediaProcessingPipeline >,
+  pipeline : Arc< MediaProcessingPipeline >,
 }
 
 impl< 'a > OptimizedMediaApi< 'a >
 {
   /// Create a new optimized media API instance with default configuration
-  pub fn new( client: &'a crate::client::Client ) -> Self
+  pub fn new( client : &'a crate::client::Client ) -> Self
   {
     let config = MediaProcessingConfig::default();
     let pipeline = Arc::new( MediaProcessingPipeline::new( config.clone() ) );
@@ -34,7 +34,7 @@ impl< 'a > OptimizedMediaApi< 'a >
   }
 
   /// Create a new optimized media API instance with custom configuration
-  pub fn with_config( client: &'a crate::client::Client, config: MediaProcessingConfig ) -> Self
+  pub fn with_config( client : &'a crate::client::Client, config : MediaProcessingConfig ) -> Self
   {
     let pipeline = Arc::new( MediaProcessingPipeline::new( config.clone() ) );
 
@@ -46,13 +46,13 @@ impl< 'a > OptimizedMediaApi< 'a >
   }
 
   /// Upload a file with advanced optimization
-  pub async fn upload_optimized< P: AsRef< Path > >( &self, file_path: P ) -> Result< ProcessedMediaResult, crate::error::Error >
+  pub async fn upload_optimized< P: AsRef< Path > >( &self, file_path : P ) -> Result< ProcessedMediaResult, crate::error::Error >
   {
     self.pipeline.process_upload( file_path.as_ref() ).await
   }
 
   /// Download and process a file with optimization
-  pub async fn download_optimized( &self, file_id: &str, destination: &Path ) -> Result< ProcessedMediaResult, crate::error::Error >
+  pub async fn download_optimized( &self, file_id : &str, destination : &Path ) -> Result< ProcessedMediaResult, crate::error::Error >
   {
     self.pipeline.process_download( file_id, destination ).await
   }
@@ -76,7 +76,7 @@ impl< 'a > OptimizedMediaApi< 'a >
   }
 
   /// Process data in streaming chunks for large files
-  pub async fn process_stream< S >( &self, stream: S, metadata: ProcessedMediaMetadata ) -> Result< ProcessedMediaResult, crate::error::Error >
+  pub async fn process_stream< S >( &self, stream : S, metadata : ProcessedMediaMetadata ) -> Result< ProcessedMediaResult, crate::error::Error >
   where
     S: Stream< Item = Result< Bytes, crate::error::Error > > + Send + Unpin,
   {
@@ -84,7 +84,7 @@ impl< 'a > OptimizedMediaApi< 'a >
   }
 
   /// Generate thumbnail for uploaded media
-  pub async fn generate_thumbnail( &self, file_data: &Bytes, mime_type: &str ) -> Result< Bytes, crate::error::Error >
+  pub async fn generate_thumbnail( &self, file_data : &Bytes, mime_type : &str ) -> Result< Bytes, crate::error::Error >
   {
     if let Some( ref thumbnail_config ) = self.config.thumbnail_config
     {

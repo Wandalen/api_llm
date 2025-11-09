@@ -48,7 +48,7 @@ mod private
     ///
     /// Default implementation includes:
     /// - Authorization header with Bearer token
-    /// - Content-Type: application/json
+    /// - Content-Type : application/json
     ///
     /// # Errors
     ///
@@ -57,19 +57,19 @@ mod private
     {
       let mut headers = header::HeaderMap::new();
 
-      // Authorization: Bearer xai-...
+      // Authorization : Bearer xai-...
       let auth_value = format!( "Bearer {secret}", secret = self.api_key().expose_secret() );
       headers.insert(
-        header::AUTHORIZATION,
+        header ::AUTHORIZATION,
         auth_value.parse()
-          .map_err( |e| XaiError::Http( format!( "Invalid authorization header: {e}" ) ) )?
+          .map_err( |e| XaiError::Http( format!( "Invalid authorization header : {e}" ) ) )?
       );
 
-      // Content-Type: application/json
+      // Content-Type : application/json
       headers.insert(
-        header::CONTENT_TYPE,
+        header ::CONTENT_TYPE,
         "application/json".parse()
-          .map_err( |e| XaiError::Http( format!( "Invalid content-type header: {e}" ) ) )?
+          .map_err( |e| XaiError::Http( format!( "Invalid content-type header : {e}" ) ) )?
       );
 
       Ok( headers )
@@ -88,7 +88,7 @@ mod private
   /// // Basic setup with defaults
   /// let secret = Secret::load_with_fallbacks( "XAI_API_KEY" )?;
   /// let env = XaiEnvironmentImpl::new( secret )?;
-  /// # Ok::<(), Box<dyn std::error::Error>>(())
+  /// # Ok::<(), Box< dyn std::error::Error > >(())
   /// ```
   ///
   /// ```no_run
@@ -98,7 +98,7 @@ mod private
   /// let secret = Secret::load_with_fallbacks( "XAI_API_KEY" )?;
   /// let env = XaiEnvironmentImpl::new( secret )?
   ///   .with_timeout( std::time::Duration::from_secs( 60 ) );
-  /// # Ok::<(), Box<dyn std::error::Error>>(())
+  /// # Ok::<(), Box< dyn std::error::Error > >(())
   /// ```
   #[ derive( Debug, Clone ) ]
   pub struct XaiEnvironmentImpl
@@ -119,7 +119,7 @@ mod private
     /// # Default Values
     ///
     /// - Base URL: `https://api.x.ai/v1`
-    /// - Timeout: 30 seconds
+    /// - Timeout : 30 seconds
     ///
     /// # Errors
     ///
@@ -133,7 +133,7 @@ mod private
     ///
     /// let secret = Secret::load_with_fallbacks( "XAI_API_KEY" )?;
     /// let env = XaiEnvironmentImpl::new( secret )?;
-    /// # Ok::<(), Box<dyn std::error::Error>>(())
+    /// # Ok::<(), Box< dyn std::error::Error > >(())
     /// ```
     pub fn new( api_key : Secret ) -> Result< Self >
     {
@@ -165,9 +165,9 @@ mod private
     ///
     /// let env = XaiEnvironmentImpl::new( secret )?
     ///   .with_base_url( custom_url );
-    /// # Ok::<(), Box<dyn std::error::Error>>(())
+    /// # Ok::<(), Box< dyn std::error::Error > >(())
     /// ```
-    #[must_use]
+    #[ must_use ]
     pub fn with_base_url( mut self, base_url : Url ) -> Self
     {
       self.base_url = base_url;
@@ -194,9 +194,9 @@ mod private
     /// // 60 second timeout
     /// let env = XaiEnvironmentImpl::new( secret )?
     ///   .with_timeout( Duration::from_secs( 60 ) );
-    /// # Ok::<(), Box<dyn std::error::Error>>(())
+    /// # Ok::<(), Box< dyn std::error::Error > >(())
     /// ```
-    #[must_use]
+    #[ must_use ]
     pub fn with_timeout( mut self, timeout : Duration ) -> Self
     {
       self.timeout = timeout;
@@ -223,7 +223,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

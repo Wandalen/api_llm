@@ -76,9 +76,9 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
   .embed_content( &embed_request )
   .await?;
 
-  println!( "Embedded text: \"{text_to_embed}\"" );
-  println!( "Embedding dimensions: {}", response.embedding.values.len() );
-  println!( "First 5 values: {:?}", &response.embedding.values[ ..5 ] );
+  println!( "Embedded text : \"{text_to_embed}\"" );
+  println!( "Embedding dimensions : {}", response.embedding.values.len() );
+  println!( "First 5 values : {:?}", &response.embedding.values[ ..5 ] );
 
   // Example 2: Batch embeddings for multiple texts
   println!( "\n2. Batch Text Embeddings for Similarity Comparison" );
@@ -124,7 +124,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     .collect(),
   };
 
-  // Note: The batch endpoint would be called differently in a real implementation
+  // Note : The batch endpoint would be called differently in a real implementation
   // For this example, we'll generate individual embeddings
   let mut embeddings = Vec::new();
 
@@ -203,7 +203,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
 
   for ( i, ( idx1, idx2, sim ) ) in similarities.iter().take( 3 ).enumerate()
   {
-    println!( "{}. Similarity: {:.3}", i + 1, sim );
+    println!( "{}. Similarity : {:.3}", i + 1, sim );
     println!( "   Text {}: \"{}\"", idx1 + 1, texts[ *idx1 ] );
     println!( "   Text {}: \"{}\"", idx2 + 1, texts[ *idx2 ] );
   }
@@ -240,7 +240,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
   .embed_content( &query_request )
   .await?;
 
-  println!( "Query: \"{query}\"" );
+  println!( "Query : \"{query}\"" );
   println!( "\nRelevance scores:" );
 
   for ( i, text ) in texts.iter().enumerate()

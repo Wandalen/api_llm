@@ -41,7 +41,7 @@
     {
       Err( Error::ConfigurationError( msg ) ) => {
         assert!( msg.contains( "Minimum instances must be greater than 0" ) );
-        println!( "✓ Zero minimum instances properly rejected: {}", msg );
+        println!( "✓ Zero minimum instances properly rejected : {}", msg );
       },
       _ => panic!( "Zero minimum instances should be rejected" ),
     }
@@ -55,7 +55,7 @@
     {
       Err( Error::ConfigurationError( msg ) ) => {
         assert!( msg.contains( "Maximum instances must be greater than or equal to minimum instances" ) );
-        println!( "✓ Invalid min/max instance relationship rejected: {}", msg );
+        println!( "✓ Invalid min/max instance relationship rejected : {}", msg );
       },
       _ => panic!( "Invalid min/max instances should be rejected" ),
     }
@@ -68,7 +68,7 @@
     {
       Err( Error::ConfigurationError( msg ) ) => {
         assert!( msg.contains( "Target CPU utilization must be between 0 and 100" ) );
-        println!( "✓ Invalid CPU utilization rejected: {}", msg );
+        println!( "✓ Invalid CPU utilization rejected : {}", msg );
       },
       _ => panic!( "Invalid CPU utilization should be rejected" ),
     }
@@ -81,7 +81,7 @@
     {
       Err( Error::ConfigurationError( msg ) ) => {
         assert!( msg.contains( "Target memory utilization must be between 0 and 100" ) );
-        println!( "✓ Invalid memory utilization rejected: {}", msg );
+        println!( "✓ Invalid memory utilization rejected : {}", msg );
       },
       _ => panic!( "Invalid memory utilization should be rejected" ),
     }
@@ -105,18 +105,18 @@
   fn test_deployment_strategy_types()
   {
     let rolling_strategy = DeploymentStrategy::Rolling {
-      max_unavailable_percentage: 25.0,
-      max_surge_percentage: 25.0,
+      max_unavailable_percentage : 25.0,
+      max_surge_percentage : 25.0,
     };
 
     let blue_green_strategy = DeploymentStrategy::BlueGreen {
-      switch_traffic_percentage: 100.0,
-      rollback_on_failure: true,
+      switch_traffic_percentage : 100.0,
+      rollback_on_failure : true,
     };
 
     let canary_strategy = DeploymentStrategy::Canary {
-      traffic_percentage: 5.0,
-      promotion_criteria: vec![ "success_rate > 99%".to_string() ],
+      traffic_percentage : 5.0,
+      promotion_criteria : vec![ "success_rate > 99%".to_string() ],
     };
 
     match rolling_strategy
@@ -163,14 +163,14 @@
   fn test_orchestration_config_types()
   {
     let k8s_config = OrchestrationConfig::Kubernetes {
-      namespace: "default".to_string(),
-      cluster: "main".to_string(),
-      service_account: "default".to_string(),
+      namespace : "default".to_string(),
+      cluster : "main".to_string(),
+      service_account : "default".to_string(),
     };
 
     let docker_config = OrchestrationConfig::Docker {
-      network: "bridge".to_string(),
-      volumes: vec![ "/data:/app/data".to_string() ],
+      network : "bridge".to_string(),
+      volumes : vec![ "/data:/app/data".to_string() ],
     };
 
     match k8s_config
@@ -205,7 +205,7 @@
     {
       Err( Error::ConfigurationError( msg ) ) => {
         assert!( msg.contains( "CPU cores must be greater than 0" ) );
-        println!( "✓ Invalid CPU cores rejected: {}", msg );
+        println!( "✓ Invalid CPU cores rejected : {}", msg );
       },
       _ => panic!( "Invalid CPU cores should be rejected" ),
     }
@@ -218,7 +218,7 @@
     {
       Err( Error::ConfigurationError( msg ) ) => {
         assert!( msg.contains( "Memory must be greater than 0" ) );
-        println!( "✓ Invalid memory rejected: {}", msg );
+        println!( "✓ Invalid memory rejected : {}", msg );
       },
       _ => panic!( "Invalid memory should be rejected" ),
     }
@@ -251,7 +251,7 @@
     {
       Err( Error::ConfigurationError( msg ) ) => {
         assert!( msg.contains( "Health check endpoint cannot be empty" ) );
-        println!( "✓ Empty endpoint rejected: {}", msg );
+        println!( "✓ Empty endpoint rejected : {}", msg );
       },
       _ => panic!( "Empty endpoint should be rejected" ),
     }
@@ -290,7 +290,7 @@
     {
       Err( Error::ConfigurationError( msg ) ) => {
         assert!( msg.contains( "Container image cannot be empty" ) );
-        println!( "✓ Empty container image rejected: {}", msg );
+        println!( "✓ Empty container image rejected : {}", msg );
       },
       _ => panic!( "Empty container image should be rejected" ),
     }

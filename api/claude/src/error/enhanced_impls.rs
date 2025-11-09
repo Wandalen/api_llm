@@ -307,11 +307,11 @@ impl BackoffCalculator
     };
 
     let strategy = BackoffStrategyDetails {
-      initial_delay: Duration::from_millis( base_delay ),
-      backoff_type: BackoffType::Linear,
-      max_retries: 5,
-      jitter_enabled: true,
-      suggested_batch_size_reduction: Some( 0.5 ),
+      initial_delay : Duration::from_millis( base_delay ),
+      backoff_type : BackoffType::Linear,
+      max_retries : 5,
+      jitter_enabled : true,
+      suggested_batch_size_reduction : Some( 0.5 ),
     };
 
     Ok( strategy )

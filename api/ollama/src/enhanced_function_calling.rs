@@ -6,7 +6,7 @@
 //! # Architecture
 //!
 //! The enhanced function calling system consists of:
-//! - `ToolExecutor` trait: Defines tool execution interface
+//! - `ToolExecutor` trait : Defines tool execution interface
 //! - `ToolRegistry`: Manages tool registration and dispatch
 //! - `ToolResult`: Type-safe result type for tool execution
 //! - Helper functions for creating `ToolDefinition` with type safety
@@ -46,9 +46,9 @@
 //! // Use definitions in ChatRequest...
 //! ```
 //!
-//! # Future: Procedural Macros
+//! # Future : Procedural Macros
 //!
-//! The full implementation will include a `#[tool]` proc-macro for automatic
+//! The full implementation will include a `#[ tool ]` proc-macro for automatic
 //! ToolDefinition generation from function signatures. This requires a separate
 //! `ollama_macros` crate and will be implemented in a future phase.
 
@@ -76,7 +76,7 @@ mod private
     /// Default implementation returns an empty object schema.
     fn parameter_schema( &self ) -> serde_json::Value
     {
-      serde_json::json!
+      serde_json ::json!
       ({
         "type" : "object",
         "properties" : {},
@@ -104,7 +104,7 @@ mod private
     /// Automatically generates a `ToolDefinition` from the tool metadata.
     fn definition( &self ) -> crate::ToolDefinition
     {
-      crate::ToolDefinition
+      crate ::ToolDefinition
       {
         name : self.name().to_string(),
         description : self.description().to_string(),
@@ -148,10 +148,7 @@ mod private
     pub fn register( &mut self, tool : Box< dyn ToolExecutor > )
     {
       let name = tool.name().to_string();
-      if self.tools.contains_key( &name )
-      {
-        panic!( "Tool '{}' is already registered", name );
-      }
+      assert!( !self.tools.contains_key( &name ), "Tool '{}' is already registered", name );
       self.tools.insert( name, tool );
     }
 
@@ -282,7 +279,7 @@ mod private
       for ( param_name, param_type, param_desc ) in parameters
       {
         properties.insert(
-          param_name.to_string(),
+          ( *param_name ).to_string(),
           json!
           ({
             "type" : param_type,
@@ -291,7 +288,7 @@ mod private
         );
       }
 
-      crate::ToolDefinition
+      crate ::ToolDefinition
       {
         name : name.to_string(),
         description : description.to_string(),
@@ -330,7 +327,7 @@ mod private
       for ( param_name, enum_values, param_desc ) in parameters
       {
         properties.insert(
-          param_name.to_string(),
+          ( *param_name ).to_string(),
           json!
           ({
             "type" : "string",
@@ -340,7 +337,7 @@ mod private
         );
       }
 
-      crate::ToolDefinition
+      crate ::ToolDefinition
       {
         name : name.to_string(),
         description : description.to_string(),
@@ -356,7 +353,7 @@ mod private
 }
 
 #[ cfg( feature = "enhanced_function_calling" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use private::ToolExecutor;
   exposed use private::ToolRegistry;

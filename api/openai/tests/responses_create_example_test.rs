@@ -7,7 +7,7 @@ use api_openai::ClientApiAccessors;
 use api_openai::
 {
   Client,
-  components::responses::{ CreateResponseRequest, ResponseInput },
+  components ::responses::{ CreateResponseRequest, ResponseInput },
 };
 
 #[ tokio::test ]
@@ -57,7 +57,7 @@ async fn test_responses_create_example_secret_loading()
       let error_msg = format!( "{e:?}" );
       if error_msg.contains( "dummy_key" )
       {
-        panic!( "❌ ISSUE: Example still using dummy_key instead of proper secret loading: {error_msg}" );
+        panic!( "❌ ISSUE: Example still using dummy_key instead of proper secret loading : {error_msg}" );
       }
       else
       {

@@ -8,10 +8,10 @@ mod private
 {
   use crate::
   {
-    client::Client,
-    environment::{ OpenaiEnvironment, EnvironmentInterface },
-    error::{ OpenAIError, Result, map_deserialization_error },
-    diagnostics::{ DiagnosticsCollector, RequestMetrics, ResponseMetrics, ErrorMetrics },
+    client ::Client,
+    environment ::{ OpenaiEnvironment, EnvironmentInterface },
+    error ::{ OpenAIError, Result, map_deserialization_error },
+    diagnostics ::{ DiagnosticsCollector, RequestMetrics, ResponseMetrics, ErrorMetrics },
   };
 
   use reqwest::Method;
@@ -78,7 +78,7 @@ mod private
 
       let bytes = response.bytes().await?.to_vec(); // Convert to Vec< u8 >
       let result = serde_json::from_slice( &bytes )
-        .map_err( |e| { let body = String::from_utf8_lossy(&bytes); OpenAIError::Internal( format!( "Failed to parse JSON response: {e}. Response body: {body}" ) ) } )?;
+        .map_err( |e| { let body = String::from_utf8_lossy(&bytes); OpenAIError::Internal( format!( "Failed to parse JSON response : {e}. Response body : {body}" ) ) } )?;
       Ok( result )
     }
 
@@ -100,10 +100,10 @@ mod private
         let request_body_size = serde_json::to_vec( body ).map( |v| v.len() ).unwrap_or( 0 );
         let request_metrics = RequestMetrics
         {
-          timestamp: start_time,
-          method: "POST".to_string(),
-          endpoint: path.to_string(),
-          headers: if diagnostics.config.collection.request_headers
+          timestamp : start_time,
+          method : "POST".to_string(),
+          endpoint : path.to_string(),
+          headers : if diagnostics.config.collection.request_headers
           {
             // Collect headers safely
             vec![ ( "Content-Type".to_string(), "application/json".to_string() ) ]
@@ -112,8 +112,8 @@ mod private
           {
             vec![]
           },
-          body_size: request_body_size,
-          user_agent: "api_openai/0.2.0".to_string(),
+          body_size : request_body_size,
+          user_agent : "api_openai/0.2.0".to_string(),
         };
         diagnostics.record_request( &request_metrics );
       }
@@ -137,9 +137,9 @@ mod private
           {
             let response_metrics = ResponseMetrics
             {
-              timestamp: Instant::now(),
+              timestamp : Instant::now(),
               status_code,
-              headers: if diagnostics.config.collection.response_headers
+              headers : if diagnostics.config.collection.response_headers
               {
                 vec![ ( "Content-Type".to_string(), "application/json".to_string() ) ]
               }
@@ -147,15 +147,15 @@ mod private
               {
                 vec![]
               },
-              body_size: bytes.len(),
+              body_size : bytes.len(),
               response_time,
-              tokens_used: None, // Will be extracted from response if available
+              tokens_used : None, // Will be extracted from response if available
             };
             diagnostics.record_response( &response_metrics );
           }
 
           let result = serde_json::from_slice( &bytes )
-            .map_err( |e| { let body = String::from_utf8_lossy(&bytes); OpenAIError::Internal( format!( "Failed to parse JSON response: {e}. Response body: {body}" ) ) } )?;
+            .map_err( |e| { let body = String::from_utf8_lossy(&bytes); OpenAIError::Internal( format!( "Failed to parse JSON response : {e}. Response body : {body}" ) ) } )?;
           Ok( result )
         },
         Err( error ) =>
@@ -165,12 +165,12 @@ mod private
           {
             let error_metrics = ErrorMetrics
             {
-              timestamp: Instant::now(),
-              error_type: "RequestError".to_string(),
-              error_code: None,
-              error_message: error.to_string(),
-              retry_count: 0, // This would need to be tracked in execute_request
-              final_failure: true,
+              timestamp : Instant::now(),
+              error_type : "RequestError".to_string(),
+              error_code : None,
+              error_message : error.to_string(),
+              retry_count : 0, // This would need to be tracked in execute_request
+              final_failure : true,
             };
             diagnostics.record_error( &error_metrics );
           }
@@ -195,7 +195,7 @@ mod private
 
       let bytes = response.bytes().await?.to_vec(); // Convert to Vec< u8 >
       let result = serde_json::from_slice( &bytes )
-        .map_err( |e| { let body = String::from_utf8_lossy(&bytes); OpenAIError::Internal( format!( "Failed to parse JSON response: {e}. Response body: {body}" ) ) } )?;
+        .map_err( |e| { let body = String::from_utf8_lossy(&bytes); OpenAIError::Internal( format!( "Failed to parse JSON response : {e}. Response body : {body}" ) ) } )?;
       Ok( result )
     }
 

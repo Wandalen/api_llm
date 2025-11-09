@@ -14,10 +14,10 @@
 //! ```no_run
 //! # use api_huggingface::cache::{Cache, CacheConfig};
 //! # use std::time::Duration;
-//! # async fn example( ) -> Result< ( ), Box< dyn std::error::Error >> {
+//! # async fn example( ) -> Result< ( ), Box< dyn std::error::Error > > {
 //! let cache = Cache::new( CacheConfig {
-//!   max_entries: 100,
-//!   default_ttl: Some( Duration::from_secs( 60 )),
+//!   max_entries : 100,
+//!   default_ttl : Some( Duration::from_secs( 60 )),
 //! } );
 //!
 //! cache.insert( "key".to_string( ), "value".to_string( ), None ).await;
@@ -35,7 +35,7 @@ use tokio::sync::RwLock;
 
 /// Cache entry with TTL
 #[ derive( Debug, Clone ) ]
-struct CacheEntry<V > 
+struct CacheEntry< V > 
 {
   value : V,
   #[ allow( dead_code ) ] // Reserved for future entry age tracking
@@ -44,7 +44,7 @@ struct CacheEntry<V >
   last_accessed : Instant,
 }
 
-impl<V > CacheEntry<V > 
+impl< V > CacheEntry< V > 
 {
   /// Create new cache entry
   #[ inline ]
@@ -136,21 +136,21 @@ impl CacheStats
 }
 
 /// Internal cache state
-struct CacheState<K, V > 
+struct CacheState< K, V > 
 {
-  entries : HashMap< K, CacheEntry<V > >,
+  entries : HashMap< K, CacheEntry< V > >,
   config : CacheConfig,
   stats : CacheStats,
 }
 
 /// In-memory cache with TTL and size limits
 #[ derive( Clone ) ]
-pub struct Cache<K, V > 
+pub struct Cache< K, V > 
 {
   state : Arc< RwLock< CacheState< K, V > > >,
 }
 
-impl<K, V > Cache<K, V >
+impl< K, V > Cache< K, V >
 where
   K : Eq + Hash + Clone,
   V : Clone,
@@ -317,13 +317,13 @@ where
   }
 }
 
-impl<K, V > core::fmt::Debug for Cache<K, V > 
+impl< K, V > core::fmt::Debug for Cache< K, V > 
 {
   #[ inline ]
-  fn fmt( &self, f : &mut core::fmt::Formatter<'_ > ) -> core::fmt::Result 
+  fn fmt( &self, f : &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result 
   {
   f.debug_struct( "Cache" )
-      .field( "state", &"<CacheState >" )
+      .field( "state", &"< CacheState >" )
       .finish( )
   }
 }
@@ -341,7 +341,7 @@ pub enum CacheError
 impl core::fmt::Display for CacheError 
 {
   #[ inline ]
-  fn fmt( &self, f : &mut core::fmt::Formatter<'_ > ) -> core::fmt::Result 
+  fn fmt( &self, f : &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result 
   {
   match self
   {
@@ -371,7 +371,7 @@ mod tests {
   #[ tokio::test ]
   async fn test_cache_miss() 
   {
-  let cache : Cache<&str, &str > = Cache::new( CacheConfig::default( ));
+  let cache : Cache< &str, &str > = Cache::new( CacheConfig::default( ));
 
   let value = cache.get( &"nonexistent" ).await;
   assert_eq!( value, None );
@@ -389,7 +389,7 @@ mod tests {
   assert!( cache.get( &"key1" ).await.is_some( ));
 
   // Wait for expiration
-  tokio::time::sleep( Duration::from_millis( 100 )).await;
+  tokio ::time::sleep( Duration::from_millis( 100 )).await;
 
   // Should be expired
   assert!( cache.get( &"key1" ).await.is_none( ));
@@ -479,7 +479,7 @@ mod tests {
   cache.insert( "key2", "value2", None ).await;
 
   // Wait for first to expire
-  tokio::time::sleep( Duration::from_millis( 100 )).await;
+  tokio ::time::sleep( Duration::from_millis( 100 )).await;
 
   let removed = cache.cleanup_expired( ).await;
   assert_eq!( removed, 1 );

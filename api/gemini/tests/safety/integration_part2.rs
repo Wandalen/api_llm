@@ -42,73 +42,73 @@
 
     // Test 1: Create comprehensive policy framework
     let gdpr_standard = ComplianceStandard {
-      standard_id: "GDPR_2018".to_string(),
-      name: "General Data Protection Regulation".to_string(),
-      framework: "EU Data Protection".to_string(),
-      version: "2018".to_string(),
-      requirements: vec![
+      standard_id : "GDPR_2018".to_string(),
+      name : "General Data Protection Regulation".to_string(),
+      framework : "EU Data Protection".to_string(),
+      version : "2018".to_string(),
+      requirements : vec![
         "Data minimization principle".to_string(),
         "Explicit consent for processing".to_string(),
         "Right to be forgotten".to_string(),
         "Data portability rights".to_string(),
         "Privacy by design".to_string(),
       ],
-      audit_frequency: "annual".to_string(),
+      audit_frequency : "annual".to_string(),
     };
 
     let coppa_standard = ComplianceStandard {
-      standard_id: "COPPA_1998".to_string(),
-      name: "Children's Online Privacy Protection Act".to_string(),
-      framework: "US Child Privacy".to_string(),
-      version: "1998_amended_2013".to_string(),
-      requirements: vec![
+      standard_id : "COPPA_1998".to_string(),
+      name : "Children's Online Privacy Protection Act".to_string(),
+      framework : "US Child Privacy".to_string(),
+      version : "1998_amended_2013".to_string(),
+      requirements : vec![
         "Parental consent for under 13".to_string(),
         "Limited data collection from children".to_string(),
         "No behavioral advertising to children".to_string(),
       ],
-      audit_frequency: "quarterly".to_string(),
+      audit_frequency : "quarterly".to_string(),
     };
 
     let privacy_policy = ContentPolicy {
-      id: "policy_privacy_comprehensive".to_string(),
-      name: "Comprehensive Privacy Policy".to_string(),
-      description: "Ensures user privacy and data protection across all platforms".to_string(),
-      policy_type: PolicyType::DataPrivacy,
-      rules: vec![
+      id : "policy_privacy_comprehensive".to_string(),
+      name : "Comprehensive Privacy Policy".to_string(),
+      description : "Ensures user privacy and data protection across all platforms".to_string(),
+      policy_type : PolicyType::DataPrivacy,
+      rules : vec![
         "No collection of personal data without explicit consent".to_string(),
         "Data retention limited to stated purposes".to_string(),
         "User rights to access and delete data".to_string(),
         "Secure data transmission and storage".to_string(),
       ],
-      exceptions: vec![
+      exceptions : vec![
         "Legal compliance requirements".to_string(),
         "Security incident response".to_string(),
       ],
-      enforcement_level: EnforcementLevel::Mandatory,
+      enforcement_level : EnforcementLevel::Mandatory,
     };
 
     let community_policy = ContentPolicy {
-      id: "policy_community_standards".to_string(),
-      name: "Community Standards".to_string(),
-      description: "Maintains healthy community interactions".to_string(),
-      policy_type: PolicyType::CommunityGuidelines,
-      rules: vec![
+      id : "policy_community_standards".to_string(),
+      name : "Community Standards".to_string(),
+      description : "Maintains healthy community interactions".to_string(),
+      policy_type : PolicyType::CommunityGuidelines,
+      rules : vec![
         "Respectful communication required".to_string(),
         "No harassment or bullying tolerated".to_string(),
         "Constructive feedback encouraged".to_string(),
       ],
-      exceptions: vec![ "Clearly marked fictional content".to_string() ],
-      enforcement_level: EnforcementLevel::Required,
+      exceptions : vec![ "Clearly marked fictional content".to_string() ],
+      enforcement_level : EnforcementLevel::Required,
     };
 
     let compliance_framework = PolicyFramework {
-      id: "framework_comprehensive".to_string(),
-      name: "Comprehensive Compliance Framework".to_string(),
-      policies: vec![ privacy_policy.clone(), community_policy.clone() ],
-      compliance_standards: vec![ gdpr_standard.clone(), coppa_standard.clone() ],
-      jurisdiction: "GLOBAL".to_string(),
-      effective_date: "2024-01-01".to_string(),
-      review_schedule: "semi_annual".to_string(),
+      id : "framework_comprehensive".to_string(),
+      name : "Comprehensive Compliance Framework".to_string(),
+      policies : vec![ privacy_policy.clone(), community_policy.clone() ],
+      compliance_standards : vec![ gdpr_standard.clone(), coppa_standard.clone() ],
+      jurisdiction : "GLOBAL".to_string(),
+      effective_date : "2024-01-01".to_string(),
+      review_schedule : "semi_annual".to_string(),
     };
 
     // Test 2: Test policy compliance for different content types
@@ -142,49 +142,49 @@
     for ( content, compliance_standards, expected_compliant, description ) in compliance_test_cases
     {
       let compliance_request = PolicyComplianceRequest {
-        content: content.to_string(),
-        policy_framework_id: compliance_framework.id.clone(),
-        compliance_standards: compliance_standards.clone(),
-        jurisdiction: "GLOBAL".to_string(),
+        content : content.to_string(),
+        policy_framework_id : compliance_framework.id.clone(),
+        compliance_standards : compliance_standards.clone(),
+        jurisdiction : "GLOBAL".to_string(),
       };
 
       // Simulate compliance analysis
       let compliance_result = if expected_compliant
       {
         SafetyAnalysisResult {
-          overall_risk_score: 0.1,
-          category_scores: [
+          overall_risk_score : 0.1,
+          category_scores : [
             ( "PRIVACY_RISK".to_string(), 0.05 ),
             ( "COMMUNITY_RISK".to_string(), 0.08 ),
           ].iter().cloned().collect(),
-          policy_violations: vec![],
-          recommendations: vec![ "Compliant with all standards".to_string() ],
-          confidence_score: 0.95,
-          processing_time_ms: 200,
-          model_versions: vec![ "compliance_checker_v2.0".to_string() ],
+          policy_violations : vec![],
+          recommendations : vec![ "Compliant with all standards".to_string() ],
+          confidence_score : 0.95,
+          processing_time_ms : 200,
+          model_versions : vec![ "compliance_checker_v2.0".to_string() ],
         }
       } else {
         SafetyAnalysisResult {
-          overall_risk_score: 0.8,
-          category_scores: HashMap::new(),
-          policy_violations: vec![
+          overall_risk_score : 0.8,
+          category_scores : HashMap::new(),
+          policy_violations : vec![
             PolicyViolation {
-              policy_id: "policy_violation".to_string(),
-              severity: SeverityLevel::Medium,
-              description: "Compliance issue detected".to_string(),
-              evidence: vec![ "Policy mismatch".to_string() ],
-              suggested_actions: vec![ "Review compliance requirements".to_string() ],
-              auto_remediation: None,
+              policy_id : "policy_violation".to_string(),
+              severity : SeverityLevel::Medium,
+              description : "Compliance issue detected".to_string(),
+              evidence : vec![ "Policy mismatch".to_string() ],
+              suggested_actions : vec![ "Review compliance requirements".to_string() ],
+              auto_remediation : None,
             }
           ],
-          recommendations: vec![ "Address compliance violations".to_string() ],
-          confidence_score: 0.88,
-          processing_time_ms: 250,
-          model_versions: vec![ "compliance_checker_v2.0".to_string() ],
+          recommendations : vec![ "Address compliance violations".to_string() ],
+          confidence_score : 0.88,
+          processing_time_ms : 250,
+          model_versions : vec![ "compliance_checker_v2.0".to_string() ],
         }
       };
 
-      println!( "  ✓ {}: Risk {:.3}, Violations: {}, Standards: {:?}",
+      println!( "  ✓ {}: Risk {:.3}, Violations : {}, Standards : {:?}",
         description,
         compliance_result.overall_risk_score,
         compliance_result.policy_violations.len(),
@@ -225,21 +225,21 @@
 
     // Test 1: Create comprehensive audit settings
     let audit_settings = AuditSettings {
-      enabled: true,
-      log_level: LogLevel::Comprehensive,
-      retention_period: 365, // 1 year retention
-      real_time_monitoring: true,
-      alert_thresholds: AlertThresholds {
-        violation_count: 10,
-        risk_score: 0.75,
-        time_window: 3600, // 1 hour
-        escalation_levels: vec![
+      enabled : true,
+      log_level : LogLevel::Comprehensive,
+      retention_period : 365, // 1 year retention
+      real_time_monitoring : true,
+      alert_thresholds : AlertThresholds {
+        violation_count : 10,
+        risk_score : 0.75,
+        time_window : 3600, // 1 hour
+        escalation_levels : vec![
           "moderator".to_string(),
           "safety_team".to_string(),
           "compliance_officer".to_string(),
         ],
       },
-      export_formats: vec![
+      export_formats : vec![
         "json".to_string(),
         "csv".to_string(),
         "pdf".to_string(),
@@ -285,13 +285,13 @@
     for ( i, ( event_type, risk_score, action, description ) ) in audit_events.iter().enumerate()
     {
       let audit_log = SafetyAuditLog {
-        id: format!( "audit_{:03}", i + 1 ),
-        timestamp: format!( "2024-01-01T{:02}:00:00Z", 10 + i ),
-        event_type: event_type.clone(),
-        content_hash: format!( "sha256:hash_{}", i + 1 ),
-        safety_result: SafetyAnalysisResult {
-          overall_risk_score: *risk_score,
-          category_scores: if *risk_score > 0.1
+        id : format!( "audit_{:03}", i + 1 ),
+        timestamp : format!( "2024-01-01T{:02}:00:00Z", 10 + i ),
+        event_type : event_type.clone(),
+        content_hash : format!( "sha256:hash_{}", i + 1 ),
+        safety_result : SafetyAnalysisResult {
+          overall_risk_score : *risk_score,
+          category_scores : if *risk_score > 0.1
           {
             [
               ( "HARASSMENT".to_string(), risk_score * 0.4 ),
@@ -300,32 +300,32 @@
           } else {
             HashMap::new()
           },
-          policy_violations: if *risk_score > 0.5
+          policy_violations : if *risk_score > 0.5
           {
             vec![
               PolicyViolation {
-                policy_id: "auto_detected".to_string(),
-                severity: if *risk_score > 0.8 { SeverityLevel::High } else { SeverityLevel::Medium },
-                description: description.to_string(),
-                evidence: vec![ "Automated detection".to_string() ],
-                suggested_actions: vec![ "Review required".to_string() ],
-                auto_remediation: if *risk_score > 0.8 { Some( "Auto-block".to_string() ) } else { None },
+                policy_id : "auto_detected".to_string(),
+                severity : if *risk_score > 0.8 { SeverityLevel::High } else { SeverityLevel::Medium },
+                description : description.to_string(),
+                evidence : vec![ "Automated detection".to_string() ],
+                suggested_actions : vec![ "Review required".to_string() ],
+                auto_remediation : if *risk_score > 0.8 { Some( "Auto-block".to_string() ) } else { None },
               }
             ]
           } else {
             vec![]
           },
-          recommendations: vec![ "Continue monitoring".to_string() ],
-          confidence_score: 0.9,
-          processing_time_ms: 150,
-          model_versions: vec![ "audit_analyzer_v1.0".to_string() ],
+          recommendations : vec![ "Continue monitoring".to_string() ],
+          confidence_score : 0.9,
+          processing_time_ms : 150,
+          model_versions : vec![ "audit_analyzer_v1.0".to_string() ],
         },
-        action_taken: action.clone(),
-        user_context: [
+        action_taken : action.clone(),
+        user_context : [
           ( "user_id".to_string(), format!( "user_{}", i + 1 ) ),
           ( "session_id".to_string(), format!( "session_{}", i + 1 ) ),
         ].iter().cloned().collect(),
-        metadata: [
+        metadata : [
           ( "source".to_string(), "automated_system".to_string() ),
           ( "audit_version".to_string(), "2.0".to_string() ),
         ].iter().cloned().collect(),
@@ -363,7 +363,7 @@
     }
 
     // Test 4: Simulate alert threshold monitoring
-    let high_risk_logs: Vec< &SafetyAuditLog > = audit_logs
+    let high_risk_logs : Vec< &SafetyAuditLog > = audit_logs
     .iter()
     .filter( |log| log.safety_result.overall_risk_score > audit_settings.alert_thresholds.risk_score )
     .collect();
@@ -373,7 +373,7 @@
     .filter( |log| !log.safety_result.policy_violations.is_empty() )
     .count();
 
-    println!( "  ✓ Alert analysis: {} high-risk events, {} policy violations",
+    println!( "  ✓ Alert analysis : {} high-risk events, {} policy violations",
       high_risk_logs.len(), violation_count );
 
     // Test 5: Validate audit settings and thresholds
@@ -387,7 +387,7 @@
     // Check if alerts would be triggered
     if high_risk_logs.len() as u32 > audit_settings.alert_thresholds.violation_count
     {
-      println!( "  ✓ Alert would be triggered: {} high-risk events exceed threshold of {}",
+      println!( "  ✓ Alert would be triggered : {} high-risk events exceed threshold of {}",
         high_risk_logs.len(), audit_settings.alert_thresholds.violation_count );
     }
 
@@ -407,110 +407,110 @@
     // Test 1: Create enhanced safety settings with custom thresholds
     let enhanced_safety_settings = vec![
       SafetySetting {
-        category: "HARM_CATEGORY_HARASSMENT".to_string(),
-        threshold: "BLOCK_LOW_AND_ABOVE".to_string(), // Stricter than default
+        category : "HARM_CATEGORY_HARASSMENT".to_string(),
+        threshold : "BLOCK_LOW_AND_ABOVE".to_string(), // Stricter than default
       },
       SafetySetting {
-        category: "HARM_CATEGORY_HATE_SPEECH".to_string(),
-        threshold: "BLOCK_LOW_AND_ABOVE".to_string(),
+        category : "HARM_CATEGORY_HATE_SPEECH".to_string(),
+        threshold : "BLOCK_LOW_AND_ABOVE".to_string(),
       },
       SafetySetting {
-        category: "HARM_CATEGORY_SEXUALLY_EXPLICIT".to_string(),
-        threshold: "BLOCK_MEDIUM_AND_ABOVE".to_string(),
+        category : "HARM_CATEGORY_SEXUALLY_EXPLICIT".to_string(),
+        threshold : "BLOCK_MEDIUM_AND_ABOVE".to_string(),
       },
       SafetySetting {
-        category: "HARM_CATEGORY_DANGEROUS_CONTENT".to_string(),
-        threshold: "BLOCK_LOW_AND_ABOVE".to_string(),
+        category : "HARM_CATEGORY_DANGEROUS_CONTENT".to_string(),
+        threshold : "BLOCK_LOW_AND_ABOVE".to_string(),
       },
     ];
 
     // Test 2: Create advanced safety config that integrates with standard settings
     let integrated_config = AdvancedSafetyConfig {
-      id: "config_integrated".to_string(),
-      name: "Integrated Safety Configuration".to_string(),
-      description: Some( "Advanced safety with standard SafetySettings integration".to_string() ),
-      rules: vec![
+      id : "config_integrated".to_string(),
+      name : "Integrated Safety Configuration".to_string(),
+      description : Some( "Advanced safety with standard SafetySettings integration".to_string() ),
+      rules : vec![
         SafetyRule {
-          id: "rule_integration_harassment".to_string(),
-          name: "Enhanced Harassment Detection".to_string(),
-          category: "HARM_CATEGORY_HARASSMENT".to_string(),
-          condition: RuleCondition {
-            content_patterns: vec![ "enhanced_harassment_patterns".to_string() ],
-            risk_threshold: 0.3, // Lower threshold for harassment
-            context_requirements: vec![ "user_interaction".to_string() ],
-            user_attributes: vec![ "verified_account".to_string() ],
-            temporal_constraints: None,
+          id : "rule_integration_harassment".to_string(),
+          name : "Enhanced Harassment Detection".to_string(),
+          category : "HARM_CATEGORY_HARASSMENT".to_string(),
+          condition : RuleCondition {
+            content_patterns : vec![ "enhanced_harassment_patterns".to_string() ],
+            risk_threshold : 0.3, // Lower threshold for harassment
+            context_requirements : vec![ "user_interaction".to_string() ],
+            user_attributes : vec![ "verified_account".to_string() ],
+            temporal_constraints : None,
           },
-          action: RuleAction {
-            action_type: ActionType::Flag,
-            severity: SeverityLevel::Medium,
-            message: Some( "Content flagged for enhanced review".to_string() ),
-            escalation_required: false,
-            custom_response: None,
+          action : RuleAction {
+            action_type : ActionType::Flag,
+            severity : SeverityLevel::Medium,
+            message : Some( "Content flagged for enhanced review".to_string() ),
+            escalation_required : false,
+            custom_response : None,
           },
-          priority: 1,
-          enabled: true,
-          metadata: [
+          priority : 1,
+          enabled : true,
+          metadata : [
             ( "integrates_with".to_string(), "HARM_CATEGORY_HARASSMENT".to_string() ),
           ].iter().cloned().collect(),
         },
       ],
-      custom_models: vec![],
-      policy_framework: PolicyFramework {
-        id: "framework_integrated".to_string(),
-        name: "Integration Framework".to_string(),
-        policies: vec![],
-        compliance_standards: vec![],
-        jurisdiction: "US".to_string(),
-        effective_date: "2024-01-01".to_string(),
-        review_schedule: "monthly".to_string(),
+      custom_models : vec![],
+      policy_framework : PolicyFramework {
+        id : "framework_integrated".to_string(),
+        name : "Integration Framework".to_string(),
+        policies : vec![],
+        compliance_standards : vec![],
+        jurisdiction : "US".to_string(),
+        effective_date : "2024-01-01".to_string(),
+        review_schedule : "monthly".to_string(),
       },
-      audit_settings: AuditSettings {
-        enabled: true,
-        log_level: LogLevel::Standard,
-        retention_period: 90,
-        real_time_monitoring: false,
-        alert_thresholds: AlertThresholds {
-          violation_count: 5,
-          risk_score: 0.6,
-          time_window: 1800,
-          escalation_levels: vec![ "moderator".to_string() ],
+      audit_settings : AuditSettings {
+        enabled : true,
+        log_level : LogLevel::Standard,
+        retention_period : 90,
+        real_time_monitoring : false,
+        alert_thresholds : AlertThresholds {
+          violation_count : 5,
+          risk_score : 0.6,
+          time_window : 1800,
+          escalation_levels : vec![ "moderator".to_string() ],
         },
-        export_formats: vec![ "json".to_string() ],
+        export_formats : vec![ "json".to_string() ],
       },
-      created_at: "2024-01-01T10:00:00Z".to_string(),
-      updated_at: "2024-01-01T10:00:00Z".to_string(),
-      status: SafetyConfigStatus::Active,
+      created_at : "2024-01-01T10:00:00Z".to_string(),
+      updated_at : "2024-01-01T10:00:00Z".to_string(),
+      status : SafetyConfigStatus::Active,
     };
 
     // Test 3: Test with actual API call using enhanced safety settings
     let integration_request = GenerateContentRequest {
-      contents: vec![
+      contents : vec![
         Content {
-          role: "user".to_string(),
-          parts: vec![
+          role : "user".to_string(),
+          parts : vec![
             Part {
-              text: Some( "Please provide information about creating a safe online environment for communities.".to_string() ),
-              inline_data: None,
-              function_call: None,
-              function_response: None,
+              text : Some( "Please provide information about creating a safe online environment for communities.".to_string() ),
+              inline_data : None,
+              function_call : None,
+              function_response : None,
               ..Default::default()
             }
           ],
         }
       ],
-      tools: None,
-      tool_config: None,
-      safety_settings: Some( enhanced_safety_settings.clone() ),
-      system_instruction: None,
-      cached_content: None,
-      generation_config: Some( GenerationConfig {
-        temperature: Some( 0.7 ),
-        top_p: Some( 0.9 ),
-        top_k: Some( 40 ),
-        candidate_count: Some( 1 ),
-        max_output_tokens: Some( 800 ),
-        stop_sequences: None,
+      tools : None,
+      tool_config : None,
+      safety_settings : Some( enhanced_safety_settings.clone() ),
+      system_instruction : None,
+      cached_content : None,
+      generation_config : Some( GenerationConfig {
+        temperature : Some( 0.7 ),
+        top_p : Some( 0.9 ),
+        top_k : Some( 40 ),
+        candidate_count : Some( 1 ),
+        max_output_tokens : Some( 800 ),
+        stop_sequences : None,
       }),
     };
 
@@ -526,7 +526,7 @@
       // Standard safety ratings from API
       if let Some( safety_ratings ) = &candidate.safety_ratings
       {
-        println!( "  ✓ Standard safety ratings received: {} categories", safety_ratings.len() );
+        println!( "  ✓ Standard safety ratings received : {} categories", safety_ratings.len() );
 
         for rating in safety_ratings
         {
@@ -557,7 +557,7 @@
             }
           };
 
-          println!( "    - {}: {} -> Enhanced risk: {:.3}",
+          println!( "    - {}: {} -> Enhanced risk : {:.3}",
             rating.category, rating.probability, enhanced_risk );
 
           // Validate integration logic
@@ -570,7 +570,7 @@
       {
         if let Some( text ) = &part.text
         {
-          println!( "  ✓ Safe content generated: {} characters", text.len() );
+          println!( "  ✓ Safe content generated : {} characters", text.len() );
           assert!( text.len() > 100 ); // Should have substantial response
           assert!( text.to_lowercase().contains( "safe" ) || text.to_lowercase().contains( "community" ) );
         }
@@ -594,7 +594,7 @@
     assert_eq!( integration_rule.category, "HARM_CATEGORY_HARASSMENT" );
     assert!( integration_rule.metadata.contains_key( "integrates_with" ) );
 
-    println!( "  ✓ Integration validation complete: Enhanced safety with standard API compatibility" );
+    println!( "  ✓ Integration validation complete : Enhanced safety with standard API compatibility" );
 
     Ok( () )
   }

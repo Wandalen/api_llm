@@ -61,7 +61,7 @@ fn integration_sync_cached_content_creation()
 
   // Create a message with cache_control to enable prompt caching
   let system_prompt = vec![
-    the_module::SystemContent
+    the_module ::SystemContent
     {
       text : "You are a helpful assistant. This is a long system prompt that should be cached for efficiency.".to_string(),
       r#type : "text".to_string(),
@@ -89,7 +89,7 @@ fn integration_sync_cached_content_creation()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION: Cached content creation must work: {err}" ),
+    Err( err ) => panic!( "INTEGRATION: Cached content creation must work : {err}" ),
   };
 
   // Verify response is valid
@@ -97,11 +97,11 @@ fn integration_sync_cached_content_creation()
   assert!( response.usage.output_tokens > 0 );
 
   // Check cache statistics (first request should create cache)
-  // Note: cache_creation_input_tokens might be present in usage
+  // Note : cache_creation_input_tokens might be present in usage
   println!( "✅ Sync cached content creation test passed!" );
   println!( "   Message ID: {}", response.id );
-  println!( "   Input tokens: {}", response.usage.input_tokens );
-  println!( "   Output tokens: {}", response.usage.output_tokens );
+  println!( "   Input tokens : {}", response.usage.input_tokens );
+  println!( "   Output tokens : {}", response.usage.output_tokens );
 }
 
 #[ test ]
@@ -113,7 +113,7 @@ fn integration_sync_cache_hit_scenario()
     .expect( "INTEGRATION: Must have valid API key for cache hit test" );
 
   let system_prompt = vec![
-    the_module::SystemContent
+    the_module ::SystemContent
     {
       text : "You are a helpful assistant specialized in mathematics. This prompt should be cached.".to_string(),
       r#type : "text".to_string(),
@@ -142,7 +142,7 @@ fn integration_sync_cache_hit_scenario()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION: First request must work: {err}" ),
+    Err( err ) => panic!( "INTEGRATION: First request must work : {err}" ),
   };
 
   assert!( !response1.id.is_empty() );
@@ -168,7 +168,7 @@ fn integration_sync_cache_hit_scenario()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted on second request" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION: Second request must work: {err}" ),
+    Err( err ) => panic!( "INTEGRATION: Second request must work : {err}" ),
   };
 
   assert!( !response2.id.is_empty() );
@@ -189,7 +189,7 @@ fn integration_sync_cache_error_handling()
 
   // Create request with caching but invalid model
   let system_prompt = vec![
-    the_module::SystemContent
+    the_module ::SystemContent
     {
       text : "Test prompt".to_string(),
       r#type : "text".to_string(),
@@ -229,7 +229,7 @@ fn integration_sync_cached_content_cost_savings()
   let long_system = "You are an expert assistant. ".repeat( 50 );
 
   let system_prompt = vec![
-    the_module::SystemContent
+    the_module ::SystemContent
     {
       text : long_system,
       r#type : "text".to_string(),
@@ -257,7 +257,7 @@ fn integration_sync_cached_content_cost_savings()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION: Cost savings test must work: {err}" ),
+    Err( err ) => panic!( "INTEGRATION: Cost savings test must work : {err}" ),
   };
 
   // Verify response
@@ -265,6 +265,6 @@ fn integration_sync_cached_content_cost_savings()
   assert!( response.usage.input_tokens > 0 );
 
   println!( "✅ Sync cached content cost savings test passed!" );
-  println!( "   Input tokens processed: {}", response.usage.input_tokens );
-  println!( "   Output tokens: {}", response.usage.output_tokens );
+  println!( "   Input tokens processed : {}", response.usage.input_tokens );
+  println!( "   Output tokens : {}", response.usage.output_tokens );
 }

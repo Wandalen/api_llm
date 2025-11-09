@@ -7,14 +7,14 @@
 mod private {}
 
 #[ cfg( feature = "model-management" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   layer core;
   layer enhanced;
 }
 
 #[ cfg( not( feature = "model-management" ) ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   // Empty when model-management feature is disabled
 }

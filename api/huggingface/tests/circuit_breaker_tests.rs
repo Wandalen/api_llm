@@ -26,15 +26,15 @@
 
 use api_huggingface::{
   Client,
-  environment::HuggingFaceEnvironmentImpl,
-  providers::ChatMessage,
-  reliability::{CircuitBreaker, CircuitBreakerConfig, CircuitState},
+  environment ::HuggingFaceEnvironmentImpl,
+  providers ::ChatMessage,
+  reliability ::{CircuitBreaker, CircuitBreakerConfig, CircuitState},
   Secret,
 };
 use core::time::Duration;
 
 /// Helper to create a test client
-fn create_test_client() -> Client<HuggingFaceEnvironmentImpl > 
+fn create_test_client() -> Client< HuggingFaceEnvironmentImpl > 
 {
   let api_key = std::env::var( "HUGGINGFACE_API_KEY" )
   .or_else( |_| std::env::var( "INFERENCE_API_KEY" ))
@@ -71,7 +71,7 @@ async fn test_circuit_breaker_successful_request_keeps_closed()
   let result = circuit_breaker.execute( async {
   client.providers( ).chat_completion(
       "meta-llama/Llama-3.2-1B-Instruct",
-      vec![ChatMessage { role: "user".to_string( ), content: "test".to_string( ) } ],
+      vec![ChatMessage { role : "user".to_string( ), content : "test".to_string( ) } ],
       Some( 10 ),
       None,
       None,
@@ -101,7 +101,7 @@ async fn test_circuit_breaker_resets_failure_count_on_success()
   let _ = circuit_breaker.execute( async {
       client.providers( ).chat_completion(
   "invalid-model-xyz",
-  vec![ChatMessage { role: "user".to_string( ), content: "test".to_string( ) } ],
+  vec![ChatMessage { role : "user".to_string( ), content : "test".to_string( ) } ],
   Some( 10 ),
   None,
   None,
@@ -116,7 +116,7 @@ async fn test_circuit_breaker_resets_failure_count_on_success()
   let result = circuit_breaker.execute( async {
   client.providers( ).chat_completion(
       "meta-llama/Llama-3.2-1B-Instruct",
-      vec![ChatMessage { role: "user".to_string( ), content: "test".to_string( ) } ],
+      vec![ChatMessage { role : "user".to_string( ), content : "test".to_string( ) } ],
       Some( 10 ),
       None,
       None,
@@ -149,7 +149,7 @@ async fn test_circuit_breaker_opens_after_threshold_failures()
   let _ = circuit_breaker.execute( async {
       client.providers( ).chat_completion(
   "invalid-model-xyz",
-  vec![ChatMessage { role: "user".to_string( ), content: "test".to_string( ) } ],
+  vec![ChatMessage { role : "user".to_string( ), content : "test".to_string( ) } ],
   Some( 10 ),
   None,
   None,
@@ -184,7 +184,7 @@ async fn test_circuit_breaker_rejects_requests_when_open()
   let _ = circuit_breaker.execute( async {
       client.providers( ).chat_completion(
   "invalid-model-xyz",
-  vec![ChatMessage { role: "user".to_string( ), content: "test".to_string( ) } ],
+  vec![ChatMessage { role : "user".to_string( ), content : "test".to_string( ) } ],
   Some( 10 ),
   None,
   None,
@@ -198,7 +198,7 @@ async fn test_circuit_breaker_rejects_requests_when_open()
   let result = circuit_breaker.execute( async {
   client.providers( ).chat_completion(
       "meta-llama/Llama-3.2-1B-Instruct",
-      vec![ChatMessage { role: "user".to_string( ), content: "test".to_string( ) } ],
+      vec![ChatMessage { role : "user".to_string( ), content : "test".to_string( ) } ],
       Some( 10 ),
       None,
       None,
@@ -237,7 +237,7 @@ async fn test_circuit_breaker_transitions_to_half_open_after_timeout()
   let _ = circuit_breaker.execute( async {
       client.providers( ).chat_completion(
   "invalid-model-xyz",
-  vec![ChatMessage { role: "user".to_string( ), content: "test".to_string( ) } ],
+  vec![ChatMessage { role : "user".to_string( ), content : "test".to_string( ) } ],
   Some( 10 ),
   None,
   None,
@@ -248,13 +248,13 @@ async fn test_circuit_breaker_transitions_to_half_open_after_timeout()
   assert!( circuit_breaker.is_open( ).await );
 
   // Wait for timeout
-  tokio::time::sleep( Duration::from_millis( 600 )).await;
+  tokio ::time::sleep( Duration::from_millis( 600 )).await;
 
   // Execute a request - should transition to half-open
   let result = circuit_breaker.execute( async {
   client.providers( ).chat_completion(
       "meta-llama/Llama-3.2-1B-Instruct",
-      vec![ChatMessage { role: "user".to_string( ), content: "test".to_string( ) } ],
+      vec![ChatMessage { role : "user".to_string( ), content : "test".to_string( ) } ],
       Some( 10 ),
       None,
       None,
@@ -283,7 +283,7 @@ async fn test_circuit_breaker_closes_after_success_threshold_in_half_open()
   let _ = circuit_breaker.execute( async {
       client.providers( ).chat_completion(
   "invalid-model-xyz",
-  vec![ChatMessage { role: "user".to_string( ), content: "test".to_string( ) } ],
+  vec![ChatMessage { role : "user".to_string( ), content : "test".to_string( ) } ],
   Some( 10 ),
   None,
   None,
@@ -294,7 +294,7 @@ async fn test_circuit_breaker_closes_after_success_threshold_in_half_open()
   assert!( circuit_breaker.is_open( ).await );
 
   // Wait for timeout
-  tokio::time::sleep( Duration::from_millis( 600 )).await;
+  tokio ::time::sleep( Duration::from_millis( 600 )).await;
 
   // Execute success_threshold successful requests
   for _ in 0..2
@@ -302,7 +302,7 @@ async fn test_circuit_breaker_closes_after_success_threshold_in_half_open()
   let result = circuit_breaker.execute( async {
       client.providers( ).chat_completion(
   "meta-llama/Llama-3.2-1B-Instruct",
-  vec![ChatMessage { role: "user".to_string( ), content: "test".to_string( ) } ],
+  vec![ChatMessage { role : "user".to_string( ), content : "test".to_string( ) } ],
   Some( 10 ),
   None,
   None,
@@ -333,7 +333,7 @@ async fn test_circuit_breaker_reopens_on_failure_in_half_open()
   let _ = circuit_breaker.execute( async {
       client.providers( ).chat_completion(
   "invalid-model-xyz",
-  vec![ChatMessage { role: "user".to_string( ), content: "test".to_string( ) } ],
+  vec![ChatMessage { role : "user".to_string( ), content : "test".to_string( ) } ],
   Some( 10 ),
   None,
   None,
@@ -344,13 +344,13 @@ async fn test_circuit_breaker_reopens_on_failure_in_half_open()
   assert!( circuit_breaker.is_open( ).await );
 
   // Wait for timeout
-  tokio::time::sleep( Duration::from_millis( 600 )).await;
+  tokio ::time::sleep( Duration::from_millis( 600 )).await;
 
   // One success ( transitions to half-open )
   let _ = circuit_breaker.execute( async {
   client.providers( ).chat_completion(
       "meta-llama/Llama-3.2-1B-Instruct",
-      vec![ChatMessage { role: "user".to_string( ), content: "test".to_string( ) } ],
+      vec![ChatMessage { role : "user".to_string( ), content : "test".to_string( ) } ],
       Some( 10 ),
       None,
       None,
@@ -361,7 +361,7 @@ async fn test_circuit_breaker_reopens_on_failure_in_half_open()
   let _ = circuit_breaker.execute( async {
   client.providers( ).chat_completion(
       "invalid-model-xyz",
-      vec![ChatMessage { role: "user".to_string( ), content: "test".to_string( ) } ],
+      vec![ChatMessage { role : "user".to_string( ), content : "test".to_string( ) } ],
       Some( 10 ),
       None,
       None,
@@ -394,7 +394,7 @@ async fn test_circuit_breaker_reset_clears_all_state()
   let _ = circuit_breaker.execute( async {
       client.providers( ).chat_completion(
   "invalid-model-xyz",
-  vec![ChatMessage { role: "user".to_string( ), content: "test".to_string( ) } ],
+  vec![ChatMessage { role : "user".to_string( ), content : "test".to_string( ) } ],
   Some( 10 ),
   None,
   None,
@@ -417,7 +417,7 @@ async fn test_circuit_breaker_reset_clears_all_state()
   let result = circuit_breaker.execute( async {
   client.providers( ).chat_completion(
       "meta-llama/Llama-3.2-1B-Instruct",
-      vec![ChatMessage { role: "user".to_string( ), content: "test".to_string( ) } ],
+      vec![ChatMessage { role : "user".to_string( ), content : "test".to_string( ) } ],
       Some( 10 ),
       None,
       None,

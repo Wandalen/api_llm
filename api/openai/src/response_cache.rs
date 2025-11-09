@@ -13,18 +13,18 @@ mod private
 {
   use crate::
   {
-    environment::{ EnvironmentInterface, OpenaiEnvironment },
-    error::{ OpenAIError, Result },
+    environment ::{ EnvironmentInterface, OpenaiEnvironment },
+    error ::{ OpenAIError, Result },
   };
   use std::
   {
-    collections::HashMap,
-    sync::Arc,
+    collections ::HashMap,
+    sync ::Arc,
   };
   use core::
   {
-    time::Duration,
-    hash::Hash,
+    time ::Duration,
+    hash ::Hash,
   };
   use std::time::Instant;
   use tokio::sync::RwLock;
@@ -36,17 +36,17 @@ mod private
   pub struct CacheConfig
   {
     /// Maximum number of cached responses
-    pub max_entries: usize,
+    pub max_entries : usize,
     /// Default TTL for cached responses
-    pub default_ttl: Duration,
+    pub default_ttl : Duration,
     /// Maximum size of cached response data in bytes
-    pub max_response_size: usize,
+    pub max_response_size : usize,
     /// Whether to enable cache compression
-    pub enable_compression: bool,
+    pub enable_compression : bool,
     /// Whether to cache error responses
-    pub cache_errors: bool,
+    pub cache_errors : bool,
     /// Cleanup interval for expired entries
-    pub cleanup_interval: Duration,
+    pub cleanup_interval : Duration,
   }
 
   impl Default for CacheConfig
@@ -56,12 +56,12 @@ mod private
     {
       Self
       {
-        max_entries: 1000,
-        default_ttl: Duration::from_secs( 300 ), // 5 minutes
-        max_response_size: 1024 * 1024, // 1MB
-        enable_compression: true,
-        cache_errors: false,
-        cleanup_interval: Duration::from_secs( 60 ), // 1 minute
+        max_entries : 1000,
+        default_ttl : Duration::from_secs( 300 ), // 5 minutes
+        max_response_size : 1024 * 1024, // 1MB
+        enable_compression : true,
+        cache_errors : false,
+        cleanup_interval : Duration::from_secs( 60 ), // 1 minute
       }
     }
   }
@@ -71,19 +71,19 @@ mod private
   pub struct CacheEntry
   {
     /// Cached response data
-    pub data: Vec< u8 >,
+    pub data : Vec< u8 >,
     /// When this entry was created
-    pub created_at: Instant,
+    pub created_at : Instant,
     /// TTL for this specific entry
-    pub ttl: Duration,
+    pub ttl : Duration,
     /// Size of the cached data in bytes
-    pub size_bytes: usize,
+    pub size_bytes : usize,
     /// Number of times this entry has been accessed
-    pub hit_count: u64,
+    pub hit_count : u64,
     /// Request method that generated this cache entry
-    pub method: String,
+    pub method : String,
     /// Request path that generated this cache entry
-    pub path: String,
+    pub path : String,
   }
 
   impl CacheEntry
@@ -109,13 +109,13 @@ mod private
   pub struct CacheKey
   {
     /// Request method (GET, POST, etc.)
-    pub method: String,
+    pub method : String,
     /// Request path
-    pub path: String,
+    pub path : String,
     /// Hash of request body (if any)
-    pub body_hash: Option< String >,
+    pub body_hash : Option< String >,
     /// Hash of query parameters
-    pub query_hash: Option< String >,
+    pub query_hash : Option< String >,
   }
 
   impl CacheKey
@@ -123,15 +123,15 @@ mod private
     /// Create a new cache key from request components
     #[ inline ]
     #[ must_use ]
-    pub fn new( method: &str, path: &str, body: Option< &[u8] >, query: Option< &str > ) -> Self
+    pub fn new( method : &str, path : &str, body : Option< &[u8] >, query : Option< &str > ) -> Self
     {
       let body_hash = body.map( Self::hash_bytes );
       let query_hash = query.map( Self::hash_string );
 
       Self
       {
-        method: method.to_uppercase(),
-        path: path.to_string(),
+        method : method.to_uppercase(),
+        path : path.to_string(),
         body_hash,
         query_hash,
       }
@@ -160,7 +160,7 @@ mod private
     }
 
     /// Hash bytes using SHA256
-    fn hash_bytes( data: &[u8] ) -> String
+    fn hash_bytes( data : &[u8] ) -> String
     {
       let mut hasher = Sha256::new();
       hasher.update( data );
@@ -168,7 +168,7 @@ mod private
     }
 
     /// Hash string using SHA256
-    fn hash_string( data: &str ) -> String
+    fn hash_string( data : &str ) -> String
     {
       Self::hash_bytes( data.as_bytes() )
     }
@@ -177,7 +177,7 @@ mod private
   impl core::fmt::Display for CacheKey
   {
     #[ inline ]
-    fn fmt( &self, f: &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result
+    fn fmt( &self, f : &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result
     {
       write!( f, "{}", self.to_cache_key() )
     }
@@ -188,23 +188,23 @@ mod private
   pub struct CacheStatistics
   {
     /// Total number of cache requests
-    pub total_requests: u64,
+    pub total_requests : u64,
     /// Number of cache hits
-    pub cache_hits: u64,
+    pub cache_hits : u64,
     /// Number of cache misses
-    pub cache_misses: u64,
+    pub cache_misses : u64,
     /// Cache hit ratio (0.0 to 1.0)
-    pub hit_ratio: f64,
+    pub hit_ratio : f64,
     /// Current number of cached entries
-    pub current_entries: usize,
+    pub current_entries : usize,
     /// Total size of cached data in bytes
-    pub total_cached_bytes: usize,
+    pub total_cached_bytes : usize,
     /// Average TTL of cached entries
-    pub average_ttl_seconds: f64,
+    pub average_ttl_seconds : f64,
     /// Number of expired entries cleaned up
-    pub expired_entries_cleaned: u64,
+    pub expired_entries_cleaned : u64,
     /// Average response size
-    pub average_response_size: f64,
+    pub average_response_size : f64,
   }
 
   /// Advanced response cache with TTL and intelligent management
@@ -212,13 +212,13 @@ mod private
   pub struct ResponseCache
   {
     /// Cache storage
-    cache: Arc< RwLock< HashMap<  String, CacheEntry  > > >,
+    cache : Arc< RwLock< HashMap<  String, CacheEntry  > > >,
     /// Cache configuration
-    config: CacheConfig,
+    config : CacheConfig,
     /// Cache statistics
-    stats: Arc< RwLock< CacheStatistics > >,
+    stats : Arc< RwLock< CacheStatistics > >,
     /// Background cleanup task handle
-    cleanup_handle: Option< tokio::task::JoinHandle< () > >,
+    cleanup_handle : Option< tokio::task::JoinHandle< () > >,
   }
 
   impl ResponseCache
@@ -234,20 +234,20 @@ mod private
     /// Create a new response cache with custom configuration
     #[ inline ]
     #[ must_use ]
-    pub fn with_config( config: CacheConfig ) -> Self
+    pub fn with_config( config : CacheConfig ) -> Self
     {
       let cache = Arc::new( RwLock::new( HashMap::new() ) );
       let stats = Arc::new( RwLock::new( CacheStatistics
       {
-        total_requests: 0,
-        cache_hits: 0,
-        cache_misses: 0,
-        hit_ratio: 0.0,
-        current_entries: 0,
-        total_cached_bytes: 0,
-        average_ttl_seconds: config.default_ttl.as_secs_f64(),
-        expired_entries_cleaned: 0,
-        average_response_size: 0.0,
+        total_requests : 0,
+        cache_hits : 0,
+        cache_misses : 0,
+        hit_ratio : 0.0,
+        current_entries : 0,
+        total_cached_bytes : 0,
+        average_ttl_seconds : config.default_ttl.as_secs_f64(),
+        expired_entries_cleaned : 0,
+        average_response_size : 0.0,
       } ) );
 
       let mut instance = Self
@@ -255,7 +255,7 @@ mod private
         cache,
         config,
         stats,
-        cleanup_handle: None,
+        cleanup_handle : None,
       };
 
       // Start background cleanup if cleanup interval is configured
@@ -269,7 +269,7 @@ mod private
 
     /// Get cached response if available and not expired
     #[ inline ]
-    pub async fn get( &self, key: &CacheKey ) -> Option< Vec< u8 > >
+    pub async fn get( &self, key : &CacheKey ) -> Option< Vec< u8 > >
     {
       let key_str = key.to_cache_key();
       let mut cache = self.cache.write().await;
@@ -304,7 +304,7 @@ mod private
     ///
     /// Returns an error if the response data is too large for caching.
     #[ inline ]
-    pub async fn put( &self, key: &CacheKey, data: Vec< u8 >, ttl: Option< Duration > ) -> Result< () >
+    pub async fn put( &self, key : &CacheKey, data : Vec< u8 >, ttl : Option< Duration > ) -> Result< () >
     {
       let data_size = data.len();
 
@@ -312,7 +312,7 @@ mod private
       if data_size > self.config.max_response_size
       {
         return Err( OpenAIError::Internal( format!(
-          "Response too large for caching: {} bytes (max: {})",
+          "Response too large for caching : {} bytes (max : {})",
           data_size,
           self.config.max_response_size
         ) ).into() );
@@ -324,12 +324,12 @@ mod private
       let entry = CacheEntry
       {
         data,
-        created_at: Instant::now(),
+        created_at : Instant::now(),
         ttl,
-        size_bytes: data_size,
-        hit_count: 0,
-        method: key.method.clone(),
-        path: key.path.clone(),
+        size_bytes : data_size,
+        hit_count : 0,
+        method : key.method.clone(),
+        path : key.path.clone(),
       };
 
       let mut cache = self.cache.write().await;
@@ -431,7 +431,7 @@ mod private
     }
 
     /// Evict the oldest entry to make room for new ones
-    fn evict_oldest_entry( cache: &mut HashMap<  String, CacheEntry  >, stats: &mut CacheStatistics )
+    fn evict_oldest_entry( cache : &mut HashMap<  String, CacheEntry  >, stats : &mut CacheStatistics )
     {
       if let Some( ( oldest_key, oldest_entry ) ) = cache.iter()
         .min_by_key( | ( _, entry ) | entry.created_at )
@@ -462,11 +462,11 @@ mod private
     E: OpenaiEnvironment + EnvironmentInterface + Send + Sync + 'static,
   {
     /// Base client for actual HTTP requests
-    client: crate::client::Client< E >,
+    client : crate::client::Client< E >,
     /// Response cache instance
-    cache: ResponseCache,
+    cache : ResponseCache,
     /// Cache configuration
-    config: CacheConfig,
+    config : CacheConfig,
   }
 
   impl< E > CachedClient< E >
@@ -475,14 +475,14 @@ mod private
   {
     /// Create a new cached client with default cache configuration
     #[ inline ]
-    pub fn new( client: crate::client::Client< E > ) -> Self
+    pub fn new( client : crate::client::Client< E > ) -> Self
     {
       Self::with_cache_config( client, CacheConfig::default() )
     }
 
     /// Create a new cached client with custom cache configuration
     #[ inline ]
-    pub fn with_cache_config( client: crate::client::Client< E >, config: CacheConfig ) -> Self
+    pub fn with_cache_config( client : crate::client::Client< E >, config : CacheConfig ) -> Self
     {
       let cache = ResponseCache::with_config( config.clone() );
       Self
@@ -499,7 +499,7 @@ mod private
     ///
     /// Returns an error if the request fails or if response deserialization fails.
     #[ inline ]
-    pub async fn get_cached< T >( &self, path: &str, ttl: Option< Duration > ) -> Result< T >
+    pub async fn get_cached< T >( &self, path : &str, ttl : Option< Duration > ) -> Result< T >
     where
       T: serde::de::DeserializeOwned + serde::Serialize,
     {
@@ -508,13 +508,13 @@ mod private
       // Try cache first
       if let Some( cached_data ) = self.cache.get( &cache_key ).await
       {
-        let result: T = serde_json::from_slice( &cached_data )
-          .map_err( | e | OpenAIError::Internal( format!( "Failed to deserialize cached response: {e}" ) ) )?;
+        let result : T = serde_json::from_slice( &cached_data )
+          .map_err( | e | OpenAIError::Internal( format!( "Failed to deserialize cached response : {e}" ) ) )?;
         return Ok( result );
       }
 
       // Cache miss - make actual request
-      let response: T = self.client.get( path ).await?;
+      let response : T = self.client.get( path ).await?;
 
       // Cache the response
       if let Ok( serialized ) = serde_json::to_vec( &response )
@@ -531,26 +531,26 @@ mod private
     ///
     /// Returns an error if serialization fails, the request fails, or response deserialization fails.
     #[ inline ]
-    pub async fn post_cached< I, O >( &self, path: &str, body: &I, ttl: Option< Duration > ) -> Result< O >
+    pub async fn post_cached< I, O >( &self, path : &str, body : &I, ttl : Option< Duration > ) -> Result< O >
     where
       I: serde::Serialize + Send + Sync,
       O: serde::de::DeserializeOwned + serde::Serialize,
     {
       let body_bytes = serde_json::to_vec( body )
-        .map_err( | e | OpenAIError::Internal( format!( "Failed to serialize request body: {e}" ) ) )?;
+        .map_err( | e | OpenAIError::Internal( format!( "Failed to serialize request body : {e}" ) ) )?;
 
       let cache_key = CacheKey::new( "POST", path, Some( &body_bytes ), None );
 
       // Try cache first (only for cacheable POST requests)
       if let Some( cached_data ) = self.cache.get( &cache_key ).await
       {
-        let result: O = serde_json::from_slice( &cached_data )
-          .map_err( | e | OpenAIError::Internal( format!( "Failed to deserialize cached response: {e}" ) ) )?;
+        let result : O = serde_json::from_slice( &cached_data )
+          .map_err( | e | OpenAIError::Internal( format!( "Failed to deserialize cached response : {e}" ) ) )?;
         return Ok( result );
       }
 
       // Cache miss - make actual request
-      let response: O = self.client.post( path, body ).await?;
+      let response : O = self.client.post( path, body ).await?;
 
       // Cache the response if TTL is specified
       if ttl.is_some()
@@ -623,13 +623,13 @@ mod private
     {
       let mut entry = CacheEntry
       {
-        data: vec![ 1, 2, 3 ],
-        created_at: Instant::now().checked_sub( Duration::from_secs( 10 ) ).unwrap(),
-        ttl: Duration::from_secs( 5 ),
-        size_bytes: 3,
-        hit_count: 0,
-        method: "GET".to_string(),
-        path: "/test".to_string(),
+        data : vec![ 1, 2, 3 ],
+        created_at : Instant::now().checked_sub( Duration::from_secs( 10 ) ).unwrap(),
+        ttl : Duration::from_secs( 5 ),
+        size_bytes : 3,
+        hit_count : 0,
+        method : "GET".to_string(),
+        path : "/test".to_string(),
       };
 
       assert!( entry.is_expired() );
@@ -671,7 +671,7 @@ mod private
       cache.put( &key, data, Some( Duration::from_millis( 1 ) ) ).await.unwrap();
 
       // Wait for expiration
-      tokio::time::sleep( Duration::from_millis( 10 ) ).await;
+      tokio ::time::sleep( Duration::from_millis( 10 ) ).await;
 
       // Should be cache miss due to expiration
       assert!( cache.get( &key ).await.is_none() );

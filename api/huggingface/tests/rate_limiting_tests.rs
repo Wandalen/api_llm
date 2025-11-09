@@ -26,16 +26,16 @@
 
 use api_huggingface::{
   Client,
-  environment::HuggingFaceEnvironmentImpl,
-  providers::ChatMessage,
-  reliability::{RateLimiter, RateLimiterConfig},
+  environment ::HuggingFaceEnvironmentImpl,
+  providers ::ChatMessage,
+  reliability ::{RateLimiter, RateLimiterConfig},
   Secret,
 };
 use core::time::Duration;
 use std::time::Instant;
 
 /// Helper to create a test client
-fn create_test_client() -> Client<HuggingFaceEnvironmentImpl > 
+fn create_test_client() -> Client< HuggingFaceEnvironmentImpl > 
 {
   let api_key = std::env::var( "HUGGINGFACE_API_KEY" )
   .or_else( |_| std::env::var( "INFERENCE_API_KEY" ))
@@ -137,7 +137,7 @@ async fn test_rate_limiter_token_refill()
   assert!( limiter.try_acquire( ).await.is_err( ));
 
   // Wait for token refill ( 100ms = 1 token )
-  tokio::time::sleep( Duration::from_millis( 150 )).await;
+  tokio ::time::sleep( Duration::from_millis( 150 )).await;
 
   // Should have at least one token now
   assert!( limiter.try_acquire( ).await.is_ok( ));
@@ -161,7 +161,7 @@ async fn test_rate_limiter_gradual_refill()
   }
 
   // Wait for 500ms ( should refill ~5 tokens )
-  tokio::time::sleep( Duration::from_millis( 500 )).await;
+  tokio ::time::sleep( Duration::from_millis( 500 )).await;
 
   // Should be able to consume ~5 tokens
   let mut count = 0;
@@ -223,14 +223,14 @@ async fn test_rate_limiter_minute_limit_after_second_refill()
   }
 
   // Wait for per-second refill
-  tokio::time::sleep( Duration::from_secs( 1 )).await;
+  tokio ::time::sleep( Duration::from_secs( 1 )).await;
 
   // Consume 2 more ( now at 5 total for minute )
   limiter.try_acquire( ).await.unwrap( );
   limiter.try_acquire( ).await.unwrap( );
 
   // Wait for per-second refill again
-  tokio::time::sleep( Duration::from_secs( 1 )).await;
+  tokio ::time::sleep( Duration::from_secs( 1 )).await;
 
   // Try another - should be blocked by per-minute limit
   assert!( limiter.try_acquire( ).await.is_err( ));
@@ -347,7 +347,7 @@ async fn test_rate_limiter_available_tokens_tracks_refill()
   assert_eq!( tokens_before.per_second, Some( 0 ));
 
   // Wait for refill
-  tokio::time::sleep( Duration::from_millis( 200 )).await;
+  tokio ::time::sleep( Duration::from_millis( 200 )).await;
 
   let tokens_after = limiter.available_tokens( ).await;
   assert!( tokens_after.per_second.unwrap( ) >= 1 );
@@ -616,7 +616,7 @@ async fn test_rate_limiter_very_low_limit()
   assert!( limiter.try_acquire( ).await.is_err( ));
 
   // Wait for refill
-  tokio::time::sleep( Duration::from_secs( 1 )).await;
+  tokio ::time::sleep( Duration::from_secs( 1 )).await;
 
   // Should succeed again
   assert!( limiter.try_acquire( ).await.is_ok( ));

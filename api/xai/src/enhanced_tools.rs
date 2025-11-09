@@ -38,7 +38,7 @@ mod private
   //!
   //! ## Independent Error Handling
   //!
-  //! Each tool result is wrapped in `Result<ToolResult, Box<dyn Error>>` rather than
+  //! Each tool result is wrapped in `Result< ToolResult, Box< dyn Error > >` rather than
   //! failing fast on the first error. This design choice:
   //!
   //! 1. **Maximizes Useful Work**: With parallel execution, some tools may succeed
@@ -53,7 +53,7 @@ mod private
   //!
   //! ## Generic Executor Pattern
   //!
-  //! Both functions accept a generic `Exec: Fn(ToolCall) -> Future<Output = Result<...>>`
+  //! Both functions accept a generic `Exec : Fn(ToolCall) -> Future< Output = Result<...> >`
   //! instead of requiring a specific trait. This provides maximum flexibility:
   //!
   //! - **Closures**: Can capture context for tool execution
@@ -141,7 +141,7 @@ mod private
     ///
     /// let result = ToolResult::from_error(
     ///   "call_123".to_string(),
-    ///   "Function execution failed: invalid parameters"
+    ///   "Function execution failed : invalid parameters"
     /// );
     /// ```
     pub fn from_error( tool_call_id : String, error : &str ) -> Self
@@ -193,14 +193,14 @@ mod private
   ///       Ok( ToolResult::new( call.id, &result ) )
   ///     }
   ///     _ => {
-  ///       Err( format!( "Unknown function: {name}", name = call.function.name ).into() )
+  ///       Err( format!( "Unknown function : {name}", name = call.function.name ).into() )
   ///     }
   ///   }
   /// } ).await;
   /// # Ok( () )
   /// # }
   /// ```
-  pub async fn execute_tool_calls_parallel<F, Exec>(
+  pub async fn execute_tool_calls_parallel< F, Exec >(
     tool_calls : Vec< ToolCall >,
     executor : Exec
   ) -> Vec< Result< ToolResult, Box< dyn std::error::Error + Send + Sync > > >
@@ -225,7 +225,7 @@ mod private
       match handle.await
       {
         Ok( result ) => results.push( result ),
-        Err( e ) => results.push( Err( format!( "Task join error: {e}" ).into() ) ),
+        Err( e ) => results.push( Err( format!( "Task join error : {e}" ).into() ) ),
       }
     }
 
@@ -267,14 +267,14 @@ mod private
   ///       Ok( ToolResult::new( call.id, &result ) )
   ///     }
   ///     _ => {
-  ///       Err( format!( "Unknown function: {name}", name = call.function.name ).into() )
+  ///       Err( format!( "Unknown function : {name}", name = call.function.name ).into() )
   ///     }
   ///   }
   /// } ).await;
   /// # Ok( () )
   /// # }
   /// ```
-  pub async fn execute_tool_calls_sequential<F, Exec>(
+  pub async fn execute_tool_calls_sequential< F, Exec >(
     tool_calls : Vec< ToolCall >,
     executor : Exec
   ) -> Vec< Result< ToolResult, Box< dyn std::error::Error + Send + Sync > > >
@@ -294,7 +294,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

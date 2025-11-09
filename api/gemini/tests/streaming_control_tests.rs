@@ -53,7 +53,7 @@ mod integration_tests {
     let test_data = vec![ "data1", "data2", "data3", "data4", "data5" ];
     let delayed_stream = stream::iter( test_data.clone().into_iter().map( |s| Ok( s.to_string() ) ) )
       .then( |item| async move {
-        tokio::time::sleep( Duration::from_millis( 50 ) ).await;
+        tokio ::time::sleep( Duration::from_millis( 50 ) ).await;
         item
       });
     let boxed_stream = Box::pin( delayed_stream );
@@ -76,7 +76,7 @@ mod integration_tests {
     controllable_stream.pause().await?;
 
     // Give the stream management task time to process the pause command
-    tokio::time::sleep( Duration::from_millis( 50 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 50 ) ).await;
     assert_eq!( controllable_stream.state(), StreamState::Paused );
     assert!( controllable_stream.is_paused() );
 
@@ -88,7 +88,7 @@ mod integration_tests {
     controllable_stream.resume().await?;
 
     // Give the stream management task time to process the resume command
-    tokio::time::sleep( Duration::from_millis( 50 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 50 ) ).await;
     assert_eq!( controllable_stream.state(), StreamState::Running );
     assert!( !controllable_stream.is_paused() );
 
@@ -117,7 +117,7 @@ mod integration_tests {
     let test_data = vec![ "item1", "item2", "item3", "item4" ];
     let delayed_stream = stream::iter( test_data.into_iter().map( |s| Ok( s.to_string() ) ) )
       .then( |item| async move {
-        tokio::time::sleep( Duration::from_millis( 50 ) ).await;
+        tokio ::time::sleep( Duration::from_millis( 50 ) ).await;
         item
       });
     let boxed_stream = Box::pin( delayed_stream );
@@ -138,7 +138,7 @@ mod integration_tests {
     controllable_stream.cancel().await?;
 
     // Give the stream management task time to process the cancellation
-    tokio::time::sleep( Duration::from_millis( 100 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 100 ) ).await;
     assert_eq!( controllable_stream.state(), StreamState::Cancelled );
     assert!( controllable_stream.is_cancelled() );
 
@@ -175,10 +175,10 @@ mod integration_tests {
 
     // Create a test stream with more data to test buffering
     use futures::stream::StreamExt;
-    let test_data: Vec< String > = ( 1..=10 ).map( |i| format!( "buffer_test_{}", i ) ).collect();
+    let test_data : Vec< String > = ( 1..=10 ).map( |i| format!( "buffer_test_{}", i ) ).collect();
     let delayed_stream = stream::iter( test_data.clone().into_iter().map( |s| Ok( s ) ) )
       .then( |item| async move {
-        tokio::time::sleep( Duration::from_millis( 30 ) ).await;
+        tokio ::time::sleep( Duration::from_millis( 30 ) ).await;
         item
       });
     let boxed_stream = Box::pin( delayed_stream );
@@ -198,15 +198,15 @@ mod integration_tests {
 
     // Pause the stream
     controllable_stream.pause().await?;
-    tokio::time::sleep( Duration::from_millis( 100 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 100 ) ).await;
     assert_eq!( controllable_stream.state(), StreamState::Paused );
 
     // Let some time pass for buffering to potentially occur
-    tokio::time::sleep( Duration::from_millis( 200 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 200 ) ).await;
 
     // Resume and check buffer flush
     let resume_result = controllable_stream.resume().await;
-    tokio::time::sleep( Duration::from_millis( 100 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 100 ) ).await;
 
     // Check if resume was successful or if stream was cancelled due to buffer overflow
     let current_state = controllable_stream.state();
@@ -223,14 +223,14 @@ mod integration_tests {
         return Ok( () );
       },
       ( Err( _ ), state ) => {
-        println!( "⚠ Resume failed for stream in state: {:?}", state );
+        println!( "⚠ Resume failed for stream in state : {:?}", state );
         let metrics = controllable_stream.get_metrics();
         assert!( metrics.pause_count >= 1 );
         println!( "✓ Stream pause with buffering test completed with expected failure" );
         return Ok( () );
       },
       ( Ok( () ), state ) => {
-        println!( "⚠ Resume succeeded but stream in unexpected state: {:?}", state );
+        println!( "⚠ Resume succeeded but stream in unexpected state : {:?}", state );
         return Ok( () );
       }
     }
@@ -241,7 +241,7 @@ mod integration_tests {
     while let Ok( Some( Ok( data ) ) ) = timeout( Duration::from_millis( 500 ), controllable_stream.next() ).await
     {
       received_count += 1;
-      println!( "Received: {}", data );
+      println!( "Received : {}", data );
 
       if received_count >= 5 { // Get a few more items
         break;
@@ -266,10 +266,10 @@ mod integration_tests {
 
     // Create a test stream
     use futures::stream::StreamExt;
-    let test_data: Vec< String > = ( 1..=20 ).map( |i| format!( "concurrent_{}", i ) ).collect();
+    let test_data : Vec< String > = ( 1..=20 ).map( |i| format!( "concurrent_{}", i ) ).collect();
     let delayed_stream = stream::iter( test_data.into_iter().map( |s| Ok( s ) ) )
       .then( |item| async move {
-        tokio::time::sleep( Duration::from_millis( 40 ) ).await;
+        tokio ::time::sleep( Duration::from_millis( 40 ) ).await;
         item
       });
     let boxed_stream = Box::pin( delayed_stream );
@@ -294,12 +294,12 @@ mod integration_tests {
 
       // Pause
       controllable_stream.pause().await?;
-      tokio::time::sleep( Duration::from_millis( 50 ) ).await;
+      tokio ::time::sleep( Duration::from_millis( 50 ) ).await;
       assert_eq!( controllable_stream.state(), StreamState::Paused );
 
       // Resume
       controllable_stream.resume().await?;
-      tokio::time::sleep( Duration::from_millis( 50 ) ).await;
+      tokio ::time::sleep( Duration::from_millis( 50 ) ).await;
       assert_eq!( controllable_stream.state(), StreamState::Running );
 
       // Try to get some data
@@ -356,7 +356,7 @@ mod integration_tests {
     assert!( error_result.unwrap().is_err() );
 
     // Give time for state to update
-    tokio::time::sleep( Duration::from_millis( 100 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 100 ) ).await;
     assert_eq!( controllable_stream.state(), StreamState::Error );
 
     // Verify metrics
@@ -379,7 +379,7 @@ mod integration_tests {
     let test_data = vec![ "timeout_test_1", "timeout_test_2", "timeout_test_3" ];
     let delayed_stream = stream::iter( test_data.into_iter().map( |s| Ok( s.to_string() ) ) )
       .then( |item| async move {
-        tokio::time::sleep( Duration::from_millis( 100 ) ).await;
+        tokio ::time::sleep( Duration::from_millis( 100 ) ).await;
         item
       });
     let boxed_stream = Box::pin( delayed_stream );
@@ -398,11 +398,11 @@ mod integration_tests {
 
     // Pause the stream
     controllable_stream.pause().await?;
-    tokio::time::sleep( Duration::from_millis( 50 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 50 ) ).await;
     assert_eq!( controllable_stream.state(), StreamState::Paused );
 
     // Wait for timeout to occur
-    tokio::time::sleep( Duration::from_millis( 300 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 300 ) ).await;
 
     // Check if state changed to TimedOut
     let final_state = controllable_stream.state();
@@ -411,7 +411,7 @@ mod integration_tests {
       println!( "✓ Stream properly timed out during pause" );
       assert!( controllable_stream.is_cancelled() ); // TimedOut is considered cancelled
     } else {
-      println!( "⚠ Stream didn't timeout as expected, state: {:?}", final_state );
+      println!( "⚠ Stream didn't timeout as expected, state : {:?}", final_state );
       // This might happen in test environment where timing is unpredictable
     }
 
@@ -434,7 +434,7 @@ mod integration_tests {
     let test_data = vec![ "state_test_1", "state_test_2", "state_test_3" ];
     let delayed_stream = stream::iter( test_data.into_iter().map( |s| Ok( s.to_string() ) ) )
       .then( |item| async move {
-        tokio::time::sleep( Duration::from_millis( 100 ) ).await;
+        tokio ::time::sleep( Duration::from_millis( 100 ) ).await;
         item
       });
     let boxed_stream = Box::pin( delayed_stream );
@@ -451,10 +451,10 @@ mod integration_tests {
 
       // Pause the stream if still running
       controllable_stream.pause().await?;
-      tokio::time::sleep( Duration::from_millis( 100 ) ).await;
+      tokio ::time::sleep( Duration::from_millis( 100 ) ).await;
       assert_eq!( controllable_stream.state(), StreamState::Paused );
     } else {
-      println!( "⚠ Stream completed before we could test pause, state: {:?}", controllable_stream.state() );
+      println!( "⚠ Stream completed before we could test pause, state : {:?}", controllable_stream.state() );
       return Ok( () ); // Exit gracefully if stream completed
     }
 
@@ -465,7 +465,7 @@ mod integration_tests {
 
     // Cancel the stream
     controllable_stream.cancel().await?;
-    tokio::time::sleep( Duration::from_millis( 50 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 50 ) ).await;
     assert_eq!( controllable_stream.state(), StreamState::Cancelled );
 
     // Test operations on cancelled stream (should fail)
@@ -566,17 +566,17 @@ mod unit_tests {
     use std::sync::atomic::{ AtomicU64, AtomicUsize };
 
     let metrics = StreamMetrics {
-      total_chunks: AtomicU64::new( 15 ),
-      buffer_size: AtomicUsize::new( 1024 ),
-      bytes_received: AtomicU64::new( 2048 ),
-      pause_count: AtomicU64::new( 3 ),
-      resume_count: AtomicU64::new( 3 ),
-      state_changes: AtomicU64::new( 8 ),
-      peak_buffer_size: AtomicUsize::new( 1200 ),
-      avg_control_response_time_us: AtomicU64::new( 50 ),
-      control_operations: AtomicU64::new( 6 ),
-      buffer_overflows: AtomicU64::new( 0 ),
-      items_sent: AtomicU64::new( 12 ),
+      total_chunks : AtomicU64::new( 15 ),
+      buffer_size : AtomicUsize::new( 1024 ),
+      bytes_received : AtomicU64::new( 2048 ),
+      pause_count : AtomicU64::new( 3 ),
+      resume_count : AtomicU64::new( 3 ),
+      state_changes : AtomicU64::new( 8 ),
+      peak_buffer_size : AtomicUsize::new( 1200 ),
+      avg_control_response_time_us : AtomicU64::new( 50 ),
+      control_operations : AtomicU64::new( 6 ),
+      buffer_overflows : AtomicU64::new( 0 ),
+      items_sent : AtomicU64::new( 12 ),
     };
 
     let snapshot = metrics.snapshot();

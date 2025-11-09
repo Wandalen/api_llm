@@ -4,14 +4,14 @@ mod private
 {
 use crate::
 {
-  client::Client,
-  components::
+  client ::Client,
+  components ::
   {
-  embeddings::{ EmbeddingRequest, EmbeddingResponse, EmbeddingOptions },
+  embeddings ::{ EmbeddingRequest, EmbeddingResponse, EmbeddingOptions },
   // common::TaskType,
   },
-  error::Result,
-  validation::{ validate_input_text, validate_model_identifier, validate_batch_inputs },
+  error ::Result,
+  validation ::{ validate_input_text, validate_model_identifier, validate_batch_inputs },
 };
 
 #[ cfg( feature = "env-config" ) ]
@@ -257,10 +257,10 @@ fn cosine_similarity( a : &[ f32 ], b : &[ f32 ] ) -> Result< f32 >
 
 } // end mod private
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use 
   {
-  private::Embeddings,
+  private ::Embeddings,
   };
 }

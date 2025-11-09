@@ -10,9 +10,9 @@ mod private
   // Use crate root for base access
   use crate::
   {
-    client::Client,
-    error::Result,
-    environment::{ OpenaiEnvironment, EnvironmentInterface },
+    client ::Client,
+    error ::Result,
+    environment ::{ OpenaiEnvironment, EnvironmentInterface },
   };
   use crate::components::images::
   {
@@ -75,7 +75,7 @@ mod private
       let image_part = Part::bytes( request.image )
         .file_name( request.image_filename.clone() )
         .mime_str( "image/png" )
-        .map_err( | e | crate::error::OpenAIError::Internal( format!( "Failed to create image part: {e}" ) ) )?;
+        .map_err( | e | crate::error::OpenAIError::Internal( format!( "Failed to create image part : {e}" ) ) )?;
 
       let mut form = Form::new()
         .part( "image", image_part )
@@ -89,7 +89,7 @@ mod private
           let mask_part = Part::bytes( mask_data )
             .file_name( mask_filename )
             .mime_str( "image/png" )
-            .map_err( | e | crate::error::OpenAIError::Internal( format!( "Failed to create mask part: {e}" ) ) )?;
+            .map_err( | e | crate::error::OpenAIError::Internal( format!( "Failed to create mask part : {e}" ) ) )?;
           form = form.part( "mask", mask_part );
         }
       }
@@ -138,7 +138,7 @@ mod private
       let image_part = Part::bytes( request.image )
         .file_name( request.image_filename.clone() )
         .mime_str( "image/png" )
-        .map_err( | e | crate::error::OpenAIError::Internal( format!( "Failed to create image part: {e}" ) ) )?;
+        .map_err( | e | crate::error::OpenAIError::Internal( format!( "Failed to create image part : {e}" ) ) )?;
 
       let mut form = Form::new()
         .part( "image", image_part );
@@ -175,7 +175,7 @@ mod private
   }
 } // end mod private
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   // Expose all structs defined in this module
   exposed use 

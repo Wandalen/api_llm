@@ -11,17 +11,17 @@ use core::time::Duration;
 pub struct RollbackAnalysis
 {
   /// Target configuration that would be restored
-  pub target_config: DynamicConfig,
+  pub target_config : DynamicConfig,
   /// List of fields that would change
-  pub changed_fields: Vec< String >,
+  pub changed_fields : Vec< String >,
   /// Potential impact assessment
-  pub impact_level: RollbackImpact,
+  pub impact_level : RollbackImpact,
   /// Safety warnings if any
-  pub warnings: Vec< String >,
+  pub warnings : Vec< String >,
   /// Estimated rollback time
-  pub estimated_duration: Duration,
+  pub estimated_duration : Duration,
   /// Whether the rollback is considered safe
-  pub is_safe: bool,
+  pub is_safe : bool,
 }
 
 /// Assessment of rollback impact level
@@ -41,7 +41,7 @@ pub enum RollbackImpact
 impl RollbackAnalysis
 {
   /// Analyze the impact of rolling back to a specific configuration
-  pub fn analyze_rollback( current_config: &DynamicConfig, target_config: &DynamicConfig ) -> Self
+  pub fn analyze_rollback( current_config : &DynamicConfig, target_config : &DynamicConfig ) -> Self
   {
     let mut changed_fields = Vec::new();
     let mut warnings = Vec::new();
@@ -118,7 +118,7 @@ impl RollbackAnalysis
     };
 
     Self {
-      target_config: target_config.clone(),
+      target_config : target_config.clone(),
       changed_fields,
       impact_level,
       warnings,

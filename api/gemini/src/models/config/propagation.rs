@@ -16,23 +16,23 @@ use tokio::sync::{ RwLock as AsyncRwLock, broadcast };
 pub struct ConfigMetrics
 {
   /// Total number of configuration updates
-  pub total_updates: AtomicU64,
+  pub total_updates : AtomicU64,
   /// Number of configuration validation cache hits
-  pub validation_cache_hits: AtomicU64,
+  pub validation_cache_hits : AtomicU64,
   /// Number of configuration validation cache misses
-  pub validation_cache_misses: AtomicU64,
+  pub validation_cache_misses : AtomicU64,
   /// Total number of change events sent
-  pub change_events_sent: AtomicU64,
+  pub change_events_sent : AtomicU64,
   /// Number of rollback operations performed
-  pub rollback_operations: AtomicU64,
+  pub rollback_operations : AtomicU64,
   /// Number of history entries currently stored
-  pub history_entries: AtomicUsize,
+  pub history_entries : AtomicUsize,
   /// Total memory used by configuration history (bytes)
-  pub history_memory_bytes: AtomicUsize,
+  pub history_memory_bytes : AtomicUsize,
   /// Average configuration update processing time (microseconds)
-  pub avg_update_time_us: AtomicU64,
+  pub avg_update_time_us : AtomicU64,
   /// Number of failed configuration updates
-  pub failed_updates: AtomicU64,
+  pub failed_updates : AtomicU64,
 }
 
 impl Default for ConfigMetrics
@@ -40,15 +40,15 @@ impl Default for ConfigMetrics
   fn default() -> Self
   {
     Self {
-      total_updates: AtomicU64::new( 0 ),
-      validation_cache_hits: AtomicU64::new( 0 ),
-      validation_cache_misses: AtomicU64::new( 0 ),
-      change_events_sent: AtomicU64::new( 0 ),
-      rollback_operations: AtomicU64::new( 0 ),
-      history_entries: AtomicUsize::new( 0 ),
-      history_memory_bytes: AtomicUsize::new( 0 ),
-      avg_update_time_us: AtomicU64::new( 0 ),
-      failed_updates: AtomicU64::new( 0 ),
+      total_updates : AtomicU64::new( 0 ),
+      validation_cache_hits : AtomicU64::new( 0 ),
+      validation_cache_misses : AtomicU64::new( 0 ),
+      change_events_sent : AtomicU64::new( 0 ),
+      rollback_operations : AtomicU64::new( 0 ),
+      history_entries : AtomicUsize::new( 0 ),
+      history_memory_bytes : AtomicUsize::new( 0 ),
+      avg_update_time_us : AtomicU64::new( 0 ),
+      failed_updates : AtomicU64::new( 0 ),
     }
   }
 }
@@ -56,7 +56,7 @@ impl Default for ConfigMetrics
 impl ConfigMetrics
 {
   /// Record a successful configuration update with timing
-  pub fn record_update( &self, duration_us: u64 )
+  pub fn record_update( &self, duration_us : u64 )
   {
     self.total_updates.fetch_add( 1, Ordering::Relaxed );
     self.update_avg_time( duration_us );
@@ -93,16 +93,16 @@ impl ConfigMetrics
   }
 
   /// Update history entry count and memory usage
-  pub fn update_history_stats( &self, entry_count: usize, total_bytes: usize )
+  pub fn update_history_stats( &self, entry_count : usize, total_bytes : usize )
   {
     self.history_entries.store( entry_count, Ordering::Relaxed );
     self.history_memory_bytes.store( total_bytes, Ordering::Relaxed );
   }
 
   /// Update the running average for update time
-  fn update_avg_time( &self, new_time_us: u64 )
+  fn update_avg_time( &self, new_time_us : u64 )
   {
-    // Simple exponential moving average: new_avg = 0.9 * old_avg + 0.1 * new_value
+    // Simple exponential moving average : new_avg = 0.9 * old_avg + 0.1 * new_value
     let current_avg = self.avg_update_time_us.load( Ordering::Relaxed );
     let new_avg = ( ( current_avg as f64 * 0.9 ) + ( new_time_us as f64 * 0.1 ) ) as u64;
     self.avg_update_time_us.store( new_avg, Ordering::Relaxed );
@@ -163,19 +163,19 @@ impl ConfigMetrics
   pub fn generate_report( &self ) -> ConfigMetricsReport
   {
     ConfigMetricsReport {
-      total_updates: self.total_updates.load( Ordering::Relaxed ),
-      failed_updates: self.failed_updates.load( Ordering::Relaxed ),
-      error_rate: self.error_rate(),
-      avg_update_time_us: self.avg_update_time_us.load( Ordering::Relaxed ),
-      cache_hit_ratio: self.cache_hit_ratio(),
-      validation_cache_hits: self.validation_cache_hits.load( Ordering::Relaxed ),
-      validation_cache_misses: self.validation_cache_misses.load( Ordering::Relaxed ),
-      change_events_sent: self.change_events_sent.load( Ordering::Relaxed ),
-      rollback_operations: self.rollback_operations.load( Ordering::Relaxed ),
-      history_entries: self.history_entries.load( Ordering::Relaxed ),
-      history_memory_bytes: self.history_memory_bytes.load( Ordering::Relaxed ),
-      memory_efficiency: self.memory_efficiency(),
-      timestamp: SystemTime::now(),
+      total_updates : self.total_updates.load( Ordering::Relaxed ),
+      failed_updates : self.failed_updates.load( Ordering::Relaxed ),
+      error_rate : self.error_rate(),
+      avg_update_time_us : self.avg_update_time_us.load( Ordering::Relaxed ),
+      cache_hit_ratio : self.cache_hit_ratio(),
+      validation_cache_hits : self.validation_cache_hits.load( Ordering::Relaxed ),
+      validation_cache_misses : self.validation_cache_misses.load( Ordering::Relaxed ),
+      change_events_sent : self.change_events_sent.load( Ordering::Relaxed ),
+      rollback_operations : self.rollback_operations.load( Ordering::Relaxed ),
+      history_entries : self.history_entries.load( Ordering::Relaxed ),
+      history_memory_bytes : self.history_memory_bytes.load( Ordering::Relaxed ),
+      memory_efficiency : self.memory_efficiency(),
+      timestamp : SystemTime::now(),
     }
   }
 
@@ -189,11 +189,11 @@ impl ConfigMetrics
     self.rollback_operations.store( 0, Ordering::Relaxed );
     self.avg_update_time_us.store( 0, Ordering::Relaxed );
     self.failed_updates.store( 0, Ordering::Relaxed );
-    // Note: history metrics are not reset as they represent current state
+    // Note : history metrics are not reset as they represent current state
   }
 
   /// Export metrics in Prometheus format for monitoring integration
-  pub fn to_prometheus_format( &self, instance_name: &str ) -> String
+  pub fn to_prometheus_format( &self, instance_name : &str ) -> String
   {
     let report = self.generate_report();
     format!(
@@ -254,37 +254,37 @@ impl ConfigMetrics
     // Check error rate
     if report.error_rate > 10.0
     {
-      issues.push( format!( "High error rate: {:.1}%", report.error_rate ) );
+      issues.push( format!( "High error rate : {:.1}%", report.error_rate ) );
     } else if report.error_rate > 5.0
     {
-      warnings.push( format!( "Elevated error rate: {:.1}%", report.error_rate ) );
+      warnings.push( format!( "Elevated error rate : {:.1}%", report.error_rate ) );
     }
 
     // Check cache performance
     if report.cache_hit_ratio < 50.0 && report.validation_cache_hits + report.validation_cache_misses > 10
     {
-      issues.push( format!( "Low cache hit ratio: {:.1}%", report.cache_hit_ratio ) );
+      issues.push( format!( "Low cache hit ratio : {:.1}%", report.cache_hit_ratio ) );
     } else if report.cache_hit_ratio < 80.0 && report.validation_cache_hits + report.validation_cache_misses > 10
     {
-      warnings.push( format!( "Suboptimal cache hit ratio: {:.1}%", report.cache_hit_ratio ) );
+      warnings.push( format!( "Suboptimal cache hit ratio : {:.1}%", report.cache_hit_ratio ) );
     }
 
     // Check update performance
     if report.avg_update_time_us > 5000 {  // 5ms
-      issues.push( format!( "Slow updates: {}μs average", report.avg_update_time_us ) );
+      issues.push( format!( "Slow updates : {}μs average", report.avg_update_time_us ) );
     } else if report.avg_update_time_us > 2000 {  // 2ms
-      warnings.push( format!( "Slow updates: {}μs average", report.avg_update_time_us ) );
+      warnings.push( format!( "Slow updates : {}μs average", report.avg_update_time_us ) );
     }
 
     // Check memory usage
     if report.history_memory_bytes > 10 * 1024 * 1024 {  // 10MB
-      warnings.push( format!( "High memory usage: {} bytes", report.history_memory_bytes ) );
+      warnings.push( format!( "High memory usage : {} bytes", report.history_memory_bytes ) );
     }
 
     // Check excessive rollbacks
     if report.rollback_operations > report.total_updates / 4
     {
-      warnings.push( format!( "High rollback rate: {} rollbacks vs {} updates", report.rollback_operations, report.total_updates ) );
+      warnings.push( format!( "High rollback rate : {} rollbacks vs {} updates", report.rollback_operations, report.total_updates ) );
     }
 
     if !issues.is_empty()
@@ -304,31 +304,31 @@ impl ConfigMetrics
 pub struct ConfigMetricsReport
 {
   /// Total number of configuration updates
-  pub total_updates: u64,
+  pub total_updates : u64,
   /// Number of failed configuration updates
-  pub failed_updates: u64,
+  pub failed_updates : u64,
   /// Error rate as percentage (0-100)
-  pub error_rate: f64,
+  pub error_rate : f64,
   /// Average configuration update processing time (microseconds)
-  pub avg_update_time_us: u64,
+  pub avg_update_time_us : u64,
   /// Cache hit ratio as percentage (0-100)
-  pub cache_hit_ratio: f64,
+  pub cache_hit_ratio : f64,
   /// Number of validation cache hits
-  pub validation_cache_hits: u64,
+  pub validation_cache_hits : u64,
   /// Number of validation cache misses
-  pub validation_cache_misses: u64,
+  pub validation_cache_misses : u64,
   /// Total number of change events sent
-  pub change_events_sent: u64,
+  pub change_events_sent : u64,
   /// Number of rollback operations performed
-  pub rollback_operations: u64,
+  pub rollback_operations : u64,
   /// Number of history entries currently stored
-  pub history_entries: usize,
+  pub history_entries : usize,
   /// Total memory used by configuration history (bytes)
-  pub history_memory_bytes: usize,
+  pub history_memory_bytes : usize,
   /// Memory efficiency percentage (0-100)
-  pub memory_efficiency: f64,
+  pub memory_efficiency : f64,
   /// Timestamp when report was generated
-  pub timestamp: SystemTime,
+  pub timestamp : SystemTime,
 }
 
 /// Health status of the configuration management system
@@ -340,14 +340,14 @@ pub enum ConfigHealthStatus
   /// System is functional but has performance warnings
   Degraded {
     /// Performance warnings that should be addressed
-    warnings: Vec< String >
+    warnings : Vec< String >
   },
   /// System has critical issues that need attention
   Unhealthy {
     /// Critical issues that must be addressed
-    issues: Vec< String >,
+    issues : Vec< String >,
     /// Additional performance warnings
-    warnings: Vec< String >
+    warnings : Vec< String >
   },
 }
 
@@ -382,24 +382,24 @@ impl ConfigHealthStatus
 pub struct ConfigManagerOptions
 {
   /// Maximum number of history entries to keep (0 = unlimited)
-  /// Recommended: 10-50 for constrained environments, 100-1000 for production
-  pub max_history_entries: usize,
+  /// Recommended : 10-50 for constrained environments, 100-1000 for production
+  pub max_history_entries : usize,
 
   /// Maximum memory usage for history in bytes (0 = unlimited)
-  /// Recommended: 64KB-1MB for constrained, 10MB+ for production
-  pub max_history_memory_bytes: usize,
+  /// Recommended : 64KB-1MB for constrained, 10MB+ for production
+  pub max_history_memory_bytes : usize,
 
   /// Enable configuration change notifications
   /// Set to false in memory-constrained environments to reduce overhead
-  pub enable_change_notifications: bool,
+  pub enable_change_notifications : bool,
 
   /// Enable validation caching for improved performance
   /// Generally recommended to be true unless debugging validation issues
-  pub enable_validation_caching: bool,
+  pub enable_validation_caching : bool,
 
   /// Automatic cleanup interval for old history entries
   /// More frequent cleanup in constrained environments, less frequent in production
-  pub cleanup_interval: Option< Duration >,
+  pub cleanup_interval : Option< Duration >,
 }
 
 impl Default for ConfigManagerOptions
@@ -407,11 +407,11 @@ impl Default for ConfigManagerOptions
   fn default() -> Self
   {
     Self {
-      max_history_entries: 1000, // Keep last 1000 changes
-      max_history_memory_bytes: 10 * 1024 * 1024, // 10MB limit
-      enable_change_notifications: true,
-      enable_validation_caching: true,
-      cleanup_interval: Some( Duration::from_secs( 3600 ) ), // Cleanup every hour
+      max_history_entries : 1000, // Keep last 1000 changes
+      max_history_memory_bytes : 10 * 1024 * 1024, // 10MB limit
+      enable_change_notifications : true,
+      enable_validation_caching : true,
+      cleanup_interval : Some( Duration::from_secs( 3600 ) ), // Cleanup every hour
     }
   }
 }
@@ -435,29 +435,29 @@ pub enum SyncStatus
 pub struct ConfigCacheEntry
 {
   /// Cached configuration
-  pub config: DynamicConfig,
+  pub config : DynamicConfig,
   /// When this entry was cached
-  pub cached_at: Instant,
+  pub cached_at : Instant,
   /// Hash of the configuration for quick comparison
-  pub config_hash: u64,
+  pub config_hash : u64,
   /// Number of times this cache entry has been accessed
-  pub access_count: AtomicUsize,
+  pub access_count : AtomicUsize,
   /// Last time this cache entry was accessed
-  pub last_accessed: Mutex< Instant >,
+  pub last_accessed : Mutex< Instant >,
 }
 
 impl ConfigCacheEntry
 {
   /// Create a new cache entry
-  pub fn new( config: DynamicConfig ) -> Self
+  pub fn new( config : DynamicConfig ) -> Self
   {
     let config_hash = config.compute_hash();
     Self {
       config,
-      cached_at: Instant::now(),
+      cached_at : Instant::now(),
       config_hash,
-      access_count: AtomicUsize::new( 0 ),
-      last_accessed: Mutex::new( Instant::now() ),
+      access_count : AtomicUsize::new( 0 ),
+      last_accessed : Mutex::new( Instant::now() ),
     }
   }
 
@@ -469,7 +469,7 @@ impl ConfigCacheEntry
   }
 
   /// Check if this cache entry has expired based on TTL
-  pub fn is_expired( &self, ttl: Duration ) -> bool
+  pub fn is_expired( &self, ttl : Duration ) -> bool
   {
     self.cached_at.elapsed() > ttl
   }
@@ -480,37 +480,37 @@ impl ConfigCacheEntry
 pub struct ConfigSyncContext
 {
   /// Configuration cache with keyed entries
-  cache: AsyncRwLock< BTreeMap<  String, ConfigCacheEntry  > >,
+  cache : AsyncRwLock< BTreeMap<  String, ConfigCacheEntry  > >,
   /// Broadcast channel for configuration change notifications
-  change_broadcaster: broadcast::Sender< ConfigChangeEvent >,
+  change_broadcaster : broadcast::Sender< ConfigChangeEvent >,
   /// Current synchronization status
-  sync_status: AsyncRwLock< SyncStatus >,
+  sync_status : AsyncRwLock< SyncStatus >,
   /// Configuration merge strategies by source
-  merge_strategies: RwLock< HashMap< String, Box< dyn Fn( &DynamicConfig, &DynamicConfig ) -> DynamicConfig + Send + Sync > > >,
+  merge_strategies : RwLock< HashMap< String, Box< dyn Fn( &DynamicConfig, &DynamicConfig ) -> DynamicConfig + Send + Sync > > >,
   /// Cache time-to-live settings
-  cache_ttl: Duration,
+  cache_ttl : Duration,
   /// Maximum cache size (number of entries)
-  max_cache_size: usize,
+  max_cache_size : usize,
 }
 
 impl ConfigSyncContext
 {
   /// Create a new synchronization context
-  pub fn new( cache_ttl: Duration, max_cache_size: usize ) -> Self
+  pub fn new( cache_ttl : Duration, max_cache_size : usize ) -> Self
   {
     let ( change_broadcaster, _ ) = broadcast::channel( 1000 );
     Self {
-      cache: AsyncRwLock::new( BTreeMap::new() ),
+      cache : AsyncRwLock::new( BTreeMap::new() ),
       change_broadcaster,
-      sync_status: AsyncRwLock::new( SyncStatus::Synchronized ),
-      merge_strategies: RwLock::new( HashMap::new() ),
+      sync_status : AsyncRwLock::new( SyncStatus::Synchronized ),
+      merge_strategies : RwLock::new( HashMap::new() ),
       cache_ttl,
       max_cache_size,
     }
   }
 
   /// Get configuration from cache if available and not expired
-  pub async fn get_cached_config( &self, key: &str ) -> Option< DynamicConfig >
+  pub async fn get_cached_config( &self, key : &str ) -> Option< DynamicConfig >
   {
     let cache = self.cache.read().await;
     if let Some( entry ) = cache.get( key )
@@ -525,7 +525,7 @@ impl ConfigSyncContext
   }
 
   /// Cache a configuration with automatic eviction
-  pub async fn cache_config( &self, key: String, config: DynamicConfig )
+  pub async fn cache_config( &self, key : String, config : DynamicConfig )
   {
     let mut cache = self.cache.write().await;
 
@@ -554,7 +554,7 @@ impl ConfigSyncContext
   }
 
   /// Broadcast a configuration change event
-  pub fn broadcast_change( &self, event: ConfigChangeEvent )
+  pub fn broadcast_change( &self, event : ConfigChangeEvent )
   {
     let _ = self.change_broadcaster.send( event );
   }
@@ -566,13 +566,13 @@ impl ConfigSyncContext
   }
 
   /// Update synchronization status
-  pub async fn update_sync_status( &self, status: SyncStatus )
+  pub async fn update_sync_status( &self, status : SyncStatus )
   {
     *self.sync_status.write().await = status;
   }
 
   /// Register a merge strategy for a configuration source
-  pub fn register_merge_strategy< F >( &self, source: String, strategy: F )
+  pub fn register_merge_strategy< F >( &self, source : String, strategy : F )
   where
     F: Fn( &DynamicConfig, &DynamicConfig ) -> DynamicConfig + Send + Sync + 'static,
   {
@@ -581,7 +581,7 @@ impl ConfigSyncContext
   }
 
   /// Merge configurations using registered strategies
-  pub fn merge_configs( &self, base: &DynamicConfig, overlay: &DynamicConfig, source: &str ) -> DynamicConfig
+  pub fn merge_configs( &self, base : &DynamicConfig, overlay : &DynamicConfig, source : &str ) -> DynamicConfig
   {
     let strategies = self.merge_strategies.read().unwrap();
     if let Some( strategy ) = strategies.get( source )
@@ -617,7 +617,7 @@ impl ConfigSyncContext
 pub struct ConfigChangeListener
 {
   /// Internal reference-counted handle for listener lifecycle management
-  pub _handle: Arc< () >,
+  pub _handle : Arc< () >,
 }
 
 impl ConfigChangeListener
@@ -626,7 +626,7 @@ impl ConfigChangeListener
   pub fn new() -> Self
   {
     Self {
-      _handle: Arc::new( () ),
+      _handle : Arc::new( () ),
     }
   }
 }

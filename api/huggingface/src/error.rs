@@ -50,16 +50,16 @@ impl fmt::Display for HuggingFaceError
   {
   match self
   {
-      HuggingFaceError::Api( e ) => write!( f, "API error: {e}" ),
-      HuggingFaceError::Http( msg ) => write!( f, "HTTP error: {msg}" ),
-      HuggingFaceError::Authentication( msg ) => write!( f, "Authentication error: {msg}" ),
-      HuggingFaceError::Validation( msg ) => write!( f, "Validation error: {msg}" ),
-      HuggingFaceError::RateLimit( msg ) => write!( f, "Rate limit error: {msg}" ),
-      HuggingFaceError::ModelUnavailable( msg ) => write!( f, "Model unavailable: {msg}" ),
-      HuggingFaceError::Stream( msg ) => write!( f, "Stream error: {msg}" ),
-      HuggingFaceError::Serialization( msg ) => write!( f, "Serialization error: {msg}" ),
-      HuggingFaceError::InvalidArgument( msg ) => write!( f, "Invalid argument: {msg}" ),
-      HuggingFaceError::Generic( msg ) => write!( f, "Generic error: {msg}" ),
+      HuggingFaceError::Api( e ) => write!( f, "API error : {e}" ),
+      HuggingFaceError::Http( msg ) => write!( f, "HTTP error : {msg}" ),
+      HuggingFaceError::Authentication( msg ) => write!( f, "Authentication error : {msg}" ),
+      HuggingFaceError::Validation( msg ) => write!( f, "Validation error : {msg}" ),
+      HuggingFaceError::RateLimit( msg ) => write!( f, "Rate limit error : {msg}" ),
+      HuggingFaceError::ModelUnavailable( msg ) => write!( f, "Model unavailable : {msg}" ),
+      HuggingFaceError::Stream( msg ) => write!( f, "Stream error : {msg}" ),
+      HuggingFaceError::Serialization( msg ) => write!( f, "Serialization error : {msg}" ),
+      HuggingFaceError::InvalidArgument( msg ) => write!( f, "Invalid argument : {msg}" ),
+      HuggingFaceError::Generic( msg ) => write!( f, "Generic error : {msg}" ),
   }
   }
 }
@@ -160,7 +160,7 @@ impl From< Error > for HuggingFaceError
 
 } // end mod private
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use private::HuggingFaceError;
   exposed use private::ApiErrorWrap;

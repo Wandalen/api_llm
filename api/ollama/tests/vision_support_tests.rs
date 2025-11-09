@@ -22,7 +22,7 @@ use api_ollama::{ OllamaClient, ChatRequest, ChatMessage, MessageRole };
 
 /// Load an image file and convert to base64
 #[ allow( dead_code ) ]
-fn load_image_as_base64( image_path: &str ) -> Result< String, Box< dyn core::error::Error > >
+fn load_image_as_base64( image_path : &str ) -> Result< String, Box< dyn core::error::Error > >
 {
   use std::io::Read;
   
@@ -38,29 +38,29 @@ fn load_image_as_base64( image_path: &str ) -> Result< String, Box< dyn core::er
 #[ tokio::test ]
 async fn test_vision_image_analysis_basic()
 {
-  with_test_server!(|mut client: OllamaClient, _model: String| async move {
+  with_test_server!(|mut client : OllamaClient, _model : String| async move {
     // Simple white pixel as base64
     let simple_image = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==";
     
     let message = ChatMessage
     {
-      role: MessageRole::User,
-      content: "What do you see in this image?".to_string(),
-      images: Some(vec![simple_image.to_string()]),
+      role : MessageRole::User,
+      content : "What do you see in this image?".to_string(),
+      images : Some(vec![simple_image.to_string()]),
       #[ cfg( feature = "tool_calling" ) ]
-      tool_calls: None,
+      tool_calls : None,
     };
     
     let request = ChatRequest
     {
-      model: "llama3.2-vision:11b".to_string(),
-      messages: vec![message],
-      stream: Some(false),
-      options: None,
+      model : "llama3.2-vision:11b".to_string(),
+      messages : vec![message],
+      stream : Some(false),
+      options : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tools: None,
+      tools : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tool_messages: None,
+      tool_messages : None,
     };
     
     let result = client.chat(request).await;
@@ -70,7 +70,7 @@ async fn test_vision_image_analysis_basic()
       Ok(response) =>
       {
         assert!(!response.message.content.is_empty(), "Vision response should have content");
-        println!("Vision response: {}", response.message.content);
+        println!("Vision response : {}", response.message.content);
         println!("Vision analysis test successful");
       },
       Err(_e) =>
@@ -85,28 +85,28 @@ async fn test_vision_image_analysis_basic()
 #[ tokio::test ] 
 async fn test_vision_invalid_base64_handling()
 {
-  with_test_server!(|mut client: OllamaClient, _model: String| async move {
+  with_test_server!(|mut client : OllamaClient, _model : String| async move {
     let invalid_base64 = "not-valid-base64-data";
     
     let message = ChatMessage
     {
-      role: MessageRole::User,
-      content: "What do you see in this image?".to_string(),
-      images: Some(vec![invalid_base64.to_string()]),
+      role : MessageRole::User,
+      content : "What do you see in this image?".to_string(),
+      images : Some(vec![invalid_base64.to_string()]),
       #[ cfg( feature = "tool_calling" ) ]
-      tool_calls: None,
+      tool_calls : None,
     };
     
     let request = ChatRequest
     {
-      model: "llama3.2-vision:11b".to_string(),
-      messages: vec![message],
-      stream: Some(false),
-      options: None,
+      model : "llama3.2-vision:11b".to_string(),
+      messages : vec![message],
+      stream : Some(false),
+      options : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tools: None,
+      tools : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tool_messages: None,
+      tool_messages : None,
     };
     
     let result = client.chat(request).await;
@@ -115,7 +115,7 @@ async fn test_vision_invalid_base64_handling()
     let error = result.unwrap_err();
     let error_str = format!("{error}");
     assert!(error_str.contains("API error") || error_str.contains("Parse error"), 
-           "Error should indicate API or parse problem: {error_str}");
+           "Error should indicate API or parse problem : {error_str}");
     
     println!("Invalid base64 error handling successful");
   });
@@ -124,29 +124,29 @@ async fn test_vision_invalid_base64_handling()
 #[ tokio::test ]
 async fn test_vision_with_non_vision_model()
 {
-  with_test_server!(|mut client: OllamaClient, model: String| async move {
+  with_test_server!(|mut client : OllamaClient, model : String| async move {
     // Simple white pixel as base64
     let simple_image = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==";
     
     let message = ChatMessage
     {
-      role: MessageRole::User,
-      content: "Describe this image if you can, otherwise just say hello".to_string(),
-      images: Some(vec![simple_image.to_string()]),
+      role : MessageRole::User,
+      content : "Describe this image if you can, otherwise just say hello".to_string(),
+      images : Some(vec![simple_image.to_string()]),
       #[ cfg( feature = "tool_calling" ) ]
-      tool_calls: None,
+      tool_calls : None,
     };
     
     let request = ChatRequest
     {
       model, // Using regular model instead of vision-specific one
-      messages: vec![message],
-      stream: Some(false),
-      options: None,
+      messages : vec![message],
+      stream : Some(false),
+      options : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tools: None,
+      tools : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tool_messages: None,
+      tool_messages : None,
     };
     
     let result = client.chat(request).await;
@@ -161,7 +161,7 @@ async fn test_vision_with_non_vision_model()
       Err(error) =>
       {
         let error_str = format!("{error}");
-        println!("Non-vision model error handling: {error_str}");
+        println!("Non-vision model error handling : {error_str}");
         // This is acceptable - non-vision models may reject image inputs
       }
     }
@@ -180,7 +180,7 @@ async fn test_load_image_as_base64()
       assert!(!base64_data.is_empty(), "Base64 data should not be empty");
       assert!(base64_data.chars().all(|c| c.is_ascii_alphanumeric() || c == '+' || c == '/' || c == '='), 
               "Base64 data should only contain valid base64 characters");
-      println!("Image loading successful, base64 length: {}", base64_data.len());
+      println!("Image loading successful, base64 length : {}", base64_data.len());
     },
     Err(e) =>
     {

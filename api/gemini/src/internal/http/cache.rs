@@ -16,11 +16,11 @@ use tracing::debug;
 pub struct CacheConfig
 {
   /// Maximum number of cached responses
-  pub max_size: usize,
+  pub max_size : usize,
   /// Time-to-live for cached entries
-  pub ttl: Duration,
+  pub ttl : Duration,
   /// Whether to collect cache metrics
-  pub enable_metrics: bool,
+  pub enable_metrics : bool,
 }
 
 impl Default for CacheConfig
@@ -28,9 +28,9 @@ impl Default for CacheConfig
   fn default() -> Self
   {
     Self {
-      max_size: 1000,
-      ttl: Duration::from_secs( 300 ), // 5 minutes
-      enable_metrics: true,
+      max_size : 1000,
+      ttl : Duration::from_secs( 300 ), // 5 minutes
+      enable_metrics : true,
     }
   }
 }
@@ -39,15 +39,15 @@ impl Default for CacheConfig
 #[ derive( Debug, Clone, PartialEq, Eq, Hash ) ]
 struct CacheKey
 {
-  method: String,
-  url: String,
-  body_hash: u64,
+  method : String,
+  url : String,
+  body_hash : u64,
 }
 
 impl CacheKey
 {
   /// Create a new cache key from request components
-  fn new< T : Serialize >( method: &Method, url: &str, body: Option< &T > ) -> Self
+  fn new< T : Serialize >( method : &Method, url : &str, body : Option< &T > ) -> Self
   {
     let body_hash = if let Some( body ) = body
     {
@@ -61,8 +61,8 @@ impl CacheKey
     };
 
     Self {
-      method: method.to_string(),
-      url: url.to_string(),
+      method : method.to_string(),
+      url : url.to_string(),
       body_hash,
     }
   }
@@ -73,25 +73,25 @@ impl CacheKey
 struct CacheEntry
 {
   /// Cached response data (JSON string)
-  response_json: String,
+  response_json : String,
   /// When this entry was created
-  created_at: Instant,
+  created_at : Instant,
   /// When this entry was last accessed (for LRU)
-  last_accessed: Instant,
+  last_accessed : Instant,
   /// Time-to-live for this entry
-  ttl: Duration,
+  ttl : Duration,
 }
 
 impl CacheEntry
 {
   /// Create a new cache entry
-  fn new( response_json: String, ttl: Duration ) -> Self
+  fn new( response_json : String, ttl : Duration ) -> Self
   {
     let now = Instant::now();
     Self {
       response_json,
-      created_at: now,
-      last_accessed: now,
+      created_at : now,
+      last_accessed : now,
       ttl,
     }
   }
@@ -114,17 +114,17 @@ impl CacheEntry
 pub struct CacheMetrics
 {
   /// Total number of cache hits
-  pub hits: u64,
+  pub hits : u64,
   /// Total number of cache misses
-  pub misses: u64,
+  pub misses : u64,
   /// Total number of evictions due to size limit
-  pub evictions: u64,
+  pub evictions : u64,
   /// Total number of expirations due to TTL
-  pub expirations: u64,
+  pub expirations : u64,
   /// Current cache size
-  pub current_size: usize,
+  pub current_size : usize,
   /// Total requests processed
-  pub total_requests: u64,
+  pub total_requests : u64,
 }
 
 impl CacheMetrics
@@ -145,25 +145,25 @@ impl CacheMetrics
 #[ derive( Debug, Clone ) ]
 pub struct RequestCache
 {
-  config: CacheConfig,
-  entries: Arc< Mutex< HashMap<  CacheKey, CacheEntry  > > >,
-  metrics: Arc< Mutex< CacheMetrics > >,
+  config : CacheConfig,
+  entries : Arc< Mutex< HashMap<  CacheKey, CacheEntry  > > >,
+  metrics : Arc< Mutex< CacheMetrics > >,
 }
 
 impl RequestCache
 {
   /// Create a new request cache with the given configuration
-  pub fn new( config: CacheConfig ) -> Self
+  pub fn new( config : CacheConfig ) -> Self
   {
     Self {
       config,
-      entries: Arc::new( Mutex::new( HashMap::new() ) ),
-      metrics: Arc::new( Mutex::new( CacheMetrics::default() ) ),
+      entries : Arc::new( Mutex::new( HashMap::new() ) ),
+      metrics : Arc::new( Mutex::new( CacheMetrics::default() ) ),
     }
   }
 
   /// Try to get a cached response for the given request
-  pub fn get< T, R >( &self, method: &Method, url: &str, body: Option< &T > ) -> Option< R >
+  pub fn get< T, R >( &self, method : &Method, url : &str, body : Option< &T > ) -> Option< R >
   where
     T: Serialize,
     R: for< 'de > Deserialize< 'de >,
@@ -198,7 +198,7 @@ impl RequestCache
       debug!( "Cache hit for {} {}", method, url );
 
       // Deserialize and return
-      serde_json::from_str( &entry.response_json ).ok()
+      serde_json ::from_str( &entry.response_json ).ok()
     } else {
       metrics.misses += 1;
 
@@ -210,7 +210,7 @@ impl RequestCache
   }
 
   /// Store a response in the cache
-  pub fn put< T, R >( &self, method: &Method, url: &str, body: Option< &T >, response: &R )
+  pub fn put< T, R >( &self, method : &Method, url : &str, body : Option< &T >, response : &R )
   where
     T: Serialize,
     R: Serialize,
@@ -223,7 +223,7 @@ impl RequestCache
       Ok( json ) => json,
       Err( e ) => {
         #[ cfg( feature = "logging" ) ]
-        debug!( "Failed to serialize response for caching: {}", e );
+        debug!( "Failed to serialize response for caching : {}", e );
         return;
       }
     };
@@ -240,7 +240,7 @@ impl RequestCache
         .map( |( k, _ )| k.clone() )
       {
         #[ cfg( feature = "logging" ) ]
-        debug!( "Evicting LRU cache entry: {} {}", lru_key.method, lru_key.url );
+        debug!( "Evicting LRU cache entry : {} {}", lru_key.method, lru_key.url );
 
         entries.remove( &lru_key );
         metrics.evictions += 1;
@@ -253,7 +253,7 @@ impl RequestCache
     metrics.current_size = entries.len();
 
     #[ cfg( feature = "logging" ) ]
-    debug!( "Cached response for {} {} (cache size: {})", method, url, entries.len() );
+    debug!( "Cached response for {} {} (cache size : {})", method, url, entries.len() );
   }
 
   /// Clear all cached entries
@@ -285,7 +285,7 @@ impl RequestCache
     let initial_size = entries.len();
 
     // Collect expired keys
-    let expired_keys: Vec< CacheKey > = entries
+    let expired_keys : Vec< CacheKey > = entries
       .iter()
       .filter( |( _, entry )| entry.is_expired() )
       .map( |( key, _ )| key.clone() )
@@ -314,13 +314,13 @@ impl RequestCache
 /// Execute an HTTP request with caching support
 pub async fn execute_with_cache< T, R >
 (
-  client: &reqwest::Client,
-  method: reqwest::Method,
-  url: &str,
-  api_key: &str,
-  body: Option< &T >,
-  config: &super::HttpConfig,
-  cache: Option< &RequestCache >,
+  client : &reqwest::Client,
+  method : reqwest::Method,
+  url : &str,
+  api_key : &str,
+  body : Option< &T >,
+  config : &super::HttpConfig,
+  cache : Option< &RequestCache >,
 )
 -> Result< R, crate::error::Error >
 where
@@ -380,7 +380,7 @@ mod tests
     let entry = CacheEntry::new( "test".to_string(), Duration::from_millis( 100 ) );
     assert!( !entry.is_expired() );
 
-    std::thread::sleep( Duration::from_millis( 150 ) );
+    std ::thread::sleep( Duration::from_millis( 150 ) );
     assert!( entry.is_expired() );
   }
 
@@ -390,14 +390,14 @@ mod tests
     let cache = RequestCache::new( CacheConfig::default() );
 
     // Test cache miss
-    let result: Option< String > = cache.get( &Method::GET, "https://api.example.com/test", None::< &() > );
+    let result : Option< String > = cache.get( &Method::GET, "https://api.example.com/test", None::< &() > );
     assert!( result.is_none() );
 
     // Store value
     cache.put( &Method::GET, "https://api.example.com/test", None::< &() >, &"cached_value" );
 
     // Test cache hit
-    let result: Option< String > = cache.get( &Method::GET, "https://api.example.com/test", None::< &() > );
+    let result : Option< String > = cache.get( &Method::GET, "https://api.example.com/test", None::< &() > );
     assert_eq!( result, Some( "cached_value".to_string() ) );
 
     // Verify metrics
@@ -411,9 +411,9 @@ mod tests
   fn test_cache_lru_eviction()
   {
     let config = CacheConfig {
-      max_size: 2,
-      ttl: Duration::from_secs( 300 ),
-      enable_metrics: true,
+      max_size : 2,
+      ttl : Duration::from_secs( 300 ),
+      enable_metrics : true,
     };
     let cache = RequestCache::new( config );
 
@@ -422,15 +422,15 @@ mod tests
     cache.put( &Method::GET, "https://api.example.com/2", None::< &() >, &"value2" );
 
     // Access first entry to make it more recently used
-    let _: Option< String > = cache.get( &Method::GET, "https://api.example.com/1", None::< &() > );
+    let _ : Option< String > = cache.get( &Method::GET, "https://api.example.com/1", None::< &() > );
 
     // Add third entry - should evict entry 2 (least recently used)
     cache.put( &Method::GET, "https://api.example.com/3", None::< &() >, &"value3" );
 
     // Verify entry 1 and 3 are present, entry 2 was evicted
-    let result1: Option< String > = cache.get( &Method::GET, "https://api.example.com/1", None::< &() > );
-    let result2: Option< String > = cache.get( &Method::GET, "https://api.example.com/2", None::< &() > );
-    let result3: Option< String > = cache.get( &Method::GET, "https://api.example.com/3", None::< &() > );
+    let result1 : Option< String > = cache.get( &Method::GET, "https://api.example.com/1", None::< &() > );
+    let result2 : Option< String > = cache.get( &Method::GET, "https://api.example.com/2", None::< &() > );
+    let result3 : Option< String > = cache.get( &Method::GET, "https://api.example.com/3", None::< &() > );
 
     assert_eq!( result1, Some( "value1".to_string() ) );
     assert_eq!( result2, None );
@@ -445,9 +445,9 @@ mod tests
   fn test_cache_expiration()
   {
     let config = CacheConfig {
-      max_size: 100,
-      ttl: Duration::from_millis( 100 ),
-      enable_metrics: true,
+      max_size : 100,
+      ttl : Duration::from_millis( 100 ),
+      enable_metrics : true,
     };
     let cache = RequestCache::new( config );
 
@@ -455,14 +455,14 @@ mod tests
     cache.put( &Method::GET, "https://api.example.com/test", None::< &() >, &"value" );
 
     // Should be cached immediately
-    let result: Option< String > = cache.get( &Method::GET, "https://api.example.com/test", None::< &() > );
+    let result : Option< String > = cache.get( &Method::GET, "https://api.example.com/test", None::< &() > );
     assert_eq!( result, Some( "value".to_string() ) );
 
     // Wait for expiration
-    std::thread::sleep( Duration::from_millis( 150 ) );
+    std ::thread::sleep( Duration::from_millis( 150 ) );
 
     // Should be expired now
-    let result: Option< String > = cache.get( &Method::GET, "https://api.example.com/test", None::< &() > );
+    let result : Option< String > = cache.get( &Method::GET, "https://api.example.com/test", None::< &() > );
     assert_eq!( result, None );
 
     // Verify expiration metric
@@ -474,9 +474,9 @@ mod tests
   fn test_cache_cleanup()
   {
     let config = CacheConfig {
-      max_size: 100,
-      ttl: Duration::from_millis( 100 ),
-      enable_metrics: true,
+      max_size : 100,
+      ttl : Duration::from_millis( 100 ),
+      enable_metrics : true,
     };
     let cache = RequestCache::new( config );
 
@@ -486,7 +486,7 @@ mod tests
     cache.put( &Method::GET, "https://api.example.com/3", None::< &() >, &"value3" );
 
     // Wait for expiration
-    std::thread::sleep( Duration::from_millis( 150 ) );
+    std ::thread::sleep( Duration::from_millis( 150 ) );
 
     // Cleanup expired entries
     let expired_count = cache.cleanup_expired();
@@ -512,7 +512,7 @@ mod tests
     let metrics = cache.get_metrics();
     assert_eq!( metrics.current_size, 0 );
 
-    let result: Option< String > = cache.get( &Method::GET, "https://api.example.com/1", None::< &() > );
+    let result : Option< String > = cache.get( &Method::GET, "https://api.example.com/1", None::< &() > );
     assert_eq!( result, None );
   }
 }

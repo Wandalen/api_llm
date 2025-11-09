@@ -538,7 +538,7 @@ mod private
 }
 
 #[ cfg( feature = "request_caching" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use private::RequestCache;
   exposed use private::RequestCacheConfig;

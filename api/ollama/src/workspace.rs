@@ -16,7 +16,7 @@ mod private
 
   /// Secret store that integrates with workspace_tools
   ///
-  /// Provides fallback chain: workspace secrets → environment variables → error
+  /// Provides fallback chain : workspace secrets → environment variables → error
   #[ derive( Clone ) ]
   pub struct WorkspaceSecretStore
   {
@@ -30,7 +30,7 @@ mod private
     pub fn from_workspace() -> OllamaResult< Self >
     {
       let ws = workspace()
-        .map_err( | e | format_err!( "Failed to resolve workspace: {}", Self::sanitize_error( &format!( "{}", e ) ) ) )?;
+        .map_err( | e | format_err!( "Failed to resolve workspace : {}", Self::sanitize_error( &format!( "{}", e ) ) ) )?;
 
       let workspace_path = Some( ws.root().to_path_buf() );
 
@@ -41,13 +41,13 @@ mod private
         {
           HashMap::new()
         },
-        Err( e ) => return Err( format_err!( "Failed to load workspace configuration: {}", Self::sanitize_error( &format!( "{}", e ) ) ) ),
+        Err( e ) => return Err( format_err!( "Failed to load workspace configuration : {}", Self::sanitize_error( &format!( "{}", e ) ) ) ),
       };
 
       Ok( Self { secrets, workspace_path } )
     }
 
-    /// Get a secret value with fallback chain: workspace secrets → environment → error
+    /// Get a secret value with fallback chain : workspace secrets → environment → error
     pub fn get_secret( &self, key : &str ) -> OllamaResult< String >
     {
       if let Some( value ) = self.secrets.get( key )
@@ -55,7 +55,7 @@ mod private
         return Ok( value.clone() );
       }
 
-      std::env::var( key )
+      std ::env::var( key )
         .map_err( | _ | format_err!( "{} not found in workspace secrets or environment variables", key ) )
     }
 
@@ -174,7 +174,7 @@ mod private
 }
 
 #[ cfg( feature = "enabled" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use WorkspaceSecretStore;
 }

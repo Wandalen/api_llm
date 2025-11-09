@@ -3,9 +3,9 @@
 use api_huggingface::
 {
   Client,
-  environment::{ HuggingFaceEnvironmentImpl, HuggingFaceEnvironment, EnvironmentInterface },
-  secret::Secret,
-  error::HuggingFaceError,
+  environment ::{ HuggingFaceEnvironmentImpl, HuggingFaceEnvironment, EnvironmentInterface },
+  secret ::Secret,
+  error ::HuggingFaceError,
 };
 
 #[ tokio::test ]
@@ -35,7 +35,7 @@ async fn client_build_with_custom_base_url()
 async fn environment_from_env_missing_key()
 {
   // Ensure the environment variable is not set
-  std::env::remove_var( "HUGGINGFACE_API_KEY" );
+  std ::env::remove_var( "HUGGINGFACE_API_KEY" );
   
   let result = HuggingFaceEnvironmentImpl::from_env();
   assert!( result.is_err(), "Should fail when API key is missing" );
@@ -43,7 +43,7 @@ async fn environment_from_env_missing_key()
   match result.unwrap_err()
   {
   HuggingFaceError::Authentication( _ ) => {}, // Expected
-  other => panic!( "Expected Authentication error, got: {other:?}" ),
+  other => panic!( "Expected Authentication error, got : {other:?}" ),
   }
 }
 

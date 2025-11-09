@@ -23,7 +23,7 @@
 use api_ollama::{ OllamaClient, ChatRequest, ChatMessage, MessageRole };
 
 const EXAMPLE_MERGE_SORT_CODE: &str = r"
-fn merge_sort< T: Ord + Clone >( mut vec: Vec< T > ) -> Vec< T >
+fn merge_sort< T: Ord + Clone >( mut vec : Vec< T > ) -> Vec< T >
 {
     if vec.len() <= 1
     {
@@ -37,7 +37,7 @@ fn merge_sort< T: Ord + Clone >( mut vec: Vec< T > ) -> Vec< T >
     merge(merge_sort(left), merge_sort(right))
 }
 
-fn merge< T: Ord + Clone >( left: Vec< T >, right: Vec< T > ) -> Vec< T >
+fn merge< T: Ord + Clone >( left : Vec< T >, right : Vec< T > ) -> Vec< T >
 {
     let mut result = Vec::with_capacity(left.len() + right.len());
     let mut left_iter = left.into_iter();
@@ -54,7 +54,10 @@ fn merge< T: Ord + Clone >( left: Vec< T >, right: Vec< T > ) -> Vec< T >
                 {
                     result.push(l);
                     left_item = left_iter.next();
-                } else {
+                }
+                else
+
+                {
                     result.push(r);
                     right_item = right_iter.next();
                 }
@@ -84,7 +87,7 @@ async fn setup_client_and_model() -> Result< ( OllamaClient, String ), Box< dyn 
   if !client.is_available().await
   {
     eprintln!( "❌ Ollama server is not available. Please start Ollama and try again." );
-    std::process::exit( 1 );
+    std ::process::exit( 1 );
   }
   
   // Get available models - prefer code-specific models
@@ -92,9 +95,9 @@ async fn setup_client_and_model() -> Result< ( OllamaClient, String ), Box< dyn 
   if models.models.is_empty()
   {
     eprintln!( "❌ No models available. Please install a model first." );
-    eprintln!( "   For best results with code: ollama pull codellama" );
-    eprintln!( "   Alternative: ollama pull llama3.2" );
-    std::process::exit( 1 );
+    eprintln!( "   For best results with code : ollama pull codellama" );
+    eprintln!( "   Alternative : ollama pull llama3.2" );
+    std ::process::exit( 1 );
   }
   
   // Try to find a code-optimized model, fall back to any available model
@@ -103,7 +106,7 @@ async fn setup_client_and_model() -> Result< ( OllamaClient, String ), Box< dyn 
     .find( | m | m.name.to_lowercase().contains( "code" ) || m.name.to_lowercase().contains( "llama" ) )
     .map_or_else(|| models.models[ 0 ].name.clone(), | m | m.name.clone());
     
-  println!( "✅ Using model: {model_name}" );
+  println!( "✅ Using model : {model_name}" );
   
   Ok( ( client, model_name ) )
 }
@@ -116,17 +119,17 @@ async fn analyze_code_samples(
 {
   // Analysis tasks for each code sample
   let analysis_tasks = [
-    "Code Review: Identify potential bugs, error handling issues, and code quality problems.",
-    "Security Analysis: Look for security vulnerabilities, unsafe practices, or potential attack vectors.",
-    "Performance Optimization: Suggest performance improvements and more efficient approaches.",
-    "Best Practices: Recommend coding best practices and modern language features that could be used.",
-    "Refactoring: Provide a refactored version that addresses the identified issues.",
+    "Code Review : Identify potential bugs, error handling issues, and code quality problems.",
+    "Security Analysis : Look for security vulnerabilities, unsafe practices, or potential attack vectors.",
+    "Performance Optimization : Suggest performance improvements and more efficient approaches.",
+    "Best Practices : Recommend coding best practices and modern language features that could be used.",
+    "Refactoring : Provide a refactored version that addresses the identified issues.",
   ];
   
   // Analyze each code sample
   for ( sample_name, code ) in code_samples
   {
-    println!( "\n🔍 Analyzing: {sample_name}" );
+    println!( "\n🔍 Analyzing : {sample_name}" );
     let separator = "═".repeat( 50 );
     println!( "{separator}" );
     println!( "Code:" );
@@ -138,7 +141,7 @@ async fn analyze_code_samples(
       // Add delay between requests to prevent connection exhaustion
       if i > 0
       {
-        tokio::time::sleep( tokio::time::Duration::from_millis( 500 ) ).await;
+        tokio ::time::sleep( tokio::time::Duration::from_millis( 500 ) ).await;
       }
 
       let task_num = i + 1;
@@ -180,8 +183,8 @@ async fn analyze_code_samples(
       };
 
       // Retry logic with exponential backoff
-      let mut attempts: u32 = 0;
-      let max_attempts: u32 = 3;
+      let mut attempts : u32 = 0;
+      let max_attempts : u32 = 3;
       let mut success = false;
 
       while attempts < max_attempts && !success
@@ -203,11 +206,11 @@ async fn analyze_code_samples(
               let delay = 1000 * ( 2_u64.pow( attempts ) ); // Exponential backoff
               eprintln!( "⚠️  Attempt {attempts} failed for {task_title}: {e}" );
               eprintln!( "   Retrying in {delay}ms..." );
-              tokio::time::sleep( tokio::time::Duration::from_millis( delay ) ).await;
+              tokio ::time::sleep( tokio::time::Duration::from_millis( delay ) ).await;
             }
             else
             {
-              eprintln!( "❌ Error in analysis for {task_title} after {max_attempts} attempts: {e}" );
+              eprintln!( "❌ Error in analysis for {task_title} after {max_attempts} attempts : {e}" );
             }
           }
         }
@@ -224,7 +227,7 @@ async fn demonstrate_code_explanation(
 ) -> Result< (), Box< dyn core::error::Error > >
 {
   // Add delay before this request
-  tokio::time::sleep( tokio::time::Duration::from_millis( 500 ) ).await;
+  tokio ::time::sleep( tokio::time::Duration::from_millis( 500 ) ).await;
 
   println!( "\n🎓 Code Explanation Example" );
   println!( "===========================" );
@@ -256,8 +259,8 @@ async fn demonstrate_code_explanation(
   };
   
   // Retry logic with exponential backoff
-  let mut attempts: u32 = 0;
-  let max_attempts: u32 = 3;
+  let mut attempts : u32 = 0;
+  let max_attempts : u32 = 3;
   let mut success = false;
 
   while attempts < max_attempts && !success
@@ -276,13 +279,13 @@ async fn demonstrate_code_explanation(
         if attempts < max_attempts
         {
           let delay = 1000 * ( 2_u64.pow( attempts ) ); // Exponential backoff
-          eprintln!( "⚠️  Attempt {attempts} failed for code explanation: {e}" );
+          eprintln!( "⚠️  Attempt {attempts} failed for code explanation : {e}" );
           eprintln!( "   Retrying in {delay}ms..." );
-          tokio::time::sleep( tokio::time::Duration::from_millis( delay ) ).await;
+          tokio ::time::sleep( tokio::time::Duration::from_millis( delay ) ).await;
         }
         else
         {
-          eprintln!( "❌ Error in code explanation after {max_attempts} attempts: {e}" );
+          eprintln!( "❌ Error in code explanation after {max_attempts} attempts : {e}" );
         }
       }
     }
@@ -304,12 +307,12 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     (
       "Rust Function with Potential Issues",
       r"
-fn process_user_data( data: Vec< String > ) -> Vec< i32 >
+fn process_user_data( data : Vec< String > ) -> Vec< i32 >
 {
     let mut results = Vec::new();
     for item in data
     {
-        let num = item.parse::<i32>().unwrap();
+        let num = item.parse::< i32 >().unwrap();
         if num > 0
         {
             results.push(num * 2);

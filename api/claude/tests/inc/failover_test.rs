@@ -61,7 +61,7 @@ fn test_endpoint_time_tracking()
   assert!( elapsed < Duration::from_secs( 1 ) );
 
   // Sleep and check again
-  std::thread::sleep( Duration::from_millis( 100 ) );
+  std ::thread::sleep( Duration::from_millis( 100 ) );
   let elapsed = endpoint.time_since_check();
   assert!( elapsed >= Duration::from_millis( 100 ) );
 }
@@ -197,19 +197,19 @@ fn test_failover_manager_priority_strategy()
     .with_strategy( the_module::FailoverStrategy::Priority );
 
   let mut endpoints = vec![
-    the_module::FailoverEndpoint::new(
+    the_module ::FailoverEndpoint::new(
       "low".to_string(),
       "https://low.com".to_string(),
       10,
       Duration::from_secs( 30 )
     ),
-    the_module::FailoverEndpoint::new(
+    the_module ::FailoverEndpoint::new(
       "high".to_string(),
       "https://high.com".to_string(),
       100,
       Duration::from_secs( 30 )
     ),
-    the_module::FailoverEndpoint::new(
+    the_module ::FailoverEndpoint::new(
       "medium".to_string(),
       "https://medium.com".to_string(),
       50,
@@ -241,19 +241,19 @@ fn test_failover_manager_round_robin_strategy()
     .with_strategy( the_module::FailoverStrategy::RoundRobin );
 
   let mut endpoints = vec![
-    the_module::FailoverEndpoint::new(
+    the_module ::FailoverEndpoint::new(
       "ep1".to_string(),
       "https://ep1.com".to_string(),
       100,
       Duration::from_secs( 30 )
     ),
-    the_module::FailoverEndpoint::new(
+    the_module ::FailoverEndpoint::new(
       "ep2".to_string(),
       "https://ep2.com".to_string(),
       100,
       Duration::from_secs( 30 )
     ),
-    the_module::FailoverEndpoint::new(
+    the_module ::FailoverEndpoint::new(
       "ep3".to_string(),
       "https://ep3.com".to_string(),
       100,
@@ -290,13 +290,13 @@ fn test_failover_manager_sticky_strategy()
     .with_strategy( the_module::FailoverStrategy::Sticky );
 
   let mut endpoints = vec![
-    the_module::FailoverEndpoint::new(
+    the_module ::FailoverEndpoint::new(
       "ep1".to_string(),
       "https://ep1.com".to_string(),
       100,
       Duration::from_secs( 30 )
     ),
-    the_module::FailoverEndpoint::new(
+    the_module ::FailoverEndpoint::new(
       "ep2".to_string(),
       "https://ep2.com".to_string(),
       50,
@@ -334,13 +334,13 @@ fn test_failover_manager_filters_unavailable()
     .with_strategy( the_module::FailoverStrategy::Priority );
 
   let mut endpoints = vec![
-    the_module::FailoverEndpoint::new(
+    the_module ::FailoverEndpoint::new(
       "unhealthy".to_string(),
       "https://unhealthy.com".to_string(),
       100,
       Duration::from_secs( 30 )
     ),
-    the_module::FailoverEndpoint::new(
+    the_module ::FailoverEndpoint::new(
       "healthy".to_string(),
       "https://healthy.com".to_string(),
       50,
@@ -370,13 +370,13 @@ fn test_failover_manager_respects_context()
     .with_strategy( the_module::FailoverStrategy::Priority );
 
   let mut endpoints = vec![
-    the_module::FailoverEndpoint::new(
+    the_module ::FailoverEndpoint::new(
       "primary".to_string(),
       "https://primary.com".to_string(),
       100,
       Duration::from_secs( 30 )
     ),
-    the_module::FailoverEndpoint::new(
+    the_module ::FailoverEndpoint::new(
       "backup".to_string(),
       "https://backup.com".to_string(),
       50,
@@ -411,7 +411,7 @@ fn test_failover_manager_no_available_endpoints()
   let config = the_module::FailoverConfig::new();
 
   let mut endpoints = vec![
-    the_module::FailoverEndpoint::new(
+    the_module ::FailoverEndpoint::new(
       "ep1".to_string(),
       "https://ep1.com".to_string(),
       100,
@@ -439,7 +439,7 @@ fn test_failover_manager_health_updates()
   let config = the_module::FailoverConfig::new();
 
   let mut endpoints = vec![
-    the_module::FailoverEndpoint::new(
+    the_module ::FailoverEndpoint::new(
       "ep1".to_string(),
       "https://ep1.com".to_string(),
       100,

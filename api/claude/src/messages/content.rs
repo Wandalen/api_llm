@@ -47,8 +47,8 @@ mod private
   ///
   /// // Create text content
   /// let text_content = Content::Text {
-  ///   r#type: "text".to_string(),
-  ///   text: "Hello, Claude!".to_string(),
+  ///   r#type : "text".to_string(),
+  ///   text : "Hello, Claude!".to_string(),
   /// };
   ///
   /// // Content can be serialized/deserialized
@@ -350,7 +350,7 @@ mod private
     {
       if self.r#type != "image"
       {
-        return Err( crate::error_tools::Error::msg( format!( "Invalid image content type: '{}'. Expected 'image'.", self.r#type ) ) );
+        return Err( crate::error_tools::Error::msg( format!( "Invalid image content type : '{}'. Expected 'image'.", self.r#type ) ) );
       }
 
       self.source.validate()
@@ -453,14 +453,14 @@ mod private
       // Validate source type
       if self.r#type != "base64"
       {
-        return Err( crate::error_tools::Error::msg( format!( "Invalid image source type: '{}'. Only 'base64' is supported.", self.r#type ) ) );
+        return Err( crate::error_tools::Error::msg( format!( "Invalid image source type : '{}'. Only 'base64' is supported.", self.r#type ) ) );
       }
 
       // Validate media type
       const VALID_MEDIA_TYPES : &[ &str ] = &[ "image/jpeg", "image/png", "image/gif", "image/webp" ];
       if !VALID_MEDIA_TYPES.contains( &self.media_type.as_str() )
       {
-        return Err( crate::error_tools::Error::msg( format!( "Invalid image media type: '{}'. Supported types: {:?}", self.media_type, VALID_MEDIA_TYPES ) ) );
+        return Err( crate::error_tools::Error::msg( format!( "Invalid image media type : '{}'. Supported types : {:?}", self.media_type, VALID_MEDIA_TYPES ) ) );
       }
 
       // Validate data is not empty
@@ -497,7 +497,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use Role;
   exposed use Content;

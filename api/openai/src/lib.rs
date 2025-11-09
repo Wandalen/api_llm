@@ -4,7 +4,7 @@
 //! assistants, chat, embeddings, files, fine-tuning, images, models,
 //! moderations, realtime, responses, and vector stores.
 //!
-//! # Governing Principle: "Thin Client, Rich API"
+//! # Governing Principle : "Thin Client, Rich API"
 //!
 //! This library follows the principle of **"Thin Client, Rich API"** - exposing all
 //! server-side functionality transparently while maintaining zero client-side intelligence
@@ -75,7 +75,7 @@ mod client_ext_http_basic;
 mod client_ext_http_stream;
 
 #[ cfg( feature = "enabled" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   // API endpoint modules
   layer admin;

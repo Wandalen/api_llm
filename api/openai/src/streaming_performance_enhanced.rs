@@ -11,19 +11,19 @@ mod private
 {
   use crate::
   {
-    components::responses::ResponseStreamEvent,
-    error::{ OpenAIError, Result },
+    components ::responses::ResponseStreamEvent,
+    error ::{ OpenAIError, Result },
   };
   use core::time::Duration;
   use std::
   {
-    collections::{ HashMap, VecDeque },
-    sync::{ Arc, Mutex },
-    time::Instant,
+    collections ::{ HashMap, VecDeque },
+    sync ::{ Arc, Mutex },
+    time ::Instant,
   };
   use tokio::
   {
-    sync::{ RwLock, Semaphore },
+    sync ::{ RwLock, Semaphore },
   };
   use serde::{ Serialize, Deserialize };
 
@@ -402,7 +402,7 @@ mod private
         _ =>
         {
           // Default hash for other event types
-          mem::discriminant( event ).hash( &mut hasher );
+          mem ::discriminant( event ).hash( &mut hasher );
         }
       }
 
@@ -418,15 +418,15 @@ mod private
       {
         ResponseStreamEvent::ResponseTextDelta( e ) =>
         {
-          mem::size_of_val( e ) + e.delta.len() + e.item_id.len()
+          mem ::size_of_val( e ) + e.delta.len() + e.item_id.len()
         },
         ResponseStreamEvent::ResponseCompleted( e ) =>
         {
-          mem::size_of_val( e ) + Self::estimate_response_size( &e.response )
+          mem ::size_of_val( e ) + Self::estimate_response_size( &e.response )
         },
         ResponseStreamEvent::ResponseCreated( e ) =>
         {
-          mem::size_of_val( e ) + Self::estimate_response_size( &e.response )
+          mem ::size_of_val( e ) + Self::estimate_response_size( &e.response )
         },
         _ =>
         {
@@ -473,7 +473,7 @@ mod private
             {
               rounded_nanos as u64
             } else {
-              u64::MAX
+              u64 ::MAX
             };
             Duration::from_nanos( nanos_u64 )
           } else {
@@ -612,7 +612,7 @@ mod private
     {
       let duration = self.start_time.elapsed();
       let stats = self.stats.clone();
-      tokio::spawn( async move
+      tokio ::spawn( async move
       {
         if let Ok( mut stats ) = stats.try_write()
         {
@@ -633,7 +633,7 @@ mod private
                 let result = rounded_nanos as u64;
                 result
               } else {
-                u64::MAX
+                u64 ::MAX
               };
               Duration::from_nanos( nanos_u64 )
             } else {
@@ -854,7 +854,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use private::StreamingPerformanceConfig;
   exposed use private::StreamingPerformanceStats;

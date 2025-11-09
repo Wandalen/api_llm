@@ -18,15 +18,15 @@ use crate::{ ChatRequest, GenerateRequest };
 pub struct BatchChatRequest
 {
   /// List of chat requests to process in batch
-  pub requests: Vec< ChatRequest >,
+  pub requests : Vec< ChatRequest >,
   /// Batch operation configuration
-  pub batch_config: Option< BatchOperationConfig >,
+  pub batch_config : Option< BatchOperationConfig >,
   /// Enable parallel execution of requests
-  pub parallel_execution: bool,
+  pub parallel_execution : bool,
   /// Stop processing on first error
-  pub fail_fast: bool,
+  pub fail_fast : bool,
   /// Overall timeout for the entire batch
-  pub timeout: Option< Duration >,
+  pub timeout : Option< Duration >,
 }
 
 /// Response structure for batch chat operations
@@ -34,21 +34,21 @@ pub struct BatchChatRequest
 pub struct BatchChatResponse
 {
   /// Results for each request in the batch
-  pub results: Vec< BatchResult >,
+  pub results : Vec< BatchResult >,
   /// Total number of requests processed
-  pub total_requests: usize,
+  pub total_requests : usize,
   /// Number of successful requests
-  pub successful_requests: usize,
+  pub successful_requests : usize,
   /// Number of failed requests
-  pub failed_requests: usize,
+  pub failed_requests : usize,
   /// Total execution time in milliseconds
-  pub execution_time_ms: u64,
+  pub execution_time_ms : u64,
   /// Throughput in requests per second
-  pub throughput_requests_per_second: f64,
+  pub throughput_requests_per_second : f64,
   /// List of optimizations applied during batch processing
-  pub batch_optimizations: Option< Vec< String > >,
+  pub batch_optimizations : Option< Vec< String > >,
   /// Error messages from batch processing
-  pub errors: Vec< String >,
+  pub errors : Vec< String >,
 }
 
 /// Request structure for batch generation operations
@@ -56,15 +56,15 @@ pub struct BatchChatResponse
 pub struct BatchGenerateRequest
 {
   /// List of generation requests to process in batch
-  pub requests: Vec< GenerateRequest >,
+  pub requests : Vec< GenerateRequest >,
   /// Batch operation configuration
-  pub batch_config: Option< BatchOperationConfig >,
+  pub batch_config : Option< BatchOperationConfig >,
   /// Enable parallel execution of requests
-  pub parallel_execution: bool,
+  pub parallel_execution : bool,
   /// Stop processing on first error
-  pub fail_fast: bool,
+  pub fail_fast : bool,
   /// Overall timeout for the entire batch
-  pub timeout: Option< Duration >,
+  pub timeout : Option< Duration >,
 }
 
 /// Response structure for batch generation operations
@@ -72,21 +72,21 @@ pub struct BatchGenerateRequest
 pub struct BatchGenerateResponse
 {
   /// Results for each request in the batch
-  pub results: Vec< BatchResult >,
+  pub results : Vec< BatchResult >,
   /// Total number of requests processed
-  pub total_requests: usize,
+  pub total_requests : usize,
   /// Number of successful requests
-  pub successful_requests: usize,
+  pub successful_requests : usize,
   /// Number of failed requests
-  pub failed_requests: usize,
+  pub failed_requests : usize,
   /// Total execution time in milliseconds
-  pub execution_time_ms: u64,
+  pub execution_time_ms : u64,
   /// Throughput in requests per second
-  pub throughput_requests_per_second: f64,
+  pub throughput_requests_per_second : f64,
   /// List of optimizations applied during batch processing
-  pub batch_optimizations: Option< Vec< String > >,
+  pub batch_optimizations : Option< Vec< String > >,
   /// Error messages from batch processing
-  pub errors: Vec< String >,
+  pub errors : Vec< String >,
 }
 
 /// Configuration for batch operations
@@ -94,17 +94,17 @@ pub struct BatchGenerateResponse
 pub struct BatchOperationConfig
 {
   /// Maximum number of requests in a single batch
-  max_batch_size: usize,
+  max_batch_size : usize,
   /// Maximum number of concurrent requests
-  concurrent_limit: usize,
+  concurrent_limit : usize,
   /// Whether to retry failed requests
-  retry_failed: bool,
+  retry_failed : bool,
   /// Whether to preserve request order in results
-  preserve_order: bool,
+  preserve_order : bool,
   /// Timeout per individual request
-  timeout_per_request: Option< Duration >,
+  timeout_per_request : Option< Duration >,
   /// Chunk size for processing large batches
-  chunk_size: usize,
+  chunk_size : usize,
 }
 
 /// Result of a single request within a batch
@@ -122,13 +122,13 @@ pub enum BatchResult
 pub struct BatchError
 {
   /// Index of the failed request in the original batch
-  pub request_index: usize,
+  pub request_index : usize,
   /// Error code categorizing the failure
-  pub error_code: String,
+  pub error_code : String,
   /// Human-readable error message
-  pub error_message: String,
+  pub error_message : String,
   /// Whether this error is recoverable through retry
-  pub recoverable: bool,
+  pub recoverable : bool,
 }
 
 impl BatchChatRequest
@@ -136,22 +136,22 @@ impl BatchChatRequest
   /// Create a new batch chat request
   #[ inline ]
   #[ must_use ]
-  pub fn new( requests: Vec< ChatRequest > ) -> Self
+  pub fn new( requests : Vec< ChatRequest > ) -> Self
   {
     Self
     {
       requests,
-      batch_config: None,
-      parallel_execution: true,
-      fail_fast: false,
-      timeout: None,
+      batch_config : None,
+      parallel_execution : true,
+      fail_fast : false,
+      timeout : None,
     }
   }
 
   /// Set batch configuration
   #[ inline ]
   #[ must_use ]
-  pub fn with_config( mut self, config: BatchOperationConfig ) -> Self
+  pub fn with_config( mut self, config : BatchOperationConfig ) -> Self
   {
     self.batch_config = Some( config );
     self
@@ -160,7 +160,7 @@ impl BatchChatRequest
   /// Set parallel execution mode
   #[ inline ]
   #[ must_use ]
-  pub fn with_parallel_execution( mut self, parallel: bool ) -> Self
+  pub fn with_parallel_execution( mut self, parallel : bool ) -> Self
   {
     self.parallel_execution = parallel;
     self
@@ -169,7 +169,7 @@ impl BatchChatRequest
   /// Set fail-fast behavior
   #[ inline ]
   #[ must_use ]
-  pub fn with_fail_fast( mut self, fail_fast: bool ) -> Self
+  pub fn with_fail_fast( mut self, fail_fast : bool ) -> Self
   {
     self.fail_fast = fail_fast;
     self
@@ -178,7 +178,7 @@ impl BatchChatRequest
   /// Set batch timeout
   #[ inline ]
   #[ must_use ]
-  pub fn with_timeout( mut self, timeout: Duration ) -> Self
+  pub fn with_timeout( mut self, timeout : Duration ) -> Self
   {
     self.timeout = Some( timeout );
     self
@@ -206,22 +206,22 @@ impl BatchGenerateRequest
   /// Create a new batch generation request
   #[ inline ]
   #[ must_use ]
-  pub fn new( requests: Vec< GenerateRequest > ) -> Self
+  pub fn new( requests : Vec< GenerateRequest > ) -> Self
   {
     Self
     {
       requests,
-      batch_config: None,
-      parallel_execution: true,
-      fail_fast: false,
-      timeout: None,
+      batch_config : None,
+      parallel_execution : true,
+      fail_fast : false,
+      timeout : None,
     }
   }
 
   /// Set batch configuration
   #[ inline ]
   #[ must_use ]
-  pub fn with_config( mut self, config: BatchOperationConfig ) -> Self
+  pub fn with_config( mut self, config : BatchOperationConfig ) -> Self
   {
     self.batch_config = Some( config );
     self
@@ -230,7 +230,7 @@ impl BatchGenerateRequest
   /// Set parallel execution mode
   #[ inline ]
   #[ must_use ]
-  pub fn with_parallel_execution( mut self, parallel: bool ) -> Self
+  pub fn with_parallel_execution( mut self, parallel : bool ) -> Self
   {
     self.parallel_execution = parallel;
     self
@@ -239,7 +239,7 @@ impl BatchGenerateRequest
   /// Set fail-fast behavior
   #[ inline ]
   #[ must_use ]
-  pub fn with_fail_fast( mut self, fail_fast: bool ) -> Self
+  pub fn with_fail_fast( mut self, fail_fast : bool ) -> Self
   {
     self.fail_fast = fail_fast;
     self
@@ -248,7 +248,7 @@ impl BatchGenerateRequest
   /// Set batch timeout
   #[ inline ]
   #[ must_use ]
-  pub fn with_timeout( mut self, timeout: Duration ) -> Self
+  pub fn with_timeout( mut self, timeout : Duration ) -> Self
   {
     self.timeout = Some( timeout );
     self
@@ -280,19 +280,19 @@ impl BatchOperationConfig
   {
     Self
     {
-      max_batch_size: 100,
-      concurrent_limit: 5,
-      retry_failed: false,
-      preserve_order: true,
-      timeout_per_request: None,
-      chunk_size: 10,
+      max_batch_size : 100,
+      concurrent_limit : 5,
+      retry_failed : false,
+      preserve_order : true,
+      timeout_per_request : None,
+      chunk_size : 10,
     }
   }
 
   /// Set maximum batch size
   #[ inline ]
   #[ must_use ]
-  pub fn with_max_batch_size( mut self, max_size: usize ) -> Self
+  pub fn with_max_batch_size( mut self, max_size : usize ) -> Self
   {
     self.max_batch_size = max_size.max( 1 ); // Ensure at least 1
     self
@@ -301,7 +301,7 @@ impl BatchOperationConfig
   /// Set concurrent limit
   #[ inline ]
   #[ must_use ]
-  pub fn with_concurrent_limit( mut self, limit: usize ) -> Self
+  pub fn with_concurrent_limit( mut self, limit : usize ) -> Self
   {
     self.concurrent_limit = limit.max( 1 ); // Ensure at least 1
     self
@@ -310,7 +310,7 @@ impl BatchOperationConfig
   /// Set retry failed requests
   #[ inline ]
   #[ must_use ]
-  pub fn with_retry_failed( mut self, retry: bool ) -> Self
+  pub fn with_retry_failed( mut self, retry : bool ) -> Self
   {
     self.retry_failed = retry;
     self
@@ -319,7 +319,7 @@ impl BatchOperationConfig
   /// Set preserve order
   #[ inline ]
   #[ must_use ]
-  pub fn with_preserve_order( mut self, preserve: bool ) -> Self
+  pub fn with_preserve_order( mut self, preserve : bool ) -> Self
   {
     self.preserve_order = preserve;
     self
@@ -328,7 +328,7 @@ impl BatchOperationConfig
   /// Set timeout per request
   #[ inline ]
   #[ must_use ]
-  pub fn with_timeout_per_request( mut self, timeout: Duration ) -> Self
+  pub fn with_timeout_per_request( mut self, timeout : Duration ) -> Self
   {
     self.timeout_per_request = Some( timeout );
     self
@@ -337,7 +337,7 @@ impl BatchOperationConfig
   /// Set chunk size for large batches
   #[ inline ]
   #[ must_use ]
-  pub fn with_chunk_size( mut self, size: usize ) -> Self
+  pub fn with_chunk_size( mut self, size : usize ) -> Self
   {
     self.chunk_size = size.max( 1 ); // Ensure at least 1
     self
@@ -449,7 +449,7 @@ impl BatchError
   /// Create a new batch error
   #[ inline ]
   #[ must_use ]
-  pub fn new( request_index: usize, error_code: String, error_message: String, recoverable: bool ) -> Self
+  pub fn new( request_index : usize, error_code : String, error_message : String, recoverable : bool ) -> Self
   {
     Self
     {
@@ -463,7 +463,7 @@ impl BatchError
   /// Create a recoverable error
   #[ inline ]
   #[ must_use ]
-  pub fn recoverable( request_index: usize, error_code: String, error_message: String ) -> Self
+  pub fn recoverable( request_index : usize, error_code : String, error_message : String ) -> Self
   {
     Self::new( request_index, error_code, error_message, true )
   }
@@ -471,7 +471,7 @@ impl BatchError
   /// Create a non-recoverable error
   #[ inline ]
   #[ must_use ]
-  pub fn non_recoverable( request_index: usize, error_code: String, error_message: String ) -> Self
+  pub fn non_recoverable( request_index : usize, error_code : String, error_message : String ) -> Self
   {
     Self::new( request_index, error_code, error_message, false )
   }

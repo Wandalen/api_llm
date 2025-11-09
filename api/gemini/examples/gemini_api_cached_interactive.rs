@@ -47,9 +47,9 @@
 #[ cfg( feature = "streaming" ) ]
 use futures::StreamExt;
 use api_gemini::{
-  client::Client,
-  models::*,
-  error::Error,
+  client ::Client,
+  models ::*,
+  error ::Error,
 };
 use std::io::{self, Write};
 use std::time::{SystemTime, UNIX_EPOCH};
@@ -58,13 +58,13 @@ use std::time::{SystemTime, UNIX_EPOCH};
 struct ChatConfig
 {
   /// Maximum tokens to keep in cache before optimization
-  max_cache_tokens: i32,
+  max_cache_tokens : i32,
   /// Maximum conversation turns to keep in memory
-  max_conversation_turns: usize,
+  max_conversation_turns : usize,
   /// Cache TTL in seconds
-  cache_ttl_seconds: u32,
+  cache_ttl_seconds : u32,
   /// Model to use for the conversation
-  model_name: String,
+  model_name : String,
 }
 
 impl Default for ChatConfig
@@ -72,10 +72,10 @@ impl Default for ChatConfig
   fn default() -> Self
   {
     Self {
-      max_cache_tokens: 8000,
-      max_conversation_turns: 20,
-      cache_ttl_seconds: 3600, // 1 hour
-      model_name: "gemini-1.5-flash-latest".to_string(),
+      max_cache_tokens : 8000,
+      max_conversation_turns : 20,
+      cache_ttl_seconds : 3600, // 1 hour
+      model_name : "gemini-1.5-flash-latest".to_string(),
     }
   }
 }
@@ -83,28 +83,28 @@ impl Default for ChatConfig
 /// Manages the cached conversation state
 struct CachedChatSession
 {
-  client: Client,
-  config: ChatConfig,
-  conversation_history: Vec< Content >,
-  cache_id: Option< String >,
-  total_tokens_used: i32,
-  cached_tokens: i32,
+  client : Client,
+  config : ChatConfig,
+  conversation_history : Vec< Content >,
+  cache_id : Option< String >,
+  total_tokens_used : i32,
+  cached_tokens : i32,
 }
 
 impl CachedChatSession
 {
   /// Create a new cached chat session
-  async fn new(client: Client) -> Result< Self, Error > 
+  async fn new(client : Client) -> Result< Self, Error > 
   {
     let config = ChatConfig::default();
 
     Ok(Self {
       client,
       config,
-      conversation_history: Vec::new(),
-      cache_id: None,
-      total_tokens_used: 0,
-      cached_tokens: 0,
+      conversation_history : Vec::new(),
+      cache_id : None,
+      total_tokens_used : 0,
+      cached_tokens : 0,
     })
   }
 
@@ -115,16 +115,16 @@ impl CachedChatSession
 
     // Create initial system context
     let system_content = Content {
-      role: "user".to_string(),
-      parts: vec![Part {
-        text: Some(
+      role : "user".to_string(),
+      parts : vec![Part {
+        text : Some(
           "You are a helpful AI assistant. This is the beginning of our conversation. \
           Please be concise but informative in your responses. You can discuss any topic \
           the user is interested in.".to_string()
         ),
-        inline_data: None,
-        function_call: None,
-        function_response: None,
+        inline_data : None,
+        function_call : None,
+        function_response : None,
         ..Default::default()
       }],
     };
@@ -147,26 +147,26 @@ impl CachedChatSession
       .as_secs();
 
     let cache_request = CreateCachedContentRequest {
-      model: self.config.model_name.clone(),
-      contents: self.conversation_history.clone(),
-      ttl: Some(format!("{}s", self.config.cache_ttl_seconds)),
-      expire_time: None,
-      display_name: Some(format!("Interactive Chat Session {}", timestamp)),
-      system_instruction: Some(Content {
-        role: "system".to_string(),
-        parts: vec![Part {
-          text: Some(
+      model : self.config.model_name.clone(),
+      contents : self.conversation_history.clone(),
+      ttl : Some(format!("{}s", self.config.cache_ttl_seconds)),
+      expire_time : None,
+      display_name : Some(format!("Interactive Chat Session {}", timestamp)),
+      system_instruction : Some(Content {
+        role : "system".to_string(),
+        parts : vec![Part {
+          text : Some(
             "You are engaging in an interactive conversation. Maintain context \
             from previous messages and provide helpful, accurate responses.".to_string()
           ),
-          inline_data: None,
-          function_call: None,
-          function_response: None,
+          inline_data : None,
+          function_call : None,
+          function_response : None,
           ..Default::default()
         }],
       }),
-      tools: None,
-      tool_config: None,
+      tools : None,
+      tool_config : None,
     };
 
     let response = self.client.cached_content().create(&cache_request).await?;
@@ -175,7 +175,7 @@ impl CachedChatSession
     // Count tokens in the cached content
     self.update_token_counts().await?;
 
-    println!("📦 Created cache: {} (ID: {})",
+    println!("📦 Created cache : {} (ID: {})",
       response.display_name.unwrap_or_else(|| "Unnamed".to_string()),
       response.name
     );
@@ -189,8 +189,8 @@ impl CachedChatSession
     if let Some(cache_id) = &self.cache_id
     {
       let update_request = UpdateCachedContentRequest {
-        ttl: Some(format!("{}s", self.config.cache_ttl_seconds)),
-        expire_time: None,
+        ttl : Some(format!("{}s", self.config.cache_ttl_seconds)),
+        expire_time : None,
       };
 
       let _response = self.client.cached_content().update(cache_id, &update_request).await?;
@@ -205,8 +205,8 @@ impl CachedChatSession
   async fn update_token_counts(&mut self) -> Result< (), Error > 
   {
     let count_request = CountTokensRequest {
-      contents: self.conversation_history.clone(),
-      generate_content_request: None,
+      contents : self.conversation_history.clone(),
+      generate_content_request : None,
     };
 
     let count_response = self.client
@@ -221,15 +221,15 @@ impl CachedChatSession
   }
 
   /// Add a user message to the conversation
-  fn add_user_message(&mut self, message: String)
+  fn add_user_message(&mut self, message : String)
   {
     let content = Content {
-      role: "user".to_string(),
-      parts: vec![Part {
-        text: Some(message),
-        inline_data: None,
-        function_call: None,
-        function_response: None,
+      role : "user".to_string(),
+      parts : vec![Part {
+        text : Some(message),
+        inline_data : None,
+        function_call : None,
+        function_response : None,
         ..Default::default()
       }],
     };
@@ -237,7 +237,7 @@ impl CachedChatSession
   }
 
   /// Add an AI response to the conversation
-  fn add_ai_response(&mut self, response: Content)
+  fn add_ai_response(&mut self, response : Content)
   {
     self.conversation_history.push(response);
   }
@@ -246,20 +246,20 @@ impl CachedChatSession
   async fn generate_response(&mut self) -> Result< String, Error > 
   {
     let request = GenerateContentRequest {
-      contents: self.conversation_history.clone(),
-      generation_config: Some(GenerationConfig {
-        temperature: Some(0.7),
-        max_output_tokens: Some(1024),
-        top_p: Some(0.9),
-        top_k: Some(40),
-        candidate_count: Some(1),
-        stop_sequences: None,
+      contents : self.conversation_history.clone(),
+      generation_config : Some(GenerationConfig {
+        temperature : Some(0.7),
+        max_output_tokens : Some(1024),
+        top_p : Some(0.9),
+        top_k : Some(40),
+        candidate_count : Some(1),
+        stop_sequences : None,
       }),
-      safety_settings: None,
-      tools: None,
-      tool_config: None,
-      system_instruction: None,
-      cached_content: self.cache_id.clone(),
+      safety_settings : None,
+      tools : None,
+      tool_config : None,
+      system_instruction : None,
+      cached_content : self.cache_id.clone(),
     };
 
     #[ cfg( feature = "streaming" ) ]
@@ -275,7 +275,7 @@ impl CachedChatSession
 
   /// Generate streaming response
   #[ cfg( feature = "streaming" ) ]
-  async fn generate_streaming_response(&mut self, request: GenerateContentRequest) -> Result< String, Error > 
+  async fn generate_streaming_response(&mut self, request : GenerateContentRequest) -> Result< String, Error > 
   {
     let stream = self.client
       .models()
@@ -284,9 +284,9 @@ impl CachedChatSession
       .await?;
 
     let mut full_response = String::new();
-    let mut response_content: Option< Content > = None;
+    let mut response_content : Option< Content > = None;
 
-    futures::pin_mut!(stream);
+    futures ::pin_mut!(stream);
 
     while let Some(chunk) = stream.next().await
     {
@@ -302,7 +302,7 @@ impl CachedChatSession
                 if let Some(text) = &part.text
                 {
                   print!("{}", text);
-                  io::stdout().flush().unwrap();
+                  io ::stdout().flush().unwrap();
                   full_response.push_str(text);
                 }
               }
@@ -327,12 +327,12 @@ impl CachedChatSession
     } else if !full_response.is_empty()
     {
       let content = Content {
-        role: "model".to_string(),
-        parts: vec![Part {
-          text: Some(full_response.clone()),
-          inline_data: None,
-          function_call: None,
-          function_response: None,
+        role : "model".to_string(),
+        parts : vec![Part {
+          text : Some(full_response.clone()),
+          inline_data : None,
+          function_call : None,
+          function_response : None,
           ..Default::default()
         }],
       };
@@ -344,7 +344,7 @@ impl CachedChatSession
 
   /// Generate regular (non-streaming) response
   #[ cfg( not( feature = "streaming" ) ) ]
-  async fn generate_regular_response(&mut self, request: GenerateContentRequest) -> Result< String, Error > 
+  async fn generate_regular_response(&mut self, request : GenerateContentRequest) -> Result< String, Error > 
   {
     let response = self.client
       .models()
@@ -359,7 +359,7 @@ impl CachedChatSession
         if let Some(text) = &part.text
         {
           // Simulate streaming by printing words with delays
-          let words: Vec< &str > = text.split_whitespace().collect();
+          let words : Vec< &str > = text.split_whitespace().collect();
           for (i, word) in words.iter().enumerate()
           {
             print!("{}", word);
@@ -367,8 +367,8 @@ impl CachedChatSession
             {
               print!(" ");
             }
-            io::stdout().flush().unwrap();
-            tokio::time::sleep(tokio::time::Duration::from_millis(80)).await;
+            io ::stdout().flush().unwrap();
+            tokio ::time::sleep(tokio::time::Duration::from_millis(80)).await;
           }
 
           self.add_ai_response(candidate.content.clone());
@@ -392,7 +392,7 @@ impl CachedChatSession
   /// Optimize cache by removing older messages and updating cache
   async fn optimize_cache(&mut self) -> Result< (), Error > 
   {
-    println!("\n🔄 Optimizing cache (current tokens: {})...", self.total_tokens_used);
+    println!("\n🔄 Optimizing cache (current tokens : {})...", self.total_tokens_used);
 
     // Keep system message and recent conversation
     let keep_count = self.config.max_conversation_turns / 2;
@@ -411,7 +411,7 @@ impl CachedChatSession
     self.delete_cache().await?;
     self.create_cache().await?;
 
-    println!("✅ Cache optimized! New token count: {}", self.total_tokens_used);
+    println!("✅ Cache optimized! New token count : {}", self.total_tokens_used);
     Ok(())
   }
 
@@ -433,9 +433,9 @@ impl CachedChatSession
     self.update_token_counts().await?;
 
     println!("\n📊 Token Usage Information:");
-    println!("  Total tokens in conversation: {}", self.total_tokens_used);
-    println!("  Cached tokens: {}", self.cached_tokens);
-    println!("  Conversation turns: {}", self.conversation_history.len() - 1); // Exclude system message
+    println!("  Total tokens in conversation : {}", self.total_tokens_used);
+    println!("  Cached tokens : {}", self.cached_tokens);
+    println!("  Conversation turns : {}", self.conversation_history.len() - 1); // Exclude system message
     println!("  Cache ID: {}", self.cache_id.as_deref().unwrap_or("None"));
     println!("  Max cache tokens (before optimization): {}", self.config.max_cache_tokens);
     println!();
@@ -453,15 +453,15 @@ impl CachedChatSession
         Ok(cache_info) => {
           println!("\n📦 Cache Information:");
           println!("  Cache ID: {}", cache_info.name);
-          println!("  Display Name: {}", cache_info.display_name.unwrap_or_else(|| "Unnamed".to_string()));
-          println!("  Model: {}", cache_info.model);
-          println!("  Expire Time: {}", cache_info.expire_time.as_deref().unwrap_or("No expiration"));
-          println!("  Create Time: {}", cache_info.create_time.unwrap_or_else(|| "Unknown".to_string()));
-          println!("  Update Time: {}", cache_info.update_time.unwrap_or_else(|| "Unknown".to_string()));
+          println!("  Display Name : {}", cache_info.display_name.unwrap_or_else(|| "Unnamed".to_string()));
+          println!("  Model : {}", cache_info.model);
+          println!("  Expire Time : {}", cache_info.expire_time.as_deref().unwrap_or("No expiration"));
+          println!("  Create Time : {}", cache_info.create_time.unwrap_or_else(|| "Unknown".to_string()));
+          println!("  Update Time : {}", cache_info.update_time.unwrap_or_else(|| "Unknown".to_string()));
           println!();
         }
         Err(e) => {
-          println!("❌ Error retrieving cache info: {}", e);
+          println!("❌ Error retrieving cache info : {}", e);
         }
       }
     } else {
@@ -518,14 +518,14 @@ impl CachedChatSession
 
 #[ tokio::main ]
 #[ allow( clippy::too_many_lines ) ]
-async fn main() -> Result<(), Box< dyn core::error::Error >> 
+async fn main() -> Result<(), Box< dyn core::error::Error > > 
 {
   // Initialize client
   let client = match Client::new()
   {
     Ok(client) => client,
     Err(e) => {
-      eprintln!("❌ Failed to create client: {}", e);
+      eprintln!("❌ Failed to create client : {}", e);
       eprintln!("💡 Make sure GEMINI_API_KEY environment variable is set");
       return Ok(());
     }
@@ -542,7 +542,7 @@ async fn main() -> Result<(), Box< dyn core::error::Error >>
   // Initialize cache
   if let Err(e) = session.initialize().await
   {
-    eprintln!("❌ Failed to initialize session: {}", e);
+    eprintln!("❌ Failed to initialize session : {}", e);
     return Ok(());
   }
 
@@ -550,8 +550,8 @@ async fn main() -> Result<(), Box< dyn core::error::Error >>
   loop
   {
     // Get user input
-    print!("\n👤 You: ");
-    io::stdout().flush()?;
+    print!("\n👤 You : ");
+    io ::stdout().flush()?;
 
     let mut input = String::new();
     match io::stdin().read_line(&mut input)
@@ -562,7 +562,7 @@ async fn main() -> Result<(), Box< dyn core::error::Error >>
       }
       Ok(_) => {}
       Err(e) => {
-        println!("\n❌ Error reading input: {}", e);
+        println!("\n❌ Error reading input : {}", e);
         break;
       }
     }
@@ -592,21 +592,21 @@ async fn main() -> Result<(), Box< dyn core::error::Error >>
       "!tokens" => {
         if let Err(e) = session.show_token_info().await
         {
-          println!("❌ Error showing token info: {}", e);
+          println!("❌ Error showing token info : {}", e);
         }
         continue;
       }
       "!cache info" => {
         if let Err(e) = session.show_cache_info().await
         {
-          println!("❌ Error showing cache info: {}", e);
+          println!("❌ Error showing cache info : {}", e);
         }
         continue;
       }
       "!cache clear" => {
         if let Err(e) = session.clear_cache().await
         {
-          println!("❌ Error clearing cache: {}", e);
+          println!("❌ Error clearing cache : {}", e);
         }
         continue;
       }
@@ -621,13 +621,13 @@ async fn main() -> Result<(), Box< dyn core::error::Error >>
     {
       if let Err(e) = session.optimize_cache().await
       {
-        println!("⚠️ Cache optimization failed: {}", e);
+        println!("⚠️ Cache optimization failed : {}", e);
       }
     }
 
     // Generate AI response
     print!("\n🤖 AI: ");
-    io::stdout().flush()?;
+    io ::stdout().flush()?;
 
     match session.generate_response().await
     {
@@ -637,11 +637,11 @@ async fn main() -> Result<(), Box< dyn core::error::Error >>
         // Update cache after successful response
         if let Err(e) = session.update_cache().await
         {
-          println!("⚠️ Cache update failed: {}", e);
+          println!("⚠️ Cache update failed : {}", e);
         }
       }
       Err(e) => {
-        println!("\n❌ Error generating response: {}", e);
+        println!("\n❌ Error generating response : {}", e);
         println!("💡 Please try again or type 'quit' to exit.");
       }
     }
@@ -650,7 +650,7 @@ async fn main() -> Result<(), Box< dyn core::error::Error >>
   // Cleanup
   if let Err(e) = session.cleanup().await
   {
-    eprintln!("⚠️ Cleanup error: {}", e);
+    eprintln!("⚠️ Cleanup error : {}", e);
   }
 
   Ok(())

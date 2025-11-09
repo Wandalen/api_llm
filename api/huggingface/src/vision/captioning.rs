@@ -4,9 +4,9 @@
 
 use crate::
 {
-  error::Result,
-  vision::{ Vision, ImageInput, CaptionResult },
-  environment::HuggingFaceEnvironment,
+  error ::Result,
+  vision ::{ Vision, ImageInput, CaptionResult },
+  environment ::HuggingFaceEnvironment,
 };
 use serde::{ Serialize, Deserialize };
 
@@ -51,7 +51,7 @@ where
   /// # use api_huggingface::{Client, environment::HuggingFaceEnvironmentImpl, secret::Secret};
   /// # use api_huggingface::vision::ImageInput;
   /// # use std::fs;
-  /// # async fn example() -> Result< (), Box< dyn std::error::Error >> {
+  /// # async fn example() -> Result< (), Box< dyn std::error::Error > > {
   /// # let api_key = Secret::new("test".to_string());
   /// # let env = HuggingFaceEnvironmentImpl::build(api_key, None)?;
   /// # let client = Client::build(env)?;
@@ -60,7 +60,7 @@ where
   /// let input = ImageInput::from_bytes( image_data );
   ///
   /// let caption = vision.caption_image( input, "Salesforce/blip-image-captioning-base" ).await?;
-  /// println!( "Caption: {}", caption );
+  /// println!( "Caption : {}", caption );
   /// # Ok(())
   /// # }
   /// ```

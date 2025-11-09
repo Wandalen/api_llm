@@ -4,7 +4,7 @@
 mod private
 {
   // Use full paths from crate root for components
-  // Removed unused: use crate::components::common::Metadata;
+  // Removed unused : use crate::components::common::Metadata;
   // Serde imports
   use serde::{ Serialize, Deserialize };
 
@@ -458,9 +458,9 @@ mod private
 
 } // end mod private
 
-crate::mod_interface!
+crate ::mod_interface!
 {
-  // Note: Re-exporting admin types again here, ideally they'd be in a common admin module.
+  // Note : Re-exporting admin types again here, ideally they'd be in a common admin module.
   // qqq : rid of duplications
   exposed use 
   {

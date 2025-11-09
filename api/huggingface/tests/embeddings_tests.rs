@@ -3,16 +3,16 @@
 use api_huggingface::
 {
   Client,
-  environment::HuggingFaceEnvironmentImpl,
-  secret::Secret,
-  components::
+  environment ::HuggingFaceEnvironmentImpl,
+  secret ::Secret,
+  components ::
   {
-  embeddings::
+  embeddings ::
   {
       EmbeddingRequest, EmbeddingResponse, EmbeddingOptions, EmbeddingInput, PoolingStrategy,
   },
   },
-  error::{ HuggingFaceError, Result },
+  error ::{ HuggingFaceError, Result },
 };
 
 /// Helper function to create a test client
@@ -195,7 +195,7 @@ fn test_embedding_input_text_validation()
   for input in valid_inputs
   {
   let result = validate_input_text( input );
-  assert!( result.is_ok(), "Input should be valid: '{input}'" );
+  assert!( result.is_ok(), "Input should be valid : '{input}'" );
   }
   
   // Setup & Execution & Verification - Invalid inputs
@@ -288,7 +288,7 @@ fn test_embedding_batch_validation()
 #[ test ]
 fn test_cosine_similarity_basic()
 {
-  // Note: cosine_similarity is a private function, so we test through similarity method
+  // Note : cosine_similarity is a private function, so we test through similarity method
   // But we can test the mathematical properties using test vectors
   
   // Test vectors that should have known similarity values
@@ -722,7 +722,7 @@ mod integration_tests
   {
       Ok( similarity ) => 
       {
-  println!( "Integration similarity test successful - similarity: {similarity}" );
+  println!( "Integration similarity test successful - similarity : {similarity}" );
   assert!( ( -1.0..=1.0 ).contains( &similarity ), "Similarity should be in valid range" );
       },
       Err( e ) => 
@@ -755,7 +755,7 @@ fn test_embedding_authentication_error_handling()
       match e
       {
   HuggingFaceError::Authentication( _ ) => {}, // Expected
-  other => panic!( "Expected Authentication error, got: {other:?}" ),
+  other => panic!( "Expected Authentication error, got : {other:?}" ),
       }
   }
   }

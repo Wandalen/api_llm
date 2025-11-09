@@ -9,11 +9,11 @@ fn create_integration_client() -> Client
   Client::new().unwrap_or_else( |err| {
     panic!( 
       "\n❌ INTEGRATION TEST FAILURE: No valid API key found!\n\
-      \n🔑 Required: Set GEMINI_API_KEY environment variable or create secret/gemini_api_key file\n\
+      \n🔑 Required : Set GEMINI_API_KEY environment variable or create secret/gemini_api_key file\n\
       \n📋 This integration test validates authentication with real API calls\n\
       \n🚫 No API key available from any source\n\
-      \n💡 For unit tests only (no API), run: cargo test --no-default-features\n\
-      \nOriginal error: {err:?}" 
+      \n💡 For unit tests only (no API), run : cargo test --no-default-features\n\
+      \nOriginal error : {err:?}" 
     );
   })
 }
@@ -40,7 +40,7 @@ fn test_integration_failure_without_api_key()
   let error = result.unwrap_err();
   let error_msg = format!( "{error:?}" );
   assert!( error_msg.to_lowercase().contains( "authentication" ) || error_msg.to_lowercase().contains( "api_key" ), 
-          "Error should mention authentication or API key: {error_msg}" );
+          "Error should mention authentication or API key : {error_msg}" );
   
   println!( "✅ Integration test properly fails with clear error message when no API key is available" );
 }
@@ -81,13 +81,13 @@ async fn integration_test_authentication_with_content_generation()
   {
     contents : vec!
     [
-      api_gemini::models::Content
+      api_gemini ::models::Content
       {
         parts : vec!
         [
-          api_gemini::models::Part
+          api_gemini ::models::Part
           {
-            text : Some( "Test authentication: say 'auth-ok'".to_string() ),
+            text : Some( "Test authentication : say 'auth-ok'".to_string() ),
             ..Default::default()
           }
         ],
@@ -129,7 +129,7 @@ async fn integration_test_authentication_with_embeddings()
       role : "user".to_string(),
       parts : vec!
       [
-        api_gemini::models::Part
+        api_gemini ::models::Part
         {
           text : Some( "authentication test".to_string() ),
           ..Default::default()
@@ -176,11 +176,11 @@ async fn integration_test_authentication_quota_and_limits()
     {
       contents : vec!
       [
-        api_gemini::models::Content
+        api_gemini ::models::Content
         {
           parts : vec!
           [
-            api_gemini::models::Part
+            api_gemini ::models::Part
             {
               text : Some( format!( "Request {}: count to 3", i + 1 ) ),
               ..Default::default()
@@ -207,7 +207,7 @@ async fn integration_test_authentication_quota_and_limits()
         assert!( !response.candidates.is_empty(), "Each successful request should return candidates" );
         
         // Small delay between requests
-        tokio::time::sleep( tokio::time::Duration::from_millis( 200 ) ).await;
+        tokio ::time::sleep( tokio::time::Duration::from_millis( 200 ) ).await;
       },
       Err( err ) =>
       {
@@ -218,7 +218,7 @@ async fn integration_test_authentication_quota_and_limits()
           println!( "Hit quota/rate limit on request {} (expected for auth validation)", i + 1 );
           break;
         }
-        panic!( "Unexpected error during quota test: {err:?}" );
+        panic!( "Unexpected error during quota test : {err:?}" );
       }
     }
   }

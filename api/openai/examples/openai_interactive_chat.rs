@@ -28,17 +28,17 @@
 //! **Complexity**: ⭐⭐⭐⭐ (Advanced)
 //! **Target Audience**: Advanced developers building chat applications
 //!
-//! Note: This is NOT for automated testing - it's for manual interactive use only.
+//! Note : This is NOT for automated testing - it's for manual interactive use only.
 
 use api_openai::ClientApiAccessors;
 use api_openai::
 {
   Client,
-  components::
+  components ::
   {
-    responses::{ CreateResponseRequest, ResponseInput },
-    input::{ InputItem, InputMessage, InputContentPart, InputText },
-    output::{ OutputItem, OutputContentPart },
+    responses ::{ CreateResponseRequest, ResponseInput },
+    input ::{ InputItem, InputMessage, InputContentPart, InputText },
+    output ::{ OutputItem, OutputContentPart },
   },
 };
 use std::io::{ self, Write };
@@ -61,16 +61,16 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
     secret,
     None,
     None,
-    api_openai::environment::OpenAIRecommended::base_url().to_string(),
-    api_openai::environment::OpenAIRecommended::realtime_base_url().to_string()
+    api_openai ::environment::OpenAIRecommended::base_url().to_string(),
+    api_openai ::environment::OpenAIRecommended::realtime_base_url().to_string()
   ).expect( "Failed to create environment" );
 
   let client = Client::build( env ).expect( "Failed to create client" );
 
   // Use faster model for interactive experience
   let model = "gpt-3.5-turbo".to_string();
-  println!( "🤖 Using model: {model} (optimized for speed)" );
-  println!( "🎯 Temperature: 0.7 (balanced creativity)" );
+  println!( "🤖 Using model : {model} (optimized for speed)" );
+  println!( "🎯 Temperature : 0.7 (balanced creativity)" );
   println!();
 
   // Initialize conversation state
@@ -83,8 +83,8 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
   loop
   {
     // Get user input
-    print!( "You: " );
-    io::stdout().flush()?;
+    print!( "You : " );
+    io ::stdout().flush()?;
 
     let mut input = String::new();
     match stdin.read_line( &mut input )
@@ -104,7 +104,7 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
         if lower_input == "quit" || lower_input == "exit" || lower_input == "bye"
         {
           println!( "\n👋 Goodbye! Thanks for chatting!" );
-          println!( "Total conversation turns: {turn_number}" );
+          println!( "Total conversation turns : {turn_number}" );
           break;
         }
 
@@ -133,11 +133,11 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
           .form();
 
         print!( "AI: " );
-        io::stdout().flush()?;
+        io ::stdout().flush()?;
 
         // Show typing indicator
         print!( "🤔 thinking..." );
-        io::stdout().flush()?;
+        io ::stdout().flush()?;
 
         // Make the request
         match client.responses().create( request ).await
@@ -158,7 +158,7 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
             }
 
               // Simulate streaming by printing word by word
-              let words: Vec< &str > = ai_response.split_whitespace().collect();
+              let words : Vec< &str > = ai_response.split_whitespace().collect();
               for ( i, word ) in words.iter().enumerate()
               {
                 print!( "{word}" );
@@ -166,10 +166,10 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
                 {
                   print!( " " );
                 }
-                io::stdout().flush()?;
+                io ::stdout().flush()?;
 
                 // Small delay to simulate streaming
-                tokio::time::sleep( tokio::time::Duration::from_millis( 50 ) ).await;
+                tokio ::time::sleep( tokio::time::Duration::from_millis( 50 ) ).await;
               }
               println!(); // New line after response
 
@@ -193,7 +193,7 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
             Err( e ) =>
             {
               print!( "\r          \r" ); // Clear thinking message
-              println!( "❌ Error: {e}" );
+              println!( "❌ Error : {e}" );
               println!( "💡 Please check your connection and try again." );
             }
           }
@@ -201,13 +201,13 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
         // Show conversation stats occasionally
         if turn_number % 5 == 0
         {
-          println!( "\n📊 Conversation stats: {} turns, {} messages in history",
+          println!( "\n📊 Conversation stats : {} turns, {} messages in history",
                    turn_number, conversation_history.len() );
         }
       }
       Err( e ) =>
       {
-        println!( "\n❌ Input error: {e}" );
+        println!( "\n❌ Input error : {e}" );
         println!( "💡 Please try typing your message again." );
       }
     }
@@ -217,10 +217,10 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
 
   // Final statistics
   println!( "\n=== Session Summary ===" );
-  println!( "Total turns: {turn_number}" );
-  println!( "Final history length: {} messages", conversation_history.len() );
+  println!( "Total turns : {turn_number}" );
+  println!( "Final history length : {} messages", conversation_history.len() );
 
-  println!( "Streaming mode: Simulated 📝" );
+  println!( "Streaming mode : Simulated 📝" );
 
   println!( "\n🎯 Key Features Demonstrated:" );
   println!( "✅ Real-time user interaction" );

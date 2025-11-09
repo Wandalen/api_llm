@@ -169,7 +169,7 @@ mod private
   /// Convert `serde_json::Value` to pretty-printed JSON string for cURL
   fn format_json_for_curl( value : &Value ) -> String
   {
-    serde_json::to_string( value ).unwrap_or_else( |_| "{}".to_string() )
+    serde_json ::to_string( value ).unwrap_or_else( |_| "{}".to_string() )
   }
 
   // Implement AsCurl for CreateMessageRequest
@@ -281,12 +281,12 @@ mod private
     T : ?Sized,
   {
     // This is a fallback - in practice, all requests should implement Serialize
-    serde_json::json!( {} )
+    serde_json ::json!( {} )
   }
 }
 
 #[ cfg( feature = "curl-diagnostics" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

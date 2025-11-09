@@ -6,8 +6,8 @@
 mod private
 {
   use crate::{ 
-    error::{ AnthropicError, AnthropicResult }, 
-    client::{ Client, CreateMessageRequest },
+    error ::{ AnthropicError, AnthropicResult }, 
+    client ::{ Client, CreateMessageRequest },
   };
   use serde::{ Serialize, Deserialize };
   use std::{ collections::HashMap, sync::{ Arc, Mutex }, time::{ Duration, Instant } };
@@ -86,30 +86,30 @@ mod private
         .header( "content-type", "application/json" )
         .send()
         .await
-        .map_err( |e| AnthropicError::http_error( format!( "Failed to fetch models: {e}" ) ) )?;
+        .map_err( |e| AnthropicError::http_error( format!( "Failed to fetch models : {e}" ) ) )?;
 
       if !response.status().is_success()
       {
-        return Err( AnthropicError::http_error_with_status( format!( "API error: {}", response.status() ), response.status().as_u16() ) );
+        return Err( AnthropicError::http_error_with_status( format!( "API error : {}", response.status() ), response.status().as_u16() ) );
       }
 
-      let models_response: ModelsApiResponse = response
+      let models_response : ModelsApiResponse = response
         .json()
         .await
-        .map_err( |e| AnthropicError::Parsing( format!( "Failed to parse models response: {e}" ) ) )?;
+        .map_err( |e| AnthropicError::Parsing( format!( "Failed to parse models response : {e}" ) ) )?;
 
       // Convert API response to our internal format
       let models = models_response.data.into_iter()
         .map( |api_model| ModelInfo {
-          id: api_model.id.clone(),
-          display_name: api_model.display_name.unwrap_or_else( || api_model.id.clone() ),
-          name: api_model.id,
-          max_tokens: api_model.max_tokens.unwrap_or( 200_000 ),
-          context_length: api_model.context_length.unwrap_or( 200_000 ),
-          created_at: api_model.created,
-          supports_tools: api_model.capabilities.contains( &"tools".to_string() ),
-          supports_vision: api_model.capabilities.contains( &"vision".to_string() ),
-          version: api_model.version,
+          id : api_model.id.clone(),
+          display_name : api_model.display_name.unwrap_or_else( || api_model.id.clone() ),
+          name : api_model.id,
+          max_tokens : api_model.max_tokens.unwrap_or( 200_000 ),
+          context_length : api_model.context_length.unwrap_or( 200_000 ),
+          created_at : api_model.created,
+          supports_tools : api_model.capabilities.contains( &"tools".to_string() ),
+          supports_vision : api_model.capabilities.contains( &"vision".to_string() ),
+          version : api_model.version,
         })
         .collect();
 
@@ -259,7 +259,7 @@ mod private
       Ok( ModelAvailability
       {
         is_available,
-        estimated_wait_time: if is_available { None } else { Some( Duration::from_secs( 30 ) ) },
+        estimated_wait_time : if is_available { None } else { Some( Duration::from_secs( 30 ) ) },
         load_factor,
       })
     }
@@ -347,14 +347,14 @@ mod private
                                  else { 0.5 };
 
           let reasoning = format!(
-            "Upgrade from {} with enhanced capabilities: {}",
+            "Upgrade from {} with enhanced capabilities : {}",
             current_model.name,
             if model.max_tokens > current_model.max_tokens { "larger context, " } else { "" }
           );
 
           recommendations.push( ModelRecommendation
           {
-            recommended_model: model.id,
+            recommended_model : model.id,
             confidence_score,
             reasoning,
           });
@@ -758,127 +758,211 @@ mod private
       ModelManager::new( self.clone() )
     }
 
-    /// List all available models. Returns error if API request fails.
+    /// List all available models.
+    ///
+    /// # Errors
+    ///
+    /// Returns error if API request fails.
     pub async fn list_models( &self ) -> AnthropicResult< Vec< ModelInfo > >
     {
       self.model_manager().list_models().await
     }
 
-    /// Get specific model information. Returns error if model not found.
+    /// Get specific model information.
+    ///
+    /// # Errors
+    ///
+    /// Returns error if model not found.
     pub async fn get_model( &self, model_id : &str ) -> AnthropicResult< ModelInfo >
     {
       self.model_manager().get_model( model_id ).await
     }
 
-    /// Get model capabilities. Returns error if model not found.
+    /// Get model capabilities.
+    ///
+    /// # Errors
+    ///
+    /// Returns error if model not found.
     pub async fn get_model_capabilities( &self, model_id : &str ) -> AnthropicResult< ModelCapabilities >
     {
       self.model_manager().get_model_capabilities( model_id ).await
     }
 
-    /// Select best model based on requirements. Returns error if no suitable model found.
+    /// Select best model based on requirements.
+    ///
+    /// # Errors
+    ///
+    /// Returns error if no suitable model found.
     pub async fn select_model( &self, requirements : ModelRequirements ) -> AnthropicResult< ModelInfo >
     {
       self.model_manager().select_model( requirements ).await
     }
 
-    /// Check model availability. Returns error if model not found.
+    /// Check model availability.
+    ///
+    /// # Errors
+    ///
+    /// Returns error if model not found.
     pub async fn check_model_availability( &self, model_id : &str ) -> AnthropicResult< ModelAvailability >
     {
       self.model_manager().check_model_availability( model_id ).await
     }
 
-    /// Select first available model from fallback chain. Returns error if no models are available.
+    /// Select first available model from fallback chain.
+    ///
+    /// # Errors
+    ///
+    /// Returns error if no models are available.
     pub async fn select_available_model( &self, fallback_chain : Vec< String > ) -> AnthropicResult< ModelInfo >
     {
       self.model_manager().select_available_model( fallback_chain ).await
     }
 
-    /// Get latest version of model family. Returns error if model family not found.
+    /// Get latest version of model family.
+    ///
+    /// # Errors
+    ///
+    /// Returns error if model family not found.
     pub async fn get_latest_model_version( &self, model_family : &str ) -> AnthropicResult< ModelInfo >
     {
       self.model_manager().get_latest_model_version( model_family ).await
     }
 
-    /// Get upgrade recommendations. Returns error if model not found.
+    /// Get upgrade recommendations.
+    ///
+    /// # Errors
+    ///
+    /// Returns error if model not found.
     pub async fn get_upgrade_recommendations( &self, model_id : &str ) -> AnthropicResult< Vec< ModelRecommendation > >
     {
       self.model_manager().get_upgrade_recommendations( model_id ).await
     }
 
-    /// Get model parameter limits. Returns error if model not found.
+    /// Get model parameter limits.
+    ///
+    /// # Errors
+    ///
+    /// Returns error if model not found.
     pub async fn get_model_limits( &self, model_id : &str ) -> AnthropicResult< ModelLimits >
     {
       self.model_manager().get_model_limits( model_id ).await
     }
 
-    /// Validate request for specific model. Returns error if request is invalid.
+    /// Validate request for specific model.
+    ///
+    /// # Errors
+    ///
+    /// Returns error if request is invalid.
     pub async fn validate_request_for_model( &self, request : &CreateMessageRequest ) -> AnthropicResult< () >
     {
       self.model_manager().validate_request_for_model( request ).await
     }
 
-    /// Get model performance. Returns error if model not found.
+    /// Get model performance.
+    ///
+    /// # Errors
+    ///
+    /// Returns error if model not found.
     pub async fn get_model_performance( &self, model_id : &str ) -> AnthropicResult< ModelPerformance >
     {
       self.model_manager().get_model_performance( model_id ).await
     }
 
-    /// Compare model performance. Returns error if any model not found.
+    /// Compare model performance.
+    ///
+    /// # Errors
+    ///
+    /// Returns error if any model not found.
     pub async fn compare_model_performance( &self, model_ids : Vec< &str > ) -> AnthropicResult< Vec< ModelPerformance > >
     {
       self.model_manager().compare_model_performance( model_ids ).await
     }
 
-    /// Get model status. Returns error if model not found.
+    /// Get model status.
+    ///
+    /// # Errors
+    ///
+    /// Returns error if model not found.
     pub async fn get_model_status( &self, model_id : &str ) -> AnthropicResult< ModelStatus >
     {
       self.model_manager().get_model_status( model_id ).await
     }
 
-    /// Get migration path. Returns error if model not found.
+    /// Get migration path.
+    ///
+    /// # Errors
+    ///
+    /// Returns error if model not found.
     pub async fn get_migration_path( &self, model_id : &str ) -> AnthropicResult< MigrationPath >
     {
       self.model_manager().get_migration_path( model_id ).await
     }
 
-    /// Get model pricing. Returns error if model not found.
+    /// Get model pricing.
+    ///
+    /// # Errors
+    ///
+    /// Returns error if model not found.
     pub async fn get_model_pricing( &self, model_id : &str ) -> AnthropicResult< ModelPricing >
     {
       self.model_manager().get_model_pricing( model_id ).await
     }
 
-    /// Estimate usage cost. Returns error if model not found.
+    /// Estimate usage cost.
+    ///
+    /// # Errors
+    ///
+    /// Returns error if model not found.
     pub async fn estimate_cost( &self, usage : EstimatedUsage ) -> AnthropicResult< CostEstimate >
     {
       self.model_manager().estimate_cost( usage ).await
     }
 
-    /// Filter models. Returns error if API request fails.
+    /// Filter models.
+    ///
+    /// # Errors
+    ///
+    /// Returns error if API request fails.
     pub async fn filter_models( &self, filter : ModelFilter ) -> AnthropicResult< Vec< ModelInfo > >
     {
       self.model_manager().filter_models( filter ).await
     }
 
-    /// Search models. Returns error if API request fails.
+    /// Search models.
+    ///
+    /// # Errors
+    ///
+    /// Returns error if API request fails.
     pub async fn search_models( &self, query : &str ) -> AnthropicResult< Vec< ModelInfo > >
     {
       self.model_manager().search_models( query ).await
     }
 
-    /// Recommend model for use case. Returns error if no recommendation found.
+    /// Recommend model for use case.
+    ///
+    /// # Errors
+    ///
+    /// Returns error if no recommendation found.
     pub fn recommend_model_for_use_case( &self, use_case : UseCase ) -> AnthropicResult< ModelRecommendation >
     {
       self.model_manager().recommend_model_for_use_case( use_case )
     }
 
-    /// Clear model cache. Should not fail.
+    /// Clear model cache.
+    ///
+    /// # Errors
+    ///
+    /// Should not fail.
     pub fn clear_model_cache( &self ) -> AnthropicResult< () >
     {
       self.model_manager().clear_model_cache()
     }
 
-    /// Check feature compatibility. Returns error if model not found.
+    /// Check feature compatibility.
+    ///
+    /// # Errors
+    ///
+    /// Returns error if model not found.
     pub async fn check_feature_compatibility( &self, model_id : &str, feature : &str ) -> AnthropicResult< FeatureCompatibility >
     {
       self.model_manager().check_feature_compatibility( model_id, feature ).await
@@ -886,7 +970,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use ModelInfo;
   exposed use ModelCapabilities;

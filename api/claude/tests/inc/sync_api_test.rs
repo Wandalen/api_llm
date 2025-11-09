@@ -24,10 +24,10 @@ mod sync_api_functionality_tests
     assert!( client_result.is_ok() || client_result.is_err(), "Construction should return a result" );
 
     // Fix(issue-hygiene-001): Fail loudly when ANTHROPIC_API_KEY missing
-    // Root cause: Silent skip when env var missing created false positive test pass
-    // Previous: if let Ok(secret) silently skipped test when ANTHROPIC_API_KEY unset
-    // Fixed: .expect() fails loudly with clear message
-    // Pitfall: Never use conditional skip - fail loudly or use #[ ignore ] with permission
+    // Root cause : Silent skip when env var missing created false positive test pass
+    // Previous : if let Ok(secret) silently skipped test when ANTHROPIC_API_KEY unset
+    // Fixed : .expect() fails loudly with clear message
+    // Pitfall : Never use conditional skip - fail loudly or use #[ ignore ] with permission
 
     // Test construction with explicit secret
     let secret = std::env::var( "ANTHROPIC_API_KEY" )
@@ -136,10 +136,10 @@ mod sync_api_functionality_tests
     request1.set_max_tokens( 50 );
 
     // Fix(issue-hygiene-002): Fail loudly if first message fails
-    // Root cause: Silent skip when response1 failed - test falsely passed
-    // Previous: if let Ok silently skipped conversation test when API call failed
-    // Fixed: .expect() fails loudly with clear message about conversation flow requirement
-    // Pitfall: Never skip test continuation on API failure - fail loudly to detect issues
+    // Root cause : Silent skip when response1 failed - test falsely passed
+    // Previous : if let Ok silently skipped conversation test when API call failed
+    // Fixed : .expect() fails loudly with clear message about conversation flow requirement
+    // Pitfall : Never skip test continuation on API failure - fail loudly to detect issues
     let response1 = client.create_message( &request1 );
     let _message1 = response1
       .expect( "First message must succeed for conversation flow test" );
@@ -211,10 +211,10 @@ mod sync_api_functionality_tests
     use the_module::SyncClientBuilder;
 
     // Fix(issue-hygiene-003): Fail loudly when builder fails
-    // Root cause: Silent skip when build_from_env failed - timeout test falsely passed
-    // Previous: if let Ok silently skipped timeout verification when client construction failed
-    // Fixed: .expect() fails loudly with clear message about timeout configuration requirement
-    // Pitfall: Never skip configuration verification on construction failure - fail loudly
+    // Root cause : Silent skip when build_from_env failed - timeout test falsely passed
+    // Previous : if let Ok silently skipped timeout verification when client construction failed
+    // Fixed : .expect() fails loudly with clear message about timeout configuration requirement
+    // Pitfall : Never skip configuration verification on construction failure - fail loudly
     let client = SyncClientBuilder::new()
       .timeout( Duration::from_secs( 30 ) )
       .build_from_env()
@@ -223,10 +223,10 @@ mod sync_api_functionality_tests
     assert!( client.get_timeout() == Duration::from_secs( 30 ), "Timeout should be configured" );
 
     // Fix(issue-hygiene-004): Fail loudly when short timeout client fails
-    // Root cause: Silent skip when build_from_env failed - timeout test falsely passed
-    // Previous: if let Ok silently skipped timeout behavior test when client construction failed
-    // Fixed: .expect() fails loudly with clear message about timeout test requirement
-    // Pitfall: Never skip timeout behavior verification - fail loudly to detect construction issues
+    // Root cause : Silent skip when build_from_env failed - timeout test falsely passed
+    // Previous : if let Ok silently skipped timeout behavior test when client construction failed
+    // Fixed : .expect() fails loudly with clear message about timeout test requirement
+    // Pitfall : Never skip timeout behavior verification - fail loudly to detect construction issues
     let client = SyncClientBuilder::new()
       .timeout( Duration::from_millis( 1 ) )
       .build_from_env()
@@ -449,7 +449,7 @@ mod sync_api_integration_tests
     if !times.is_empty()
     {
       #[ allow( clippy::cast_possible_truncation ) ]
-      let avg_time: Duration = times.iter().sum::<Duration>() / times.len() as u32;
+      let avg_time : Duration = times.iter().sum::< Duration >() / times.len() as u32;
 
       // Sync overhead should be minimal (< 100ms extra)
       assert!( avg_time < Duration::from_secs( 30 ), "Sync requests should complete in reasonable time" );
@@ -492,7 +492,7 @@ mod sync_api_integration_tests
                  error_msg.contains( "key" ) ||
                  error_msg.contains( "401" ) ||
                  error_msg.contains( "unauthorized" ),
-                 "Error should indicate authentication issue: {error}" );
+                 "Error should indicate authentication issue : {error}" );
       }
       Err( _ ) => {
         // Expected - invalid key should be rejected at construction
@@ -500,10 +500,10 @@ mod sync_api_integration_tests
     }
 
     // Fix(issue-hygiene-005): Fail loudly when client unavailable for invalid model test
-    // Root cause: Silent skip when from_env failed - invalid model error handling test falsely passed
-    // Previous: if let Ok silently skipped model validation test when client construction failed
-    // Fixed: .expect() fails loudly with clear message about model validation requirement
-    // Pitfall: Never skip error handling verification - fail loudly to ensure test executes
+    // Root cause : Silent skip when from_env failed - invalid model error handling test falsely passed
+    // Previous : if let Ok silently skipped model validation test when client construction failed
+    // Fixed : .expect() fails loudly with clear message about model validation requirement
+    // Pitfall : Never skip error handling verification - fail loudly to ensure test executes
     let client = SyncClient::from_env()
       .expect( "Client must be available from environment for invalid model error handling test" );
 

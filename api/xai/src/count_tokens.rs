@@ -58,13 +58,13 @@ mod private
   /// # Examples
   ///
   /// ```
-  /// # #[cfg(feature = "count_tokens")]
+  /// # #[ cfg( feature = "count_tokens") ]
   /// # {
   /// use api_xai::count_tokens::count_tokens;
   ///
   /// # fn example() -> Result< (), Box< dyn std::error::Error > > {
   /// let count = count_tokens( "Hello, world!", "grok-3" )?;
-  /// println!( "Token count: {}", count );
+  /// println!( "Token count : {}", count );
   /// # Ok( () )
   /// # }
   /// # }
@@ -97,7 +97,7 @@ mod private
   /// # Examples
   ///
   /// ```
-  /// # #[cfg(feature = "count_tokens")]
+  /// # #[ cfg( feature = "count_tokens") ]
   /// # {
   /// use api_xai::{ ChatCompletionRequest, Message, count_tokens_for_request };
   ///
@@ -108,7 +108,7 @@ mod private
   ///   .form();
   ///
   /// let count = count_tokens_for_request( &request )?;
-  /// println!( "Total request tokens: {}", count );
+  /// println!( "Total request tokens : {}", count );
   /// # Ok( () )
   /// # }
   /// # }
@@ -213,11 +213,11 @@ mod private
       {
         // Map to gpt-4 for tiktoken
         get_bpe_from_model( "gpt-4" )
-          .map_err( | e | XaiError::InvalidModel( format!( "Tokenizer error: {e}" ) ).into() )
+          .map_err( | e | XaiError::InvalidModel( format!( "Tokenizer error : {e}" ) ).into() )
       }
       _ =>
       {
-        Err( XaiError::InvalidModel( format!( "Unknown model: {model}" ) ).into() )
+        Err( XaiError::InvalidModel( format!( "Unknown model : {model}" ) ).into() )
       }
     }
   }
@@ -240,7 +240,7 @@ mod private
   /// # Examples
   ///
   /// ```
-  /// # #[cfg(feature = "count_tokens")]
+  /// # #[ cfg( feature = "count_tokens") ]
   /// # {
   /// use api_xai::{ ChatCompletionRequest, Message, validate_request_size };
   ///
@@ -280,7 +280,7 @@ mod private
 }
 
 #[ cfg( feature = "count_tokens" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

@@ -35,7 +35,7 @@
 //! **Authentication:**
 //! ```
 //! OLD: X-API-Key header (deprecated)
-//! NEW: Authorization: Bearer {token}
+//! NEW: Authorization : Bearer {token}
 //! ```
 //!
 //! **Request Format:**
@@ -77,7 +77,7 @@ mod tests
 {
   use api_huggingface::
   {
-  secret::Secret,
+  secret ::Secret,
   };
 
   #[ derive( Debug, Clone ) ]

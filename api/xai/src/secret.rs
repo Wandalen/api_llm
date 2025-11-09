@@ -42,7 +42,7 @@ mod private
   ///
   /// // Create from string
   /// let secret = Secret::new( "xai-your-key-here".to_string() )?;
-  /// # Ok::<(), Box<dyn std::error::Error>>(())
+  /// # Ok::<(), Box< dyn std::error::Error > >(())
   /// ```
   #[ derive( Debug, Clone ) ]
   pub struct Secret( SecretString );
@@ -66,7 +66,7 @@ mod private
     /// use api_xai::Secret;
     ///
     /// let secret = Secret::new( "xai-1234567890".to_string() )?;
-    /// # Ok::<(), Box<dyn std::error::Error>>(())
+    /// # Ok::<(), Box< dyn std::error::Error > >(())
     /// ```
     pub fn new( key : String ) -> Result< Self >
     {
@@ -91,7 +91,7 @@ mod private
     /// use api_xai::Secret;
     ///
     /// let secret = Secret::load_from_env( "XAI_API_KEY" )?;
-    /// # Ok::<(), Box<dyn std::error::Error>>(())
+    /// # Ok::<(), Box< dyn std::error::Error > >(())
     /// ```
     pub fn load_from_env( env_var : &str ) -> Result< Self >
     {
@@ -124,18 +124,18 @@ mod private
     /// use api_xai::Secret;
     ///
     /// let secret = Secret::load_from_workspace( "XAI_API_KEY", "-secrets.sh" )?;
-    /// # Ok::<(), Box<dyn std::error::Error>>(())
+    /// # Ok::<(), Box< dyn std::error::Error > >(())
     /// ```
     pub fn load_from_workspace( key_name : &str, filename : &str ) -> Result< Self >
     {
       let ws = workspace()
         .map_err( |e| XaiError::Environment(
-          format!( "Failed to access workspace: {e}" )
+          format!( "Failed to access workspace : {e}" )
         ) )?;
 
       let key = ws.load_secret_key( key_name, filename )
         .map_err( |e| XaiError::Environment(
-          format!( "Failed to load from workspace secrets: {e}" )
+          format!( "Failed to load from workspace secrets : {e}" )
         ) )?;
 
       Self::new( key )
@@ -166,9 +166,9 @@ mod private
     /// ```no_run
     /// use api_xai::Secret;
     ///
-    /// // Recommended: tries all sources automatically (workspace-first)
+    /// // Recommended : tries all sources automatically (workspace-first)
     /// let secret = Secret::load_with_fallbacks( "XAI_API_KEY" )?;
-    /// # Ok::<(), Box<dyn std::error::Error>>(())
+    /// # Ok::<(), Box< dyn std::error::Error > >(())
     /// ```
     pub fn load_with_fallbacks( key_name : &str ) -> Result< Self >
     {
@@ -252,7 +252,7 @@ mod private
     ///
     /// // Use only when necessary (e.g., setting Authorization header)
     /// let api_key = secret.expose_secret();
-    /// # Ok::<(), Box<dyn std::error::Error>>(())
+    /// # Ok::<(), Box< dyn std::error::Error > >(())
     /// ```
     pub fn expose_secret( &self ) -> &str
     {
@@ -275,7 +275,7 @@ mod private
     ///
     /// let _ = secret.expose_secret();
     /// assert_eq!( Secret::exposure_count(), initial_count + 1 );
-    /// # Ok::<(), Box<dyn std::error::Error>>(())
+    /// # Ok::<(), Box< dyn std::error::Error > >(())
     /// ```
     pub fn exposure_count() -> usize
     {
@@ -284,7 +284,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

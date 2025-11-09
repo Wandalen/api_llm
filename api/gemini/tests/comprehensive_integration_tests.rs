@@ -17,9 +17,9 @@
 
 use api_gemini::
 {
-  client::Client,
-  models::*,
-  error::Error,
+  client ::Client,
+  models ::*,
+  error ::Error,
 };
 use serde_json::json;
 use core::time::Duration;
@@ -34,10 +34,10 @@ fn create_integration_client() -> Client
   Client::new().unwrap_or_else( |err| {
     panic!(
       "\n❌ INTEGRATION TEST FAILURE: No valid API key found!\n\
-      \n🔑 Required: Set GEMINI_API_KEY environment variable or create secret/gemini_api_key file\n\
+      \n🔑 Required : Set GEMINI_API_KEY environment variable or create secret/gemini_api_key file\n\
       \n📋 Integration tests run by default and CANNOT be silently skipped\n\
-      \n🚫 Error details: {err:?}\n\
-      \n💡 To run only unit tests: cargo test --no-default-features\n"
+      \n🚫 Error details : {err:?}\n\
+      \n💡 To run only unit tests : cargo test --no-default-features\n"
     )
   })
 }
@@ -114,7 +114,7 @@ async fn integration_test_content_generation_real_api()
   assert!( !response.candidates[0].content.parts.is_empty(), "No content parts in candidate from real API" );
   
   let text = response.candidates[0].content.parts[0].text.as_ref().unwrap();
-  assert!( text.contains( "Integration test successful" ), "Real API response doesn't match expected: {text}" );
+  assert!( text.contains( "Integration test successful" ), "Real API response doesn't match expected : {text}" );
 }
 
 #[ tokio::test ]
@@ -149,7 +149,7 @@ async fn integration_test_embeddings_real_api()
   
   let response = result.unwrap();
   assert!( !response.embedding.values.is_empty(), "No embedding values returned from real API" );
-  assert!( response.embedding.values.len() > 100, "Embedding dimension too small: {}", response.embedding.values.len() );
+  assert!( response.embedding.values.len() > 100, "Embedding dimension too small : {}", response.embedding.values.len() );
 }
 
 // ==============================================================================
@@ -160,7 +160,7 @@ async fn integration_test_embeddings_real_api()
 ///
 /// # Critical Implementation Details
 ///
-/// **⚠️ Gemini Streaming Format: JSON Array, NOT Server-Sent Events (SSE)**
+/// **⚠️ Gemini Streaming Format : JSON Array, NOT Server-Sent Events (SSE)**
 ///
 /// Despite using a streaming endpoint, Gemini returns a complete JSON array containing
 /// all response chunks, NOT a stream of Server-Sent Events (SSE). This is a critical
@@ -185,11 +185,11 @@ async fn integration_test_embeddings_real_api()
 ///
 /// The API does NOT return Server-Sent Events like:
 /// ```text
-/// data: {"candidates": [...]}
+/// data : {"candidates": [...]}
 ///
-/// data: {"candidates": [...]}
+/// data : {"candidates": [...]}
 ///
-/// data: [DONE]
+/// data : [DONE]
 /// ```
 ///
 /// ## Implementation Requirements
@@ -197,7 +197,7 @@ async fn integration_test_embeddings_real_api()
 /// 1. **Buffer Complete Response**: Must collect entire HTTP response body before parsing
 /// 2. **Parse as JSON Array**: Deserialize as `Vec< GenerateContentResponse >`
 /// 3. **Emit as Stream**: Convert array elements into async stream chunks
-/// 4. **Header**: Use `Accept: application/json`, NOT `Accept: text/event-stream`
+/// 4. **Header**: Use `Accept : application/json`, NOT `Accept : text/event-stream`
 ///
 /// ## Historical Bug
 ///
@@ -313,7 +313,7 @@ async fn integration_test_chat_completion_real_api()
   
   let response = result.unwrap();
   assert!( !response.choices.is_empty(), "No choices returned from real chat API" );
-  assert!( response.choices[0].message.content.contains( '4' ), "Chat response incorrect: {}", response.choices[0].message.content );
+  assert!( response.choices[0].message.content.contains( '4' ), "Chat response incorrect : {}", response.choices[0].message.content );
 }
 
 // ==============================================================================
@@ -348,7 +348,7 @@ async fn integration_test_invalid_model_real_api()
   match result.err().unwrap()
   {
     Error::ApiError( _ ) | Error::InvalidArgument( _ ) => {}, // Expected API errors
-    other => panic!( "Expected API error for invalid model, got: {other:?}" ),
+    other => panic!( "Expected API error for invalid model, got : {other:?}" ),
   }
 }
 
@@ -379,7 +379,7 @@ async fn integration_test_empty_content_real_api()
   {
     Ok( response ) => assert!( !response.candidates.is_empty() ),
     Err( Error::ApiError( _ ) | Error::InvalidArgument( _ ) ) => {}, // Expected validation errors
-    Err( other ) => panic!( "Unexpected error for empty content: {other:?}" ),
+    Err( other ) => panic!( "Unexpected error for empty content : {other:?}" ),
   }
 }
 
@@ -596,8 +596,8 @@ async fn integration_test_rate_limiting_real_api()
   let elapsed = start.elapsed();
   
   // Both requests should succeed
-  assert!( result1.is_ok(), "First rate-limited request failed: {:?}", result1.err() );
-  assert!( result2.is_ok(), "Second rate-limited request failed: {:?}", result2.err() );
+  assert!( result1.is_ok(), "First rate-limited request failed : {:?}", result1.err() );
+  assert!( result2.is_ok(), "Second rate-limited request failed : {:?}", result2.err() );
   
   // Second request should be delayed by rate limiting (if implemented)
   // With 1 req/sec limit, should take at least 1 second for both requests
@@ -654,8 +654,8 @@ async fn integration_test_request_caching_real_api()
   
   let elapsed = start.elapsed();
   
-  assert!( result1.is_ok(), "First cached request failed: {:?}", result1.err() );
-  assert!( result2.is_ok(), "Second cached request failed: {:?}", result2.err() );
+  assert!( result1.is_ok(), "First cached request failed : {:?}", result1.err() );
+  assert!( result2.is_ok(), "Second cached request failed : {:?}", result2.err() );
   
   // If caching is working, second request should be much faster
   if elapsed > Duration::from_secs( 2 )

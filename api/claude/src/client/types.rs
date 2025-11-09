@@ -303,7 +303,7 @@ mod private
               if !tools.iter().any( | tool | tool.name == tool_name )
               {
                 return Err( AnthropicError::InvalidRequest( 
-                  format!( "tool_choice references unknown tool: '{tool_name}'" )
+                  format!( "tool_choice references unknown tool : '{tool_name}'" )
                 ) );
               }
             }
@@ -334,7 +334,7 @@ mod private
             if !seen_names.insert( &tool.name )
             {
               return Err( AnthropicError::InvalidRequest( 
-                format!( "duplicate tool name: '{}'", tool.name )
+                format!( "duplicate tool name : '{}'", tool.name )
               ) );
             }
             
@@ -545,7 +545,7 @@ mod private
 
       if self.r#type != "text"
       {
-        return Err( format!( "Invalid system content type: {}", self.r#type ) );
+        return Err( format!( "Invalid system content type : {}", self.r#type ) );
       }
 
       Ok( () )
@@ -599,7 +599,7 @@ mod private
   ///
   /// let instructions = SystemInstructions::new()
   ///   .add_text( "You are a helpful assistant." )
-  ///   .add_cached_text( "Knowledge base: Large corpus of information..." )
+  ///   .add_cached_text( "Knowledge base : Large corpus of information..." )
   ///   .add_text( "Help the user with their questions." )
   ///   .build();
   ///
@@ -882,7 +882,7 @@ mod private
         };
 
         return Err( AnthropicError::RateLimit(
-          crate::RateLimitError::with_headers(
+          crate ::RateLimitError::with_headers(
             error_text,
             retry_after,
             limit_type.to_string(),
@@ -907,13 +907,13 @@ mod private
     let response_text = response.text().await.map_err( AnthropicError::from )?;
 
     let parsed_response : T = serde_json::from_str( &response_text )
-      .map_err( | e | AnthropicError::Parsing( format!( "Failed to parse response: {e}" ) ) )?;
+      .map_err( | e | AnthropicError::Parsing( format!( "Failed to parse response : {e}" ) ) )?;
 
     Ok( parsed_response )
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use ClientConfig;
   exposed use ClientConfigBuilder;

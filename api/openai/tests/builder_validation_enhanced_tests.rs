@@ -8,24 +8,24 @@
 
 use api_openai::exposed::
 {
-  components::
+  components ::
   {
-    responses::
+    responses ::
     {
       CreateResponseRequest,
       ResponseInput,
     },
-    common::
+    common ::
     {
       ModelIdsResponses,
     },
-    input::
+    input ::
     {
       InputMessage,
       InputContentPart,
       InputText,
     },
-    tools::
+    tools ::
     {
       FunctionTool,
       FunctionParameters,
@@ -42,7 +42,7 @@ fn test_builder_validation_methods()
     .model(ModelIdsResponses::from("gpt-4".to_string()));
 
   // This should fail because input is required but not set
-  // Expected: builder should have a validate() method that returns Result< (), ValidationError >
+  // Expected : builder should have a validate() method that returns Result< (), ValidationError >
 
   // Complete the builder properly
   let complete_builder = builder
@@ -60,7 +60,7 @@ fn test_builder_validation_methods()
 fn test_builder_convenience_methods()
 {
   // Test that builders should have convenience methods for common usage patterns
-  // Expected: CreateResponseRequest should have a with_simple_text() convenience method
+  // Expected : CreateResponseRequest should have a with_simple_text() convenience method
 
   // Current verbose way:
   let request_verbose = CreateResponseRequest::former()
@@ -88,7 +88,7 @@ fn test_builder_enhanced_error_handling()
     .temperature(2.5) // This is outside the typical range (0.0-2.0)
     .form();
 
-  // Expected: Builder should have validation that warns about or prevents invalid values
+  // Expected : Builder should have validation that warns about or prevents invalid values
   assert_eq!(request.temperature, Some(2.5)); // Currently allows any f32 value
 }
 
@@ -107,7 +107,7 @@ fn test_builder_chaining_with_validation()
     .form();
 
   // Currently allows empty text, but enhanced builders might validate this
-  assert_eq!(message.content[0], InputContentPart::Text(InputText { text: String::new() }));
+  assert_eq!(message.content[0], InputContentPart::Text(InputText { text : String::new() }));
 }
 
 /// Test builder documentation generation
@@ -149,7 +149,7 @@ fn test_builder_performance_optimizations()
   println!("Built 10000 requests in {duration:?}");
 
   // Enhanced builders should be very fast - expect under 100ms for 10k builds
-  assert!(duration.as_millis() < 1000, "Builder performance should be optimized: {duration:?}");
+  assert!(duration.as_millis() < 1000, "Builder performance should be optimized : {duration:?}");
 }
 
 /// Test builder pattern consistency across different types

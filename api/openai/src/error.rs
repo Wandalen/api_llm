@@ -7,7 +7,7 @@
 mod private
 {
   // Use crate root for base access
-  // Removed: use crate::components::common::ResponseError;
+  // Removed : use crate::components::common::ResponseError;
 
   // External crates  
   use serde_json;
@@ -42,20 +42,20 @@ mod private
     #[ inline ]
     fn fmt( &self, formatter : &mut fmt::Formatter< '_ > ) -> core::fmt::Result
     {
-      write!( formatter, "API Error: {}", self.message )?;
+      write!( formatter, "API Error : {}", self.message )?;
       if let Some( code ) = &self.code
       {
-        write!( formatter, " (Code: {code})" )?;
+        write!( formatter, " (Code : {code})" )?;
       }
       if let Some( param ) = &self.param
       {
-        write!( formatter, " (Param: {param})" )?;
+        write!( formatter, " (Param : {param})" )?;
       }
       if let Some( r#type ) = &self.r#type
       {
-        write!( formatter, " (Type: {type})" )?;
+        write!( formatter, " (Type : {type})" )?;
       }
-      core::result::Result::Ok( () )
+      core ::result::Result::Ok( () )
     }
   }
 
@@ -75,7 +75,7 @@ mod private
     #[ inline ]
     fn fmt( &self, formatter : &mut fmt::Formatter< '_ > ) -> core::fmt::Result
     {
-      write!( formatter, "HTTP Status: {}, API Error: {}", self.status_code, self.error )
+      write!( formatter, "HTTP Status : {}, API Error : {}", self.status_code, self.error )
     }
   }
 
@@ -85,52 +85,52 @@ mod private
   pub enum OpenAIError
   {
     /// An error returned by the `OpenAI` API.
-    #[ error( "API Error: {0}" ) ]
+    #[ error( "API Error : {0}" ) ]
     Api( ApiError ),
     /// An error that occurred during HTTP communication.
-    #[ error( "HTTP Error: {0}" ) ]
+    #[ error( "HTTP Error : {0}" ) ]
     Http( String ),
     /// An error that occurred during WebSocket communication.
-    #[ error( "WebSocket Error: {0}" ) ]
+    #[ error( "WebSocket Error : {0}" ) ]
     Ws( String ), // Changed from tokio_tungstenite::tungstenite::Error to String
     /// An error that occurred during WebSocket communication due to an invalid message.
-    #[ error( "WebSocket Invalid Message Error: {0}" ) ]
+    #[ error( "WebSocket Invalid Message Error : {0}" ) ]
     WsInvalidMessage( String ),
     /// An error that occurred during serialization or deserialization.
-    #[ error( "Internal Error: {0}" ) ]
+    #[ error( "Internal Error : {0}" ) ]
     Internal( String ), // Added Internal variant
     /// An error indicating an invalid argument was provided.
-    #[ error( "Invalid Argument Error: {0}" ) ]
+    #[ error( "Invalid Argument Error : {0}" ) ]
     InvalidArgument( String ),
     /// An error indicating a missing required argument.
-    #[ error( "Missing Argument Error: {0}" ) ]
+    #[ error( "Missing Argument Error : {0}" ) ]
     MissingArgument( String ),
     /// An error indicating a missing environment variable.
-    #[ error( "Missing Environment Error: {0}" ) ]
+    #[ error( "Missing Environment Error : {0}" ) ]
     MissingEnvironment( String ),
     /// An error indicating a missing header.
-    #[ error( "Missing Header Error: {0}" ) ]
+    #[ error( "Missing Header Error : {0}" ) ]
     MissingHeader( String ),
     /// An error indicating a missing file.
-    #[ error( "Missing File Error: {0}" ) ]
+    #[ error( "Missing File Error : {0}" ) ]
     MissingFile( String ),
     /// An error indicating a file operation failed.
-    #[ error( "File Error: {0}" ) ]
+    #[ error( "File Error : {0}" ) ]
     File( String ),
     /// An error indicating a network issue.
-    #[ error( "Network Error: {0}" ) ]
+    #[ error( "Network Error : {0}" ) ]
     Network( String ),
     /// An error indicating a timeout.
-    #[ error( "Timeout Error: {0}" ) ]
+    #[ error( "Timeout Error : {0}" ) ]
     Timeout( String ),
     /// An error related to streaming data.
-    #[ error( "Stream Error: {0}" ) ]
+    #[ error( "Stream Error : {0}" ) ]
     Stream( String ), // Added Stream variant
     /// An unknown error.
-    #[ error( "Unknown Error: {0}" ) ]
+    #[ error( "Unknown Error : {0}" ) ]
     Unknown( String ),
     /// A rate limiting error.
-    #[ error( "Rate Limit Error: {0}" ) ]
+    #[ error( "Rate Limit Error : {0}" ) ]
     RateLimit( String ),
   }
 
@@ -153,7 +153,7 @@ mod private
       }
       else if error.is_builder()
       {
-        OpenAIError::Internal( format!( "HTTP client build error: {error}" ) )
+        OpenAIError::Internal( format!( "HTTP client build error : {error}" ) )
       }
       else if error.is_status()
       {
@@ -172,7 +172,7 @@ mod private
     #[ inline ]
     fn from( error : serde_json::Error ) -> Self
     {
-      OpenAIError::Internal( format!( "JSON error: {error}" ) )
+      OpenAIError::Internal( format!( "JSON error : {error}" ) )
     }
   }
 
@@ -183,8 +183,8 @@ mod private
     {
       match error
       {
-        backoff::Error::Transient { err, .. } => err,
-        backoff::Error::Permanent( e ) => e,
+        backoff ::Error::Transient { err, .. } => err,
+        backoff ::Error::Permanent( e ) => e,
       }
     }
   }
@@ -194,7 +194,7 @@ mod private
   #[ inline ]
   pub fn map_deserialization_error( error : &serde_json::Error ) -> OpenAIError
   {
-    OpenAIError::Internal( format!( "Deserialization error: {error}" ) )
+    OpenAIError::Internal( format!( "Deserialization error : {error}" ) )
   }
 
   /// Type alias for Results using `error_tools` pattern
@@ -202,7 +202,7 @@ mod private
 
 } // end mod private
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   // Expose all structs defined in this module
   exposed use 

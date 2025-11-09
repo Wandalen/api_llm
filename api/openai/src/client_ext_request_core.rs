@@ -8,9 +8,9 @@ mod private
 {
   use crate::
   {
-    client::Client,
-    environment::{ OpenaiEnvironment, EnvironmentInterface },
-    error::{ OpenAIError, Result, ApiErrorWrap },
+    client ::Client,
+    environment ::{ OpenaiEnvironment, EnvironmentInterface },
+    error ::{ OpenAIError, Result, ApiErrorWrap },
   };
 
   #[ cfg( feature = "retry" ) ]
@@ -27,7 +27,7 @@ mod private
     ///
     /// This method makes a single HTTP request without any automatic behaviors.
     /// It handles basic error parsing but leaves retry decisions to the developer.
-    /// Following the governing principle: zero client-side intelligence.
+    /// Following the governing principle : zero client-side intelligence.
     pub(in crate) async fn execute_request< F, Fut >( &self, request_builder : F ) -> Result< reqwest::Response >
     where
       F : FnOnce() -> Fut + Send,
@@ -51,13 +51,13 @@ mod private
         {
           // If not valid JSON, create a generic error with the response content
           let body_text = String::from_utf8_lossy( &bytes );
-          let error_msg = format!( "HTTP {status} error: {body_text}" );
+          let error_msg = format!( "HTTP {status} error : {body_text}" );
           Err( OpenAIError::Http( error_msg ).into() )
         }
       }
       else if status.is_server_error()
       {
-        Err( OpenAIError::Http( format!( "Server error: {status}" ) ).into() )
+        Err( OpenAIError::Http( format!( "Server error : {status}" ) ).into() )
       }
       else
       {
@@ -171,7 +171,7 @@ mod private
       Fut : core::future::Future< Output = core::result::Result< reqwest::Response, reqwest::Error > > + Send,
     {
       let executor = EnhancedRetryExecutor::new( retry_config.clone() )
-        .map_err( |e| OpenAIError::InvalidArgument( format!( "Invalid retry configuration: {e}" ) ) )?;
+        .map_err( |e| OpenAIError::InvalidArgument( format!( "Invalid retry configuration : {e}" ) ) )?;
 
       executor.execute( || self.execute_request( &request_builder ) ).await
     }

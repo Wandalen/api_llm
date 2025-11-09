@@ -407,10 +407,10 @@ mod private
   {
     /// The amount of context window space to use for search results
     #[ serde( skip_serializing_if = "Option::is_none" ) ]
-    pub search_context_size: Option< String >,
+    pub search_context_size : Option< String >,
     /// User location information for search personalization
     #[ serde( skip_serializing_if = "Option::is_none" ) ]
-    pub user_location: Option< WebSearchUserLocation >,
+    pub user_location : Option< WebSearchUserLocation >,
   }
 
   /// User location information for web search personalization
@@ -424,19 +424,19 @@ mod private
   {
     /// Type of location (e.g., "approximate")
     #[ serde( skip_serializing_if = "Option::is_none" ) ]
-    pub r#type: Option< String >,
+    pub r#type : Option< String >,
     /// City name
     #[ serde( skip_serializing_if = "Option::is_none" ) ]
-    pub city: Option< String >,
+    pub city : Option< String >,
     /// Country code
     #[ serde( skip_serializing_if = "Option::is_none" ) ]
-    pub country: Option< String >,
+    pub country : Option< String >,
     /// Region/state
     #[ serde( skip_serializing_if = "Option::is_none" ) ]
-    pub region: Option< String >,
+    pub region : Option< String >,
     /// Timezone
     #[ serde( skip_serializing_if = "Option::is_none" ) ]
-    pub timezone: Option< String >,
+    pub timezone : Option< String >,
   }
 
 
@@ -454,7 +454,7 @@ mod private
     pub id : String,
     /// The status of the web search tool call (`in_progress`, `searching`, `completed`, `failed`).
     pub status : String,
-    // Note: The actual search results are typically included in the subsequent assistant message annotations, not directly in this call object.
+    // Note : The actual search results are typically included in the subsequent assistant message annotations, not directly in this call object.
   }
 
   /// Represents web search context size options.
@@ -467,7 +467,7 @@ mod private
   pub struct WebSearchContextSize
   {
     /// The context size setting (`low`, `medium`, or `high`). Defaults to `medium`.
-    pub value : String, // Enum: low, medium, high
+    pub value : String, // Enum : low, medium, high
   }
 
   /// Represents approximate location parameters for the web search.
@@ -493,7 +493,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   // Common tool structures
   exposed use { Tool, ToolChoice, ToolChoiceFunction };

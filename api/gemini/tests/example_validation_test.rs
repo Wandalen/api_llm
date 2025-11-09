@@ -10,11 +10,11 @@ fn create_integration_client() -> Client
   Client::new().unwrap_or_else( |err| {
     panic!( 
       "\n❌ INTEGRATION TEST FAILURE: No valid API key found!\n\
-      \n🔑 Required: Set GEMINI_API_KEY environment variable or create secret/gemini_api_key file\n\
+      \n🔑 Required : Set GEMINI_API_KEY environment variable or create secret/gemini_api_key file\n\
       \n📋 This integration test validates API structure with real API calls\n\
       \n🚫 No API key available from any source\n\
-      \n💡 For unit tests only (no API), run: cargo test --no-default-features\n\
-      \nOriginal error: {err:?}" 
+      \n💡 For unit tests only (no API), run : cargo test --no-default-features\n\
+      \nOriginal error : {err:?}" 
     );
   })
 }
@@ -290,7 +290,7 @@ fn test_error_handling_client_builder()
   assert!( result.is_err() );
   match result.unwrap_err()
   {
-    api_gemini::error::Error::AuthenticationError( msg ) =>
+    api_gemini ::error::Error::AuthenticationError( msg ) =>
     {
       assert_eq!( msg, "API key cannot be empty" );
     },
@@ -439,7 +439,7 @@ async fn integration_test_embeddings_example_real_api()
   assert!( response.embedding.values.len() > 100, "Real API should return meaningful embedding vector" );
   
   // Verify embedding values are reasonable
-  let embedding_sum: f32 = response.embedding.values.iter().sum();
+  let embedding_sum : f32 = response.embedding.values.iter().sum();
   assert!( embedding_sum.abs() > 0.001, "Embedding should have non-zero values" );
 }
 
@@ -539,12 +539,12 @@ async fn integration_test_multimodal_example_real_api()
         [
           Part
           {
-            text : Some( "Describe a simple image: a red circle on a white background.".to_string() ),
+            text : Some( "Describe a simple image : a red circle on a white background.".to_string() ),
             ..Default::default()
           },
           Part
           {
-            text : Some( "[Image description: A red circle on a white background]".to_string() ),
+            text : Some( "[Image description : A red circle on a white background]".to_string() ),
             ..Default::default()
           },
         ],
@@ -630,7 +630,7 @@ async fn integration_test_safety_settings_example_real_api()
   assert!( !response_text.is_empty(), "Real API should return non-empty response" );
   // Verify the model responded appropriately to the safe content request
   // The response should be substantive (not just an error or refusal)
-  assert!( response_text.len() > 20, "Response should be substantive for safe content: {response_text}" );
+  assert!( response_text.len() > 20, "Response should be substantive for safe content : {response_text}" );
   
   // Accept any positive, creative response that doesn't indicate content blocking
   let response_lower = response_text.to_lowercase();
@@ -650,7 +650,7 @@ async fn integration_test_safety_settings_example_real_api()
                        response_lower.contains( "was" ) ||
                        response_lower.contains( "said" ) ||
                        response_text.split( '.' ).count() > 2; // Multiple sentences
-    assert!( is_narrative, "Response should either relate to friendship/cooperation or be a creative narrative: {response_text}" );
+    assert!( is_narrative, "Response should either relate to friendship/cooperation or be a creative narrative : {response_text}" );
   }
 }
 
@@ -669,7 +669,7 @@ async fn integration_test_model_list_example_real_api()
   assert!( !models_response.models.is_empty(), "Real API should return available models" );
   
   // Find a gemini model
-  let gemini_models: Vec< _ > = models_response.models.iter()
+  let gemini_models : Vec< _ > = models_response.models.iter()
     .filter( |model| model.name.contains( "gemini" ) )
     .collect();
   

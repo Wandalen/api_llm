@@ -125,7 +125,7 @@ impl ConversationBuilder< '_ >
   #[ must_use ]
   pub fn temperature( mut self, temperature : f32 ) -> Self
   {
-    assert!( ( 0.0..=2.0 ).contains( &temperature ), "Temperature must be between 0.0 and 2.0, got: {temperature}" );
+    assert!( ( 0.0..=2.0 ).contains( &temperature ), "Temperature must be between 0.0 and 2.0, got : {temperature}" );
     self.temperature = Some( temperature );
     self
   }
@@ -143,7 +143,7 @@ impl ConversationBuilder< '_ >
   #[ must_use ]
   pub fn max_tokens( mut self, max_tokens : i32 ) -> Self
   {
-    assert!( max_tokens > 0, "max_tokens must be positive, got: {max_tokens}" );
+    assert!( max_tokens > 0, "max_tokens must be positive, got : {max_tokens}" );
     self.max_tokens = Some( max_tokens );
     self
   }
@@ -163,7 +163,7 @@ impl ConversationBuilder< '_ >
   #[ must_use ]
   pub fn top_p( mut self, top_p : f32 ) -> Self
   {
-    assert!( ( 0.0..=1.0 ).contains( &top_p ), "top_p must be between 0.0 and 1.0, got: {top_p}" );
+    assert!( ( 0.0..=1.0 ).contains( &top_p ), "top_p must be between 0.0 and 1.0, got : {top_p}" );
     self.top_p = Some( top_p );
     self
   }
@@ -209,7 +209,7 @@ impl ConversationBuilder< '_ >
   #[ inline ]
   pub fn build_request( self ) -> crate::models::ChatCompletionRequest
   {
-    crate::models::ChatCompletionRequest
+    crate ::models::ChatCompletionRequest
     {
       messages : self.messages,
       model : self.model,

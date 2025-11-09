@@ -29,16 +29,16 @@
 ///
 /// // Get model information
 /// let info = model.get().await?;
-/// println!( "Model: {} v{}", info.display_name.as_deref().unwrap_or( "N/A" ), info.version.as_deref().unwrap_or( "N/A" ) );
+/// println!( "Model : {} v{}", info.display_name.as_deref().unwrap_or( "N/A" ), info.version.as_deref().unwrap_or( "N/A" ) );
 ///
 /// // Use the model for content generation
 /// let request = api_gemini::GenerateContentRequest {
-///   contents: vec![ api_gemini::Content {
-///     parts: vec![ api_gemini::Part {
-///       text: Some( "What is Rust?".to_string() ),
+///   contents : vec![ api_gemini::Content {
+///     parts : vec![ api_gemini::Part {
+///       text : Some( "What is Rust?".to_string() ),
 ///       ..Default::default()
 ///     } ],
-///     role: "user".to_string(),
+///     role : "user".to_string(),
 ///   } ],
 ///   ..Default::default()
 /// };
@@ -48,7 +48,7 @@
 ///   let content = &candidate.content;
 ///   if let Some( part ) = content.parts.first() {
 ///     if let Some( text ) = &part.text {
-///       println!( "Response: {}", text );
+///       println!( "Response : {}", text );
 ///     }
 ///   }
 /// }

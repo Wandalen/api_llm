@@ -44,23 +44,23 @@ mod config_tests
     let valid_config = EnhancedCircuitBreakerConfig::default();
     assert!( valid_config.validate().is_ok() );
 
-    // Invalid: failure_threshold = 0
+    // Invalid : failure_threshold = 0
     let invalid_config = EnhancedCircuitBreakerConfig::default().with_failure_threshold( 0 );
     assert!( invalid_config.validate().is_err() );
 
-    // Invalid: recovery_timeout_ms = 0
+    // Invalid : recovery_timeout_ms = 0
     let invalid_config = EnhancedCircuitBreakerConfig::default().with_recovery_timeout( 0 );
     assert!( invalid_config.validate().is_err() );
 
-    // Invalid: success_threshold = 0
+    // Invalid : success_threshold = 0
     let invalid_config = EnhancedCircuitBreakerConfig::default().with_success_threshold( 0 );
     assert!( invalid_config.validate().is_err() );
 
-    // Invalid: half_open_max_requests = 0
+    // Invalid : half_open_max_requests = 0
     let invalid_config = EnhancedCircuitBreakerConfig::default().with_half_open_max_requests( 0 );
     assert!( invalid_config.validate().is_err() );
 
-    // Invalid: half_open_timeout_ms = 0
+    // Invalid : half_open_timeout_ms = 0
     let invalid_config = EnhancedCircuitBreakerConfig::default().with_half_open_timeout( 0 );
     assert!( invalid_config.validate().is_err() );
   }

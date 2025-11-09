@@ -91,11 +91,11 @@ mod unit_tests {
   fn test_health_check_result_creation()
   {
     let result = HealthCheckResult {
-      status: HealthStatus::Healthy,
-      response_time: Some( core::time::Duration::from_millis( 100 ) ),
-      checked_at: Some( std::time::SystemTime::now() ),
-      endpoint: "https://generativelanguage.googleapis.com".to_string(),
-      error_message: None,
+      status : HealthStatus::Healthy,
+      response_time : Some( core::time::Duration::from_millis( 100 ) ),
+      checked_at : Some( std::time::SystemTime::now() ),
+      endpoint : "https://generativelanguage.googleapis.com".to_string(),
+      error_message : None,
     };
 
     assert_eq!( result.status, HealthStatus::Healthy );

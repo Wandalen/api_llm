@@ -21,7 +21,7 @@ async fn test_comprehensive_token_validation()
   // Create a temporary workspace with realistic tokens
   let temp_dir = env::temp_dir().join("comprehensive_token_test");
   let secret_dir = temp_dir.join("secret");
-  fs::create_dir_all(&secret_dir).expect("Failed to create secret directory");
+  fs ::create_dir_all(&secret_dir).expect("Failed to create secret directory");
 
   // Create a realistic secret file with multiple tokens
   let secret_content = r#"#!/bin/bash
@@ -39,11 +39,11 @@ export SHORT_TOKEN="abc123"
 "#;
 
   let secret_file = secret_dir.join("-secrets.sh");
-  fs::write(&secret_file, secret_content).expect("Failed to write secrets file");
+  fs ::write(&secret_file, secret_content).expect("Failed to write secrets file");
 
   // Set workspace path
   let original_workspace = env::var("WORKSPACE_PATH").ok();
-  env::set_var("WORKSPACE_PATH", &temp_dir);
+  env ::set_var("WORKSPACE_PATH", &temp_dir);
 
   // Test 1: Load secrets and validate they're correct
   println!("🔑 Testing token loading...");
@@ -87,7 +87,7 @@ export SHORT_TOKEN="abc123"
 
   // Test 4: Environment fallback
   println!("🌍 Testing environment fallback...");
-  env::set_var("ENV_ONLY_TOKEN", "env-fallback-value");
+  env ::set_var("ENV_ONLY_TOKEN", "env-fallback-value");
   let env_token = secret_store.get_with_fallback("ENV_ONLY_TOKEN")
     .expect("Failed to get environment fallback token");
   assert_eq!(env_token, "env-fallback-value");
@@ -111,12 +111,12 @@ export SHORT_TOKEN="abc123"
   println!("✅ Tokens are properly masked in debug output");
 
   // Cleanup
-  env::remove_var("ENV_ONLY_TOKEN");
+  env ::remove_var("ENV_ONLY_TOKEN");
   if let Some(original) = original_workspace
   {
-    env::set_var("WORKSPACE_PATH", original);
+    env ::set_var("WORKSPACE_PATH", original);
   } else {
-    env::remove_var("WORKSPACE_PATH");
+    env ::remove_var("WORKSPACE_PATH");
   }
   let _ = fs::remove_dir_all(&temp_dir);
 
@@ -135,7 +135,7 @@ async fn test_token_validation_edge_cases()
   // Test edge cases for token validation
   let temp_dir = env::temp_dir().join("token_edge_cases");
   let secret_dir = temp_dir.join("secret");
-  fs::create_dir_all(&secret_dir).expect("Failed to create secret directory");
+  fs ::create_dir_all(&secret_dir).expect("Failed to create secret directory");
 
   // Create secret file with edge cases
   let secret_content = r#"#!/bin/bash
@@ -147,10 +147,10 @@ export WHITESPACE_KEY="  sk-test-with-whitespace  "
 "#;
 
   let secret_file = secret_dir.join("-secrets.sh");
-  fs::write(&secret_file, secret_content).expect("Failed to write secrets file");
+  fs ::write(&secret_file, secret_content).expect("Failed to write secrets file");
 
   let original_workspace = env::var("WORKSPACE_PATH").ok();
-  env::set_var("WORKSPACE_PATH", &temp_dir);
+  env ::set_var("WORKSPACE_PATH", &temp_dir);
 
   let secret_store = SecretStore::from_path(&temp_dir)
     .expect("Failed to create secret store");
@@ -168,9 +168,9 @@ export WHITESPACE_KEY="  sk-test-with-whitespace  "
   // Cleanup
   if let Some(original) = original_workspace
   {
-    env::set_var("WORKSPACE_PATH", original);
+    env ::set_var("WORKSPACE_PATH", original);
   } else {
-    env::remove_var("WORKSPACE_PATH");
+    env ::remove_var("WORKSPACE_PATH");
   }
   let _ = fs::remove_dir_all(&temp_dir);
 
@@ -181,5 +181,5 @@ export WHITESPACE_KEY="  sk-test-with-whitespace  "
 fn main()
 {
   println!("⚠️  Token validation tests require 'workspace' and 'secret_management' features");
-  println!("Run with: cargo test --features 'workspace,secret_management'");
+  println!("Run with : cargo test --features 'workspace,secret_management'");
 }

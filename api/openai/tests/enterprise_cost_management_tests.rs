@@ -121,19 +121,19 @@ async fn test_usage_breakdown_structure()
   // Add time usage
   breakdown.time_usage.push( TimeUsage
   {
-    start_time: 1000,
-    end_time: 2000,
-    request_count: 50,
-    cost: 25.0,
+    start_time : 1000,
+    end_time : 2000,
+    request_count : 50,
+    cost : 25.0,
   } );
 
   // Add token usage
   breakdown.token_usage.push( TokenUsage
   {
-    token_type: "input".to_string(),
-    count: 1000,
-    cost_per_token: 0.01,
-    total_cost: 10.0,
+    token_type : "input".to_string(),
+    count : 1000,
+    cost_per_token : 0.01,
+    total_cost : 10.0,
   } );
 
   // Add model usage
@@ -159,10 +159,10 @@ async fn test_cost_efficiency_ratio()
   // Add usage data
   tracker.usage_breakdown.time_usage.push( TimeUsage
   {
-    start_time: 0,
-    end_time: 1000,
-    request_count: 100,
-    cost: 50.0,
+    start_time : 0,
+    end_time : 1000,
+    request_count : 100,
+    cost : 50.0,
   } );
 
   let efficiency = tracker.get_cost_efficiency_ratio();
@@ -175,11 +175,11 @@ async fn test_cost_optimization_settings()
 {
   let settings = CostOptimizationSettings
   {
-    enabled: true,
-    prefer_cheaper_models: true,
-    max_latency_increase_ms: 500,
-    enable_request_batching: true,
-    enable_response_caching: true,
+    enabled : true,
+    prefer_cheaper_models : true,
+    max_latency_increase_ms : 500,
+    enable_request_batching : true,
+    enable_response_caching : true,
   };
 
   assert!( settings.enabled );
@@ -194,17 +194,17 @@ async fn test_cost_alert_serialization()
 {
   let alert = CostAlert
   {
-    alert_type: AlertType::DailyLimitExceeded,
-    severity: AlertSeverity::Critical,
-    message: "Daily limit exceeded".to_string(),
-    timestamp: 1_234_567_890,
-    current_spend: 150.0,
-    limit: 100.0,
+    alert_type : AlertType::DailyLimitExceeded,
+    severity : AlertSeverity::Critical,
+    message : "Daily limit exceeded".to_string(),
+    timestamp : 1_234_567_890,
+    current_spend : 150.0,
+    limit : 100.0,
   };
 
   // Test serialization
   let json = serde_json::to_string( &alert ).expect( "Serialization should work" );
-  let deserialized: CostAlert = serde_json::from_str( &json ).expect( "Deserialization should work" );
+  let deserialized : CostAlert = serde_json::from_str( &json ).expect( "Deserialization should work" );
 
   assert!( (alert.current_spend - deserialized.current_spend).abs() < f64::EPSILON );
   assert!( (alert.limit - deserialized.limit).abs() < f64::EPSILON );
@@ -235,10 +235,10 @@ async fn test_token_usage_calculations()
 {
   let token_usage = TokenUsage
   {
-    token_type: "output".to_string(),
-    count: 500,
-    cost_per_token: 0.002,
-    total_cost: 1.0,
+    token_type : "output".to_string(),
+    count : 500,
+    cost_per_token : 0.002,
+    total_cost : 1.0,
   };
 
   // Verify calculation consistency
@@ -255,7 +255,7 @@ async fn test_edge_cases()
   assert!( alerts.is_empty() );
 
   // Spending at 90% should trigger alerts
-  let alerts2 = tracker.update_spending( 0.008, 0.008 ); // Total: 0.009, which is 90% of 0.01
+  let alerts2 = tracker.update_spending( 0.008, 0.008 ); // Total : 0.009, which is 90% of 0.01
   assert!( !alerts2.is_empty() );
 
   // Test with zero limits

@@ -63,14 +63,14 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
 
     for tool_call in tool_calls
     {
-      println!( "   Function: {}", tool_call.function.name );
-      println!( "   Arguments: {}", tool_call.function.arguments );
+      println!( "   Function : {}", tool_call.function.name );
+      println!( "   Arguments : {}", tool_call.function.arguments );
 
       // Simulate function execution
       let args : serde_json::Value = serde_json::from_str( &tool_call.function.arguments )?;
 
       let location = args[ "location" ].as_str().unwrap_or( "unknown" );
-      println!( "   → Simulating weather lookup for: {location}\n" );
+      println!( "   → Simulating weather lookup for : {location}\n" );
 
       // Mock weather result
       let weather_result = json!({

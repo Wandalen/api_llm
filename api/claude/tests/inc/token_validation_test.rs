@@ -7,8 +7,8 @@
 //! - Tests MUST FAIL IMMEDIATELY if authentication with API fails
 //! - NO SILENT PASSES allowed when problems occur
 //!
-//! Run with: cargo test --features `integration,full`
-//! Requires: Valid `ANTHROPIC_API_KEY` in environment or ../../secret/-secrets.sh
+//! Run with : cargo test --features `integration,full`
+//! Requires : Valid `ANTHROPIC_API_KEY` in environment or ../../secret/-secrets.sh
 
 #[ allow( unused_imports ) ]
 use super::*;
@@ -31,16 +31,16 @@ fn test_workspace_token_loading_and_format_validation()
   println!( "🔍 Validating token format..." );
   assert!( !api_key.is_empty(), "INTEGRATION FAILURE: API key cannot be empty" );
   assert!( api_key.starts_with( "sk-ant-" ), 
-    "INTEGRATION FAILURE: Invalid API key format. Expected sk-ant-*, got: {}...", 
+    "INTEGRATION FAILURE: Invalid API key format. Expected sk-ant-*, got : {}...", 
     &api_key[..core::cmp::min( 10, api_key.len() )] );
   assert!( api_key.len() >= 50, 
-    "INTEGRATION FAILURE: API key too short. Expected >=50 chars, got: {}", api_key.len() );
+    "INTEGRATION FAILURE: API key too short. Expected >=50 chars, got : {}", api_key.len() );
   
   println!( "✅ Token format validation passed:" );
-  println!( "   Format: ✅ Valid Anthropic format (sk-ant-...)" );
-  println!( "   Length: ✅ {} characters", api_key.len() );
-  println!( "   Prefix: {}", &api_key[..15] );
-  println!( "   Source: ✅ Workspace secrets (../../secret/-secrets.sh)" );
+  println!( "   Format : ✅ Valid Anthropic format (sk-ant-...)" );
+  println!( "   Length : ✅ {} characters", api_key.len() );
+  println!( "   Prefix : {}", &api_key[..15] );
+  println!( "   Source : ✅ Workspace secrets (../../secret/-secrets.sh)" );
   
   // Test 3: Client creation with token
   println!( "\n🏗️ Testing client creation..." );
@@ -50,7 +50,7 @@ fn test_workspace_token_loading_and_format_validation()
   
   println!( "✅ Client creation passed:" );
   println!( "   Base URL: {}", client.base_url() );
-  println!( "   Token match: ✅ Client token matches workspace token" );
+  println!( "   Token match : ✅ Client token matches workspace token" );
   
   // Test 4: Alternative client creation method
   println!( "\n🏢 Testing Client::from_workspace()..." );
@@ -61,8 +61,8 @@ fn test_workspace_token_loading_and_format_validation()
   assert_eq!( workspace_client.base_url(), client.base_url() );
   
   println!( "✅ Workspace client creation passed:" );
-  println!( "   Token consistency: ✅ Both methods load same token" );
-  println!( "   Configuration match: ✅ Same base URL and settings" );
+  println!( "   Token consistency : ✅ Both methods load same token" );
+  println!( "   Configuration match : ✅ Same base URL and settings" );
   
   println!( "\n🎉 TOKEN VALIDATION: ✅ ALL TESTS PASSED" );
   println!( "=========================================" );
@@ -79,7 +79,7 @@ async fn test_live_token_authentication_verification()
     .expect( "INTEGRATION FAILURE: Must have workspace client for authentication test" );
     
   let api_key = &client.secret().ANTHROPIC_API_KEY;
-  println!( "🔑 Testing authentication with token: {}...{}", 
+  println!( "🔑 Testing authentication with token : {}...{}", 
     &api_key[..12], &api_key[api_key.len()-8..] );
 
   // Test minimal API request for authentication verification
@@ -106,14 +106,14 @@ async fn test_live_token_authentication_verification()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted - this confirms real API usage" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION FAILURE: Authentication must succeed with valid token: {err}" ),
+    Err( err ) => panic!( "INTEGRATION FAILURE: Authentication must succeed with valid token : {err}" ),
   };
     
   let auth_duration = auth_start.elapsed();
   
   // Verify authentic API response structure
   assert!( !response.id.is_empty(), "INTEGRATION FAILURE: Real API response must have message ID" );
-  assert!( response.id.starts_with( "msg_" ), "INTEGRATION FAILURE: Invalid message ID format: {}", response.id );
+  assert!( response.id.starts_with( "msg_" ), "INTEGRATION FAILURE: Invalid message ID format : {}", response.id );
   assert_eq!( response.r#type, "message", "INTEGRATION FAILURE: Response type must be 'message'" );
   assert_eq!( response.role, "assistant", "INTEGRATION FAILURE: Response role must be 'assistant'" );
   assert_eq!( response.model, "claude-3-5-haiku-20241022", "INTEGRATION FAILURE: Model mismatch" );
@@ -124,12 +124,12 @@ async fn test_live_token_authentication_verification()
   
   println!( "✅ Authentication verification successful:" );
   println!( "   Response ID: {}", response.id );
-  println!( "   Response time: {auth_duration:?}" );
-  println!( "   Model: {}", response.model );
-  println!( "   Token usage: {} in, {} out", response.usage.input_tokens, response.usage.output_tokens );
+  println!( "   Response time : {auth_duration:?}" );
+  println!( "   Model : {}", response.model );
+  println!( "   Token usage : {} in, {} out", response.usage.input_tokens, response.usage.output_tokens );
   if let Some( text ) = &response.content[0].text
   {
-    println!( "   Content preview: {}", &text[..core::cmp::min( 50, text.len() )] );
+    println!( "   Content preview : {}", &text[..core::cmp::min( 50, text.len() )] );
   }
   
   // Test authentication error handling with invalid token
@@ -156,18 +156,18 @@ async fn test_live_token_authentication_verification()
   let error = auth_error_result.unwrap_err();
   let error_str = error.to_string().to_lowercase();
   assert!( error_str.contains( "authentication" ) || error_str.contains( "unauthorized" ) || error_str.contains( "invalid" ),
-    "INTEGRATION FAILURE: Authentication error should mention auth issue, got: {error}" );
+    "INTEGRATION FAILURE: Authentication error should mention auth issue, got : {error}" );
   
   println!( "✅ Authentication error handling verified:" );
-  println!( "   Invalid token properly rejected: {error}" );
+  println!( "   Invalid token properly rejected : {error}" );
   
   println!( "\n🎉 AUTHENTICATION VERIFICATION: ✅ FULLY WORKING" );
   println!( "================================================" );
-  println!( "✅ Token loading: WORKING" );
-  println!( "✅ Token format: VALID" );  
-  println!( "✅ API authentication: WORKING" );
-  println!( "✅ Error handling: WORKING" );
-  println!( "✅ Response validation: WORKING" );
+  println!( "✅ Token loading : WORKING" );
+  println!( "✅ Token format : VALID" );  
+  println!( "✅ API authentication : WORKING" );
+  println!( "✅ Error handling : WORKING" );
+  println!( "✅ Response validation : WORKING" );
 }
 
 #[ test ]
@@ -196,9 +196,9 @@ fn test_token_security_and_workspace_integration()
   assert!( !api_key.contains( "test" ), "INTEGRATION FAILURE: Token appears to be test value" );
   
   println!( "✅ Token security validation passed:" );
-  println!( "   Length: ✅ {} characters (secure length)", api_key.len() );
-  println!( "   Characters: ✅ Safe ASCII characters only" );
-  println!( "   Authenticity: ✅ Real API token (not placeholder/test)" );
+  println!( "   Length : ✅ {} characters (secure length)", api_key.len() );
+  println!( "   Characters : ✅ Safe ASCII characters only" );
+  println!( "   Authenticity : ✅ Real API token (not placeholder/test)" );
   
   // Test environment variable fallback (if available)
   println!( "\n🌍 Testing environment variable integration..." );
@@ -207,8 +207,8 @@ fn test_token_security_and_workspace_integration()
     Ok( env_key ) => 
     {
       println!( "ℹ️ ANTHROPIC_API_KEY found in environment" );
-      println!( "   Length: {} characters", env_key.len() );
-      println!( "   Matches workspace: {}", if env_key == *api_key { "✅ Yes" } else { "⚠️ No (using workspace)" } );
+      println!( "   Length : {} characters", env_key.len() );
+      println!( "   Matches workspace : {}", if env_key == *api_key { "✅ Yes" } else { "⚠️ No (using workspace)" } );
     },
     Err( _ ) => 
     {

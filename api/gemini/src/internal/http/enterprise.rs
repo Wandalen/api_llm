@@ -23,11 +23,11 @@ use super::cache::{ RequestCache, execute_with_cache };
 /// when available, falling back to legacy execution when features are disabled or unavailable
 pub async fn execute_with_optional_retries< T, R >
 (
-  full_client: &crate::client::Client,
-  method: Method,
-  url: &str,
-  api_key: &str,
-  body: Option< &T >,
+  full_client : &crate::client::Client,
+  method : Method,
+  url : &str,
+  api_key : &str,
+  body : Option< &T >,
 )
 -> Result< R, Error >
 where
@@ -61,22 +61,22 @@ where
   #[ cfg( feature = "rate_limiting" ) ]
   let rate_limiter = full_client.to_rate_limiting_config().map( |config| RateLimit::new( config ) );
   #[ cfg( not( feature = "rate_limiting" ) ) ]
-  let rate_limiter: Option< () > = None;
+  let rate_limiter : Option< () > = None;
 
   #[ cfg( feature = "circuit_breaker" ) ]
   let circuit_breaker = full_client.to_circuit_breaker_config().map( |config| CircuitBreaker::new( config ) );
   #[ cfg( not( feature = "circuit_breaker" ) ) ]
-  let circuit_breaker: Option< () > = None;
+  let circuit_breaker : Option< () > = None;
 
   #[ cfg( feature = "retry" ) ]
   let retry_config = full_client.to_retry_config();
   #[ cfg( not( feature = "retry" ) ) ]
-  let retry_config: Option< () > = None;
+  let retry_config : Option< () > = None;
 
   #[ cfg( feature = "caching" ) ]
   let cache = full_client.request_cache.as_ref().map( |arc| arc.as_ref() );
   #[ cfg( not( feature = "caching" ) ) ]
-  let cache: Option< &() > = None;
+  let cache : Option< &() > = None;
 
   // Execute with the configured features
   execute_with_enterprise_features(
@@ -96,28 +96,28 @@ where
 /// Execute an HTTP request with enterprise reliability features (rate limiting, circuit breaker, retry, caching)
 pub( crate ) async fn execute_with_enterprise_features< T, R >
 (
-  client: &reqwest::Client,
-  method: Method,
-  url: &str,
-  api_key: &str,
-  body: Option< &T >,
-  config: &HttpConfig,
+  client : &reqwest::Client,
+  method : Method,
+  url : &str,
+  api_key : &str,
+  body : Option< &T >,
+  config : &HttpConfig,
   #[ cfg( feature = "rate_limiting" ) ]
-  rate_limiter: Option< &RateLimit >,
+  rate_limiter : Option< &RateLimit >,
   #[ cfg( not( feature = "rate_limiting" ) ) ]
-  _rate_limiter: Option< &() >,
+  _rate_limiter : Option< &() >,
   #[ cfg( feature = "circuit_breaker" ) ]
-  circuit_breaker: Option< &CircuitBreaker >,
+  circuit_breaker : Option< &CircuitBreaker >,
   #[ cfg( not( feature = "circuit_breaker" ) ) ]
-  _circuit_breaker: Option< &() >,
+  _circuit_breaker : Option< &() >,
   #[ cfg( feature = "retry" ) ]
-  retry_config: Option< &RetryConfig >,
+  retry_config : Option< &RetryConfig >,
   #[ cfg( not( feature = "retry" ) ) ]
-  _retry_config: Option< &() >,
+  _retry_config : Option< &() >,
   #[ cfg( feature = "caching" ) ]
-  cache: Option< &RequestCache >,
+  cache : Option< &RequestCache >,
   #[ cfg( not( feature = "caching" ) ) ]
-  _cache: Option< &() >,
+  _cache : Option< &() >,
 )
 -> Result< R, Error >
 where
@@ -198,7 +198,7 @@ where
 
             // Calculate and apply retry delay
             let delay = calculate_retry_delay( attempt, retry_cfg );
-            tokio::time::sleep( delay ).await;
+            tokio ::time::sleep( delay ).await;
             attempt += 1;
           }
         }

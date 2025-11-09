@@ -29,7 +29,7 @@ mod private
     {
       write!(
         f,
-        "Validation error in field '{}': {}. Value: '{}', Constraint: '{}'",
+        "Validation error in field '{}': {}. Value : '{}', Constraint : '{}'",
         self.field, self.message, self.value, self.constraint
       )
     }
@@ -70,17 +70,17 @@ mod private
 
       if name.len() > 256
       {
-        return Err( format!( "Model name too long: {} chars (max 256)", name.len() ) );
+        return Err( format!( "Model name too long : {} chars (max 256)", name.len() ) );
       }
 
-      // Ollama model names: alphanumeric + dash + underscore + colon + slash + dot
+      // Ollama model names : alphanumeric + dash + underscore + colon + slash + dot
       let valid_chars = name.chars().all( | c |
         c.is_alphanumeric() || c == '-' || c == '_' || c == ':' || c == '/' || c == '.'
       );
 
       if !valid_chars
       {
-        return Err( "Model name contains invalid characters (allowed: alphanumeric, -, _, :, /, .)".to_string() );
+        return Err( "Model name contains invalid characters (allowed : alphanumeric, -, _, :, /, .)".to_string() );
       }
 
       Ok( () )
@@ -190,16 +190,16 @@ mod private
       }
 
       // Base64 length must be multiple of 4
-      if data.len() % 4 != 0
+      if !data.len().is_multiple_of( 4 )
       {
-        return Err( format!( "Invalid base64 length: {} (must be multiple of 4)", data.len() ) );
+        return Err( format!( "Invalid base64 length : {} (must be multiple of 4)", data.len() ) );
       }
 
       // Check reasonable size limits (max 10MB base64 ~ 13.3MB decoded)
       const MAX_BASE64_SIZE : usize = 13_333_333;
       if data.len() > MAX_BASE64_SIZE
       {
-        return Err( format!( "Image data too large: {} bytes (max ~10MB)", data.len() ) );
+        return Err( format!( "Image data too large : {} bytes (max ~10MB)", data.len() ) );
       }
 
       Ok( () )
@@ -261,7 +261,7 @@ mod private
       const MAX_PROMPT_LENGTH : usize = 500_000; // ~500k chars
       if prompt.len() > MAX_PROMPT_LENGTH
       {
-        return Err( format!( "Prompt too long: {} chars (max {})", prompt.len(), MAX_PROMPT_LENGTH ) );
+        return Err( format!( "Prompt too long : {} chars (max {})", prompt.len(), MAX_PROMPT_LENGTH ) );
       }
 
       Ok( () )
@@ -281,7 +281,7 @@ mod private
       if !VALID_FORMATS.contains( &format )
       {
         return Err( format!(
-          "Invalid audio format '{}' (valid: {})",
+          "Invalid audio format '{}' (valid : {})",
           format,
           VALID_FORMATS.join( ", " )
         ));
@@ -536,7 +536,7 @@ mod private
 }
 
 #[ cfg( feature = "input_validation" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use private::ValidationError;
   exposed use private::ValidationResult;

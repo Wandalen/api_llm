@@ -34,14 +34,14 @@ mod private
       let response = request_builder
         .send()
         .await
-        .map_err( | e | format_err!( "Network error: {}", e ) )?;
+        .map_err( | e | format_err!( "Network error : {}", e ) )?;
 
       if !response.status().is_success()
       {
-        return Err( format_err!( "API error {}: Cache content request failed: {}", response.status().as_u16(), response.status() ) );
+        return Err( format_err!( "API error {}: Cache content request failed : {}", response.status().as_u16(), response.status() ) );
       }
 
-      let cache_response : CachedContentResponse = response.json().await.map_err( | e | format_err!( "Parse error: {}", e ) )?;
+      let cache_response : CachedContentResponse = response.json().await.map_err( | e | format_err!( "Parse error : {}", e ) )?;
       Ok( cache_response )
     }
 
@@ -68,14 +68,14 @@ mod private
       let response = request_builder
         .send()
         .await
-        .map_err( | e | format_err!( "Network error: {}", e ) )?;
+        .map_err( | e | format_err!( "Network error : {}", e ) )?;
 
       if !response.status().is_success()
       {
-        return Err( format_err!( "API error {}: Cache invalidation request failed: {}", response.status().as_u16(), response.status() ) );
+        return Err( format_err!( "API error {}: Cache invalidation request failed : {}", response.status().as_u16(), response.status() ) );
       }
 
-      let invalidation_response : CacheInvalidationResponse = response.json().await.map_err( | e | format_err!( "Parse error: {}", e ) )?;
+      let invalidation_response : CacheInvalidationResponse = response.json().await.map_err( | e | format_err!( "Parse error : {}", e ) )?;
       Ok( invalidation_response )
     }
 
@@ -101,14 +101,14 @@ mod private
       let response = request_builder
         .send()
         .await
-        .map_err( | e | format_err!( "Network error: {}", e ) )?;
+        .map_err( | e | format_err!( "Network error : {}", e ) )?;
 
       if !response.status().is_success()
       {
-        return Err( format_err!( "API error {}: Cache metrics request failed: {}", response.status().as_u16(), response.status() ) );
+        return Err( format_err!( "API error {}: Cache metrics request failed : {}", response.status().as_u16(), response.status() ) );
       }
 
-      let metrics : CachePerformanceMetrics = response.json().await.map_err( | e | format_err!( "Parse error: {}", e ) )?;
+      let metrics : CachePerformanceMetrics = response.json().await.map_err( | e | format_err!( "Parse error : {}", e ) )?;
       Ok( metrics )
     }
   }

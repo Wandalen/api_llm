@@ -10,9 +10,9 @@ mod private
   // Use crate root for base access
   use crate::
   {
-    client::Client,
-    error::Result,
-    environment::{ OpenaiEnvironment, EnvironmentInterface },
+    client ::Client,
+    error ::Result,
+    environment ::{ OpenaiEnvironment, EnvironmentInterface },
   };
   use crate::components::audio::
   {
@@ -79,7 +79,7 @@ mod private
       let file_part = Part::bytes( request.file )
         .file_name( request.filename )
         .mime_str( "audio/*" )
-        .map_err( | e | crate::error::OpenAIError::Internal( format!( "Failed to create file part: {e}" ) ) )?;
+        .map_err( | e | crate::error::OpenAIError::Internal( format!( "Failed to create file part : {e}" ) ) )?;
 
       let mut form = Form::new()
         .part( "file", file_part )
@@ -98,7 +98,7 @@ mod private
       if let Some( response_format ) = request.response_format
       {
         form = form.text( "response_format", serde_json::to_string( &response_format )
-          .map_err( | e | crate::error::OpenAIError::Internal( format!( "Failed to serialize response_format: {e}" ) ) )? );
+          .map_err( | e | crate::error::OpenAIError::Internal( format!( "Failed to serialize response_format : {e}" ) ) )? );
       }
 
       if let Some( temperature ) = request.temperature
@@ -109,7 +109,7 @@ mod private
       if let Some( timestamp_granularities ) = request.timestamp_granularities
       {
         let granularities_json = serde_json::to_string( &timestamp_granularities )
-          .map_err( | e | crate::error::OpenAIError::Internal( format!( "Failed to serialize timestamp_granularities: {e}" ) ) )?;
+          .map_err( | e | crate::error::OpenAIError::Internal( format!( "Failed to serialize timestamp_granularities : {e}" ) ) )?;
         form = form.text( "timestamp_granularities", granularities_json );
       }
 
@@ -131,7 +131,7 @@ mod private
       let file_part = Part::bytes( request.file )
         .file_name( request.filename )
         .mime_str( "audio/*" )
-        .map_err( | e | crate::error::OpenAIError::Internal( format!( "Failed to create file part: {e}" ) ) )?;
+        .map_err( | e | crate::error::OpenAIError::Internal( format!( "Failed to create file part : {e}" ) ) )?;
 
       let mut form = Form::new()
         .part( "file", file_part )
@@ -145,7 +145,7 @@ mod private
       if let Some( response_format ) = request.response_format
       {
         form = form.text( "response_format", serde_json::to_string( &response_format )
-          .map_err( | e | crate::error::OpenAIError::Internal( format!( "Failed to serialize response_format: {e}" ) ) )? );
+          .map_err( | e | crate::error::OpenAIError::Internal( format!( "Failed to serialize response_format : {e}" ) ) )? );
       }
 
       if let Some( temperature ) = request.temperature
@@ -159,7 +159,7 @@ mod private
   }
 } // end mod private
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   // Expose all structs defined in this module
   exposed use 

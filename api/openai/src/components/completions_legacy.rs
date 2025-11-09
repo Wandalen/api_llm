@@ -39,7 +39,7 @@ mod private
   pub struct CompletionChoice
   {
     /// The reason the model stopped generating tokens.
-    pub finish_reason : String, // Enum: stop, length, content_filter
+    pub finish_reason : String, // Enum : stop, length, content_filter
     /// The index of the choice in the list of choices.
     pub index : i32,
     /// Log probability information for the choice.
@@ -49,7 +49,7 @@ mod private
   }
 
   /// Represents a completion response from the legacy API.
-  /// Note: both the streamed and non-streamed response objects share the same shape.
+  /// Note : both the streamed and non-streamed response objects share the same shape.
   ///
   /// # Used By
   /// - `/completions` (POST)
@@ -75,7 +75,7 @@ mod private
   }
 } // end mod private
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use 
   {

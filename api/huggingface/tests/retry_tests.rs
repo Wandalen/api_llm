@@ -7,7 +7,7 @@ mod retry_tests
   {
   Client,
   ExplicitRetryConfig,
-  error::{ HuggingFaceError, ApiErrorWrap },
+  error ::{ HuggingFaceError, ApiErrorWrap },
   };
 
   /// Test `ExplicitRetryConfig` creation and configuration
@@ -139,7 +139,7 @@ mod retry_tests
   }
   }
 
-  /// Integration test: Client with retry policy
+  /// Integration test : Client with retry policy
   #[ cfg( feature = "env-config" ) ]
   #[ tokio::test ]
   async fn test_client_with_custom_retry_policy()
@@ -170,7 +170,7 @@ mod retry_tests
   assert!( ( explicit_retry_config.multiplier - 1.8 ).abs() < f64::EPSILON );
   }
 
-  /// Integration test: Client explicit retry behavior
+  /// Integration test : Client explicit retry behavior
   #[ cfg( feature = "env-config" ) ]
   #[ tokio::test ]
   async fn test_client_explicit_retry_pattern()
@@ -217,8 +217,8 @@ mod retry_tests
   use workspace_tools as workspace;
   use api_huggingface::
   {
-      environment::HuggingFaceEnvironmentImpl,
-      secret::Secret,
+      environment ::HuggingFaceEnvironmentImpl,
+      secret ::Secret,
   };
 
   fn get_api_key_for_integration() -> String
@@ -270,7 +270,7 @@ mod retry_tests
       assert!( result.is_err(), "Invalid key should cause failure" );
 
       // Should have taken time due to explicit retries (at least 50ms for first retry)
-      assert!( elapsed.as_millis() > 40, "Should have spent time on explicit retries: {elapsed:?}" );
+      assert!( elapsed.as_millis() > 40, "Should have spent time on explicit retries : {elapsed:?}" );
 
       // Verify explicit retry configuration is developer-controlled
       assert_eq!( retry_config.max_retries, 2 );
@@ -391,7 +391,7 @@ mod retry_tests
   ( Err( e1 ), Ok( _ ) ) => 
   {
           // This is expected - retry client might succeed where no-retry fails
-          println!( "No-retry failed: {e1}, retry client succeeded - this is expected behavior" );
+          println!( "No-retry failed : {e1}, retry client succeeded - this is expected behavior" );
   }
       }
   }

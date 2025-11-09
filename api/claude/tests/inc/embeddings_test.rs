@@ -62,8 +62,8 @@ mod embeddings_functionality_tests
     });
 
     // Attempt to deserialize - will fail until types are implemented
-    let response: Result< the_module::EmbeddingResponse, _ > =
-      serde_json::from_value( mock_response );
+    let response : Result< the_module::EmbeddingResponse, _ > =
+      serde_json ::from_value( mock_response );
 
     assert!( response.is_ok(), "Should deserialize valid embedding response" );
 
@@ -151,7 +151,7 @@ mod embeddings_functionality_tests
 
     let duration = start.elapsed();
 
-    // Performance expectation: request construction should be fast
+    // Performance expectation : request construction should be fast
     assert!( duration.as_millis() < 100, "Request construction should be under 100ms" );
   }
 }
@@ -185,7 +185,7 @@ mod embeddings_integration_tests
       error.to_string().contains( "not supported" ) ||
       error.to_string().contains( "not available" ) ||
       error.to_string().contains( "Not implemented" ),
-      "Error should indicate embeddings not supported, got: {error}"
+      "Error should indicate embeddings not supported, got : {error}"
     );
   }
 

@@ -188,7 +188,7 @@ mod private
       // Validate all endpoints are valid URLs
       for endpoint in &endpoints
       {
-        url::Url::parse( endpoint ).map_err( |e| format_err!( "Invalid URL {}: {}", endpoint, e ) )?;
+        url ::Url::parse( endpoint ).map_err( |e| format_err!( "Invalid URL {}: {}", endpoint, e ) )?;
       }
 
       let endpoint_infos : Vec< EndpointInfo > = endpoints.into_iter()
@@ -331,7 +331,7 @@ mod private
 }
 
 #[ cfg( any( feature = "failover", feature = "health_checks" ) ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use private::EndpointHealth;
 

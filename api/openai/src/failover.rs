@@ -8,8 +8,8 @@ mod private
 {
   use std::
   {
-    sync::{ Arc, Mutex },
-    time::Instant,
+    sync ::{ Arc, Mutex },
+    time ::Instant,
   };
   use core::time::Duration;
   use serde::{ Deserialize, Serialize };
@@ -363,11 +363,11 @@ mod private
       let base_delay = Duration::from_millis( self.config.retry_delay_ms );
       let max_delay = Duration::from_millis( self.config.max_retry_delay_ms );
 
-      // Exponential backoff: base_delay * 2^(attempt-1)
+      // Exponential backoff : base_delay * 2^(attempt-1)
       let multiplier = 2_u64.saturating_pow( attempt.saturating_sub( 1 ) );
       let calculated_delay = base_delay.saturating_mul( u32::try_from( multiplier ).unwrap_or( u32::MAX ) );
 
-      core::cmp::min( calculated_delay, max_delay )
+      core ::cmp::min( calculated_delay, max_delay )
     }
   }
 
@@ -426,7 +426,7 @@ mod private
 
             // Calculate delay before next attempt
             let delay = manager.calculate_retry_delay( attempt );
-            tokio::time::sleep( delay ).await;
+            tokio ::time::sleep( delay ).await;
           }
         }
       }
@@ -509,9 +509,9 @@ mod private
       match self
       {
         FailoverError::NoAvailableEndpoints => write!( f, "No endpoints are available for failover" ),
-        FailoverError::AllEndpointsFailed( error ) => write!( f, "All endpoints failed: {error}" ),
+        FailoverError::AllEndpointsFailed( error ) => write!( f, "All endpoints failed : {error}" ),
         FailoverError::MaxRetriesExceeded => write!( f, "Maximum retry attempts exceeded" ),
-        FailoverError::ConfigurationError( msg ) => write!( f, "Configuration error: {msg}" ),
+        FailoverError::ConfigurationError( msg ) => write!( f, "Configuration error : {msg}" ),
       }
     }
   }
@@ -644,7 +644,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use private::EndpointHealth;
   exposed use private::FailoverStrategy;

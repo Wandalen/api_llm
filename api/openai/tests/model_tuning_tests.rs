@@ -886,12 +886,12 @@ async fn test_serialization_roundtrip()
 {
   let status = TuningStatus::Running;
   let serialized = serde_json::to_string( &status ).unwrap();
-  let deserialized: TuningStatus = serde_json::from_str( &serialized ).unwrap();
+  let deserialized : TuningStatus = serde_json::from_str( &serialized ).unwrap();
   assert!( matches!( deserialized, TuningStatus::Running ) );
 
   let method = FineTuningMethod::LoRA { rank : 16, alpha : 32.0, dropout : 0.1 };
   let serialized = serde_json::to_string( &method ).unwrap();
-  let deserialized: FineTuningMethod = serde_json::from_str( &serialized ).unwrap();
+  let deserialized : FineTuningMethod = serde_json::from_str( &serialized ).unwrap();
   assert!( matches!( deserialized, FineTuningMethod::LoRA { .. } ) );
 }
 

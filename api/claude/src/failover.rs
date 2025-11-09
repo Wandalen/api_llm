@@ -15,8 +15,8 @@ mod private
 {
   use std::
   {
-    sync::{ Arc, Mutex },
-    time::Instant,
+    sync ::{ Arc, Mutex },
+    time ::Instant,
   };
   use core::time::Duration;
   use serde::{ Deserialize, Serialize };
@@ -55,7 +55,7 @@ mod private
   {
     /// Unique identifier for the endpoint
     pub id : String,
-    /// Endpoint URL (e.g., "<https://api.anthropic.com>")
+    /// Endpoint URL (e.g., "< https://api.anthropic.com >")
     pub url : String,
     /// Priority level (higher = more preferred)
     pub priority : i32,
@@ -494,7 +494,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

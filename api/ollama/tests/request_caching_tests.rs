@@ -218,20 +218,20 @@ async fn test_ollama_client_cache_integration()
 
   // Create a request that would normally fail due to unreachable server
   let request = ChatRequest {
-    model: "test-model".to_string(),
-    messages: vec![ChatMessage {
-      role: MessageRole::User,
-      content: "Hello, cache test".to_string(),
-      images: None,
+    model : "test-model".to_string(),
+    messages : vec![ChatMessage {
+      role : MessageRole::User,
+      content : "Hello, cache test".to_string(),
+      images : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tool_calls: None,
+      tool_calls : None,
     }],
-    stream: Some(false),
-    options: None,
+    stream : Some(false),
+    options : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tools: None,
+    tools : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tool_messages: None,
+    tool_messages : None,
   };
 
   // First call should be a cache miss and network error
@@ -261,54 +261,54 @@ async fn test_cache_key_generation()
   let cache = RequestCache::new(config);
 
   let request1 = ChatRequest {
-    model: "llama2".to_string(),
-    messages: vec![ChatMessage {
-      role: MessageRole::User,
-      content: "Hello".to_string(),
-      images: None,
+    model : "llama2".to_string(),
+    messages : vec![ChatMessage {
+      role : MessageRole::User,
+      content : "Hello".to_string(),
+      images : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tool_calls: None,
+      tool_calls : None,
     }],
-    stream: Some(false),
-    options: None,
+    stream : Some(false),
+    options : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tools: None,
+    tools : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tool_messages: None,
+    tool_messages : None,
   };
 
   let request2 = ChatRequest {
-    model: "llama2".to_string(),
-    messages: vec![ChatMessage {
-      role: MessageRole::User,
-      content: "Hello".to_string(),
-      images: None,
+    model : "llama2".to_string(),
+    messages : vec![ChatMessage {
+      role : MessageRole::User,
+      content : "Hello".to_string(),
+      images : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tool_calls: None,
+      tool_calls : None,
     }],
-    stream: Some(false),
-    options: None,
+    stream : Some(false),
+    options : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tools: None,
+    tools : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tool_messages: None,
+    tool_messages : None,
   };
 
   let request3 = ChatRequest {
-    model: "llama2".to_string(),
-    messages: vec![ChatMessage {
-      role: MessageRole::User,
-      content: "Different message".to_string(),
-      images: None,
+    model : "llama2".to_string(),
+    messages : vec![ChatMessage {
+      role : MessageRole::User,
+      content : "Different message".to_string(),
+      images : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tool_calls: None,
+      tool_calls : None,
     }],
-    stream: Some(false),
-    options: None,
+    stream : Some(false),
+    options : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tools: None,
+    tools : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tool_messages: None,
+    tool_messages : None,
   };
 
   // Same requests should generate same cache keys
@@ -321,13 +321,13 @@ async fn test_cache_key_generation()
   assert_ne!(key1, key3);
 }
 
-// Note: Performance overhead test moved to benches/cache_performance.rs
+// Note : Performance overhead test moved to benches/cache_performance.rs
 //
 // Performance measurements were causing flaky test failures due to timing variability
 // across different systems and load conditions. Per test_organization.rulebook.md,
 // performance tests belong in benches/ directory, not in the functional test suite.
 //
-// Run with: cargo bench --bench cache_performance --all-features
+// Run with : cargo bench --bench cache_performance --all-features
 
 #[ tokio::test ]
 async fn test_cache_concurrent_access()
@@ -377,28 +377,28 @@ async fn test_cache_with_different_request_types()
 
   // Test with ChatRequest
   let chat_request = ChatRequest {
-    model: "llama2".to_string(),
-    messages: vec![ChatMessage {
-      role: MessageRole::User,
-      content: "Chat test".to_string(),
-      images: None,
+    model : "llama2".to_string(),
+    messages : vec![ChatMessage {
+      role : MessageRole::User,
+      content : "Chat test".to_string(),
+      images : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tool_calls: None,
+      tool_calls : None,
     }],
-    stream: Some(false),
-    options: None,
+    stream : Some(false),
+    options : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tools: None,
+    tools : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tool_messages: None,
+    tool_messages : None,
   };
 
   // Test with GenerateRequest
   let generate_request = GenerateRequest {
-    model: "llama2".to_string(),
-    prompt: "Generate test".to_string(),
-    stream: Some(false),
-    options: None,
+    model : "llama2".to_string(),
+    prompt : "Generate test".to_string(),
+    stream : Some(false),
+    options : None,
   };
 
   // Generate keys for different request types
@@ -448,7 +448,7 @@ async fn test_cache_debug_and_display()
   // Test Debug implementation
   let debug_output = format!("{cache:?}");
   assert!(debug_output.contains("RequestCache"));
-  assert!(debug_output.contains("entries: 0"));
+  assert!(debug_output.contains("entries : 0"));
 
   // Test Display implementation
   let display_output = format!("{cache}");

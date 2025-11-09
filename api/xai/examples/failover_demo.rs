@@ -34,7 +34,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     .with_auto_rotate( true );  // Automatically rotate on unhealthy
 
   // Create client with multiple endpoints
-  // Note: Using the same endpoint for demo purposes
+  // Note : Using the same endpoint for demo purposes
   // In production, use distinct backup endpoints
   let client = Client::build( env )?
     .with_failover_config(
@@ -48,9 +48,9 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     );
 
   println!( "📊 Failover Configuration:" );
-  println!( "   - Max failures before unhealthy: 3" );
-  println!( "   - Retry delay: 60 seconds" );
-  println!( "   - Auto-rotation: enabled\n" );
+  println!( "   - Max failures before unhealthy : 3" );
+  println!( "   - Retry delay : 60 seconds" );
+  println!( "   - Auto-rotation : enabled\n" );
 
   // Display endpoint health
   if let Some( ref manager ) = client.failover_manager
@@ -63,7 +63,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     }
     println!();
 
-    println!( "📍 Current endpoint: {}\n", manager.current_endpoint() );
+    println!( "📍 Current endpoint : {}\n", manager.current_endpoint() );
   }
 
   // Make a test request
@@ -87,7 +87,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
       {
         if let Some( ref content ) = choice.message.content
         {
-          println!( "🤖 Response: {content}\n" );
+          println!( "🤖 Response : {content}\n" );
         }
       }
 
@@ -104,7 +104,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     }
     Err( e ) =>
     {
-      println!( "❌ Request failed: {e}\n" );
+      println!( "❌ Request failed : {e}\n" );
 
       // Display health after failure
       if let Some( ref manager ) = client.failover_manager

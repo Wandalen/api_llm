@@ -64,7 +64,7 @@ mod private
     #[ serde( skip_serializing_if = "Option::is_none" ) ]
     pub metadata : Option< Metadata >,
     /// Model ID used to generate the response.
-    // Use the wrapper type for requests to allow From<String> via derive
+    // Use the wrapper type for requests to allow From< String > via derive
     pub model : components::common::ModelIdsResponses,
     /// Whether to allow parallel tool calls. Defaults to true.
     #[ serde( default = "default_parallel_tool_calls" ) ] // Add default
@@ -200,7 +200,7 @@ mod private
     pub top_p : Option< f32 >,
     /// Truncation strategy ("auto" or "disabled").
     #[ serde( skip_serializing_if = "Option::is_none" ) ]
-    pub truncation : Option< String >, // Enum: auto, disabled
+    pub truncation : Option< String >, // Enum : auto, disabled
     /// Usage statistics for the request. Null if status is not `completed`.
     #[ serde( skip_serializing_if = "Option::is_none" ) ]
     pub usage : Option< ResponseUsage >, // Use relative path common::ResponseUsage
@@ -616,7 +616,7 @@ mod private
   }
 } // end mod private
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   // Expose all structs defined in this module
   exposed use 
@@ -655,7 +655,7 @@ crate::mod_interface!
   // Re-export types used by the exposed structs
   own use crate::components::
   {
-    common::
+    common ::
     {
       ResponseError,
       ResponseUsage,
@@ -665,8 +665,8 @@ crate::mod_interface!
       Includable,
       ListQuery, // Correctly placed ListQuery
     },
-    input::{ InputItem, ListedInputItem },
-    output::{ OutputItem, OutputContentPart, Annotation, FileSearchResultItem, ComputerScreenshotImage },
-    tools::{ Tool, ToolChoice },
+    input ::{ InputItem, ListedInputItem },
+    output ::{ OutputItem, OutputContentPart, Annotation, FileSearchResultItem, ComputerScreenshotImage },
+    tools ::{ Tool, ToolChoice },
   };
 }

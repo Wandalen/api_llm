@@ -3,7 +3,7 @@ mod private
 }
 
 #[ cfg( feature = "enabled" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   /// Common types shared across API components.
   layer common;

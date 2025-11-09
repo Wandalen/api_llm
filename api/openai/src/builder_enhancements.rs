@@ -12,12 +12,12 @@ mod private
 {
   use crate::
   {
-    components::
+    components ::
     {
-      responses::{ CreateResponseRequest, ResponseInput },
-      common::ModelIdsResponses,
-      input::{ InputMessage, InputContentPart, InputText, InputItem },
-      tools::{ FunctionTool, FunctionParameters },
+      responses ::{ CreateResponseRequest, ResponseInput },
+      common ::ModelIdsResponses,
+      input ::{ InputMessage, InputContentPart, InputText, InputItem },
+      tools ::{ FunctionTool, FunctionParameters },
     },
   };
 
@@ -38,12 +38,12 @@ mod private
   impl core::fmt::Display for ResponseRequestValidationError
   {
     #[ inline ]
-    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+    fn fmt(&self, f : &mut core::fmt::Formatter< '_ >) -> core::fmt::Result
     {
       match self
       {
-        Self::InvalidModel(model) => write!(f, "Invalid model: {model}"),
-        Self::InvalidInput(input) => write!(f, "Invalid input: {input}"),
+        Self::InvalidModel(model) => write!(f, "Invalid model : {model}"),
+        Self::InvalidInput(input) => write!(f, "Invalid input : {input}"),
         Self::InvalidTemperature(temp) => write!(f, "Invalid temperature {temp}: must be between 0.0 and 2.0"),
         Self::InvalidMaxTokens(tokens) => write!(f, "Invalid max tokens {tokens}: must be positive"),
       }
@@ -72,7 +72,7 @@ mod private
     ///
     /// let request = CreateResponseRequest::with_simple_text("gpt-4", "Tell me a story");
     /// ```
-    fn with_simple_text(model: &str, text: &str) -> CreateResponseRequest;
+    fn with_simple_text(model : &str, text : &str) -> CreateResponseRequest;
 
     /// Create a request with message-based input
     ///
@@ -82,7 +82,7 @@ mod private
     ///
     /// # Returns
     /// A configured `CreateResponseRequest` with message input
-    fn with_messages(model: &str, messages: Vec< InputMessage >) -> CreateResponseRequest;
+    fn with_messages(model : &str, messages : Vec< InputMessage >) -> CreateResponseRequest;
 
     /// Validate the request configuration
     ///
@@ -98,7 +98,7 @@ mod private
   impl CreateResponseRequestEnhancements for CreateResponseRequest
   {
     #[ inline ]
-    fn with_simple_text(model: &str, text: &str) -> CreateResponseRequest
+    fn with_simple_text(model : &str, text : &str) -> CreateResponseRequest
     {
       CreateResponseRequest::former()
         .model(ModelIdsResponses::from(model.to_string()))
@@ -107,9 +107,9 @@ mod private
     }
 
     #[ inline ]
-    fn with_messages(model: &str, messages: Vec< InputMessage >) -> CreateResponseRequest
+    fn with_messages(model : &str, messages : Vec< InputMessage >) -> CreateResponseRequest
     {
-      let input_items: Vec< InputItem > = messages.into_iter()
+      let input_items : Vec< InputItem > = messages.into_iter()
         .map(InputItem::Message)
         .collect();
 
@@ -174,7 +174,7 @@ mod private
     ///
     /// # Returns
     /// An `InputMessage` with role "user" and text content
-    fn user_text(text: &str) -> InputMessage;
+    fn user_text(text : &str) -> InputMessage;
 
     /// Create a system message with text content
     ///
@@ -183,7 +183,7 @@ mod private
     ///
     /// # Returns
     /// An `InputMessage` with role "system" and text content
-    fn system_text(text: &str) -> InputMessage;
+    fn system_text(text : &str) -> InputMessage;
 
     /// Create an assistant message with text content
     ///
@@ -192,35 +192,35 @@ mod private
     ///
     /// # Returns
     /// An `InputMessage` with role "assistant" and text content
-    fn assistant_text(text: &str) -> InputMessage;
+    fn assistant_text(text : &str) -> InputMessage;
   }
 
   impl InputMessageEnhancements for InputMessage
   {
     #[ inline ]
-    fn user_text(text: &str) -> InputMessage
+    fn user_text(text : &str) -> InputMessage
     {
       InputMessage::former()
         .role("user".to_string())
-        .content(vec![InputContentPart::Text(InputText { text: text.to_string() })])
+        .content(vec![InputContentPart::Text(InputText { text : text.to_string() })])
         .form()
     }
 
     #[ inline ]
-    fn system_text(text: &str) -> InputMessage
+    fn system_text(text : &str) -> InputMessage
     {
       InputMessage::former()
         .role("system".to_string())
-        .content(vec![InputContentPart::Text(InputText { text: text.to_string() })])
+        .content(vec![InputContentPart::Text(InputText { text : text.to_string() })])
         .form()
     }
 
     #[ inline ]
-    fn assistant_text(text: &str) -> InputMessage
+    fn assistant_text(text : &str) -> InputMessage
     {
       InputMessage::former()
         .role("assistant".to_string())
-        .content(vec![InputContentPart::Text(InputText { text: text.to_string() })])
+        .content(vec![InputContentPart::Text(InputText { text : text.to_string() })])
         .form()
     }
   }
@@ -236,7 +236,7 @@ mod private
     ///
     /// # Returns
     /// A `FunctionTool` with basic configuration
-    fn simple_function(name: &str, description: &str) -> FunctionTool;
+    fn simple_function(name : &str, description : &str) -> FunctionTool;
 
     /// Create a function tool with object parameters
     ///
@@ -247,13 +247,13 @@ mod private
     ///
     /// # Returns
     /// A `FunctionTool` with structured parameters
-    fn with_object_params(name: &str, description: &str, properties: serde_json::Value) -> FunctionTool;
+    fn with_object_params(name : &str, description : &str, properties : serde_json::Value) -> FunctionTool;
   }
 
   impl FunctionToolEnhancements for FunctionTool
   {
     #[ inline ]
-    fn simple_function(name: &str, description: &str) -> FunctionTool
+    fn simple_function(name : &str, description : &str) -> FunctionTool
     {
       let params = serde_json::json!({
         "type": "object",
@@ -269,7 +269,7 @@ mod private
     }
 
     #[ inline ]
-    fn with_object_params(name: &str, description: &str, properties: serde_json::Value) -> FunctionTool
+    fn with_object_params(name : &str, description : &str, properties : serde_json::Value) -> FunctionTool
     {
       let params = serde_json::json!({
         "type": "object",
@@ -380,7 +380,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   orphan use ResponseRequestValidationError;
   orphan use CreateResponseRequestEnhancements;

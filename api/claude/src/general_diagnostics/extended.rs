@@ -236,7 +236,7 @@ mod private
     #[ must_use ]
     pub fn to_json( &self ) -> String
     {
-      serde_json::to_string( self ).unwrap_or_else( | _ | "{}".to_string() )
+      serde_json ::to_string( self ).unwrap_or_else( | _ | "{}".to_string() )
     }
   }
 
@@ -464,15 +464,15 @@ mod private
     {
       DiagnosticsData
       {
-        curl_representation : Some( r#"curl -X POST "https:// api.anthropic.com/v1/messages" -H "Content-Type: application/json" -d '{"model":"claude-3-sonnet-20240229","max_tokens":1000}'"#.to_string() ),
+        curl_representation : Some( r#"curl -X POST "https:// api.anthropic.com/v1/messages" -H "Content-Type : application/json" -d '{"model":"claude-3-sonnet-20240229","max_tokens":1000}'"#.to_string() ),
         request_size : 150,
         estimated_cost : Some( 0.01 ),
         request_metrics : vec![
           RequestMetricData {
-            request_id: "test-request".to_string(),
-            operation: "create_message".to_string(),
-            duration: Duration::from_millis(150),
-            success: true,
+            request_id : "test-request".to_string(),
+            operation : "create_message".to_string(),
+            duration : Duration::from_millis(150),
+            success : true,
           }
         ],
       }
@@ -493,15 +493,15 @@ mod private
     {
       DiagnosticsData
       {
-        curl_representation : Some( r#"curl -X POST "https:// api.anthropic.com/v1/messages" -H "Content-Type: application/json" -d '{"model":"claude-3-haiku-20240307","max_tokens":50}'"#.to_string() ),
+        curl_representation : Some( r#"curl -X POST "https:// api.anthropic.com/v1/messages" -H "Content-Type : application/json" -d '{"model":"claude-3-haiku-20240307","max_tokens":50}'"#.to_string() ),
         request_size : 100,
         estimated_cost : Some( 0.005 ),
         request_metrics : vec![
           RequestMetricData {
-            request_id: "integration-test".to_string(),
-            operation: "create_message".to_string(),
-            duration: Duration::from_millis(120),
-            success: true,
+            request_id : "integration-test".to_string(),
+            operation : "create_message".to_string(),
+            duration : Duration::from_millis(120),
+            success : true,
           }
         ],
       }
@@ -915,7 +915,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use ErrorAnalyzer;
   exposed use ErrorCategory;

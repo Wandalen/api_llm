@@ -1,4 +1,4 @@
-//! Reliability tests: error handling, pagination, concurrent operations
+//! Reliability tests : error handling, pagination, concurrent operations
 
 use super::*;
 
@@ -12,38 +12,38 @@ async fn test_error_handling_edge_cases() -> Result< (), Box< dyn std::error::Er
   println!( "✓ Testing error handling and edge cases:" );
 
   let empty_upload = UploadFileRequest {
-    file_data: vec![],
-    mime_type: "image/png".to_string(),
-    display_name: Some( "Empty File".to_string() ),
+    file_data : vec![],
+    mime_type : "image/png".to_string(),
+    display_name : Some( "Empty File".to_string() ),
   };
 
   match files_api.upload( &empty_upload ).await
   {
-    Err( e ) => println!( "  - Empty file upload properly rejected: {}", e ),
+    Err( e ) => println!( "  - Empty file upload properly rejected : {}", e ),
     Ok( _ ) => println!( "  - Empty file upload unexpectedly succeeded" ),
   }
 
   match files_api.get( "invalid/file/name" ).await
   {
-    Err( e ) => println!( "  - Invalid file name properly rejected: {}", e ),
+    Err( e ) => println!( "  - Invalid file name properly rejected : {}", e ),
     Ok( _ ) => println!( "  - Invalid file name unexpectedly succeeded" ),
   }
 
   match files_api.delete( "files/non-existent-file-123" ).await
   {
-    Err( e ) => println!( "  - Non-existent file deletion properly rejected: {}", e ),
+    Err( e ) => println!( "  - Non-existent file deletion properly rejected : {}", e ),
     Ok( _ ) => println!( "  - Non-existent file deletion unexpectedly succeeded" ),
   }
 
   let invalid_mime_upload = UploadFileRequest {
-    file_data: vec![ 1, 2, 3, 4 ],
-    mime_type: "invalid/mime/type".to_string(),
-    display_name: Some( "Invalid MIME".to_string() ),
+    file_data : vec![ 1, 2, 3, 4 ],
+    mime_type : "invalid/mime/type".to_string(),
+    display_name : Some( "Invalid MIME".to_string() ),
   };
 
   match files_api.upload( &invalid_mime_upload ).await
   {
-    Err( e ) => println!( "  - Invalid MIME type properly handled: {}", e ),
+    Err( e ) => println!( "  - Invalid MIME type properly handled : {}", e ),
     Ok( response ) => {
       println!( "  - Invalid MIME type accepted (API flexibility): {}", response.file.mime_type );
       let _ = files_api.delete( &response.file.name ).await;
@@ -67,25 +67,25 @@ async fn test_pagination_large_result_sets() -> Result< (), Box< dyn std::error:
   for page_size in page_sizes
   {
     let list_request = ListFilesRequest {
-      page_size: Some( page_size ),
-      page_token: None,
+      page_size : Some( page_size ),
+      page_token : None,
     };
 
     let list_response = files_api.list( &list_request ).await?;
 
     println!( "✓ Pagination test with page_size {}:", page_size );
-    println!( "  - Files returned: {}", list_response.files.len() );
-    println!( "  - Has next page: {}", list_response.next_page_token.is_some() );
+    println!( "  - Files returned : {}", list_response.files.len() );
+    println!( "  - Has next page : {}", list_response.next_page_token.is_some() );
 
     if let Some( next_token ) = list_response.next_page_token
     {
       let next_page_request = ListFilesRequest {
-        page_size: Some( page_size ),
-        page_token: Some( next_token ),
+        page_size : Some( page_size ),
+        page_token : Some( next_token ),
       };
 
       let next_page_response = files_api.list( &next_page_request ).await?;
-      println!( "  - Next page files: {}", next_page_response.files.len() );
+      println!( "  - Next page files : {}", next_page_response.files.len() );
     }
   }
 
@@ -104,14 +104,14 @@ async fn test_concurrent_file_operations() -> Result< (), Box< dyn std::error::E
     ( "application/json", b"{\"test\": \"concurrent3\"}".to_vec() ),
   ];
 
-  let upload_handles: Vec< _ > = concurrent_uploads.into_iter().enumerate().map( |( index, ( mime_type, data ) )| {
-    tokio::spawn( async move {
+  let upload_handles : Vec< _ > = concurrent_uploads.into_iter().enumerate().map( |( index, ( mime_type, data ) )| {
+    tokio ::spawn( async move {
       let client = create_integration_client();
       let files_api = client.files();
       let upload_request = UploadFileRequest {
-        file_data: data,
-        mime_type: mime_type.to_string(),
-        display_name: Some( format!( "Concurrent Test {}", index + 1 ) ),
+        file_data : data,
+        mime_type : mime_type.to_string(),
+        display_name : Some( format!( "Concurrent Test {}", index + 1 ) ),
       };
       files_api.upload( &upload_request ).await
     } )
@@ -123,16 +123,16 @@ async fn test_concurrent_file_operations() -> Result< (), Box< dyn std::error::E
     match handle.await?
     {
       Ok( response ) => {
-        println!( "✓ Concurrent upload {} successful: {}", index + 1, response.file.name );
+        println!( "✓ Concurrent upload {} successful : {}", index + 1, response.file.name );
         successful_uploads.push( response.file.name );
       },
       Err( e ) => {
-        println!( "⚠ Concurrent upload {} failed: {}", index + 1, e );
+        println!( "⚠ Concurrent upload {} failed : {}", index + 1, e );
       }
     }
   }
 
-  println!( "✓ Concurrent operations test: {}/{} uploads successful", successful_uploads.len(), 3 );
+  println!( "✓ Concurrent operations test : {}/{} uploads successful", successful_uploads.len(), 3 );
 
   let cleanup_client = create_integration_client();
   let cleanup_files_api = cleanup_client.files();

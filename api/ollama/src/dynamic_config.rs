@@ -12,13 +12,13 @@ mod private
   pub struct DynamicConfig
   {
     /// Server URL for Ollama API
-    pub server_url: String,
+    pub server_url : String,
     /// Request timeout
-    pub timeout: Duration,
+    pub timeout : Duration,
     /// Maximum concurrent connections
-    pub max_connections: usize,
+    pub max_connections : usize,
     /// Enable request caching
-    pub enable_caching: bool,
+    pub enable_caching : bool,
   }
 
   impl DynamicConfig
@@ -29,10 +29,10 @@ mod private
     pub fn new() -> Self
     {
       Self {
-        server_url: "http://localhost:11434".to_string(),
-        timeout: Duration::from_secs( 30 ),
-        max_connections: 5,
-        enable_caching: false,
+        server_url : "http://localhost:11434".to_string(),
+        timeout : Duration::from_secs( 30 ),
+        max_connections : 5,
+        enable_caching : false,
       }
     }
 
@@ -71,21 +71,21 @@ mod private
 
       if let Ok( timeout_str ) = std::env::var( "OLLAMA_TIMEOUT_SECS" )
       {
-        let timeout_secs: u64 = timeout_str.parse()
-          .map_err( | e | format_err!( "Invalid timeout value: {}", e ) )?;
+        let timeout_secs : u64 = timeout_str.parse()
+          .map_err( | e | format_err!( "Invalid timeout value : {}", e ) )?;
         config.timeout = Duration::from_secs( timeout_secs );
       }
 
       if let Ok( connections_str ) = std::env::var( "OLLAMA_MAX_CONNECTIONS" )
       {
         config.max_connections = connections_str.parse()
-          .map_err( | e | format_err!( "Invalid max connections value: {}", e ) )?;
+          .map_err( | e | format_err!( "Invalid max connections value : {}", e ) )?;
       }
 
       if let Ok( caching_str ) = std::env::var( "OLLAMA_ENABLE_CACHING" )
       {
         config.enable_caching = caching_str.parse()
-          .map_err( | e | format_err!( "Invalid caching flag: {}", e ) )?;
+          .map_err( | e | format_err!( "Invalid caching flag : {}", e ) )?;
       }
 
       config.validate()?;
@@ -94,13 +94,13 @@ mod private
 
     /// Load configuration from file
     #[ inline ]
-    pub fn from_file< P: AsRef< std::path::Path > >( path: P ) -> OllamaResult< Self >
+    pub fn from_file< P: AsRef< std::path::Path > >( path : P ) -> OllamaResult< Self >
     {
       let content = std::fs::read_to_string( path )
-        .map_err( | e | format_err!( "Failed to read config file: {}", e ) )?;
+        .map_err( | e | format_err!( "Failed to read config file : {}", e ) )?;
 
-      let config: Self = serde_json::from_str( &content )
-        .map_err( | e | format_err!( "Failed to parse config file: {}", e ) )?;
+      let config : Self = serde_json::from_str( &content )
+        .map_err( | e | format_err!( "Failed to parse config file : {}", e ) )?;
 
       config.validate()?;
       Ok( config )
@@ -108,13 +108,13 @@ mod private
 
     /// Save configuration to file
     #[ inline ]
-    pub fn save_to_file< P: AsRef< std::path::Path > >( &self, path: P ) -> OllamaResult< () >
+    pub fn save_to_file< P: AsRef< std::path::Path > >( &self, path : P ) -> OllamaResult< () >
     {
       let content = serde_json::to_string_pretty( self )
-        .map_err( | e | format_err!( "Failed to serialize config: {}", e ) )?;
+        .map_err( | e | format_err!( "Failed to serialize config : {}", e ) )?;
 
-      std::fs::write( path, content )
-        .map_err( | e | format_err!( "Failed to write config file: {}", e ) )?;
+      std ::fs::write( path, content )
+        .map_err( | e | format_err!( "Failed to write config file : {}", e ) )?;
 
       Ok( () )
     }
@@ -133,13 +133,13 @@ mod private
   pub struct ConfigDiff
   {
     /// Whether server URL changed
-    pub server_url_changed: bool,
+    pub server_url_changed : bool,
     /// Whether timeout changed
-    pub timeout_changed: bool,
+    pub timeout_changed : bool,
     /// Whether max connections changed
-    pub max_connections_changed: bool,
+    pub max_connections_changed : bool,
     /// Whether caching setting changed
-    pub caching_changed: bool,
+    pub caching_changed : bool,
   }
 
   impl ConfigDiff
@@ -147,13 +147,13 @@ mod private
     /// Calculate differences between two configurations
     #[ inline ]
     #[ must_use ]
-    pub fn calculate( old: &DynamicConfig, new: &DynamicConfig ) -> Self
+    pub fn calculate( old : &DynamicConfig, new : &DynamicConfig ) -> Self
     {
       Self {
-        server_url_changed: old.server_url != new.server_url,
-        timeout_changed: old.timeout != new.timeout,
-        max_connections_changed: old.max_connections != new.max_connections,
-        caching_changed: old.enable_caching != new.enable_caching,
+        server_url_changed : old.server_url != new.server_url,
+        timeout_changed : old.timeout != new.timeout,
+        max_connections_changed : old.max_connections != new.max_connections,
+        caching_changed : old.enable_caching != new.enable_caching,
       }
     }
 
@@ -171,11 +171,11 @@ mod private
   pub struct ConfigBackup
   {
     /// Configuration data
-    pub config: DynamicConfig,
+    pub config : DynamicConfig,
     /// Backup timestamp
-    pub timestamp: std::time::SystemTime,
+    pub timestamp : std::time::SystemTime,
     /// Version number
-    pub version: u64,
+    pub version : u64,
   }
 
   impl ConfigBackup
@@ -183,12 +183,12 @@ mod private
     /// Create backup from configuration
     #[ inline ]
     #[ must_use ]
-    pub fn from_config( config: &DynamicConfig ) -> Self
+    pub fn from_config( config : &DynamicConfig ) -> Self
     {
       Self {
-        config: config.clone(),
-        timestamp: std::time::SystemTime::now(),
-        version: 0, // Version will be set by manager
+        config : config.clone(),
+        timestamp : std::time::SystemTime::now(),
+        version : 0, // Version will be set by manager
       }
     }
 
@@ -205,11 +205,11 @@ mod private
   pub struct ConfigVersion
   {
     /// Configuration at this version
-    pub config: DynamicConfig,
+    pub config : DynamicConfig,
     /// Version number
-    pub version: u64,
+    pub version : u64,
     /// Timestamp when version was created
-    pub created_at: std::time::SystemTime,
+    pub created_at : std::time::SystemTime,
   }
 
   impl ConfigVersion
@@ -217,12 +217,12 @@ mod private
     /// Create new versioned configuration
     #[ inline ]
     #[ must_use ]
-    pub fn new( config: DynamicConfig, version: u64 ) -> Self
+    pub fn new( config : DynamicConfig, version : u64 ) -> Self
     {
       Self {
         config,
         version,
-        created_at: std::time::SystemTime::now(),
+        created_at : std::time::SystemTime::now(),
       }
     }
 
@@ -246,11 +246,11 @@ mod private
   pub struct DynamicConfigManager
   {
     /// Current active configuration
-    current: DynamicConfig,
+    current : DynamicConfig,
     /// Configuration history for rollback
-    history: Vec< ConfigVersion >,
+    history : Vec< ConfigVersion >,
     /// Maximum history size
-    max_history: usize,
+    max_history : usize,
   }
 
   impl DynamicConfigManager
@@ -263,28 +263,28 @@ mod private
       config.validate()?;
       let version = ConfigVersion::new( config.clone(), 0 );
       Ok( Self {
-        current: config,
-        history: vec![ version ],
-        max_history: 10,
+        current : config,
+        history : vec![ version ],
+        max_history : 10,
       })
     }
 
     /// Create configuration manager from existing config
     #[ inline ]
     #[ must_use ]
-    pub fn from_config( config: DynamicConfig ) -> Self
+    pub fn from_config( config : DynamicConfig ) -> Self
     {
       let version = ConfigVersion::new( config.clone(), 0 );
       Self {
-        current: config,
-        history: vec![ version ],
-        max_history: 10,
+        current : config,
+        history : vec![ version ],
+        max_history : 10,
       }
     }
 
     /// Load configuration manager from file
     #[ inline ]
-    pub fn from_file< P: AsRef< std::path::Path > >( path: P ) -> OllamaResult< Self >
+    pub fn from_file< P: AsRef< std::path::Path > >( path : P ) -> OllamaResult< Self >
     {
       let config = DynamicConfig::from_file( path )?;
       Ok( Self::from_config( config ) )
@@ -306,7 +306,7 @@ mod private
 
     /// Update configuration with validation
     #[ inline ]
-    pub fn update( &mut self, new_config: DynamicConfig ) -> OllamaResult< () >
+    pub fn update( &mut self, new_config : DynamicConfig ) -> OllamaResult< () >
     {
       new_config.validate()?;
 
@@ -334,7 +334,7 @@ mod private
 
     /// Update configuration (alias for `update`)
     #[ inline ]
-    pub fn update_config( &mut self, new_config: DynamicConfig ) -> OllamaResult< () >
+    pub fn update_config( &mut self, new_config : DynamicConfig ) -> OllamaResult< () >
     {
       self.update( new_config )
     }
@@ -348,7 +348,7 @@ mod private
 
     /// Rollback to previous configuration version
     #[ inline ]
-    pub fn rollback( &mut self, version: u64 ) -> OllamaResult< () >
+    pub fn rollback( &mut self, version : u64 ) -> OllamaResult< () >
     {
       let config_version = self.history.iter()
         .find( | v | v.version == version )
@@ -360,7 +360,7 @@ mod private
 
     /// Rollback to version (alias for `rollback`)
     #[ inline ]
-    pub fn rollback_to_version( &mut self, version: u64 ) -> OllamaResult< () >
+    pub fn rollback_to_version( &mut self, version : u64 ) -> OllamaResult< () >
     {
       self.rollback( version )
     }
@@ -382,7 +382,7 @@ mod private
 
     /// Register config change callback (no-op for now)
     #[ inline ]
-    pub fn on_config_change< F >( &mut self, _callback: F ) -> OllamaResult< () >
+    pub fn on_config_change< F >( &mut self, _callback : F ) -> OllamaResult< () >
     where
       F : Fn( &DynamicConfig ) + 'static,
     {
@@ -393,7 +393,7 @@ mod private
     /// Get configuration diff compared to specific version
     #[ inline ]
     #[ must_use ]
-    pub fn diff_from_version( &self, version: u64 ) -> Option< ConfigDiff >
+    pub fn diff_from_version( &self, version : u64 ) -> Option< ConfigDiff >
     {
       self.history.iter()
         .find( | v | v.version == version )
@@ -410,7 +410,7 @@ mod private
 
     /// Apply configuration to client (placeholder)
     #[ inline ]
-    pub fn apply_to_client( &self, _client: &mut crate::client::OllamaClient ) -> OllamaResult< () >
+    pub fn apply_to_client( &self, _client : &mut crate::client::OllamaClient ) -> OllamaResult< () >
     {
       // In a full implementation, this would update the client's internal configuration
       // For now, just validate the config
@@ -420,7 +420,7 @@ mod private
 }
 
 #[ cfg( feature = "dynamic_config" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use private::DynamicConfig;
   exposed use private::ConfigDiff;

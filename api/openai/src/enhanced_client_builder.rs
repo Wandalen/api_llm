@@ -9,11 +9,11 @@ mod private
 {
   use crate::
   {
-    enhanced_client::EnhancedClient,
-    environment::{ OpenaiEnvironment, EnvironmentInterface },
-    connection_manager::ConnectionConfig,
-    metrics_framework::MetricsConfig,
-    error::Result,
+    enhanced_client ::EnhancedClient,
+    environment ::{ OpenaiEnvironment, EnvironmentInterface },
+    connection_manager ::ConnectionConfig,
+    metrics_framework ::MetricsConfig,
+    error ::Result,
   };
 
   // Feature-gated imports
@@ -30,16 +30,16 @@ mod private
   #[ allow( dead_code ) ]
   pub struct EnhancedClientBuilder
   {
-    connection: ConnectionConfig,
+    connection : ConnectionConfig,
     #[ cfg( feature = "caching" ) ]
-    cache: Option< CacheConfig >,
+    cache : Option< CacheConfig >,
     #[ cfg( not( feature = "caching" ) ) ]
-    cache: Option< () >,
+    cache : Option< () >,
     #[ cfg( feature = "circuit_breaker" ) ]
-    circuit_breaker: Option< EnhancedCircuitBreakerConfig >,
+    circuit_breaker : Option< EnhancedCircuitBreakerConfig >,
     #[ cfg( not( feature = "circuit_breaker" ) ) ]
-    circuit_breaker: Option< () >,
-    metrics: Option< MetricsConfig >,
+    circuit_breaker : Option< () >,
+    metrics : Option< MetricsConfig >,
   }
 
   impl EnhancedClientBuilder
@@ -51,17 +51,17 @@ mod private
     {
       Self
       {
-        connection: ConnectionConfig::default(),
-        cache: None,
-        circuit_breaker: None,
-        metrics: None,
+        connection : ConnectionConfig::default(),
+        cache : None,
+        circuit_breaker : None,
+        metrics : None,
       }
     }
 
     /// Set maximum connections per host
     #[ must_use ]
     #[ inline ]
-    pub fn max_connections_per_host( mut self, max: usize ) -> Self
+    pub fn max_connections_per_host( mut self, max : usize ) -> Self
     {
       self.connection.max_connections_per_host = max;
       self
@@ -70,7 +70,7 @@ mod private
     /// Set minimum connections per host
     #[ must_use ]
     #[ inline ]
-    pub fn min_connections_per_host( mut self, min: usize ) -> Self
+    pub fn min_connections_per_host( mut self, min : usize ) -> Self
     {
       self.connection.min_connections_per_host = min;
       self
@@ -79,7 +79,7 @@ mod private
     /// Set connection idle timeout
     #[ must_use ]
     #[ inline ]
-    pub fn idle_timeout( mut self, timeout: Duration ) -> Self
+    pub fn idle_timeout( mut self, timeout : Duration ) -> Self
     {
       self.connection.idle_timeout = timeout;
       self
@@ -88,7 +88,7 @@ mod private
     /// Enable or disable adaptive pooling
     #[ must_use ]
     #[ inline ]
-    pub fn adaptive_pooling( mut self, enabled: bool ) -> Self
+    pub fn adaptive_pooling( mut self, enabled : bool ) -> Self
     {
       self.connection.adaptive_pooling = enabled;
       self
@@ -97,7 +97,7 @@ mod private
     /// Enable or disable connection warming
     #[ must_use ]
     #[ inline ]
-    pub fn connection_warming( mut self, enabled: bool ) -> Self
+    pub fn connection_warming( mut self, enabled : bool ) -> Self
     {
       self.connection.enable_connection_warming = enabled;
       self
@@ -106,7 +106,7 @@ mod private
     /// Set health check interval
     #[ must_use ]
     #[ inline ]
-    pub fn health_check_interval( mut self, interval: Duration ) -> Self
+    pub fn health_check_interval( mut self, interval : Duration ) -> Self
     {
       self.connection.health_check_interval = interval;
       self
@@ -116,7 +116,7 @@ mod private
     #[ cfg( feature = "caching" ) ]
     #[ must_use ]
     #[ inline ]
-    pub fn with_cache( mut self, cache_config: CacheConfig ) -> Self
+    pub fn with_cache( mut self, cache_config : CacheConfig ) -> Self
     {
       self.cache = Some( cache_config );
       self
@@ -136,7 +136,7 @@ mod private
     #[ cfg( feature = "circuit_breaker" ) ]
     #[ must_use ]
     #[ inline ]
-    pub fn with_circuit_breaker( mut self, circuit_breaker_config: EnhancedCircuitBreakerConfig ) -> Self
+    pub fn with_circuit_breaker( mut self, circuit_breaker_config : EnhancedCircuitBreakerConfig ) -> Self
     {
       self.circuit_breaker = Some( circuit_breaker_config );
       self
@@ -155,7 +155,7 @@ mod private
     /// Enable metrics collection with configuration
     #[ must_use ]
     #[ inline ]
-    pub fn with_metrics( mut self, metrics_config: MetricsConfig ) -> Self
+    pub fn with_metrics( mut self, metrics_config : MetricsConfig ) -> Self
     {
       self.metrics = Some( metrics_config );
       self
@@ -176,7 +176,7 @@ mod private
     ///
     /// Returns an error if the enhanced client cannot be built with the specified configuration.
     #[ inline ]
-    pub fn build< E >( self, environment: E ) -> Result< EnhancedClient< E > >
+    pub fn build< E >( self, environment : E ) -> Result< EnhancedClient< E > >
     where
       E : OpenaiEnvironment + EnvironmentInterface + Send + Sync + 'static,
     {

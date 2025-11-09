@@ -11,15 +11,15 @@ mod private
 {
   use crate::
   {
-    error::Result,
+    error ::Result,
   };
 
   use core::time::Duration;
   use std::
   {
-    sync::{ Arc, Mutex },
-    time::Instant,
-    collections::VecDeque,
+    sync ::{ Arc, Mutex },
+    time ::Instant,
+    collections ::VecDeque,
   };
 
   use serde::{ Serialize, Deserialize };
@@ -543,7 +543,7 @@ pub use private::
 pub use private::EnhancedRateLimitingConfig;
 
 // Export for mod_interface
-crate::mod_interface!
+crate ::mod_interface!
 {
   #[ cfg( feature = "rate_limiting" ) ]
   exposed use

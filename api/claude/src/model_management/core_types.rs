@@ -2,20 +2,20 @@
   #[ derive( Debug, Deserialize ) ]
   struct ModelsApiResponse
   {
-    data: Vec< ApiModelInfo >,
+    data : Vec< ApiModelInfo >,
   }
 
   /// Model information from API
   #[ derive( Debug, Deserialize ) ]
   struct ApiModelInfo
   {
-    id: String,
-    display_name: Option< String >,
-    max_tokens: Option< u32 >,
-    context_length: Option< u32 >,
-    created: Option< String >,
-    capabilities: Vec< String >,
-    version: Option< String >,
+    id : String,
+    display_name : Option< String >,
+    max_tokens : Option< u32 >,
+    context_length : Option< u32 >,
+    created : Option< String >,
+    capabilities : Vec< String >,
+    version : Option< String >,
   }
 
   /// Model information structure

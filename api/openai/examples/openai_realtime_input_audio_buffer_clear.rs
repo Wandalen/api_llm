@@ -10,17 +10,17 @@ use api_openai::ClientApiAccessors;
 #[ allow( unused_imports ) ]
 use api_openai::
 {
-  client::Client,
-  error::OpenAIError,
-  api::realtime::{ RealtimeClient, ws::WsSession },
-  components::realtime_shared::
+  client ::Client,
+  error ::OpenAIError,
+  api ::realtime::{ RealtimeClient, ws::WsSession },
+  components ::realtime_shared::
   {
     RealtimeSessionCreateRequest,
     RealtimeClientEventInputAudioBufferAppend,
     RealtimeClientEventInputAudioBufferClear,
     RealtimeServerEvent,
   },
-  components::common::ModelIds,
+  components ::common::ModelIds,
 };
 
 
@@ -37,25 +37,25 @@ async fn main() -> Result< (), OpenAIError >
   .init();
 
   // Load environment variables
-  dotenv::from_filename( "./secret/-secret.sh" ).ok();
+  dotenv ::from_filename( "./secret/-secret.sh" ).ok();
 
   // 1. Create a new OpenAI client.
-  tracing::info!( "Initializing client..." );
+  tracing ::info!( "Initializing client..." );
   let client = Client::new();
 
   // 2. Create the request payload to initiate the session, configuring audio input.
-  tracing::info!( "Building realtime session request..." );
+  tracing ::info!( "Building realtime session request..." );
   let request = RealtimeSessionCreateRequest::former()
   .model( "gpt-4o-realtime-preview".to_string() )
   .input_audio_format( "pcm16" ) // Necessary for appending audio first
   .temperature( 0.7 )
   .form();
 
-  tracing::info!( "Sending request to OpenAI API to create session..." );
+  tracing ::info!( "Sending request to OpenAI API to create session..." );
   // 3. Call the API endpoint to get session details.
   let session = client.realtime().create( request ).await?;
 
-  tracing::info!( "Creating Realtime WebSocket Session Client..." );
+  tracing ::info!( "Creating Realtime WebSocket Session Client..." );
   let token = session.client_secret.value;
   // 4. Establish the WebSocket connection using the session token.
   let session_client  = WsSession::connect( client.environment().clone(), Some( &token ) ).await?;
@@ -66,25 +66,25 @@ async fn main() -> Result< (), OpenAIError >
   let iaba_append = RealtimeClientEventInputAudioBufferAppend::former()
   .audio( audio_base64 )
   .form();
-  tracing::info!( "Sending a preliminary input_audio_buffer.append event..." );
+  tracing ::info!( "Sending a preliminary input_audio_buffer.append event..." );
   session_client.input_audio_buffer_append( iaba_append ).await?;
   // Give a tiny moment for processing, though not strictly necessary
-  tokio::time::sleep( tokio::time::Duration::from_millis( 50 ) ).await;
-  tracing::info!( "Preliminary audio append sent." );
+  tokio ::time::sleep( tokio::time::Duration::from_millis( 50 ) ).await;
+  tracing ::info!( "Preliminary audio append sent." );
 
   // 5. Prepare the client event to clear the audio buffer.
   // We can add a client-side event_id for tracking, though it's optional.
   let client_event_id = "clear-example-id";
   let iabc_clear = RealtimeClientEventInputAudioBufferClear::former()
-  .event_id( client_event_id ) // Optional: Client-generated event ID
+  .event_id( client_event_id ) // Optional : Client-generated event ID
   .form();
 
-  tracing::info!( event_id = %client_event_id, "Sending input_audio_buffer.clear event..." );
+  tracing ::info!( event_id = %client_event_id, "Sending input_audio_buffer.clear event..." );
   // 6. Send the clear event over the WebSocket.
   session_client.input_audio_buffer_clear( iabc_clear ).await?;
 
   // 7. Loop to read responses, specifically looking for the clear confirmation.
-  tracing::info!( "Waiting for input_audio_buffer.cleared confirmation..." );
+  tracing ::info!( "Waiting for input_audio_buffer.cleared confirmation..." );
   let mut confirmation_received = false;
   loop
   {
@@ -117,7 +117,7 @@ async fn main() -> Result< (), OpenAIError >
       }
       Err( e ) =>
       {
-        eprintln!( "\nError reading from WebSocket: {:?}", e );
+        eprintln!( "\nError reading from WebSocket : {:?}", e );
         return Err( e ); // Propagate the error
       }
     }

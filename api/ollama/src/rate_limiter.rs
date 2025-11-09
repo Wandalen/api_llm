@@ -14,19 +14,19 @@ mod private
   pub struct RateLimitingConfig
   {
     /// Maximum number of requests per time window
-    max_requests: u32,
+    max_requests : u32,
     /// Time window duration in milliseconds
-    window_duration_ms: u64,
+    window_duration_ms : u64,
     /// Maximum burst capacity (token bucket only)
-    burst_capacity: u32,
+    burst_capacity : u32,
     /// Token refill rate per second (token bucket only)
-    refill_rate: f64,
+    refill_rate : f64,
     /// Rate limiting algorithm to use
-    algorithm: RateLimitingAlgorithm,
+    algorithm : RateLimitingAlgorithm,
     /// Request timeout when rate limit exceeded
-    timeout_ms: u64,
+    timeout_ms : u64,
     /// Whether to enable per-endpoint rate limiting
-    per_endpoint: bool,
+    per_endpoint : bool,
   }
 
   /// Rate limiting algorithm enumeration
@@ -43,9 +43,9 @@ mod private
   #[ derive( Debug, Clone ) ]
   pub struct RateLimiter
   {
-    config: RateLimitingConfig,
-    token_bucket_state: Option< Arc< Mutex< TokenBucketState > > >,
-    sliding_window_state: Option< Arc< Mutex< SlidingWindowState > > >,
+    config : RateLimitingConfig,
+    token_bucket_state : Option< Arc< Mutex< TokenBucketState > > >,
+    sliding_window_state : Option< Arc< Mutex< SlidingWindowState > > >,
   }
 
   /// Token bucket rate limiter state
@@ -53,13 +53,13 @@ mod private
   struct TokenBucketState
   {
     /// Current number of tokens available
-    tokens: f64,
+    tokens : f64,
     /// Last time tokens were refilled
-    last_refill: Instant,
+    last_refill : Instant,
     /// Total number of requests processed
-    total_requests: u64,
+    total_requests : u64,
     /// Total number of rate limited requests
-    rate_limited_requests: u64,
+    rate_limited_requests : u64,
   }
 
   /// Sliding window rate limiter state
@@ -67,24 +67,24 @@ mod private
   struct SlidingWindowState
   {
     /// Request timestamps within the current window
-    request_timestamps: VecDeque< Instant >,
+    request_timestamps : VecDeque< Instant >,
     /// Total number of requests processed
-    total_requests: u64,
+    total_requests : u64,
     /// Total number of rate limited requests
-    rate_limited_requests: u64,
+    rate_limited_requests : u64,
   }
 
   impl TokenBucketState
   {
     #[ inline ]
-    fn new( initial_tokens: f64 ) -> Self
+    fn new( initial_tokens : f64 ) -> Self
     {
       Self
       {
-        tokens: initial_tokens,
-        last_refill: Instant::now(),
-        total_requests: 0,
-        rate_limited_requests: 0,
+        tokens : initial_tokens,
+        last_refill : Instant::now(),
+        total_requests : 0,
+        rate_limited_requests : 0,
       }
     }
   }
@@ -96,9 +96,9 @@ mod private
     {
       Self
       {
-        request_timestamps: VecDeque::new(),
-        total_requests: 0,
-        rate_limited_requests: 0,
+        request_timestamps : VecDeque::new(),
+        total_requests : 0,
+        rate_limited_requests : 0,
       }
     }
   }
@@ -112,20 +112,20 @@ mod private
     {
       Self
       {
-        max_requests: 100,
-        window_duration_ms: 60000, // 1 minute
-        burst_capacity: 10,
-        refill_rate: 1.67, // ~100 requests per minute
-        algorithm: RateLimitingAlgorithm::TokenBucket,
-        timeout_ms: 5000,
-        per_endpoint: false,
+        max_requests : 100,
+        window_duration_ms : 60000, // 1 minute
+        burst_capacity : 10,
+        refill_rate : 1.67, // ~100 requests per minute
+        algorithm : RateLimitingAlgorithm::TokenBucket,
+        timeout_ms : 5000,
+        per_endpoint : false,
       }
     }
 
     /// Set maximum requests per window
     #[ inline ]
     #[ must_use ]
-    pub fn with_max_requests( mut self, max_requests: u32 ) -> Self
+    pub fn with_max_requests( mut self, max_requests : u32 ) -> Self
     {
       self.max_requests = max_requests;
       self
@@ -134,7 +134,7 @@ mod private
     /// Set window duration in milliseconds
     #[ inline ]
     #[ must_use ]
-    pub fn with_window_duration( mut self, duration_ms: u64 ) -> Self
+    pub fn with_window_duration( mut self, duration_ms : u64 ) -> Self
     {
       self.window_duration_ms = duration_ms;
       self
@@ -143,7 +143,7 @@ mod private
     /// Set burst capacity for token bucket
     #[ inline ]
     #[ must_use ]
-    pub fn with_burst_capacity( mut self, capacity: u32 ) -> Self
+    pub fn with_burst_capacity( mut self, capacity : u32 ) -> Self
     {
       self.burst_capacity = capacity;
       self
@@ -152,7 +152,7 @@ mod private
     /// Set token refill rate per second
     #[ inline ]
     #[ must_use ]
-    pub fn with_refill_rate( mut self, rate: f64 ) -> Self
+    pub fn with_refill_rate( mut self, rate : f64 ) -> Self
     {
       self.refill_rate = rate;
       self
@@ -161,7 +161,7 @@ mod private
     /// Set rate limiting algorithm
     #[ inline ]
     #[ must_use ]
-    pub fn with_algorithm( mut self, algorithm: RateLimitingAlgorithm ) -> Self
+    pub fn with_algorithm( mut self, algorithm : RateLimitingAlgorithm ) -> Self
     {
       self.algorithm = algorithm;
       self
@@ -170,7 +170,7 @@ mod private
     /// Set request timeout when rate limit exceeded
     #[ inline ]
     #[ must_use ]
-    pub fn with_timeout( mut self, timeout_ms: u64 ) -> Self
+    pub fn with_timeout( mut self, timeout_ms : u64 ) -> Self
     {
       self.timeout_ms = timeout_ms;
       self
@@ -179,7 +179,7 @@ mod private
     /// Enable per-endpoint rate limiting
     #[ inline ]
     #[ must_use ]
-    pub fn with_per_endpoint( mut self, per_endpoint: bool ) -> Self
+    pub fn with_per_endpoint( mut self, per_endpoint : bool ) -> Self
     {
       self.per_endpoint = per_endpoint;
       self
@@ -282,9 +282,9 @@ mod private
   {
     /// Create new rate limiter with configuration
     #[ inline ]
-    pub fn new( config: RateLimitingConfig ) -> Result< Self >
+    pub fn new( config : RateLimitingConfig ) -> Result< Self >
     {
-      config.validate().map_err( |e| format_err!( "Rate limiting configuration validation failed: {}", e ) )?;
+      config.validate().map_err( |e| format_err!( "Rate limiting configuration validation failed : {}", e ) )?;
 
       let ( token_bucket_state, sliding_window_state ) = match config.algorithm
       {
@@ -426,7 +426,7 @@ mod private
 }
 
 #[ cfg( feature = "rate_limiting" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use private::RateLimiter;
   exposed use private::RateLimitingConfig;

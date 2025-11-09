@@ -3,10 +3,10 @@
 
 use api_huggingface::
 {
-  client::Client,
-  inference::Inference,
-  environment::{ HuggingFaceEnvironmentImpl, HuggingFaceEnvironment, EnvironmentInterface },
-  providers::ChatMessage,
+  client ::Client,
+  inference ::Inference,
+  environment ::{ HuggingFaceEnvironmentImpl, HuggingFaceEnvironment, EnvironmentInterface },
+  providers ::ChatMessage,
   Secret,
 };
 
@@ -22,12 +22,12 @@ fn load_api_key() -> Result< String, Box< dyn std::error::Error > >
   {
   Ok(token) => {
       println!( "✅ Found HUGGINGFACE_API_KEY in environment" );
-      println!( "📝 Token length: {} characters", token.len() );
-      println!( "📝 Token prefix: {}...", &token[..core::cmp::min(10, token.len())] );
+      println!( "📝 Token length : {} characters", token.len() );
+      println!( "📝 Token prefix : {}...", &token[..core::cmp::min(10, token.len())] );
       println!( "📝 Token source : ENVIRONMENT VARIABLE" );
   },
   Err(e) => {
-      println!( "❌ HUGGINGFACE_API_KEY not found in environment: {e:?}" );
+      println!( "❌ HUGGINGFACE_API_KEY not found in environment : {e:?}" );
   }
   }
 
@@ -39,16 +39,16 @@ fn load_api_key() -> Result< String, Box< dyn std::error::Error > >
   println!( "🔍 Initializing workspace..." );
   let workspace = workspace::workspace()
       .map_err(|e| {
-  println!( "❌ Failed to initialize workspace: {e:?}" );
-  std::env::VarError::NotPresent
+  println!( "❌ Failed to initialize workspace : {e:?}" );
+  std ::env::VarError::NotPresent
       })?;
 
   println!( "✅ Workspace initialized successfully" );
-  println!( "🔍 Current working directory: {}", std::env::current_dir().unwrap_or_else(|_| std::path::PathBuf::from("unknown")).display() );
+  println!( "🔍 Current working directory : {}", std::env::current_dir().unwrap_or_else(|_| std::path::PathBuf::from("unknown")).display() );
 
   // WORKSPACE_TOOLS: Load project-specific secrets using proper API
   println!( "🔍 Loading from project secrets using workspace_tools..." );
-  println!( "🔍 Workspace path: {:?}", std::env::var("WORKSPACE_PATH").unwrap_or_else(|_| "not set".to_string()) );
+  println!( "🔍 Workspace path : {:?}", std::env::var("WORKSPACE_PATH").unwrap_or_else(|_| "not set".to_string()) );
 
   let secrets_result = workspace.load_secrets_from_file("-secrets.sh");
   match &secrets_result
@@ -56,47 +56,47 @@ fn load_api_key() -> Result< String, Box< dyn std::error::Error > >
       Ok(secrets) => {
   println!( "✅ Successfully loaded {} secrets using workspace_tools", secrets.len() );
   let secret_file_path = workspace.secret_file("-secrets.sh");
-  println!( "📝 Loaded from absolute path: {}", secret_file_path.display() );
+  println!( "📝 Loaded from absolute path : {}", secret_file_path.display() );
 
   if let Some(token) = secrets.get("HUGGINGFACE_API_KEY")
   {
           println!( "✅ Found HUGGINGFACE_API_KEY in project secrets" );
-          println!( "📝 Token length: {} characters", token.len() );
-          println!( "📝 Full token: {token}" );
-          println!( "📝 Token source: workspace_tools from {}", secret_file_path.display() );
+          println!( "📝 Token length : {} characters", token.len() );
+          println!( "📝 Full token : {token}" );
+          println!( "📝 Token source : workspace_tools from {}", secret_file_path.display() );
           return Ok(token.clone());
   }
   println!( "❌ HUGGINGFACE_API_KEY not found in project secrets" );
-  println!( "📝 Available keys: {:?}", secrets.keys().collect::< Vec< _ > >() );
+  println!( "📝 Available keys : {:?}", secrets.keys().collect::< Vec< _ > >() );
       },
       Err(e) => {
-  println!( "❌ Failed to load project secrets: {e:?}" );
+  println!( "❌ Failed to load project secrets : {e:?}" );
       }
   }
 
   // Fallback to workspace root secret/-secrets.sh
   let workspace_secrets_path = "-secrets.sh";
   let expected_workspace_absolute = std::path::Path::new("/home/user1/pro/secret").join(workspace_secrets_path);
-  println!( "🔍 Attempting fallback to absolute path: {}", expected_workspace_absolute.display() );
-  println!( "🔍 Workspace file exists check: {}", expected_workspace_absolute.exists() );
+  println!( "🔍 Attempting fallback to absolute path : {}", expected_workspace_absolute.display() );
+  println!( "🔍 Workspace file exists check : {}", expected_workspace_absolute.exists() );
 
   let fallback_result = workspace.load_secrets_from_file(workspace_secrets_path);
   match &fallback_result
   {
       Ok(secrets) => {
-  println!( "✅ Successfully loaded secrets from absolute path: {}", expected_workspace_absolute.display() );
-  println!( "📝 Number of secrets loaded: {}", secrets.len() );
-  println!( "📝 Available secret keys: {:?}", secrets.keys().collect::< Vec< _ > >() );
+  println!( "✅ Successfully loaded secrets from absolute path : {}", expected_workspace_absolute.display() );
+  println!( "📝 Number of secrets loaded : {}", secrets.len() );
+  println!( "📝 Available secret keys : {:?}", secrets.keys().collect::< Vec< _ > >() );
 
   if let Some(token) = secrets.get("HUGGINGFACE_API_KEY")
   {
-          println!( "✅ Found HUGGINGFACE_API_KEY in absolute path: {}", expected_workspace_absolute.display() );
-          println!( "📝 Token length: {} characters", token.len() );
-          println!( "📝 Full token: {token}" );
-          println!( "📝 Token source: {}", expected_workspace_absolute.display() );
+          println!( "✅ Found HUGGINGFACE_API_KEY in absolute path : {}", expected_workspace_absolute.display() );
+          println!( "📝 Token length : {} characters", token.len() );
+          println!( "📝 Full token : {token}" );
+          println!( "📝 Token source : {}", expected_workspace_absolute.display() );
           return Ok(token.clone());
   }
-  println!( "❌ HUGGINGFACE_API_KEY not found in absolute path: {}", expected_workspace_absolute.display() );
+  println!( "❌ HUGGINGFACE_API_KEY not found in absolute path : {}", expected_workspace_absolute.display() );
       },
       Err(e) => {
   println!( "❌ Failed to load absolute path {}: {e:?}", expected_workspace_absolute.display() );
@@ -109,8 +109,8 @@ fn load_api_key() -> Result< String, Box< dyn std::error::Error > >
   .map_err(|_| "HUGGINGFACE_API_KEY not found in environment or workspace secrets (./secret/-secrets.sh or -secrets.sh)")?;
 
   println!( "🎉 FINAL TOKEN LOADED SUCCESSFULLY!" );
-  println!( "📝 Final token length: {} characters", api_key.len() );
-  println!( "📝 Final full token: {api_key}" );
+  println!( "📝 Final token length : {} characters", api_key.len() );
+  println!( "📝 Final full token : {api_key}" );
   println!();
 
   Ok( api_key )
@@ -141,9 +141,9 @@ where
   for (i, model) in pro_models.iter().enumerate()
   {
   println!( "🧪 Test {}: {}", i + 1, model );
-  println!( "📤 Input: {test_input:?}" );
-  println!( "🌐 API Endpoint: https://api-inference.huggingface.co/models/{model}" );
-  println!( "📝 Request Model: {model}" );
+  println!( "📤 Input : {test_input:?}" );
+  println!( "🌐 API Endpoint : https://api-inference.huggingface.co/models/{model}" );
+  println!( "📝 Request Model : {model}" );
 
   match inference.create( test_input, model ).await
   {
@@ -152,7 +152,7 @@ where
   println!( "✅ SUCCESS! Model {model} is available" );
   if let Some(text) = response.extract_text()
   {
-          println!( "📝 Response: \"{}\"", text.chars().take(100).collect::< String >() );
+          println!( "📝 Response : \"{}\"", text.chars().take(100).collect::< String >() );
   }
   println!( "🎉 WORKING MODEL FOUND: {model}" );
       },
@@ -190,9 +190,9 @@ where
   for (i, model) in pro_models_for_providers.iter().enumerate()
   {
   println!( "🧪 Pro Test {}: {}", i + 1, model );
-  println!( "📤 Math Question: \"{math_question}\"" );
-  println!( "🌐 API Endpoint: https://api-inference.huggingface.co/v1/chat/completions" );
-  println!( "📝 Request Model: {model}" );
+  println!( "📤 Math Question : \"{math_question}\"" );
+  println!( "🌐 API Endpoint : https://api-inference.huggingface.co/v1/chat/completions" );
+  println!( "📝 Request Model : {model}" );
 
   match providers.math_completion( model, math_question ).await
   {
@@ -201,14 +201,14 @@ where
   println!( "✅ SUCCESS! Pro model {model} responded via Providers API" );
   if let Some( choice ) = response.choices.first()
   {
-          println!( "📝 Pro Response: \"{}\"", choice.message.content.chars().take(200).collect::< String >() );
+          println!( "📝 Pro Response : \"{}\"", choice.message.content.chars().take(200).collect::< String >() );
           println!( "🎉 WORKING PRO MODEL FOUND: {model}" );
 
           // Test simple conversation too
           println!( "\n🗣️  Testing conversational capability..." );
           let messages = vec![
-      ChatMessage { role: "system".to_string(), content: "You are a helpful assistant.".to_string() },
-      ChatMessage { role: "user".to_string(), content: "Hello! How are you?".to_string() }
+      ChatMessage { role : "system".to_string(), content : "You are a helpful assistant.".to_string() },
+      ChatMessage { role : "user".to_string(), content : "Hello! How are you?".to_string() }
           ];
 
           match providers.chat_completion( model, messages, Some(100), Some(0.7), Some(0.9) ).await
@@ -217,12 +217,12 @@ where
       {
               if let Some( chat_choice ) = chat_response.choices.first()
               {
-        println!( "💬 Conversation Response: \"{}\"", chat_choice.message.content.chars().take(150).collect::< String >() );
+        println!( "💬 Conversation Response : \"{}\"", chat_choice.message.content.chars().take(150).collect::< String >() );
               }
       },
       Err( e ) =>
       {
-              println!( "❌ Conversation test failed: {e}" );
+              println!( "❌ Conversation test failed : {e}" );
       }
           }
 

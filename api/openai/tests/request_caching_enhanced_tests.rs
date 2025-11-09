@@ -20,12 +20,12 @@ mod enhanced_cache_tests
 {
   use api_openai::
   {
-    request_cache_enhanced::*,
+    request_cache_enhanced ::*,
   };
   use std::
   {
-    time::Duration,
-    sync::Arc,
+    time ::Duration,
+    sync ::Arc,
   };
   use tokio::time::sleep;
 

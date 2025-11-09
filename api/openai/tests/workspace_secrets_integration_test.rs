@@ -43,11 +43,11 @@ fn test_secret_loading_integration()
       
       println!( "✅ Successfully loaded API key via workspace_tools v0.3.0" );
       let key_preview = &api_key[ ..core::cmp::min( 10, api_key.len() ) ];
-      println!( "   Key prefix: {key_preview}..." );
+      println!( "   Key prefix : {key_preview}..." );
     }
     Err( e ) =>
     {
-      println!( "⚠️  No valid OPENAI_API_KEY found: {e}" );
+      println!( "⚠️  No valid OPENAI_API_KEY found : {e}" );
       println!( "   This is expected if no API key is configured." );
       println!( "   To test with real credentials, add OPENAI_API_KEY to:" );
       println!( "   - Environment variables, OR" );
@@ -64,14 +64,14 @@ fn test_fallback_chain_behavior()
   let original_env_key = std::env::var( "OPENAI_API_KEY" ).ok();
   
   // Remove environment variable to test workspace file fallback
-  std::env::remove_var( "OPENAI_API_KEY" );
+  std ::env::remove_var( "OPENAI_API_KEY" );
   
   let result = Secret::load_with_fallbacks( "OPENAI_API_KEY" );
   
   // Restore original environment if it existed
   if let Some( key ) = original_env_key
   {
-    std::env::set_var( "OPENAI_API_KEY", key );
+    std ::env::set_var( "OPENAI_API_KEY", key );
   }
   
   match result
@@ -81,11 +81,11 @@ fn test_fallback_chain_behavior()
       println!( "✅ Successfully loaded from workspace secrets (fallback worked)" );
       let api_key = secret.expose_secret();
       let key_preview = &api_key[ ..core::cmp::min( 10, api_key.len() ) ];
-      println!( "   Key loaded from workspace file: {key_preview}..." );
+      println!( "   Key loaded from workspace file : {key_preview}..." );
     }
     Err( e ) =>
     {
-      println!( "⚠️  Fallback to workspace secrets failed: {e}" );
+      println!( "⚠️  Fallback to workspace secrets failed : {e}" );
       println!( "   This is expected if no secrets file is configured." );
     }
   }
@@ -108,7 +108,7 @@ fn test_workspace_tools_feature_compatibility()
     }
     Err( e ) =>
     {
-      println!( "⚠️  No workspace secrets found: {e}" );
+      println!( "⚠️  No workspace secrets found : {e}" );
       println!( "   This is expected if secret/-secrets.sh is not configured." );
     }
   }
@@ -127,7 +127,7 @@ fn test_secret_exposure_counting()
     let new_count = Secret::exposure_count();
     
     assert!( new_count > initial_count, "Exposure count should increment" );
-    println!( "✅ Secret exposure counting works: {initial_count} -> {new_count}" );
+    println!( "✅ Secret exposure counting works : {initial_count} -> {new_count}" );
   }
   else
   {
@@ -180,5 +180,5 @@ fn test_missing_secret_error_handling()
   assert!( error_string.contains( "DEFINITELY_NONEXISTENT_API_KEY_12345" ), "Error should mention the key name" );
   assert!( error_string.contains( "not found" ), "Error should indicate key was not found" );
   
-  println!( "✅ Error handling working correctly: {error_string}" );
+  println!( "✅ Error handling working correctly : {error_string}" );
 }

@@ -159,11 +159,11 @@ async fn test_generate_error_transparency()
 /// Test that embeddings requests fail transparently without automatic retries
 ///
 /// Fix(issue-silent-failure-008): Replaced silent skip with proper #[ignore] annotation
-/// Root cause: Empty test body with println+return violated "No Disabled Tests" rule
-/// Pitfall: Use #[ignore] with permission tracking, not empty test body per `codebase_hygiene.rulebook.md`
+/// Root cause : Empty test body with println+return violated "No Disabled Tests" rule
+/// Pitfall : Use #[ignore] with permission tracking, not empty test body per `codebase_hygiene.rulebook.md`
 // DISABLED: 2025-11-07 by Claude Code
 // REASON: EmbeddingsRequest moved to models module during refactoring - test needs rewrite
-// RE-ENABLE: After models module refactoring complete (target: 2025-11-14)
+// RE-ENABLE: After models module refactoring complete (target : 2025-11-14)
 // APPROVED: self (codebase hygiene enforcement)
 // TRACKING: models-module-refactor
 #[ tokio::test ]
@@ -255,7 +255,7 @@ async fn test_streaming_error_transparency()
     assert!( result.is_err() );
 
     // Error should be transparent, not retry-wrapped
-    // Note: streaming errors don't implement Debug, so we just verify it fails
+    // Note : streaming errors don't implement Debug, so we just verify it fails
     assert!( result.is_err() );
   }
 

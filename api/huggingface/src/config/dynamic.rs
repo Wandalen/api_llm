@@ -16,7 +16,7 @@
 //! ```no_run
 //! # use api_huggingface::config::{DynamicConfig, ReliabilityConfig};
 //! # use std::sync::Arc;
-//! # async fn example( ) -> Result< ( ), Box< dyn std::error::Error >> {
+//! # async fn example( ) -> Result< ( ), Box< dyn std::error::Error > > {
 //! let config = ReliabilityConfig::default( );
 //! let dynamic_config = DynamicConfig::new( config );
 //!
@@ -119,7 +119,7 @@ impl core::fmt::Debug for DynamicConfig
   fn fmt( &self, f : &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result
   {
   f.debug_struct( "DynamicConfig" )
-      .field( "state", &"<DynamicConfigState >" )
+      .field( "state", &"< DynamicConfigState >" )
       .finish( )
   }
 }
@@ -201,7 +201,7 @@ impl DynamicConfig
   ///
   /// Watchers are called whenever the configuration is updated.
   #[ inline ]
-  pub async fn add_watcher<F >( &self, watcher : F )
+  pub async fn add_watcher< F >( &self, watcher : F )
   where
   F : Fn( &ReliabilityConfig, &ReliabilityConfig ) + Send + Sync + 'static,
   {
@@ -451,7 +451,7 @@ mod tests {
 
   dynamic_config.add_watcher( move |_old, _new| {
       let notified = notified_clone.clone( );
-      tokio::spawn( async move {
+      tokio ::spawn( async move {
   let mut n = notified.write( ).await;
   *n = true;
       } );
@@ -461,7 +461,7 @@ mod tests {
   dynamic_config.update( new_config ).await.unwrap( );
 
   // Give watcher time to execute
-  tokio::time::sleep( Duration::from_millis( 50 )).await;
+  tokio ::time::sleep( Duration::from_millis( 50 )).await;
 
   let was_notified = *notified.read( ).await;
   assert!( was_notified, "Watcher should have been notified" );

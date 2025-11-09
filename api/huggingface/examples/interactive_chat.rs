@@ -28,17 +28,17 @@
 use api_huggingface::
 {
   Client,
-  environment::HuggingFaceEnvironmentImpl,
-  components::
+  environment ::HuggingFaceEnvironmentImpl,
+  components ::
   {
-  input::InferenceParameters,
-  models::Models,
+  input ::InferenceParameters,
+  models ::Models,
   },
-  secret::Secret,
+  secret ::Secret,
 };
 use std::
 {
-  io::{ self, Write as IoWrite },
+  io ::{ self, Write as IoWrite },
 };
 use core::fmt::Write;
 
@@ -77,13 +77,13 @@ impl ChatSession
   // Include conversation history for context
   for ( user_msg, assistant_msg ) in &self.history
   {
-      writeln!( &mut prompt, "User: {user_msg}" ).unwrap();
-      writeln!( &mut prompt, "Assistant: {assistant_msg}" ).unwrap();
+      writeln!( &mut prompt, "User : {user_msg}" ).unwrap();
+      writeln!( &mut prompt, "Assistant : {assistant_msg}" ).unwrap();
       writeln!( &mut prompt ).unwrap();
   }
 
   // Add the new user message
-  write!( &mut prompt, "User: {new_message}\nAssistant:" ).unwrap();
+  write!( &mut prompt, "User : {new_message}\nAssistant:" ).unwrap();
 
   prompt
   }
@@ -114,8 +114,8 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
 
   let model = Models::kimi_k2_instruct();
 
-  println!( "🤖 Model: {model}" );
-  println!( "📋 Temperature: 0.7 | Max tokens: 300\n" );
+  println!( "🤖 Model : {model}" );
+  println!( "📋 Temperature : 0.7 | Max tokens : 300\n" );
   println!( "💬 Chat with the AI! Type 'quit', 'exit', or 'bye' to end the conversation.\n" );
   println!( "─────────────────────────────────────────\n" );
 
@@ -126,8 +126,8 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
   loop
   {
   // Prompt for user input
-  print!( "You: " );
-  io::stdout().flush()?;
+  print!( "You : " );
+  io ::stdout().flush()?;
 
   // Read user input
   let mut input = String::new();
@@ -160,7 +160,7 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
 
   // Send request and get response
   print!( "\n🤖 " );
-  io::stdout().flush()?;
+  io ::stdout().flush()?;
 
   match client.inference().create_with_parameters( &prompt, model, params.clone() ).await
   {
@@ -178,14 +178,14 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
   let exchanges = session.exchange_count();
   if exchanges > 0
   {
-          println!( "📊 Context: {exchanges} exchange{}\n", if exchanges == 1 { "" } else { "s" } );
+          println!( "📊 Context : {exchanges} exchange{}\n", if exchanges == 1 { "" } else { "s" } );
   }
 
   println!( "─────────────────────────────────────────\n" );
       },
       Err( e ) =>
       {
-  eprintln!( "\n❌ Error: {e}\n" );
+  eprintln!( "\n❌ Error : {e}\n" );
   eprintln!( "💡 The conversation will continue. Try your message again.\n" );
   println!( "─────────────────────────────────────────\n" );
       }
@@ -197,8 +197,8 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
   if exchanges > 0
   {
   println!( "\n📈 Session Summary:" );
-  println!( "   Total exchanges: {exchanges}" );
-  println!( "   Context retained: {} exchanges\n", exchanges.min( 10 ) );
+  println!( "   Total exchanges : {exchanges}" );
+  println!( "   Context retained : {} exchanges\n", exchanges.min( 10 ) );
   }
 
   println!( "✅ Chat session ended successfully!\n" );

@@ -10,17 +10,17 @@ use core::time::Duration;
 pub struct WebBrowsingConfig
 {
   /// User agent string
-  pub user_agent: String,
+  pub user_agent : String,
   /// Maximum page size in bytes
-  pub max_page_size: usize,
+  pub max_page_size : usize,
   /// Whether to follow redirects
-  pub follow_redirects: bool,
+  pub follow_redirects : bool,
   /// Enable JavaScript execution
-  pub javascript_enabled: bool,
+  pub javascript_enabled : bool,
   /// Enable screenshot capture
-  pub screenshot_enabled: bool,
+  pub screenshot_enabled : bool,
   /// Request timeout
-  pub timeout: Duration,
+  pub timeout : Duration,
 }
 
 impl Default for WebBrowsingConfig
@@ -30,12 +30,12 @@ impl Default for WebBrowsingConfig
   {
     Self
     {
-      user_agent: "Mozilla/5.0 (compatible; OpenAI-Client/1.0)".to_string(),
-      max_page_size: 10 * 1024 * 1024, // 10MB
-      follow_redirects: true,
-      javascript_enabled: false, // Disabled by default for security
-      screenshot_enabled: false,
-      timeout: Duration::from_secs( 30 ),
+      user_agent : "Mozilla/5.0 (compatible; OpenAI-Client/1.0)".to_string(),
+      max_page_size : 10 * 1024 * 1024, // 10MB
+      follow_redirects : true,
+      javascript_enabled : false, // Disabled by default for security
+      screenshot_enabled : false,
+      timeout : Duration::from_secs( 30 ),
     }
   }
 }
@@ -45,20 +45,20 @@ impl Default for WebBrowsingConfig
 pub struct BrowsingResult
 {
   /// Final URL after redirects
-  pub url: String,
+  pub url : String,
   /// Page title
-  pub title: String,
+  pub title : String,
   /// Page content (text)
-  pub content: String,
+  pub content : String,
   /// Links found on page
-  pub links: Vec< String >,
+  pub links : Vec< String >,
   /// Images found on page
-  pub images: Vec< String >,
+  pub images : Vec< String >,
   /// Screenshot data (if enabled)
   #[ serde( skip_serializing_if = "Option::is_none" ) ]
-  pub screenshot: Option< Vec< u8 > >,
+  pub screenshot : Option< Vec< u8 > >,
   /// Browsing metadata
-  pub metadata: BrowsingMetadata,
+  pub metadata : BrowsingMetadata,
 }
 
 /// Metadata about browsing operation.
@@ -66,13 +66,13 @@ pub struct BrowsingResult
 pub struct BrowsingMetadata
 {
   /// HTTP status code
-  pub status_code: u16,
+  pub status_code : u16,
   /// Content type
-  pub content_type: String,
+  pub content_type : String,
   /// Content length in bytes
-  pub content_length: usize,
+  pub content_length : usize,
   /// Load time in milliseconds
-  pub load_time_ms: u64,
+  pub load_time_ms : u64,
   /// Number of redirects followed
-  pub redirect_count: usize,
+  pub redirect_count : usize,
 }

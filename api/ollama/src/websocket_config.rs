@@ -15,24 +15,24 @@ mod private
     {
       Self
       {
-        url: "ws://localhost:11434/api/ws".to_string(),
-        timeout: Duration::from_secs( 30 ),
-        max_reconnection_attempts: 5,
-        reconnection_delay: Duration::from_secs( 2 ),
-        enable_compression: true,
-        heartbeat_interval: Duration::from_secs( 30 ),
-        max_queue_size: 1000,
-        auth_token: None,
-        enable_auto_reconnect: true,
-        pool_size: 5,
-        http_fallback_url: Some( "http://localhost:11434/api/chat".to_string() ),
+        url : "ws://localhost:11434/api/ws".to_string(),
+        timeout : Duration::from_secs( 30 ),
+        max_reconnection_attempts : 5,
+        reconnection_delay : Duration::from_secs( 2 ),
+        enable_compression : true,
+        heartbeat_interval : Duration::from_secs( 30 ),
+        max_queue_size : 1000,
+        auth_token : None,
+        enable_auto_reconnect : true,
+        pool_size : 5,
+        http_fallback_url : Some( "http://localhost:11434/api/chat".to_string() ),
       }
     }
 
     /// Set the WebSocket URL
     #[ inline ]
     #[ must_use ]
-    pub fn with_url< S: Into< String > >( mut self, url: S ) -> Self
+    pub fn with_url< S: Into< String > >( mut self, url : S ) -> Self
     {
       self.url = url.into();
       self
@@ -41,7 +41,7 @@ mod private
     /// Set the connection timeout
     #[ inline ]
     #[ must_use ]
-    pub fn with_timeout( mut self, timeout: Duration ) -> Self
+    pub fn with_timeout( mut self, timeout : Duration ) -> Self
     {
       self.timeout = timeout;
       self
@@ -50,7 +50,7 @@ mod private
     /// Set the maximum reconnection attempts
     #[ inline ]
     #[ must_use ]
-    pub fn with_max_reconnection_attempts( mut self, attempts: u32 ) -> Self
+    pub fn with_max_reconnection_attempts( mut self, attempts : u32 ) -> Self
     {
       self.max_reconnection_attempts = attempts;
       self
@@ -59,7 +59,7 @@ mod private
     /// Set the reconnection delay
     #[ inline ]
     #[ must_use ]
-    pub fn with_reconnection_delay( mut self, delay: Duration ) -> Self
+    pub fn with_reconnection_delay( mut self, delay : Duration ) -> Self
     {
       self.reconnection_delay = delay;
       self
@@ -68,7 +68,7 @@ mod private
     /// Enable or disable compression
     #[ inline ]
     #[ must_use ]
-    pub fn with_compression( mut self, enable: bool ) -> Self
+    pub fn with_compression( mut self, enable : bool ) -> Self
     {
       self.enable_compression = enable;
       self
@@ -77,7 +77,7 @@ mod private
     /// Set the heartbeat interval
     #[ inline ]
     #[ must_use ]
-    pub fn with_heartbeat_interval( mut self, interval: Duration ) -> Self
+    pub fn with_heartbeat_interval( mut self, interval : Duration ) -> Self
     {
       self.heartbeat_interval = interval;
       self
@@ -86,7 +86,7 @@ mod private
     /// Set the maximum queue size
     #[ inline ]
     #[ must_use ]
-    pub fn with_max_queue_size( mut self, size: usize ) -> Self
+    pub fn with_max_queue_size( mut self, size : usize ) -> Self
     {
       self.max_queue_size = size;
       self
@@ -95,7 +95,7 @@ mod private
     /// Set the authentication token
     #[ inline ]
     #[ must_use ]
-    pub fn with_auth_token< S: Into< String > >( mut self, token: S ) -> Self
+    pub fn with_auth_token< S: Into< String > >( mut self, token : S ) -> Self
     {
       self.auth_token = Some( token.into() );
       self
@@ -104,7 +104,7 @@ mod private
     /// Enable or disable auto-reconnect
     #[ inline ]
     #[ must_use ]
-    pub fn with_auto_reconnect( mut self, enable: bool ) -> Self
+    pub fn with_auto_reconnect( mut self, enable : bool ) -> Self
     {
       self.enable_auto_reconnect = enable;
       self
@@ -113,7 +113,7 @@ mod private
     /// Set the connection pool size
     #[ inline ]
     #[ must_use ]
-    pub fn with_pool_size( mut self, size: usize ) -> Self
+    pub fn with_pool_size( mut self, size : usize ) -> Self
     {
       self.pool_size = size;
       self
@@ -122,7 +122,7 @@ mod private
     /// Set the HTTP fallback URL
     #[ inline ]
     #[ must_use ]
-    pub fn with_http_fallback< S: Into< String > >( mut self, url: S ) -> Self
+    pub fn with_http_fallback< S: Into< String > >( mut self, url : S ) -> Self
     {
       self.http_fallback_url = Some( url.into() );
       self
@@ -254,7 +254,7 @@ mod private
 }
 
 #[ cfg( feature = "websocket_streaming" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use {};
 }

@@ -17,12 +17,12 @@ mod private
     #[ inline ]
     pub async fn chat_stream_controlled(
       &mut self,
-      request: ChatRequest
+      request : ChatRequest
     ) -> crate::OllamaResult< ControlledStream< crate::OllamaResult< ChatResponse > > >
     {
       let regular_stream = self.chat_stream( request ).await?;
       let control = StreamControl::new();
-      control.start().await.map_err( | e | format_err!( "Failed to start controlled stream: {}", e ) )?;
+      control.start().await.map_err( | e | format_err!( "Failed to start controlled stream : {}", e ) )?;
 
       Ok( ControlledStream::new( regular_stream, control ) )
     }

@@ -15,9 +15,9 @@
 
 use api_gemini::
 {
-  client::Client,
-  models::*,
-  error::Error,
+  client ::Client,
+  models ::*,
+  error ::Error,
 };
 use core::time::Duration;
 
@@ -63,7 +63,7 @@ async fn test_batch_embed_texts_basic()
         assert_eq!( embedding.len(), 768 ); // Expected dimension for text-embedding-004
       }
     },
-    Err( e ) => panic!( "Batch text embedding failed: {e}" ),
+    Err( e ) => panic!( "Batch text embedding failed : {e}" ),
   }
 }
 
@@ -83,16 +83,16 @@ async fn test_batch_embed_contents_mixed()
 
   let contents = vec![
     Content {
-      parts: vec![ Part { text: Some( "Simple text content".to_string() ), ..Default::default() } ],
-      role: "user".to_string(),
+      parts : vec![ Part { text : Some( "Simple text content".to_string() ), ..Default::default() } ],
+      role : "user".to_string(),
     },
     Content {
-      parts: vec![ Part { text: Some( "Another text content".to_string() ), ..Default::default() } ],
-      role: "user".to_string(),
+      parts : vec![ Part { text : Some( "Another text content".to_string() ), ..Default::default() } ],
+      role : "user".to_string(),
     },
     Content {
-      parts: vec![ Part { text: Some( "Third piece of content".to_string() ), ..Default::default() } ],
-      role: "user".to_string(),
+      parts : vec![ Part { text : Some( "Third piece of content".to_string() ), ..Default::default() } ],
+      role : "user".to_string(),
     },
   ];
 
@@ -109,7 +109,7 @@ async fn test_batch_embed_contents_mixed()
         assert!( !embedding.is_empty() );
       }
     },
-    Err( e ) => panic!( "Batch content embedding failed: {e}" ),
+    Err( e ) => panic!( "Batch content embedding failed : {e}" ),
   }
 }
 
@@ -148,7 +148,7 @@ async fn test_batch_generate_content_basic()
         assert!( !content.parts.is_empty() );
       }
     },
-    Err( e ) => panic!( "Batch content generation failed: {e}" ),
+    Err( e ) => panic!( "Batch content generation failed : {e}" ),
   }
 }
 
@@ -166,7 +166,7 @@ async fn test_batch_operations_empty_input()
   let models_api = client.models();
   let model = models_api.by_name( "text-embedding-004" );
 
-  let empty_texts: Vec< &str > = vec![];
+  let empty_texts : Vec< &str > = vec![];
   
   // Should handle empty input gracefully
   let result = model.batch_embed_texts( &empty_texts ).await;
@@ -181,7 +181,7 @@ async fn test_batch_operations_empty_input()
     {
       assert!( message.contains( "empty" ) || message.contains( "no input" ) );
     },
-    Err( e ) => panic!( "Unexpected error for empty input: {e}" ),
+    Err( e ) => panic!( "Unexpected error for empty input : {e}" ),
   }
 }
 
@@ -200,11 +200,11 @@ async fn test_batch_operations_size_limits()
   let model = models_api.by_name( "text-embedding-004" );
 
   // Test with large batch size (should handle chunking internally)
-  let large_batch: Vec< String > = ( 0..100 )
+  let large_batch : Vec< String > = ( 0..100 )
     .map( |i| format!( "Test text number {i}" ) )
     .collect();
   
-  let large_batch_refs: Vec< &str > = large_batch.iter().map( std::string::String::as_str ).collect();
+  let large_batch_refs : Vec< &str > = large_batch.iter().map( std::string::String::as_str ).collect();
   
   let result = model.batch_embed_texts( &large_batch_refs ).await;
   
@@ -214,7 +214,7 @@ async fn test_batch_operations_size_limits()
     {
       assert_eq!( embeddings.len(), large_batch.len() );
     },
-    Err( e ) => panic!( "Large batch embedding failed: {e}" ),
+    Err( e ) => panic!( "Large batch embedding failed : {e}" ),
   }
 }
 
@@ -259,7 +259,7 @@ async fn test_batch_operations_partial_failure_handling()
     Err( e ) => 
     {
       // Other errors are acceptable for this edge case test
-      eprintln!( "Expected error for mixed input: {e}" );
+      eprintln!( "Expected error for mixed input : {e}" );
     }
   }
 }
@@ -295,11 +295,11 @@ async fn test_batch_request_builder()
     {
       assert_eq!( embeddings.len(), texts.len() );
     },
-    Err( e ) => panic!( "Batch request builder failed: {e}" ),
+    Err( e ) => panic!( "Batch request builder failed : {e}" ),
   }
 }
 
-/// Performance test: compare batch vs individual operations
+/// Performance test : compare batch vs individual operations
 // DISABLED: 2025-11-08 by Claude
 // REASON: Gemini batch API endpoints hanging/timing out on requests
 // RE-ENABLE: When Gemini batch API endpoints are fixed/available
@@ -344,11 +344,11 @@ async fn test_batch_vs_individual_performance()
   // Batch should be faster (this is more of a documentation than assertion)
   if batch_duration < individual_duration 
   {
-    println!( "✓ Batch processing is faster: {batch_duration:?} vs {individual_duration:?}" );
+    println!( "✓ Batch processing is faster : {batch_duration:?} vs {individual_duration:?}" );
   } 
   else 
   {
-    println!( "⚠ Batch processing took longer: {batch_duration:?} vs {individual_duration:?}" );
+    println!( "⚠ Batch processing took longer : {batch_duration:?} vs {individual_duration:?}" );
   }
 }
 
@@ -387,7 +387,7 @@ async fn test_batch_operations_different_models()
       Err( e ) => 
       {
         // Some models might not support batch operations
-        println!( "⚠ Model {model_name} doesn't support batch operations: {e}" );
+        println!( "⚠ Model {model_name} doesn't support batch operations : {e}" );
       }
     }
   }

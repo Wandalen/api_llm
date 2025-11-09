@@ -64,7 +64,7 @@ impl AudioInput
 fn base64_encode( bytes : &[ u8 ] ) -> String
 {
   use base64::{ Engine, engine::general_purpose };
-  general_purpose::STANDARD.encode( bytes )
+  general_purpose ::STANDARD.encode( bytes )
 }
 
 /// Automatic Speech Recognition (ASR) result

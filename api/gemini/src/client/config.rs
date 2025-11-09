@@ -157,7 +157,7 @@ use super::Client;
         if self.backoff_multiplier <= 1.0
         {
           return Err( Error::InvalidArgument(
-            format!( "Backoff multiplier must be greater than 1.0, got: {0}", self.backoff_multiplier )
+            format!( "Backoff multiplier must be greater than 1.0, got : {0}", self.backoff_multiplier )
           ) );
         }
 
@@ -173,16 +173,16 @@ use super::Client;
       let http = reqwest::Client::builder()
         .timeout( self.timeout )
         .build()
-        .map_err( | e | Error::NetworkError( format!( "Failed to create HTTP client: {e}" ) ) )?;
+        .map_err( | e | Error::NetworkError( format!( "Failed to create HTTP client : {e}" ) ) )?;
 
       // Create request cache if caching is enabled
       #[ cfg( feature = "caching" ) ]
       let request_cache = if self.enable_request_cache
       {
         let cache_config = crate::internal::http::CacheConfig {
-          max_size: self.cache_max_size,
-          ttl: self.cache_ttl,
-          enable_metrics: false, // Simplified for former version
+          max_size : self.cache_max_size,
+          ttl : self.cache_ttl,
+          enable_metrics : false, // Simplified for former version
         };
         Some( std::sync::Arc::new( crate::internal::http::RequestCache::new( cache_config ) ) )
       } else {
@@ -254,5 +254,5 @@ use super::Client;
   #[ derive( Debug ) ]
   pub struct ConfigWatchHandle
   {
-    pub( super ) _handle: std::sync::Arc< () >,
+    pub( super ) _handle : std::sync::Arc< () >,
   }

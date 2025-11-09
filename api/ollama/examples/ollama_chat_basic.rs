@@ -76,7 +76,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     tool_messages : None,
   };
 
-  // Note: Curl generation would be available with diagnostics features
+  // Note : Curl generation would be available with diagnostics features
 
   // Always show the JSON payload for transparency (Thin Client principle)
   println!( "=== Request JSON Payload ===" );
@@ -96,13 +96,13 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
   println!( "\n=== Response Metadata ===" );
   if let Some( model ) = &response.model
   {
-    println!( "Model: {model}" );
+    println!( "Model : {model}" );
   }
   if let Some( created_at ) = &response.created_at
   {
-    println!( "Created at: {created_at}" );
+    println!( "Created at : {created_at}" );
   }
-  println!( "Done: {}", response.done );
+  println!( "Done : {}", response.done );
 
   // Display usage metadata if available (Ollama token tracking)
   if let Some( eval_count ) = response.eval_count
@@ -116,11 +116,11 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
   }
   if let Some( total_duration ) = response.total_duration
   {
-    println!( "Total duration: {total_duration} ms" );
+    println!( "Total duration : {total_duration} ms" );
   }
   if let Some( eval_duration ) = response.eval_duration
   {
-    println!( "Eval duration: {eval_duration} ms" );
+    println!( "Eval duration : {eval_duration} ms" );
   }
 
   println!( "\n=== Example Complete ===" );

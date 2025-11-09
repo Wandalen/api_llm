@@ -37,11 +37,11 @@ use api_openai::ClientApiAccessors;
 use api_openai::
 {
   Client,
-  components::
+  components ::
   {
-    responses::{ CreateResponseRequest, ResponseInput, ResponseObject },
-    output::{ OutputItem, OutputContentPart },
-    common::ModelIdsResponses,
+    responses ::{ CreateResponseRequest, ResponseInput, ResponseObject },
+    output ::{ OutputItem, OutputContentPart },
+    common ::ModelIdsResponses,
   },
 };
 
@@ -60,8 +60,8 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
     secret,
     None,
     None,
-    api_openai::environment::OpenAIRecommended::base_url().to_string(),
-    api_openai::environment::OpenAIRecommended::realtime_base_url().to_string()
+    api_openai ::environment::OpenAIRecommended::base_url().to_string(),
+    api_openai ::environment::OpenAIRecommended::realtime_base_url().to_string()
   ).expect( "Failed to create environment" );
 
   let client = Client::build( env ).expect( "Failed to create client" );
@@ -76,23 +76,23 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
     .top_p( 0.95 )
     .form();
 
-  // Request transparency: Show JSON payload for educational purposes
+  // Request transparency : Show JSON payload for educational purposes
   println!( "=== Request JSON Payload ===" );
   let json_payload = serde_json::to_string_pretty( &request )?;
   println!( "{json_payload}" );
   println!();
 
-  // Request transparency: Show cURL command for debugging
-  // Note: cURL generation available through CurlGeneration trait
+  // Request transparency : Show cURL command for debugging
+  // Note : cURL generation available through CurlGeneration trait
   println!( "=== cURL Command Generation ===" );
-  println!( "Note: cURL command generation available through response client interface" );
+  println!( "Note : cURL command generation available through response client interface" );
   println!();
 
   println!( "Sending request to OpenAI API..." );
-  println!( "Model: gpt-4o" );
-  println!( "Temperature: 0.7 (balanced creativity)" );
-  println!( "Max tokens: 1024" );
-  println!( "Top-p: 0.95 (nucleus sampling)" );
+  println!( "Model : gpt-4o" );
+  println!( "Temperature : 0.7 (balanced creativity)" );
+  println!( "Max tokens : 1024" );
+  println!( "Top-p : 0.95 (nucleus sampling)" );
   println!();
 
   // Send the request and handle the response
@@ -127,15 +127,15 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
   if let Some( usage ) = response.usage
   {
     println!( "=== Token Usage Information ===" );
-    println!( "Input tokens: {}", usage.prompt_tokens );
+    println!( "Input tokens : {}", usage.prompt_tokens );
     if let Some( completion_tokens ) = usage.completion_tokens
     {
-      println!( "Output tokens: {completion_tokens}" );
+      println!( "Output tokens : {completion_tokens}" );
     }
-    println!( "Total tokens: {}", usage.total_tokens );
+    println!( "Total tokens : {}", usage.total_tokens );
 
     // Educational note about cost implications
-    println!( "\n💡 Note: Token usage directly impacts API costs." );
+    println!( "\n💡 Note : Token usage directly impacts API costs." );
     println!( "Monitor usage to optimize both performance and expenses." );
   }
   else

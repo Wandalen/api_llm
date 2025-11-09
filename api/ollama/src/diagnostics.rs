@@ -567,7 +567,7 @@ mod private
       {
         // Generate a basic cURL command - simplified for now
         let curl_command = format!(
-          "curl -X POST {} -H \"Content-Type: application/json\" -d '{}'",
+          "curl -X POST {} -H \"Content-Type : application/json\" -d '{}'",
           format!( "{base_url}/api/chat" ),
           "{{\"model\":\"llama2\",\"messages\":[{{\"role\":\"user\",\"content\":\"Generate cURL command\"}}]}}"
         );
@@ -890,18 +890,18 @@ mod private
     fn fmt( &self, f : &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result
     {
       writeln!( f, "Diagnostics Report" )?;
-      writeln!( f, "Total Requests: {}", self.total_requests )?;
-      writeln!( f, "Successful: {}", self.successful_requests )?;
-      writeln!( f, "Failed: {}", self.failed_requests )?;
-      writeln!( f, "Error Rate: {:.2}%", self.error_rate * 100.0 )?;
-      write!( f, "Average Response Time: {:?}", self.average_response_time )
+      writeln!( f, "Total Requests : {}", self.total_requests )?;
+      writeln!( f, "Successful : {}", self.successful_requests )?;
+      writeln!( f, "Failed : {}", self.failed_requests )?;
+      writeln!( f, "Error Rate : {:.2}%", self.error_rate * 100.0 )?;
+      write!( f, "Average Response Time : {:?}", self.average_response_time )
     }
   }
   
 }
 
 #[ cfg( feature = "general_diagnostics" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use private::DiagnosticsConfig;
   exposed use private::RequestMetrics;

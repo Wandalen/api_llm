@@ -1,7 +1,7 @@
 //! Request cache performance benchmarks
 //!
 //! Measures cache operation overhead to ensure reasonable performance
-//! (target: < 100μs per operation in debug builds).
+//! (target : < 100μs per operation in debug builds).
 //!
 //! Originally in `tests/request_caching_tests.rs` but moved here because
 //! performance measurements should not be in functional test suite due to
@@ -46,16 +46,20 @@ fn benchmark_cache_performance()
   let overhead_per_operation = duration / (iterations * 2); // insert + get
 
   println!("\n=== Cache Performance Benchmark ===");
-  println!("Iterations: {iterations}");
-  println!("Total duration: {duration:?}");
-  println!("Per operation: {overhead_per_operation:?}");
+  println!("Iterations : {iterations}");
+  println!("Total duration : {duration:?}");
+  println!("Per operation : {overhead_per_operation:?}");
 
   let micros = overhead_per_operation.as_micros();
   if micros > 200 {
     println!("⚠️  WARNING: Cache operations exceed 200μs per operation!");
-  } else if micros > 100 {
+  }
+  else if micros > 100
+  {
     println!("⚠️  CAUTION: Cache operations exceed 100μs per operation");
-  } else {
+  }
+  else
+  {
     println!("✅ Cache performance within acceptable range (< 100μs)");
   }
 }

@@ -167,7 +167,7 @@ mod private
   }
 
   /// Client event to trigger model inference and create a response.
-  /// Not needed in Server VAD mode with `create_response: true`.
+  /// Not needed in Server VAD mode with `create_response : true`.
   ///
   /// # Used By
   /// - `RealtimeClientEvent`
@@ -362,7 +362,7 @@ mod private
 
 } // end mod private
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use private::RealtimeClientEventConversationItemCreate;
   exposed use private::RealtimeClientEventConversationItemDelete;

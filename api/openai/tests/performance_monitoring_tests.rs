@@ -24,9 +24,9 @@ mod performance_monitoring_tests
   use api_openai::
   {
     Client,
-    environment::OpenaiEnvironmentImpl,
-    secret::Secret,
-    performance_monitoring::*,
+    environment ::OpenaiEnvironmentImpl,
+    secret ::Secret,
+    performance_monitoring ::*,
   };
   use std::time::Duration;
 
@@ -45,7 +45,7 @@ mod performance_monitoring_tests
   async fn test_request_overhead_measurement_succeeds()
   {
     // SUCCESS TEST: Request overhead measurement should succeed with implementation
-    // Target: <10ms overhead per request
+    // Target : <10ms overhead per request
 
     let _client = create_test_client().expect("Failed to create client");
 
@@ -145,9 +145,9 @@ mod performance_monitoring_tests
 
     // Configure baseline performance for regression detection
     let config = PerformanceConfig {
-      enable_regression_detection: true,
-      baseline_performance: Some(Duration::from_millis(5)),
-      regression_threshold_percent: 50.0,
+      enable_regression_detection : true,
+      baseline_performance : Some(Duration::from_millis(5)),
+      regression_threshold_percent : 50.0,
       ..Default::default()
     };
     configure_performance_monitoring(config);

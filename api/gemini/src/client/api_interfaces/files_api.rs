@@ -54,12 +54,12 @@ impl FilesApi< '_ >
   ///
   /// let request = UploadFileRequest {
   ///   file_data,
-  ///   mime_type: "image/png".to_string(),
-  ///   display_name: Some("Example Image".to_string()),
+  ///   mime_type : "image/png".to_string(),
+  ///   display_name : Some("Example Image".to_string()),
   /// };
   ///
   /// let response = files_api.upload(&request).await?;
-  /// println!("Uploaded file: {}", response.file.name);
+  /// println!("Uploaded file : {}", response.file.name);
   /// # Ok( () )
   /// # }
   /// ```
@@ -136,7 +136,7 @@ impl FilesApi< '_ >
   /// let response = files_api.list(&request).await?;
   ///
   /// for file in &response.files {
-  ///   println!("File: {} ({})", file.name, file.mime_type);
+  ///   println!("File : {} ({})", file.name, file.mime_type);
   /// }
   /// # Ok( () )
   /// # }
@@ -163,10 +163,10 @@ impl FilesApi< '_ >
       url.push_str( &query_params.join( "&" ) );
     }
 
-    crate::internal::http::execute_legacy::< (), crate::models::ListFilesResponse >
+    crate ::internal::http::execute_legacy::< (), crate::models::ListFilesResponse >
     (
       &self.client.http,
-      reqwest::Method::GET,
+      reqwest ::Method::GET,
       &url,
       &self.client.api_key,
       None,
@@ -206,7 +206,7 @@ impl FilesApi< '_ >
   /// let files_api = client.files();
   ///
   /// let file_metadata = files_api.get("files/abc123").await?;
-  /// println!("File: {} ({})", file_metadata.name, file_metadata.mime_type);
+  /// println!("File : {} ({})", file_metadata.name, file_metadata.mime_type);
   /// # Ok( () )
   /// # }
   /// ```
@@ -215,10 +215,10 @@ impl FilesApi< '_ >
   {
     let url = format!( "{}/v1beta/{}", self.client.base_url, file_name );
 
-    crate::internal::http::execute_legacy::< (), crate::models::FileMetadata >
+    crate ::internal::http::execute_legacy::< (), crate::models::FileMetadata >
     (
       &self.client.http,
-      reqwest::Method::GET,
+      reqwest ::Method::GET,
       &url,
       &self.client.api_key,
       None,

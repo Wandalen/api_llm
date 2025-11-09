@@ -484,7 +484,7 @@ mod private
     /// The desired reasoning effort level.
     pub effort : Option< ReasoningEffort >,
     /// Whether to generate a concise or detailed summary of reasoning.
-    pub generate_summary : Option< String >, // Enum: concise, detailed
+    pub generate_summary : Option< String >, // Enum : concise, detailed
   }
 
   /// Represents the properties common to model responses across different APIs.
@@ -682,7 +682,7 @@ mod private
     pub deleted : bool,
   }
 
-  /// Represents the structure for a deleted project confirmation (Note: Projects are archived, not deleted).
+  /// Represents the structure for a deleted project confirmation (Note : Projects are archived, not deleted).
   /// This might represent the response from an archive operation.
   ///
   /// # Used By
@@ -838,7 +838,7 @@ mod private
   }
 } // end mod private
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use 
   {

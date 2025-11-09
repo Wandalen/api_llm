@@ -7,14 +7,14 @@
 use api_openai::ClientApiAccessors;
 use api_openai::
 {
-  environment::DevEnvironment,
-  chat::CreateChatCompletionRequest,
-  enhanced_client::{ EnhancedClient, EnhancedClientBuilder },
-  connection_manager::ConnectionConfig,
-  response_cache::CacheConfig,
-  enhanced_circuit_breaker::EnhancedCircuitBreakerConfig,
-  metrics_framework::MetricsConfig,
-  error::Result,
+  environment ::DevEnvironment,
+  chat ::CreateChatCompletionRequest,
+  enhanced_client ::{ EnhancedClient, EnhancedClientBuilder },
+  connection_manager ::ConnectionConfig,
+  response_cache ::CacheConfig,
+  enhanced_circuit_breaker ::EnhancedCircuitBreakerConfig,
+  metrics_framework ::MetricsConfig,
+  error ::Result,
 };
 use std::time::Duration;
 
@@ -29,47 +29,47 @@ async fn main() -> Result< () >
   // Configure comprehensive metrics collection
   let metrics_config = MetricsConfig
   {
-    collect_connection_metrics: true,
-    collect_cache_metrics: true,
-    collect_circuit_breaker_metrics: true,
-    collect_timing_metrics: true,
-    collect_error_metrics: true,
-    max_entries: 1000,
-    collection_interval: Duration::from_secs( 5 ), // Collect every 5 seconds
-    retention_period: Duration::from_secs( 1800 ), // Retain for 30 minutes
-    enable_streaming: false,
+    collect_connection_metrics : true,
+    collect_cache_metrics : true,
+    collect_circuit_breaker_metrics : true,
+    collect_timing_metrics : true,
+    collect_error_metrics : true,
+    max_entries : 1000,
+    collection_interval : Duration::from_secs( 5 ), // Collect every 5 seconds
+    retention_period : Duration::from_secs( 1800 ), // Retain for 30 minutes
+    enable_streaming : false,
   };
 
   // Configure connection management for optimal performance
   let connection_config = ConnectionConfig
   {
-    max_connections_per_host: 8,
-    min_connections_per_host: 2,
-    idle_timeout: Duration::from_secs( 300 ),
-    adaptive_pooling: true,
-    enable_connection_warming: true,
-    health_check_interval: Duration::from_secs( 30 ),
+    max_connections_per_host : 8,
+    min_connections_per_host : 2,
+    idle_timeout : Duration::from_secs( 300 ),
+    adaptive_pooling : true,
+    enable_connection_warming : true,
+    health_check_interval : Duration::from_secs( 30 ),
   };
 
   // Configure intelligent response caching
   let cache_config = CacheConfig
   {
-    max_entries: 200,
-    default_ttl: Duration::from_secs( 900 ), // 15 minutes
-    max_response_size: 1024 * 1024, // 1MB
-    enable_compression: true,
-    cache_errors: false,
-    cleanup_interval: Duration::from_secs( 30 ),
+    max_entries : 200,
+    default_ttl : Duration::from_secs( 900 ), // 15 minutes
+    max_response_size : 1024 * 1024, // 1MB
+    enable_compression : true,
+    cache_errors : false,
+    cleanup_interval : Duration::from_secs( 30 ),
   };
 
   // Configure circuit breaker for fault tolerance
   let circuit_breaker_config = EnhancedCircuitBreakerConfig
   {
-    failure_threshold: 5, // Open after 5 consecutive failures
-    recovery_timeout_ms: 10000, // Wait 10 seconds before attempting recovery
-    success_threshold: 3, // Close after 3 successful requests in half-open state
-    half_open_max_requests: 5, // Allow up to 5 requests in half-open state
-    half_open_timeout_ms: 15000, // Half-open state times out after 15 seconds
+    failure_threshold : 5, // Open after 5 consecutive failures
+    recovery_timeout_ms : 10000, // Wait 10 seconds before attempting recovery
+    success_threshold : 3, // Close after 3 successful requests in half-open state
+    half_open_max_requests : 5, // Allow up to 5 requests in half-open state
+    half_open_timeout_ms : 15000, // Half-open state times out after 15 seconds
   };
 
   // Build enhanced client with full configuration using the builder pattern
@@ -86,10 +86,10 @@ async fn main() -> Result< () >
     .build( environment )?;
 
   println!( "✅ Enhanced client created with comprehensive monitoring:" );
-  println!( "   - Connection Management: ✓" );
-  println!( "   - Response Caching: {}", if client.is_caching_enabled() { "✓" } else { "✗" } );
-  println!( "   - Circuit Breaker: {}", if client.is_circuit_breaker_enabled() { "✓" } else { "✗" } );
-  println!( "   - Metrics Collection: {}", if client.is_metrics_enabled() { "✓" } else { "✗" } );
+  println!( "   - Connection Management : ✓" );
+  println!( "   - Response Caching : {}", if client.is_caching_enabled() { "✓" } else { "✗" } );
+  println!( "   - Circuit Breaker : {}", if client.is_circuit_breaker_enabled() { "✓" } else { "✗" } );
+  println!( "   - Metrics Collection : {}", if client.is_metrics_enabled() { "✓" } else { "✗" } );
 
   // Warm up connections
   println!( "\n🔄 Warming up connections..." );
@@ -138,7 +138,7 @@ async fn main() -> Result< () >
       Err( e ) =>
       {
         failed_requests += 1;
-        println!( "  ❌ Failed: {}", e );
+        println!( "  ❌ Failed : {}", e );
       }
     }
 
@@ -153,46 +153,46 @@ async fn main() -> Result< () >
         if let Some( ref conn_metrics ) = snapshot.connection_metrics
         {
           println!( "   🔗 Connection Performance:" );
-          println!( "     - Efficiency Score: {:.1}%", conn_metrics.efficiency_score * 100.0 );
-          println!( "     - Connection Reuse Ratio: {:.1}", conn_metrics.connection_reuse_ratio );
-          println!( "     - Pool Utilization: {:.1}%", conn_metrics.average_pool_utilization * 100.0 );
-          println!( "     - Active Connections: {}", conn_metrics.active_connections );
-          println!( "     - Health Score: {:.1}", conn_metrics.health_score );
+          println!( "     - Efficiency Score : {:.1}%", conn_metrics.efficiency_score * 100.0 );
+          println!( "     - Connection Reuse Ratio : {:.1}", conn_metrics.connection_reuse_ratio );
+          println!( "     - Pool Utilization : {:.1}%", conn_metrics.average_pool_utilization * 100.0 );
+          println!( "     - Active Connections : {}", conn_metrics.active_connections );
+          println!( "     - Health Score : {:.1}", conn_metrics.health_score );
         }
 
         // Cache metrics
         if let Some( ref cache_metrics ) = snapshot.cache_metrics
         {
           println!( "   💾 Cache Performance:" );
-          println!( "     - Hit Ratio: {:.1}%", cache_metrics.hit_ratio * 100.0 );
-          println!( "     - Total Requests: {}", cache_metrics.total_requests );
-          println!( "     - Cache Hits: {}", cache_metrics.cache_hits );
-          println!( "     - Current Entries: {}", cache_metrics.current_entries );
-          println!( "     - Efficiency Score: {:.1}", cache_metrics.efficiency_score );
+          println!( "     - Hit Ratio : {:.1}%", cache_metrics.hit_ratio * 100.0 );
+          println!( "     - Total Requests : {}", cache_metrics.total_requests );
+          println!( "     - Cache Hits : {}", cache_metrics.cache_hits );
+          println!( "     - Current Entries : {}", cache_metrics.current_entries );
+          println!( "     - Efficiency Score : {:.1}", cache_metrics.efficiency_score );
         }
 
         // Timing metrics
         if let Some( ref timing_metrics ) = snapshot.timing_metrics
         {
           println!( "   ⏱️ Timing Performance:" );
-          println!( "     - Average Duration: {:.1}ms", timing_metrics.average_duration_ms );
-          println!( "     - Min Duration: {:.1}ms", timing_metrics.min_duration_ms );
-          println!( "     - Max Duration: {:.1}ms", timing_metrics.max_duration_ms );
-          println!( "     - P95 Duration: {:.1}ms", timing_metrics.p95_duration_ms );
-          println!( "     - P99 Duration: {:.1}ms", timing_metrics.p99_duration_ms );
-          println!( "     - Total Requests: {}", timing_metrics.total_requests );
+          println!( "     - Average Duration : {:.1}ms", timing_metrics.average_duration_ms );
+          println!( "     - Min Duration : {:.1}ms", timing_metrics.min_duration_ms );
+          println!( "     - Max Duration : {:.1}ms", timing_metrics.max_duration_ms );
+          println!( "     - P95 Duration : {:.1}ms", timing_metrics.p95_duration_ms );
+          println!( "     - P99 Duration : {:.1}ms", timing_metrics.p99_duration_ms );
+          println!( "     - Total Requests : {}", timing_metrics.total_requests );
         }
 
         // Error metrics
         if let Some( ref error_metrics ) = snapshot.error_metrics
         {
           println!( "   ⚠️ Error Tracking:" );
-          println!( "     - Total Errors: {}", error_metrics.total_errors );
-          println!( "     - Error Rate: {:.1}/min", error_metrics.error_rate_per_minute );
-          println!( "     - Trend: {}", error_metrics.trend );
+          println!( "     - Total Errors : {}", error_metrics.total_errors );
+          println!( "     - Error Rate : {:.1}/min", error_metrics.error_rate_per_minute );
+          println!( "     - Trend : {}", error_metrics.trend );
           if let Some( ref most_common ) = error_metrics.most_common_error
           {
-            println!( "     - Most Common Error: {}", most_common );
+            println!( "     - Most Common Error : {}", most_common );
           }
         }
       }
@@ -201,7 +201,7 @@ async fn main() -> Result< () >
     }
 
     // Small delay between requests
-    tokio::time::sleep( Duration::from_millis( 200 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 200 ) ).await;
   }
 
   // Generate comprehensive analysis report
@@ -209,9 +209,9 @@ async fn main() -> Result< () >
 
   if let Some( analysis ) = client.get_metrics_analysis().await
   {
-    println!( "🏆 Overall Performance Grade: {}", analysis.performance_grade );
-    println!( "💯 Health Score: {:.1}%", analysis.health_score * 100.0 );
-    println!( "🚨 Risk Level: {}", analysis.risk_level );
+    println!( "🏆 Overall Performance Grade : {}", analysis.performance_grade );
+    println!( "💯 Health Score : {:.1}%", analysis.health_score * 100.0 );
+    println!( "🚨 Risk Level : {}", analysis.risk_level );
 
     if !analysis.kpis.is_empty()
     {
@@ -259,25 +259,25 @@ async fn main() -> Result< () >
     Ok( json_data ) =>
     {
       let entry_count = json_data.matches( "timestamp" ).count();
-      println!( "✅ JSON Export: {} metrics entries exported", entry_count );
+      println!( "✅ JSON Export : {} metrics entries exported", entry_count );
     },
     Err( e ) =>
     {
-      println!( "❌ JSON Export failed: {}", e );
+      println!( "❌ JSON Export failed : {}", e );
     }
   }
 
   // Prometheus export
   let prometheus_data = client.export_metrics_prometheus().await;
   let metric_count = prometheus_data.matches( "# HELP" ).count();
-  println!( "✅ Prometheus Export: {} metrics available", metric_count );
+  println!( "✅ Prometheus Export : {} metrics available", metric_count );
 
   // Final summary
   println!( "\n📋 Execution Summary:" );
-  println!( "   Total Requests: {}", successful_requests + failed_requests );
-  println!( "   Successful: {}", successful_requests );
-  println!( "   Failed: {}", failed_requests );
-  println!( "   Success Rate: {:.1}%", ( successful_requests as f64 / ( successful_requests + failed_requests ) as f64 ) * 100.0 );
+  println!( "   Total Requests : {}", successful_requests + failed_requests );
+  println!( "   Successful : {}", successful_requests );
+  println!( "   Failed : {}", failed_requests );
+  println!( "   Success Rate : {:.1}%", ( successful_requests as f64 / ( successful_requests + failed_requests ) as f64 ) * 100.0 );
 
   // Performance benefits summary
   println!( "\n🎯 Metrics Framework Benefits Demonstrated:" );

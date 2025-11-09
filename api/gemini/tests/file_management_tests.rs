@@ -22,9 +22,9 @@ fn create_sample_image_data() -> Vec< u8 >
     0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, // PNG signature
     0x00, 0x00, 0x00, 0x0D, // IHDR chunk length
     0x49, 0x48, 0x44, 0x52, // IHDR chunk type
-    0x00, 0x00, 0x00, 0x01, // Width: 1
-    0x00, 0x00, 0x00, 0x01, // Height: 1
-    0x08, 0x02, 0x00, 0x00, 0x00, // Bit depth: 8, Color type: 2 (RGB), Compression: 0, Filter: 0, Interlace: 0
+    0x00, 0x00, 0x00, 0x01, // Width : 1
+    0x00, 0x00, 0x00, 0x01, // Height : 1
+    0x08, 0x02, 0x00, 0x00, 0x00, // Bit depth : 8, Color type : 2 (RGB), Compression : 0, Filter : 0, Interlace : 0
     0x90, 0x77, 0x53, 0xDE, // CRC32
     0x00, 0x00, 0x00, 0x0C, // IDAT chunk length
     0x49, 0x44, 0x41, 0x54, // IDAT chunk type
@@ -56,9 +56,9 @@ async fn test_upload_image_file() -> Result< (), Box< dyn std::error::Error > >
   let files_api = client.files();
 
   let request = UploadFileRequest {
-    file_data: create_sample_image_data(),
-    mime_type: "image/png".to_string(),
-    display_name: Some( "test_image.png".to_string() ),
+    file_data : create_sample_image_data(),
+    mime_type : "image/png".to_string(),
+    display_name : Some( "test_image.png".to_string() ),
   };
 
   let response = files_api.upload( &request ).await?;
@@ -69,7 +69,7 @@ async fn test_upload_image_file() -> Result< (), Box< dyn std::error::Error > >
   assert_eq!( response.file.display_name, Some( "test_image.png".to_string() ), "Display name should match" );
   assert!( response.file.uri.is_some(), "File should have a URI" );
 
-  println!( "✅ Image file uploaded successfully: {}", response.file.name );
+  println!( "✅ Image file uploaded successfully : {}", response.file.name );
 
   // Clean up - delete the uploaded file
   let _ = files_api.delete( &response.file.name ).await;
@@ -91,9 +91,9 @@ async fn test_upload_text_file() -> Result< (), Box< dyn std::error::Error > >
   let files_api = client.files();
 
   let request = UploadFileRequest {
-    file_data: create_sample_text_data(),
-    mime_type: "text/plain".to_string(),
-    display_name: Some( "test_document.txt".to_string() ),
+    file_data : create_sample_text_data(),
+    mime_type : "text/plain".to_string(),
+    display_name : Some( "test_document.txt".to_string() ),
   };
 
   let response = files_api.upload( &request ).await?;
@@ -104,7 +104,7 @@ async fn test_upload_text_file() -> Result< (), Box< dyn std::error::Error > >
   assert_eq!( response.file.display_name, Some( "test_document.txt".to_string() ), "Display name should match" );
   assert!( response.file.uri.is_some(), "File should have a URI" );
 
-  println!( "✅ Text file uploaded successfully: {}", response.file.name );
+  println!( "✅ Text file uploaded successfully : {}", response.file.name );
 
   // Clean up - delete the uploaded file
   let _ = files_api.delete( &response.file.name ).await;
@@ -127,9 +127,9 @@ async fn test_list_files() -> Result< (), Box< dyn std::error::Error > >
 
   // Upload a test file first
   let upload_request = UploadFileRequest {
-    file_data: create_sample_image_data(),
-    mime_type: "image/png".to_string(),
-    display_name: Some( "list_test_image.png".to_string() ),
+    file_data : create_sample_image_data(),
+    mime_type : "image/png".to_string(),
+    display_name : Some( "list_test_image.png".to_string() ),
   };
 
   let upload_response = files_api.upload( &upload_request ).await?;
@@ -175,8 +175,8 @@ async fn test_list_files_with_pagination() -> Result< (), Box< dyn std::error::E
 
   // Test pagination with a small page size
   let list_request = ListFilesRequest {
-    page_size: Some( 2 ),
-    page_token: None,
+    page_size : Some( 2 ),
+    page_token : None,
   };
 
   let list_response = files_api.list( &list_request ).await?;
@@ -191,8 +191,8 @@ async fn test_list_files_with_pagination() -> Result< (), Box< dyn std::error::E
     if let Some( ref next_token ) = list_response.next_page_token
     {
       let next_page_request = ListFilesRequest {
-        page_size: Some( 2 ),
-        page_token: Some( next_token.clone() ),
+        page_size : Some( 2 ),
+        page_token : Some( next_token.clone() ),
       };
 
       let next_page_response = files_api.list( &next_page_request ).await?;
@@ -222,9 +222,9 @@ async fn test_get_file_metadata() -> Result< (), Box< dyn std::error::Error > >
 
   // Upload a test file first
   let upload_request = UploadFileRequest {
-    file_data: create_sample_text_data(),
-    mime_type: "text/plain".to_string(),
-    display_name: Some( "metadata_test.txt".to_string() ),
+    file_data : create_sample_text_data(),
+    mime_type : "text/plain".to_string(),
+    display_name : Some( "metadata_test.txt".to_string() ),
   };
 
   let upload_response = files_api.upload( &upload_request ).await?;
@@ -246,7 +246,7 @@ async fn test_get_file_metadata() -> Result< (), Box< dyn std::error::Error > >
     assert_eq!( size as usize, create_sample_text_data().len(), "File size should match uploaded data" );
   }
 
-  println!( "✅ File metadata retrieval successful: {} ({} bytes)",
+  println!( "✅ File metadata retrieval successful : {} ({} bytes)",
     file_metadata.name,
     file_metadata.size_bytes.unwrap_or( 0 )
   );
@@ -272,9 +272,9 @@ async fn test_delete_file() -> Result< (), Box< dyn std::error::Error > >
 
   // Upload a test file first
   let upload_request = UploadFileRequest {
-    file_data: create_sample_image_data(),
-    mime_type: "image/png".to_string(),
-    display_name: Some( "delete_test.png".to_string() ),
+    file_data : create_sample_image_data(),
+    mime_type : "image/png".to_string(),
+    display_name : Some( "delete_test.png".to_string() ),
   };
 
   let upload_response = files_api.upload( &upload_request ).await?;
@@ -290,7 +290,7 @@ async fn test_delete_file() -> Result< (), Box< dyn std::error::Error > >
   let get_result = files_api.get( &uploaded_file_name ).await;
   assert!( get_result.is_err(), "Getting metadata for deleted file should fail" );
 
-  println!( "✅ File deletion successful: {}", uploaded_file_name );
+  println!( "✅ File deletion successful : {}", uploaded_file_name );
 
   Ok( () )
 }
@@ -313,9 +313,9 @@ async fn test_upload_large_file() -> Result< (), Box< dyn std::error::Error > >
   let large_file_data = large_text.as_bytes().to_vec();
 
   let request = UploadFileRequest {
-    file_data: large_file_data.clone(),
-    mime_type: "text/plain".to_string(),
-    display_name: Some( "large_test_file.txt".to_string() ),
+    file_data : large_file_data.clone(),
+    mime_type : "text/plain".to_string(),
+    display_name : Some( "large_test_file.txt".to_string() ),
   };
 
   let response = files_api.upload( &request ).await?;
@@ -330,7 +330,7 @@ async fn test_upload_large_file() -> Result< (), Box< dyn std::error::Error > >
     assert!( size > 50000, "Large file should be over 50KB" );
   }
 
-  println!( "✅ Large file upload successful: {} ({} bytes)",
+  println!( "✅ Large file upload successful : {} ({} bytes)",
     response.file.name,
     response.file.size_bytes.unwrap_or( 0 )
   );
@@ -355,9 +355,9 @@ async fn test_upload_file_without_display_name() -> Result< (), Box< dyn std::er
   let files_api = client.files();
 
   let request = UploadFileRequest {
-    file_data: create_sample_text_data(),
-    mime_type: "text/plain".to_string(),
-    display_name: None, // No display name
+    file_data : create_sample_text_data(),
+    mime_type : "text/plain".to_string(),
+    display_name : None, // No display name
   };
 
   let response = files_api.upload( &request ).await?;
@@ -369,7 +369,7 @@ async fn test_upload_file_without_display_name() -> Result< (), Box< dyn std::er
   assert!( response.file.display_name.is_none() || response.file.display_name == Some( "file".to_string() ),
     "Display name should be None or default" );
 
-  println!( "✅ File upload without display name successful: {}", response.file.name );
+  println!( "✅ File upload without display name successful : {}", response.file.name );
 
   // Clean up - delete the uploaded file
   let _ = files_api.delete( &response.file.name ).await;
@@ -390,7 +390,7 @@ async fn test_get_nonexistent_file() -> Result< (), Box< dyn std::error::Error >
 
   if let Err( e ) = result
   {
-    println!( "✅ Nonexistent file error handled correctly: {:?}", e );
+    println!( "✅ Nonexistent file error handled correctly : {:?}", e );
   }
 
   Ok( () )
@@ -409,7 +409,7 @@ async fn test_delete_nonexistent_file() -> Result< (), Box< dyn std::error::Erro
 
   if let Err( e ) = result
   {
-    println!( "✅ Nonexistent file deletion error handled correctly: {:?}", e );
+    println!( "✅ Nonexistent file deletion error handled correctly : {:?}", e );
   }
 
   Ok( () )
@@ -423,9 +423,9 @@ async fn test_upload_unsupported_file_type() -> Result< (), Box< dyn std::error:
 
   // Try to upload a file with an unsupported MIME type
   let request = UploadFileRequest {
-    file_data: vec![ 0x00, 0x01, 0x02, 0x03 ], // Random binary data
-    mime_type: "application/x-unsupported-test".to_string(),
-    display_name: Some( "unsupported.test".to_string() ),
+    file_data : vec![ 0x00, 0x01, 0x02, 0x03 ], // Random binary data
+    mime_type : "application/x-unsupported-test".to_string(),
+    display_name : Some( "unsupported.test".to_string() ),
   };
 
   let result = files_api.upload( &request ).await;
@@ -435,13 +435,13 @@ async fn test_upload_unsupported_file_type() -> Result< (), Box< dyn std::error:
   {
     Ok( response ) =>
     {
-      println!( "✅ Unsupported file type was accepted: {}", response.file.name );
+      println!( "✅ Unsupported file type was accepted : {}", response.file.name );
       // Clean up if successful
       let _ = files_api.delete( &response.file.name ).await;
     },
     Err( e ) =>
     {
-      println!( "✅ Unsupported file type was rejected: {:?}", e );
+      println!( "✅ Unsupported file type was rejected : {:?}", e );
     }
   }
 
@@ -463,9 +463,9 @@ async fn test_file_upload_lifecycle() -> Result< (), Box< dyn std::error::Error 
 
   // Step 1: Upload file
   let upload_request = UploadFileRequest {
-    file_data: create_sample_image_data(),
-    mime_type: "image/png".to_string(),
-    display_name: Some( "lifecycle_test.png".to_string() ),
+    file_data : create_sample_image_data(),
+    mime_type : "image/png".to_string(),
+    display_name : Some( "lifecycle_test.png".to_string() ),
   };
 
   let upload_response = files_api.upload( &upload_request ).await?;
@@ -514,12 +514,12 @@ async fn test_concurrent_file_operations() -> Result< (), Box< dyn std::error::E
   // Upload multiple files concurrently
   let upload_tasks = ( 0..5 ).map( |i| {
     let client_clone = client.clone();
-    task::spawn( async move {
+    task ::spawn( async move {
       let files_api = client_clone.files();
       let request = UploadFileRequest {
-        file_data: create_sample_text_data(),
-        mime_type: "text/plain".to_string(),
-        display_name: Some( format!( "concurrent_test_{}.txt", i ) ),
+        file_data : create_sample_text_data(),
+        mime_type : "text/plain".to_string(),
+        display_name : Some( format!( "concurrent_test_{}.txt", i ) ),
       };
 
       files_api.upload( &request ).await
@@ -541,11 +541,11 @@ async fn test_concurrent_file_operations() -> Result< (), Box< dyn std::error::E
       },
       Ok( Err( e ) ) =>
       {
-        println!( "Concurrent upload {} failed: {:?}", i, e );
+        println!( "Concurrent upload {} failed : {:?}", i, e );
       },
       Err( e ) =>
       {
-        println!( "Concurrent upload {} task failed: {:?}", i, e );
+        println!( "Concurrent upload {} task failed : {:?}", i, e );
       }
     }
   }
@@ -554,7 +554,7 @@ async fn test_concurrent_file_operations() -> Result< (), Box< dyn std::error::E
   let delete_tasks = uploaded_files.iter().map( |file_name| {
     let client_clone = client.clone();
     let file_name_clone = file_name.clone();
-    task::spawn( async move {
+    task ::spawn( async move {
       let files_api = client_clone.files();
       files_api.delete( &file_name_clone ).await
     })
@@ -574,16 +574,16 @@ async fn test_concurrent_file_operations() -> Result< (), Box< dyn std::error::E
       },
       Ok( Err( e ) ) =>
       {
-        println!( "Concurrent delete {} failed: {:?}", i, e );
+        println!( "Concurrent delete {} failed : {:?}", i, e );
       },
       Err( e ) =>
       {
-        println!( "Concurrent delete {} task failed: {:?}", i, e );
+        println!( "Concurrent delete {} task failed : {:?}", i, e );
       }
     }
   }
 
-  println!( "✅ Concurrent operations test completed: {} uploads, {} deletes",
+  println!( "✅ Concurrent operations test completed : {} uploads, {} deletes",
     uploaded_files.len(),
     successful_deletes
   );

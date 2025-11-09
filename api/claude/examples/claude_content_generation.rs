@@ -1,5 +1,5 @@
 //! Content generation example using real Anthropic API
-//! Run with: cargo run --example `claude_content_generation` --features integration
+//! Run with : cargo run --example `claude_content_generation` --features integration
 
 use api_claude::{ Client, CreateMessageRequest, Message };
 
@@ -17,16 +17,16 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     {
         model : "claude-sonnet-4-5-20250929".to_string(),
         max_tokens : 1000,
-        messages: vec![
+        messages : vec![
             Message::user(
                 "Write a technical blog post introduction about why Rust is ideal for building AI applications. Focus on memory safety, performance, and async capabilities. Make it engaging and informative.".to_string()
             )
         ],
-        temperature: Some(0.7),
-        stream: None,
-        tools: None,
-        tool_choice: None,
-        system: Some( vec![ api_claude::SystemContent::text( "You are a technical writer specializing in systems programming and AI. Write in a clear, engaging style suitable for developers." ) ] ),
+        temperature : Some(0.7),
+        stream : None,
+        tools : None,
+        tool_choice : None,
+        system : Some( vec![ api_claude::SystemContent::text( "You are a technical writer specializing in systems programming and AI. Write in a clear, engaging style suitable for developers." ) ] ),
     };
     
     println!("📝 Generating technical blog post...");
@@ -42,9 +42,9 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
         }
     }
     println!("{}", "=".repeat(60));
-    println!("📊 Token usage: {} input, {} output", 
+    println!("📊 Token usage : {} input, {} output", 
         response.usage.input_tokens, response.usage.output_tokens);
-    println!("⚡ Model: {}", response.model);
+    println!("⚡ Model : {}", response.model);
     
     Ok(())
 }

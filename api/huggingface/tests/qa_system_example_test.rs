@@ -8,7 +8,7 @@
 //! - Answer confidence scoring and validation
 //! - Knowledge source integration and management
 //! - Response quality assessment and filtering
-//! - Edge cases: ambiguous questions, unanswerable questions, etc.
+//! - Edge cases : ambiguous questions, unanswerable questions, etc.
 
 #![ allow( missing_docs ) ]
 
@@ -383,8 +383,8 @@ async fn test_single_question_answering_integration()
   assert_eq!( answer.question_id, "q1" );
   assert!( answer.response_time_ms > 0, "Should have response time" );
 
-  println!( "Answer: {}", answer.text );
-  println!( "Confidence: {:.2}%", answer.confidence * 100.0 );
+  println!( "Answer : {}", answer.text );
+  println!( "Confidence : {:.2}%", answer.confidence * 100.0 );
 }
 
 // DISABLED: 2025-11-06 by system
@@ -424,8 +424,8 @@ async fn test_context_based_answering_integration()
   || answer_lower.contains( "safe" )
   || answer_lower.contains( "performance" );
 
-  println!( "Context-based answer: {}", answer.text );
-  println!( "Relates to context: {}", has_rust_content );
+  println!( "Context-based answer : {}", answer.text );
+  println!( "Relates to context : {}", has_rust_content );
 }
 
 // DISABLED: 2025-11-06 by system
@@ -520,7 +520,7 @@ async fn test_error_handling_scenarios()
 
   let result = qa_system.answer_question( &empty_question ).await;
   // API might still respond even with empty input
-  println!( "Empty question result: {:?}", result.is_ok() );
+  println!( "Empty question result : {:?}", result.is_ok() );
 }
 
 #[ test ]

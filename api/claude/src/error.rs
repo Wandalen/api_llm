@@ -6,7 +6,7 @@
 
 mod private {}
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   layer core;
   #[ cfg( feature = "error-handling" ) ]

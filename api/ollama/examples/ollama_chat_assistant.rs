@@ -30,8 +30,8 @@ async fn setup_client_and_model() -> Result< ( OllamaClient, String ), Box< dyn 
   if !client.is_available().await
   {
     eprintln!( "❌ Ollama server is not available. Please start Ollama and try again." );
-    eprintln!( "   Start with: ollama serve" );
-    std::process::exit( 1 );
+    eprintln!( "   Start with : ollama serve" );
+    std ::process::exit( 1 );
   }
   
   // Get available models
@@ -39,8 +39,8 @@ async fn setup_client_and_model() -> Result< ( OllamaClient, String ), Box< dyn 
   if models.models.is_empty()
   {
     eprintln!( "❌ No models available. Please install a model first." );
-    eprintln!( "   Install with: ollama pull llama3.2" );
-    std::process::exit( 1 );
+    eprintln!( "   Install with : ollama pull llama3.2" );
+    std ::process::exit( 1 );
   }
   
   // Prefer smarter models over tinyllama
@@ -51,7 +51,7 @@ async fn setup_client_and_model() -> Result< ( OllamaClient, String ), Box< dyn 
     .find( |&preferred| models.models.iter().any( |m| m.name == *preferred ) )
     .map_or_else(|| models.models[ 0 ].name.clone(), |&name| name.to_string());
     
-  println!( "✅ Using model: {model_name}" );
+  println!( "✅ Using model : {model_name}" );
   
   Ok( ( client, model_name ) )
 }
@@ -62,8 +62,8 @@ async fn handle_chat_response(
   conversation_history : &mut Vec< ChatMessage >
 ) -> Result< (), Box< dyn core::error::Error > >
 {
-  print!( "🤖 Assistant: " );
-  io::stdout().flush()?;
+  print!( "🤖 Assistant : " );
+  io ::stdout().flush()?;
   
   // Stream the response for better user experience
   #[ cfg( feature = "streaming" ) ]
@@ -88,12 +88,12 @@ async fn handle_chat_response(
               }
               let content = response.message.content;
               print!( "{content}" );
-              io::stdout().flush()?;
+              io ::stdout().flush()?;
               full_response.push_str( &content );
             }
             Err( e ) =>
             {
-              eprintln!( "\n❌ Stream error: {e}" );
+              eprintln!( "\n❌ Stream error : {e}" );
               break;
             }
           }
@@ -115,7 +115,7 @@ async fn handle_chat_response(
       }
       Err( e ) =>
       {
-        eprintln!( "\n❌ Error: {e}" );
+        eprintln!( "\n❌ Error : {e}" );
         eprintln!( "   Please check your Ollama installation and try again.\n" );
       }
     }
@@ -143,7 +143,7 @@ async fn handle_chat_response(
       }
       Err( e ) =>
       {
-        eprintln!( "❌ Error: {e}" );
+        eprintln!( "❌ Error : {e}" );
         eprintln!( "   Please check your Ollama installation and try again.\n" );
       }
     }
@@ -179,8 +179,8 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
   loop
   {
     // Get user input
-    print!( "You: " );
-    io::stdout().flush()?;
+    print!( "You : " );
+    io ::stdout().flush()?;
 
     let mut user_input = String::new();
     let bytes_read = io::stdin().read_line( &mut user_input )?;

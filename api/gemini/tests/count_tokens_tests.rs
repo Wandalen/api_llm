@@ -28,9 +28,9 @@
 
 use api_gemini::
 {
-  client::{ Client, ClientBuilder },
-  models::{ Content, Part, CountTokensRequest, Blob },
-  error::Error,
+  client ::{ Client, ClientBuilder },
+  models ::{ Content, Part, CountTokensRequest, Blob },
+  error ::Error,
 };
 
 /// Test basic text token counting functionality
@@ -48,24 +48,24 @@ async fn test_count_tokens_simple_text()
 
   let content = Content
   {
-    parts: vec!
+    parts : vec!
     [
       Part
       {
-        text: Some( "Hello, world! This is a simple text for token counting.".to_string() ),
-        inline_data: None,
-        function_call: None,
-        function_response: None,
+        text : Some( "Hello, world! This is a simple text for token counting.".to_string() ),
+        inline_data : None,
+        function_call : None,
+        function_response : None,
         ..Default::default()
       }
     ],
-    role: "user".to_string(),
+    role : "user".to_string(),
   };
 
   let request = CountTokensRequest
   {
-    contents: vec![ content ],
-    generate_content_request: None,
+    contents : vec![ content ],
+    generate_content_request : None,
   };
 
   // Now test the actual implementation
@@ -84,7 +84,7 @@ async fn test_count_tokens_simple_text()
         assert!( cached_tokens >= 0, "Cached token count should be non-negative" );
       }
 
-      println!( "✅ Simple text token count: {}", response.total_tokens );
+      println!( "✅ Simple text token count : {}", response.total_tokens );
     },
     Err( e ) =>
     {
@@ -95,7 +95,7 @@ async fn test_count_tokens_simple_text()
         {
           println!( "⚠️  Authentication error (expected without API key): {e}" );
         },
-        _ => panic!( "Count tokens failed: {e:?}" ),
+        _ => panic!( "Count tokens failed : {e:?}" ),
       }
     }
   }
@@ -119,36 +119,36 @@ async fn test_count_tokens_multimodal_content()
 
   let content = Content
   {
-    parts: vec!
+    parts : vec!
     [
       Part
       {
-        text: Some( "What do you see in this image?".to_string() ),
-        inline_data: None,
-        function_call: None,
-        function_response: None,
+        text : Some( "What do you see in this image?".to_string() ),
+        inline_data : None,
+        function_call : None,
+        function_response : None,
         ..Default::default()
       },
       Part
       {
-        text: None,
-        inline_data: Some( Blob
+        text : None,
+        inline_data : Some( Blob
         {
-          mime_type: "image/png".to_string(),
-          data: sample_image_data.to_string(),
+          mime_type : "image/png".to_string(),
+          data : sample_image_data.to_string(),
         }),
-        function_call: None,
-        function_response: None,
+        function_call : None,
+        function_response : None,
         ..Default::default()
       }
     ],
-    role: "user".to_string(),
+    role : "user".to_string(),
   };
 
   let request = CountTokensRequest
   {
-    contents: vec![ content ],
-    generate_content_request: None,
+    contents : vec![ content ],
+    generate_content_request : None,
   };
 
   // Now test the actual implementation
@@ -159,7 +159,7 @@ async fn test_count_tokens_multimodal_content()
     Ok( response ) =>
     {
       assert!( response.total_tokens > 0, "Token count should be positive for multimodal content" );
-      println!( "✅ Multimodal token count: {}", response.total_tokens );
+      println!( "✅ Multimodal token count : {}", response.total_tokens );
     },
     Err( e ) =>
     {
@@ -169,7 +169,7 @@ async fn test_count_tokens_multimodal_content()
         {
           println!( "⚠️  Authentication error (expected without API key): {e}" );
         },
-        _ => panic!( "Multimodal count tokens failed: {e:?}" ),
+        _ => panic!( "Multimodal count tokens failed : {e:?}" ),
       }
     }
   }
@@ -192,25 +192,25 @@ async fn test_count_tokens_conversation_context()
   [
     Content
     {
-      parts: vec![ Part { text: Some( "Hello, I'm starting a conversation.".to_string() ), inline_data: None, function_call: None, function_response: None, ..Default::default() } ],
-      role: "user".to_string(),
+      parts : vec![ Part { text : Some( "Hello, I'm starting a conversation.".to_string() ), inline_data : None, function_call : None, function_response : None, ..Default::default() } ],
+      role : "user".to_string(),
     },
     Content
     {
-      parts: vec![ Part { text: Some( "Hello! I'm happy to help you today.".to_string() ), inline_data: None, function_call: None, function_response: None, ..Default::default() } ],
-      role: "model".to_string(),
+      parts : vec![ Part { text : Some( "Hello! I'm happy to help you today.".to_string() ), inline_data : None, function_call : None, function_response : None, ..Default::default() } ],
+      role : "model".to_string(),
     },
     Content
     {
-      parts: vec![ Part { text: Some( "Can you explain quantum computing?".to_string() ), inline_data: None, function_call: None, function_response: None, ..Default::default() } ],
-      role: "user".to_string(),
+      parts : vec![ Part { text : Some( "Can you explain quantum computing?".to_string() ), inline_data : None, function_call : None, function_response : None, ..Default::default() } ],
+      role : "user".to_string(),
     },
   ];
 
   let request = CountTokensRequest
   {
     contents,
-    generate_content_request: None,
+    generate_content_request : None,
   };
 
   // Now test the actual implementation
@@ -221,7 +221,7 @@ async fn test_count_tokens_conversation_context()
     Ok( response ) =>
     {
       assert!( response.total_tokens > 0, "Token count should be positive for conversation" );
-      println!( "✅ Conversation token count: {}", response.total_tokens );
+      println!( "✅ Conversation token count : {}", response.total_tokens );
     },
     Err( e ) =>
     {
@@ -231,7 +231,7 @@ async fn test_count_tokens_conversation_context()
         {
           println!( "⚠️  Authentication error (expected without API key): {e}" );
         },
-        _ => panic!( "Conversation count tokens failed: {e:?}" ),
+        _ => panic!( "Conversation count tokens failed : {e:?}" ),
       }
     }
   }
@@ -252,24 +252,24 @@ async fn test_count_tokens_different_models()
 
   let content = Content
   {
-    parts: vec!
+    parts : vec!
     [
       Part
       {
-        text: Some( "This is a test message for token counting across different models.".to_string() ),
-        inline_data: None,
-        function_call: None,
-        function_response: None,
+        text : Some( "This is a test message for token counting across different models.".to_string() ),
+        inline_data : None,
+        function_call : None,
+        function_response : None,
         ..Default::default()
       }
     ],
-    role: "user".to_string(),
+    role : "user".to_string(),
   };
 
   let request = CountTokensRequest
   {
-    contents: vec![ content ],
-    generate_content_request: None,
+    contents : vec![ content ],
+    generate_content_request : None,
   };
 
   // Test with multiple models
@@ -283,8 +283,8 @@ async fn test_count_tokens_different_models()
     {
       Ok( response ) =>
       {
-        assert!( response.total_tokens > 0, "Token count should be positive for model: {model}" );
-        println!( "✅ Model {model} token count: {token_count}", token_count = response.total_tokens );
+        assert!( response.total_tokens > 0, "Token count should be positive for model : {model}" );
+        println!( "✅ Model {model} token count : {token_count}", token_count = response.total_tokens );
       },
       Err( e ) =>
       {
@@ -321,21 +321,21 @@ async fn test_count_tokens_error_handling()
   // Test 1: Empty content
   let empty_request = CountTokensRequest
   {
-    contents: vec![],
-    generate_content_request: None,
+    contents : vec![],
+    generate_content_request : None,
   };
 
   // Test 2: Invalid model name
   let content = Content
   {
-    parts: vec![ Part { text: Some( "Test content".to_string() ), inline_data: None, function_call: None, function_response: None, ..Default::default() } ],
-    role: "user".to_string(),
+    parts : vec![ Part { text : Some( "Test content".to_string() ), inline_data : None, function_call : None, function_response : None, ..Default::default() } ],
+    role : "user".to_string(),
   };
 
   let request = CountTokensRequest
   {
-    contents: vec![ content ],
-    generate_content_request: None,
+    contents : vec![ content ],
+    generate_content_request : None,
   };
 
   // Test 1: Empty content should fail
@@ -355,7 +355,7 @@ async fn test_count_tokens_error_handling()
         Error::InvalidArgument( _ ) => println!( "✅ Correctly rejected invalid model" ),
         Error::AuthenticationError( _ ) => println!( "⚠️  Authentication error (API key needed to test invalid model)" ),
         Error::ServerError( _ ) => println!( "✅ Server correctly rejected invalid model" ),
-        _ => println!( "⚠️  Unexpected error type for invalid model: {e:?}" ),
+        _ => println!( "⚠️  Unexpected error type for invalid model : {e:?}" ),
       }
     }
   }
@@ -376,26 +376,26 @@ async fn test_count_tokens_with_generation_config()
 
   let content = Content
   {
-    parts: vec!
+    parts : vec!
     [
       Part
       {
-        text: Some( "Generate a creative story about space exploration.".to_string() ),
-        inline_data: None,
-        function_call: None,
-        function_response: None,
+        text : Some( "Generate a creative story about space exploration.".to_string() ),
+        inline_data : None,
+        function_call : None,
+        function_response : None,
         ..Default::default()
       }
     ],
-    role: "user".to_string(),
+    role : "user".to_string(),
   };
 
-  // Note: The Gemini API expects model to be specified in URL path, not in generate_content_request
+  // Note : The Gemini API expects model to be specified in URL path, not in generate_content_request
   // So we test basic token counting without generation config since that's not supported in count tokens
   let request = CountTokensRequest
   {
-    contents: vec![ content ],
-    generate_content_request: None, // API doesn't support generation config in count tokens
+    contents : vec![ content ],
+    generate_content_request : None, // API doesn't support generation config in count tokens
   };
 
   // Now test the actual implementation (basic token counting)
@@ -416,7 +416,7 @@ async fn test_count_tokens_with_generation_config()
         {
           println!( "⚠️  Authentication error (expected without API key): {e}" );
         },
-        _ => panic!( "Count tokens (basic counting) failed: {e:?}" ),
+        _ => panic!( "Count tokens (basic counting) failed : {e:?}" ),
       }
     }
   }
@@ -437,14 +437,14 @@ async fn test_count_tokens_rate_limiting()
 
   let content = Content
   {
-    parts: vec![ Part { text: Some( "Rate limit test content".to_string() ), inline_data: None, function_call: None, function_response: None, ..Default::default() } ],
-    role: "user".to_string(),
+    parts : vec![ Part { text : Some( "Rate limit test content".to_string() ), inline_data : None, function_call : None, function_response : None, ..Default::default() } ],
+    role : "user".to_string(),
   };
 
   let request = CountTokensRequest
   {
-    contents: vec![ content ],
-    generate_content_request: None,
+    contents : vec![ content ],
+    generate_content_request : None,
   };
 
   // Make multiple rapid requests to test rate limiting
@@ -456,7 +456,7 @@ async fn test_count_tokens_rate_limiting()
     results.push( ( i, result ) );
 
     // Small delay between requests
-    tokio::time::sleep( core::time::Duration::from_millis( 100 ) ).await;
+    tokio ::time::sleep( core::time::Duration::from_millis( 100 ) ).await;
   }
 
   // Check results
@@ -483,7 +483,7 @@ async fn test_count_tokens_rate_limiting()
           },
           _ =>
           {
-            println!( "⚠️  Request {i} failed with error: {e:?}" );
+            println!( "⚠️  Request {i} failed with error : {e:?}" );
           }
         }
       }
@@ -508,14 +508,14 @@ async fn test_count_tokens_authentication_error()
 
   let content = Content
   {
-    parts: vec![ Part { text: Some( "Test content".to_string() ), inline_data: None, function_call: None, function_response: None, ..Default::default() } ],
-    role: "user".to_string(),
+    parts : vec![ Part { text : Some( "Test content".to_string() ), inline_data : None, function_call : None, function_response : None, ..Default::default() } ],
+    role : "user".to_string(),
   };
 
   let request = CountTokensRequest
   {
-    contents: vec![ content ],
-    generate_content_request: None,
+    contents : vec![ content ],
+    generate_content_request : None,
   };
 
   // Test with invalid API key
@@ -536,7 +536,7 @@ async fn test_count_tokens_authentication_error()
         {
           println!( "✅ Server correctly rejected invalid API key (403/401)" );
         },
-        _ => panic!( "Unexpected error type for authentication: {e:?}" ),
+        _ => panic!( "Unexpected error type for authentication : {e:?}" ),
       }
     }
   }

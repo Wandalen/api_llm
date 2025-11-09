@@ -10,15 +10,15 @@ mod private
 {
   use std::
   {
-    collections::HashMap,
-    time::Instant,
+    collections ::HashMap,
+    time ::Instant,
   };
   use serde::{ Deserialize, Serialize };
   use crate::
   {
     Client,
-    client_api_accessors::ClientApiAccessors,
-    environment::{ OpenaiEnvironment, EnvironmentInterface },
+    client_api_accessors ::ClientApiAccessors,
+    environment ::{ OpenaiEnvironment, EnvironmentInterface },
   };
 
   /// Health status for an endpoint
@@ -158,14 +158,14 @@ mod private
         Ok( _ ) => ( HealthStatus::Healthy, None ),
         Err( e ) =>
         {
-          let error_msg = format!( "Health check failed: {e}" );
+          let error_msg = format!( "Health check failed : {e}" );
           ( HealthStatus::Unhealthy, Some( error_msg ) )
         }
       }
     }
 
     /// Perform health checks on multiple endpoints (utility function)
-    /// Note: This is stateless - results are returned immediately
+    /// Note : This is stateless - results are returned immediately
     pub async fn check_multiple_endpoints< E >(
       clients : &[ &Client< E > ],
       config : &HealthCheckConfig
@@ -208,7 +208,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use private::HealthStatus;
   exposed use private::HealthCheckStrategy;

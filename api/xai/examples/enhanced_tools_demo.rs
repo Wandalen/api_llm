@@ -101,7 +101,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
       for ( i, call ) in tool_calls.iter().enumerate()
       {
         println!( "   {}. {} ({})", i + 1, call.function.name, call.id );
-        println!( "      Args: {}\n", call.function.arguments );
+        println!( "      Args : {}\n", call.function.arguments );
       }
 
       // Execute all tool calls in parallel
@@ -113,7 +113,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
         tool_calls.clone(),
         | call | async move {
           // Simulate tool execution with some delay
-          tokio::time::sleep( core::time::Duration::from_millis( 500 ) ).await;
+          tokio ::time::sleep( core::time::Duration::from_millis( 500 ) ).await;
 
           match call.function.name.as_str()
           {
@@ -148,7 +148,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
             }
             _ =>
             {
-              Err( format!( "Unknown function: {}", call.function.name ).into() )
+              Err( format!( "Unknown function : {}", call.function.name ).into() )
             }
           }
         }
@@ -171,7 +171,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
           }
           Err( e ) =>
           {
-            println!( "   {}. ✗ Error: {}\n", i + 1, e );
+            println!( "   {}. ✗ Error : {}\n", i + 1, e );
           }
         }
       }
@@ -210,11 +210,11 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
       }
 
       println!( "💡 Performance Benefit:" );
-      println!( "   - Parallel execution: ~{elapsed:?}" );
+      println!( "   - Parallel execution : ~{elapsed:?}" );
       #[ allow( clippy::cast_possible_truncation ) ]  // Small number of tool calls in demo
       let sequential_time = elapsed * tool_calls.len() as u32;
-      println!( "   - Sequential would take: ~{sequential_time:?}" );
-      println!( "   - Speedup: ~{}x faster\n", tool_calls.len() );
+      println!( "   - Sequential would take : ~{sequential_time:?}" );
+      println!( "   - Speedup : ~{}x faster\n", tool_calls.len() );
     }
     else if let Some( ref content ) = choice.message.content
     {

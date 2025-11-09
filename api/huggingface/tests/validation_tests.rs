@@ -2,8 +2,8 @@
 
 use api_huggingface::
 {
-  components::input::InferenceParameters,
-  error::HuggingFaceError,
+  components ::input::InferenceParameters,
+  error ::HuggingFaceError,
 };
 
 /// Test `InferenceParameters` validation ranges

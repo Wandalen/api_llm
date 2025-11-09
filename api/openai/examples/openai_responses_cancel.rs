@@ -15,10 +15,10 @@ use api_openai::exposed::
 {
   Client,
   OpenAIError,
-  components::
+  components ::
   {
-    responses::{ CreateResponseRequest, ResponseInput, ResponseStreamEvent },
-    common::ModelIdsResponses,
+    responses ::{ CreateResponseRequest, ResponseInput, ResponseStreamEvent },
+    common ::ModelIdsResponses,
   },
 };
 use futures_util::stream::StreamExt;
@@ -27,7 +27,7 @@ use futures_util::stream::StreamExt;
 async fn main() -> Result< (), OpenAIError >
 {
   // Load environment variables
-  dotenv::from_filename("./secret/-secret.sh").ok();
+  dotenv ::from_filename("./secret/-secret.sh").ok();
 
   println!("Initializing client...");
   let secret = api_openai::exposed::Secret::load_from_env("OPENAI_API_KEY")
@@ -92,16 +92,16 @@ if event_count >= 5
     let cancelled_response = client.responses().cancel(&id).await?;
 
     println!("Response cancelled successfully!");
-    println!("Final status: {}", cancelled_response.status);
+    println!("Final status : {}", cancelled_response.status);
     
 if let Some(incomplete_details) = cancelled_response.incomplete_details
 {
-      println!("Cancellation reason: {}", incomplete_details.reason);
+      println!("Cancellation reason : {}", incomplete_details.reason);
     }
 
     // 5. Verify cancellation by trying to retrieve the response
     let retrieved_response = client.responses().retrieve(&id).await?;
-    println!("Retrieved status after cancellation: {}", retrieved_response.status);
+    println!("Retrieved status after cancellation : {}", retrieved_response.status);
   }
 
   Ok(())

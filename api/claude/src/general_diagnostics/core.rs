@@ -383,12 +383,12 @@ mod private
       for ( operation, stats ) in &self.operation_metrics
       {
         use std::fmt::Write;
-        let _ = write!( report, "Operation: {operation}\\n" );
-        let _ = write!( report, "  Count: {}\\n", stats.count() );
-        let _ = write!( report, "  Total Duration: {:?}\\n", stats.total_duration() );
-        let _ = write!( report, "  Average Duration: {:?}\\n", stats.average_duration() );
-        let _ = write!( report, "  Min Duration: {:?}\\n", stats.min_duration() );
-        let _ = write!( report, "  Max Duration: {:?}\\n", stats.max_duration() );
+        let _ = write!( report, "Operation : {operation}\\n" );
+        let _ = write!( report, "  Count : {}\\n", stats.count() );
+        let _ = write!( report, "  Total Duration : {:?}\\n", stats.total_duration() );
+        let _ = write!( report, "  Average Duration : {:?}\\n", stats.average_duration() );
+        let _ = write!( report, "  Min Duration : {:?}\\n", stats.min_duration() );
+        let _ = write!( report, "  Max Duration : {:?}\\n", stats.max_duration() );
         report.push_str( "\\n" );
       }
 
@@ -423,7 +423,7 @@ mod private
         operations.insert( operation.clone(), stats_json );
       }
 
-      serde_json::to_string_pretty( &operations ).map_err( |e| e.to_string() )
+      serde_json ::to_string_pretty( &operations ).map_err( |e| e.to_string() )
     }
   }
 
@@ -742,10 +742,10 @@ mod private
           fields.insert( key.clone(), json!( value ) );
         }
 
-        serde_json::Value::Object( fields )
+        serde_json ::Value::Object( fields )
       } ).collect();
 
-      serde_json::to_string_pretty( &logs_json ).map_err( |e| e.to_string() )
+      serde_json ::to_string_pretty( &logs_json ).map_err( |e| e.to_string() )
     }
 
     /// Log if enabled (no-op if disabled)
@@ -784,28 +784,28 @@ mod private
   {
     match error
     {
-      crate::AnthropicError::Http( _ ) => "Http".to_string(),
-      crate::AnthropicError::Api( _ ) => "Api".to_string(),
-      crate::AnthropicError::InvalidArgument( _ ) => "InvalidArgument".to_string(),
-      crate::AnthropicError::InvalidRequest( _ ) => "InvalidRequest".to_string(),
-      crate::AnthropicError::MissingEnvironment( _ ) => "MissingEnvironment".to_string(),
-      crate::AnthropicError::Authentication( _ ) => "Authentication".to_string(),
-      crate::AnthropicError::RateLimit( _ ) => "RateLimit".to_string(),
-      crate::AnthropicError::File( _ ) => "File".to_string(),
-      crate::AnthropicError::Internal( _ ) => "Internal".to_string(),
-      crate::AnthropicError::Stream( _ ) => "Stream".to_string(),
-      crate::AnthropicError::Parsing( _ ) => "Parsing".to_string(),
-      crate::AnthropicError::NotImplemented( _ ) => "NotImplemented".to_string(),
+      crate ::AnthropicError::Http( _ ) => "Http".to_string(),
+      crate ::AnthropicError::Api( _ ) => "Api".to_string(),
+      crate ::AnthropicError::InvalidArgument( _ ) => "InvalidArgument".to_string(),
+      crate ::AnthropicError::InvalidRequest( _ ) => "InvalidRequest".to_string(),
+      crate ::AnthropicError::MissingEnvironment( _ ) => "MissingEnvironment".to_string(),
+      crate ::AnthropicError::Authentication( _ ) => "Authentication".to_string(),
+      crate ::AnthropicError::RateLimit( _ ) => "RateLimit".to_string(),
+      crate ::AnthropicError::File( _ ) => "File".to_string(),
+      crate ::AnthropicError::Internal( _ ) => "Internal".to_string(),
+      crate ::AnthropicError::Stream( _ ) => "Stream".to_string(),
+      crate ::AnthropicError::Parsing( _ ) => "Parsing".to_string(),
+      crate ::AnthropicError::NotImplemented( _ ) => "NotImplemented".to_string(),
       #[ cfg( feature = "circuit-breaker" ) ]
-      crate::AnthropicError::CircuitOpen( _ ) => "CircuitOpen".to_string(),
+      crate ::AnthropicError::CircuitOpen( _ ) => "CircuitOpen".to_string(),
       #[ cfg( feature = "error-handling" ) ]
-      crate::AnthropicError::Enhanced( _ ) => "Enhanced".to_string(),
+      crate ::AnthropicError::Enhanced( _ ) => "Enhanced".to_string(),
     }
   }
 
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use RequestStatus;
   exposed use RequestResult;

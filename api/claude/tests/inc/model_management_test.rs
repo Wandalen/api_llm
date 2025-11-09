@@ -8,8 +8,8 @@
 //! - Tests MUST FAIL IMMEDIATELY on any API endpoint errors
 //! - NO SILENT PASSES allowed when problems occur
 //!
-//! Run with: cargo test --features integration
-//! Requires: Valid `ANTHROPIC_API_KEY` in environment or ../../secret/-secrets.sh
+//! Run with : cargo test --features integration
+//! Requires : Valid `ANTHROPIC_API_KEY` in environment or ../../secret/-secrets.sh
 
 #[ allow( unused_imports ) ]
 use super::*;
@@ -59,7 +59,7 @@ async fn integration_model_management_real_model_validation()
         println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted - this confirms real API usage" );
         return;
       },
-      Err( err ) => panic!( "INTEGRATION: Valid model {model_name} must work: {err}" ),
+      Err( err ) => panic!( "INTEGRATION: Valid model {model_name} must work : {err}" ),
     };
 
     // Verify response uses the requested model
@@ -70,7 +70,7 @@ async fn integration_model_management_real_model_validation()
     
     println!( "✅ Model {model_name} validation passed" );
     println!( "   Response ID: {}", response.id );
-    println!( "   Tokens: {} in, {} out", response.usage.input_tokens, response.usage.output_tokens );
+    println!( "   Tokens : {} in, {} out", response.usage.input_tokens, response.usage.output_tokens );
   }
 }
 
@@ -110,10 +110,10 @@ async fn integration_model_management_invalid_model_handling()
     let error_str = error.to_string().to_lowercase();
     assert!( 
       error_str.contains( "model" ) || error_str.contains( "invalid" ) || error_str.contains( "not found" ),
-      "Error for invalid model {model_name} should mention model issue: {error}"
+      "Error for invalid model {model_name} should mention model issue : {error}"
     );
     
-    println!( "✅ Invalid model {model_name} properly rejected: {error}" );
+    println!( "✅ Invalid model {model_name} properly rejected : {error}" );
   }
 }
 
@@ -134,7 +134,7 @@ async fn integration_model_management_capability_validation()
     temperature : None,
     stream : None,
     tools : Some( vec![ 
-      the_module::ToolDefinition::simple( "calculator", "Calculate mathematical expressions" ) 
+      the_module ::ToolDefinition::simple( "calculator", "Calculate mathematical expressions" ) 
     ] ),
     tool_choice : None,
   };
@@ -147,7 +147,7 @@ async fn integration_model_management_capability_validation()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted - this confirms real API usage" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION: Tool-capable model must handle tools: {err}" ),
+    Err( err ) => panic!( "INTEGRATION: Tool-capable model must handle tools : {err}" ),
   };
 
   // Verify the model can handle tools

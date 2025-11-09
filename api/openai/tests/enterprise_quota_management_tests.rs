@@ -26,11 +26,11 @@ async fn test_request_metadata_creation()
 {
   let metadata = RequestMetadata
   {
-    estimated_tokens: 500,
-    model: "gpt-4".to_string(),
-    request_type: "chat".to_string(),
-    priority: 1,
-    user_id: Some( "user123".to_string() ),
+    estimated_tokens : 500,
+    model : "gpt-4".to_string(),
+    request_type : "chat".to_string(),
+    priority : 1,
+    user_id : Some( "user123".to_string() ),
   };
 
   assert_eq!( metadata.user_id, Some( "user123".to_string() ) );
@@ -44,9 +44,9 @@ async fn test_quota_reservation_structure()
 {
   let reservation = QuotaReservation
   {
-    concurrent: true,
-    timestamp: std::time::Instant::now(),
-    estimated_tokens: Some( 1000 ),
+    concurrent : true,
+    timestamp : std::time::Instant::now(),
+    estimated_tokens : Some( 1000 ),
   };
 
   assert!( reservation.concurrent );
@@ -59,12 +59,12 @@ async fn test_quota_usage_details()
 {
   let usage_details = QuotaUsageDetails
   {
-    requests_used: 150,
-    requests_limit: Some( 1000 ),
-    tokens_used: 75000,
-    tokens_limit: Some( 500_000 ),
-    usage_percentage: 0.15,
-    time_until_reset_seconds: 3600,
+    requests_used : 150,
+    requests_limit : Some( 1000 ),
+    tokens_used : 75000,
+    tokens_limit : Some( 500_000 ),
+    usage_percentage : 0.15,
+    time_until_reset_seconds : 3600,
   };
 
   assert_eq!( usage_details.requests_used, 150 );
@@ -79,10 +79,10 @@ async fn test_concurrent_usage_details()
 {
   let concurrent_details = ConcurrentUsageDetails
   {
-    current_requests: 5,
-    max_requests: Some( 10 ),
-    peak_requests: 8,
-    average_requests: 3.5,
+    current_requests : 5,
+    max_requests : Some( 10 ),
+    peak_requests : 8,
+    average_requests : 3.5,
   };
 
   assert_eq!( concurrent_details.current_requests, 5 );
@@ -106,7 +106,7 @@ async fn test_quota_status_variants()
   for status in statuses
   {
     let json = serde_json::to_string( &status ).expect( "Serialization should work" );
-    let deserialized: QuotaStatus = serde_json::from_str( &json ).expect( "Deserialization should work" );
+    let deserialized : QuotaStatus = serde_json::from_str( &json ).expect( "Deserialization should work" );
     assert_eq!( status, deserialized );
   }
 }
@@ -116,15 +116,15 @@ async fn test_request_metadata_serialization()
 {
   let metadata = RequestMetadata
   {
-    estimated_tokens: 500,
-    model: "gpt-4".to_string(),
-    request_type: "chat".to_string(),
-    priority: 2,
-    user_id: Some( "user_test".to_string() ),
+    estimated_tokens : 500,
+    model : "gpt-4".to_string(),
+    request_type : "chat".to_string(),
+    priority : 2,
+    user_id : Some( "user_test".to_string() ),
   };
 
   let json = serde_json::to_string( &metadata ).expect( "Serialization should work" );
-  let deserialized: RequestMetadata = serde_json::from_str( &json ).expect( "Deserialization should work" );
+  let deserialized : RequestMetadata = serde_json::from_str( &json ).expect( "Deserialization should work" );
 
   assert_eq!( metadata.user_id, deserialized.user_id );
   assert_eq!( metadata.model, deserialized.model );

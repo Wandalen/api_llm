@@ -431,7 +431,7 @@ mod private
       let client = reqwest::Client::builder()
         .timeout( config.timeout )
         .build()
-        .map_err( | e | format_err!( "Failed to create HTTP client: {}", e ) )?;
+        .map_err( | e | format_err!( "Failed to create HTTP client : {}", e ) )?;
 
       Ok( Self
       {
@@ -470,7 +470,7 @@ mod private
 
         loop
         {
-          tokio::select! {
+          tokio ::select! {
             _ = interval.tick() => {
               let start_time = std::time::Instant::now();
               let success = if simulate_failure.load( std::sync::atomic::Ordering::Relaxed )
@@ -616,7 +616,7 @@ mod private
 }
 
 #[ cfg( feature = "health_checks" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

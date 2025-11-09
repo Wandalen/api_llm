@@ -15,7 +15,7 @@ mod private
 {
   use std::
   {
-    time::{ Duration, Instant, SystemTime },
+    time ::{ Duration, Instant, SystemTime },
   };
   use serde::{ Deserialize, Serialize };
 
@@ -274,7 +274,7 @@ mod private
         .build()
       {
         Ok( c ) => c,
-        Err( e ) => return ( EndpointHealthStatus::Unhealthy, Some( format!( "Failed to create client: {e}" ) ) ),
+        Err( e ) => return ( EndpointHealthStatus::Unhealthy, Some( format!( "Failed to create client : {e}" ) ) ),
       };
 
       // Try to connect to the endpoint (HEAD request is most lightweight)
@@ -299,7 +299,7 @@ mod private
         },
         Err( e ) =>
         {
-          ( EndpointHealthStatus::Unhealthy, Some( format!( "Request failed: {e}" ) ) )
+          ( EndpointHealthStatus::Unhealthy, Some( format!( "Request failed : {e}" ) ) )
         },
       }
     }
@@ -321,7 +321,7 @@ mod private
         .build()
       {
         Ok( c ) => c,
-        Err( e ) => return ( EndpointHealthStatus::Unhealthy, Some( format!( "Failed to create client: {e}" ) ) ),
+        Err( e ) => return ( EndpointHealthStatus::Unhealthy, Some( format!( "Failed to create client : {e}" ) ) ),
       };
 
       // Try OPTIONS request to check if endpoint is responding
@@ -334,7 +334,7 @@ mod private
         },
         Ok( response ) if response.status().is_server_error() =>
         {
-          ( EndpointHealthStatus::Unhealthy, Some( format!( "Server error: {}", response.status() ) ) )
+          ( EndpointHealthStatus::Unhealthy, Some( format!( "Server error : {}", response.status() ) ) )
         },
         Ok( response ) =>
         {
@@ -351,7 +351,7 @@ mod private
         },
         Err( e ) =>
         {
-          ( EndpointHealthStatus::Unhealthy, Some( format!( "Request failed: {e}" ) ) )
+          ( EndpointHealthStatus::Unhealthy, Some( format!( "Request failed : {e}" ) ) )
         },
       }
     }
@@ -486,7 +486,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use private::EndpointHealthStatus;
   exposed use private::HealthCheckStrategy;

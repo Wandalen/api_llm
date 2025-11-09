@@ -25,9 +25,9 @@ mod health_checks_tests
   use api_openai::
   {
     Client,
-    environment::OpenaiEnvironmentImpl,
-    secret::Secret,
-    health_checks::*,
+    environment ::OpenaiEnvironmentImpl,
+    secret ::Secret,
+    health_checks ::*,
   };
   use std::time::Duration;
 
@@ -39,8 +39,8 @@ mod health_checks_tests
       secret,
       None,
       None,
-      api_openai::environment::OpenAIRecommended::base_url().to_string(),
-      api_openai::environment::OpenAIRecommended::realtime_base_url().to_string()
+      api_openai ::environment::OpenAIRecommended::base_url().to_string(),
+      api_openai ::environment::OpenAIRecommended::realtime_base_url().to_string()
     ).expect( "Failed to create environment" );
     Ok( Client::build( env )? )
   }
@@ -68,7 +68,7 @@ mod health_checks_tests
     assert!( !serialized.is_empty() );
 
     // Test deserialization
-    let deserialized: HealthCheckConfig = serde_json::from_str( &serialized )
+    let deserialized : HealthCheckConfig = serde_json::from_str( &serialized )
       .expect( "Failed to deserialize config" );
 
     assert_eq!( config.timeout_ms, deserialized.timeout_ms );
@@ -180,27 +180,27 @@ mod health_checks_tests
     let results = vec![
       HealthCheckResult
       {
-        endpoint_url: "https://api.openai.com".to_string(),
-        status: HealthStatus::Healthy,
-        response_time_ms: 100,
-        error_message: None,
-        timestamp: std::time::SystemTime::now(),
+        endpoint_url : "https://api.openai.com".to_string(),
+        status : HealthStatus::Healthy,
+        response_time_ms : 100,
+        error_message : None,
+        timestamp : std::time::SystemTime::now(),
       },
       HealthCheckResult
       {
-        endpoint_url: "https://api.openai.com/v2".to_string(),
-        status: HealthStatus::Degraded,
-        response_time_ms: 1500,
-        error_message: None,
-        timestamp: std::time::SystemTime::now(),
+        endpoint_url : "https://api.openai.com/v2".to_string(),
+        status : HealthStatus::Degraded,
+        response_time_ms : 1500,
+        error_message : None,
+        timestamp : std::time::SystemTime::now(),
       },
       HealthCheckResult
       {
-        endpoint_url: "https://api.openai.com/v3".to_string(),
-        status: HealthStatus::Unhealthy,
-        response_time_ms: 5000,
-        error_message: Some( "Timeout".to_string() ),
-        timestamp: std::time::SystemTime::now(),
+        endpoint_url : "https://api.openai.com/v3".to_string(),
+        status : HealthStatus::Unhealthy,
+        response_time_ms : 5000,
+        error_message : Some( "Timeout".to_string() ),
+        timestamp : std::time::SystemTime::now(),
       },
     ];
 
@@ -250,11 +250,11 @@ mod health_checks_tests
     // Create a result with error message
     let result_with_error = HealthCheckResult
     {
-      endpoint_url: "https://invalid.endpoint".to_string(),
-      status: HealthStatus::Unhealthy,
-      response_time_ms: 5000,
-      error_message: Some( "Connection failed".to_string() ),
-      timestamp: std::time::SystemTime::now(),
+      endpoint_url : "https://invalid.endpoint".to_string(),
+      status : HealthStatus::Unhealthy,
+      response_time_ms : 5000,
+      error_message : Some( "Connection failed".to_string() ),
+      timestamp : std::time::SystemTime::now(),
     };
 
     assert_eq!( result_with_error.status, HealthStatus::Unhealthy );
@@ -267,11 +267,11 @@ mod health_checks_tests
   {
     let result = HealthCheckResult
     {
-      endpoint_url: "https://api.openai.com".to_string(),
-      status: HealthStatus::Healthy,
-      response_time_ms: 150,
-      error_message: None,
-      timestamp: std::time::SystemTime::now(),
+      endpoint_url : "https://api.openai.com".to_string(),
+      status : HealthStatus::Healthy,
+      response_time_ms : 150,
+      error_message : None,
+      timestamp : std::time::SystemTime::now(),
     };
 
     // Test serialization
@@ -279,7 +279,7 @@ mod health_checks_tests
     assert!( !serialized.is_empty() );
 
     // Test deserialization
-    let deserialized: HealthCheckResult = serde_json::from_str( &serialized )
+    let deserialized : HealthCheckResult = serde_json::from_str( &serialized )
       .expect( "Failed to deserialize result" );
 
     assert_eq!( result.endpoint_url, deserialized.endpoint_url );

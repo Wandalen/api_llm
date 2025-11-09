@@ -11,7 +11,9 @@ mod private
   impl OllamaClient
   {
         }
-      } else {
+      }
+      else
+      {
         // Sequential execution
         optimizations.push( "Sequential execution for ordered processing".to_string() );
 
@@ -46,7 +48,9 @@ mod private
       let throughput = if execution_time_ms > 0
       {
         ( total_requests as f64 ) / ( execution_time_ms as f64 / 1000.0 )
-      } else {
+      }
+      else
+      {
         0.0
       };
 
@@ -79,8 +83,8 @@ mod private
     pub async fn configure_safety_settings( &mut self, config : crate::safety_settings::SafetyConfiguration ) -> OllamaResult< () >
     {
       // Validate configuration before applying
-      crate::safety_settings::validate_safety_configuration( &config )
-        .map_err( | e | format_err!( "Invalid safety configuration: {}", e ) )?;
+      crate ::safety_settings::validate_safety_configuration( &config )
+        .map_err( | e | format_err!( "Invalid safety configuration : {}", e ) )?;
 
       // For now, this is a placeholder implementation
       // In a real implementation, this would send the configuration to Ollama
@@ -135,7 +139,7 @@ mod private
         risk_score : if is_safe { 0.1 } else { 0.9 },
         recommended_action : if is_safe { crate::safety_settings::SafetyAction::Allow } else { crate::safety_settings::SafetyAction::Block },
         filter_results : request.filter_categories.iter().map( | category |
-          crate::safety_settings::FilterResult {
+          crate ::safety_settings::FilterResult {
             category : category.clone(),
             passed : is_safe,
             confidence : 0.85,
@@ -175,9 +179,11 @@ mod private
         harm_categories : if is_safe
         {
           Vec::new()
-        } else {
+        }
+        else
+        {
           vec![
-            crate::safety_settings::HarmCategory {
+            crate ::safety_settings::HarmCategory {
               category : crate::safety_settings::HarmType::Violence,
               confidence : 0.75,
               severity : crate::safety_settings::SeverityLevel::Medium,
@@ -324,7 +330,7 @@ mod private
     {
       // Look for ollama.toml in current directory
       let current_dir = env::current_dir()
-        .map_err( | e | format_err!( "Failed to get current directory: {}", e ) )?;
+        .map_err( | e | format_err!( "Failed to get current directory : {}", e ) )?;
       
       let config_path = current_dir.join( "ollama.toml" );
       if config_path.exists()

@@ -12,55 +12,55 @@ pub enum ValidationError
   /// Required field is missing or empty.
   RequiredFieldMissing {
     /// The name of the field that is missing
-    field: String,
+    field : String,
     /// Context where the validation occurred
-    context: String
+    context : String
   },
 
   /// Field value is invalid.
   InvalidFieldValue {
     /// The name of the field with invalid value
-    field: String,
+    field : String,
     /// The invalid value that was provided
-    value: String,
+    value : String,
     /// Reason why the value is invalid
-    reason: String
+    reason : String
   },
 
   /// Field value is out of acceptable range.
   ValueOutOfRange {
     /// The name of the field with out-of-range value
-    field: String,
+    field : String,
     /// The value that is out of range
-    value: f64,
+    value : f64,
     /// Minimum allowed value (if any)
-    min: Option< f64 >,
+    min : Option< f64 >,
     /// Maximum allowed value (if any)
-    max: Option< f64 >
+    max : Option< f64 >
   },
 
   /// Collection is empty when it should contain items.
   EmptyCollection {
     /// The name of the collection field
-    field: String,
+    field : String,
     /// Context where the validation occurred
-    context: String
+    context : String
   },
 
   /// Collection exceeds maximum allowed size.
   CollectionTooLarge {
     /// The name of the collection field
-    field: String,
+    field : String,
     /// Current size of the collection
-    size: usize,
+    size : usize,
     /// Maximum allowed size
-    max: usize
+    max : usize
   },
 }
 
 impl core::fmt::Display for ValidationError
 {
-  fn fmt( &self, f: &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result
+  fn fmt( &self, f : &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result
   {
     match self
     {
@@ -120,13 +120,13 @@ const MAX_CODE_EXECUTION_TIMEOUT: i32 = 300;
 /// # Returns
 ///
 /// Returns `Ok(())` if the model name is valid, or a validation error.
-fn validate_model_name( model_name: &str ) -> Result< (), ValidationError >
+fn validate_model_name( model_name : &str ) -> Result< (), ValidationError >
 {
   if model_name.trim().is_empty()
   {
     return Err( ValidationError::RequiredFieldMissing {
-      field: "model_name".to_string(),
-      context: "model validation".to_string(),
+      field : "model_name".to_string(),
+      context : "model validation".to_string(),
     } );
   }
 
@@ -134,9 +134,9 @@ fn validate_model_name( model_name: &str ) -> Result< (), ValidationError >
   if model_name.contains( '\n' ) || model_name.contains( '\r' ) || model_name.contains( '\0' )
   {
     return Err( ValidationError::InvalidFieldValue {
-      field: "model_name".to_string(),
-      value: model_name.to_string(),
-      reason: "Model name contains invalid characters (newlines or null bytes)".to_string(),
+      field : "model_name".to_string(),
+      value : model_name.to_string(),
+      reason : "Model name contains invalid characters (newlines or null bytes)".to_string(),
     } );
   }
 
@@ -152,13 +152,13 @@ fn validate_model_name( model_name: &str ) -> Result< (), ValidationError >
 /// # Returns
 ///
 /// Returns `Ok(())` if the content is valid, or a validation error.
-fn validate_content( content: &Content ) -> Result< (), ValidationError >
+fn validate_content( content : &Content ) -> Result< (), ValidationError >
 {
   if content.parts.is_empty()
   {
     return Err( ValidationError::EmptyCollection {
-      field: "parts".to_string(),
-      context: "Content".to_string(),
+      field : "parts".to_string(),
+      context : "Content".to_string(),
     } );
   }
 
@@ -167,9 +167,9 @@ fn validate_content( content: &Content ) -> Result< (), ValidationError >
   {
     validate_part( part )
       .map_err( |e| ValidationError::InvalidFieldValue {
-        field: format!( "parts[{}]", i ),
-        value: "Part".to_string(),
-        reason: e.to_string(),
+        field : format!( "parts[{}]", i ),
+        value : "Part".to_string(),
+        reason : e.to_string(),
       } )?;
   }
 
@@ -185,7 +185,7 @@ fn validate_content( content: &Content ) -> Result< (), ValidationError >
 /// # Returns
 ///
 /// Returns `Ok(())` if the part is valid, or a validation error.
-fn validate_part( part: &Part ) -> Result< (), ValidationError >
+fn validate_part( part : &Part ) -> Result< (), ValidationError >
 {
   let has_text = part.text.as_ref().map_or( false, |t| !t.trim().is_empty() );
   let has_inline_data = part.inline_data.is_some();
@@ -200,8 +200,8 @@ fn validate_part( part: &Part ) -> Result< (), ValidationError >
   if content_count == 0
   {
     return Err( ValidationError::RequiredFieldMissing {
-      field: "content".to_string(),
-      context: "Part must have at least one content type (text, inline_data, function_call, or function_response)".to_string(),
+      field : "content".to_string(),
+      context : "Part must have at least one content type (text, inline_data, function_call, or function_response)".to_string(),
     } );
   }
 

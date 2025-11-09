@@ -65,7 +65,7 @@ fn test_log_response_structure()
     "usage": {"input_tokens": 10, "output_tokens": 5}
   }"#;
 
-  let response: the_module::CreateMessageResponse = serde_json::from_str( response_json ).unwrap();
+  let response : the_module::CreateMessageResponse = serde_json::from_str( response_json ).unwrap();
 
   logger.log_response( &response, "request_id_123" );
 
@@ -228,15 +228,15 @@ fn test_disabled_logger_zero_overhead()
   // Overhead should be minimal (less than 2x under concurrent test load)
   let overhead_ratio = duration_with_disabled_logging.as_micros() as f64 / duration_without_logging.as_micros() as f64;
 
-  assert!( overhead_ratio < 2.0, "Disabled logging has too much overhead: {overhead_ratio}x" );
+  assert!( overhead_ratio < 2.0, "Disabled logging has too much overhead : {overhead_ratio}x" );
 
   // Verify no logs were collected (functional correctness)
   assert_eq!( logger.get_logs().len(), 0, "Disabled logger must not collect logs" );
 
   println!( "✅ Zero overhead test passed!" );
-  println!( "   Without logging: {:?}", duration_without_logging );
-  println!( "   With disabled logging: {:?}", duration_with_disabled_logging );
-  println!( "   Overhead ratio: {:.2}x", overhead_ratio );
+  println!( "   Without logging : {:?}", duration_without_logging );
+  println!( "   With disabled logging : {:?}", duration_with_disabled_logging );
+  println!( "   Overhead ratio : {:.2}x", overhead_ratio );
 }
 
 // Helper function
@@ -286,7 +286,7 @@ async fn integration_log_api_request_response()
     },
     Err( err ) => {
       logger.log_error( &err, request_id );
-      panic!( "INTEGRATION: API call must work: {err}" );
+      panic!( "INTEGRATION: API call must work : {err}" );
     },
   };
 
@@ -398,7 +398,7 @@ async fn integration_structured_logging_with_context()
     },
     Err( err ) => {
       logger.log_error( &err, request_id );
-      panic!( "Request failed: {err}" );
+      panic!( "Request failed : {err}" );
     },
   };
 

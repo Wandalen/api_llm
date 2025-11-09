@@ -50,9 +50,9 @@ fn test_multi_part_system_instructions()
   // Test creating multi-part system instructions
   let instructions =
   [
-    the_module::SystemContent::text( "You are a helpful assistant." ),
-    the_module::SystemContent::text( "Always respond in a friendly tone." ),
-    the_module::SystemContent::text( "Keep responses concise." ),
+    the_module ::SystemContent::text( "You are a helpful assistant." ),
+    the_module ::SystemContent::text( "Always respond in a friendly tone." ),
+    the_module ::SystemContent::text( "Keep responses concise." ),
   ].to_vec();
 
   assert_eq!( instructions.len(), 3 );
@@ -65,7 +65,7 @@ fn test_system_instruction_composition()
   // Test composing system instructions with different parts
   let base_instruction = the_module::SystemContent::text( "You are a helpful assistant." );
 
-  let mut cached_knowledge = the_module::SystemContent::text( "Knowledge base: Rust is a systems programming language." );
+  let mut cached_knowledge = the_module::SystemContent::text( "Knowledge base : Rust is a systems programming language." );
   cached_knowledge.cache_control = Some( the_module::CacheControl::ephemeral() );
 
   let task_instruction = the_module::SystemContent::text( "Help the user with Rust programming." );
@@ -141,7 +141,7 @@ async fn integration_single_system_instruction()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION: Single system instruction must work: {err}" ),
+    Err( err ) => panic!( "INTEGRATION: Single system instruction must work : {err}" ),
   };
 
   assert!( !response.id.is_empty() );
@@ -160,9 +160,9 @@ async fn integration_multi_part_system_instructions()
 
   let system = vec!
   [
-    the_module::SystemContent::text( "You are a helpful assistant." ),
-    the_module::SystemContent::text( "Always respond with enthusiasm." ),
-    the_module::SystemContent::text( "Keep responses under 20 words." ),
+    the_module ::SystemContent::text( "You are a helpful assistant." ),
+    the_module ::SystemContent::text( "Always respond with enthusiasm." ),
+    the_module ::SystemContent::text( "Keep responses under 20 words." ),
   ];
 
   let request = the_module::CreateMessageRequest
@@ -187,7 +187,7 @@ async fn integration_multi_part_system_instructions()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION: Multi-part system instructions must work: {err}" ),
+    Err( err ) => panic!( "INTEGRATION: Multi-part system instructions must work : {err}" ),
   };
 
   assert!( !response.id.is_empty() );
@@ -235,7 +235,7 @@ async fn integration_system_instructions_with_caching()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION: System instructions with caching must work: {err}" ),
+    Err( err ) => panic!( "INTEGRATION: System instructions with caching must work : {err}" ),
   };
 
   assert!( !response.id.is_empty() );
@@ -274,7 +274,7 @@ async fn integration_empty_system_instructions()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION: Empty system instructions must work: {err}" ),
+    Err( err ) => panic!( "INTEGRATION: Empty system instructions must work : {err}" ),
   };
 
   assert!( !response.id.is_empty() );
@@ -317,7 +317,7 @@ async fn integration_long_system_instruction()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION: Long system instruction must work: {err}" ),
+    Err( err ) => panic!( "INTEGRATION: Long system instruction must work : {err}" ),
   };
 
   assert!( !response.id.is_empty() );

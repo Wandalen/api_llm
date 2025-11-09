@@ -109,6 +109,6 @@ async fn test_api_error_handling()
   
   let error = result.unwrap_err();
   let error_str = format!( "{error}" );
-  println!( "Actual error: {error_str}" );
+  println!( "Actual error : {error_str}" );
   assert!( error_str.contains( "API error" ) || error_str.contains( "Parse error" ) || error_str.contains( "Network error" ) );
 }

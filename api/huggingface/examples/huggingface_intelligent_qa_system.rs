@@ -344,7 +344,7 @@ impl AnswerLength
 #[ derive( Debug ) ]
 pub struct QASystem
 {
-  pub client : Client<HuggingFaceEnvironmentImpl >,
+  pub client : Client< HuggingFaceEnvironmentImpl >,
   pub knowledge_sources : HashMap< String, KnowledgeSource >,
   pub active_sessions : HashMap< String, QASession >,
   pub default_model : String,
@@ -354,7 +354,7 @@ pub struct QASystem
 impl QASystem
 {
   /// Create a new QA system
-  pub fn new(client : Client<HuggingFaceEnvironmentImpl >) -> Self
+  pub fn new(client : Client< HuggingFaceEnvironmentImpl >) -> Self
   {
   Self {
       client,
@@ -414,7 +414,7 @@ impl QASystem
   if !session_context.is_empty()
   {
       let prev_context = context_question.context.unwrap_or_default();
-      context_question.context = Some(format!("{prev_context}\n\nPrevious context: {session_context}"));
+      context_question.context = Some(format!("{prev_context}\n\nPrevious context : {session_context}"));
   }
 
   let answer = self.answer_question(&context_question).await?;
@@ -515,10 +515,10 @@ impl QASystem
 
   if let Some(context) = &question.context
   {
-      let _ = write!(&mut prompt, "Context: {context}\n\n");
+      let _ = write!(&mut prompt, "Context : {context}\n\n");
   }
 
-  let _ = writeln!(&mut prompt, "Question: {}", question.text);
+  let _ = writeln!(&mut prompt, "Question : {}", question.text);
   
   match question.question_type
   {
@@ -669,7 +669,7 @@ pub struct PlatformStats
 impl QASystemPlatform
 {
   /// Create a new QA system platform
-  pub fn new(client : Client<HuggingFaceEnvironmentImpl >) -> Self
+  pub fn new(client : Client< HuggingFaceEnvironmentImpl >) -> Self
   {
   let mut platform = Self {
       qa_system : QASystem::new(client),
@@ -761,7 +761,7 @@ impl QASystemPlatform
   }
 
   /// Run the interactive QA system
-  pub async fn run(&mut self) -> Result< (), Box< dyn std::error::Error >>
+  pub async fn run(&mut self) -> Result< (), Box< dyn std::error::Error > >
   {
   println!("🧠 Intelligent Question-Answering System");
   println!("=====================================");
@@ -772,10 +772,10 @@ impl QASystemPlatform
   loop
   {
       print!("\n > ");
-      io::stdout().flush()?;
+      io ::stdout().flush()?;
 
       let mut input = String::new();
-      io::stdin().read_line(&mut input)?;
+      io ::stdin().read_line(&mut input)?;
       let input = input.trim();
 
       if input.is_empty()
@@ -798,7 +798,7 @@ impl QASystemPlatform
   "/export" => self.export_session_interactive()?,
   cmd if cmd.starts_with('/') =>
   {
-          println!("❌ Unknown command: {cmd}. Type /help for available commands.");
+          println!("❌ Unknown command : {cmd}. Type /help for available commands.");
   }
   question => {
           // Direct question input
@@ -828,7 +828,7 @@ impl QASystemPlatform
   }
 
   /// Handle direct question input
-  async fn answer_direct_question(&mut self, question_text : &str) -> Result< (), Box< dyn std::error::Error >>
+  async fn answer_direct_question(&mut self, question_text : &str) -> Result< (), Box< dyn std::error::Error > >
   {
   let q_num = self.stats.questions_asked;
   let question = Question::new(
@@ -854,15 +854,15 @@ impl QASystemPlatform
   }
 
   /// Interactive question asking
-  async fn ask_question_interactive(&mut self) -> Result< (), Box< dyn std::error::Error >>
+  async fn ask_question_interactive(&mut self) -> Result< (), Box< dyn std::error::Error > >
   {
   println!("\n📝 Ask a Question");
   println!("================");
   
-  print!("Question: ");
-  io::stdout().flush()?;
+  print!("Question : ");
+  io ::stdout().flush()?;
   let mut question_text = String::new();
-  io::stdin().read_line(&mut question_text)?;
+  io ::stdin().read_line(&mut question_text)?;
   let question_text = question_text.trim();
 
   if question_text.is_empty()
@@ -881,9 +881,9 @@ impl QASystemPlatform
   println!("6. Multiple Choice");
   
   print!("Select type (1-6): ");
-  io::stdout().flush()?;
+  io ::stdout().flush()?;
   let mut type_input = String::new();
-  io::stdin().read_line(&mut type_input)?;
+  io ::stdin().read_line(&mut type_input)?;
   
   let question_type = match type_input.trim()
   {
@@ -904,9 +904,9 @@ impl QASystemPlatform
   println!("4. Expert");
   
   print!("Select difficulty (1-4): ");
-  io::stdout().flush()?;
+  io ::stdout().flush()?;
   let mut diff_input = String::new();
-  io::stdin().read_line(&mut diff_input)?;
+  io ::stdin().read_line(&mut diff_input)?;
   
   let difficulty = match diff_input.trim()
   {
@@ -922,9 +922,9 @@ impl QASystemPlatform
   if question_type == QuestionType::ContextBased
   {
       print!("Context (optional): ");
-      io::stdout().flush()?;
+      io ::stdout().flush()?;
       let mut context_input = String::new();
-      io::stdin().read_line(&mut context_input)?;
+      io ::stdin().read_line(&mut context_input)?;
       let context_input = context_input.trim();
       if !context_input.is_empty()
       {
@@ -963,14 +963,14 @@ impl QASystemPlatform
   }
 
   /// Create or manage sessions
-  fn create_session_interactive(&mut self) -> Result< (), Box< dyn std::error::Error >>
+  fn create_session_interactive(&mut self) -> Result< (), Box< dyn std::error::Error > >
   {
   println!("\n🗣️  Session Management");
   println!("====================");
   
   if let Some(session_id) = &self.current_session
   {
-      println!("Current session: {session_id}");
+      println!("Current session : {session_id}");
       println!("1. Continue with current session");
       println!("2. Create new session");
       println!("3. End current session");
@@ -980,10 +980,10 @@ impl QASystemPlatform
       println!("2. Continue without session");
   }
 
-  print!("Select option: ");
-  io::stdout().flush()?;
+  print!("Select option : ");
+  io ::stdout().flush()?;
   let mut option = String::new();
-  io::stdin().read_line(&mut option)?;
+  io ::stdin().read_line(&mut option)?;
 
   match option.trim()
   {
@@ -1017,12 +1017,12 @@ impl QASystemPlatform
   }
 
   /// Create a new session
-  fn create_new_session(&mut self) -> Result< (), Box< dyn std::error::Error >>
+  fn create_new_session(&mut self) -> Result< (), Box< dyn std::error::Error > >
   {
   print!("Session name (optional): ");
-  io::stdout().flush()?;
+  io ::stdout().flush()?;
   let mut name = String::new();
-  io::stdin().read_line(&mut name)?;
+  io ::stdin().read_line(&mut name)?;
   let name = name.trim();
 
   let session_id = if name.is_empty()
@@ -1038,7 +1038,7 @@ impl QASystemPlatform
   self.current_session = Some(session_id.clone());
   self.stats.sessions_created += 1;
 
-  println!("✅ Created session: {session_id}");
+  println!("✅ Created session : {session_id}");
   Ok(())
   }
 
@@ -1058,15 +1058,15 @@ impl QASystemPlatform
       
       if let Some(context) = &question.context
       {
-  println!("   Context: {context}");
+  println!("   Context : {context}");
       }
   }
 
   println!("\nType the question number to ask it, or create your own with /ask");
 
   let max_num = self.sample_questions.len();
-  print!("Select question (1-{max_num}) or press Enter to skip: ");
-  io::stdout().flush().unwrap();
+  print!("Select question (1-{max_num}) or press Enter to skip : ");
+  io ::stdout().flush().unwrap();
   
   let mut input = String::new();
   if io::stdin().read_line(&mut input).is_ok()
@@ -1076,10 +1076,10 @@ impl QASystemPlatform
   if index > 0 && index <= self.sample_questions.len()
   {
           let question = self.sample_questions[index - 1].clone();
-          tokio::spawn(async move {
-      // Note: This is a simplified approach - in a real app you'd handle this better
+          tokio ::spawn(async move {
+      // Note : This is a simplified approach - in a real app you'd handle this better
       let q_text = &question.text;
-      println!("Selected: {q_text}");
+      println!("Selected : {q_text}");
           });
   }
       }
@@ -1087,7 +1087,7 @@ impl QASystemPlatform
   }
 
   /// Manage knowledge sources
-  fn manage_knowledge_interactive(&mut self) -> Result< (), Box< dyn std::error::Error >>
+  fn manage_knowledge_interactive(&mut self) -> Result< (), Box< dyn std::error::Error > >
   {
   println!("\n📖 Knowledge Management");
   println!("======================");
@@ -1097,9 +1097,9 @@ impl QASystemPlatform
   println!("3. Search knowledge sources");
   
   print!("Select option (1-3): ");
-  io::stdout().flush()?;
+  io ::stdout().flush()?;
   let mut option = String::new();
-  io::stdin().read_line(&mut option)?;
+  io ::stdin().read_line(&mut option)?;
 
   match option.trim()
   {
@@ -1124,7 +1124,7 @@ impl QASystemPlatform
       let title = &source.title;
       let s_type = source.source_type.as_str();
       let reliability = source.reliability_score;
-      println!("{num}. {title} [{s_type}] (Reliability: {reliability:.2})");
+      println!("{num}. {title} [{s_type}] (Reliability : {reliability:.2})");
       println!("   {}", &source.content[..source.content.len().min(100)]);
       if source.content.len() > 100
       {
@@ -1134,12 +1134,12 @@ impl QASystemPlatform
   }
 
   /// Add knowledge source interactively
-  fn add_knowledge_source_interactive(&mut self) -> Result< (), Box< dyn std::error::Error >>
+  fn add_knowledge_source_interactive(&mut self) -> Result< (), Box< dyn std::error::Error > >
   {
-  print!("Source title: ");
-  io::stdout().flush()?;
+  print!("Source title : ");
+  io ::stdout().flush()?;
   let mut title = String::new();
-  io::stdin().read_line(&mut title)?;
+  io ::stdin().read_line(&mut title)?;
   let title = title.trim().to_string();
 
   if title.is_empty()
@@ -1148,10 +1148,10 @@ impl QASystemPlatform
       return Ok(());
   }
 
-  print!("Source content: ");
-  io::stdout().flush()?;
+  print!("Source content : ");
+  io ::stdout().flush()?;
   let mut content = String::new();
-  io::stdin().read_line(&mut content)?;
+  io ::stdin().read_line(&mut content)?;
   let content = content.trim().to_string();
 
   if content.is_empty()
@@ -1169,9 +1169,9 @@ impl QASystemPlatform
   println!("6. FAQ");
 
   print!("Select source type (1-6): ");
-  io::stdout().flush()?;
+  io ::stdout().flush()?;
   let mut type_input = String::new();
-  io::stdin().read_line(&mut type_input)?;
+  io ::stdin().read_line(&mut type_input)?;
 
   let source_type = match type_input.trim()
   {
@@ -1201,12 +1201,12 @@ impl QASystemPlatform
   }
 
   /// Search knowledge sources interactively
-  fn search_knowledge_interactive(&mut self) -> Result< (), Box< dyn std::error::Error >>
+  fn search_knowledge_interactive(&mut self) -> Result< (), Box< dyn std::error::Error > >
   {
-  print!("Search query: ");
-  io::stdout().flush()?;
+  print!("Search query : ");
+  io ::stdout().flush()?;
   let mut query = String::new();
-  io::stdin().read_line(&mut query)?;
+  io ::stdin().read_line(&mut query)?;
   let query = query.trim();
 
   if query.is_empty()
@@ -1229,7 +1229,7 @@ impl QASystemPlatform
   let num = i + 1;
   let title = &source.title;
   let s_type = source.source_type.as_str();
-  println!("{num}. {title} [{s_type}] (Relevance: {relevance:.2})");
+  println!("{num}. {title} [{s_type}] (Relevance : {relevance:.2})");
   println!("   {}", &source.content[..source.content.len().min(150)]);
   if source.content.len() > 150
   {
@@ -1254,23 +1254,23 @@ impl QASystemPlatform
   let k_sources = qa_stats.total_knowledge_sources;
   let total_answered = qa_stats.total_questions_answered;
   let avg_conf = qa_stats.average_confidence;
-  println!("Questions Asked: {q_asked}");
-  println!("Sessions Created: {s_created}");
-  println!("Active Sessions: {active_sess}");
-  println!("Knowledge Sources: {k_sources}");
-  println!("Total Questions Answered: {total_answered}");
-  println!("Average Confidence: {avg_conf:.2}");
+  println!("Questions Asked : {q_asked}");
+  println!("Sessions Created : {s_created}");
+  println!("Active Sessions : {active_sess}");
+  println!("Knowledge Sources : {k_sources}");
+  println!("Total Questions Answered : {total_answered}");
+  println!("Average Confidence : {avg_conf:.2}");
   let avg_time = if self.stats.questions_asked > 0
   {
       self.stats.total_response_time_ms as f64 / self.stats.questions_asked as f64
   } else {
       0.0
   };
-  println!("Average Response Time: {avg_time:.2}ms");
+  println!("Average Response Time : {avg_time:.2}ms");
   }
 
   /// Export session data
-  fn export_session_interactive(&mut self) -> Result< (), Box< dyn std::error::Error >>
+  fn export_session_interactive(&mut self) -> Result< (), Box< dyn std::error::Error > >
   {
   if let Some(session_id) = &self.current_session
   {
@@ -1279,9 +1279,9 @@ impl QASystemPlatform
   let json_data = serde_json::to_string_pretty(session)?;
   
   print!("Export filename (press Enter for default): ");
-  io::stdout().flush()?;
+  io ::stdout().flush()?;
   let mut filename = String::new();
-  io::stdin().read_line(&mut filename)?;
+  io ::stdin().read_line(&mut filename)?;
   let filename = filename.trim();
   
   let filename = if filename.is_empty()
@@ -1291,8 +1291,8 @@ impl QASystemPlatform
           filename.to_string()
   };
 
-  std::fs::write(&filename, json_data)?;
-  println!("✅ Session exported to: {filename}");
+  std ::fs::write(&filename, json_data)?;
+  println!("✅ Session exported to : {filename}");
       } else {
   println!("❌ Session not found");
       }
@@ -1313,18 +1313,18 @@ impl QASystemPlatform
   println!();
   let conf_pct = answer.confidence * 100.0;
   let resp_time = answer.response_time_ms;
-  println!("Confidence: {conf_pct:.1}%");
-  println!("Response Time: {resp_time}ms");
+  println!("Confidence : {conf_pct:.1}%");
+  println!("Response Time : {resp_time}ms");
   
   if !answer.sources.is_empty()
   {
       let sources = answer.sources.join(", ");
-      println!("Sources: {sources}");
+      println!("Sources : {sources}");
   }
   
   if let Some(reasoning) = &answer.reasoning
   {
-      println!("Reasoning: {reasoning}");
+      println!("Reasoning : {reasoning}");
   }
   }
 

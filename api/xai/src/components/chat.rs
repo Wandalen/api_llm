@@ -216,21 +216,21 @@ mod private
     /// Nucleus sampling threshold (0.0-1.0).
     ///
     /// Only tokens with cumulative probability up to `top_p` are considered.
-    /// Recommended: 0.1-0.9. Do not use with temperature.
+    /// Recommended : 0.1-0.9. Do not use with temperature.
     #[ serde( skip_serializing_if = "Option::is_none" ) ]
     pub top_p : Option< f32 >,
 
     /// Frequency penalty (0.0-2.0).
     ///
     /// Reduces repetition of tokens based on their frequency.
-    /// Typical range: 0.1-0.8.
+    /// Typical range : 0.1-0.8.
     #[ serde( skip_serializing_if = "Option::is_none" ) ]
     pub frequency_penalty : Option< f32 >,
 
     /// Presence penalty (0.0-2.0).
     ///
     /// Encourages the model to talk about new topics.
-    /// Typical range: 0.1-0.8.
+    /// Typical range : 0.1-0.8.
     #[ serde( skip_serializing_if = "Option::is_none" ) ]
     pub presence_penalty : Option< f32 >,
 
@@ -459,7 +459,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

@@ -166,7 +166,7 @@ async fn test_watcher_receives_notification()
 
   dynamic_config.add_watcher( move |_old, _new| {
   let notified = notified_clone.clone( );
-  tokio::spawn( async move {
+  tokio ::spawn( async move {
       let mut n = notified.write( ).await;
       *n = true;
   } );
@@ -175,7 +175,7 @@ async fn test_watcher_receives_notification()
   dynamic_config.update( ReliabilityConfig::default( )).await.unwrap( );
 
   // Give watcher time to execute
-  tokio::time::sleep( Duration::from_millis( 50 )).await;
+  tokio ::time::sleep( Duration::from_millis( 50 )).await;
 
   assert!( *notified.read( ).await, "Watcher should be notified" );
 }
@@ -191,7 +191,7 @@ async fn test_multiple_watchers_all_notified()
   let count_clone1 = count.clone( );
   dynamic_config.add_watcher( move |_, _| {
   let count = count_clone1.clone( );
-  tokio::spawn( async move {
+  tokio ::spawn( async move {
       let mut c = count.write( ).await;
       *c += 1;
   } );
@@ -200,7 +200,7 @@ async fn test_multiple_watchers_all_notified()
   let count_clone2 = count.clone( );
   dynamic_config.add_watcher( move |_, _| {
   let count = count_clone2.clone( );
-  tokio::spawn( async move {
+  tokio ::spawn( async move {
       let mut c = count.write( ).await;
       *c += 1;
   } );
@@ -209,7 +209,7 @@ async fn test_multiple_watchers_all_notified()
   dynamic_config.update( ReliabilityConfig::default( )).await.unwrap( );
 
   // Give watchers time to execute
-  tokio::time::sleep( Duration::from_millis( 100 )).await;
+  tokio ::time::sleep( Duration::from_millis( 100 )).await;
 
   assert_eq!( *count.read( ).await, 2, "Both watchers should be notified" );
 }
@@ -238,7 +238,7 @@ async fn test_watcher_receives_old_and_new_config()
   let old_val = old.circuit_breaker.as_ref( ).map( |cb| cb.failure_threshold ).unwrap_or( 0 );
   let new_val = new.circuit_breaker.as_ref( ).map( |cb| cb.failure_threshold ).unwrap_or( 0 );
 
-  tokio::spawn( async move {
+  tokio ::spawn( async move {
       *old_t.write( ).await = old_val;
       *new_t.write( ).await = new_val;
   } );
@@ -254,7 +254,7 @@ async fn test_watcher_receives_old_and_new_config()
   dynamic_config.update( new_config ).await.unwrap( );
 
   // Give watcher time to execute
-  tokio::time::sleep( Duration::from_millis( 50 )).await;
+  tokio ::time::sleep( Duration::from_millis( 50 )).await;
 
   assert_eq!( *old_threshold.read( ).await, 3 );
   assert_eq!( *new_threshold.read( ).await, 10 );
@@ -521,7 +521,7 @@ async fn test_rollback_notifies_watchers()
 
   dynamic_config.add_watcher( move |_, _| {
   let n = notified_clone.clone( );
-  tokio::spawn( async move {
+  tokio ::spawn( async move {
       *n.write( ).await = true;
   } );
   } ).await;
@@ -541,7 +541,7 @@ async fn test_rollback_notifies_watchers()
   dynamic_config.rollback( ).await.unwrap( );
 
   // Give watcher time to execute
-  tokio::time::sleep( Duration::from_millis( 50 )).await;
+  tokio ::time::sleep( Duration::from_millis( 50 )).await;
 
   assert!( *notified.read( ).await, "Rollback should notify watchers" );
 }
@@ -600,7 +600,7 @@ async fn test_concurrent_reads_during_update()
   for _ in 0..5
   {
       dc_update.update( ReliabilityConfig::default( )).await.unwrap( );
-      tokio::time::sleep( Duration::from_millis( 10 )).await;
+      tokio ::time::sleep( Duration::from_millis( 10 )).await;
   }
   } ));
 
@@ -612,7 +612,7 @@ async fn test_concurrent_reads_during_update()
       for _ in 0..20
       {
   let _ = dc_read.get( ).await;
-  tokio::time::sleep( Duration::from_millis( 5 )).await;
+  tokio ::time::sleep( Duration::from_millis( 5 )).await;
       }
   } ));
   }
@@ -637,7 +637,7 @@ async fn test_config_timestamp_updates_on_change()
 
   let timestamp1 = dynamic_config.get( ).await.timestamp;
 
-  tokio::time::sleep( Duration::from_millis( 10 )).await;
+  tokio ::time::sleep( Duration::from_millis( 10 )).await;
 
   dynamic_config.update( ReliabilityConfig::default( )).await.unwrap( );
 

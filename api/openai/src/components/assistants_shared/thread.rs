@@ -35,7 +35,7 @@ mod private
     pub metadata : Option< Metadata >,
   }
 
-  /// Response containing a list of threads. (Note: `OpenAI` spec doesn't define a list threads endpoint, but this structure might be useful internally or for future expansion).
+  /// Response containing a list of threads. (Note : `OpenAI` spec doesn't define a list threads endpoint, but this structure might be useful internally or for future expansion).
   #[ derive( Debug, Deserialize, Clone, PartialEq ) ]
   pub struct ListThreadsResponse
   {
@@ -52,7 +52,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use private::ThreadObject;
   exposed use private::ListThreadsResponse;

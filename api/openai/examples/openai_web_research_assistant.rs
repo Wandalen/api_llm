@@ -16,11 +16,11 @@ use api_openai::ClientApiAccessors;
 use api_openai::
 {
   Client,
-  components::
+  components ::
   {
-    responses::{ CreateResponseRequest, ResponseInput },
-    tools::{ Tool, WebSearchTool },
-    output::{ OutputItem, OutputContentPart, Annotation },
+    responses ::{ CreateResponseRequest, ResponseInput },
+    tools ::{ Tool, WebSearchTool },
+    output ::{ OutputItem, OutputContentPart, Annotation },
   },
 };
 // use std::io::{self, Write}; // Not needed for this example
@@ -55,7 +55,7 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
     
     // Create a comprehensive research prompt
     let research_prompt = format!(
-      "Please research and provide a comprehensive summary on: \"{query}\"\n\n\
+      "Please research and provide a comprehensive summary on : \"{query}\"\n\n\
       Your response should include:\n\
       1. **Current Status**: What's the latest information available\n\
       2. **Key Developments**: Recent important changes or breakthroughs\n\
@@ -87,7 +87,7 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
           web_searches_performed += 1;
           let search_id = &search_call.id;
           let search_status = &search_call.status;
-          println!("🔎 Web Search #{web_searches_performed}: {search_id} (Status: {search_status})");
+          println!("🔎 Web Search #{web_searches_performed}: {search_id} (Status : {search_status})");
         },
         OutputItem::Message(message) => {
           println!("📋 Research Summary:");
@@ -128,18 +128,18 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
 
     // Display research statistics
     println!("\n📊 Research Statistics:");
-    println!("  Web searches performed: {web_searches_performed}");
+    println!("  Web searches performed : {web_searches_performed}");
     let citations_count = citations_found.len();
-    println!("  Citations found: {citations_count}");
+    println!("  Citations found : {citations_count}");
     
     if let Some(usage) = &response.usage
     {
       let prompt_tokens = usage.prompt_tokens;
-      println!("  Prompt tokens: {prompt_tokens}");
+      println!("  Prompt tokens : {prompt_tokens}");
       let completion_tokens = usage.completion_tokens;
-      println!("  Completion tokens: {completion_tokens:?}");
+      println!("  Completion tokens : {completion_tokens:?}");
       let total_tokens = usage.total_tokens;
-      println!("  Total tokens: {total_tokens}");
+      println!("  Total tokens : {total_tokens}");
     }
 
     println!("\n{}\n", "=".repeat(80));
@@ -148,7 +148,7 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
     if i < research_queries.len() - 1
     {
       println!("⏳ Preparing next research query...\n");
-      tokio::time::sleep(tokio::time::Duration::from_secs(2)).await;
+      tokio ::time::sleep(tokio::time::Duration::from_secs(2)).await;
     }
   }
 

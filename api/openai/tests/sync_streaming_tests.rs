@@ -2,10 +2,10 @@
 
 use api_openai::
 {
-  sync::{ SyncClient, StreamConfig, SyncStreamIterator },
-  components::chat_shared::{ ChatCompletionRequest, ChatCompletionStreamResponse },
-  environment::{ OpenaiEnvironmentImpl, OpenAIRecommended },
-  secret::Secret,
+  sync ::{ SyncClient, StreamConfig, SyncStreamIterator },
+  components ::chat_shared::{ ChatCompletionRequest, ChatCompletionStreamResponse },
+  environment ::{ OpenaiEnvironmentImpl, OpenAIRecommended },
+  secret ::Secret,
 };
 use std::sync::Arc;
 use core::sync::atomic::{ AtomicBool, Ordering };
@@ -48,9 +48,9 @@ fn test_stream_config_custom_values()
   let cancel_token = Arc::new( AtomicBool::new( false ) );
   let config = StreamConfig
   {
-    timeout: Some( Duration::from_secs( 60 ) ),
-    buffer_size: 50,
-    cancellation_token: Some( cancel_token.clone() ),
+    timeout : Some( Duration::from_secs( 60 ) ),
+    buffer_size : 50,
+    cancellation_token : Some( cancel_token.clone() ),
   };
 
   // Verify custom configuration
@@ -87,9 +87,9 @@ fn test_stream_config_clone()
   let original_token = Arc::new( AtomicBool::new( false ) );
   let original_config = StreamConfig
   {
-    timeout: Some( Duration::from_secs( 120 ) ),
-    buffer_size: 200,
-    cancellation_token: Some( original_token.clone() ),
+    timeout : Some( Duration::from_secs( 120 ) ),
+    buffer_size : 200,
+    cancellation_token : Some( original_token.clone() ),
   };
 
   let cloned_config = original_config.clone();
@@ -127,23 +127,23 @@ fn test_sync_stream_iterator_structure()
   // Create a basic chat request
   let _request = ChatCompletionRequest
   {
-    model: "gpt-3.5-turbo".to_string(),
-    messages: vec![],
-    temperature: None,
-    top_p: None,
-    max_tokens: None,
-    n: None,
-    stop: None,
-    stream: None,
-    system_prompt: None,
-    user: None,
-    tools: None,
-    tool_choice: None,
-    response_format: None,
-    seed: None,
-    logit_bias: None,
-    logprobs: None,
-    top_logprobs: None,
+    model : "gpt-3.5-turbo".to_string(),
+    messages : vec![],
+    temperature : None,
+    top_p : None,
+    max_tokens : None,
+    n : None,
+    stop : None,
+    stream : None,
+    system_prompt : None,
+    user : None,
+    tools : None,
+    tool_choice : None,
+    response_format : None,
+    seed : None,
+    logit_bias : None,
+    logprobs : None,
+    top_logprobs : None,
   };
 
   // Test that we can create the streaming methods (they should fail gracefully in tests)
@@ -173,7 +173,7 @@ fn test_mock_stream_iterator_cancellation()
   if cancellation_token.load( Ordering::Relaxed )
   {
     // This simulates what the iterator.next() would return when cancelled
-    let result: Option< api_openai::error::Result< ChatCompletionStreamResponse > > = None;
+    let result : Option< api_openai::error::Result< ChatCompletionStreamResponse > > = None;
     assert!( result.is_none() );
   }
 }
@@ -184,9 +184,9 @@ fn test_stream_config_serialization()
   // Test that StreamConfig implements Debug properly
   let config = StreamConfig
   {
-    timeout: Some( Duration::from_secs( 45 ) ),
-    buffer_size: 75,
-    cancellation_token: None,
+    timeout : Some( Duration::from_secs( 45 ) ),
+    buffer_size : 75,
+    cancellation_token : None,
   };
 
   let debug_string = format!( "{config:?}" );
@@ -222,9 +222,9 @@ fn test_stream_config_extreme_values()
   // Test StreamConfig with extreme values
   let config = StreamConfig
   {
-    timeout: Some( Duration::from_secs( u64::MAX ) ),
-    buffer_size: usize::MAX,
-    cancellation_token: Some( Arc::new( AtomicBool::new( true ) ) ),
+    timeout : Some( Duration::from_secs( u64::MAX ) ),
+    buffer_size : usize::MAX,
+    cancellation_token : Some( Arc::new( AtomicBool::new( true ) ) ),
   };
 
   assert_eq!( config.timeout, Some( Duration::from_secs( u64::MAX ) ) );
@@ -243,9 +243,9 @@ fn test_stream_config_zero_values()
   // Test StreamConfig with zero/minimal values
   let config = StreamConfig
   {
-    timeout: Some( Duration::from_secs( 0 ) ),
-    buffer_size: 0,
-    cancellation_token: None,
+    timeout : Some( Duration::from_secs( 0 ) ),
+    buffer_size : 0,
+    cancellation_token : None,
   };
 
   assert_eq!( config.timeout, Some( Duration::from_secs( 0 ) ) );
@@ -259,9 +259,9 @@ fn test_stream_config_no_timeout()
   // Test StreamConfig with no timeout
   let config = StreamConfig
   {
-    timeout: None,
-    buffer_size: 100,
-    cancellation_token: None,
+    timeout : None,
+    buffer_size : 100,
+    cancellation_token : None,
   };
 
   assert!( config.timeout.is_none() );
@@ -289,23 +289,23 @@ fn test_sync_chat_streaming_method_signatures()
   // Create a basic request
   let _request = ChatCompletionRequest
   {
-    model: "gpt-3.5-turbo".to_string(),
-    messages: vec![],
-    temperature: None,
-    top_p: None,
-    max_tokens: None,
-    n: None,
-    stop: None,
-    stream: None,
-    system_prompt: None,
-    user: None,
-    tools: None,
-    tool_choice: None,
-    response_format: None,
-    seed: None,
-    logit_bias: None,
-    logprobs: None,
-    top_logprobs: None,
+    model : "gpt-3.5-turbo".to_string(),
+    messages : vec![],
+    temperature : None,
+    top_p : None,
+    max_tokens : None,
+    n : None,
+    stop : None,
+    stream : None,
+    system_prompt : None,
+    user : None,
+    tools : None,
+    tool_choice : None,
+    response_format : None,
+    seed : None,
+    logit_bias : None,
+    logprobs : None,
+    top_logprobs : None,
   };
 
   // Test that we can call the streaming methods with proper types
@@ -320,9 +320,9 @@ fn test_cancellation_token_thread_safety()
   use std::thread;
 
   let token = Arc::new( AtomicBool::new( false ) );
-  let handles: Vec< _ > = ( 0..10 ).map( | i | {
+  let handles : Vec< _ > = ( 0..10 ).map( | i | {
     let token_clone = token.clone();
-    thread::spawn( move || {
+    thread ::spawn( move || {
       // Half the threads set to true, half to false
       let value = i % 2 == 0;
       token_clone.store( value, Ordering::Relaxed );
@@ -352,8 +352,8 @@ fn test_stream_iterator_trait_bounds()
   fn assert_iterator< T: Iterator >() {}
 
   // These should compile if the trait bounds are correct
-  assert_send::< SyncStreamIterator< ChatCompletionStreamResponse > >();
-  assert_iterator::< SyncStreamIterator< ChatCompletionStreamResponse > >();
+  assert_send ::< SyncStreamIterator< ChatCompletionStreamResponse > >();
+  assert_iterator ::< SyncStreamIterator< ChatCompletionStreamResponse > >();
 
   // Test passes by successful compilation demonstrating correct trait bounds
 }

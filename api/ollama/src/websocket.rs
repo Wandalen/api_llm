@@ -29,25 +29,25 @@ mod private
       // Implementation for getting next streaming response
       Some( Ok( ChatResponse
       {
-        model: Some( self.request.model.clone() ),
-        created_at: Some( "2024-01-01T00:00:00Z".to_string() ),
-        message: ChatMessage
+        model : Some( self.request.model.clone() ),
+        created_at : Some( "2024-01-01T00:00:00Z".to_string() ),
+        message : ChatMessage
         {
-          role: MessageRole::Assistant,
-          content: "Test response".to_string(),
+          role : MessageRole::Assistant,
+          content : "Test response".to_string(),
           #[ cfg( feature = "vision_support" ) ]
-          images: None,
+          images : None,
           #[ cfg( feature = "tool_calling" ) ]
-          tool_calls: None,
+          tool_calls : None,
         },
-        done: true,
-        done_reason: Some( "stop".to_string() ),
-        total_duration: Some( 1000 ),
-        load_duration: Some( 100 ),
-        prompt_eval_count: Some( 10 ),
-        prompt_eval_duration: Some( 200 ),
-        eval_count: Some( 20 ),
-        eval_duration: Some( 300 ),
+        done : true,
+        done_reason : Some( "stop".to_string() ),
+        total_duration : Some( 1000 ),
+        load_duration : Some( 100 ),
+        prompt_eval_count : Some( 10 ),
+        prompt_eval_duration : Some( 200 ),
+        eval_count : Some( 20 ),
+        eval_duration : Some( 300 ),
       } ) )
     }
   }
@@ -57,13 +57,13 @@ mod private
     /// Create a new message queue
     #[ inline ]
     #[ must_use ]
-    pub fn new( max_size: usize ) -> Self
+    pub fn new( max_size : usize ) -> Self
     {
       Self
       {
-        queue: Arc::new( Mutex::new( Vec::new() ) ),
+        queue : Arc::new( Mutex::new( Vec::new() ) ),
         max_size,
-        metrics: Arc::new( RwLock::new( WebSocketMetrics::default() ) ),
+        metrics : Arc::new( RwLock::new( WebSocketMetrics::default() ) ),
       }
     }
 
@@ -75,7 +75,7 @@ mod private
     /// # Panics
     /// Panics if the queue mutex is poisoned.
     #[ inline ]
-    pub fn enqueue( &self, message: QueuedMessage ) -> Result< () >
+    pub fn enqueue( &self, message : QueuedMessage ) -> Result< () >
     {
       let mut queue = self.queue.lock().unwrap();
       if queue.len() >= self.max_size
@@ -153,16 +153,16 @@ mod private
     /// # Panics
     /// Panics if the queue mutex is poisoned or if system time goes backwards.
     #[ inline ]
-    pub fn push( &self, message: &WebSocketMessage ) -> Result< () >
+    pub fn push( &self, message : &WebSocketMessage ) -> Result< () >
     {
       let queued_msg = QueuedMessage
       {
-        id: format!( "msg-{}", std::time::SystemTime::now().duration_since( std::time::UNIX_EPOCH ).unwrap().as_nanos() ),
-        content: format!( "{message:?}" ),
-        priority: 1,
-        timestamp: std::time::Instant::now(),
-        retry_count: 0,
-        max_retries: 3,
+        id : format!( "msg-{}", std::time::SystemTime::now().duration_since( std::time::UNIX_EPOCH ).unwrap().as_nanos() ),
+        content : format!( "{message:?}" ),
+        priority : 1,
+        timestamp : std::time::Instant::now(),
+        retry_count : 0,
+        max_retries : 3,
       };
       self.enqueue( queued_msg )
     }
@@ -200,27 +200,27 @@ mod private
   impl core::fmt::Display for WebSocketError
   {
     #[ inline ]
-    fn fmt( &self, f: &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result
+    fn fmt( &self, f : &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result
     {
       match self
       {
-        WebSocketError::ConnectionFailed( msg ) => write!( f, "Connection failed: {msg}" ),
-        WebSocketError::ProtocolError( msg ) => write!( f, "Protocol error: {msg}" ),
-        WebSocketError::AuthenticationFailed( msg ) => write!( f, "Authentication failed: {msg}" ),
-        WebSocketError::CompressionError( msg ) => write!( f, "Compression error: {msg}" ),
+        WebSocketError::ConnectionFailed( msg ) => write!( f, "Connection failed : {msg}" ),
+        WebSocketError::ProtocolError( msg ) => write!( f, "Protocol error : {msg}" ),
+        WebSocketError::AuthenticationFailed( msg ) => write!( f, "Authentication failed : {msg}" ),
+        WebSocketError::CompressionError( msg ) => write!( f, "Compression error : {msg}" ),
         WebSocketError::QueueOverflow => write!( f, "Message queue overflow" ),
         WebSocketError::HeartbeatTimeout => write!( f, "Heartbeat timeout" ),
-        WebSocketError::InvalidMessage( msg ) => write!( f, "Invalid message: {msg}" ),
+        WebSocketError::InvalidMessage( msg ) => write!( f, "Invalid message : {msg}" ),
         WebSocketError::PoolExhausted => write!( f, "Connection pool exhausted" ),
         WebSocketError::StreamingError { message, code } =>
         {
           match code
           {
             Some( code ) => write!( f, "Streaming error ({code}): {message}" ),
-            None => write!( f, "Streaming error: {message}" ),
+            None => write!( f, "Streaming error : {message}" ),
           }
         },
-        WebSocketError::Generic( msg ) => write!( f, "WebSocket error: {msg}" ),
+        WebSocketError::Generic( msg ) => write!( f, "WebSocket error : {msg}" ),
       }
     }
   }
@@ -235,21 +235,21 @@ mod private
     {
       Self
       {
-        messages_sent: 0,
-        messages_received: 0,
-        uptime_seconds: 0,
-        reconnection_attempts: 0,
-        average_latency_ms: 0,
-        queue_size: 0,
-        compression_errors: 0,
-        heartbeat_failures: 0,
-        bytes_sent: 0,
-        bytes_received: 0,
-        heartbeat_count: 0,
-        reconnect_count: 0,
-        uptime: core::time::Duration::from_nanos( 0 ),
-        compression_ratio: 0.0,
-        created_at: std::time::Instant::now(),
+        messages_sent : 0,
+        messages_received : 0,
+        uptime_seconds : 0,
+        reconnection_attempts : 0,
+        average_latency_ms : 0,
+        queue_size : 0,
+        compression_errors : 0,
+        heartbeat_failures : 0,
+        bytes_sent : 0,
+        bytes_received : 0,
+        heartbeat_count : 0,
+        reconnect_count : 0,
+        uptime : core::time::Duration::from_nanos( 0 ),
+        compression_ratio : 0.0,
+        created_at : std::time::Instant::now(),
       }
     }
   }
@@ -273,7 +273,7 @@ mod private
 
     /// Record a message sent
     #[ inline ]
-    pub fn record_message_sent( &mut self, bytes: u64 )
+    pub fn record_message_sent( &mut self, bytes : u64 )
     {
       self.messages_sent += 1;
       self.bytes_sent += bytes;
@@ -282,7 +282,7 @@ mod private
 
     /// Record a message received
     #[ inline ]
-    pub fn record_message_received( &mut self, bytes: u64 )
+    pub fn record_message_received( &mut self, bytes : u64 )
     {
       self.messages_received += 1;
       self.bytes_received += bytes;
@@ -325,17 +325,17 @@ mod private
     {
       Self
       {
-        max_connections: 10,
-        min_connections: 2,
-        connection_timeout: Duration::from_secs( 300 ),
-        enable_multiplexing: true,
+        max_connections : 10,
+        min_connections : 2,
+        connection_timeout : Duration::from_secs( 300 ),
+        enable_multiplexing : true,
       }
     }
 
     /// Set the maximum number of connections
     #[ inline ]
     #[ must_use ]
-    pub fn with_max_connections( mut self, max: usize ) -> Self
+    pub fn with_max_connections( mut self, max : usize ) -> Self
     {
       self.max_connections = max;
       self
@@ -344,7 +344,7 @@ mod private
     /// Set the connection timeout
     #[ inline ]
     #[ must_use ]
-    pub fn with_connection_timeout( mut self, timeout: Duration ) -> Self
+    pub fn with_connection_timeout( mut self, timeout : Duration ) -> Self
     {
       self.connection_timeout = timeout;
       self
@@ -353,7 +353,7 @@ mod private
     /// Set the idle timeout (placeholder - not stored in config)
     #[ inline ]
     #[ must_use ]
-    pub fn with_idle_timeout( self, _timeout: Duration ) -> Self
+    pub fn with_idle_timeout( self, _timeout : Duration ) -> Self
     {
       // Placeholder implementation
       self
@@ -400,21 +400,21 @@ mod private
     /// Create a new WebSocket pool
     #[ inline ]
     #[ must_use ]
-    pub fn new( config: WebSocketPoolConfig ) -> Self
+    pub fn new( config : WebSocketPoolConfig ) -> Self
     {
       let pool = ConnectionPool::new( config.max_connections, config.connection_timeout );
       Self
       {
         config,
         pool,
-        active_connections: std::sync::Arc::new( std::sync::Mutex::new( 0 ) ),
-        connections: std::sync::Arc::new( std::sync::Mutex::new( std::collections::HashMap::new() ) ),
+        active_connections : std::sync::Arc::new( std::sync::Mutex::new( 0 ) ),
+        connections : std::sync::Arc::new( std::sync::Mutex::new( std::collections::HashMap::new() ) ),
       }
     }
 
     /// Get or create a connection with the given configuration
     #[ inline ]
-    pub async fn get_or_create_connection( &self, config: WebSocketConfig ) -> Result< WebSocketConnection >
+    pub async fn get_or_create_connection( &self, config : WebSocketConfig ) -> Result< WebSocketConnection >
     {
       let url = config.url().to_string();
 
@@ -456,10 +456,10 @@ mod private
       let active = *self.active_connections.lock().unwrap();
       PoolStatistics
       {
-        active_connections: active,
-        idle_connections: 0,
-        total_connections: active,
-        queue_length: 0,
+        active_connections : active,
+        idle_connections : 0,
+        total_connections : active,
+        queue_length : 0,
       }
     }
   }
@@ -469,14 +469,14 @@ mod private
     /// Create a new connection pool
     #[ inline ]
     #[ must_use ]
-    pub fn new( max_size: usize, connection_timeout: Duration ) -> Self
+    pub fn new( max_size : usize, connection_timeout : Duration ) -> Self
     {
       Self
       {
-        connections: Arc::new( RwLock::new( Vec::new() ) ),
+        connections : Arc::new( RwLock::new( Vec::new() ) ),
         max_size,
         connection_timeout,
-        metrics: Arc::new( RwLock::new( WebSocketMetrics::default() ) ),
+        metrics : Arc::new( RwLock::new( WebSocketMetrics::default() ) ),
       }
     }
 
@@ -496,12 +496,12 @@ mod private
         let mut connections = self.connections.write().unwrap();
         connections.push( PooledConnection
         {
-          id: connection_id.clone(),
-          state: Arc::new( RwLock::new( WebSocketState::Disconnected ) ),
-          established_at: std::time::Instant::now(),
-          last_activity: Arc::new( RwLock::new( std::time::Instant::now() ) ),
-          active_streams: Arc::new( RwLock::new( 0 ) ),
-          metrics: Arc::new( RwLock::new( WebSocketMetrics::default() ) ),
+          id : connection_id.clone(),
+          state : Arc::new( RwLock::new( WebSocketState::Disconnected ) ),
+          established_at : std::time::Instant::now(),
+          last_activity : Arc::new( RwLock::new( std::time::Instant::now() ) ),
+          active_streams : Arc::new( RwLock::new( 0 ) ),
+          metrics : Arc::new( RwLock::new( WebSocketMetrics::default() ) ),
         } );
         Ok( connection_id )
       }
@@ -521,7 +521,7 @@ mod private
     /// Create a new WebSocket client
     #[ inline ]
     #[ must_use ]
-    pub fn new( config: WebSocketConfig ) -> Result< Self >
+    pub fn new( config : WebSocketConfig ) -> Result< Self >
     {
       let message_queue = MessageQueue::new( config.max_queue_size );
       let connection_pool = ConnectionPool::new( config.pool_size, config.timeout );
@@ -529,12 +529,12 @@ mod private
       Ok( Self
       {
         config,
-        state: Arc::new( RwLock::new( WebSocketState::Disconnected ) ),
+        state : Arc::new( RwLock::new( WebSocketState::Disconnected ) ),
         message_queue,
         connection_pool,
-        auth: None,
-        metrics: Arc::new( RwLock::new( WebSocketMetrics::default() ) ),
-        http_client: None,
+        auth : None,
+        metrics : Arc::new( RwLock::new( WebSocketMetrics::default() ) ),
+        http_client : None,
       } )
     }
 
@@ -548,7 +548,7 @@ mod private
       }
 
       // Placeholder for actual WebSocket connection logic
-      tokio::time::sleep( Duration::from_millis( 100 ) ).await;
+      tokio ::time::sleep( Duration::from_millis( 100 ) ).await;
 
       {
         let mut state = self.state.write().unwrap();
@@ -623,7 +623,7 @@ mod private
 
     /// Send a queued message
     #[ inline ]
-    pub fn send_queued_message( &self, message: QueuedMessage ) -> Result< () >
+    pub fn send_queued_message( &self, message : QueuedMessage ) -> Result< () >
     {
       let state = self.state.read().unwrap();
       if *state != WebSocketState::Connected
@@ -647,18 +647,18 @@ mod private
     /// Create a new WebSocket connection
     #[ inline ]
     #[ must_use ]
-    pub fn new( id: String ) -> Self
+    pub fn new( id : String ) -> Self
     {
       let now = std::time::Instant::now();
       Self
       {
         id,
-        state: Arc::new( RwLock::new( WebSocketState::Disconnected ) ),
-        client_id: format!( "client-{}", std::time::SystemTime::now().duration_since( std::time::UNIX_EPOCH ).unwrap().as_nanos() ),
-        established_at: now,
-        last_message_at: Arc::new( RwLock::new( now ) ),
-        metrics: Arc::new( RwLock::new( WebSocketMetrics::default() ) ),
-        connection_type: ConnectionType::WebSocket,
+        state : Arc::new( RwLock::new( WebSocketState::Disconnected ) ),
+        client_id : format!( "client-{}", std::time::SystemTime::now().duration_since( std::time::UNIX_EPOCH ).unwrap().as_nanos() ),
+        established_at : now,
+        last_message_at : Arc::new( RwLock::new( now ) ),
+        metrics : Arc::new( RwLock::new( WebSocketMetrics::default() ) ),
+        connection_type : ConnectionType::WebSocket,
       }
     }
 
@@ -761,7 +761,7 @@ mod private
 
     /// Stream chat messages over WebSocket
     #[ inline ]
-    pub async fn stream_chat( &self, request: ChatRequest ) -> Result< WebSocketChatStream >
+    pub async fn stream_chat( &self, request : ChatRequest ) -> Result< WebSocketChatStream >
     {
       // Validate the request
       if request.model.is_empty()
@@ -786,16 +786,16 @@ mod private
       // Create a chat stream
       let stream = WebSocketChatStream
       {
-        connection_id: self.id.clone(),
+        connection_id : self.id.clone(),
         request,
-        state: Arc::new( RwLock::new( WebSocketState::Connected ) ),
+        state : Arc::new( RwLock::new( WebSocketState::Connected ) ),
       };
       Ok( stream )
     }
 
     /// Queue a message for sending
     #[ inline ]
-    pub async fn queue_message( &self, _request: ChatRequest ) -> Result< () >
+    pub async fn queue_message( &self, _request : ChatRequest ) -> Result< () >
     {
       // Placeholder implementation - add to message queue
       Ok( () )
@@ -807,9 +807,9 @@ mod private
     {
       QueueInfo
       {
-        size: 0,
-        capacity: 1000,
-        pending_messages: 0,
+        size : 0,
+        capacity : 1000,
+        pending_messages : 0,
       }
     }
 
@@ -829,7 +829,7 @@ mod private
       *state = WebSocketState::Reconnecting;
 
       // Simulate reconnection after a delay
-      tokio::time::sleep( Duration::from_millis( 100 ) ).await;
+      tokio ::time::sleep( Duration::from_millis( 100 ) ).await;
       *state = WebSocketState::Connected;
 
       Ok( () )
@@ -851,15 +851,15 @@ mod private
     {
       RecoveryStatus
       {
-        error_count: 1,
-        recovery_attempts: 1,
-        is_recovered: self.get_state() == WebSocketState::Connected,
+        error_count : 1,
+        recovery_attempts : 1,
+        is_recovered : self.get_state() == WebSocketState::Connected,
       }
     }
 
     /// Set callback for state changes
     #[ inline ]
-    pub fn on_state_change< F >( &self, _callback: F ) -> Result< () >
+    pub fn on_state_change< F >( &self, _callback : F ) -> Result< () >
     where
       F: Fn( WebSocketState ) + Send + 'static,
     {
@@ -875,7 +875,7 @@ mod private
       *state = WebSocketState::Reconnecting;
 
       // Simulate reconnection delay
-      tokio::time::sleep( Duration::from_millis( 100 ) ).await;
+      tokio ::time::sleep( Duration::from_millis( 100 ) ).await;
 
       *state = WebSocketState::Connected;
       Ok( () )
@@ -884,7 +884,7 @@ mod private
 }
 
 #[ cfg( feature = "websocket_streaming" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use private::WebSocketState;
   exposed use private::WebSocketError;

@@ -34,14 +34,14 @@ mod private
   //! - **Chat completion**: Too expensive and slow for frequent health checks
   //! - **Custom health route**: Would violate "Thin Client" principle by adding non-API functionality
   //!
-  //! ## Health Status: 3-State Model
+  //! ## Health Status : 3-State Model
   //!
   //! Health checks return Healthy/Degraded/Unhealthy instead of binary pass/fail:
   //!
   //! ```text
-  //! Healthy:   Response < 2000ms, successful
-  //! Degraded:  Response ≥ 2000ms, successful (slow but working)
-  //! Unhealthy: Request failed or error response
+  //! Healthy :   Response < 2000ms, successful
+  //! Degraded :  Response ≥ 2000ms, successful (slow but working)
+  //! Unhealthy : Request failed or error response
   //! ```
   //!
   //! **Rationale**: The Degraded state allows monitoring systems to detect
@@ -128,12 +128,12 @@ mod private
   /// let client = Client::build( env )?;
   ///
   /// let result = health_check( &client ).await;
-  /// println!( "Health: {:?}", result.status );
-  /// println!( "Response time: {}ms", result.response_time_ms );
+  /// println!( "Health : {:?}", result.status );
+  /// println!( "Response time : {}ms", result.response_time_ms );
   /// # Ok( () )
   /// # }
   /// ```
-  #[allow(clippy::cast_possible_truncation)]  // Bounded by min(u64::MAX), response times won't overflow
+  #[ allow( clippy::cast_possible_truncation) ]  // Bounded by min(u64::MAX), response times won't overflow
   pub async fn health_check< E >( client : &Client< E > ) -> HealthCheckResult
   where
     E : XaiEnvironment + Send + Sync + 'static,
@@ -157,7 +157,7 @@ mod private
           {
             status : HealthStatus::Degraded,
             response_time_ms,
-            message : Some( format!( "Slow response: {response_time_ms}ms" ) ),
+            message : Some( format!( "Slow response : {response_time_ms}ms" ) ),
           }
         }
         else
@@ -176,7 +176,7 @@ mod private
         {
           status : HealthStatus::Unhealthy,
           response_time_ms,
-          message : Some( format!( "Health check failed: {e}" ) ),
+          message : Some( format!( "Health check failed : {e}" ) ),
         }
       }
     }
@@ -257,7 +257,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

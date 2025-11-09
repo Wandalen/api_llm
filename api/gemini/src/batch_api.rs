@@ -9,16 +9,16 @@
 
 use crate::
 {
-  client::Client,
-  error::Error,
-  models::
+  client ::Client,
+  error ::Error,
+  models ::
   {
     GenerateContentRequest,
     GenerateContentResponse,
     ContentEmbedding,
     Content,
     Part,
-    batch::*,
+    batch ::*,
   },
 };
 use std::time::{ Duration, SystemTime };
@@ -27,14 +27,14 @@ use std::time::{ Duration, SystemTime };
 #[ derive( Debug ) ]
 pub struct BatchApi< 'a >
 {
-  client: &'a Client,
+  client : &'a Client,
 }
 
 impl< 'a > BatchApi< 'a >
 {
   /// Create a new BatchApi instance.
   #[ inline ]
-  pub fn new( client: &'a Client ) -> Self
+  pub fn new( client : &'a Client ) -> Self
   {
     Self { client }
   }
@@ -55,8 +55,8 @@ impl< 'a > BatchApi< 'a >
   /// Returns error if job creation fails or request is invalid.
   pub async fn create_inline(
     &self,
-    model: &str,
-    requests: Vec< GenerateContentRequest >
+    model : &str,
+    requests : Vec< GenerateContentRequest >
   ) -> Result< BatchJob, Error >
   {
     // Use client field to access base_url even in mock implementation
@@ -68,13 +68,13 @@ impl< 'a > BatchApi< 'a >
     // Create batch job (mock implementation - replace with real API call)
     let batch_job = BatchJob
     {
-      job_id: job_id.clone(),
-      state: BatchJobState::Pending,
-      model: model.to_string(),
+      job_id : job_id.clone(),
+      state : BatchJobState::Pending,
+      model : model.to_string(),
       request_count,
-      create_time: Some( SystemTime::now() ),
-      expiration_time: Some( SystemTime::now() + Duration::from_secs( 86400 ) ), // 24 hours
-      error: None,
+      create_time : Some( SystemTime::now() ),
+      expiration_time : Some( SystemTime::now() + Duration::from_secs( 86400 ) ), // 24 hours
+      error : None,
     };
 
     Ok( batch_job )
@@ -93,17 +93,17 @@ impl< 'a > BatchApi< 'a >
   /// # Errors
   ///
   /// Returns error if job not found or API call fails.
-  pub async fn get_status( &self, job_id: &str ) -> Result< BatchJobStatus, Error >
+  pub async fn get_status( &self, job_id : &str ) -> Result< BatchJobStatus, Error >
   {
     // Mock implementation - replace with real API call
     let status = BatchJobStatus
     {
-      job_id: job_id.to_string(),
-      state: BatchJobState::Running,
-      completed_count: 0,
-      failed_count: 0,
-      update_time: Some( SystemTime::now() ),
-      error: None,
+      job_id : job_id.to_string(),
+      state : BatchJobState::Running,
+      completed_count : 0,
+      failed_count : 0,
+      update_time : Some( SystemTime::now() ),
+      error : None,
     };
 
     Ok( status )
@@ -127,8 +127,8 @@ impl< 'a > BatchApi< 'a >
   /// Returns error if timeout reached or job fails.
   pub async fn wait_and_retrieve(
     &self,
-    job_id: &str,
-    timeout: Duration
+    job_id : &str,
+    timeout : Duration
   ) -> Result< BatchJobResults, Error >
   {
     let start = SystemTime::now();
@@ -163,7 +163,7 @@ impl< 'a > BatchApi< 'a >
           }
 
           // Wait before next poll
-          tokio::time::sleep( poll_interval ).await;
+          tokio ::time::sleep( poll_interval ).await;
         }
       }
     }
@@ -182,53 +182,53 @@ impl< 'a > BatchApi< 'a >
   /// # Errors
   ///
   /// Returns error if results not available or expired.
-  async fn retrieve_results( &self, job_id: &str ) -> Result< BatchJobResults, Error >
+  async fn retrieve_results( &self, job_id : &str ) -> Result< BatchJobResults, Error >
   {
     // Mock implementation - replace with real API call
     let results = BatchJobResults
     {
-      job_id: job_id.to_string(),
-      state: BatchJobState::Succeeded,
-      responses: vec!
+      job_id : job_id.to_string(),
+      state : BatchJobState::Succeeded,
+      responses : vec!
       [
         GenerateContentResponse
         {
-          candidates: vec!
+          candidates : vec!
           [
-            crate::models::Candidate
+            crate ::models::Candidate
             {
-              content: Content
+              content : Content
               {
-                parts: vec!
+                parts : vec!
                 [
                   Part
                   {
-                    text: Some( "Mock response".to_string() ),
+                    text : Some( "Mock response".to_string() ),
                     ..Default::default()
                   }
                 ],
-                role: "model".to_string(),
+                role : "model".to_string(),
               },
-              finish_reason: Some( "STOP".to_string() ),
-              safety_ratings: None,
-              citation_metadata: None,
-              token_count: Some( 10 ),
-              index: Some( 0 ),
+              finish_reason : Some( "STOP".to_string() ),
+              safety_ratings : None,
+              citation_metadata : None,
+              token_count : Some( 10 ),
+              index : Some( 0 ),
             }
           ],
-          prompt_feedback: None,
-          usage_metadata: None,
-          grounding_metadata: None,
+          prompt_feedback : None,
+          usage_metadata : None,
+          grounding_metadata : None,
         }
       ],
-      billing_metadata: Some( BatchBillingMetadata
+      billing_metadata : Some( BatchBillingMetadata
       {
-        discount_percentage: 50,
-        standard_cost: 0.02,
-        discounted_cost: 0.01,
-        total_tokens: 100,
+        discount_percentage : 50,
+        standard_cost : 0.02,
+        discounted_cost : 0.01,
+        total_tokens : 100,
       } ),
-      retrieve_time: Some( SystemTime::now() ),
+      retrieve_time : Some( SystemTime::now() ),
     };
 
     Ok( results )
@@ -243,7 +243,7 @@ impl< 'a > BatchApi< 'a >
   /// # Errors
   ///
   /// Returns error if job cannot be cancelled or not found.
-  pub async fn cancel( &self, job_id: &str ) -> Result< (), Error >
+  pub async fn cancel( &self, job_id : &str ) -> Result< (), Error >
   {
     // Mock implementation - replace with real API call
     let _ = job_id;
@@ -277,7 +277,7 @@ impl< 'a > BatchApi< 'a >
   /// # Errors
   ///
   /// Returns error if token invalid or list fails.
-  pub async fn list_with_token( &self, page_token: &str ) -> Result< BatchJobList, Error >
+  pub async fn list_with_token( &self, page_token : &str ) -> Result< BatchJobList, Error >
   {
     self.list_with_page_size( None, Some( page_token.to_string() ) ).await
   }
@@ -285,15 +285,15 @@ impl< 'a > BatchApi< 'a >
   /// Internal list implementation with page size and token.
   async fn list_with_page_size(
     &self,
-    _page_size: Option< i32 >,
-    _page_token: Option< String >
+    _page_size : Option< i32 >,
+    _page_token : Option< String >
   ) -> Result< BatchJobList, Error >
   {
     // Mock implementation - replace with real API call
     let list = BatchJobList
     {
-      jobs: vec![],
-      next_page_token: None,
+      jobs : vec![],
+      next_page_token : None,
     };
 
     Ok( list )
@@ -315,8 +315,8 @@ impl< 'a > BatchApi< 'a >
   /// Returns error if job creation fails.
   pub async fn create_embedding_batch(
     &self,
-    model: &str,
-    texts: Vec< String >
+    model : &str,
+    texts : Vec< String >
   ) -> Result< BatchJob, Error >
   {
     let job_id = format!( "batch_embed_{}", uuid::Uuid::new_v4() );
@@ -324,13 +324,13 @@ impl< 'a > BatchApi< 'a >
 
     let batch_job = BatchJob
     {
-      job_id: job_id.clone(),
-      state: BatchJobState::Pending,
-      model: model.to_string(),
+      job_id : job_id.clone(),
+      state : BatchJobState::Pending,
+      model : model.to_string(),
       request_count,
-      create_time: Some( SystemTime::now() ),
-      expiration_time: Some( SystemTime::now() + Duration::from_secs( 86400 ) ),
-      error: None,
+      create_time : Some( SystemTime::now() ),
+      expiration_time : Some( SystemTime::now() + Duration::from_secs( 86400 ) ),
+      error : None,
     };
 
     Ok( batch_job )
@@ -352,8 +352,8 @@ impl< 'a > BatchApi< 'a >
   /// Returns error if timeout or job fails.
   pub async fn wait_and_retrieve_embeddings(
     &self,
-    job_id: &str,
-    timeout: Duration
+    job_id : &str,
+    timeout : Duration
   ) -> Result< BatchEmbeddingResults, Error >
   {
     let start = SystemTime::now();
@@ -386,33 +386,33 @@ impl< 'a > BatchApi< 'a >
             return Err( Error::ApiError( "Batch job timeout".to_string() ) );
           }
 
-          tokio::time::sleep( poll_interval ).await;
+          tokio ::time::sleep( poll_interval ).await;
         }
       }
     }
   }
 
   /// Retrieve embedding results from completed job.
-  async fn retrieve_embedding_results( &self, job_id: &str ) -> Result< BatchEmbeddingResults, Error >
+  async fn retrieve_embedding_results( &self, job_id : &str ) -> Result< BatchEmbeddingResults, Error >
   {
     // Mock implementation - replace with real API call
     let results = BatchEmbeddingResults
     {
-      job_id: job_id.to_string(),
-      state: BatchJobState::Succeeded,
-      embeddings: vec!
+      job_id : job_id.to_string(),
+      state : BatchJobState::Succeeded,
+      embeddings : vec!
       [
         ContentEmbedding
         {
-          values: vec![ 0.1, 0.2, 0.3 ],
+          values : vec![ 0.1, 0.2, 0.3 ],
         }
       ],
-      billing_metadata: Some( BatchBillingMetadata
+      billing_metadata : Some( BatchBillingMetadata
       {
-        discount_percentage: 50,
-        standard_cost: 0.01,
-        discounted_cost: 0.005,
-        total_tokens: 50,
+        discount_percentage : 50,
+        standard_cost : 0.01,
+        discounted_cost : 0.005,
+        total_tokens : 50,
       } ),
     };
 

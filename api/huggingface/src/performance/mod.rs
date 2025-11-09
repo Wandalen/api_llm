@@ -15,7 +15,7 @@
 //! ```no_run
 //! # use api_huggingface::performance::{PerformanceMetrics, MetricsConfig};
 //! # use std::time::Instant;
-//! # async fn example() -> Result< (), Box< dyn std::error::Error >> {
+//! # async fn example() -> Result< (), Box< dyn std::error::Error > > {
 //! let metrics = PerformanceMetrics::new(MetricsConfig::default());
 //!
 //! // Record a request
@@ -25,9 +25,9 @@
 //!
 //! // Get statistics
 //! let snapshot = metrics.snapshot().await;
-//! println!("Mean latency: {:?}", snapshot.latency.mean);
-//! println!("P95 latency: {:?}", snapshot.latency.p95);
-//! println!("Error rate: {:.2}%", snapshot.error_rate() * 100.0);
+//! println!("Mean latency : {:?}", snapshot.latency.mean);
+//! println!("P95 latency : {:?}", snapshot.latency.p95);
+//! println!("Error rate : {:.2}%", snapshot.error_rate() * 100.0);
 //! # Ok(())
 //! # }
 //! ```

@@ -17,15 +17,15 @@ mod private
   pub struct FailoverConfig
   {
     /// Primary endpoint URL
-    pub primary_endpoint: String,
+    pub primary_endpoint : String,
     /// List of backup endpoint URLs
-    pub backup_endpoints: Vec< String >,
+    pub backup_endpoints : Vec< String >,
     /// Timeout for endpoint health checks
-    pub timeout: Duration,
+    pub timeout : Duration,
     /// Maximum retry attempts per endpoint
-    pub max_retries: u32,
+    pub max_retries : u32,
     /// Failover strategy to use
-    pub strategy: FailoverStrategy,
+    pub strategy : FailoverStrategy,
   }
 
   impl Default for FailoverConfig
@@ -34,11 +34,11 @@ mod private
     fn default() -> Self
     {
       Self {
-        primary_endpoint: "https://generativelanguage.googleapis.com".to_string(),
-        backup_endpoints: Vec::new(),
-        timeout: Duration::from_secs( 5 ),
-        max_retries: 3,
-        strategy: FailoverStrategy::Priority,
+        primary_endpoint : "https://generativelanguage.googleapis.com".to_string(),
+        backup_endpoints : Vec::new(),
+        timeout : Duration::from_secs( 5 ),
+        max_retries : 3,
+        strategy : FailoverStrategy::Priority,
       }
     }
   }
@@ -47,7 +47,7 @@ mod private
   #[ derive( Debug, Clone ) ]
   pub struct FailoverConfigBuilder
   {
-    config: FailoverConfig,
+    config : FailoverConfig,
   }
 
   impl Default for FailoverConfigBuilder
@@ -56,7 +56,7 @@ mod private
     fn default() -> Self
     {
       Self {
-        config: FailoverConfig::default(),
+        config : FailoverConfig::default(),
       }
     }
   }
@@ -69,14 +69,14 @@ mod private
     pub fn new() -> Self
     {
       Self {
-        config: FailoverConfig::default(),
+        config : FailoverConfig::default(),
       }
     }
 
     /// Set the primary endpoint
     #[ inline ]
     #[ must_use ]
-    pub fn primary_endpoint( mut self, endpoint: String ) -> Self
+    pub fn primary_endpoint( mut self, endpoint : String ) -> Self
     {
       self.config.primary_endpoint = endpoint;
       self
@@ -85,7 +85,7 @@ mod private
     /// Add a backup endpoint
     #[ inline ]
     #[ must_use ]
-    pub fn backup_endpoint( mut self, endpoint: String ) -> Self
+    pub fn backup_endpoint( mut self, endpoint : String ) -> Self
     {
       self.config.backup_endpoints.push( endpoint );
       self
@@ -94,7 +94,7 @@ mod private
     /// Set the timeout for health checks
     #[ inline ]
     #[ must_use ]
-    pub fn timeout( mut self, timeout: Duration ) -> Self
+    pub fn timeout( mut self, timeout : Duration ) -> Self
     {
       self.config.timeout = timeout;
       self
@@ -103,7 +103,7 @@ mod private
     /// Set the maximum retry attempts
     #[ inline ]
     #[ must_use ]
-    pub fn max_retries( mut self, retries: u32 ) -> Self
+    pub fn max_retries( mut self, retries : u32 ) -> Self
     {
       self.config.max_retries = retries;
       self
@@ -112,7 +112,7 @@ mod private
     /// Set the failover strategy
     #[ inline ]
     #[ must_use ]
-    pub fn strategy( mut self, strategy: FailoverStrategy ) -> Self
+    pub fn strategy( mut self, strategy : FailoverStrategy ) -> Self
     {
       self.config.strategy = strategy;
       self
@@ -135,7 +135,7 @@ mod private
 
     /// Validate the failover configuration
     #[ inline ]
-    fn validate_config( config: &FailoverConfig ) -> Result< (), crate::error::Error >
+    fn validate_config( config : &FailoverConfig ) -> Result< (), crate::error::Error >
     {
       if config.primary_endpoint.is_empty()
       {
@@ -207,15 +207,15 @@ mod private
   pub struct EndpointHealth
   {
     /// The endpoint URL
-    pub endpoint: String,
+    pub endpoint : String,
     /// Current health status
-    pub status: HealthStatus,
+    pub status : HealthStatus,
     /// Last time this endpoint was checked
-    pub last_check: SystemTime,
+    pub last_check : SystemTime,
     /// Response time of last successful request
-    pub response_time: Option< Duration >,
+    pub response_time : Option< Duration >,
     /// Number of consecutive failures
-    pub consecutive_failures: u32,
+    pub consecutive_failures : u32,
   }
 
   /// Result of checking endpoint health
@@ -223,13 +223,13 @@ mod private
   pub struct HealthCheckResult
   {
     /// Whether the primary endpoint is healthy
-    pub primary_healthy: bool,
+    pub primary_healthy : bool,
     /// Whether backup endpoints are available
-    pub backup_available: bool,
+    pub backup_available : bool,
     /// Detailed health status for all endpoints
-    pub endpoint_health: Vec< EndpointHealth >,
+    pub endpoint_health : Vec< EndpointHealth >,
     /// Recommended next endpoint to try
-    pub recommended_endpoint: Option< String >,
+    pub recommended_endpoint : Option< String >,
   }
 
   /// Metrics for failover operations
@@ -237,24 +237,24 @@ mod private
   pub struct FailoverMetrics
   {
     /// Total number of configured endpoints
-    pub total_endpoints: usize,
+    pub total_endpoints : usize,
     /// Number of times failover has occurred
-    pub failover_count: u64,
+    pub failover_count : u64,
     /// Health status of all endpoints
-    pub endpoint_health: Vec< EndpointHealth >,
+    pub endpoint_health : Vec< EndpointHealth >,
     /// Current active endpoint
-    pub active_endpoint: String,
+    pub active_endpoint : String,
   }
 
   /// Failover management interface
   #[ allow( missing_debug_implementations ) ] // Cannot derive Debug due to function pointers
   pub struct FailoverManager
   {
-    client: crate::client::Client,
-    config: FailoverConfig,
-    metrics: Arc< Mutex< FailoverMetrics > >,
-    round_robin_index: Arc< Mutex< usize > >,
-    endpoint_health: Arc< Mutex< HashMap<  String, EndpointHealth  > > >,
+    client : crate::client::Client,
+    config : FailoverConfig,
+    metrics : Arc< Mutex< FailoverMetrics > >,
+    round_robin_index : Arc< Mutex< usize > >,
+    endpoint_health : Arc< Mutex< HashMap<  String, EndpointHealth  > > >,
   }
 
   impl FailoverManager
@@ -262,22 +262,22 @@ mod private
     /// Create a new failover manager
     #[ inline ]
     #[ must_use ]
-    pub fn new( client: crate::client::Client, config: FailoverConfig ) -> Self
+    pub fn new( client : crate::client::Client, config : FailoverConfig ) -> Self
     {
       let total_endpoints = 1 + config.backup_endpoints.len();
       let metrics = FailoverMetrics {
         total_endpoints,
-        failover_count: 0,
-        endpoint_health: Vec::new(),
-        active_endpoint: config.primary_endpoint.clone(),
+        failover_count : 0,
+        endpoint_health : Vec::new(),
+        active_endpoint : config.primary_endpoint.clone(),
       };
 
       Self {
         client,
         config,
-        metrics: Arc::new( Mutex::new( metrics ) ),
-        round_robin_index: Arc::new( Mutex::new( 0 ) ),
-        endpoint_health: Arc::new( Mutex::new( HashMap::new() ) ),
+        metrics : Arc::new( Mutex::new( metrics ) ),
+        round_robin_index : Arc::new( Mutex::new( 0 ) ),
+        endpoint_health : Arc::new( Mutex::new( HashMap::new() ) ),
       }
     }
 
@@ -348,7 +348,7 @@ mod private
     }
 
     /// Check health of a single endpoint
-    async fn check_single_endpoint( &self, endpoint: &str ) -> EndpointHealth
+    async fn check_single_endpoint( &self, endpoint : &str ) -> EndpointHealth
     {
       let start_time = SystemTime::now();
 
@@ -375,9 +375,9 @@ mod private
       };
 
       EndpointHealth {
-        endpoint: endpoint.to_string(),
+        endpoint : endpoint.to_string(),
         status,
-        last_check: start_time,
+        last_check : start_time,
         response_time,
         consecutive_failures,
       }
@@ -488,11 +488,11 @@ mod private
     #[ inline ]
     pub async fn execute_with_failover< F, Fut, T >(
       &self,
-      operation: F
+      operation : F
     ) -> Result< T, crate::error::Error >
     where
       F: Fn( crate::client::Client ) -> Fut,
-      Fut: Future< Output = Result< T, crate::error::Error > >,
+      Fut : Future< Output = Result< T, crate::error::Error > >,
     {
       // Try primary endpoint first
       if let Ok( result ) = operation( self.client.clone() ).await
@@ -528,7 +528,7 @@ mod private
   #[ derive( Debug ) ]
   pub struct FailoverBuilder
   {
-    client: crate::client::Client,
+    client : crate::client::Client,
   }
 
   impl FailoverBuilder
@@ -536,7 +536,7 @@ mod private
     /// Create a new failover builder
     #[ inline ]
     #[ must_use ]
-    pub fn new( client: crate::client::Client ) -> Self
+    pub fn new( client : crate::client::Client ) -> Self
     {
       Self { client }
     }
@@ -544,7 +544,7 @@ mod private
     /// Configure failover with the given configuration
     #[ inline ]
     #[ must_use ]
-    pub fn configure( self, config: FailoverConfig ) -> FailoverManager
+    pub fn configure( self, config : FailoverConfig ) -> FailoverManager
     {
       FailoverManager::new( self.client, config )
     }

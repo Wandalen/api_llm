@@ -10,10 +10,10 @@ mod private
   // Use crate root for base access
   use crate::
   {
-    client::Client,
-    error::{ Result, OpenAIError },
-    environment::{ OpenaiEnvironment, EnvironmentInterface },
-    curl_generation::{ CurlGeneration, build_curl_request, serialize_request_to_json },
+    client ::Client,
+    error ::{ Result, OpenAIError },
+    environment ::{ OpenaiEnvironment, EnvironmentInterface },
+    curl_generation ::{ CurlGeneration, build_curl_request, serialize_request_to_json },
   };
   use crate::components::embeddings::
   {
@@ -63,7 +63,7 @@ mod private
     /// use api_openai::{ Client, environment::{ OpenaiEnvironmentImpl, OpenAIRecommended }, Secret, ClientApiAccessors };
     /// use api_openai::components::embeddings_request::CreateEmbeddingRequest;
     ///
-    /// # async fn example() -> Result<(), Box< dyn std::error::Error >> {
+    /// # async fn example() -> Result<(), Box< dyn std::error::Error > > {
     /// let secret = Secret::load_from_env("OPENAI_API_KEY")?;
     /// let env = OpenaiEnvironmentImpl::build(secret, None, None, OpenAIRecommended::base_url().to_string(), OpenAIRecommended::realtime_base_url().to_string())?;
     /// let client = Client::build(env)?;
@@ -98,7 +98,7 @@ mod private
     fn to_curl( &self, request : &Self::Request ) -> core::result::Result< String, Self::Error >
     {
       let json_body = serialize_request_to_json( request ).map_err( |e|
-        OpenAIError::Internal( format!( "Failed to serialize request: {e}" ) )
+        OpenAIError::Internal( format!( "Failed to serialize request : {e}" ) )
       )?;
 
       let base_url = self.client.environment.base_url();
@@ -111,7 +111,7 @@ mod private
 
       // Add headers from environment (includes authorization, organization, project)
       let env_headers = self.client.environment.headers().map_err( |e|
-        OpenAIError::Internal( format!( "Failed to get headers from environment: {e}" ) )
+        OpenAIError::Internal( format!( "Failed to get headers from environment : {e}" ) )
       )?;
 
       for ( key, value ) in &env_headers
@@ -131,7 +131,7 @@ mod private
     fn to_curl_safe( &self, request : &Self::Request ) -> core::result::Result< String, Self::Error >
     {
       let json_body = serialize_request_to_json( request ).map_err( |e|
-        OpenAIError::Internal( format!( "Failed to serialize request: {e}" ) )
+        OpenAIError::Internal( format!( "Failed to serialize request : {e}" ) )
       )?;
 
       let base_url = self.client.environment.base_url();
@@ -152,7 +152,7 @@ mod private
     fn to_curl_with_headers( &self, request : &Self::Request, custom_headers : &std::collections::HashMap<  String, String  > ) -> core::result::Result< String, Self::Error >
     {
       let json_body = serialize_request_to_json( request ).map_err( |e|
-        OpenAIError::Internal( format!( "Failed to serialize request: {e}" ) )
+        OpenAIError::Internal( format!( "Failed to serialize request : {e}" ) )
       )?;
 
       let base_url = self.client.environment.base_url();
@@ -165,7 +165,7 @@ mod private
 
       // Add headers from environment (includes authorization, organization, project)
       let env_headers = self.client.environment.headers().map_err( |e|
-        OpenAIError::Internal( format!( "Failed to get headers from environment: {e}" ) )
+        OpenAIError::Internal( format!( "Failed to get headers from environment : {e}" ) )
       )?;
 
       for ( key, value ) in &env_headers
@@ -188,7 +188,7 @@ mod private
   }
 } // end mod private
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   // Expose all structs defined in this module
   exposed use 

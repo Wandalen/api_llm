@@ -271,17 +271,17 @@ mod private
     {
       match self
       {
-        StreamContentBlock::Text { r#type, text: _ } =>
+        StreamContentBlock::Text { r#type, text : _ } =>
         {
           if r#type != "text"
           {
             #[ cfg( feature = "error-handling" ) ]
-            return Err( AnthropicError::InvalidArgument( format!( "Invalid text content type: '{type}'" ) ) );
+            return Err( AnthropicError::InvalidArgument( format!( "Invalid text content type : '{type}'" ) ) );
             #[ cfg( not( feature = "error-handling" ) ) ]
-            return Err( crate::error_tools::Error::msg( format!( "Invalid text content type: '{type}'" ) ) );
+            return Err( crate::error_tools::Error::msg( format!( "Invalid text content type : '{type}'" ) ) );
           }
 
-          // Note: Empty text is allowed in streaming scenarios as content starts empty and gets deltas
+          // Note : Empty text is allowed in streaming scenarios as content starts empty and gets deltas
         },
         #[ cfg( feature = "tools" ) ]
         StreamContentBlock::ToolUse { r#type, id, name, .. } =>
@@ -289,9 +289,9 @@ mod private
           if r#type != "tool_use"
           {
             #[ cfg( feature = "error-handling" ) ]
-            return Err( AnthropicError::InvalidArgument( format!( "Invalid tool use content type: '{type}'" ) ) );
+            return Err( AnthropicError::InvalidArgument( format!( "Invalid tool use content type : '{type}'" ) ) );
             #[ cfg( not( feature = "error-handling" ) ) ]
-            return Err( crate::error_tools::Error::msg( format!( "Invalid tool use content type: '{type}'" ) ) );
+            return Err( crate::error_tools::Error::msg( format!( "Invalid tool use content type : '{type}'" ) ) );
           }
 
           if id.is_empty()
@@ -434,17 +434,17 @@ mod private
     {
       match self
       {
-        StreamDelta::TextDelta { r#type, text: _ } =>
+        StreamDelta::TextDelta { r#type, text : _ } =>
         {
           if r#type != "text_delta"
           {
             #[ cfg( feature = "error-handling" ) ]
-            return Err( AnthropicError::InvalidArgument( format!( "Invalid text delta type: '{type}'" ) ) );
+            return Err( AnthropicError::InvalidArgument( format!( "Invalid text delta type : '{type}'" ) ) );
             #[ cfg( not( feature = "error-handling" ) ) ]
-            return Err( crate::error_tools::Error::msg( format!( "Invalid text delta type: '{type}'" ) ) );
+            return Err( crate::error_tools::Error::msg( format!( "Invalid text delta type : '{type}'" ) ) );
           }
 
-          // Note: Empty text deltas are allowed in streaming scenarios (e.g., whitespace-only deltas)
+          // Note : Empty text deltas are allowed in streaming scenarios (e.g., whitespace-only deltas)
         },
         #[ cfg( feature = "tools" ) ]
         StreamDelta::InputJsonDelta { r#type, partial_json } =>
@@ -452,9 +452,9 @@ mod private
           if r#type != "input_json_delta"
           {
             #[ cfg( feature = "error-handling" ) ]
-            return Err( AnthropicError::InvalidArgument( format!( "Invalid input JSON delta type: '{type}'" ) ) );
+            return Err( AnthropicError::InvalidArgument( format!( "Invalid input JSON delta type : '{type}'" ) ) );
             #[ cfg( not( feature = "error-handling" ) ) ]
-            return Err( crate::error_tools::Error::msg( format!( "Invalid input JSON delta type: '{type}'" ) ) );
+            return Err( crate::error_tools::Error::msg( format!( "Invalid input JSON delta type : '{type}'" ) ) );
           }
 
           if partial_json.is_empty()
@@ -723,11 +723,11 @@ mod private
         continue;
       }
 
-      if let Some( event_line ) = line.strip_prefix( "event: " )
+      if let Some( event_line ) = line.strip_prefix( "event : " )
       {
         current_event = Some( event_line.to_string() );
       }
-      else if let Some( data_line ) = line.strip_prefix( "data: " )
+      else if let Some( data_line ) = line.strip_prefix( "data : " )
       {
         if !current_data.is_empty()
         {
@@ -782,9 +782,9 @@ mod private
     if data.is_empty() && event_type != "message_stop"
     {
       #[ cfg( feature = "error-handling" ) ]
-      return Err( AnthropicError::InvalidArgument( format!( "Event data cannot be empty for event type: {event_type}" ) ) );
+      return Err( AnthropicError::InvalidArgument( format!( "Event data cannot be empty for event type : {event_type}" ) ) );
       #[ cfg( not( feature = "error-handling" ) ) ]
-      return Err( crate::error_tools::Error::msg( format!( "Event data cannot be empty for event type: {event_type}" ) ) );
+      return Err( crate::error_tools::Error::msg( format!( "Event data cannot be empty for event type : {event_type}" ) ) );
     }
 
     Ok( () )
@@ -797,9 +797,9 @@ mod private
       .map_err( | e | 
       {
         #[ cfg( feature = "error-handling" ) ]
-        return AnthropicError::Parsing( format!( "Failed to parse message_start: {e}" ) );
+        return AnthropicError::Parsing( format!( "Failed to parse message_start : {e}" ) );
         #[ cfg( not( feature = "error-handling" ) ) ]
-        return crate::error_tools::Error::msg( format!( "Failed to parse message_start: {e}" ) );
+        return crate::error_tools::Error::msg( format!( "Failed to parse message_start : {e}" ) );
       } )?;
 
     message.validate()?;
@@ -820,9 +820,9 @@ mod private
       .map_err( | e | 
       {
         #[ cfg( feature = "error-handling" ) ]
-        return AnthropicError::Parsing( format!( "Failed to parse content_block_start: {e}" ) );
+        return AnthropicError::Parsing( format!( "Failed to parse content_block_start : {e}" ) );
         #[ cfg( not( feature = "error-handling" ) ) ]
-        return crate::error_tools::Error::msg( format!( "Failed to parse content_block_start: {e}" ) );
+        return crate::error_tools::Error::msg( format!( "Failed to parse content_block_start : {e}" ) );
       } )?;
 
     event_data.content_block.validate()?;
@@ -847,9 +847,9 @@ mod private
       .map_err( | e | 
       {
         #[ cfg( feature = "error-handling" ) ]
-        return AnthropicError::Parsing( format!( "Failed to parse content_block_delta: {e}" ) );
+        return AnthropicError::Parsing( format!( "Failed to parse content_block_delta : {e}" ) );
         #[ cfg( not( feature = "error-handling" ) ) ]
-        return crate::error_tools::Error::msg( format!( "Failed to parse content_block_delta: {e}" ) );
+        return crate::error_tools::Error::msg( format!( "Failed to parse content_block_delta : {e}" ) );
       } )?;
 
     event_data.delta.validate()?;
@@ -873,9 +873,9 @@ mod private
       .map_err( | e | 
       {
         #[ cfg( feature = "error-handling" ) ]
-        return AnthropicError::Parsing( format!( "Failed to parse content_block_stop: {e}" ) );
+        return AnthropicError::Parsing( format!( "Failed to parse content_block_stop : {e}" ) );
         #[ cfg( not( feature = "error-handling" ) ) ]
-        return crate::error_tools::Error::msg( format!( "Failed to parse content_block_stop: {e}" ) );
+        return crate::error_tools::Error::msg( format!( "Failed to parse content_block_stop : {e}" ) );
       } )?;
     
     Ok( StreamEvent::ContentBlockStop { index : event_data.index } )
@@ -887,12 +887,12 @@ mod private
     #[ cfg( feature = "error-handling" ) ]
     {
       let api_error : crate::error::AnthropicApiError = serde_json::from_str( data )
-        .map_err( | e | AnthropicError::Parsing( format!( "Failed to parse error: {e}" ) ) )?;
+        .map_err( | e | AnthropicError::Parsing( format!( "Failed to parse error : {e}" ) ) )?;
       Ok( StreamEvent::Error { error : AnthropicError::Api( api_error ) } )
     }
     #[ cfg( not( feature = "error-handling" ) ) ]
     {
-      let error_msg = format!( "API error: {data}" );
+      let error_msg = format!( "API error : {data}" );
       Ok( StreamEvent::Error { error : crate::error_tools::Error::msg( error_msg ) } )
     }
   }
@@ -901,9 +901,9 @@ mod private
   fn parse_unknown_event( event_type : &str ) -> AnthropicResult< StreamEvent >
   {
     #[ cfg( feature = "error-handling" ) ]
-    return Err( AnthropicError::Parsing( format!( "Unknown event type: '{event_type}'. Supported types: message_start, content_block_start, content_block_delta, content_block_stop, message_stop, error" ) ) );
+    return Err( AnthropicError::Parsing( format!( "Unknown event type : '{event_type}'. Supported types : message_start, content_block_start, content_block_delta, content_block_stop, message_stop, error" ) ) );
     #[ cfg( not( feature = "error-handling" ) ) ]
-    return Err( crate::error_tools::Error::msg( format!( "Unknown event type: '{event_type}'. Supported types: message_start, content_block_start, content_block_delta, content_block_stop, message_stop, error" ) ) );
+    return Err( crate::error_tools::Error::msg( format!( "Unknown event type : '{event_type}'. Supported types : message_start, content_block_start, content_block_delta, content_block_stop, message_stop, error" ) ) );
   }
 
   /// Stream of Server-Sent Events
@@ -913,7 +913,7 @@ mod private
 }
 
 #[ cfg( feature = "streaming" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use StreamMessage;
   exposed use StreamContentBlock;

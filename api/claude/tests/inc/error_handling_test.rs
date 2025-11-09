@@ -1,6 +1,6 @@
 //! Error Handling Integration Tests - STRICT FAILURE POLICY
 //!
-//! # Knowledge: Error Classification & Recovery Strategy
+//! # Knowledge : Error Classification & Recovery Strategy
 //!
 //! ## Why Error Classification Matters
 //!
@@ -13,52 +13,52 @@
 //! ## Error Severity Levels (Operational Impact)
 //!
 //! - **Critical**: Blocks all operations, requires immediate action (Authentication, MissingEnvironment)
-//!   - Impact: Cannot proceed with ANY requests
-//!   - Recovery: Fix credentials/environment before retrying
+//!   - Impact : Cannot proceed with ANY requests
+//!   - Recovery : Fix credentials/environment before retrying
 //!
 //! - **High**: Blocks current operation, likely user error (InvalidRequest, InvalidArgument)
-//!   - Impact: This specific request fails
-//!   - Recovery: Fix request parameters and retry
+//!   - Impact : This specific request fails
+//!   - Recovery : Fix request parameters and retry
 //!
 //! - **Medium**: Temporary operational issue (RateLimit, Internal)
-//!   - Impact: Request fails but system healthy
-//!   - Recovery: Wait and retry with backoff
+//!   - Impact : Request fails but system healthy
+//!   - Recovery : Wait and retry with backoff
 //!
 //! - **Low**: Degraded functionality (Parsing, Stream interruption)
-//!   - Impact: Partial failure, may have partial data
-//!   - Recovery: Retry or use partial results
+//!   - Impact : Partial failure, may have partial data
+//!   - Recovery : Retry or use partial results
 //!
 //! ## Retryable vs Non-Retryable Errors
 //!
 //! **Retryable** (transient, may succeed on retry):
-//! - RateLimit: Server explicitly says retry later
-//! - Internal: Server-side issue, may be resolved
-//! - Stream: Network interruption, connection may recover
-//! - Http: Network issues are often transient
+//! - RateLimit : Server explicitly says retry later
+//! - Internal : Server-side issue, may be resolved
+//! - Stream : Network interruption, connection may recover
+//! - Http : Network issues are often transient
 //!
 //! **Non-Retryable** (permanent, will fail again):
-//! - Authentication: Invalid credentials won't fix themselves
-//! - InvalidArgument: Bad input won't become valid
-//! - InvalidRequest: Malformed request structure permanent
-//! - Parsing: If we can't parse, retrying won't help
-//! - MissingEnvironment: Config issue must be fixed manually
+//! - Authentication : Invalid credentials won't fix themselves
+//! - InvalidArgument : Bad input won't become valid
+//! - InvalidRequest : Malformed request structure permanent
+//! - Parsing : If we can't parse, retrying won't help
+//! - MissingEnvironment : Config issue must be fixed manually
 //!
 //! ## SSE Parsing Edge Cases
 //!
 //! **Malformed JSON** (test_sse_parsing_errors_malformed_json):
-//! - Real-world scenario: Network corruption, truncated responses
-//! - Strategy: Filter out bad events, continue processing stream
-//! - Rationale: Partial data better than complete failure
+//! - Real-world scenario : Network corruption, truncated responses
+//! - Strategy : Filter out bad events, continue processing stream
+//! - Rationale : Partial data better than complete failure
 //!
 //! **Unknown Event Types** (test_sse_parsing_unknown_event_type):
-//! - Real-world scenario: API adds new events before client update
-//! - Strategy: Silently ignore unknown events
-//! - Rationale: Forward compatibility, don't break on API evolution
+//! - Real-world scenario : API adds new events before client update
+//! - Strategy : Silently ignore unknown events
+//! - Rationale : Forward compatibility, don't break on API evolution
 //!
 //! **Incomplete Data** (test_sse_parsing_content_block_delta_errors):
-//! - Real-world scenario: Race conditions, partial server responses
-//! - Strategy: Validate required fields, skip invalid deltas
-//! - Rationale: Graceful degradation over hard failures
+//! - Real-world scenario : Race conditions, partial server responses
+//! - Strategy : Validate required fields, skip invalid deltas
+//! - Rationale : Graceful degradation over hard failures
 //!
 //! ## Recovery Suggestions
 //!
@@ -92,8 +92,8 @@
 //! - Tests MUST FAIL IMMEDIATELY on any API endpoint errors
 //! - NO SILENT PASSES allowed when problems occur
 //!
-//! Run with: cargo test --features integration
-//! Requires: Valid `ANTHROPIC_API_KEY` in environment or ../../secret/-secrets.sh
+//! Run with : cargo test --features integration
+//! Requires : Valid `ANTHROPIC_API_KEY` in environment or ../../secret/-secrets.sh
 
 #[ allow( unused_imports ) ]
 use super::*;
@@ -254,7 +254,7 @@ async fn test_error_recovery_strategies_and_retry_conditions()
 
   // Test permanent error (authentication)
   let auth_error = the_module::AnthropicError::Authentication( 
-    the_module::AuthenticationError::new( "Invalid API key".to_string() ) 
+    the_module ::AuthenticationError::new( "Invalid API key".to_string() ) 
   );
   let recovery_strategy = the_module::ErrorRecovery::analyze_error( &auth_error );
   
@@ -297,8 +297,8 @@ async fn test_timeout_error_detection_and_classification()
 
   // Test connection timeout
   let connection_timeout = the_module::TimeoutError::new(
-    the_module::TimeoutType::Connection,
-    core::time::Duration::from_secs( 30 ),
+    the_module ::TimeoutType::Connection,
+    core ::time::Duration::from_secs( 30 ),
     "Connection timeout after 30 seconds".to_string()
   );
 
@@ -319,8 +319,8 @@ async fn test_timeout_error_detection_and_classification()
 
   // Test read timeout
   let read_timeout = the_module::TimeoutError::new(
-    the_module::TimeoutType::Read,
-    core::time::Duration::from_secs( 60 ),
+    the_module ::TimeoutType::Read,
+    core ::time::Duration::from_secs( 60 ),
     "Read timeout after 60 seconds".to_string()
   );
 
@@ -347,7 +347,7 @@ async fn test_network_error_classification()
   
   // Test DNS resolution error
   let dns_error = the_module::NetworkError::new(
-    the_module::NetworkErrorType::DnsResolution,
+    the_module ::NetworkErrorType::DnsResolution,
     "Failed to resolve api.anthropic.com".to_string(),
     Some( "NXDOMAIN".to_string() )
   );
@@ -369,7 +369,7 @@ async fn test_network_error_classification()
 
   // Test SSL/TLS error
   let ssl_error = the_module::NetworkError::new(
-    the_module::NetworkErrorType::SslHandshake,
+    the_module ::NetworkErrorType::SslHandshake,
     "SSL handshake failed".to_string(),
     Some( "certificate verify failed".to_string() )
   );
@@ -391,7 +391,7 @@ async fn test_network_error_classification()
 
   // Test connection refused error
   let connection_error = the_module::NetworkError::new(
-    the_module::NetworkErrorType::ConnectionRefused,
+    the_module ::NetworkErrorType::ConnectionRefused,
     "Connection refused".to_string(),
     Some( "port 443".to_string() )
   );
@@ -475,12 +475,12 @@ async fn test_error_serialization_and_deserialization()
 {
   // Test that errors can be properly serialized and deserialized
   let original_error = the_module::EnhancedAnthropicError::new(
-    the_module::ErrorType::RateLimit,
+    the_module ::ErrorType::RateLimit,
     "Rate limit exceeded".to_string(),
     Some( the_module::ErrorContext::new(
       "create_message".to_string(),
       "req_123".to_string(),
-      std::collections::HashMap::from([
+      std ::collections::HashMap::from([
         ( "model".to_string(), "claude-sonnet-4-5-20250929".to_string() ),
         ( "tokens".to_string(), "1000".to_string() ),
       ])
@@ -598,7 +598,7 @@ async fn test_custom_error_types_and_chaining()
   let domain_error = the_module::CustomError::new(
     "ModelConfigurationError".to_string(),
     "Model temperature out of range".to_string(),
-    the_module::ErrorSeverity::Medium
+    the_module ::ErrorSeverity::Medium
   );
 
   // Chain with underlying API error
@@ -658,7 +658,7 @@ async fn integration_error_handling_network_timeout()
     model : "claude-3-5-haiku-20241022".to_string(),
     max_tokens : 4000, // Large response
     messages : vec![ 
-      the_module::Message::user( 
+      the_module ::Message::user( 
         "Write a very detailed analysis of quantum computing, machine learning, blockchain technology, and artificial intelligence. Include mathematical formulas, code examples, and comprehensive explanations of each topic. Make it as detailed as possible.".repeat( 20 )
       ) 
     ],
@@ -677,7 +677,7 @@ async fn integration_error_handling_network_timeout()
     Ok( response ) => {
       assert!( !response.id.is_empty(), "Large request response must have ID" );
       assert!( response.usage.output_tokens > 0, "Must generate tokens" );
-      println!( "✅ Large request succeeded: {} tokens", response.usage.output_tokens );
+      println!( "✅ Large request succeeded : {} tokens", response.usage.output_tokens );
     },
     Err( error ) => {
       let error_str = error.to_string().to_lowercase();
@@ -687,9 +687,9 @@ async fn integration_error_handling_network_timeout()
         error_str.contains( "rate" ) || 
         error_str.contains( "limit" ) ||
         error_str.contains( "request" ),
-        "Large request error should be meaningful: {error}"
+        "Large request error should be meaningful : {error}"
       );
-      println!( "✅ Large request properly handled error: {error}" );
+      println!( "✅ Large request properly handled error : {error}" );
     }
   }
 }
@@ -726,11 +726,11 @@ async fn integration_error_handling_invalid_parameters()
     error_str.contains( "temperature" ) || 
     error_str.contains( "parameter" ) ||
     error_str.contains( "invalid" ),
-    "Temperature error should mention the issue: {error}"
+    "Temperature error should mention the issue : {error}"
   );
 
   println!( "✅ Invalid parameter error handling integration test passed!" );
-  println!( "   Invalid temperature properly rejected: {error}" );
+  println!( "   Invalid temperature properly rejected : {error}" );
 }
 
 #[ tokio::test ]
@@ -765,11 +765,11 @@ async fn integration_error_handling_authentication_failures()
     error_str.contains( "unauthorized" ) ||
     error_str.contains( "invalid" ) ||
     error_str.contains( "key" ),
-    "Auth error should mention authentication issue: {error}"
+    "Auth error should mention authentication issue : {error}"
   );
 
   println!( "✅ Authentication error handling integration test passed!" );
-  println!( "   Invalid API key properly rejected: {error}" );
+  println!( "   Invalid API key properly rejected : {error}" );
 }
 
 // ============================================================================
@@ -781,8 +781,8 @@ async fn integration_error_handling_authentication_failures()
 async fn test_sse_parsing_errors_malformed_json()
 {
   // Test parsing errors for SSE events with malformed JSON
-  let malformed_message_start = r#"event: message_start
-data: {"id": "msg_123", "type": INVALID_JSON}
+  let malformed_message_start = r#"event : message_start
+data : {"id": "msg_123", "type": INVALID_JSON}
 
 "#;
 
@@ -795,8 +795,8 @@ data: {"id": "msg_123", "type": INVALID_JSON}
 async fn test_sse_parsing_unknown_event_type()
 {
   // Test handling of unknown event types
-  let unknown_event = r#"event: unknown_event_type
-data: {"some": "data"}
+  let unknown_event = r#"event : unknown_event_type
+data : {"some": "data"}
 
 "#;
 
@@ -810,8 +810,8 @@ data: {"some": "data"}
 async fn test_sse_parsing_content_block_delta_errors()
 {
   // Test parsing error for content_block_delta with missing fields
-  let incomplete_delta = r#"event: content_block_delta
-data: {"index": 0}
+  let incomplete_delta = r#"event : content_block_delta
+data : {"index": 0}
 
 "#;
 
@@ -828,7 +828,7 @@ fn test_error_classification_is_retryable()
 
   // Retryable errors
   let rate_limit_err = the_module::AnthropicError::RateLimit(
-    the_module::RateLimitError::new( "Rate limited".to_string(), Some( 60 ), "request".to_string() )
+    the_module ::RateLimitError::new( "Rate limited".to_string(), Some( 60 ), "request".to_string() )
   );
   assert!( rate_limit_err.is_retryable(), "Rate limit errors should be retryable" );
 
@@ -843,7 +843,7 @@ fn test_error_classification_is_retryable()
   assert!( !invalid_arg_err.is_retryable(), "Invalid argument errors should not be retryable" );
 
   let auth_err = the_module::AnthropicError::Authentication(
-    the_module::AuthenticationError::new( "Bad key".to_string() )
+    the_module ::AuthenticationError::new( "Bad key".to_string() )
   );
   assert!( !auth_err.is_retryable(), "Authentication errors should not be retryable" );
 
@@ -859,7 +859,7 @@ fn test_error_severity_classification()
 
   // Critical severity
   let auth_err = the_module::AnthropicError::Authentication(
-    the_module::AuthenticationError::new( "Invalid key".to_string() )
+    the_module ::AuthenticationError::new( "Invalid key".to_string() )
   );
   assert_eq!( auth_err.severity(), ErrorSeverity::Critical, "Auth errors should be critical" );
 
@@ -872,7 +872,7 @@ fn test_error_severity_classification()
 
   // Medium severity
   let rate_limit_err = the_module::AnthropicError::RateLimit(
-    the_module::RateLimitError::new( "Rate limited".to_string(), Some( 60 ), "request".to_string() )
+    the_module ::RateLimitError::new( "Rate limited".to_string(), Some( 60 ), "request".to_string() )
   );
   assert_eq!( rate_limit_err.severity(), ErrorSeverity::Medium, "Rate limit errors should be medium" );
 }
@@ -886,27 +886,27 @@ fn test_error_display_formatting()
   let parsing_err = the_module::AnthropicError::Parsing( "JSON parse failed".to_string() );
   let err_msg = format!( "{parsing_err}" );
   assert!( err_msg.contains( "Parsing error" ) && err_msg.contains( "JSON parse failed" ),
-    "Parsing error should contain type and message: {err_msg}" );
+    "Parsing error should contain type and message : {err_msg}" );
 
   let internal_err = the_module::AnthropicError::Internal( "Internal failure".to_string() );
   let err_msg = format!( "{internal_err}" );
   assert!( err_msg.contains( "Internal error" ) && err_msg.contains( "Internal failure" ),
-    "Internal error should contain type and message: {err_msg}" );
+    "Internal error should contain type and message : {err_msg}" );
 
   let missing_env_err = the_module::AnthropicError::MissingEnvironment( "ANTHROPIC_API_KEY not set".to_string() );
   let err_msg = format!( "{missing_env_err}" );
   assert!( err_msg.contains( "Missing environment" ) && err_msg.contains( "ANTHROPIC_API_KEY" ),
-    "Missing env error should contain type and variable: {err_msg}" );
+    "Missing env error should contain type and variable : {err_msg}" );
 
   let file_err = the_module::AnthropicError::File( "File not found".to_string() );
   let err_msg = format!( "{file_err}" );
   assert!( err_msg.contains( "File error" ) && err_msg.contains( "File not found" ),
-    "File error should contain type and message: {err_msg}" );
+    "File error should contain type and message : {err_msg}" );
 
   let not_impl_err = the_module::AnthropicError::NotImplemented( "Feature X not implemented".to_string() );
   let err_msg = format!( "{not_impl_err}" );
   assert!( err_msg.contains( "Not implemented" ) && err_msg.contains( "Feature X" ),
-    "NotImplemented error should contain type and feature: {err_msg}" );
+    "NotImplemented error should contain type and feature : {err_msg}" );
 }
 
 #[ cfg( feature = "error-handling" ) ]
@@ -924,13 +924,13 @@ fn test_error_recovery_suggestions()
     "Suggestions should mention the environment variable" );
 
   let auth_err = the_module::AnthropicError::Authentication(
-    the_module::AuthenticationError::new( "Invalid API key".to_string() )
+    the_module ::AuthenticationError::new( "Invalid API key".to_string() )
   );
   let suggestions = auth_err.recovery_suggestions();
   assert!( !suggestions.is_empty(), "Auth errors should have recovery suggestions" );
 
   let rate_limit_err = the_module::AnthropicError::RateLimit(
-    the_module::RateLimitError::new( "Rate limited".to_string(), Some( 60 ), "request".to_string() )
+    the_module ::RateLimitError::new( "Rate limited".to_string(), Some( 60 ), "request".to_string() )
   );
   let suggestions = rate_limit_err.recovery_suggestions();
   assert!( !suggestions.is_empty(), "Rate limit errors should have recovery suggestions" );
@@ -948,7 +948,7 @@ async fn test_stream_event_validation()
     "message",
     "assistant",
     "claude-sonnet-4-5-20250929",
-    the_module::Usage
+    the_module ::Usage
     {
       input_tokens : 10,
       output_tokens : 50,

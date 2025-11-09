@@ -37,20 +37,20 @@ use std::collections::HashMap;
 #[ derive( Debug, Clone ) ]
 struct HttpOperation
 {
-  call_count: Arc< Mutex< u32 > >,
-  failure_threshold: u32,
-  client: reqwest::Client,
+  call_count : Arc< Mutex< u32 > >,
+  failure_threshold : u32,
+  client : reqwest::Client,
 }
 
 impl HttpOperation
 {
-  fn new( failure_threshold: u32 ) -> Self
+  fn new( failure_threshold : u32 ) -> Self
   {
     Self
     {
-      call_count: Arc::new( Mutex::new( 0 ) ),
+      call_count : Arc::new( Mutex::new( 0 ) ),
       failure_threshold,
-      client: reqwest::Client::new(),
+      client : reqwest::Client::new(),
     }
   }
 
@@ -97,11 +97,11 @@ impl HttpOperation
 #[ derive( Debug, Default ) ]
 struct CircuitBreakerMetrics
 {
-  state_transitions: Arc< Mutex< HashMap<  String, u32  > > >,
-  total_calls: Arc< Mutex< u32 > >,
-  blocked_calls: Arc< Mutex< u32 > >,
-  successful_calls: Arc< Mutex< u32 > >,
-  failed_calls: Arc< Mutex< u32 > >,
+  state_transitions : Arc< Mutex< HashMap<  String, u32  > > >,
+  total_calls : Arc< Mutex< u32 > >,
+  blocked_calls : Arc< Mutex< u32 > >,
+  successful_calls : Arc< Mutex< u32 > >,
+  failed_calls : Arc< Mutex< u32 > >,
 }
 
 impl CircuitBreakerMetrics
@@ -111,7 +111,7 @@ impl CircuitBreakerMetrics
     Self::default()
   }
 
-  fn record_state_transition( &self, from: CircuitBreakerState, to: CircuitBreakerState )
+  fn record_state_transition( &self, from : CircuitBreakerState, to : CircuitBreakerState )
   {
     let transition = format!( "{from:?} -> {to:?}" );
     let mut transitions = self.state_transitions.lock().unwrap();
@@ -194,7 +194,7 @@ async fn test_circuit_breaker_configuration()
   println!( "✓ Circuit breaker configuration validation successful" );
 }
 
-/// Test basic state transitions: Closed → Open → Half-Open → Closed
+/// Test basic state transitions : Closed → Open → Half-Open → Closed
 #[ tokio::test ]
 async fn test_basic_state_transitions()
 {
@@ -218,7 +218,7 @@ async fn test_basic_state_transitions()
   assert!( !circuit_breaker.can_execute() );
 
   // Wait for recovery timeout
-  tokio::time::sleep( Duration::from_millis( 120 ) ).await;
+  tokio ::time::sleep( Duration::from_millis( 120 ) ).await;
 
   // Should transition to half-open after timeout
   assert_eq!( circuit_breaker.state(), CircuitBreakerState::HalfOpen );
@@ -272,11 +272,11 @@ async fn test_recovery_timer_behavior()
   assert_eq!( circuit_breaker.state(), CircuitBreakerState::Open );
 
   // Should remain open before timeout
-  tokio::time::sleep( Duration::from_millis( 100 ) ).await;
+  tokio ::time::sleep( Duration::from_millis( 100 ) ).await;
   assert_eq!( circuit_breaker.state(), CircuitBreakerState::Open );
 
   // Should transition to half-open after timeout
-  tokio::time::sleep( Duration::from_millis( 120 ) ).await;
+  tokio ::time::sleep( Duration::from_millis( 120 ) ).await;
   assert_eq!( circuit_breaker.state(), CircuitBreakerState::HalfOpen );
 
   println!( "✓ Recovery timer behavior validated" );
@@ -297,7 +297,7 @@ async fn test_half_open_state_behavior()
   assert_eq!( circuit_breaker.state(), CircuitBreakerState::Open );
 
   // Wait for recovery
-  tokio::time::sleep( Duration::from_millis( 60 ) ).await;
+  tokio ::time::sleep( Duration::from_millis( 60 ) ).await;
   assert_eq!( circuit_breaker.state(), CircuitBreakerState::HalfOpen );
 
   // Should allow limited calls in half-open
@@ -309,7 +309,7 @@ async fn test_half_open_state_behavior()
   assert_eq!( circuit_breaker.state(), CircuitBreakerState::Open );
 
   // Reset and test successful half-open transition
-  tokio::time::sleep( Duration::from_millis( 60 ) ).await;
+  tokio ::time::sleep( Duration::from_millis( 60 ) ).await;
   assert_eq!( circuit_breaker.state(), CircuitBreakerState::HalfOpen );
 
   // Successful calls should eventually close circuit
@@ -353,7 +353,7 @@ async fn test_thread_safe_operations()
             cb.record_failure();
           }
         }
-        tokio::time::sleep( Duration::from_millis( 10 ) ).await;
+        tokio ::time::sleep( Duration::from_millis( 10 ) ).await;
       }
       task_id
     } );
@@ -372,7 +372,7 @@ async fn test_thread_safe_operations()
   let final_state = circuit_breaker.state();
   assert!( matches!( final_state, CircuitBreakerState::Closed | CircuitBreakerState::Open | CircuitBreakerState::HalfOpen ) );
 
-  println!( "✓ Thread-safe operations validated, final state: {final_state:?}" );
+  println!( "✓ Thread-safe operations validated, final state : {final_state:?}" );
 }
 
 /// Test circuit breaker with real HTTP failures
@@ -410,30 +410,30 @@ async fn test_circuit_breaker_with_http_failures()
         {
           circuit_breaker.record_success();
           metrics.record_successful_call();
-          println!( "  Attempt {attempt}: Success, state: {current_state:?}" );
+          println!( "  Attempt {attempt}: Success, state : {current_state:?}" );
         }
         Err( _error ) =>
         {
           circuit_breaker.record_failure();
           metrics.record_failed_call();
-          println!( "  Attempt {attempt}: Failed, state: {current_state:?}" );
+          println!( "  Attempt {attempt}: Failed, state : {current_state:?}" );
         }
       }
     }
     else
     {
       metrics.record_blocked_call();
-      println!( "  Attempt {attempt}: Blocked by circuit breaker, state: {current_state:?}" );
+      println!( "  Attempt {attempt}: Blocked by circuit breaker, state : {current_state:?}" );
     }
 
-    tokio::time::sleep( Duration::from_millis( 30 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 30 ) ).await;
   }
 
   let ( total, blocked, successful, failed ) = metrics.get_stats();
   let transitions = metrics.get_transitions();
 
-  println!( "✓ Circuit breaker with real HTTP requests: {total} total, {blocked} blocked, {successful} successful, {failed} failed" );
-  println!( "  State transitions: {transitions:?}" );
+  println!( "✓ Circuit breaker with real HTTP requests : {total} total, {blocked} blocked, {successful} successful, {failed} failed" );
+  println!( "  State transitions : {transitions:?}" );
 
   // Verify that circuit breaker blocked some calls and allowed some through
   assert!( blocked > 0, "Circuit breaker should have blocked some calls" );
@@ -453,7 +453,7 @@ async fn test_circuit_breaker_metrics()
 
   // Track state transitions through a full cycle
   let mut current_state = circuit_breaker.state();
-  println!( "  Initial state: {current_state:?}" );
+  println!( "  Initial state : {current_state:?}" );
 
   // Trigger failures to open circuit
   for i in 1..=2
@@ -469,12 +469,12 @@ async fn test_circuit_breaker_metrics()
   }
 
   // Wait for recovery
-  tokio::time::sleep( Duration::from_millis( 60 ) ).await;
+  tokio ::time::sleep( Duration::from_millis( 60 ) ).await;
   let new_state = circuit_breaker.state();
   if new_state != current_state
   {
     metrics.record_state_transition( current_state, new_state );
-    println!( "  State transition after recovery: {current_state:?} -> {new_state:?}" );
+    println!( "  State transition after recovery : {current_state:?} -> {new_state:?}" );
     current_state = new_state;
   }
 
@@ -484,13 +484,13 @@ async fn test_circuit_breaker_metrics()
   if new_state != current_state
   {
     metrics.record_state_transition( current_state, new_state );
-    println!( "  State transition after success: {current_state:?} -> {new_state:?}" );
+    println!( "  State transition after success : {current_state:?} -> {new_state:?}" );
   }
 
   let transitions = metrics.get_transitions();
   assert!( !transitions.is_empty(), "Should have recorded state transitions" );
 
-  println!( "✓ Circuit breaker metrics validated: {transitions:?}" );
+  println!( "✓ Circuit breaker metrics validated : {transitions:?}" );
 }
 
 /// Test circuit breaker request blocking behavior
@@ -516,7 +516,7 @@ async fn test_request_blocking_behavior()
   }
 
   // Wait for recovery timeout
-  tokio::time::sleep( Duration::from_millis( 220 ) ).await;
+  tokio ::time::sleep( Duration::from_millis( 220 ) ).await;
 
   // Should allow requests in half-open
   assert!( circuit_breaker.can_execute() );
@@ -533,7 +533,7 @@ async fn test_graceful_degradation_no_circuit_breaker()
     "http://localhost:11434".to_string(),
     Duration::from_secs( 5 )
   );
-  // Note: No circuit breaker configuration
+  // Note : No circuit breaker configuration
 
   // Should report closed state when no circuit breaker configured
   assert_eq!( client.circuit_breaker_state(), CircuitBreakerState::Closed );
@@ -559,25 +559,25 @@ async fn test_circuit_breaker_ollama_integration()
 
   let request = ChatRequest
   {
-    model: "test-model".to_string(),
-    messages: vec!
+    model : "test-model".to_string(),
+    messages : vec!
     [
       ChatMessage
       {
-        role: MessageRole::User,
-        content: "Test circuit breaker".to_string(),
+        role : MessageRole::User,
+        content : "Test circuit breaker".to_string(),
         #[ cfg( feature = "vision_support" ) ]
-        images: None,
+        images : None,
         #[ cfg( feature = "tool_calling" ) ]
-        tool_calls: None,
+        tool_calls : None,
       }
     ],
-    stream: Some( false ),
-    options: None,
+    stream : Some( false ),
+    options : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tools: None,
+    tools : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tool_messages: None,
+    tool_messages : None,
   };
 
   // Make requests that will fail (unreachable endpoint)
@@ -588,13 +588,13 @@ async fn test_circuit_breaker_ollama_integration()
     let state_after = client.circuit_breaker_state();
 
     assert!( result.is_err() );
-    println!( "  Attempt {attempt}: Failed, state: {state_before:?} -> {state_after:?}" );
+    println!( "  Attempt {attempt}: Failed, state : {state_before:?} -> {state_after:?}" );
 
-    tokio::time::sleep( Duration::from_millis( 20 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 20 ) ).await;
   }
 
   // Circuit should eventually open due to failures
-  // Note: The actual circuit breaker integration with HTTP layer will be implemented in Task 672
+  // Note : The actual circuit breaker integration with HTTP layer will be implemented in Task 672
   println!( "✓ Circuit breaker OllamaClient integration validated" );
 }
 
@@ -608,7 +608,7 @@ async fn test_error_classification()
   let circuit_breaker = CircuitBreaker::new( config );
 
   // Function to classify errors for circuit breaker
-  let should_trigger_circuit_breaker = | error: &str | -> bool
+  let should_trigger_circuit_breaker = | error : &str | -> bool
   {
     let error_lower = error.to_lowercase();
 
@@ -662,7 +662,7 @@ async fn test_error_classification()
     {
       circuit_breaker.record_failure();
       circuit_triggering_errors += 1;
-      println!( "  Error '{error}' triggered circuit breaker (total: {circuit_triggering_errors})" );
+      println!( "  Error '{error}' triggered circuit breaker (total : {circuit_triggering_errors})" );
     }
     else
     {

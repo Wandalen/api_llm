@@ -12,20 +12,20 @@ mod private
 {
   use crate::
   {
-    realtime::WsSession,
-    error::{ OpenAIError, Result },
-    components::realtime_shared::RealtimeClientEvent,
+    realtime ::WsSession,
+    error ::{ OpenAIError, Result },
+    components ::realtime_shared::RealtimeClientEvent,
   };
   use std::
   {
-    collections::VecDeque,
-    sync::{ Arc, Mutex },
-    time::Instant,
+    collections ::VecDeque,
+    sync ::{ Arc, Mutex },
+    time ::Instant,
   };
   use tokio::
   {
-    sync::{ RwLock, Semaphore },
-    time::{ timeout, sleep, interval },
+    sync ::{ RwLock, Semaphore },
+    time ::{ timeout, sleep, interval },
   };
   use core::time::Duration;
   use serde::{ Serialize, Deserialize };
@@ -544,7 +544,7 @@ mod private
           {
             let mut stats_guard = heartbeat_stats.write().await;
             stats_guard.last_heartbeat_timestamp = Some(
-              std::time::SystemTime::now()
+              std ::time::SystemTime::now()
                 .duration_since( std::time::UNIX_EPOCH )
                 .unwrap_or_default()
                 .as_secs()
@@ -890,7 +890,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use private::WebSocketReliabilityConfig;
   exposed use private::WebSocketConnectionStats;

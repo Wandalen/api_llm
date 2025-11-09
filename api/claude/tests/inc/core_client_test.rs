@@ -8,8 +8,8 @@
 //! - Tests MUST FAIL IMMEDIATELY on any API endpoint errors
 //! - NO SILENT PASSES allowed when problems occur
 //!
-//! Run with: cargo test --features integration
-//! Requires: Valid `ANTHROPIC_API_KEY` in environment or ../../secret/-secrets.sh
+//! Run with : cargo test --features integration
+//! Requires : Valid `ANTHROPIC_API_KEY` in environment or ../../secret/-secrets.sh
 
 #[ allow( unused_imports ) ]
 use super::*;
@@ -38,7 +38,7 @@ async fn test_error_handling_types()
   // Test that AnthropicError enum has required variants
   let http_error = the_module::AnthropicError::http_error( "Connection failed".to_string() );
   let auth_error = the_module::AnthropicError::Authentication(
-    the_module::AuthenticationError::new( "Invalid API key".to_string() )
+    the_module ::AuthenticationError::new( "Invalid API key".to_string() )
   );
   let invalid_arg_error = the_module::AnthropicError::InvalidArgument( "Missing parameter".to_string() );
 
@@ -71,7 +71,7 @@ async fn test_client_from_workspace_method_exists()
 async fn test_client_from_missing_environment_variable()
 {
   // Test that Client::from_env fails when env var is missing
-  std::env::remove_var( "ANTHROPIC_API_KEY" );
+  std ::env::remove_var( "ANTHROPIC_API_KEY" );
 
   let result = the_module::Client::from_env();
   assert!( result.is_err() );
@@ -113,7 +113,7 @@ async fn integration_client_real_api_lifecycle()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted - this confirms real API usage" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION: Client must successfully make API call: {err}" ),
+    Err( err ) => panic!( "INTEGRATION: Client must successfully make API call : {err}" ),
   };
 
   // Verify client properly handles real API response
@@ -173,7 +173,7 @@ async fn integration_client_concurrent_requests()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted - this confirms real API usage" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION: First concurrent request must succeed: {err}" ),
+    Err( err ) => panic!( "INTEGRATION: First concurrent request must succeed : {err}" ),
   };
 
   let response2 = match response2
@@ -184,7 +184,7 @@ async fn integration_client_concurrent_requests()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted - this confirms real API usage" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION: Second concurrent request must succeed: {err}" ),
+    Err( err ) => panic!( "INTEGRATION: Second concurrent request must succeed : {err}" ),
   };
 
   // Verify both responses are valid and unique

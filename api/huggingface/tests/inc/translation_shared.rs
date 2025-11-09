@@ -7,12 +7,12 @@
 use api_huggingface::
 {
   Client,
-  environment::HuggingFaceEnvironmentImpl,
-  components::
+  environment ::HuggingFaceEnvironmentImpl,
+  components ::
   {
-  input::InferenceParameters,
+  input ::InferenceParameters,
   },
-  secret::Secret,
+  secret ::Secret,
 };
 use std::{ collections::HashMap, time::Instant };
 use serde::{ Serialize, Deserialize };
@@ -497,10 +497,10 @@ impl TranslationPlatform
 
   if let Some( ref context ) = request.context
   {
-      prompt.push_str( &format!( " Context: {}", context ) );
+      prompt.push_str( &format!( " Context : {}", context ) );
   }
 
-  prompt.push_str( &format!( "\n\nText: {}\n\nTranslation:", request.text ) );
+  prompt.push_str( &format!( "\n\nText : {}\n\nTranslation:", request.text ) );
 
   Ok( prompt )
   }
@@ -633,7 +633,7 @@ impl TranslationPlatform
 // Helper function to get API key for testing
 fn get_api_key_for_testing() -> Option< String >
 {
-  std::env::var( "HUGGINGFACE_API_KEY" ).ok()
+  std ::env::var( "HUGGINGFACE_API_KEY" ).ok()
 }
 
 // Helper function to create test client

@@ -1,8 +1,8 @@
 //! Enhanced Model Details Tests for Anthropic API client
 //!
-//! ## Test Status: TDD Implementation Phase
+//! ## Test Status : TDD Implementation Phase
 //!
-//! Some tests in this file are currently disabled with #[ignore] as part of
+//! Some tests in this file are currently disabled with #[ ignore ] as part of
 //! the Test-Driven Development (TDD) workflow. Tests were written BEFORE
 //! implementation to define the expected behavior of the EnhancedModelDetails
 //! feature set.
@@ -35,7 +35,7 @@ mod enhanced_model_details_functionality_tests
   ///
   /// DISABLED: 2025-11-06
   /// REASON: TDD test for EnhancedModelDetails type not yet implemented
-  /// RE-ENABLE: When EnhancedModelDetails type implementation complete (target: 2025-12-01)
+  /// RE-ENABLE: When EnhancedModelDetails type implementation complete (target : 2025-12-01)
   /// APPROVED: Project maintainer
   /// TRACKING: issue-002
   #[ ignore = "TDD test for EnhancedModelDetails not yet implemented" ]
@@ -61,7 +61,7 @@ mod enhanced_model_details_functionality_tests
   ///
   /// DISABLED: 2025-11-06
   /// REASON: TDD test for ModelPricing type not yet implemented
-  /// RE-ENABLE: When ModelPricing type implementation complete (target: 2025-12-01)
+  /// RE-ENABLE: When ModelPricing type implementation complete (target : 2025-12-01)
   /// APPROVED: Project maintainer
   /// TRACKING: issue-002
   #[ ignore = "TDD test for ModelPricing not yet implemented" ]
@@ -84,7 +84,7 @@ mod enhanced_model_details_functionality_tests
   ///
   /// DISABLED: 2025-11-06
   /// REASON: TDD test for EnhancedModelCapabilities type not yet implemented
-  /// RE-ENABLE: When EnhancedModelCapabilities type implementation complete (target: 2025-12-01)
+  /// RE-ENABLE: When EnhancedModelCapabilities type implementation complete (target : 2025-12-01)
   /// APPROVED: Project maintainer
   /// TRACKING: issue-002
   #[ ignore = "TDD test for EnhancedModelCapabilities not yet implemented" ]
@@ -98,11 +98,11 @@ mod enhanced_model_details_functionality_tests
 
     // Test advanced capabilities
     // Fix(issue-001): Sonnet 4.5 capabilities differ from 3.5 Sonnet
-    // Root cause: Sonnet 4.x family has different capabilities than 3.5 Sonnet
+    // Root cause : Sonnet 4.x family has different capabilities than 3.5 Sonnet
     // - No function calling (tools) support
     // - No vision/multimodal support
     // - Text-only model optimized for speed and efficiency
-    // Pitfall: Capability expectations change between model families - always verify
+    // Pitfall : Capability expectations change between model families - always verify
     assert!( !capabilities.supports_function_calling(), "Sonnet 4.5 does NOT support function calling" );
     assert!( !capabilities.supports_vision(), "Sonnet 4.5 does NOT support vision" );
     assert!( !capabilities.supports_multimodal_input(), "Sonnet 4.5 does NOT support multimodal input" );
@@ -129,7 +129,7 @@ mod enhanced_model_details_functionality_tests
   ///
   /// DISABLED: 2025-11-06
   /// REASON: TDD test for ContextWindowDetails type not yet implemented
-  /// RE-ENABLE: When ContextWindowDetails type implementation complete (target: 2025-12-01)
+  /// RE-ENABLE: When ContextWindowDetails type implementation complete (target : 2025-12-01)
   /// APPROVED: Project maintainer
   /// TRACKING: issue-002
   #[ ignore = "TDD test for ContextWindowDetails not yet implemented" ]
@@ -143,9 +143,9 @@ mod enhanced_model_details_functionality_tests
 
     // Validate context window information
     // Fix(issue-001): Update expected values to match Sonnet 4.5 specifications
-    // Root cause: Test expectations needed updating for new model
+    // Root cause : Test expectations needed updating for new model
     // Sonnet 4.5 has 200k context window and 8k max output tokens
-    // Pitfall: Always verify model specifications when updating model versions
+    // Pitfall : Always verify model specifications when updating model versions
     assert_eq!( context_details.get_max_context_tokens(), 200_000, "Max context should be 200k tokens for Sonnet 4.5" );
     assert_eq!( context_details.get_max_output_tokens(), 8_192, "Max output should be 8k tokens for Sonnet 4.5" );
 
@@ -225,7 +225,7 @@ mod enhanced_model_details_functionality_tests
     let duration = start.elapsed();
 
     // Performance expectations
-    assert!( duration.as_millis() < 100, "Model details retrieval should be fast: {}ms", duration.as_millis() );
+    assert!( duration.as_millis() < 100, "Model details retrieval should be fast : {}ms", duration.as_millis() );
 
     // Test caching performance
     let cached_start = Instant::now();
@@ -236,7 +236,7 @@ mod enhanced_model_details_functionality_tests
     }
 
     let cached_duration = cached_start.elapsed();
-    assert!( cached_duration.as_millis() < 10, "Cached retrieval should be very fast: {}ms", cached_duration.as_millis() );
+    assert!( cached_duration.as_millis() < 10, "Cached retrieval should be very fast : {}ms", cached_duration.as_millis() );
   }
 
   /// Test model comparison functionality
@@ -319,7 +319,7 @@ mod enhanced_model_details_functionality_tests
   ///
   /// DISABLED: 2025-11-06
   /// REASON: TDD test for FeatureCompatibilityMatrix type not yet implemented
-  /// RE-ENABLE: When FeatureCompatibilityMatrix type implementation complete (target: 2025-12-01)
+  /// RE-ENABLE: When FeatureCompatibilityMatrix type implementation complete (target : 2025-12-01)
   /// APPROVED: Project maintainer
   /// TRACKING: issue-002
   #[ ignore = "TDD test for FeatureCompatibilityMatrix not yet implemented" ]
@@ -430,7 +430,7 @@ mod enhanced_model_details_integration_tests
         println!( "INTEGRATION TEST SKIPPED: No API key available - this confirms real API dependency" );
         return;
       },
-      Err( err ) => panic!( "Must have valid API key for integration test: {err}" ),
+      Err( err ) => panic!( "Must have valid API key for integration test : {err}" ),
     };
 
     let comparison = ModelComparison::fetch_comparison(

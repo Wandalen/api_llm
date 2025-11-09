@@ -32,21 +32,21 @@ mod private
   pub struct CircuitBreakerConfig
   {
     /// Number of failures required to open the circuit
-    failure_threshold: u32,
+    failure_threshold : u32,
     /// Number of successes required to close the circuit from half-open
-    success_threshold: u32,
+    success_threshold : u32,
     /// Timeout before allowing recovery attempt (milliseconds)
-    timeout_ms: u64,
+    timeout_ms : u64,
     /// Timeout for half-open state (milliseconds)
-    half_open_timeout_ms: u64,
+    half_open_timeout_ms : u64,
     /// Whether to ignore authentication errors
-    ignore_auth_errors: bool,
+    ignore_auth_errors : bool,
     /// Whether to ignore rate limit errors
-    ignore_rate_limit_errors: bool,
+    ignore_rate_limit_errors : bool,
     /// Whether to ignore validation errors
-    ignore_validation_errors: bool,
+    ignore_validation_errors : bool,
     /// Size of the sliding window for failure tracking
-    window_size: usize,
+    window_size : usize,
   }
 
   impl Default for CircuitBreakerConfig 
@@ -73,14 +73,14 @@ mod private
     /// * `window_size` - Size of the sliding window for failure tracking
     #[ allow(clippy::too_many_arguments) ]
     pub fn with_explicit_config(
-      failure_threshold: u32,
-      success_threshold: u32,
-      timeout_ms: u64,
-      half_open_timeout_ms: u64,
-      ignore_auth_errors: bool,
-      ignore_rate_limit_errors: bool,
-      ignore_validation_errors: bool,
-      window_size: usize,
+      failure_threshold : u32,
+      success_threshold : u32,
+      timeout_ms : u64,
+      half_open_timeout_ms : u64,
+      ignore_auth_errors : bool,
+      ignore_rate_limit_errors : bool,
+      ignore_validation_errors : bool,
+      window_size : usize,
     ) -> Self
     {
       Self {
@@ -103,20 +103,20 @@ mod private
     {
       // Compatibility wrapper with sensible defaults for circuit breaker
       Self::with_explicit_config(
-        5,     // failure_threshold: 5 failures to open
-        3,     // success_threshold: 3 successes to close
-        60000, // timeout_ms: 1 minute
-        30000, // half_open_timeout_ms: 30 seconds
-        true,  // ignore_auth_errors: true (auth errors don't count as circuit failures)
-        true,  // ignore_rate_limit_errors: true (rate limits don't count as circuit failures)
-        true,  // ignore_validation_errors: true (validation errors don't count as circuit failures)
-        100,   // window_size: 100 requests for tracking
+        5,     // failure_threshold : 5 failures to open
+        3,     // success_threshold : 3 successes to close
+        60000, // timeout_ms : 1 minute
+        30000, // half_open_timeout_ms : 30 seconds
+        true,  // ignore_auth_errors : true (auth errors don't count as circuit failures)
+        true,  // ignore_rate_limit_errors : true (rate limits don't count as circuit failures)
+        true,  // ignore_validation_errors : true (validation errors don't count as circuit failures)
+        100,   // window_size : 100 requests for tracking
       )
     }
 
     /// Set the failure threshold
     #[ must_use ]
-    pub fn with_failure_threshold( mut self, threshold: u32 ) -> Self
+    pub fn with_failure_threshold( mut self, threshold : u32 ) -> Self
     {
       self.failure_threshold = threshold;
       self
@@ -124,7 +124,7 @@ mod private
 
     /// Set the success threshold
     #[ must_use ]
-    pub fn with_success_threshold( mut self, threshold: u32 ) -> Self
+    pub fn with_success_threshold( mut self, threshold : u32 ) -> Self
     {
       self.success_threshold = threshold;
       self
@@ -132,7 +132,7 @@ mod private
 
     /// Set the timeout in milliseconds
     #[ must_use ]
-    pub fn with_timeout_ms( mut self, timeout: u64 ) -> Self
+    pub fn with_timeout_ms( mut self, timeout : u64 ) -> Self
     {
       self.timeout_ms = timeout;
       self
@@ -140,7 +140,7 @@ mod private
 
     /// Set the half-open timeout in milliseconds
     #[ must_use ]
-    pub fn with_half_open_timeout_ms( mut self, timeout: u64 ) -> Self
+    pub fn with_half_open_timeout_ms( mut self, timeout : u64 ) -> Self
     {
       self.half_open_timeout_ms = timeout;
       self
@@ -148,7 +148,7 @@ mod private
 
     /// Set whether to ignore authentication errors
     #[ must_use ]
-    pub fn with_ignore_auth_errors( mut self, ignore: bool ) -> Self
+    pub fn with_ignore_auth_errors( mut self, ignore : bool ) -> Self
     {
       self.ignore_auth_errors = ignore;
       self
@@ -156,7 +156,7 @@ mod private
 
     /// Set whether to ignore rate limit errors
     #[ must_use ]
-    pub fn with_ignore_rate_limit_errors( mut self, ignore: bool ) -> Self
+    pub fn with_ignore_rate_limit_errors( mut self, ignore : bool ) -> Self
     {
       self.ignore_rate_limit_errors = ignore;
       self
@@ -164,7 +164,7 @@ mod private
 
     /// Set whether to ignore validation errors
     #[ must_use ]
-    pub fn with_ignore_validation_errors( mut self, ignore: bool ) -> Self
+    pub fn with_ignore_validation_errors( mut self, ignore : bool ) -> Self
     {
       self.ignore_validation_errors = ignore;
       self
@@ -172,7 +172,7 @@ mod private
 
     /// Set the window size for failure tracking
     #[ must_use ]
-    pub fn with_window_size( mut self, size: usize ) -> Self
+    pub fn with_window_size( mut self, size : usize ) -> Self
     {
       self.window_size = size;
       self
@@ -222,10 +222,10 @@ mod private
   #[ derive( Debug, Clone ) ]
   pub struct CircuitBreakerMetrics
   {
-    total_requests: u64,
-    success_count: u64,
-    failure_count: u64,
-    state_changes: u64,
+    total_requests : u64,
+    success_count : u64,
+    failure_count : u64,
+    state_changes : u64,
   }
 
   impl Default for CircuitBreakerMetrics 
@@ -243,10 +243,10 @@ mod private
     pub fn new() -> Self
     {
       Self {
-        total_requests: 0,
-        success_count: 0,
-        failure_count: 0,
-        state_changes: 0,
+        total_requests : 0,
+        success_count : 0,
+        failure_count : 0,
+        state_changes : 0,
       }
     }
 
@@ -323,38 +323,38 @@ mod private
   #[ derive( Debug ) ]
   pub struct CircuitBreaker
   {
-    config: CircuitBreakerConfig,
-    state: Arc< Mutex< CircuitBreakerState > >,
+    config : CircuitBreakerConfig,
+    state : Arc< Mutex< CircuitBreakerState > >,
   }
 
   #[ derive( Debug ) ]
   struct CircuitBreakerState
   {
-    current_state: CircuitState,
-    failure_count: u32,
-    success_count: u32,
-    last_failure_time: Option< Instant >,
-    last_state_change: Instant,
-    metrics: CircuitBreakerMetrics,
+    current_state : CircuitState,
+    failure_count : u32,
+    success_count : u32,
+    last_failure_time : Option< Instant >,
+    last_state_change : Instant,
+    metrics : CircuitBreakerMetrics,
   }
 
   impl CircuitBreaker
   {
     /// Create a new circuit breaker
-    pub fn new( config: CircuitBreakerConfig ) -> Self
+    pub fn new( config : CircuitBreakerConfig ) -> Self
     {
       let state = CircuitBreakerState {
-        current_state: CircuitState::Closed,
-        failure_count: 0,
-        success_count: 0,
-        last_failure_time: None,
-        last_state_change: Instant::now(),
-        metrics: CircuitBreakerMetrics::new(),
+        current_state : CircuitState::Closed,
+        failure_count : 0,
+        success_count : 0,
+        last_failure_time : None,
+        last_state_change : Instant::now(),
+        metrics : CircuitBreakerMetrics::new(),
       };
 
       Self {
         config,
-        state: Arc::new( Mutex::new( state ) ),
+        state : Arc::new( Mutex::new( state ) ),
       }
     }
 
@@ -454,10 +454,10 @@ mod private
     /// Panics if the internal mutex is poisoned
     pub fn record_failure_with_config(
       &self,
-      error: &AnthropicError,
-      failure_status_codes: Option< &std::ops::Range< u16 > >,
-      consider_network_errors_as_failures: bool,
-      default_error_classification: bool,
+      error : &AnthropicError,
+      failure_status_codes : Option< &std::ops::Range< u16 > >,
+      consider_network_errors_as_failures : bool,
+      default_error_classification : bool,
     )
     {
       if !self.is_failure_with_config( error, failure_status_codes, consider_network_errors_as_failures, default_error_classification )
@@ -498,10 +498,10 @@ mod private
     /// Check if an error should be considered a failure with explicit error classification
     pub fn is_failure_with_config(
       &self,
-      error: &AnthropicError,
-      failure_status_codes: Option< &std::ops::Range< u16 > >,
-      consider_network_errors_as_failures: bool,
-      default_error_classification: bool,
+      error : &AnthropicError,
+      failure_status_codes : Option< &std::ops::Range< u16 > >,
+      consider_network_errors_as_failures : bool,
+      default_error_classification : bool,
     ) -> bool
     {
       match error
@@ -540,7 +540,7 @@ mod private
     /// Record a failed operation (compatibility wrapper with sensible defaults)
     ///
     /// NOTE: This is a compatibility wrapper. For explicit control, use `record_failure_with_config()`
-    pub fn record_failure( &self, error: &AnthropicError )
+    pub fn record_failure( &self, error : &AnthropicError )
     {
       // Compatibility wrapper with sensible defaults for HTTP errors
       let http_5xx_range = 500..600;
@@ -548,14 +548,14 @@ mod private
         error,
         Some( &http_5xx_range ),
         true, // Consider network errors as failures
-        true, // Default error classification: consider as failure
+        true, // Default error classification : consider as failure
       );
     }
 
     /// Check if an error should be considered a failure (compatibility wrapper with sensible defaults)
     ///
     /// NOTE: This is a compatibility wrapper. For explicit control, use `is_failure_with_config()`
-    pub fn is_failure( &self, error: &AnthropicError ) -> bool
+    pub fn is_failure( &self, error : &AnthropicError ) -> bool
     {
       // Compatibility wrapper with sensible defaults for HTTP errors
       let http_5xx_range = 500..600;
@@ -563,7 +563,7 @@ mod private
         error,
         Some( &http_5xx_range ),
         true, // Consider network errors as failures
-        true, // Default error classification: consider as failure
+        true, // Default error classification : consider as failure
       )
     }
 
@@ -601,8 +601,8 @@ mod private
     fn clone( &self ) -> Self
     {
       Self {
-        config: self.config.clone(),
-        state: self.state.clone(),
+        config : self.config.clone(),
+        state : self.state.clone(),
       }
     }
   }
@@ -610,7 +610,7 @@ mod private
 }
 
 #[ cfg( feature = "circuit-breaker" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

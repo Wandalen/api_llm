@@ -4,14 +4,14 @@ mod private
 {
 use crate::
 {
-  client::Client,
-  components::
+  client ::Client,
+  components ::
   {
-  models::ModelInfo,
+  models ::ModelInfo,
   // common::TaskType,
   },
-  error::Result,
-  validation::validate_model_identifier,
+  error ::Result,
+  validation ::validate_model_identifier,
 };
 
 #[ cfg( feature = "env-config" ) ]
@@ -257,7 +257,7 @@ where
   ModelStatus::Error( msg ) =>
   {
           return Err( crate::error::HuggingFaceError::ModelUnavailable(
-      format!( "Model '{model_ref}' error: {msg}" )
+      format!( "Model '{model_ref}' error : {msg}" )
           ) );
   }
       }
@@ -333,11 +333,11 @@ pub enum ModelStatus
 
 } // end mod private
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use 
   {
-  private::Models,
-  private::ModelStatus,
+  private ::Models,
+  private ::ModelStatus,
   };
 }

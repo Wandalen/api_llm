@@ -5,9 +5,9 @@
 use crate::
 {
   Client,
-  error::{ Result, OpenAIError },
-  environment::{ OpenaiEnvironment, EnvironmentInterface },
-  components::chat_shared::{ ChatCompletionRequest, CreateChatCompletionResponse },
+  error ::{ Result, OpenAIError },
+  environment ::{ OpenaiEnvironment, EnvironmentInterface },
+  components ::chat_shared::{ ChatCompletionRequest, CreateChatCompletionResponse },
 };
 
 use super::
@@ -32,8 +32,8 @@ where
   /// Returns error if search grounding fails or chat completion fails.
   async fn create_chat_completion_with_search(
     &self,
-    request: ChatCompletionRequest,
-    search_config: SearchGroundingConfig
+    request : ChatCompletionRequest,
+    search_config : SearchGroundingConfig
   ) -> Result< CreateChatCompletionResponse >;
 
   /// Performs search grounding for a query with optional context.
@@ -42,9 +42,9 @@ where
   /// Returns error if search operation fails.
   async fn search_and_ground(
     &self,
-    query: &str,
-    context: Option< &str >,
-    config: SearchGroundingConfig
+    query : &str,
+    context : Option< &str >,
+    config : SearchGroundingConfig
   ) -> Result< GroundedResponse >;
 
   // Code Execution Methods
@@ -55,8 +55,8 @@ where
   /// Returns error if code execution fails or times out.
   async fn execute_code(
     &self,
-    code: &str,
-    config: CodeExecutionConfig
+    code : &str,
+    config : CodeExecutionConfig
   ) -> Result< CodeExecutionResult >;
 
   /// Creates a chat completion with code execution capabilities.
@@ -65,8 +65,8 @@ where
   /// Returns error if code execution or chat completion fails.
   async fn create_chat_completion_with_code_execution(
     &self,
-    request: ChatCompletionRequest,
-    execution_config: CodeExecutionConfig
+    request : ChatCompletionRequest,
+    execution_config : CodeExecutionConfig
   ) -> Result< CreateChatCompletionResponse >;
 
   // Web Browsing Methods
@@ -77,8 +77,8 @@ where
   /// Returns error if URL cannot be accessed or content extraction fails.
   async fn browse_url(
     &self,
-    url: &str,
-    config: WebBrowsingConfig
+    url : &str,
+    config : WebBrowsingConfig
   ) -> Result< BrowsingResult >;
 
   /// Creates a chat completion with web browsing capabilities.
@@ -87,8 +87,8 @@ where
   /// Returns error if browsing or chat completion fails.
   async fn create_chat_completion_with_browsing(
     &self,
-    request: ChatCompletionRequest,
-    browsing_config: WebBrowsingConfig
+    request : ChatCompletionRequest,
+    browsing_config : WebBrowsingConfig
   ) -> Result< CreateChatCompletionResponse >;
 
   // Image Generation Methods
@@ -99,8 +99,8 @@ where
   /// Returns error if image generation fails.
   async fn generate_image(
     &self,
-    prompt: &str,
-    config: ImageGenerationConfig
+    prompt : &str,
+    config : ImageGenerationConfig
   ) -> Result< ImageResult >;
 }
 
@@ -112,8 +112,8 @@ where
   #[ inline ]
   async fn create_chat_completion_with_search(
     &self,
-    _request: ChatCompletionRequest,
-    _search_config: SearchGroundingConfig
+    _request : ChatCompletionRequest,
+    _search_config : SearchGroundingConfig
   ) -> Result< CreateChatCompletionResponse >
   {
     Err( OpenAIError::Internal( "Search grounding not yet implemented".to_string() ).into() )
@@ -122,9 +122,9 @@ where
   #[ inline ]
   async fn search_and_ground(
     &self,
-    _query: &str,
-    _context: Option< &str >,
-    _config: SearchGroundingConfig
+    _query : &str,
+    _context : Option< &str >,
+    _config : SearchGroundingConfig
   ) -> Result< GroundedResponse >
   {
     Err( OpenAIError::Internal( "Search grounding not yet implemented".to_string() ).into() )
@@ -133,8 +133,8 @@ where
   #[ inline ]
   async fn execute_code(
     &self,
-    _code: &str,
-    _config: CodeExecutionConfig
+    _code : &str,
+    _config : CodeExecutionConfig
   ) -> Result< CodeExecutionResult >
   {
     Err( OpenAIError::Internal( "Code execution not yet implemented".to_string() ).into() )
@@ -143,8 +143,8 @@ where
   #[ inline ]
   async fn create_chat_completion_with_code_execution(
     &self,
-    _request: ChatCompletionRequest,
-    _execution_config: CodeExecutionConfig
+    _request : ChatCompletionRequest,
+    _execution_config : CodeExecutionConfig
   ) -> Result< CreateChatCompletionResponse >
   {
     Err( OpenAIError::Internal( "Code execution integration not yet implemented".to_string() ).into() )
@@ -153,8 +153,8 @@ where
   #[ inline ]
   async fn browse_url(
     &self,
-    _url: &str,
-    _config: WebBrowsingConfig
+    _url : &str,
+    _config : WebBrowsingConfig
   ) -> Result< BrowsingResult >
   {
     Err( OpenAIError::Internal( "Web browsing not yet implemented".to_string() ).into() )
@@ -163,8 +163,8 @@ where
   #[ inline ]
   async fn create_chat_completion_with_browsing(
     &self,
-    _request: ChatCompletionRequest,
-    _browsing_config: WebBrowsingConfig
+    _request : ChatCompletionRequest,
+    _browsing_config : WebBrowsingConfig
   ) -> Result< CreateChatCompletionResponse >
   {
     Err( OpenAIError::Internal( "Browsing integration not yet implemented".to_string() ).into() )
@@ -173,8 +173,8 @@ where
   #[ inline ]
   async fn generate_image(
     &self,
-    _prompt: &str,
-    _config: ImageGenerationConfig
+    _prompt : &str,
+    _config : ImageGenerationConfig
   ) -> Result< ImageResult >
   {
     Err( OpenAIError::Internal( "Image generation not yet implemented".to_string() ).into() )

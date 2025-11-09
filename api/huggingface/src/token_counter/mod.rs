@@ -13,12 +13,12 @@
 //!
 //! ```no_run
 //! # use api_huggingface::token_counter::{TokenCounter, CountingStrategy};
-//! # fn example() -> Result< (), Box< dyn std::error::Error >> {
+//! # fn example() -> Result< (), Box< dyn std::error::Error > > {
 //! let counter = TokenCounter::new(CountingStrategy::Estimation);
 //!
 //! let text = "Hello, how are you today?";
 //! let count = counter.count_tokens(text);
-//! println!("Estimated tokens: {}", count.total);
+//! println!("Estimated tokens : {}", count.total);
 //! # Ok(())
 //! # }
 //! ```

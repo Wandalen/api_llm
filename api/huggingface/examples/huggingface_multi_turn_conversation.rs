@@ -23,13 +23,13 @@
 use api_huggingface::
 {
   Client,
-  environment::HuggingFaceEnvironmentImpl,
-  components::
+  environment ::HuggingFaceEnvironmentImpl,
+  components ::
   {
-  input::InferenceParameters,
-  models::Models,
+  input ::InferenceParameters,
+  models ::Models,
   },
-  secret::Secret,
+  secret ::Secret,
 };
 
 /// Represents a single conversation turn
@@ -92,7 +92,7 @@ impl ConversationHistory
   }
 
   // Add the new user message
-  write!( &mut prompt, "User: {new_user_message}\nAI:" ).unwrap();
+  write!( &mut prompt, "User : {new_user_message}\nAI:" ).unwrap();
 
   prompt
   }
@@ -130,8 +130,8 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
   .with_top_p( 0.9 );
 
   let model = Models::kimi_k2_instruct();
-  println!( "🤖 Model: {model}" );
-  println!( "📋 Temperature: 0.7 | Max tokens: 200 | Top-p: 0.9\n" );
+  println!( "🤖 Model : {model}" );
+  println!( "📋 Temperature : 0.7 | Max tokens : 200 | Top-p : 0.9\n" );
 
   // Step 3: Create conversation history tracker
   let mut history = ConversationHistory::new();
@@ -144,7 +144,7 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
   println!( "─────────────────────────────────────────" );
 
   let turn1_message = "I want to plan a trip to Japan in spring. What should I know?";
-  println!( "User: {turn1_message}\n" );
+  println!( "User : {turn1_message}\n" );
 
   let prompt1 = history.build_prompt( turn1_message );
   let response1 = client.inference().create_with_parameters( &prompt1, model, params.clone() ).await?;
@@ -164,7 +164,7 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
   println!( "─────────────────────────────────────────" );
 
   let turn2_message = "What about visiting Kyoto specifically? What are the must-see places?";
-  println!( "User: {turn2_message}\n" );
+  println!( "User : {turn2_message}\n" );
 
   // The prompt now includes the entire conversation history
   let prompt2 = history.build_prompt( turn2_message );
@@ -185,7 +185,7 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
   println!( "─────────────────────────────────────────" );
 
   let turn3_message = "When exactly in spring would be the best time for cherry blossoms there?";
-  println!( "User: {turn3_message}\n" );
+  println!( "User : {turn3_message}\n" );
 
   // The prompt now includes all three turns of conversation
   let prompt3 = history.build_prompt( turn3_message );

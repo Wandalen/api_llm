@@ -74,7 +74,7 @@ mod private
   /// # Examples
   ///
   /// ```
-  /// # #[cfg(feature = "input_validation")]
+  /// # #[ cfg( feature = "input_validation") ]
   /// # {
   /// use api_xai::{ validate_request, ChatCompletionRequest, Message };
   ///
@@ -144,7 +144,7 @@ mod private
         (
           format!
           (
-            "Unknown model: '{}'. Valid models: {}",
+            "Unknown model : '{}'. Valid models : {}",
             model,
             VALID_MODELS.join( ", " )
           )
@@ -226,7 +226,7 @@ mod private
           (
             format!
             (
-              "temperature must be between 0.0 and 2.0, got: {temp}"
+              "temperature must be between 0.0 and 2.0, got : {temp}"
             )
           ).into()
         );
@@ -287,7 +287,7 @@ mod private
           (
             format!
             (
-              "top_p must be between 0.0 and 1.0, got: {p}"
+              "top_p must be between 0.0 and 1.0, got : {p}"
             )
           ).into()
         );
@@ -319,7 +319,7 @@ mod private
           (
             format!
             (
-              "frequency_penalty must be between -2.0 and 2.0, got: {penalty}"
+              "frequency_penalty must be between -2.0 and 2.0, got : {penalty}"
             )
           ).into()
         );
@@ -351,7 +351,7 @@ mod private
           (
             format!
             (
-              "presence_penalty must be between -2.0 and 2.0, got: {penalty}"
+              "presence_penalty must be between -2.0 and 2.0, got : {penalty}"
             )
           ).into()
         );
@@ -421,13 +421,13 @@ mod private
     // Description should be non-empty (best practice, not enforced)
     if function.description.trim().is_empty()
     {
-      // Note: This is a warning, not an error
+      // Note : This is a warning, not an error
       // The API will accept it, but it's not recommended
     }
 
     // Parameters must be valid JSON schema
     // Try to serialize to ensure it's valid JSON
-    serde_json::to_string( &function.parameters )
+    serde_json ::to_string( &function.parameters )
       .map_err
       (
         | e |
@@ -444,7 +444,7 @@ mod private
 }
 
 #[ cfg( feature = "input_validation" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

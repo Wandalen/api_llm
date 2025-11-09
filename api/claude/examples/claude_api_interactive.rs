@@ -29,7 +29,7 @@
 //! ```
 //!
 //! **Important**: Type your messages and press Enter. Type 'quit', 'exit', or 'bye' to end.
-//! Note: This is NOT for automated testing - it's for manual interactive use only.
+//! Note : This is NOT for automated testing - it's for manual interactive use only.
 //!
 //! **Target Audience**: Advanced developers building chat applications
 //!
@@ -58,15 +58,15 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
   println!( "🤖 Interactive Claude Chat" );
   println!( "==========================" );
   println!( "Type your messages and press Enter to chat with Claude." );
-  println!( "Commands: 'quit', 'exit', or 'bye' to end the conversation." );
+  println!( "Commands : 'quit', 'exit', or 'bye' to end the conversation." );
 
   #[ cfg( feature = "streaming" ) ]
-  println!( "✨ Streaming mode: Real-time responses enabled" );
+  println!( "✨ Streaming mode : Real-time responses enabled" );
 
   #[ cfg( not( feature = "streaming" ) ) ]
-  println!( "📝 Standard mode: Simulated streaming responses" );
+  println!( "📝 Standard mode : Simulated streaming responses" );
 
-  println!( "Model: Claude 3.5 Sonnet (optimized for interactive chat)\n" );
+  println!( "Model : Claude 3.5 Sonnet (optimized for interactive chat)\n" );
 
   // Initialize conversation history
   let mut conversation_history : Vec< Message > = Vec::new();
@@ -75,8 +75,8 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
   loop
   {
     // Get user input with prompt
-    print!( "💬 You: " );
-    io::stdout().flush()?;
+    print!( "💬 You : " );
+    io ::stdout().flush()?;
 
     let mut input = String::new();
     match io::stdin().read_line( &mut input )
@@ -85,13 +85,13 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
       {
         // EOF reached (e.g., when input is not available in non-interactive mode)
         println!( "\n⚠️  No input available. Use this example in interactive terminal only." );
-        println!( "Run: cargo run --example claude_api_interactive" );
+        println!( "Run : cargo run --example claude_api_interactive" );
         break;
       }
       Ok( _ ) => {}
       Err( e ) =>
       {
-        println!( "\n❌ Error reading input: {e}" );
+        println!( "\n❌ Error reading input : {e}" );
         println!( "Please try again or restart the chat application." );
         break;
       }
@@ -114,12 +114,12 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
 
     // Add user message to conversation history
     conversation_history.push( Message {
-      role: Role::User,
-      content: vec![ Content::Text {
-        r#type: "text".to_string(),
-        text: user_message,
+      role : Role::User,
+      content : vec![ Content::Text {
+        r#type : "text".to_string(),
+        text : user_message,
       } ],
-      cache_control: None,
+      cache_control : None,
     });
 
     // Create request with conversation history
@@ -130,8 +130,8 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
       .temperature( 0.7 ) // Balanced creativity and coherence
       .build();
 
-    print!( "\n🤖 Claude: " );
-    io::stdout().flush()?;
+    print!( "\n🤖 Claude : " );
+    io ::stdout().flush()?;
 
     // Use real streaming if available, otherwise fallback to simulated streaming
     #[ cfg( feature = "streaming" ) ]
@@ -155,14 +155,14 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
                   if let Some( text_chunk ) = delta.text()
                   {
                     print!( "{text_chunk}" );
-                    io::stdout().flush()?;
+                    io ::stdout().flush()?;
                     full_response.push_str( text_chunk );
                   }
                 }
               }
               Err( e ) =>
               {
-                println!( "\n⚠️  Streaming error: {e}" );
+                println!( "\n⚠️  Streaming error : {e}" );
                 println!( "Continuing with standard request..." );
                 break;
               }
@@ -175,18 +175,18 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
           if !full_response.is_empty()
           {
             conversation_history.push( Message {
-              role: Role::Assistant,
-              content: vec![ Content::Text {
-                r#type: "text".to_string(),
-                text: full_response,
+              role : Role::Assistant,
+              content : vec![ Content::Text {
+                r#type : "text".to_string(),
+                text : full_response,
               } ],
-              cache_control: None,
+              cache_control : None,
             });
           }
         }
         Err( e ) =>
         {
-          println!( "❌ Streaming error: {e}" );
+          println!( "❌ Streaming error : {e}" );
           println!( "Please try again or type 'quit' to exit.\n" );
         }
       }
@@ -214,7 +214,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
                   {
                     print!( " " );
                   }
-                  io::stdout().flush()?;
+                  io ::stdout().flush()?;
 
                   // Variable delay based on word length for more natural feel
                   let delay_ms = match word.len()
@@ -223,18 +223,18 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
                     4..=7 => 80,
                     _ => 100,
                   };
-                  tokio::time::sleep( tokio::time::Duration::from_millis( delay_ms ) ).await;
+                  tokio ::time::sleep( tokio::time::Duration::from_millis( delay_ms ) ).await;
                 }
                 println!( "\n" );
 
                 // Add Claude's response to conversation history
                 conversation_history.push( Message {
-                  role: Role::Assistant,
-                  content: vec![ Content::Text {
-                    r#type: "text".to_string(),
-                    text: text.clone(),
+                  role : Role::Assistant,
+                  content : vec![ Content::Text {
+                    r#type : "text".to_string(),
+                    text : text.clone(),
                   } ],
-                  cache_control: None,
+                  cache_control : None,
                 });
               }
               else
@@ -254,7 +254,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
         }
         Err( e ) =>
         {
-          println!( "❌ Error: {}", e );
+          println!( "❌ Error : {}", e );
           println!( "Please try again or type 'quit' to exit.\n" );
         }
       }
@@ -263,7 +263,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     // Show conversation statistics periodically
     if conversation_history.len().is_multiple_of(10) && !conversation_history.is_empty()
     {
-      println!( "📊 Conversation stats: {} messages exchanged", conversation_history.len() );
+      println!( "📊 Conversation stats : {} messages exchanged", conversation_history.len() );
     }
   }
 
@@ -272,15 +272,15 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
   let ai_messages = conversation_history.iter().filter( |m| matches!( m.role, Role::Assistant ) ).count();
 
   println!( "\n📊 === Chat Session Summary ===" );
-  println!( "User messages: {user_messages}" );
-  println!( "Claude responses: {ai_messages}" );
-  println!( "Total conversation turns: {}", conversation_history.len() );
+  println!( "User messages : {user_messages}" );
+  println!( "Claude responses : {ai_messages}" );
+  println!( "Total conversation turns : {}", conversation_history.len() );
 
   #[ cfg( feature = "streaming" ) ]
-  println!( "Streaming mode: ✅ Real-time responses" );
+  println!( "Streaming mode : ✅ Real-time responses" );
 
   #[ cfg( not( feature = "streaming" ) ) ]
-  println!( "Streaming mode: 📝 Simulated responses" );
+  println!( "Streaming mode : 📝 Simulated responses" );
 
   println!( "\n🎯 === Production Implementation Notes ===" );
   println!( "• Interactive chat with persistent conversation history" );

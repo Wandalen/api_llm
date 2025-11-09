@@ -13,7 +13,7 @@ async fn test_optimized_streaming_control_basic() -> Result< (), Box< dyn std::e
   let stream = futures::stream::unfold( test_data.into_iter(), |mut iter| async move {
     if let Some( item ) = iter.next()
     {
-      tokio::time::sleep( Duration::from_millis( 50 ) ).await;
+      tokio ::time::sleep( Duration::from_millis( 50 ) ).await;
       Some( ( Ok( item.to_string() ), iter ) )
     } else {
       None
@@ -77,7 +77,7 @@ async fn test_buffer_strategies() -> Result< (), Box< dyn std::error::Error > >
   let strategies = vec![
     BufferStrategy::Vector,
     BufferStrategy::Circular,
-    BufferStrategy::Chunked { chunk_size: 10 },
+    BufferStrategy::Chunked { chunk_size : 10 },
   ];
 
   for strategy in strategies
@@ -137,11 +137,11 @@ async fn test_metrics_levels() -> Result< (), Box< dyn std::error::Error > >
       },
       MetricsLevel::Basic => {
         // Basic metrics should be collected
-        println!( "✓ MetricsLevel::Basic - basic metrics collected (total_chunks: {})", metrics.total_chunks );
+        println!( "✓ MetricsLevel::Basic - basic metrics collected (total_chunks : {})", metrics.total_chunks );
       },
       MetricsLevel::Detailed => {
         // Detailed metrics should include response times
-        println!( "✓ MetricsLevel::Detailed - detailed metrics collected (total_chunks: {})", metrics.total_chunks );
+        println!( "✓ MetricsLevel::Detailed - detailed metrics collected (total_chunks : {})", metrics.total_chunks );
       },
     }
   }
@@ -157,14 +157,14 @@ async fn test_configuration_validation() -> Result< (), Box< dyn std::error::Err
   // Valid chunked strategy
   let valid_config = StreamControlConfig::builder()
     .buffer_size( 1024 )
-    .buffer_strategy( BufferStrategy::Chunked { chunk_size: 100 } )
+    .buffer_strategy( BufferStrategy::Chunked { chunk_size : 100 } )
     .build();
   assert!( valid_config.is_ok() );
 
   // Invalid chunked strategy (chunk_size > buffer_size)
   let invalid_config = StreamControlConfig::builder()
     .buffer_size( 100 )
-    .buffer_strategy( BufferStrategy::Chunked { chunk_size: 200 } )
+    .buffer_strategy( BufferStrategy::Chunked { chunk_size : 200 } )
     .build();
   assert!( invalid_config.is_err() );
 

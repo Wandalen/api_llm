@@ -33,11 +33,11 @@ async fn test_request_construction_performance()
   let duration = start.elapsed();
   
   // Construction should be very fast (under 10ms for 1000 requests)
-  assert!( duration.as_millis() < 10, "Request construction too slow: {duration:?}" );
+  assert!( duration.as_millis() < 10, "Request construction too slow : {duration:?}" );
   
   println!( "✅ Request construction performance test passed!" );
-  println!( "   1000 requests constructed in: {duration:?}" );
-  println!( "   Average per request: {:?}", duration / 1000 );
+  println!( "   1000 requests constructed in : {duration:?}" );
+  println!( "   Average per request : {:?}", duration / 1000 );
 }
 
 #[ tokio::test ]
@@ -49,8 +49,8 @@ async fn test_message_serialization_performance()
     model : "claude-sonnet-4-5-20250929".to_string(),
     max_tokens : 1000,
     messages : vec![ 
-      the_module::Message::user( "This is a test message for serialization performance".repeat( 10 ) ),
-      the_module::Message::assistant( "This is a response for testing".repeat( 10 ) ),
+      the_module ::Message::user( "This is a test message for serialization performance".repeat( 10 ) ),
+      the_module ::Message::assistant( "This is a response for testing".repeat( 10 ) ),
     ],
     system : Some( vec![ the_module::SystemContent::text( "You are a performance testing assistant" ) ] ),
     temperature : Some( 0.3 ),
@@ -69,18 +69,18 @@ async fn test_message_serialization_performance()
   let duration = start.elapsed();
   
   // Serialization should be fast (under 50ms for 100 serializations)
-  assert!( duration.as_millis() < 50, "Serialization too slow: {duration:?}" );
+  assert!( duration.as_millis() < 50, "Serialization too slow : {duration:?}" );
   
   println!( "✅ Serialization performance test passed!" );
-  println!( "   100 serializations in: {duration:?}" );
-  println!( "   Average per serialization: {:?}", duration / 100 );
+  println!( "   100 serializations in : {duration:?}" );
+  println!( "   Average per serialization : {:?}", duration / 100 );
 }
 
 #[ tokio::test ]
 async fn test_response_deserialization_performance()
 {
   // Test deserialization performance with realistic response structure
-  // Note: This uses real response structure format but with test data
+  // Note : This uses real response structure format but with test data
   let test_response_json = r#"{
     "id": "msg_perf_test_123",
     "type": "message",
@@ -99,18 +99,18 @@ async fn test_response_deserialization_performance()
   
   for _ in 0..100
   {
-    let _response: the_module::CreateMessageResponse = serde_json::from_str( test_response_json )
+    let _response : the_module::CreateMessageResponse = serde_json::from_str( test_response_json )
       .expect( "Deserialization must work" );
   }
   
   let duration = start.elapsed();
   
   // Deserialization should be fast (under 50ms for 100 deserializations)
-  assert!( duration.as_millis() < 50, "Deserialization too slow: {duration:?}" );
+  assert!( duration.as_millis() < 50, "Deserialization too slow : {duration:?}" );
   
   println!( "✅ Deserialization performance test passed!" );
-  println!( "   100 deserializations in: {duration:?}" );
-  println!( "   Average per deserialization: {:?}", duration / 100 );
+  println!( "   100 deserializations in : {duration:?}" );
+  println!( "   Average per deserialization : {:?}", duration / 100 );
 }
 
 #[ tokio::test ]
@@ -129,11 +129,11 @@ async fn test_client_construction_performance()
   let duration = start.elapsed();
   
   // Client construction should be fast (under 10ms for 100 constructions)
-  assert!( duration.as_millis() < 10, "Client construction too slow: {duration:?}" );
+  assert!( duration.as_millis() < 10, "Client construction too slow : {duration:?}" );
   
   println!( "✅ Client construction performance test passed!" );
-  println!( "   100 clients constructed in: {duration:?}" );
-  println!( "   Average per construction: {:?}", duration / 100 );
+  println!( "   100 clients constructed in : {duration:?}" );
+  println!( "   Average per construction : {:?}", duration / 100 );
 }
 
 #[ tokio::test ]
@@ -152,8 +152,8 @@ async fn test_memory_usage_patterns()
       model : "test-model".to_string(),
       max_tokens : 100,
       messages : vec![ 
-        the_module::Message::user( "Memory test".to_string() ),
-        the_module::Message::assistant( "Response".to_string() ),
+        the_module ::Message::user( "Memory test".to_string() ),
+        the_module ::Message::assistant( "Response".to_string() ),
       ],
       system : Some( vec![ the_module::SystemContent::text( "Memory testing" ) ] ),
       temperature : Some( 0.5 ),
@@ -167,12 +167,12 @@ async fn test_memory_usage_patterns()
   let memory_growth = final_memory.saturating_sub( initial_memory );
   
   // Memory growth should be reasonable (less than 10MB for 1000 operations)
-  assert!( memory_growth < 10_000_000, "Memory growth too high: {memory_growth} bytes" );
+  assert!( memory_growth < 10_000_000, "Memory growth too high : {memory_growth} bytes" );
   
   println!( "✅ Memory usage performance test passed!" );
-  println!( "   Initial memory estimate: {initial_memory} bytes" );
-  println!( "   Final memory estimate: {final_memory} bytes" );
-  println!( "   Memory growth: {memory_growth} bytes" );
+  println!( "   Initial memory estimate : {initial_memory} bytes" );
+  println!( "   Final memory estimate : {final_memory} bytes" );
+  println!( "   Memory growth : {memory_growth} bytes" );
 }
 
 // Helper function to estimate memory usage (simple approximation)
@@ -198,8 +198,8 @@ async fn test_concurrent_request_construction_performance()
   // Test concurrent request construction performance
   let start = std::time::Instant::now();
   
-  let futures: Vec<_> = (0..100).map( |i| {
-    tokio::spawn( async move {
+  let futures : Vec< _ > = (0..100).map( |i| {
+    tokio ::spawn( async move {
       let _request = the_module::CreateMessageRequest
       {
         model : format!( "test-model-{i}" ),
@@ -214,15 +214,15 @@ async fn test_concurrent_request_construction_performance()
     } )
   } ).collect();
   
-  futures::future::join_all( futures ).await;
+  futures ::future::join_all( futures ).await;
   
   let duration = start.elapsed();
   
   // Concurrent construction should still be fast (under 50ms for 100 concurrent tasks)
-  assert!( duration.as_millis() < 50, "Concurrent construction too slow: {duration:?}" );
+  assert!( duration.as_millis() < 50, "Concurrent construction too slow : {duration:?}" );
   
   println!( "✅ Concurrent construction performance test passed!" );
-  println!( "   100 concurrent constructions in: {duration:?}" );
+  println!( "   100 concurrent constructions in : {duration:?}" );
 }
 
 // ============================================================================
@@ -258,13 +258,13 @@ async fn integration_performance_api_response_time()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted - this confirms real API usage" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION: Performance test API call must work: {err}" ),
+    Err( err ) => panic!( "INTEGRATION: Performance test API call must work : {err}" ),
   };
 
   let duration = start_time.elapsed();
 
   // API response should be reasonably fast (under 10 seconds)
-  assert!( duration.as_secs() < 10, "API response too slow: {duration:?}" );
+  assert!( duration.as_secs() < 10, "API response too slow : {duration:?}" );
 
   // Verify response is valid
   assert!( !response.id.is_empty() );
@@ -272,9 +272,9 @@ async fn integration_performance_api_response_time()
   assert!( !response.content.is_empty() );
 
   println!( "✅ API response time integration test passed!" );
-  println!( "   Response time: {duration:?}" );
-  println!( "   Input tokens: {}", response.usage.input_tokens );
-  println!( "   Output tokens: {}", response.usage.output_tokens );
+  println!( "   Response time : {duration:?}" );
+  println!( "   Input tokens : {}", response.usage.input_tokens );
+  println!( "   Output tokens : {}", response.usage.output_tokens );
 }
 
 #[ tokio::test ]
@@ -341,7 +341,7 @@ async fn integration_performance_concurrent_api_requests()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted - this confirms real API usage" );
       return;
     },
-    Err( err ) => panic!( "Concurrent request 1 must succeed: {err}" ),
+    Err( err ) => panic!( "Concurrent request 1 must succeed : {err}" ),
   };
 
   let response2 = match result2
@@ -352,7 +352,7 @@ async fn integration_performance_concurrent_api_requests()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted - this confirms real API usage" );
       return;
     },
-    Err( err ) => panic!( "Concurrent request 2 must succeed: {err}" ),
+    Err( err ) => panic!( "Concurrent request 2 must succeed : {err}" ),
   };
 
   let response3 = match result3
@@ -363,11 +363,11 @@ async fn integration_performance_concurrent_api_requests()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted - this confirms real API usage" );
       return;
     },
-    Err( err ) => panic!( "Concurrent request 3 must succeed: {err}" ),
+    Err( err ) => panic!( "Concurrent request 3 must succeed : {err}" ),
   };
 
   // Concurrent requests should be reasonably fast (under 15 seconds total)
-  assert!( duration.as_secs() < 15, "Concurrent requests too slow: {duration:?}" );
+  assert!( duration.as_secs() < 15, "Concurrent requests too slow : {duration:?}" );
 
   // All responses should be valid and unique
   assert!( !response1.id.is_empty() );
@@ -380,7 +380,7 @@ async fn integration_performance_concurrent_api_requests()
   let total_tokens = response1.usage.output_tokens + response2.usage.output_tokens + response3.usage.output_tokens;
 
   println!( "✅ Concurrent API requests performance integration test passed!" );
-  println!( "   3 concurrent requests in: {duration:?}" );
-  println!( "   Total output tokens: {total_tokens}" );
-  println!( "   Average per request: {:?}", duration / 3 );
+  println!( "   3 concurrent requests in : {duration:?}" );
+  println!( "   Total output tokens : {total_tokens}" );
+  println!( "   Average per request : {:?}", duration / 3 );
 }

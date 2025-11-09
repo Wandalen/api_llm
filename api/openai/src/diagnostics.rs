@@ -12,9 +12,9 @@ mod private
 {
   use std::
   {
-    collections::HashMap,
-    sync::{ Arc, Mutex },
-    time::Instant,
+    collections ::HashMap,
+    sync ::{ Arc, Mutex },
+    time ::Instant,
   };
   use core::time::Duration;
   use serde::{ Serialize, Deserialize };
@@ -68,9 +68,9 @@ mod private
     {
       Self
       {
-        collection: DiagnosticsCollectionConfig::default(),
-        performance: DiagnosticsPerformanceConfig::default(),
-        max_history_size: 100,
+        collection : DiagnosticsCollectionConfig::default(),
+        performance : DiagnosticsPerformanceConfig::default(),
+        max_history_size : 100,
       }
     }
   }
@@ -82,11 +82,11 @@ mod private
     {
       Self
       {
-        enabled: true,
-        request_headers: false, // Privacy-conscious default
-        response_headers: false,
-        request_body: false,
-        response_body: false,
+        enabled : true,
+        request_headers : false, // Privacy-conscious default
+        response_headers : false,
+        request_body : false,
+        response_body : false,
       }
     }
   }
@@ -98,7 +98,7 @@ mod private
     {
       Self
       {
-        enabled: true,
+        enabled : true,
       }
     }
   }
@@ -235,10 +235,10 @@ mod private
       Self
       {
         config,
-        metrics_history: Arc::new( Mutex::new( Vec::new() ) ),
-        request_count: Arc::new( Mutex::new( 0 ) ),
-        error_count: Arc::new( Mutex::new( 0 ) ),
-        start_time: Instant::now(),
+        metrics_history : Arc::new( Mutex::new( Vec::new() ) ),
+        request_count : Arc::new( Mutex::new( 0 ) ),
+        error_count : Arc::new( Mutex::new( 0 ) ),
+        start_time : Instant::now(),
       }
     }
 
@@ -261,9 +261,9 @@ mod private
       // Create a new request/response entry
       let entry = RequestResponseMetrics
       {
-        request: metrics.clone(),
-        response: None,
-        error: None,
+        request : metrics.clone(),
+        response : None,
+        error : None,
       };
 
       let mut history = self.metrics_history.lock().unwrap();
@@ -388,22 +388,22 @@ mod private
       {
         return PerformanceMetrics
         {
-          total_requests: 0,
-          successful_requests: 0,
-          failed_requests: 0,
-          average_response_time: Duration::from_millis( 0 ),
-          min_response_time: Duration::from_millis( 0 ),
-          max_response_time: Duration::from_millis( 0 ),
-          total_tokens_used: 0,
-          requests_per_minute: 0.0,
-          error_rate: 0.0,
+          total_requests : 0,
+          successful_requests : 0,
+          failed_requests : 0,
+          average_response_time : Duration::from_millis( 0 ),
+          min_response_time : Duration::from_millis( 0 ),
+          max_response_time : Duration::from_millis( 0 ),
+          total_tokens_used : 0,
+          requests_per_minute : 0.0,
+          error_rate : 0.0,
         };
       }
 
       let successful_requests = history.iter().filter( |entry| entry.response.is_some() ).count() as u64;
       let failed_requests = total_requests - successful_requests;
 
-      let response_times: Vec< Duration > = history
+      let response_times : Vec< Duration > = history
         .iter()
         .filter_map( |entry| entry.response.as_ref().map( |r| r.response_time ) )
         .collect();
@@ -414,7 +414,7 @@ mod private
       }
       else
       {
-        let total_ms: u64 = response_times.iter().map( |d| u64::try_from( d.as_millis() ).unwrap_or( u64::MAX ) ).sum();
+        let total_ms : u64 = response_times.iter().map( |d| u64::try_from( d.as_millis() ).unwrap_or( u64::MAX ) ).sum();
         Duration::from_millis( total_ms / response_times.len() as u64 )
       };
 
@@ -473,23 +473,23 @@ mod private
       let cutoff_time = Instant::now().checked_sub( time_range ).unwrap();
 
       // Filter to time range
-      let recent_metrics: Vec< _ > = history
+      let recent_metrics : Vec< _ > = history
         .iter()
         .filter( |entry| entry.request.timestamp >= cutoff_time )
         .collect();
 
       // Count endpoints
-      let mut endpoint_counts: HashMap<  String, u64  > = HashMap::new();
+      let mut endpoint_counts : HashMap<  String, u64  > = HashMap::new();
       for entry in &recent_metrics
       {
         *endpoint_counts.entry( entry.request.endpoint.clone() ).or_insert( 0 ) += 1;
       }
 
-      let mut top_endpoints: Vec< _ > = endpoint_counts.into_iter().collect();
+      let mut top_endpoints : Vec< _ > = endpoint_counts.into_iter().collect();
       top_endpoints.sort_by( |a, b| b.1.cmp( &a.1 ) );
 
       // Count error types
-      let mut error_counts: HashMap<  String, u64  > = HashMap::new();
+      let mut error_counts : HashMap<  String, u64  > = HashMap::new();
       for entry in &recent_metrics
       {
         if let Some( error ) = &entry.error
@@ -498,14 +498,14 @@ mod private
         }
       }
 
-      let mut error_summary: Vec< _ > = error_counts.into_iter().collect();
+      let mut error_summary : Vec< _ > = error_counts.into_iter().collect();
       error_summary.sort_by( |a, b| b.1.cmp( &a.1 ) );
 
       DiagnosticsReport
       {
-        generated_at: Instant::now(),
+        generated_at : Instant::now(),
         time_range,
-        performance: self.get_performance_metrics(),
+        performance : self.get_performance_metrics(),
         top_endpoints,
         error_summary,
       }
@@ -521,13 +521,13 @@ mod private
     pub fn estimate_memory_usage( &self ) -> usize
     {
       let history = self.metrics_history.lock().unwrap();
-      // Rough estimate: each entry is about 1KB
+      // Rough estimate : each entry is about 1KB
       history.len() * 1024
     }
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

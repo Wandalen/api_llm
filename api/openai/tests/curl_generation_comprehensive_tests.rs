@@ -8,10 +8,10 @@ use api_openai::ClientApiAccessors;
 use api_openai::
 {
   Client,
-  environment::OpenaiEnvironmentImpl,
-  secret::Secret,
-  components::embeddings_request::CreateEmbeddingRequest,
-  curl_generation::{ CurlGeneration, CurlGenerator, CurlRequestBuilder, CurlRequest, CurlFormatOptions, CurlFormattingOptions, CurlConnectionOptions },
+  environment ::OpenaiEnvironmentImpl,
+  secret ::Secret,
+  components ::embeddings_request::CreateEmbeddingRequest,
+  curl_generation ::{ CurlGeneration, CurlGenerator, CurlRequestBuilder, CurlRequest, CurlFormatOptions, CurlFormattingOptions, CurlConnectionOptions },
 };
 
 use std::collections::HashMap;
@@ -29,7 +29,7 @@ fn create_test_client() -> Result< Client< OpenaiEnvironmentImpl >, Box< dyn std
 /// Helper function to check if we should run integration tests
 fn should_run_integration_tests() -> bool
 {
-  std::env::var( "OPENAI_API_KEY" ).is_ok()
+  std ::env::var( "OPENAI_API_KEY" ).is_ok()
 }
 
 // === UNIT TESTS ===
@@ -69,13 +69,13 @@ fn test_curl_command_generation_basic()
 {
   let request = CurlRequest
   {
-    method: "POST".to_string(),
-    url: "https://api.openai.com/v1/embeddings".to_string(),
-    headers: vec![
+    method : "POST".to_string(),
+    url : "https://api.openai.com/v1/embeddings".to_string(),
+    headers : vec![
       ("Authorization".to_string(), "Bearer sk-test".to_string()),
       ("Content-Type".to_string(), "application/json".to_string()),
     ],
-    body: Some(r#"{"input": "test", "model": "text-embedding-ada-002"}"#.to_string()),
+    body : Some(r#"{"input": "test", "model": "text-embedding-ada-002"}"#.to_string()),
   };
 
   let curl_command = request.to_curl_command();
@@ -83,8 +83,8 @@ fn test_curl_command_generation_basic()
   assert!(curl_command.contains("curl"));
   assert!(curl_command.contains("-X POST"));
   assert!(curl_command.contains("https://api.openai.com/v1/embeddings"));
-  assert!(curl_command.contains("-H 'Authorization: Bearer sk-test'"));
-  assert!(curl_command.contains("-H 'Content-Type: application/json'"));
+  assert!(curl_command.contains("-H 'Authorization : Bearer sk-test'"));
+  assert!(curl_command.contains("-H 'Content-Type : application/json'"));
   assert!(curl_command.contains("-d"));
   assert!(curl_command.contains("text-embedding-ada-002"));
 }
@@ -94,12 +94,12 @@ fn test_curl_command_escaping()
 {
   let request = CurlRequest
   {
-    method: "POST".to_string(),
-    url: "https://api.openai.com/v1/chat/completions".to_string(),
-    headers: vec![
+    method : "POST".to_string(),
+    url : "https://api.openai.com/v1/chat/completions".to_string(),
+    headers : vec![
       ("Authorization".to_string(), "Bearer sk-test".to_string()),
     ],
-    body: Some(r#"{"messages": [{"role": "user", "content": "What's \"hello world\" in Rust?"}]}"#.to_string()),
+    body : Some(r#"{"messages": [{"role": "user", "content": "What's \"hello world\" in Rust?"}]}"#.to_string()),
   };
 
   let curl_command = request.to_curl_command();
@@ -114,12 +114,12 @@ fn test_curl_command_get_request()
 {
   let request = CurlRequest
   {
-    method: "GET".to_string(),
-    url: "https://api.openai.com/v1/models".to_string(),
-    headers: vec![
+    method : "GET".to_string(),
+    url : "https://api.openai.com/v1/models".to_string(),
+    headers : vec![
       ("Authorization".to_string(), "Bearer sk-test".to_string()),
     ],
-    body: None,
+    body : None,
   };
 
   let curl_command = request.to_curl_command();
@@ -127,7 +127,7 @@ fn test_curl_command_get_request()
   assert!(curl_command.contains("curl"));
   assert!(curl_command.contains("-X GET"));
   assert!(curl_command.contains("https://api.openai.com/v1/models"));
-  assert!(curl_command.contains("-H 'Authorization: Bearer sk-test'"));
+  assert!(curl_command.contains("-H 'Authorization : Bearer sk-test'"));
   assert!(!curl_command.contains("-d")); // No body for GET request
 }
 
@@ -136,28 +136,28 @@ fn test_curl_command_formatting_options()
 {
   let request = CurlRequest
   {
-    method: "POST".to_string(),
-    url: "https://api.openai.com/v1/embeddings".to_string(),
-    headers: vec![
+    method : "POST".to_string(),
+    url : "https://api.openai.com/v1/embeddings".to_string(),
+    headers : vec![
       ("Authorization".to_string(), "Bearer sk-test".to_string()),
       ("Content-Type".to_string(), "application/json".to_string()),
     ],
-    body: Some(r#"{"input": "test"}"#.to_string()),
+    body : Some(r#"{"input": "test"}"#.to_string()),
   };
 
   let options = CurlFormatOptions
   {
-    formatting: CurlFormattingOptions
+    formatting : CurlFormattingOptions
     {
-      pretty_print: true,
-      include_verbose: true,
-      include_silent: false,
+      pretty_print : true,
+      include_verbose : true,
+      include_silent : false,
     },
-    connection: CurlConnectionOptions
+    connection : CurlConnectionOptions
     {
-      include_insecure: false,
+      include_insecure : false,
     },
-    timeout: Some(30),
+    timeout : Some(30),
   };
 
   let curl_command = request.to_curl_command_with_options(&options);
@@ -190,7 +190,7 @@ fn test_embeddings_request_to_curl()
   assert!(curl_command.contains("The quick brown fox"));
 }
 
-// Note: Chat completion tests will be added once the request structures are properly exposed
+// Note : Chat completion tests will be added once the request structures are properly exposed
 
 #[ test ]
 fn test_models_list_request_to_curl()
@@ -202,7 +202,7 @@ fn test_models_list_request_to_curl()
   assert!(curl_command.contains("curl"));
   assert!(curl_command.contains("-X GET"));
   assert!(curl_command.contains("https://api.openai.com/v1/models"));
-  assert!(curl_command.contains("Authorization: Bearer") || curl_command.contains("authorization: Bearer"));
+  assert!(curl_command.contains("Authorization : Bearer") || curl_command.contains("authorization : Bearer"));
 }
 
 #[ test ]
@@ -215,7 +215,7 @@ fn test_models_retrieve_request_to_curl()
   assert!(curl_command.contains("curl"));
   assert!(curl_command.contains("-X GET"));
   assert!(curl_command.contains("https://api.openai.com/v1/models/gpt-3.5-turbo"));
-  assert!(curl_command.contains("Authorization: Bearer") || curl_command.contains("authorization: Bearer"));
+  assert!(curl_command.contains("Authorization : Bearer") || curl_command.contains("authorization : Bearer"));
 }
 
 #[ test ]
@@ -236,8 +236,8 @@ fn test_curl_generation_with_custom_headers()
     .to_curl_with_headers(&request, &custom_headers)
     .expect("Failed to generate cURL");
 
-  assert!(curl_command.contains("-H 'X-Custom-Header: custom-value'"));
-  assert!(curl_command.contains("-H 'User-Agent: MyApp/1.0'"));
+  assert!(curl_command.contains("-H 'X-Custom-Header : custom-value'"));
+  assert!(curl_command.contains("-H 'User-Agent : MyApp/1.0'"));
 }
 
 #[ test ]
@@ -250,8 +250,8 @@ fn test_curl_generation_with_organization_project()
     secret,
     Some("org-123".to_string()),
     Some("proj-456".to_string()),
-    api_openai::environment::OpenAIRecommended::base_url().to_string(),
-    api_openai::environment::OpenAIRecommended::realtime_base_url().to_string()
+    api_openai ::environment::OpenAIRecommended::base_url().to_string(),
+    api_openai ::environment::OpenAIRecommended::realtime_base_url().to_string()
   ).expect("Failed to create environment");
   let client = Client::build(env).expect("Failed to create client");
 
@@ -262,8 +262,8 @@ fn test_curl_generation_with_organization_project()
 
   let curl_command = client.embeddings().to_curl(&request).expect("Failed to generate cURL");
 
-  assert!(curl_command.contains("-H 'openai-organization: org-123'"));
-  assert!(curl_command.contains("-H 'openai-project: proj-456'"));
+  assert!(curl_command.contains("-H 'openai-organization : org-123'"));
+  assert!(curl_command.contains("-H 'openai-project : proj-456'"));
 }
 
 #[ test ]
@@ -279,7 +279,7 @@ fn test_curl_security_header_redaction()
   let curl_command = client.embeddings().to_curl_safe(&request).expect("Failed to generate safe cURL");
 
   // API key should be redacted for security
-  assert!(curl_command.contains("Authorization: Bearer [REDACTED]"));
+  assert!(curl_command.contains("Authorization : Bearer [REDACTED]"));
   assert!(!curl_command.contains("sk-")); // No actual API keys should be present
 }
 
@@ -317,7 +317,7 @@ async fn test_curl_generation_integration_embeddings()
   // INTEGRATION TEST - Skip if no API key available
   if !should_run_integration_tests()
   {
-    eprintln!("Skipping integration test: OPENAI_API_KEY not available");
+    eprintln!("Skipping integration test : OPENAI_API_KEY not available");
     return;
   }
 
@@ -337,11 +337,11 @@ async fn test_curl_generation_integration_embeddings()
   assert!(curl_command.contains("Integration test for cURL generation"));
 
   // The command should be executable (though we won't execute it in tests)
-  let lines: Vec< &str > = curl_command.split('\n').collect();
+  let lines : Vec< &str > = curl_command.split('\n').collect();
   assert!(!lines.is_empty()); // Should have at least the curl command line
 }
 
-// Note: Chat integration tests will be added once request structures are properly exposed
+// Note : Chat integration tests will be added once request structures are properly exposed
 
 #[ cfg( feature = "integration" ) ]
 #[ tokio::test ]
@@ -350,7 +350,7 @@ async fn test_curl_generation_integration_models()
   // INTEGRATION TEST - Skip if no API key available
   if !should_run_integration_tests()
   {
-    eprintln!("Skipping integration test: OPENAI_API_KEY not available");
+    eprintln!("Skipping integration test : OPENAI_API_KEY not available");
     return;
   }
 
@@ -389,7 +389,7 @@ fn test_curl_generation_performance_benchmark()
 
   // cURL generation should be fast (< 100ms for 100 generations)
   assert!(elapsed < core::time::Duration::from_millis(100),
-          "cURL generation too slow: {elapsed:?}");
+          "cURL generation too slow : {elapsed:?}");
 }
 
 #[ test ]

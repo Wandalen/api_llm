@@ -8,7 +8,7 @@ use crate::error::Result;
 
 /// Trait for custom tools that can be integrated.
 #[ async_trait::async_trait ]
-pub trait CustomTool: Send + Sync
+pub trait CustomTool : Send + Sync
 {
   /// Tool name
   fn name( &self ) -> &str;
@@ -20,7 +20,7 @@ pub trait CustomTool: Send + Sync
   fn parameters( &self ) -> ToolParameters;
 
   /// Execute the tool with given parameters
-  async fn execute( &self, parameters: serde_json::Value ) -> Result< ToolResult >;
+  async fn execute( &self, parameters : serde_json::Value ) -> Result< ToolResult >;
 }
 
 /// Tool parameter definitions.
@@ -28,9 +28,9 @@ pub trait CustomTool: Send + Sync
 pub struct ToolParameters
 {
   /// Required parameter names
-  pub required: Vec< String >,
+  pub required : Vec< String >,
   /// Parameter definitions
-  pub properties: HashMap<  String, ParameterDefinition  >,
+  pub properties : HashMap<  String, ParameterDefinition  >,
 }
 
 /// Definition of a single parameter.
@@ -38,13 +38,13 @@ pub struct ToolParameters
 pub struct ParameterDefinition
 {
   /// Parameter type
-  pub param_type: String,
+  pub param_type : String,
   /// Parameter description
-  pub description: String,
+  pub description : String,
   /// Whether parameter is required
-  pub required: bool,
+  pub required : bool,
   /// Default value if any
-  pub default: Option< serde_json::Value >,
+  pub default : Option< serde_json::Value >,
 }
 
 /// Result of tool execution.
@@ -52,9 +52,9 @@ pub struct ParameterDefinition
 pub struct ToolResult
 {
   /// Tool output
-  pub output: serde_json::Value,
+  pub output : serde_json::Value,
   /// Whether execution was successful
-  pub success: bool,
+  pub success : bool,
   /// Error message if execution failed
-  pub error_message: Option< String >,
+  pub error_message : Option< String >,
 }

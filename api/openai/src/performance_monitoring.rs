@@ -8,9 +8,9 @@ mod private
 {
   use std::
   {
-    collections::HashMap,
-    sync::{ Arc, Mutex },
-    time::Instant,
+    collections ::HashMap,
+    sync ::{ Arc, Mutex },
+    time ::Instant,
   };
   use core::time::Duration;
   use serde::{ Deserialize, Serialize };
@@ -141,7 +141,7 @@ mod private
       let start = Instant::now();
 
       // Simulate a minimal request overhead measurement
-      tokio::time::sleep( Duration::from_micros( 500 ) ).await;
+      tokio ::time::sleep( Duration::from_micros( 500 ) ).await;
 
       let overhead = start.elapsed();
 
@@ -192,7 +192,7 @@ mod private
       let std_dev = variance.sqrt();
 
       // If standard deviation is more than 100% of mean, consider it inconsistent
-      // Note: Relaxed threshold to account for system timing variability
+      // Note : Relaxed threshold to account for system timing variability
       if std_dev > mean * 1.0
       {
         return Err( "Request overhead measurements are inconsistent" );
@@ -219,7 +219,7 @@ mod private
         {
           let request_start = Instant::now();
           // Simulate request processing
-          tokio::time::sleep( Duration::from_millis( 10 ) ).await;
+          tokio ::time::sleep( Duration::from_millis( 10 ) ).await;
           request_start.elapsed()
         } );
 
@@ -276,7 +276,7 @@ mod private
       // Monitor for a short period
       for _ in 0..10
       {
-        tokio::time::sleep( Duration::from_millis( 10 ) ).await;
+        tokio ::time::sleep( Duration::from_millis( 10 ) ).await;
         let current_usage = Self::get_current_memory_usage();
         if current_usage > peak_usage
         {
@@ -377,7 +377,7 @@ mod private
         let request_start = Instant::now();
 
         // Simulate request processing with occasional failures
-        tokio::time::sleep( Duration::from_millis( 5 ) ).await;
+        tokio ::time::sleep( Duration::from_millis( 5 ) ).await;
 
         let latency = request_start.elapsed();
         latencies.push( latency );
@@ -397,7 +397,7 @@ mod private
         // Wait for next request interval
         if request_count < total_requests
         {
-          tokio::time::sleep( interval ).await;
+          tokio ::time::sleep( interval ).await;
         }
       }
 
@@ -530,7 +530,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   orphan use MemoryUsageReport;
   orphan use RegressionReport;

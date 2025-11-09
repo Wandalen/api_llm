@@ -1,4 +1,4 @@
-//! Example: Embedding generation with `HuggingFace` API
+//! Example : Embedding generation with `HuggingFace` API
 //!
 //! This example demonstrates embedding generation and similarity calculation.
 //! 
@@ -11,19 +11,19 @@
 use api_huggingface::
 {
   Client,
-  environment::HuggingFaceEnvironmentImpl,
-  components::
+  environment ::HuggingFaceEnvironmentImpl,
+  components ::
   {
-  models::Models,
+  models ::Models,
   },
-  secret::Secret,
+  secret ::Secret,
 };
 
 #[ tokio::main ]
 async fn main() -> Result< (), Box< dyn std::error::Error > >
 {
   // Initialize tracing for debugging
-  tracing_subscriber::fmt::init();
+  tracing_subscriber ::fmt::init();
   
   println!( "🤗 HuggingFace Embeddings API Example" );
   
@@ -37,12 +37,12 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
   println!( "✓ Client initialized" );
   
   let model = Models::all_minilm_l6_v2();
-  println!( "🤖 Using embedding model: {model}" );
+  println!( "🤖 Using embedding model : {model}" );
   
   // Example 1: Single embedding
   println!( "\n📝 Example 1: Single text embedding" );
   let text = "The quick brown fox jumps over the lazy dog.";
-  println!( "Text: {text}" );
+  println!( "Text : {text}" );
   
   match client.embeddings().create( text, model ).await
   {
@@ -50,20 +50,20 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
   {
       match response
       {
-  api_huggingface::components::embeddings::EmbeddingResponse::Single( embeddings ) =>
+  api_huggingface ::components::embeddings::EmbeddingResponse::Single( embeddings ) =>
   {
           if let Some( embedding ) = embeddings.first()
           {
       println!( "✓ Generated embedding with {} dimensions", embedding.len() );
-      println!( "📊 First 5 values: {:?}", &embedding[ 0..5.min( embedding.len() ) ] );
+      println!( "📊 First 5 values : {:?}", &embedding[ 0..5.min( embedding.len() ) ] );
           }
   },
-  api_huggingface::components::embeddings::EmbeddingResponse::Batch( _ ) => println!( "Unexpected response format" ),
+  api_huggingface ::components::embeddings::EmbeddingResponse::Batch( _ ) => println!( "Unexpected response format" ),
       }
   },
   Err( e ) =>
   {
-      eprintln!( "❌ Error: {e}" );
+      eprintln!( "❌ Error : {e}" );
   }
   }
   
@@ -76,7 +76,7 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
   "Natural language processing enables computers to understand human language.".to_string(),
   ];
   
-  println!( "Texts: {texts:?}" );
+  println!( "Texts : {texts:?}" );
   
   match client.embeddings().create_batch( texts.clone(), model ).await
   {
@@ -84,7 +84,7 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
   {
       match response
       {
-  api_huggingface::components::embeddings::EmbeddingResponse::Single( embeddings ) =>
+  api_huggingface ::components::embeddings::EmbeddingResponse::Single( embeddings ) =>
   {
           println!( "✓ Generated {} embeddings", embeddings.len() );
           for ( i, embedding ) in embeddings.iter().enumerate()
@@ -92,12 +92,12 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
       println!( "  Embedding {}: {} dimensions", i + 1, embedding.len() );
           }
   },
-  api_huggingface::components::embeddings::EmbeddingResponse::Batch( _ ) => println!( "Unexpected response format" ),
+  api_huggingface ::components::embeddings::EmbeddingResponse::Batch( _ ) => println!( "Unexpected response format" ),
       }
   },
   Err( e ) =>
   {
-      eprintln!( "❌ Error: {e}" );
+      eprintln!( "❌ Error : {e}" );
   }
   }
   
@@ -120,7 +120,7 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
   },
   Err( e ) =>
   {
-      eprintln!( "❌ Similarity error: {e}" );
+      eprintln!( "❌ Similarity error : {e}" );
   }
   }
   
@@ -133,7 +133,7 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
   },
   Err( e ) =>
   {
-      eprintln!( "❌ Similarity error: {e}" );
+      eprintln!( "❌ Similarity error : {e}" );
   }
   }
   

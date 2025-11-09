@@ -150,10 +150,10 @@ mod private
         }
       }
       FailoverStats {
-        total_failovers: 0,
-        total_requests: 0,
-        active_endpoint_index: 0,
-        total_endpoints: 0,
+        total_failovers : 0,
+        total_requests : 0,
+        active_endpoint_index : 0,
+        total_endpoints : 0,
       }
     }
 

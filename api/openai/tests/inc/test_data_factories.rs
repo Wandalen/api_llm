@@ -5,16 +5,16 @@
 
 use api_openai::exposed::
 {
-  components::
+  components ::
   {
-    responses::
+    responses ::
     {
       CreateResponseRequest,
       ResponseObject,
       ResponseInput,
       ResponseItemList,
     },
-    input::
+    input ::
     {
       InputItem,
       InputMessage,
@@ -23,18 +23,18 @@ use api_openai::exposed::
       InputImage,
       ListedInputItem,
     },
-    output::
+    output ::
     {
       OutputItem,
       OutputContentPart,
     },
-    common::
+    common ::
     {
       ModelIdsResponses,
       Metadata,
       ResponseUsage,
     },
-    tools::
+    tools ::
     {
       Tool,
       ToolChoice,
@@ -57,19 +57,19 @@ pub struct CreateResponseRequestFactory;
 impl CreateResponseRequestFactory
 {
   /// Creates a basic request with string input
-  pub fn with_simple_string( model: &str, input: &str ) -> CreateResponseRequest
+  pub fn with_simple_string( model : &str, input : &str ) -> CreateResponseRequest
   {
     CreateResponseRequest::former()
-    .model( ModelIdsResponses { value: model.to_string() } )
+    .model( ModelIdsResponses { value : model.to_string() } )
     .input( ResponseInput::String( input.to_string() ) )
     .form()
   }
 
   /// Creates a request with optional parameters
-  pub fn with_optional_params( model: &str, input: &str, temperature: Option< f32 >, top_p: Option< f32 >, store: Option< bool > ) -> CreateResponseRequest
+  pub fn with_optional_params( model : &str, input : &str, temperature : Option< f32 >, top_p : Option< f32 >, store : Option< bool > ) -> CreateResponseRequest
   {
     let mut former = CreateResponseRequest::former()
-    .model( ModelIdsResponses { value: model.to_string() } )
+    .model( ModelIdsResponses { value : model.to_string() } )
     .input( ResponseInput::String( input.to_string() ) );
 
     if let Some( temp ) = temperature
@@ -89,31 +89,31 @@ impl CreateResponseRequestFactory
   }
 
   /// Creates a request with message items
-  pub fn with_message_items( model: &str, messages: Vec< InputMessage > ) -> CreateResponseRequest
+  pub fn with_message_items( model : &str, messages : Vec< InputMessage > ) -> CreateResponseRequest
   {
     let input_items = messages.into_iter().map( InputItem::Message ).collect();
     CreateResponseRequest::former()
-    .model( ModelIdsResponses { value: model.to_string() } )
+    .model( ModelIdsResponses { value : model.to_string() } )
     .input( ResponseInput::Items( input_items ) )
     .form()
   }
 
   /// Creates a request with metadata
-  pub fn with_metadata( model: &str, input: &str, metadata_pairs: Vec< ( &str, &str ) > ) -> CreateResponseRequest
+  pub fn with_metadata( model : &str, input : &str, metadata_pairs : Vec< ( &str, &str ) > ) -> CreateResponseRequest
   {
     let metadata = Metadata::from( metadata_pairs );
     CreateResponseRequest::former()
-    .model( ModelIdsResponses { value: model.to_string() } )
+    .model( ModelIdsResponses { value : model.to_string() } )
     .input( ResponseInput::String( input.to_string() ) )
     .metadata( metadata )
     .form()
   }
 
   /// Creates a request with tools and tool choice
-  pub fn with_tools( model: &str, input: &str, tools: Vec< Tool >, tool_choice: Option< ToolChoice > ) -> CreateResponseRequest
+  pub fn with_tools( model : &str, input : &str, tools : Vec< Tool >, tool_choice : Option< ToolChoice > ) -> CreateResponseRequest
   {
     let mut former = CreateResponseRequest::former()
-    .model( ModelIdsResponses { value: model.to_string() } )
+    .model( ModelIdsResponses { value : model.to_string() } )
     .input( ResponseInput::String( input.to_string() ) )
     .tools( tools );
 
@@ -132,25 +132,25 @@ pub struct InputMessageFactory;
 impl InputMessageFactory
 {
   /// Creates a simple text message
-  pub fn text_message( role: &str, text: &str ) -> InputMessage
+  pub fn text_message( role : &str, text : &str ) -> InputMessage
   {
     InputMessage::former()
     .r#type( "message".to_string() )
     .role( role.to_string() )
-    .content( vec![ InputContentPart::Text( InputText { text: text.to_string() } ) ] )
+    .content( vec![ InputContentPart::Text( InputText { text : text.to_string() } ) ] )
     .form()
   }
 
   /// Creates a message with mixed content (text and image)
-  pub fn multimodal_message( role: &str, text: &str, image_url: Option< &str >, file_id: Option< &str >, detail: Option< &str > ) -> InputMessage
+  pub fn multimodal_message( role : &str, text : &str, image_url : Option< &str >, file_id : Option< &str >, detail : Option< &str > ) -> InputMessage
   {
-    let mut content = vec![ InputContentPart::Text( InputText { text: text.to_string() } ) ];
+    let mut content = vec![ InputContentPart::Text( InputText { text : text.to_string() } ) ];
     
     content.push( InputContentPart::Image( InputImage
     {
-      image_url: image_url.map( |s| s.to_string() ),
-      file_id: file_id.map( |s| s.to_string() ),
-      detail: detail.map( |s| s.to_string() ),
+      image_url : image_url.map( |s| s.to_string() ),
+      file_id : file_id.map( |s| s.to_string() ),
+      detail : detail.map( |s| s.to_string() ),
     } ) );
 
     InputMessage::former()
@@ -161,7 +161,7 @@ impl InputMessageFactory
   }
 
   /// Creates a conversation with multiple messages
-  pub fn conversation( exchanges: Vec< ( &str, &str, &str ) > ) -> Vec< InputMessage >
+  pub fn conversation( exchanges : Vec< ( &str, &str, &str ) > ) -> Vec< InputMessage >
   {
     exchanges.into_iter()
     .map( |( role, text, _context )| Self::text_message( role, text ) )
@@ -175,7 +175,7 @@ pub struct ToolFactory;
 impl ToolFactory
 {
   /// Creates a basic function tool
-  pub fn function_tool( name: &str, description: Option< &str > ) -> Tool
+  pub fn function_tool( name : &str, description : Option< &str > ) -> Tool
   {
     let mut former = FunctionTool::former()
     .name( name.to_string() )
@@ -202,7 +202,7 @@ impl ToolFactory
   }
 
   /// Creates a computer use tool with display parameters
-  pub fn computer_tool( display_width: Option< f64 >, display_height: Option< f64 >, environment: Option< &str > ) -> Tool
+  pub fn computer_tool( display_width : Option< f64 >, display_height : Option< f64 >, environment : Option< &str > ) -> Tool
   {
     let mut former = ComputerTool::former();
     
@@ -229,20 +229,20 @@ pub struct ToolChoiceFactory;
 impl ToolChoiceFactory
 {
   /// Creates a string-based tool choice
-  pub fn string_choice( choice: &str ) -> ToolChoice
+  pub fn string_choice( choice : &str ) -> ToolChoice
   {
     ToolChoice::String( choice.to_string() )
   }
 
   /// Creates a function-specific tool choice
-  pub fn function_choice( function_name: &str ) -> ToolChoice
+  pub fn function_choice( function_name : &str ) -> ToolChoice
   {
     ToolChoice::Function
     {
-      r#type: "function".to_string(),
-      function: ToolChoiceFunction
+      r#type : "function".to_string(),
+      function : ToolChoiceFunction
       {
-        name: function_name.to_string(),
+        name : function_name.to_string(),
       },
     }
   }
@@ -254,7 +254,7 @@ pub struct ResponseObjectFactory;
 impl ResponseObjectFactory
 {
   /// Creates basic response object JSON string
-  pub fn simple_completed_response( response_id: &str, message_id: &str, text: &str, model: &str ) -> String
+  pub fn simple_completed_response( response_id : &str, message_id : &str, text : &str, model : &str ) -> String
   {
     json!({
       "id": response_id,
@@ -281,7 +281,7 @@ impl ResponseObjectFactory
   }
 
   /// Creates response object with usage data
-  pub fn response_with_usage( response_id: &str, prompt_tokens: u32, completion_tokens: u32, total_tokens: u32 ) -> String
+  pub fn response_with_usage( response_id : &str, prompt_tokens : u32, completion_tokens : u32, total_tokens : u32 ) -> String
   {
     json!({
       "id": response_id,
@@ -300,7 +300,7 @@ impl ResponseObjectFactory
   }
 
   /// Creates response object with refusal
-  pub fn response_with_refusal( response_id: &str, refusal_reason: &str ) -> String
+  pub fn response_with_refusal( response_id : &str, refusal_reason : &str ) -> String
   {
     json!({
       "id": response_id,
@@ -327,7 +327,7 @@ impl ResponseObjectFactory
   }
 
   /// Creates failed response object
-  pub fn failed_response( response_id: &str, error_message: &str, error_code: &str ) -> String
+  pub fn failed_response( response_id : &str, error_message : &str, error_code : &str ) -> String
   {
     json!({
       "id": response_id,
@@ -357,9 +357,9 @@ impl ResponseObjectFactory
   }
 
   /// Creates response list with multiple items
-  pub fn response_list_with_items( response_ids: Vec< &str > ) -> String
+  pub fn response_list_with_items( response_ids : Vec< &str > ) -> String
   {
-    let responses: Vec< serde_json::Value > = response_ids.into_iter().map( |id|
+    let responses : Vec< serde_json::Value > = response_ids.into_iter().map( |id|
     {
       json!({
         "id": id,
@@ -382,7 +382,7 @@ impl ResponseObjectFactory
   }
 
   /// Creates delete response
-  pub fn delete_response( response_id: &str, deleted: bool ) -> String
+  pub fn delete_response( response_id : &str, deleted : bool ) -> String
   {
     json!({
       "id": response_id,
@@ -416,7 +416,7 @@ pub mod scenarios
   use super::*;
 
   /// Creates a basic chat scenario
-  pub fn basic_chat( user_message: &str ) -> CreateResponseRequest
+  pub fn basic_chat( user_message : &str ) -> CreateResponseRequest
   {
     CreateResponseRequestFactory::with_simple_string( constants::DEFAULT_MODEL, user_message )
   }
@@ -433,7 +433,7 @@ pub mod scenarios
   }
 
   /// Creates a multimodal scenario with image
-  pub fn multimodal_with_image( text: &str ) -> CreateResponseRequest
+  pub fn multimodal_with_image( text : &str ) -> CreateResponseRequest
   {
     let message = InputMessageFactory::multimodal_message(
       "user",
@@ -446,7 +446,7 @@ pub mod scenarios
   }
 
   /// Creates a function calling scenario
-  pub fn function_calling( query: &str ) -> CreateResponseRequest
+  pub fn function_calling( query : &str ) -> CreateResponseRequest
   {
     let tools = vec![ ToolFactory::function_tool( "get_current_weather", Some( "Get the current weather in a given location" ) ) ];
     let tool_choice = Some( ToolChoiceFactory::function_choice( "get_current_weather" ) );
@@ -454,7 +454,7 @@ pub mod scenarios
   }
 
   /// Creates a file search scenario
-  pub fn file_search( query: &str ) -> CreateResponseRequest
+  pub fn file_search( query : &str ) -> CreateResponseRequest
   {
     let tools = vec![ ToolFactory::file_search_tool() ];
     let tool_choice = Some( ToolChoiceFactory::string_choice( "auto" ) );
@@ -462,7 +462,7 @@ pub mod scenarios
   }
 
   /// Creates a web search scenario
-  pub fn web_search( query: &str ) -> CreateResponseRequest
+  pub fn web_search( query : &str ) -> CreateResponseRequest
   {
     let tools = vec![ ToolFactory::web_search_tool() ];
     let tool_choice = Some( ToolChoiceFactory::string_choice( "auto" ) );
@@ -470,7 +470,7 @@ pub mod scenarios
   }
 
   /// Creates a computer use scenario
-  pub fn computer_use( instruction: &str ) -> CreateResponseRequest
+  pub fn computer_use( instruction : &str ) -> CreateResponseRequest
   {
     let tools = vec![ ToolFactory::computer_tool(
       Some( constants::DEFAULT_DISPLAY_WIDTH ),

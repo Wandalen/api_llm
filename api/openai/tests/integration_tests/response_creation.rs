@@ -16,7 +16,7 @@ use api_openai::ClientApiAccessors;
 use super::shared::{ *, IsolatedClient };
 
 /// Tests basic response creation functionality.
-/// Test Combination: R1.1
+/// Test Combination : R1.1
 /// Uses proper test isolation to prevent shared state issues.
 #[ tokio::test ]
 async fn create_response()
@@ -34,7 +34,7 @@ async fn create_response()
 }
 
 /// Tests that invalid model returns appropriate error.
-/// Test Combination: R1.2
+/// Test Combination : R1.2
 /// Uses proper test isolation to prevent shared state issues.
 #[ tokio::test ]
 async fn create_response_invalid_model()
@@ -55,7 +55,7 @@ async fn create_response_invalid_model()
 }
 
 /// Tests streaming response creation.
-/// Test Combination: R1.3
+/// Test Combination : R1.3
 /// Uses proper test isolation to prevent shared state issues.
 #[ tokio::test ]
 async fn create_response_stream()
@@ -109,7 +109,7 @@ async fn create_response_stream()
               }
             },
             Ok(Some(Err(e))) => {
-              panic!("Stream error: {e:?}");
+              panic!("Stream error : {e:?}");
             },
             Ok(None) => {
               println!("Stream ended after {event_count} events");
@@ -125,17 +125,17 @@ async fn create_response_stream()
         assert!(event_count > 0, "Should receive at least one streaming event");
         if event_count >= 50
         {
-          println!("Warning: Stopped after 50 events to prevent infinite loop");
+          println!("Warning : Stopped after 50 events to prevent infinite loop");
         }
         
         // For real API, we expect either content or done event
         if !has_content && !is_done
         {
-          println!("Warning: No content or done event received in {event_count} events");
+          println!("Warning : No content or done event received in {event_count} events");
         }
       },
       Err(e) => {
-        panic!("Failed to create stream: {e:?}");
+        panic!("Failed to create stream : {e:?}");
       }
     }
   } else {
@@ -145,7 +145,7 @@ async fn create_response_stream()
       Ok(mut receiver) => {
         // Client succeeded - verify it returns data
         let event_result = tokio::time::timeout(
-          core::time::Duration::from_secs(2),
+          core ::time::Duration::from_secs(2),
           receiver.recv()
         ).await;
         match event_result
@@ -164,7 +164,7 @@ async fn create_response_stream()
 }
 
 /// Tests response creation with tool usage (function calling).
-/// Test Combination: R1.4
+/// Test Combination : R1.4
 /// Uses proper test isolation to prevent shared state issues.
 #[ tokio::test ]
 async fn create_response_with_tools()

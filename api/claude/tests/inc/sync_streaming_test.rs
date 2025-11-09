@@ -50,7 +50,7 @@ fn integration_sync_streaming_text_generation()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION: Sync streaming must work: {err}" ),
+    Err( err ) => panic!( "INTEGRATION: Sync streaming must work : {err}" ),
   };
 
   let mut received_chunks = 0;
@@ -64,7 +64,7 @@ fn integration_sync_streaming_text_generation()
     received_chunks += 1;
 
     // Extract text from chunk
-    if let the_module::StreamEvent::ContentBlockDelta{ delta: the_module::StreamDelta::TextDelta{ text, .. }, .. } = chunk
+    if let the_module::StreamEvent::ContentBlockDelta{ delta : the_module::StreamDelta::TextDelta{ text, .. }, .. } = chunk
     {
       accumulated_text.push_str( &text );
     }
@@ -76,7 +76,7 @@ fn integration_sync_streaming_text_generation()
 
   println!( "✅ Sync streaming text generation test passed!" );
   println!( "   Received {received_chunks} chunks" );
-  println!( "   Total text length: {} chars", accumulated_text.len() );
+  println!( "   Total text length : {} chars", accumulated_text.len() );
 }
 
 #[ test ]
@@ -137,7 +137,7 @@ fn integration_sync_streaming_blocking_iteration()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION: Stream creation must work: {err}" ),
+    Err( err ) => panic!( "INTEGRATION: Stream creation must work : {err}" ),
   };
 
   let mut chunk_count = 0;
@@ -153,7 +153,7 @@ fn integration_sync_streaming_blocking_iteration()
         println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted during streaming" );
         return;
       },
-      Err( err ) => panic!( "INTEGRATION: Chunk must be valid: {err}" ),
+      Err( err ) => panic!( "INTEGRATION: Chunk must be valid : {err}" ),
     }
   }
 

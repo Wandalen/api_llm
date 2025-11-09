@@ -22,8 +22,8 @@ impl OllamaClient
   ///
   /// # Errors
   /// Returns error if:
-  /// - Circuit breaker is open (feature: circuit_breaker)
-  /// - Rate limiting is exceeded (feature: rate_limiting)
+  /// - Circuit breaker is open (feature : circuit_breaker)
+  /// - Rate limiting is exceeded (feature : rate_limiting)
   /// - Text input is invalid or too long
   /// - Model name is invalid or unsupported
   /// - Network request fails or times out
@@ -47,12 +47,12 @@ impl OllamaClient
   /// );
   ///
   /// let response = client.count_tokens( request ).await?;
-  /// println!( "Token count: {}", response.token_count );
+  /// println!( "Token count : {}", response.token_count );
   /// # Ok( () )
   /// # }
   /// ```
   #[ inline ]
-  pub async fn count_tokens( &mut self, request: crate::tokens::TokenCountRequest ) -> OllamaResult< crate::tokens::TokenCountResponse >
+  pub async fn count_tokens( &mut self, request : crate::tokens::TokenCountRequest ) -> OllamaResult< crate::tokens::TokenCountResponse >
   {
     // Check circuit breaker before making request
     #[ cfg( feature = "circuit_breaker" ) ]
@@ -110,11 +110,11 @@ impl OllamaClient
         let status = resp.status();
         if status.is_success()
         {
-          let response_text = resp.text().await.map_err( | e | format_err!( "Failed to read response: {e}" ) )?;
+          let response_text = resp.text().await.map_err( | e | format_err!( "Failed to read response : {e}" ) )?;
 
           // Parse the response (unused but needed to validate JSON)
-          let _embeddings_response: serde_json::Value = serde_json::from_str( &response_text )
-            .map_err( | e | format_err!( "Failed to parse response: {e}" ) )?;
+          let _embeddings_response : serde_json::Value = serde_json::from_str( &response_text )
+            .map_err( | e | format_err!( "Failed to parse response : {e}" ) )?;
 
           // Extract token count
           // In Ollama, the embeddings response doesn't directly provide token count
@@ -142,12 +142,12 @@ impl OllamaClient
           // Build response
           let response = crate::tokens::TokenCountResponse
           {
-            token_count: token_count as u32,
-            model: request.model.clone(),
-            text_length: request.text.len(),
-            estimated_cost: None, // Cost estimation requires pricing data
-            processing_time_ms: Some( processing_time_ms ),
-            metadata: None,
+            token_count : token_count as u32,
+            model : request.model.clone(),
+            text_length : request.text.len(),
+            estimated_cost : None, // Cost estimation requires pricing data
+            processing_time_ms : Some( processing_time_ms ),
+            metadata : None,
           };
 
           Ok( response )
@@ -197,7 +197,7 @@ impl OllamaClient
           }
         }
 
-        Err( format_err!( "Token counting request failed: {e}" ) )
+        Err( format_err!( "Token counting request failed : {e}" ) )
       }
     }
   }
@@ -207,9 +207,9 @@ impl OllamaClient
   /// This is a rough estimation based on character count and model characteristics.
   /// For more accurate counts, use the actual API token counting.
   #[ inline ]
-  fn estimate_token_count( &self, text: &str, model: &str ) -> u64
+  fn estimate_token_count( &self, text : &str, model : &str ) -> u64
   {
-    // Rough estimation: average of 4 characters per token for English text
+    // Rough estimation : average of 4 characters per token for English text
     // This varies by model and language
     let char_count = text.chars().count() as u64;
 
@@ -244,7 +244,7 @@ impl OllamaClient
   /// # Errors
   /// Returns error if any individual token counting operation fails
   #[ inline ]
-  pub async fn count_tokens_batch( &mut self, request: crate::tokens::BatchTokenRequest ) -> OllamaResult< crate::tokens::BatchTokenResponse >
+  pub async fn count_tokens_batch( &mut self, request : crate::tokens::BatchTokenRequest ) -> OllamaResult< crate::tokens::BatchTokenResponse >
   {
     // request.validate()?;
 
@@ -255,9 +255,9 @@ impl OllamaClient
     {
       let single_request = crate::tokens::TokenCountRequest
       {
-        model: request.model.clone(),
-        text: text.clone(),
-        options: request.options.clone(),
+        model : request.model.clone(),
+        text : text.clone(),
+        options : request.options.clone(),
       };
 
       let response = self.count_tokens( single_request ).await?;
@@ -266,15 +266,15 @@ impl OllamaClient
 
     let processing_time_ms = start_time.elapsed().as_millis() as u64;
     let total_tokens = results.iter().map( | r | r.token_count ).sum();
-    let total_estimated_cost = results.iter().filter_map( | r | r.estimated_cost ).sum::<f64>();
+    let total_estimated_cost = results.iter().filter_map( | r | r.estimated_cost ).sum::< f64 >();
 
     Ok( crate::tokens::BatchTokenResponse
     {
       results,
       total_tokens,
-      total_estimated_cost: Some( total_estimated_cost ),
-      processing_time_ms: Some( processing_time_ms ),
-      batch_optimization_savings: None, // Would require baseline comparison
+      total_estimated_cost : Some( total_estimated_cost ),
+      processing_time_ms : Some( processing_time_ms ),
+      batch_optimization_savings : None, // Would require baseline comparison
     })
   }
 
@@ -291,16 +291,16 @@ impl OllamaClient
   #[ inline ]
   pub async fn validate_token_count(
     &mut self,
-    text: &str,
-    model: &str,
-    config: crate::tokens::TokenValidationConfig
+    text : &str,
+    model : &str,
+    config : crate::tokens::TokenValidationConfig
   ) -> OllamaResult< () >
   {
     let request = crate::tokens::TokenCountRequest
     {
-      model: model.to_string(),
-      text: text.to_string(),
-      options: None,
+      model : model.to_string(),
+      text : text.to_string(),
+      options : None,
     };
 
     let response = self.count_tokens( request ).await?;

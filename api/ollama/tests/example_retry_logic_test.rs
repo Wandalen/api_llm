@@ -17,7 +17,7 @@
 //! ### Fix Applied
 //! 1. Added 500ms delay between sequential requests to prevent connection exhaustion
 //! 2. Implemented retry logic with exponential backoff (3 attempts max)
-//! 3. Backoff delays: 2s, 4s, 8s for attempts 1, 2, 3
+//! 3. Backoff delays : 2s, 4s, 8s for attempts 1, 2, 3
 //! 4. Clear error messages indicating retry attempts and failures
 //! 5. Examples now gracefully handle transient network issues
 //!
@@ -45,11 +45,11 @@ mod private
   ///
   /// **Fix(issue-003)**: Added exponential backoff for retries.
   /// **Root cause**: No retry mechanism for transient network failures.
-  /// **Pitfall**: Backoff prevents overwhelming server: `delay = 1000 * 2^attempt_num`.
+  /// **Pitfall**: Backoff prevents overwhelming server : `delay = 1000 * 2^attempt_num`.
   #[ test ]
   fn test_exponential_backoff_calculation()
   {
-    // Verify backoff formula: delay = 1000 * 2^attempts
+    // Verify backoff formula : delay = 1000 * 2^attempts
     let attempt_1_delay = 1000 * ( 2_u64.pow( 1 ) ); // 2s
     let attempt_2_delay = 1000 * ( 2_u64.pow( 2 ) ); // 4s
     let attempt_3_delay = 1000 * ( 2_u64.pow( 3 ) ); // 8s
@@ -58,7 +58,7 @@ mod private
     assert_eq!( attempt_2_delay, 4000, "Second retry should wait 4s" );
     assert_eq!( attempt_3_delay, 8000, "Third retry should wait 8s" );
 
-    // Total max wait time for 3 retries: 2 + 4 + 8 = 14 seconds
+    // Total max wait time for 3 retries : 2 + 4 + 8 = 14 seconds
     let total_wait = attempt_1_delay + attempt_2_delay + attempt_3_delay;
     assert_eq!( total_wait, 14000, "Total backoff time should be 14s" );
   }
@@ -90,7 +90,7 @@ mod private
   #[ test ]
   fn test_retry_limit()
   {
-    let max_attempts: u32 = 3;
+    let max_attempts : u32 = 3;
 
     // Verify retry limit is reasonable
     assert!( max_attempts >= 2, "Should retry at least twice" );
@@ -113,10 +113,10 @@ mod private
   fn test_error_handling_strategy()
   {
     // Simulate retry logic
-    fn simulate_retry_logic( should_fail: bool ) -> Result< String, String >
+    fn simulate_retry_logic( should_fail : bool ) -> Result< String, String >
     {
-      let mut attempts: u32 = 0;
-      let max_attempts: u32 = 3;
+      let mut attempts : u32 = 0;
+      let max_attempts : u32 = 3;
 
       while attempts < max_attempts
       {
@@ -153,12 +153,12 @@ mod private
     async fn retry_with_timing() -> Duration
     {
       let start = Instant::now();
-      let max_attempts: u32 = 2;
+      let max_attempts : u32 = 2;
 
       for attempt in 1..max_attempts
       {
         let delay_ms = 1000 * ( 2_u64.pow( attempt ) );
-        tokio::time::sleep( Duration::from_millis( delay_ms ) ).await;
+        tokio ::time::sleep( Duration::from_millis( delay_ms ) ).await;
       }
 
       start.elapsed()
@@ -182,7 +182,7 @@ mod private
   #[ tokio::test ]
   async fn test_sequential_delays()
   {
-    async fn simulate_sequential_requests( count: usize ) -> Vec< Duration >
+    async fn simulate_sequential_requests( count : usize ) -> Vec< Duration >
     {
       let mut delays = Vec::new();
 
@@ -191,7 +191,7 @@ mod private
         if i > 0
         {
           let start = Instant::now();
-          tokio::time::sleep( Duration::from_millis( 500 ) ).await;
+          tokio ::time::sleep( Duration::from_millis( 500 ) ).await;
           delays.push( start.elapsed() );
         }
       }
@@ -222,7 +222,7 @@ mod private
   #[ test ]
   fn test_retry_termination()
   {
-    fn should_retry_error( error_msg: &str ) -> bool
+    fn should_retry_error( error_msg : &str ) -> bool
     {
       // Network errors should be retried
       error_msg.contains( "network" ) ||

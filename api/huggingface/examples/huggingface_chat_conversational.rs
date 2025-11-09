@@ -13,8 +13,8 @@
 //!
 //! ## Commands
 //!
-//! - `/style <casual|formal|creative|technical|supportive >` - Change conversation style
-//! - `/model <model-name >` - Change AI model
+//! - `/style < casual|formal|creative|technical|supportive >` - Change conversation style
+//! - `/model < model-name >` - Change AI model
 //! - `/history` - Show conversation history
 //! - `/clear` - Clear conversation history
 //! - `/export` - Export conversation to file
@@ -24,21 +24,21 @@
 use api_huggingface::
 {
   Client,
-  environment::HuggingFaceEnvironmentImpl,
-  components::
+  environment ::HuggingFaceEnvironmentImpl,
+  components ::
   {
-  input::InferenceParameters,
-  models::Models,
+  input ::InferenceParameters,
+  models ::Models,
   },
-  providers::ChatMessage,
-  secret::Secret,
+  providers ::ChatMessage,
+  secret ::Secret,
 };
 use std::
 {
-  collections::HashMap,
-  io::{ self, Write as IoWrite },
+  collections ::HashMap,
+  io ::{ self, Write as IoWrite },
   fs,
-  time::{ SystemTime, UNIX_EPOCH },
+  time ::{ SystemTime, UNIX_EPOCH },
 };
 use core::fmt::Write;
 
@@ -204,7 +204,7 @@ impl ChatbotSystem
   Ok( response ) => response,
   Err( e ) =>
   {
-          println!( "⚠️  Pro model {model} failed: {e}" );
+          println!( "⚠️  Pro model {model} failed : {e}" );
           println!( "🔄 Falling back to BART model..." );
           
           // Update model to fallback model
@@ -387,8 +387,8 @@ impl ChatbotSystem
   
   // Remove common prompt echoes
   let prefixes_to_remove = [
-      &format!( "User: {user_input}\nAssistant:" ),
-      &format!( "User: {user_input}" ),
+      &format!( "User : {user_input}\nAssistant:" ),
+      &format!( "User : {user_input}" ),
       "Assistant:",
       "AI:",
   ];
@@ -428,7 +428,7 @@ impl ChatbotSystem
       };
       
       format!(
-  "Question: {user_input}\n\nAnswer: A {style_desc} AI assistant responds with helpful information. \
+  "Question : {user_input}\n\nAnswer : A {style_desc} AI assistant responds with helpful information. \
          Summary of the response:"
       )
   }
@@ -444,12 +444,12 @@ impl ChatbotSystem
   ConversationStyle::Supportive => "You are a supportive AI assistant. Be empathetic and encouraging.",
       };
 
-      let mut prompt = format!( "<s >[INST] <<SYS>>\n{system_msg}\n<</SYS>>\n\n" );
+      let mut prompt = format!( "< s >[INST] << SYS > >\n{system_msg}\n<</SYS > >\n\n" );
 
       // Add conversation history with conversational labels
       for ( user_msg, bot_msg ) in &context.history
       {
-  write!( &mut prompt, "User : {user_msg} [/INST] Assistant : {bot_msg} </s ><s >[INST] " ).unwrap();
+  write!( &mut prompt, "User : {user_msg} [/INST] Assistant : {bot_msg} </s >< s >[INST] " ).unwrap();
       }
 
       write!( &mut prompt, "User : {user_input} [/INST] Assistant : " ).unwrap();
@@ -574,10 +574,10 @@ impl ChatbotSystem
   let mut export_content = format!(
       "Chatbot Conversation Export\n\
        Session ID: {}\n\
-       Style: {:?}\n\
-       Model: {}\n\
-       Started: {:?}\n\
-       Exported: {:?}\n\
+       Style : {:?}\n\
+       Model : {}\n\
+       Started : {:?}\n\
+       Exported : {:?}\n\
        \n\
        === Conversation History ===\n\n",
       context.session_id,
@@ -589,10 +589,10 @@ impl ChatbotSystem
   
   for ( i, ( user_msg, bot_msg ) ) in context.history.iter().enumerate()
   {
-      write!( &mut export_content, "Turn {}:\nUser: {}\nAssistant: {}\n\n", i + 1, user_msg, bot_msg )?;
+      write!( &mut export_content, "Turn {}:\nUser : {}\nAssistant : {}\n\n", i + 1, user_msg, bot_msg )?;
   }
   
-  fs::write( &filename, export_content )?;
+  fs ::write( &filename, export_content )?;
   Ok( filename )
   }
 }
@@ -636,7 +636,7 @@ impl InteractiveChatbot
   
   if let Some( context ) = self.system.get_current_context()
   {
-      println!( "Session: {} | Style: {:?} | Model: {}", 
+      println!( "Session : {} | Style : {:?} | Model : {}", 
   context.session_id, context.style, context.model );
   }
   println!();
@@ -646,7 +646,7 @@ impl InteractiveChatbot
 
   loop
   {
-      print!( "You: " );
+      print!( "You : " );
       stdout.flush()?;
 
       let mut input = String::new();
@@ -672,7 +672,7 @@ impl InteractiveChatbot
   {
           Ok( Some( response ) ) => println!( "🤖 {response}" ),
           Ok( None ) => {}, // Command handled without output
-          Err( e ) => println!( "❌ Error: {e}" ),
+          Err( e ) => println!( "❌ Error : {e}" ),
   }
   continue;
       }
@@ -684,7 +684,7 @@ impl InteractiveChatbot
       match self.system.process_input( &self.system.current_session.clone(), input ).await
       {
   Ok( response ) => println!( "{response}" ),
-  Err( e ) => println!( "❌ Sorry, I encountered an error: {e}" ),
+  Err( e ) => println!( "❌ Sorry, I encountered an error : {e}" ),
       }
       
       println!();
@@ -709,14 +709,14 @@ impl InteractiveChatbot
       "quit" | "exit" => 
       {
   println!( "👋 Goodbye!" );
-  std::process::exit( 0 );
+  std ::process::exit( 0 );
       },
       
       "style" =>
       {
   if parts.len() < 2
   {
-          return Ok( Some( "Usage: /style <casual|formal|creative|technical|supportive >".to_string() ) );
+          return Ok( Some( "Usage : /style < casual|formal|creative|technical|supportive >".to_string() ) );
   }
   
   match ConversationStyle::from_str( parts[ 1 ] )
@@ -724,9 +724,9 @@ impl InteractiveChatbot
           Some( style ) =>
           {
       self.system.change_style( style )?;
-      Ok( Some( format!( "Changed to {} style: {}", parts[ 1 ], style.description() ) ) )
+      Ok( Some( format!( "Changed to {} style : {}", parts[ 1 ], style.description() ) ) )
           },
-          None => Ok( Some( "Invalid style. Use: casual, formal, creative, technical, or supportive".to_string() ) ),
+          None => Ok( Some( "Invalid style. Use : casual, formal, creative, technical, or supportive".to_string() ) ),
   }
       },
       
@@ -734,12 +734,12 @@ impl InteractiveChatbot
       {
   if parts.len() < 2
   {
-          return Ok( Some( "Usage: /model <model-name >".to_string() ) );
+          return Ok( Some( "Usage : /model < model-name >".to_string() ) );
   }
   
   let model = parts[ 1.. ].join( " " );
   self.system.change_model( &model )?;
-  Ok( Some( format!( "Changed to model: {model}" ) ) )
+  Ok( Some( format!( "Changed to model : {model}" ) ) )
       },
       
       "history" =>
@@ -751,7 +751,7 @@ impl InteractiveChatbot
       let mut history = String::from( "Conversation History:\n" );
       for ( i, ( user_msg, bot_msg ) ) in context.history.iter().enumerate()
       {
-              write!( &mut history, "\n{}. You: {}\n   Bot: {}\n", i + 1, user_msg, bot_msg )?;
+              write!( &mut history, "\n{}. You : {}\n   Bot : {}\n", i + 1, user_msg, bot_msg )?;
       }
       Ok( Some( history ) )
           },
@@ -770,8 +770,8 @@ impl InteractiveChatbot
       {
   match self.system.export_conversation()
   {
-          Ok( filename ) => Ok( Some( format!( "Conversation exported to: {filename}" ) ) ),
-          Err( e ) => Ok( Some( format!( "Export failed: {e}" ) ) ),
+          Ok( filename ) => Ok( Some( format!( "Conversation exported to : {filename}" ) ) ),
+          Err( e ) => Ok( Some( format!( "Export failed : {e}" ) ) ),
   }
       },
       
@@ -783,7 +783,7 @@ impl InteractiveChatbot
           {
       let duration = SystemTime::now().duration_since( context.started_at )?;
       Ok( Some( format!(
-              "Session: {}\nStyle: {:?} ({})\nModel: {}\nHistory: {} turns\nDuration: {}m {}s",
+              "Session : {}\nStyle : {:?} ({})\nModel : {}\nHistory : {} turns\nDuration : {}m {}s",
               context.session_id,
               context.style,
               context.style.description(),
@@ -797,7 +797,7 @@ impl InteractiveChatbot
   }
       },
       
-      _ => Ok( Some( format!( "Unknown command: /{}\nType '/help' for available commands.", parts[ 0 ] ) ) ),
+      _ => Ok( Some( format!( "Unknown command : /{}\nType '/help' for available commands.", parts[ 0 ] ) ) ),
   }
   }
 
@@ -807,9 +807,9 @@ impl InteractiveChatbot
   r"Available Commands:
 ===================
 
-/style <type >     - Change conversation style
-          Options: casual, formal, creative, technical, supportive
-/model <name >     - Change AI model (Pro : Llama-3, Mistral, CodeLlama)
+/style < type >     - Change conversation style
+          Options : casual, formal, creative, technical, supportive
+/model < name >     - Change AI model (Pro : Llama-3, Mistral, CodeLlama)
 /history          - Show conversation history
 /clear            - Clear conversation history
 /export           - Export conversation to file
@@ -841,7 +841,7 @@ Conversation Styles:
 • supportive - Empathetic, encouraging responses (Llama-3-8B)
 
 Simply type your message to start chatting!
-Try math questions like: 'x=13, what is x*3?' for better results with Pro models!".to_string()
+Try math questions like : 'x=13, what is x*3?' for better results with Pro models!".to_string()
   }
 }
 

@@ -7,7 +7,7 @@ use api_openai::ClientApiAccessors;
 use api_openai::
 {
   Client,
-  components::responses::{ CreateResponseRequest, ResponseInput },
+  components ::responses::{ CreateResponseRequest, ResponseInput },
 };
 #[ tokio::test ]
 async fn test_responses_create_stream_example_secret_loading()
@@ -49,7 +49,7 @@ async fn test_responses_create_stream_example_secret_loading()
         {
           Ok( event ) =>
           {
-            println!( "📦 Received stream event: {event:?}" );
+            println!( "📦 Received stream event : {event:?}" );
             
             // Extract content from stream events
             let event_str = format!( "{event:?}" );
@@ -71,7 +71,7 @@ async fn test_responses_create_stream_example_secret_loading()
             let error_msg = format!( "{e:?}" );
             if error_msg.contains( "dummy_key" )
             {
-              panic!( "❌ ISSUE: Stream example still using dummy_key: {error_msg}" );
+              panic!( "❌ ISSUE: Stream example still using dummy_key : {error_msg}" );
             }
             else
             {
@@ -96,7 +96,7 @@ async fn test_responses_create_stream_example_secret_loading()
       let error_msg = format!( "{e:?}" );
       if error_msg.contains( "dummy_key" )
       {
-        panic!( "❌ ISSUE: Stream example still using dummy_key: {error_msg}" );
+        panic!( "❌ ISSUE: Stream example still using dummy_key : {error_msg}" );
       }
       else
       {

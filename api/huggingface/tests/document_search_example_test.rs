@@ -6,13 +6,13 @@
 use api_huggingface::
 {
   Client,
-  environment::HuggingFaceEnvironmentImpl,
-  components::
+  environment ::HuggingFaceEnvironmentImpl,
+  components ::
   {
-  embeddings::EmbeddingResponse,
-  models::Models,
+  embeddings ::EmbeddingResponse,
+  models ::Models,
   },
-  secret::Secret,
+  secret ::Secret,
 };
 use std::{ collections::HashMap, time::Instant };
 
@@ -721,7 +721,7 @@ mod tests
   }
   let insertion_time = start_time.elapsed();
 
-  println!( "Document insertion time for 20 documents: {insertion_time:?}" );
+  println!( "Document insertion time for 20 documents : {insertion_time:?}" );
   assert_eq!( engine.documents.len(), 20 );
 
   // Test search performance simulation (without actual API calls)

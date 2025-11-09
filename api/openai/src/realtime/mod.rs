@@ -10,9 +10,9 @@ mod private
   // Use crate root for base access
   use crate::
   {
-    client::Client,
-    error::{ OpenAIError, Result },
-    environment::{ OpenaiEnvironment, EnvironmentInterface },
+    client ::Client,
+    error ::{ OpenAIError, Result },
+    environment ::{ OpenaiEnvironment, EnvironmentInterface },
   };
   use crate::components::realtime_shared:: // Corrected import path
   {
@@ -31,8 +31,8 @@ mod private
   use tokio::sync::mpsc;
   use tokio::
   {
-    net::TcpStream,
-    sync::{ Mutex }, // Mutex is needed here
+    net ::TcpStream,
+    sync ::{ Mutex }, // Mutex is needed here
   };
   use tokio_tungstenite::{ MaybeTlsStream, WebSocketStream };
   use futures_util::
@@ -226,15 +226,15 @@ mod private
       let rx_arc = Arc::new( Mutex::new( rx ) ); // Wrap rx in Arc< Mutex >
       let tx_arc = Arc::new( tx ); // Wrap tx in Arc
 
-      let ws_stream_locked = Arc::<_>::clone( &ws_stream_arc );
-      let tx_clone = Arc::<_>::clone( &tx_arc ); // Clone the Arc< Sender >
+      let ws_stream_locked = Arc::< _ >::clone( &ws_stream_arc );
+      let tx_clone = Arc::< _ >::clone( &tx_arc ); // Clone the Arc< Sender >
 
-      tokio::spawn( async move
+      tokio ::spawn( async move
       {
         let mut ws_stream_locked = ws_stream_locked.lock().await;
         loop
         {
-          tokio::select!
+          tokio ::select!
           {
             // Receive messages from the WebSocket
             msg = ws_stream_locked.next() =>
@@ -290,7 +290,7 @@ mod private
     pub async fn send_event( &self, event : RealtimeClientEvent ) -> Result< () >
     {
       let message = serde_json::to_string( &event )
-      .map_err( | e | OpenAIError::Internal( format!( "Serialization error: {e}" ) ) )?;
+      .map_err( | e | OpenAIError::Internal( format!( "Serialization error : {e}" ) ) )?;
       let mut ws_stream_locked = self.ws_stream.lock().await;
       ws_stream_locked.send( tokio_tungstenite::tungstenite::Message::Text( message.into() ) ) // Convert String to Utf8Bytes
       .await
@@ -309,8 +309,8 @@ mod private
       {
         Some( HandlerMessage::Message( message ) ) =>
         {
-          serde_json::from_str( &message )
-          .map_err( | e | OpenAIError::Internal( format!( "Deserialization error: {e}" ) ).into() )
+          serde_json ::from_str( &message )
+          .map_err( | e | OpenAIError::Internal( format!( "Deserialization error : {e}" ) ).into() )
         },
         Some( HandlerMessage::Error( error ) ) => Err( error.into() ),
         Some( HandlerMessage::Closed ) | None => Err( OpenAIError::Ws( tokio_tungstenite::tungstenite::Error::ConnectionClosed.to_string() ).into() ), // Convert error to String
@@ -319,7 +319,7 @@ mod private
   }
 } // end mod private
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   // Expose all structs defined in this module
   exposed use 

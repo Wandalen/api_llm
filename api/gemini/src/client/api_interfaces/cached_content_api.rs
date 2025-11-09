@@ -37,10 +37,10 @@ impl CachedContentApi< '_ >
   {
     let url = format!( "{}/v1beta/cachedContents", self.client.base_url );
 
-    crate::internal::http::execute_legacy::< CreateCachedContentRequest, CachedContentResponse >
+    crate ::internal::http::execute_legacy::< CreateCachedContentRequest, CachedContentResponse >
     (
       &self.client.http,
-      reqwest::Method::POST,
+      reqwest ::Method::POST,
       &url,
       &self.client.api_key,
       Some( request ),
@@ -84,10 +84,10 @@ impl CachedContentApi< '_ >
       url.push_str( &query_params.join( "&" ) );
     }
 
-    crate::internal::http::execute_legacy::< (), ListCachedContentsResponse >
+    crate ::internal::http::execute_legacy::< (), ListCachedContentsResponse >
     (
       &self.client.http,
-      reqwest::Method::GET,
+      reqwest ::Method::GET,
       &url,
       &self.client.api_key,
       None,
@@ -113,10 +113,10 @@ impl CachedContentApi< '_ >
   {
     let url = format!( "{}/v1beta/cachedContents/{}", self.client.base_url, urlencoding::encode( cache_id ) );
 
-    crate::internal::http::execute_legacy::< (), CachedContentResponse >
+    crate ::internal::http::execute_legacy::< (), CachedContentResponse >
     (
       &self.client.http,
-      reqwest::Method::GET,
+      reqwest ::Method::GET,
       &url,
       &self.client.api_key,
       None,
@@ -143,10 +143,10 @@ impl CachedContentApi< '_ >
   {
     let url = format!( "{}/v1beta/cachedContents/{}", self.client.base_url, urlencoding::encode( cache_id ) );
 
-    crate::internal::http::execute_legacy::< UpdateCachedContentRequest, CachedContentResponse >
+    crate ::internal::http::execute_legacy::< UpdateCachedContentRequest, CachedContentResponse >
     (
       &self.client.http,
-      reqwest::Method::PATCH,
+      reqwest ::Method::PATCH,
       &url,
       &self.client.api_key,
       Some( request ),
@@ -175,7 +175,7 @@ impl CachedContentApi< '_ >
     let _response : serde_json::Value = crate::internal::http::execute_legacy
     (
       &self.client.http,
-      reqwest::Method::DELETE,
+      reqwest ::Method::DELETE,
       &url,
       &self.client.api_key,
       None::< &() >,

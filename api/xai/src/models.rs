@@ -21,7 +21,7 @@ mod private
   ///
   /// let models = client.models().list().await?;
   /// for model in models.data {
-  ///   println!( "Model: {}", model.id );
+  ///   println!( "Model : {}", model.id );
   /// }
   /// # Ok( () )
   /// # }
@@ -70,7 +70,7 @@ mod private
     ///
     /// println!( "Available models:" );
     /// for model in response.data {
-    ///   println!( "  - {} (created: {})", model.id, model.created );
+    ///   println!( "  - {} (created : {})", model.id, model.created );
     /// }
     /// # Ok( () )
     /// # }
@@ -100,9 +100,9 @@ mod private
     /// # let client = Client::build( env )?;
     /// let model = client.models().get( "grok-3" ).await?;
     ///
-    /// println!( "Model: {}", model.id );
-    /// println!( "Owned by: {}", model.owned_by );
-    /// println!( "Created: {}", model.created );
+    /// println!( "Model : {}", model.id );
+    /// println!( "Owned by : {}", model.owned_by );
+    /// println!( "Created : {}", model.created );
     /// # Ok( () )
     /// # }
     /// ```
@@ -114,7 +114,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

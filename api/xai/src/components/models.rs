@@ -46,7 +46,7 @@ mod private
   ///
   /// let models = client.models().list().await?;
   /// for model in models.data {
-  ///   println!( "Model: {}", model.id );
+  ///   println!( "Model : {}", model.id );
   /// }
   /// # Ok( () )
   /// # }
@@ -62,7 +62,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

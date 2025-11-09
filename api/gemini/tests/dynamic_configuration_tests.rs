@@ -30,7 +30,7 @@ mod integration_tests {
     // Apply configuration update at runtime (without restart)
     let updated_client = client.config().update( new_config ).apply().await?;
 
-    // NOTE: Timeout application to HTTP client is not yet implemented (xxx: in client.rs:1702)
+    // NOTE: Timeout application to HTTP client is not yet implemented (xxx : in client.rs:1702)
     // The current_config() method returns hardcoded 30s timeout
     let current_config = updated_client.config().current();
     assert_eq!( current_config.timeout, Duration::from_secs( 30 ) ); // Still hardcoded
@@ -54,7 +54,7 @@ mod integration_tests {
     if let Err( Error::ConfigurationError( msg ) ) = result
     {
       assert!( msg.contains( "cannot exceed 10 minutes" ) );
-      println!( "✓ Long timeout properly rejected: {}", msg );
+      println!( "✓ Long timeout properly rejected : {}", msg );
     }
 
     // Test timeout validation (zero)
@@ -65,7 +65,7 @@ mod integration_tests {
     if let Err( Error::ConfigurationError( msg ) ) = result
     {
       assert!( msg.contains( "cannot be zero" ) );
-      println!( "✓ Zero timeout properly rejected: {}", msg );
+      println!( "✓ Zero timeout properly rejected : {}", msg );
     }
 
     // Test retry attempts validation (too many)
@@ -76,7 +76,7 @@ mod integration_tests {
     if let Err( Error::ConfigurationError( msg ) ) = result
     {
       assert!( msg.contains( "cannot exceed 50" ) );
-      println!( "✓ Excessive retry attempts properly rejected: {}", msg );
+      println!( "✓ Excessive retry attempts properly rejected : {}", msg );
     }
 
     // Test backoff multiplier validation (too high)
@@ -87,7 +87,7 @@ mod integration_tests {
     if let Err( Error::ConfigurationError( msg ) ) = result
     {
       assert!( msg.contains( "between 0 and 10" ) );
-      println!( "✓ Invalid backoff multiplier properly rejected: {}", msg );
+      println!( "✓ Invalid backoff multiplier properly rejected : {}", msg );
     }
 
     // Test backoff multiplier validation (negative)
@@ -104,7 +104,7 @@ mod integration_tests {
     if let Err( Error::ConfigurationError( msg ) ) = result
     {
       assert!( msg.contains( "cannot be empty" ) );
-      println!( "✓ Empty base URL properly rejected: {}", msg );
+      println!( "✓ Empty base URL properly rejected : {}", msg );
     }
 
     // Test valid configuration passes
@@ -131,7 +131,7 @@ mod integration_tests {
     if let Err( Error::ConfigurationError( msg ) ) = rollback_result
     {
       assert!( msg.contains( "No previous configuration" ) );
-      println!( "✓ Rollback properly rejected when no history exists: {}", msg );
+      println!( "✓ Rollback properly rejected when no history exists : {}", msg );
     }
 
     // Apply a configuration change to create history
@@ -154,14 +154,14 @@ mod integration_tests {
     // NOTE: Timeout application not yet implemented
     assert_eq!( client_v2.config().current().timeout, Duration::from_secs( 30 ) );
 
-    // NOTE: History tracking is not yet implemented (xxx: in config.rs:303-305)
+    // NOTE: History tracking is not yet implemented (xxx : in config.rs:303-305)
     // Rollback will fail with "No previous configuration to rollback to"
     let rollback_result = client_v2.config().rollback().await;
     match rollback_result
     {
       Err( e ) => {
         assert!( e.to_string().contains( "No previous configuration to rollback to" ) );
-        println!( "✓ Rollback properly rejected when no history exists: {}", e );
+        println!( "✓ Rollback properly rejected when no history exists : {}", e );
       },
       Ok( _ ) => panic!( "Rollback should fail when history tracking is not implemented" ),
     }
@@ -195,7 +195,7 @@ mod integration_tests {
     "#;
 
     let temp_file = std::env::temp_dir().join( "comprehensive_config_test.json" );
-    tokio::fs::write( &temp_file, json_content ).await?;
+    tokio ::fs::write( &temp_file, json_content ).await?;
 
     // Load configuration from file
     let file_config = DynamicConfig::from_file( &temp_file ).await?;
@@ -222,14 +222,14 @@ mod integration_tests {
     // Test loading invalid file (should fail gracefully)
     let invalid_json = r#"{ "timeout_seconds": "invalid" }"#;
     let invalid_file = std::env::temp_dir().join( "invalid_config_test.json" );
-    tokio::fs::write( &invalid_file, invalid_json ).await?;
+    tokio ::fs::write( &invalid_file, invalid_json ).await?;
 
     let invalid_result = DynamicConfig::from_file( &invalid_file ).await;
     assert!( invalid_result.is_err() );
     if let Err( Error::ConfigurationError( msg ) ) = invalid_result
     {
       assert!( msg.contains( "Failed to parse" ) );
-      println!( "✓ Invalid JSON file properly rejected: {}", msg );
+      println!( "✓ Invalid JSON file properly rejected : {}", msg );
     }
 
     // Test loading non-existent file
@@ -238,12 +238,12 @@ mod integration_tests {
     if let Err( Error::ConfigurationError( msg ) ) = missing_result
     {
       assert!( msg.contains( "Failed to read" ) );
-      println!( "✓ Missing file properly handled: {}", msg );
+      println!( "✓ Missing file properly handled : {}", msg );
     }
 
     // Cleanup
-    tokio::fs::remove_file( temp_file ).await?;
-    tokio::fs::remove_file( invalid_file ).await?;
+    tokio ::fs::remove_file( temp_file ).await?;
+    tokio ::fs::remove_file( invalid_file ).await?;
 
     Ok( () )
   }
@@ -348,23 +348,23 @@ mod integration_tests {
       {
         Ok( Ok( ( id, timeout_val, retry_val ) ) ) => {
           successful_updates += 1;
-          println!( "✓ Concurrent update {} succeeded: timeout={:?}, retries={}",
+          println!( "✓ Concurrent update {} succeeded : timeout={:?}, retries={}",
                    id, timeout_val, retry_val );
         },
         Ok( Err( e ) ) => {
           failed_updates += 1;
-          println!( "⚠ Concurrent update failed: {}", e );
+          println!( "⚠ Concurrent update failed : {}", e );
         },
         Err( e ) => {
           failed_updates += 1;
-          println!( "⚠ Concurrent update task failed: {}", e );
+          println!( "⚠ Concurrent update task failed : {}", e );
         }
       }
     }
 
     // At least some updates should succeed (thread safety test)
     assert!( successful_updates > 0 );
-    println!( "✓ Concurrent configuration updates completed: {} successful, {} failed",
+    println!( "✓ Concurrent configuration updates completed : {} successful, {} failed",
              successful_updates, failed_updates );
 
     Ok( () )
@@ -390,7 +390,7 @@ mod integration_tests {
       println!( "✓ Applied configuration {}", version_name );
     }
 
-    // NOTE: History tracking is not yet implemented (xxx: in config.rs:303-305)
+    // NOTE: History tracking is not yet implemented (xxx : in config.rs:303-305)
     // The history will only contain the initial entry
     let history = current_client.config().history();
     assert_eq!( history.len(), 1 ); // Only initial entry exists
@@ -429,7 +429,7 @@ mod integration_tests {
     if let Err( Error::ConfigurationError( msg ) ) = invalid_rollback
     {
       assert!( msg.contains( "not found" ) );
-      println!( "✓ Rollback to non-existent version properly rejected: {}", msg );
+      println!( "✓ Rollback to non-existent version properly rejected : {}", msg );
     }
 
     Ok( () )
@@ -568,35 +568,35 @@ mod unit_tests {
   {
     // Test all change event types
     let update_event = ConfigChangeEvent {
-      version_id: "v1".to_string(),
-      change_type: ConfigChangeType::Update,
-      timestamp: std::time::SystemTime::now(),
-      previous_config: None,
-      new_config: DynamicConfig::default(),
+      version_id : "v1".to_string(),
+      change_type : ConfigChangeType::Update,
+      timestamp : std::time::SystemTime::now(),
+      previous_config : None,
+      new_config : DynamicConfig::default(),
     };
 
     let rollback_event = ConfigChangeEvent {
-      version_id: "v0".to_string(),
-      change_type: ConfigChangeType::Rollback,
-      timestamp: std::time::SystemTime::now(),
-      previous_config: Some( DynamicConfig::default() ),
-      new_config: DynamicConfig::default(),
+      version_id : "v0".to_string(),
+      change_type : ConfigChangeType::Rollback,
+      timestamp : std::time::SystemTime::now(),
+      previous_config : Some( DynamicConfig::default() ),
+      new_config : DynamicConfig::default(),
     };
 
     let file_load_event = ConfigChangeEvent {
-      version_id: "file_v1".to_string(),
-      change_type: ConfigChangeType::FileLoad,
-      timestamp: std::time::SystemTime::now(),
-      previous_config: None,
-      new_config: DynamicConfig::default(),
+      version_id : "file_v1".to_string(),
+      change_type : ConfigChangeType::FileLoad,
+      timestamp : std::time::SystemTime::now(),
+      previous_config : None,
+      new_config : DynamicConfig::default(),
     };
 
     let version_restore_event = ConfigChangeEvent {
-      version_id: "restore_v1".to_string(),
-      change_type: ConfigChangeType::VersionRestore,
-      timestamp: std::time::SystemTime::now(),
-      previous_config: Some( DynamicConfig::default() ),
-      new_config: DynamicConfig::default(),
+      version_id : "restore_v1".to_string(),
+      change_type : ConfigChangeType::VersionRestore,
+      timestamp : std::time::SystemTime::now(),
+      previous_config : Some( DynamicConfig::default() ),
+      new_config : DynamicConfig::default(),
     };
 
     assert_eq!( update_event.change_type, ConfigChangeType::Update );

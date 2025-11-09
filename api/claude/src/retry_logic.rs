@@ -24,15 +24,15 @@ mod private
   #[ derive( Debug, Clone ) ]
   pub struct RateLimitError
   {
-    message: String,
-    retry_after: Option< u64 >,
-    limit_type: String,
+    message : String,
+    retry_after : Option< u64 >,
+    limit_type : String,
   }
 
   #[ cfg( not( feature = "error-handling" ) ) ]
   impl RateLimitError
   {
-    pub fn new(limit_type: String, retry_after: Option< u64 >, message: String) -> Self
+    pub fn new(limit_type : String, retry_after : Option< u64 >, message : String) -> Self
     {
       Self { message, retry_after, limit_type }
     }
@@ -55,7 +55,7 @@ mod private
   #[ cfg( not( feature = "error-handling" ) ) ]
   impl BackoffCalculator
   {
-    pub fn calculate_backoff(_error: &RateLimitError) -> AnthropicResult< BackoffStrategyDetails >
+    pub fn calculate_backoff(_error : &RateLimitError) -> AnthropicResult< BackoffStrategyDetails >
     {
       Err(err!("BackoffCalculator not available without error-handling feature"))
     }
@@ -68,11 +68,11 @@ mod private
   #[ derive( Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize ) ]
   pub struct RetryConfig
   {
-    max_attempts: u32,
-    base_delay_ms: u64,
-    max_delay_ms: u64,
-    backoff_multiplier: f64,
-    jitter_enabled: bool,
+    max_attempts : u32,
+    base_delay_ms : u64,
+    max_delay_ms : u64,
+    backoff_multiplier : f64,
+    jitter_enabled : bool,
   }
 
   impl Default for RetryConfig
@@ -94,7 +94,7 @@ mod private
     /// * `max_delay_ms` - Maximum delay in milliseconds (must be >= `base_delay_ms`)
     /// * `backoff_multiplier` - Multiplier for exponential backoff (must be >= 1.0)
     /// * `jitter_enabled` - Whether to apply jitter to delays
-    pub fn with_explicit_config( max_attempts: u32, base_delay_ms: u64, max_delay_ms: u64, backoff_multiplier: f64, jitter_enabled: bool ) -> Self
+    pub fn with_explicit_config( max_attempts : u32, base_delay_ms : u64, max_delay_ms : u64, backoff_multiplier : f64, jitter_enabled : bool ) -> Self
     {
       Self {
         max_attempts,
@@ -115,17 +115,17 @@ mod private
     {
       // Compatibility wrapper with sensible defaults for retry logic
       Self::with_explicit_config(
-        3,      // max_attempts: 3 attempts total
-        1000,   // base_delay_ms: 1 second base delay
-        60000,  // max_delay_ms: 60 seconds max delay
-        2.0,    // backoff_multiplier: exponential backoff
-        true,   // jitter_enabled: add jitter to delays
+        3,      // max_attempts : 3 attempts total
+        1000,   // base_delay_ms : 1 second base delay
+        60000,  // max_delay_ms : 60 seconds max delay
+        2.0,    // backoff_multiplier : exponential backoff
+        true,   // jitter_enabled : add jitter to delays
       )
     }
 
     /// Set maximum number of retry attempts
     #[ must_use ]
-    pub fn with_max_attempts( mut self, max_attempts: u32 ) -> Self
+    pub fn with_max_attempts( mut self, max_attempts : u32 ) -> Self
     {
       self.max_attempts = max_attempts;
       self
@@ -133,7 +133,7 @@ mod private
 
     /// Set base delay in milliseconds
     #[ must_use ]
-    pub fn with_base_delay_ms( mut self, base_delay_ms: u64 ) -> Self
+    pub fn with_base_delay_ms( mut self, base_delay_ms : u64 ) -> Self
     {
       self.base_delay_ms = base_delay_ms;
       self
@@ -141,7 +141,7 @@ mod private
 
     /// Set maximum delay in milliseconds
     #[ must_use ]
-    pub fn with_max_delay_ms( mut self, max_delay_ms: u64 ) -> Self
+    pub fn with_max_delay_ms( mut self, max_delay_ms : u64 ) -> Self
     {
       self.max_delay_ms = max_delay_ms;
       self
@@ -165,7 +165,7 @@ mod private
 
     /// Set backoff multiplier for exponential backoff
     #[ must_use ]
-    pub fn with_backoff_multiplier( mut self, backoff_multiplier: f64 ) -> Self
+    pub fn with_backoff_multiplier( mut self, backoff_multiplier : f64 ) -> Self
     {
       self.backoff_multiplier = backoff_multiplier;
       self
@@ -173,7 +173,7 @@ mod private
 
     /// Enable or disable jitter
     #[ must_use ]
-    pub fn with_jitter( mut self, jitter_enabled: bool ) -> Self
+    pub fn with_jitter( mut self, jitter_enabled : bool ) -> Self
     {
       self.jitter_enabled = jitter_enabled;
       self
@@ -270,35 +270,35 @@ mod private
   #[ derive( Debug, Clone ) ]
   pub struct RetryStrategy
   {
-    strategy_type: RetryStrategyType,
-    config: RetryConfig,
+    strategy_type : RetryStrategyType,
+    config : RetryConfig,
   }
 
   impl RetryStrategy
   {
     /// Create exponential backoff strategy with explicit configuration
-    pub fn exponential_backoff_with_config( config: RetryConfig ) -> Self
+    pub fn exponential_backoff_with_config( config : RetryConfig ) -> Self
     {
       Self {
-        strategy_type: RetryStrategyType::ExponentialBackoff,
+        strategy_type : RetryStrategyType::ExponentialBackoff,
         config,
       }
     }
 
     /// Create linear backoff strategy with explicit configuration
-    pub fn linear_backoff_with_config( config: RetryConfig ) -> Self
+    pub fn linear_backoff_with_config( config : RetryConfig ) -> Self
     {
       Self {
-        strategy_type: RetryStrategyType::LinearBackoff,
+        strategy_type : RetryStrategyType::LinearBackoff,
         config,
       }
     }
 
     /// Create fixed delay strategy with explicit configuration
-    pub fn fixed_delay_with_config( config: RetryConfig ) -> Self
+    pub fn fixed_delay_with_config( config : RetryConfig ) -> Self
     {
       Self {
-        strategy_type: RetryStrategyType::FixedDelay,
+        strategy_type : RetryStrategyType::FixedDelay,
         config,
       }
     }
@@ -329,7 +329,7 @@ mod private
 
     /// Set custom configuration
     #[ must_use ]
-    pub fn with_config( mut self, config: RetryConfig ) -> Self
+    pub fn with_config( mut self, config : RetryConfig ) -> Self
     {
       self.config = config;
       self
@@ -348,7 +348,7 @@ mod private
     }
 
     /// Determine if an error should be retried
-    pub fn should_retry( &self, error: &AnthropicError, attempt: u32 ) -> bool
+    pub fn should_retry( &self, error : &AnthropicError, attempt : u32 ) -> bool
     {
       // Check if max attempts reached
       if attempt >= self.config.max_attempts
@@ -399,7 +399,7 @@ mod private
     ///
     /// This method will panic if jitter is enabled in config but jitter factors are not provided
     #[ allow( clippy::cast_possible_truncation, clippy::cast_sign_loss ) ]
-    pub fn calculate_delay_with_jitter_config( &self, attempt: u32, jitter_min_factor: Option< f64 >, jitter_max_factor: Option< f64 > ) -> u64
+    pub fn calculate_delay_with_jitter_config( &self, attempt : u32, jitter_min_factor : Option< f64 >, jitter_max_factor : Option< f64 > ) -> u64
     {
       let base_delay = self.config.base_delay_ms;
 
@@ -446,9 +446,9 @@ mod private
     ///
     /// NOTE: This is a compatibility wrapper with default jitter settings. For explicit control, use `calculate_delay_with_jitter_config()`
     #[ allow( clippy::cast_possible_truncation, clippy::cast_sign_loss ) ]
-    pub fn calculate_delay( &self, attempt: u32 ) -> u64
+    pub fn calculate_delay( &self, attempt : u32 ) -> u64
     {
-      // Compatibility wrapper: apply jitter if enabled in config, using ±10% variation (original behavior)
+      // Compatibility wrapper : apply jitter if enabled in config, using ±10% variation (original behavior)
       if self.config.jitter_enabled
       {
         self.calculate_delay_with_jitter_config( attempt, Some( 0.9 ), Some( 1.1 ) )
@@ -462,10 +462,10 @@ mod private
     /// Calculate delay for a specific error with explicit configuration
     pub fn calculate_delay_for_error_with_config(
       &self,
-      error: &RateLimitError,
-      attempt: u32,
-      jitter_min_factor: Option< f64 >,
-      jitter_max_factor: Option< f64 >,
+      error : &RateLimitError,
+      attempt : u32,
+      jitter_min_factor : Option< f64 >,
+      jitter_max_factor : Option< f64 >,
     ) -> u64
     {
       let base_delay = self.calculate_delay_with_jitter_config( attempt, jitter_min_factor, jitter_max_factor );
@@ -483,7 +483,7 @@ mod private
     }
 
     /// Calculate delay for a specific error (compatibility wrapper)
-    pub fn calculate_delay_for_error( &self, error: &RateLimitError, attempt: u32 ) -> u64
+    pub fn calculate_delay_for_error( &self, error : &RateLimitError, attempt : u32 ) -> u64
     {
       // Compatibility wrapper with no jitter (None values)
       self.calculate_delay_for_error_with_config( error, attempt, None, None )
@@ -491,14 +491,14 @@ mod private
 
     /// Apply jitter to delay with explicit configuration
     #[ allow( clippy::cast_possible_truncation, clippy::cast_sign_loss ) ]
-    fn apply_jitter_with_config( delay: u64, jitter_min_factor: f64, jitter_max_factor: f64 ) -> u64
+    fn apply_jitter_with_config( delay : u64, jitter_min_factor : f64, jitter_max_factor : f64 ) -> u64
     {
       use core::hash::{Hash, Hasher};
       use std::collections::hash_map::DefaultHasher;
 
       // Use deterministic pseudo-random based on current time for testing
       let mut hasher = DefaultHasher::new();
-      std::time::SystemTime::now().duration_since( std::time::UNIX_EPOCH )
+      std ::time::SystemTime::now().duration_since( std::time::UNIX_EPOCH )
         .unwrap_or_default().as_nanos().hash( &mut hasher );
 
       let hash = hasher.finish();
@@ -512,7 +512,7 @@ mod private
     #[ deprecated(note = "Use apply_jitter_with_config() for explicit jitter configuration") ]
     #[ allow(dead_code) ]
     #[ allow( clippy::cast_possible_truncation, clippy::cast_sign_loss ) ]
-    fn apply_jitter( _delay: u64 ) -> u64
+    fn apply_jitter( _delay : u64 ) -> u64
     {
       // Magic numbers removed - this method is deprecated
       panic!("apply_jitter() is deprecated. Use apply_jitter_with_config() for explicit jitter configuration")
@@ -523,18 +523,18 @@ mod private
   #[ derive( Debug ) ]
   pub struct RetryExecutor
   {
-    strategy: RetryStrategy,
-    current_attempt: u32,
+    strategy : RetryStrategy,
+    current_attempt : u32,
   }
 
   impl RetryExecutor
   {
     /// Create new retry executor
-    pub fn new( strategy: RetryStrategy ) -> Self
+    pub fn new( strategy : RetryStrategy ) -> Self
     {
       Self {
         strategy,
-        current_attempt: 0,
+        current_attempt : 0,
       }
     }
 
@@ -561,10 +561,10 @@ mod private
     /// # Errors
     ///
     /// Returns an error if all retry attempts fail
-    pub async fn execute< F, Fut, T >( &self, operation: F ) -> AnthropicResult< T >
+    pub async fn execute< F, Fut, T >( &self, operation : F ) -> AnthropicResult< T >
     where
       F: Fn() -> Fut,
-      Fut: core::future::Future< Output = AnthropicResult< T > >,
+      Fut : core::future::Future< Output = AnthropicResult< T > >,
     {
       let mut attempt = 1;
 
@@ -601,7 +601,7 @@ mod private
               }
             };
 
-            tokio::time::sleep( Duration::from_millis( delay_ms ) ).await;
+            tokio ::time::sleep( Duration::from_millis( delay_ms ) ).await;
             attempt += 1;
           }
         }
@@ -625,15 +625,15 @@ mod private
   #[ derive( Debug, Clone ) ]
   pub struct BackoffStrategyDetails
   {
-    strategy_type: BackoffStrategyType,
-    suggested_delay_ms: u64,
-    jitter_enabled: bool,
+    strategy_type : BackoffStrategyType,
+    suggested_delay_ms : u64,
+    jitter_enabled : bool,
   }
 
   impl BackoffStrategyDetails
   {
     /// Create new backoff strategy details
-    pub fn new( strategy_type: BackoffStrategyType, suggested_delay_ms: u64, jitter_enabled: bool ) -> Self
+    pub fn new( strategy_type : BackoffStrategyType, suggested_delay_ms : u64, jitter_enabled : bool ) -> Self
     {
       Self {
         strategy_type,
@@ -667,11 +667,11 @@ mod private
   #[ derive( Debug, Clone ) ]
   pub struct RetryMetrics
   {
-    total_attempts: u64,
-    successful_retries: u64,
-    failed_attempts: u64,
-    total_delay_ms: u64,
-    error_counts: HashMap< String, u64 >,
+    total_attempts : u64,
+    successful_retries : u64,
+    failed_attempts : u64,
+    total_delay_ms : u64,
+    error_counts : HashMap< String, u64 >,
   }
 
   impl Default for RetryMetrics 
@@ -688,16 +688,16 @@ mod private
     pub fn new() -> Self
     {
       Self {
-        total_attempts: 0,
-        successful_retries: 0,
-        failed_attempts: 0,
-        total_delay_ms: 0,
-        error_counts: HashMap::new(),
+        total_attempts : 0,
+        successful_retries : 0,
+        failed_attempts : 0,
+        total_delay_ms : 0,
+        error_counts : HashMap::new(),
       }
     }
 
     /// Record a retry attempt
-    pub fn record_attempt( &mut self, attempt: u32, delay_ms: u64 )
+    pub fn record_attempt( &mut self, attempt : u32, delay_ms : u64 )
     {
       self.total_attempts += 1;
       self.total_delay_ms += delay_ms;
@@ -710,7 +710,7 @@ mod private
     }
 
     /// Record successful retry
-    pub fn record_success( &mut self, final_attempt: u32 )
+    pub fn record_success( &mut self, final_attempt : u32 )
     {
       if final_attempt > 1
       {
@@ -719,7 +719,7 @@ mod private
     }
 
     /// Record failed retry
-    pub fn record_failure( &mut self, error: &AnthropicError )
+    pub fn record_failure( &mut self, error : &AnthropicError )
     {
       self.failed_attempts += 1;
 
@@ -810,7 +810,7 @@ mod private
 }
 
 #[ cfg( feature = "retry-logic" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   // Core retry types
   exposed use RetryConfig;

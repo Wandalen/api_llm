@@ -53,7 +53,7 @@ pub fn create_test_client() -> Client< XaiEnvironmentImpl >
 /// #[ tokio::test ]
 /// async fn test_optional() {
 ///   let Some( client ) = try_create_test_client() else {
-///     println!( "Skipping test: credentials not available" );
+///     println!( "Skipping test : credentials not available" );
 ///     return;
 ///   };
 ///

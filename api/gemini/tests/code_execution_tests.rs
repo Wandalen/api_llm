@@ -6,8 +6,8 @@
 
 use api_gemini::
 {
-  client::Client,
-  models::
+  client ::Client,
+  models ::
   {
     GenerateContentRequest, Content, Part, Tool, CodeExecution,
     GenerationConfig,
@@ -19,14 +19,14 @@ use serde_json::Value;
 /// Create a test client using the API key from workspace secrets or environment.
 ///
 /// This uses `Client::new()` which attempts to load GEMINI_API_KEY from:
-/// 1. Workspace secrets: `secret/-secrets.sh` (workspace_tools 0.6.0)
-/// 2. Environment variable: `GEMINI_API_KEY`
+/// 1. Workspace secrets : `secret/-secrets.sh` (workspace_tools 0.6.0)
+/// 2. Environment variable : `GEMINI_API_KEY`
 ///
 /// Tests will FAIL EXPLICITLY (not skip) if the API key cannot be loaded.
 /// This is intentional - silent skipping masks configuration issues and creates
 /// false confidence in CI/CD pipelines.
 ///
-/// Note: workspace_tools 0.6.0 uses `secret/` (visible directory, NO dot prefix)
+/// Note : workspace_tools 0.6.0 uses `secret/` (visible directory, NO dot prefix)
 fn create_test_client() -> Client
 {
   Client::new().unwrap()
@@ -34,7 +34,7 @@ fn create_test_client() -> Client
 
 /// Create a code execution request with specified configuration.
 ///
-/// Note: The Gemini API's code_execution tool uses an empty configuration as per API specification.
+/// Note : The Gemini API's code_execution tool uses an empty configuration as per API specification.
 /// Timeout and network settings are not configurable at request time.
 fn create_code_execution_request( prompt : &str ) -> GenerateContentRequest
 {
@@ -83,16 +83,16 @@ fn validate_execution_result( function_response : &Value ) -> Result< (), String
     .and_then( |v| v.as_str() )
     .ok_or( "Missing or invalid outcome field" )?;
 
-  println!( "Execution outcome: {}", outcome );
+  println!( "Execution outcome : {}", outcome );
 
   // Validate outcome is a known value
   match outcome
   {
     "OUTCOME_OK" | "OUTCOME_FAILED" | "OUTCOME_DEADLINE_EXCEEDED" => {
-      println!( "✅ Valid execution outcome: {}", outcome );
+      println!( "✅ Valid execution outcome : {}", outcome );
     },
     _ => {
-      return Err( format!( "Unknown execution outcome: {}", outcome ) );
+      return Err( format!( "Unknown execution outcome : {}", outcome ) );
     }
   }
 
@@ -103,7 +103,7 @@ fn validate_execution_result( function_response : &Value ) -> Result< (), String
     {
       if !output.trim().is_empty()
       {
-        println!( "✅ Execution produced output: {} characters", output.len() );
+        println!( "✅ Execution produced output : {} characters", output.len() );
       } else {
         println!( "⚠️ Execution successful but no output" );
       }
@@ -115,14 +115,14 @@ fn validate_execution_result( function_response : &Value ) -> Result< (), String
   {
     if let Some( error ) = function_response.get( "error" ).and_then( |v| v.as_str() )
     {
-      println!( "❌ Execution error: {}", error );
+      println!( "❌ Execution error : {}", error );
     }
   }
 
   // Check execution time if available
   if let Some( exec_time ) = function_response.get( "execution_time_ms" ).and_then( |v| v.as_i64() )
   {
-    println!( "⏱️ Execution time: {}ms", exec_time );
+    println!( "⏱️ Execution time : {}ms", exec_time );
 
     // Validate execution time is reasonable
     if exec_time < 0
@@ -131,7 +131,7 @@ fn validate_execution_result( function_response : &Value ) -> Result< (), String
     }
 
     if exec_time > 60000 { // More than 60 seconds seems excessive for most tests
-      println!( "⚠️ Execution took longer than expected: {}ms", exec_time );
+      println!( "⚠️ Execution took longer than expected : {}ms", exec_time );
     }
   }
 
@@ -165,7 +165,7 @@ async fn test_basic_code_execution() -> Result< (), Box< dyn std::error::Error >
 
   let prompt = "Please write and execute Python code to calculate the factorial of 5 and print the result.";
 
-  println!( "Testing basic code execution: {}", prompt );
+  println!( "Testing basic code execution : {}", prompt );
 
   let request = create_code_execution_request( prompt );
 
@@ -219,7 +219,7 @@ async fn test_basic_code_execution() -> Result< (), Box< dyn std::error::Error >
   {
     if let Some( total ) = usage.total_token_count
     {
-      println!( "Total tokens used: {}", total );
+      println!( "Total tokens used : {}", total );
       assert!( total > 0, "Should use some tokens" );
     }
   }
@@ -235,7 +235,7 @@ async fn test_mathematical_computation() -> Result< (), Box< dyn std::error::Err
 
   let prompt = "Write Python code to calculate the first 10 prime numbers and display them.";
 
-  println!( "Testing mathematical computation: {}", prompt );
+  println!( "Testing mathematical computation : {}", prompt );
 
   let request = create_code_execution_request( prompt );
 
@@ -258,7 +258,7 @@ async fn test_mathematical_computation() -> Result< (), Box< dyn std::error::Err
       // Check for prime numbers in output
       if let Some( output ) = function_response.get( "output" ).and_then( |v| v.as_str() )
       {
-        // First 10 primes: 2, 3, 5, 7, 11, 13, 17, 19, 23, 29
+        // First 10 primes : 2, 3, 5, 7, 11, 13, 17, 19, 23, 29
         let expected_primes = [ "2", "3", "5", "7", "11", "13", "17", "19", "23", "29" ];
         let mut found_primes = 0;
 
@@ -305,7 +305,7 @@ async fn test_data_analysis_execution() -> Result< (), Box< dyn std::error::Erro
 
   let prompt = "Create a Python list of 10 random numbers, calculate their mean, median, and standard deviation, and display the results.";
 
-  println!( "Testing data analysis execution: {}", prompt );
+  println!( "Testing data analysis execution : {}", prompt );
 
   let request = create_code_execution_request( prompt );
 
@@ -334,7 +334,7 @@ async fn test_data_analysis_execution() -> Result< (), Box< dyn std::error::Erro
         let has_median = output_lower.contains( "median" );
         let has_std = output_lower.contains( "standard" ) || output_lower.contains( "std" );
 
-        println!( "Statistical measures found - Mean: {}, Median: {}, Std Dev: {}", has_mean, has_median, has_std );
+        println!( "Statistical measures found - Mean : {}, Median : {}, Std Dev : {}", has_mean, has_median, has_std );
 
         // Expect at least some statistical measures
         let stats_count = [ has_mean, has_median, has_std ].iter().filter( |&&x| x ).count();
@@ -371,7 +371,7 @@ async fn test_code_execution_error_handling() -> Result< (), Box< dyn std::error
 
   let prompt = "Write Python code that intentionally causes a division by zero error, then fix it with proper error handling.";
 
-  println!( "Testing error handling: {}", prompt );
+  println!( "Testing error handling : {}", prompt );
 
   let request = create_code_execution_request( prompt );
 
@@ -458,7 +458,7 @@ async fn test_execution_timeout_handling() -> Result< (), Box< dyn std::error::E
   // Create a task that should complete within a short timeout
   let prompt = "Write Python code to calculate the sum of numbers from 1 to 100 and print the result.";
 
-  println!( "Testing timeout handling with short timeout: {}", prompt );
+  println!( "Testing timeout handling with short timeout : {}", prompt );
 
   // Use a very short timeout to test timeout behavior
   let request = create_code_execution_request( prompt );
@@ -504,7 +504,7 @@ async fn test_execution_timeout_handling() -> Result< (), Box< dyn std::error::E
           println!( "❌ Execution failed" );
         },
         _ => {
-          println!( "⚠️ Unknown outcome: {}", outcome );
+          println!( "⚠️ Unknown outcome : {}", outcome );
         }
       }
 
@@ -538,7 +538,7 @@ async fn test_network_access_configuration() -> Result< (), Box< dyn std::error:
   // Test with network disabled (should be default and safer)
   let prompt = "Write Python code to make a simple HTTP request to httpbin.org/get and print the response. Handle any network errors gracefully.";
 
-  println!( "Testing network access configuration: {}", prompt );
+  println!( "Testing network access configuration : {}", prompt );
 
   // Test with network explicitly disabled
   let request = create_code_execution_request( prompt );
@@ -582,7 +582,7 @@ async fn test_network_access_configuration() -> Result< (), Box< dyn std::error:
           }
         },
         _ => {
-          println!( "⚠️ Unexpected outcome: {}", outcome );
+          println!( "⚠️ Unexpected outcome : {}", outcome );
         }
       }
     }
@@ -651,7 +651,7 @@ async fn test_sequential_code_execution() -> Result< (), Box< dyn std::error::Er
         {
           println!( "✅ Task {} executed successfully", i + 1 );
         } else {
-          println!( "⚠️ Task {} had outcome: {}", i + 1, outcome );
+          println!( "⚠️ Task {} had outcome : {}", i + 1, outcome );
         }
       }
     } else {
@@ -670,7 +670,7 @@ async fn test_sequential_code_execution() -> Result< (), Box< dyn std::error::Er
     }
 
     // Brief pause between tasks
-    tokio::time::sleep( Duration::from_millis( 500 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 500 ) ).await;
   }
 
   println!( "✅ All sequential tasks completed" );
@@ -688,17 +688,17 @@ async fn test_execution_complexity_levels() -> Result< (), Box< dyn std::error::
 
   let complexity_tests = vec![
     ( "Simple", "print('Hello, World!')" ),
-    ( "Basic Math", "result = 15 + 27; print(f'Sum: {result}')" ),
-    ( "Loop", "for i in range(5): print(f'Number: {i}')" ),
+    ( "Basic Math", "result = 15 + 27; print(f'Sum : {result}')" ),
+    ( "Loop", "for i in range(5): print(f'Number : {i}')" ),
     ( "Function", "def greet(name): return f'Hello, {name}!'; print(greet('Python'))" ),
-    ( "List Comprehension", "squares = [x**2 for x in range(10)]; print(f'Squares: {squares[:5]}')" ),
+    ( "List Comprehension", "squares = [x**2 for x in range(10)]; print(f'Squares : {squares[:5]}')" ),
   ];
 
   for ( level, code ) in complexity_tests
   {
-    println!( "Testing {} level: {}", level, code );
+    println!( "Testing {} level : {}", level, code );
 
-    let prompt = format!( "Execute this Python code: {}", code );
+    let prompt = format!( "Execute this Python code : {}", code );
     let request = create_code_execution_request( &prompt );
 
     let response = timeout(
@@ -739,13 +739,13 @@ async fn test_execution_complexity_levels() -> Result< (), Box< dyn std::error::
             }
           }
         } else {
-          println!( "⚠️ {} level had outcome: {}", level, outcome );
+          println!( "⚠️ {} level had outcome : {}", level, outcome );
         }
       }
     }
 
     // Brief pause between complexity tests
-    tokio::time::sleep( Duration::from_millis( 300 ) ).await;
+    tokio ::time::sleep( Duration::from_millis( 300 ) ).await;
   }
 
   println!( "✅ All complexity levels tested" );

@@ -9,5 +9,5 @@ pub mod environment;
 pub mod shared;
 
 // Re-export commonly used test utilities
-// Note: shared::* not re-exported here to avoid unused import warnings
+// Note : shared::* not re-exported here to avoid unused import warnings
 // Each module imports from shared directly as needed

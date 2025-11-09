@@ -498,7 +498,7 @@ mod private
 }
 
 #[ cfg( feature = "enabled" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   #[ cfg( feature = "builder_patterns" ) ]
   exposed use

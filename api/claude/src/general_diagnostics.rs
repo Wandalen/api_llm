@@ -7,7 +7,7 @@
 mod private {}
 
 #[ cfg( feature = "general-diagnostics" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   layer core;
   layer extended;

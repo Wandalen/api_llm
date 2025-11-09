@@ -17,13 +17,13 @@ mod private
   pub struct CacheConfig
   {
     /// Time-to-live for cached entries in seconds
-    ttl_seconds: u64,
+    ttl_seconds : u64,
     /// Maximum number of entries in cache
-    max_entries: usize,
+    max_entries : usize,
     /// Memory limit in megabytes
-    memory_limit_mb: usize,
+    memory_limit_mb : usize,
     /// Enable/disable caching
-    enabled: bool,
+    enabled : bool,
   }
 
   impl Default for CacheConfig
@@ -31,10 +31,10 @@ mod private
     fn default() -> Self
     {
       Self {
-        ttl_seconds: 300, // 5 minutes
-        max_entries: 1000,
-        memory_limit_mb: 100, // 100 MB
-        enabled: true,
+        ttl_seconds : 300, // 5 minutes
+        max_entries : 1000,
+        memory_limit_mb : 100, // 100 MB
+        enabled : true,
       }
     }
   }
@@ -49,7 +49,7 @@ mod private
 
     /// Set TTL in seconds
     #[ must_use ]
-    pub fn with_ttl_seconds( mut self, ttl_seconds: u64 ) -> Self
+    pub fn with_ttl_seconds( mut self, ttl_seconds : u64 ) -> Self
     {
       self.ttl_seconds = ttl_seconds;
       self
@@ -57,7 +57,7 @@ mod private
 
     /// Set maximum number of entries
     #[ must_use ]
-    pub fn with_max_entries( mut self, max_entries: usize ) -> Self
+    pub fn with_max_entries( mut self, max_entries : usize ) -> Self
     {
       self.max_entries = max_entries;
       self
@@ -65,7 +65,7 @@ mod private
 
     /// Set memory limit in megabytes
     #[ must_use ]
-    pub fn with_memory_limit_mb( mut self, memory_limit_mb: usize ) -> Self
+    pub fn with_memory_limit_mb( mut self, memory_limit_mb : usize ) -> Self
     {
       self.memory_limit_mb = memory_limit_mb;
       self
@@ -73,7 +73,7 @@ mod private
 
     /// Enable or disable caching
     #[ must_use ]
-    pub fn with_enabled( mut self, enabled: bool ) -> Self
+    pub fn with_enabled( mut self, enabled : bool ) -> Self
     {
       self.enabled = enabled;
       self
@@ -116,24 +116,24 @@ mod private
   #[ derive( Debug, Clone ) ]
   struct CacheEntry
   {
-    response: CreateMessageResponse,
-    created_at: Instant,
-    last_accessed: Instant,
+    response : CreateMessageResponse,
+    created_at : Instant,
+    last_accessed : Instant,
   }
 
   impl CacheEntry
   {
-    fn new( response: CreateMessageResponse ) -> Self
+    fn new( response : CreateMessageResponse ) -> Self
     {
       let now = Instant::now();
       Self {
         response,
-        created_at: now,
-        last_accessed: now,
+        created_at : now,
+        last_accessed : now,
       }
     }
 
-    fn is_expired( &self, ttl: Duration ) -> bool
+    fn is_expired( &self, ttl : Duration ) -> bool
     {
       self.created_at.elapsed() > ttl
     }
@@ -148,10 +148,10 @@ mod private
   #[ derive( Debug, Clone, Default ) ]
   pub struct CacheMetrics
   {
-    hits: u64,
-    misses: u64,
-    stores: u64,
-    evictions: u64,
+    hits : u64,
+    misses : u64,
+    stores : u64,
+    evictions : u64,
   }
 
   impl CacheMetrics
@@ -197,25 +197,25 @@ mod private
   #[ derive( Debug ) ]
   pub struct RequestCache
   {
-    config: CacheConfig,
-    storage: Arc< Mutex< HashMap< String, CacheEntry > > >,
-    metrics: Arc< Mutex< CacheMetrics > >,
+    config : CacheConfig,
+    storage : Arc< Mutex< HashMap< String, CacheEntry > > >,
+    metrics : Arc< Mutex< CacheMetrics > >,
   }
 
   impl RequestCache
   {
     /// Create a new request cache
-    pub fn new( config: CacheConfig ) -> Self
+    pub fn new( config : CacheConfig ) -> Self
     {
       Self {
         config,
-        storage: Arc::new( Mutex::new( HashMap::new() ) ),
-        metrics: Arc::new( Mutex::new( CacheMetrics::default() ) ),
+        storage : Arc::new( Mutex::new( HashMap::new() ) ),
+        metrics : Arc::new( Mutex::new( CacheMetrics::default() ) ),
       }
     }
 
     /// Generate cache key from request
-    pub fn generate_cache_key( &self, request: &CreateMessageRequest ) -> String
+    pub fn generate_cache_key( &self, request : &CreateMessageRequest ) -> String
     {
       use std::collections::hash_map::DefaultHasher;
 
@@ -262,7 +262,7 @@ mod private
     /// # Panics
     ///
     /// Panics if the internal mutex is poisoned
-    pub fn store( &self, request: &CreateMessageRequest, response: CreateMessageResponse )
+    pub fn store( &self, request : &CreateMessageRequest, response : CreateMessageResponse )
     {
       if !self.config.is_enabled()
       {
@@ -296,7 +296,7 @@ mod private
     /// # Panics
     ///
     /// Panics if the internal mutex is poisoned
-    pub fn get( &self, request: &CreateMessageRequest ) -> Option< CreateMessageResponse >
+    pub fn get( &self, request : &CreateMessageRequest ) -> Option< CreateMessageResponse >
     {
       if !self.config.is_enabled()
       {
@@ -343,7 +343,7 @@ mod private
     /// # Panics
     ///
     /// Panics if the internal mutex is poisoned
-    pub fn invalidate( &self, request: &CreateMessageRequest )
+    pub fn invalidate( &self, request : &CreateMessageRequest )
     {
       let key = self.generate_cache_key( request );
       let mut storage = self.storage.lock().unwrap();
@@ -390,7 +390,7 @@ mod private
     }
 
     /// Evict least recently used entry
-    fn evict_lru( &self, storage: &mut HashMap< String, CacheEntry > )
+    fn evict_lru( &self, storage : &mut HashMap< String, CacheEntry > )
     {
       if storage.is_empty()
       {
@@ -427,16 +427,16 @@ mod private
     fn clone( &self ) -> Self
     {
       Self {
-        config: self.config.clone(),
-        storage: Arc::clone( &self.storage ),
-        metrics: Arc::clone( &self.metrics ),
+        config : self.config.clone(),
+        storage : Arc::clone( &self.storage ),
+        metrics : Arc::clone( &self.metrics ),
       }
     }
   }
 }
 
 #[ cfg( feature = "request-caching" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {
@@ -447,7 +447,7 @@ crate::mod_interface!
 }
 
 #[ cfg( not( feature = "request-caching" ) ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   // Empty when request-caching feature is disabled
 }

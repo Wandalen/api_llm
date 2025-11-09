@@ -1,4 +1,4 @@
-//! Basic file operations tests: CRUD operations (Create, Read, Update, Delete)
+//! Basic file operations tests : CRUD operations (Create, Read, Update, Delete)
 
 use super::*;
 
@@ -13,9 +13,9 @@ async fn test_basic_file_upload() -> Result< (), Box< dyn std::error::Error > >
   let test_image_data = vec![ 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A ];
 
   let upload_request = UploadFileRequest {
-    file_data: test_image_data,
-    mime_type: "image/png".to_string(),
-    display_name: Some( "Test Upload Image".to_string() ),
+    file_data : test_image_data,
+    mime_type : "image/png".to_string(),
+    display_name : Some( "Test Upload Image".to_string() ),
   };
 
   let upload_response = files_api.upload( &upload_request ).await?;
@@ -27,10 +27,10 @@ async fn test_basic_file_upload() -> Result< (), Box< dyn std::error::Error > >
   assert!( upload_response.file.uri.is_some() );
 
   println!( "✓ Basic file upload successful:" );
-  println!( "  - File name: {}", upload_response.file.name );
-  println!( "  - Display name: {:?}", upload_response.file.display_name );
-  println!( "  - Size: {:?} bytes", upload_response.file.size_bytes );
-  println!( "  - State: {:?}", upload_response.file.state );
+  println!( "  - File name : {}", upload_response.file.name );
+  println!( "  - Display name : {:?}", upload_response.file.display_name );
+  println!( "  - Size : {:?} bytes", upload_response.file.size_bytes );
+  println!( "  - State : {:?}", upload_response.file.state );
 
   Ok( () )
 }
@@ -47,7 +47,7 @@ async fn test_file_listing() -> Result< (), Box< dyn std::error::Error > >
   let list_response = files_api.list( &list_request ).await?;
 
   println!( "✓ File listing successful:" );
-  println!( "  - Total files found: {}", list_response.files.len() );
+  println!( "  - Total files found : {}", list_response.files.len() );
 
   for ( index, file ) in list_response.files.iter().take( 3 ).enumerate()
   {
@@ -56,7 +56,7 @@ async fn test_file_listing() -> Result< (), Box< dyn std::error::Error > >
 
   if let Some( next_token ) = &list_response.next_page_token
   {
-    println!( "  - Has next page: {}", !next_token.is_empty() );
+    println!( "  - Has next page : {}", !next_token.is_empty() );
   }
 
   Ok( () )
@@ -72,9 +72,9 @@ async fn test_file_metadata_retrieval() -> Result< (), Box< dyn std::error::Erro
   // First upload a test file
   let test_data = vec![ 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A ]; // PNG header
   let upload_request = UploadFileRequest {
-    file_data: test_data,
-    mime_type: "image/png".to_string(),
-    display_name: Some( "Metadata Test File".to_string() ),
+    file_data : test_data,
+    mime_type : "image/png".to_string(),
+    display_name : Some( "Metadata Test File".to_string() ),
   };
 
   let upload_response = files_api.upload( &upload_request ).await?;
@@ -89,12 +89,12 @@ async fn test_file_metadata_retrieval() -> Result< (), Box< dyn std::error::Erro
   assert!( file_metadata.display_name.is_some() );
 
   println!( "✓ File metadata retrieval successful:" );
-  println!( "  - Name: {}", file_metadata.name );
-  println!( "  - MIME type: {}", file_metadata.mime_type );
-  println!( "  - Display name: {:?}", file_metadata.display_name );
-  println!( "  - Size: {:?} bytes", file_metadata.size_bytes );
-  println!( "  - Creation time: {:?}", file_metadata.create_time );
-  println!( "  - State: {:?}", file_metadata.state );
+  println!( "  - Name : {}", file_metadata.name );
+  println!( "  - MIME type : {}", file_metadata.mime_type );
+  println!( "  - Display name : {:?}", file_metadata.display_name );
+  println!( "  - Size : {:?} bytes", file_metadata.size_bytes );
+  println!( "  - Creation time : {:?}", file_metadata.create_time );
+  println!( "  - State : {:?}", file_metadata.state );
 
   Ok( () )
 }
@@ -109,15 +109,15 @@ async fn test_file_deletion() -> Result< (), Box< dyn std::error::Error > >
   // Upload a file specifically for deletion
   let test_data = vec![ 0x25, 0x50, 0x44, 0x46 ]; // PDF header
   let upload_request = UploadFileRequest {
-    file_data: test_data,
-    mime_type: "application/pdf".to_string(),
-    display_name: Some( "File to Delete".to_string() ),
+    file_data : test_data,
+    mime_type : "application/pdf".to_string(),
+    display_name : Some( "File to Delete".to_string() ),
   };
 
   let upload_response = files_api.upload( &upload_request ).await?;
   let file_name = upload_response.file.name.clone();
 
-  println!( "✓ File uploaded for deletion test: {}", file_name );
+  println!( "✓ File uploaded for deletion test : {}", file_name );
 
   // Delete the file
   files_api.delete( &file_name ).await?;
@@ -155,9 +155,9 @@ async fn test_multimodal_content_with_uploaded_media() -> Result< (), Box< dyn s
   // Upload a test image
   let test_image = vec![ 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A ]; // PNG header
   let upload_request = UploadFileRequest {
-    file_data: test_image,
-    mime_type: "image/png".to_string(),
-    display_name: Some( "Multimodal Test Image".to_string() ),
+    file_data : test_image,
+    mime_type : "image/png".to_string(),
+    display_name : Some( "Multimodal Test Image".to_string() ),
   };
 
   let upload_response = files_api.upload( &upload_request ).await?;
@@ -167,15 +167,15 @@ async fn test_multimodal_content_with_uploaded_media() -> Result< (), Box< dyn s
 
   // Create multimodal content request with uploaded file
   let request = GenerateContentRequest {
-    contents: vec![
+    contents : vec![
       Content {
-        parts: vec![
+        parts : vec![
           Part {
-            text: Some( "Describe this image in detail.".to_string() ),
+            text : Some( "Describe this image in detail.".to_string() ),
             ..Default::default()
           }
         ],
-        role: "user".to_string(),
+        role : "user".to_string(),
       }
     ],
     ..Default::default()
@@ -189,11 +189,11 @@ async fn test_multimodal_content_with_uploaded_media() -> Result< (), Box< dyn s
   assert!( !response.candidates[0].content.parts.is_empty() );
 
   println!( "✓ Multimodal content generation with uploaded media successful:" );
-  println!( "  - Used file: {}", upload_response.file.name );
-  println!( "  - Response candidates: {}", response.candidates.len() );
+  println!( "  - Used file : {}", upload_response.file.name );
+  println!( "  - Response candidates : {}", response.candidates.len() );
   if let Some( text ) = &response.candidates[0].content.parts[0].text
   {
-    println!( "  - Generated text length: {} characters", text.len() );
+    println!( "  - Generated text length : {} characters", text.len() );
   }
 
   Ok( () )

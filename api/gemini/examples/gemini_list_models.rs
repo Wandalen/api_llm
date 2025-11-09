@@ -25,43 +25,43 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
   // Display information about each model
   for model in &models_response.models
   {
-    println!( "Model: {}", model.name );
+    println!( "Model : {}", model.name );
 
     // Display name is a human-friendly version of the model name
     if let Some( display_name ) = &model.display_name
     {
-      println!( "  Display Name: {display_name}" );
+      println!( "  Display Name : {display_name}" );
     }
 
     // Description explains what the model is designed for
     if let Some( description ) = &model.description
     {
-      println!( "  Description: {description}" );
+      println!( "  Description : {description}" );
     }
 
     // Token limits define the maximum input/output size
     // Important for planning your prompts and managing costs
     if let Some( input_limit ) = model.input_token_limit
     {
-      println!( "  Max Input Tokens: {input_limit}" );
+      println!( "  Max Input Tokens : {input_limit}" );
     }
 
     if let Some( output_limit ) = model.output_token_limit
     {
-      println!( "  Max Output Tokens: {output_limit}" );
+      println!( "  Max Output Tokens : {output_limit}" );
     }
 
     // Supported generation methods indicate what operations are available
-    // Common methods: generateContent, embedContent, countTokens
+    // Common methods : generateContent, embedContent, countTokens
     if let Some( methods ) = &model.supported_generation_methods
     {
-      println!( "  Supported Methods: {}", methods.join( ", " ) );
+      println!( "  Supported Methods : {}", methods.join( ", " ) );
     }
 
     println!();
   }
 
-  // Example: Get detailed information about a specific model
+  // Example : Get detailed information about a specific model
   println!( "=== Getting Specific Model Details ===" );
 
   let model_name = "models/gemini-2.0-flash-exp";
@@ -73,7 +73,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
   // These are the default values used if not specified in requests
   if let Some( temp ) = specific_model.temperature
   {
-    println!( "  Default Temperature: {temp} (controls randomness)" );
+    println!( "  Default Temperature : {temp} (controls randomness)" );
   }
 
   if let Some( top_p ) = specific_model.top_p

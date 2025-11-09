@@ -119,7 +119,7 @@ async fn test_training_progress_monitoring() -> Result< (), Box< dyn std::error:
   job.start().await?;
 
   // Monitor training progress
-  tokio::time::sleep( Duration::from_millis( 100 ) ).await;
+  tokio ::time::sleep( Duration::from_millis( 100 ) ).await;
 
   let progress = job.get_progress().await?;
   assert!( progress.current_epoch >= 0 );
@@ -150,7 +150,7 @@ async fn test_model_checkpointing() -> Result< (), Box< dyn std::error::Error > 
   let mut job = client.create_tuning_job( config, training_data ).await?;
 
   job.start().await?;
-  tokio::time::sleep( Duration::from_millis( 200 ) ).await;
+  tokio ::time::sleep( Duration::from_millis( 200 ) ).await;
 
   let checkpoints = job.list_checkpoints().await?;
   assert!( !checkpoints.is_empty() );
@@ -253,7 +253,7 @@ async fn test_model_evaluation() -> Result< (), Box< dyn std::error::Error > >
   job.set_validation_data( validation_data ).await?;
   job.start().await?;
 
-  tokio::time::sleep( Duration::from_millis( 300 ) ).await;
+  tokio ::time::sleep( Duration::from_millis( 300 ) ).await;
 
   let evaluation = job.evaluate().await?;
 
@@ -278,19 +278,19 @@ async fn test_custom_training_objectives() -> Result< (), Box< dyn std::error::E
 
   // Test different training objectives
   let classification_objective = TrainingObjective::Classification {
-    num_classes: 5,
-    class_weights: Some( vec![ 1.0, 2.0, 1.5, 1.0, 3.0 ] ),
+    num_classes : 5,
+    class_weights : Some( vec![ 1.0, 2.0, 1.5, 1.0, 3.0 ] ),
   };
 
   let generation_objective = TrainingObjective::TextGeneration {
-    max_length: 512,
-    temperature: 0.8,
-    top_p: 0.9,
+    max_length : 512,
+    temperature : 0.8,
+    top_p : 0.9,
   };
 
   let qa_objective = TrainingObjective::QuestionAnswering {
-    max_answer_length: 100,
-    impossible_answer_threshold: 0.5,
+    max_answer_length : 100,
+    impossible_answer_threshold : 0.5,
   };
 
   let config = ModelTuningConfig::builder()
@@ -326,7 +326,7 @@ async fn test_resource_monitoring() -> Result< (), Box< dyn std::error::Error > 
   let mut job = client.create_tuning_job( config, training_data ).await?;
 
   job.start().await?;
-  tokio::time::sleep( Duration::from_millis( 100 ) ).await;
+  tokio ::time::sleep( Duration::from_millis( 100 ) ).await;
 
   let resource_usage = job.get_resource_usage().await?;
 
@@ -391,7 +391,7 @@ async fn test_model_benchmarking() -> Result< (), Box< dyn std::error::Error > >
   let mut job = client.create_tuning_job( config, training_data ).await?;
   job.start().await?;
 
-  tokio::time::sleep( Duration::from_millis( 500 ) ).await;
+  tokio ::time::sleep( Duration::from_millis( 500 ) ).await;
 
   let benchmark = ModelBenchmark::new()
     .add_task( "text_generation" )
@@ -432,7 +432,7 @@ async fn test_model_versioning() -> Result< (), Box< dyn std::error::Error > >
   let mut job = client.create_tuning_job( config, training_data ).await?;
 
   job.start().await?;
-  tokio::time::sleep( Duration::from_millis( 200 ) ).await;
+  tokio ::time::sleep( Duration::from_millis( 200 ) ).await;
   job.complete().await?;
 
   let model_version = job.create_model_version().await?;

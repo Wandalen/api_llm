@@ -14,8 +14,8 @@ use super::ModelApi;
 #[ derive( Debug ) ]
 pub struct EmbeddingRequestBuilder< 'a >
 {
-  model: &'a ModelApi< 'a >,
-  request: crate::models::EmbedContentRequest,
+  model : &'a ModelApi< 'a >,
+  request : crate::models::EmbedContentRequest,
 }
 
 impl< 'a > EmbeddingRequestBuilder< 'a >
@@ -23,18 +23,18 @@ impl< 'a > EmbeddingRequestBuilder< 'a >
   /// Creates a new embedding request builder.
   #[ inline ]
   #[ must_use ]
-  pub fn new( model: &'a ModelApi< 'a > ) -> Self
+  pub fn new( model : &'a ModelApi< 'a > ) -> Self
   {
     Self {
       model,
-      request: crate::models::EmbedContentRequest {
-        content: crate::models::Content {
-          parts: vec![],
-          role: "user".to_string(),
+      request : crate::models::EmbedContentRequest {
+        content : crate::models::Content {
+          parts : vec![],
+          role : "user".to_string(),
         },
-        task_type: None,
-        title: None,
-        output_dimensionality: None,
+        task_type : None,
+        title : None,
+        output_dimensionality : None,
       },
     }
   }
@@ -48,10 +48,10 @@ impl< 'a > EmbeddingRequestBuilder< 'a >
   /// * `text` - The text content to embed
   #[ inline ]
   #[ must_use ]
-  pub fn with_text( mut self, text: &str ) -> Self
+  pub fn with_text( mut self, text : &str ) -> Self
   {
     self.request.content.parts = vec![ crate::models::Part {
-      text: Some( text.to_string() ),
+      text : Some( text.to_string() ),
       ..Default::default()
     } ];
     self
@@ -70,7 +70,7 @@ impl< 'a > EmbeddingRequestBuilder< 'a >
   /// * `task_type` - The task type string
   #[ inline ]
   #[ must_use ]
-  pub fn with_task_type( mut self, task_type: &str ) -> Self
+  pub fn with_task_type( mut self, task_type : &str ) -> Self
   {
     self.request.task_type = Some( task_type.to_string() );
     self
@@ -85,7 +85,7 @@ impl< 'a > EmbeddingRequestBuilder< 'a >
   /// * `title` - The title string
   #[ inline ]
   #[ must_use ]
-  pub fn with_title( mut self, title: &str ) -> Self
+  pub fn with_title( mut self, title : &str ) -> Self
   {
     self.request.title = Some( title.to_string() );
     self
@@ -101,7 +101,7 @@ impl< 'a > EmbeddingRequestBuilder< 'a >
   /// * `dimensions` - The desired number of dimensions
   #[ inline ]
   #[ must_use ]
-  pub fn with_output_dimensionality( mut self, dimensions: i32 ) -> Self
+  pub fn with_output_dimensionality( mut self, dimensions : i32 ) -> Self
   {
     self.request.output_dimensionality = Some( dimensions );
     self
@@ -158,13 +158,13 @@ impl< 'a > EmbeddingRequestBuilder< 'a >
 pub struct BatchEmbeddingRequestBuilder< 'a >
 {
   /// The `ModelApi` instance to use for batch operations
-  model: &'a ModelApi< 'a >,
+  model : &'a ModelApi< 'a >,
   /// Optional list of texts to embed
-  texts: Option< Vec< &'a str > >,
+  texts : Option< Vec< &'a str > >,
   /// Optional batch size for processing chunks
-  batch_size: Option< usize >,
+  batch_size : Option< usize >,
   /// Optional timeout for batch operations  
-  timeout: Option< Duration >,
+  timeout : Option< Duration >,
 }
 
 impl< 'a > BatchEmbeddingRequestBuilder< 'a >
@@ -176,13 +176,13 @@ impl< 'a > BatchEmbeddingRequestBuilder< 'a >
   /// * `model` - The `ModelApi` instance to use for batch operations
   #[ inline ]
   #[ must_use ]
-  pub fn new( model: &'a ModelApi< 'a > ) -> Self
+  pub fn new( model : &'a ModelApi< 'a > ) -> Self
   {
     Self {
       model,
-      texts: None,
-      batch_size: None,
-      timeout: None,
+      texts : None,
+      batch_size : None,
+      timeout : None,
     }
   }
 
@@ -193,7 +193,7 @@ impl< 'a > BatchEmbeddingRequestBuilder< 'a >
   /// * `texts` - A slice of text strings to embed
   #[ inline ]
   #[ must_use ]
-  pub fn with_texts( mut self, texts: &'a [ &'a str ] ) -> Self
+  pub fn with_texts( mut self, texts : &'a [ &'a str ] ) -> Self
   {
     self.texts = Some( texts.to_vec() );
     self
@@ -209,7 +209,7 @@ impl< 'a > BatchEmbeddingRequestBuilder< 'a >
   /// * `size` - The maximum number of texts per batch
   #[ inline ]
   #[ must_use ]
-  pub fn with_batch_size( mut self, size: usize ) -> Self
+  pub fn with_batch_size( mut self, size : usize ) -> Self
   {
     self.batch_size = Some( size );
     self
@@ -222,7 +222,7 @@ impl< 'a > BatchEmbeddingRequestBuilder< 'a >
   /// * `timeout` - The maximum duration to wait for batch completion
   #[ inline ]
   #[ must_use ]
-  pub fn with_timeout( mut self, timeout: Duration ) -> Self
+  pub fn with_timeout( mut self, timeout : Duration ) -> Self
   {
     self.timeout = Some( timeout );
     self
@@ -241,7 +241,7 @@ impl< 'a > BatchEmbeddingRequestBuilder< 'a >
   pub async fn execute( self ) -> Result< Vec< Vec< f32 > >, Error >
   {
     let texts = self.texts.ok_or_else( || Error::ValidationError {
-      message: "No texts specified for batch embedding".to_string()
+      message : "No texts specified for batch embedding".to_string()
     } )?;
 
     // For now, delegate to the main batch method

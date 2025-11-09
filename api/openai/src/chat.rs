@@ -10,9 +10,9 @@ mod private
   // Use crate root for base access
   use crate::
   {
-    client::Client,
-    error::Result,
-    environment::{ OpenaiEnvironment, EnvironmentInterface },
+    client ::Client,
+    error ::Result,
+    environment ::{ OpenaiEnvironment, EnvironmentInterface },
   };
   use crate::components::chat_shared::
   {
@@ -58,14 +58,14 @@ mod private
     /// ```no_run
     /// use api_openai::{ Client, environment::{ OpenaiEnvironment, EnvironmentInterface }, components::chat_shared::ChatCompletionRequest, ClientApiAccessors };
     ///
-    /// # async fn example(client: Client<impl OpenaiEnvironment + EnvironmentInterface + Send + Sync + 'static>) -> Result<(), Box< dyn core::error::Error >>
+    /// # async fn example(client : Client< impl OpenaiEnvironment + EnvironmentInterface + Send + Sync + 'static >) -> Result<(), Box< dyn core::error::Error > >
     /// # {
     /// let request = ChatCompletionRequest::former()
     ///   .model("gpt-4".to_string())
     ///   .form();
     ///
     /// let response = client.chat().create(request).await?;
-    /// println!("Response: {:?}", response);
+    /// println!("Response : {:?}", response);
     /// # Ok(())
     /// # }
     /// ```
@@ -93,7 +93,7 @@ mod private
   }
 } // end mod private
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   // Expose all structs defined in this module
   exposed use 

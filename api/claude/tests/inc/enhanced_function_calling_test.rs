@@ -1,6 +1,6 @@
 //! Enhanced Function Calling Tests
 //!
-//! Tests for advanced tool choice modes: AUTO, ANY, NONE
+//! Tests for advanced tool choice modes : AUTO, ANY, NONE
 
 #[ allow( unused_imports ) ]
 use super::*;
@@ -124,7 +124,7 @@ async fn integration_tool_choice_auto_mode()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION: AUTO mode must work: {err}" ),
+    Err( err ) => panic!( "INTEGRATION: AUTO mode must work : {err}" ),
   };
 
   // With AUTO mode, model should decide to use calculator for math
@@ -174,7 +174,7 @@ async fn integration_tool_choice_any_mode()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION: ANY mode must work: {err}" ),
+    Err( err ) => panic!( "INTEGRATION: ANY mode must work : {err}" ),
   };
 
   // With ANY mode, model must use at least one tool
@@ -228,7 +228,7 @@ async fn integration_tool_choice_none_mode()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION: NONE mode must work: {err}" ),
+    Err( err ) => panic!( "INTEGRATION: NONE mode must work : {err}" ),
   };
 
   // With NONE mode, model should not use tools
@@ -272,7 +272,7 @@ async fn integration_tool_choice_mode_transitions()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION: First request must work: {err}" ),
+    Err( err ) => panic!( "INTEGRATION: First request must work : {err}" ),
   };
 
   assert!( !response1.id.is_empty() );
@@ -298,7 +298,7 @@ async fn integration_tool_choice_mode_transitions()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted on second request" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION: Second request must work: {err}" ),
+    Err( err ) => panic!( "INTEGRATION: Second request must work : {err}" ),
   };
 
   assert!( !response2.id.is_empty() );

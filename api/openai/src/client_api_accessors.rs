@@ -9,18 +9,18 @@ mod private
 {
   use crate::
   {
-    client::Client,
-    environment::{ OpenaiEnvironment, EnvironmentInterface },
-    assistants::Assistants,
-    chat::Chat,
-    embeddings::Embeddings,
-    files::Files,
-    fine_tuning::FineTuning,
-    images::Images,
-    models::Models,
-    realtime::Realtime,
-    responses::Responses,
-    vector_stores::VectorStores,
+    client ::Client,
+    environment ::{ OpenaiEnvironment, EnvironmentInterface },
+    assistants ::Assistants,
+    chat ::Chat,
+    embeddings ::Embeddings,
+    files ::Files,
+    fine_tuning ::FineTuning,
+    images ::Images,
+    models ::Models,
+    realtime ::Realtime,
+    responses ::Responses,
+    vector_stores ::VectorStores,
   };
 
   #[ cfg( feature = "audio" ) ]

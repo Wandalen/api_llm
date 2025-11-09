@@ -4,7 +4,7 @@
 //! Tests token estimation before API calls, cost calculation, input validation,
 //! and batch operation optimization for different text inputs and model types.
 //!
-//! Note: These tests focus on API structure and token counting logic rather than actual
+//! Note : These tests focus on API structure and token counting logic rather than actual
 //! Ollama token counting, since token counting is model-dependent and varies by implementation.
 
 #[ cfg( feature = "count_tokens" ) ]
@@ -22,7 +22,7 @@ mod count_tokens_tests
   const MEDIUM_TEXT: &str = "This is a longer text that contains multiple sentences and should result in more tokens being counted by the tokenizer.";
   const LONG_TEXT: &str = "This is a very long text that will be used to test token counting with larger inputs. It contains multiple paragraphs, various sentence structures, and different types of content. The purpose is to verify that the token counting functionality can handle longer texts accurately and efficiently. This text will help us test performance characteristics as well as accuracy of token estimation across different text lengths and complexities.";
   const CODE_TEXT: &str = r"
-    fn fibonacci(n: u32) -> u32 
+    fn fibonacci(n : u32) -> u32 
     {
         match n
         {
@@ -40,9 +40,9 @@ mod count_tokens_tests
     // Test creating a valid token count request
     let request = TokenCountRequest
     {
-      model: "llama3.2".to_string(),
-      text: SHORT_TEXT.to_string(),
-      options: None,
+      model : "llama3.2".to_string(),
+      text : SHORT_TEXT.to_string(),
+      options : None,
     };
 
     // Test request structure
@@ -60,9 +60,9 @@ mod count_tokens_tests
     // Test with longer text
     let long_request = TokenCountRequest
     {
-      model: "llama3.2".to_string(),
-      text: LONG_TEXT.to_string(),
-      options: None,
+      model : "llama3.2".to_string(),
+      text : LONG_TEXT.to_string(),
+      options : None,
     };
 
     assert_eq!( long_request.text.len(), LONG_TEXT.len() );
@@ -76,12 +76,12 @@ mod count_tokens_tests
     // Test basic token count response
     let response = TokenCountResponse
     {
-      token_count: 42,
-      model: "llama3.2".to_string(),
-      text_length: SHORT_TEXT.len(),
-      estimated_cost: Some( 0.0001 ),
-      processing_time_ms: Some( 5 ),
-      metadata: None,
+      token_count : 42,
+      model : "llama3.2".to_string(),
+      text_length : SHORT_TEXT.len(),
+      estimated_cost : Some( 0.0001 ),
+      processing_time_ms : Some( 5 ),
+      metadata : None,
     };
 
     // Test response structure validation
@@ -106,13 +106,13 @@ mod count_tokens_tests
     // Test cost estimation structure
     let cost_estimation = CostEstimation
     {
-      input_tokens: 100,
-      estimated_output_tokens: 50,
-      input_cost_per_token: 0.0001,
-      output_cost_per_token: 0.0002,
-      total_estimated_cost: 0.02,
-      currency: "USD".to_string(),
-      model: "llama3.2".to_string(),
+      input_tokens : 100,
+      estimated_output_tokens : 50,
+      input_cost_per_token : 0.0001,
+      output_cost_per_token : 0.0002,
+      total_estimated_cost : 0.02,
+      currency : "USD".to_string(),
+      model : "llama3.2".to_string(),
     };
 
     // Test cost calculation validation
@@ -146,10 +146,10 @@ mod count_tokens_tests
 
     let batch_request = BatchTokenRequest
     {
-      model: "llama3.2".to_string(),
+      model : "llama3.2".to_string(),
       texts,
-      options: None,
-      estimate_costs: true,
+      options : None,
+      estimate_costs : true,
     };
 
     // Test batch request structure
@@ -163,30 +163,30 @@ mod count_tokens_tests
     // Test batch response structure
     let batch_response = BatchTokenResponse
     {
-      results: vec![
+      results : vec![
         TokenCountResponse
         {
-          token_count: 3,
-          model: "llama3.2".to_string(),
-          text_length: SHORT_TEXT.len(),
-          estimated_cost: Some( 0.0001 ),
-          processing_time_ms: Some( 2 ),
-          metadata: None,
+          token_count : 3,
+          model : "llama3.2".to_string(),
+          text_length : SHORT_TEXT.len(),
+          estimated_cost : Some( 0.0001 ),
+          processing_time_ms : Some( 2 ),
+          metadata : None,
         },
         TokenCountResponse
         {
-          token_count: 25,
-          model: "llama3.2".to_string(),
-          text_length: MEDIUM_TEXT.len(),
-          estimated_cost: Some( 0.001 ),
-          processing_time_ms: Some( 3 ),
-          metadata: None,
+          token_count : 25,
+          model : "llama3.2".to_string(),
+          text_length : MEDIUM_TEXT.len(),
+          estimated_cost : Some( 0.001 ),
+          processing_time_ms : Some( 3 ),
+          metadata : None,
         },
       ],
-      total_tokens: 28,
-      total_estimated_cost: Some( 0.0011 ),
-      processing_time_ms: Some( 5 ),
-      batch_optimization_savings: Some( 0.2 ), // 20% savings from batch processing
+      total_tokens : 28,
+      total_estimated_cost : Some( 0.0011 ),
+      processing_time_ms : Some( 5 ),
+      batch_optimization_savings : Some( 0.2 ), // 20% savings from batch processing
     };
 
     assert_eq!( batch_response.results.len(), 2 );
@@ -204,12 +204,12 @@ mod count_tokens_tests
     // Test token validation configuration
     let validation_config = TokenValidationConfig
     {
-      max_input_tokens: 4096,
-      max_output_tokens: 2048,
-      model_context_window: 8192,
-      warning_threshold: 0.8, // Warn at 80% of limit
-      enforce_limits: true,
-      truncation_strategy: "end".to_string(), // "start", "end", "middle"
+      max_input_tokens : 4096,
+      max_output_tokens : 2048,
+      model_context_window : 8192,
+      warning_threshold : 0.8, // Warn at 80% of limit
+      enforce_limits : true,
+      truncation_strategy : "end".to_string(), // "start", "end", "middle"
     };
 
     // Test configuration validation
@@ -236,15 +236,15 @@ mod count_tokens_tests
     // Test model token capabilities structure
     let llama_capabilities = ModelTokenCapabilities
     {
-      model_name: "llama3.2".to_string(),
-      context_window: 8192,
-      supports_function_calling: true,
-      average_tokens_per_word: 1.3,
-      max_input_tokens: 6144,
-      max_output_tokens: 2048,
-      cost_per_input_token: 0.0001,
-      cost_per_output_token: 0.0002,
-      tokenizer_type: "tiktoken".to_string(),
+      model_name : "llama3.2".to_string(),
+      context_window : 8192,
+      supports_function_calling : true,
+      average_tokens_per_word : 1.3,
+      max_input_tokens : 6144,
+      max_output_tokens : 2048,
+      cost_per_input_token : 0.0001,
+      cost_per_output_token : 0.0002,
+      tokenizer_type : "tiktoken".to_string(),
     };
 
     // Test capabilities validation
@@ -260,15 +260,15 @@ mod count_tokens_tests
     // Test different model capabilities
     let code_model_capabilities = ModelTokenCapabilities
     {
-      model_name: "codellama".to_string(),
-      context_window: 16384,
-      supports_function_calling: false,
-      average_tokens_per_word: 1.5, // Code typically has more tokens per word
-      max_input_tokens: 12288,
-      max_output_tokens: 4096,
-      cost_per_input_token: 0.00015,
-      cost_per_output_token: 0.0003,
-      tokenizer_type: "sentencepiece".to_string(),
+      model_name : "codellama".to_string(),
+      context_window : 16384,
+      supports_function_calling : false,
+      average_tokens_per_word : 1.5, // Code typically has more tokens per word
+      max_input_tokens : 12288,
+      max_output_tokens : 4096,
+      cost_per_input_token : 0.00015,
+      cost_per_output_token : 0.0003,
+      tokenizer_type : "sentencepiece".to_string(),
     };
 
     assert_eq!( code_model_capabilities.model_name, "codellama" );
@@ -297,9 +297,9 @@ mod count_tokens_tests
     {
       let request = TokenCountRequest
       {
-        model: "llama3.2".to_string(),
-        text: text.to_string(),
-        options: None,
+        model : "llama3.2".to_string(),
+        text : text.to_string(),
+        options : None,
       };
 
       // Test request structure for each text type
@@ -309,12 +309,12 @@ mod count_tokens_tests
       // Create test response for validation
       let response = TokenCountResponse
       {
-        token_count: expected_tokens,
-        model: "llama3.2".to_string(),
-        text_length: text.len(),
-        estimated_cost: Some( f64::from(expected_tokens) * 0.0001 ),
-        processing_time_ms: Some( 3 ),
-        metadata: None,
+        token_count : expected_tokens,
+        model : "llama3.2".to_string(),
+        text_length : text.len(),
+        estimated_cost : Some( f64::from(expected_tokens) * 0.0001 ),
+        processing_time_ms : Some( 3 ),
+        metadata : None,
       };
 
       assert_eq!( response.token_count, expected_tokens );
@@ -340,9 +340,9 @@ mod count_tokens_tests
     {
       let request = TokenCountRequest
       {
-        model: "llama3.2".to_string(),
-        text: text.to_string(),
-        options: None,
+        model : "llama3.2".to_string(),
+        text : text.to_string(),
+        options : None,
       };
 
       // Simulate token counting performance
@@ -356,12 +356,12 @@ mod count_tokens_tests
       // Create performance response
       let response = TokenCountResponse
       {
-        token_count: u32::try_from(text.len() / 4).unwrap_or(0), // Rough estimate: 4 chars per token
-        model: "llama3.2".to_string(),
-        text_length: text.len(),
-        estimated_cost: Some( ( text.len() / 4 ) as f64 * 0.0001 ),
-        processing_time_ms: Some( u64::try_from(latency.as_millis()).unwrap_or(0) ),
-        metadata: None,
+        token_count : u32::try_from(text.len() / 4).unwrap_or(0), // Rough estimate : 4 chars per token
+        model : "llama3.2".to_string(),
+        text_length : text.len(),
+        estimated_cost : Some( ( text.len() / 4 ) as f64 * 0.0001 ),
+        processing_time_ms : Some( u64::try_from(latency.as_millis()).unwrap_or(0) ),
+        metadata : None,
       };
 
       assert!( response.processing_time_ms.unwrap() < 100 );
@@ -378,9 +378,9 @@ mod count_tokens_tests
     // Test with empty model name
     let invalid_request = TokenCountRequest
     {
-      model: String::new(),
-      text: "Valid text".to_string(),
-      options: None,
+      model : String::new(),
+      text : "Valid text".to_string(),
+      options : None,
     };
 
     assert!( invalid_request.model.is_empty() );
@@ -390,9 +390,9 @@ mod count_tokens_tests
     let very_long_text = "word ".repeat( 100_000 ); // 500k characters
     let large_request = TokenCountRequest
     {
-      model: "llama3.2".to_string(),
-      text: very_long_text.clone(),
-      options: None,
+      model : "llama3.2".to_string(),
+      text : very_long_text.clone(),
+      options : None,
     };
 
     assert_eq!( large_request.text.len(), very_long_text.len() );
@@ -413,9 +413,9 @@ mod count_tokens_tests
     {
       let request = TokenCountRequest
       {
-        model: "llama3.2".to_string(),
-        text: edge_case.to_string(),
-        options: None,
+        model : "llama3.2".to_string(),
+        text : edge_case.to_string(),
+        options : None,
       };
 
       assert_eq!( request.text, edge_case );

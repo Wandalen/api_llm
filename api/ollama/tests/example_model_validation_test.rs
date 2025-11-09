@@ -37,7 +37,7 @@ mod private
   ///
   /// **Fix(issue-001)**: Updated model name from "llama3.2" to "llama3.2:3b".
   /// **Root cause**: Ollama requires explicit size tag in model name.
-  /// **Pitfall**: Always use full model name with tag: "model:size" not just "model".
+  /// **Pitfall**: Always use full model name with tag : "model:size" not just "model".
   #[ tokio::test ]
   async fn test_model_name_format()
   {
@@ -50,7 +50,7 @@ mod private
     // Verify model name format matches Ollama convention
     let parts : Vec< &str > = model_name.split( ':' ).collect();
     assert_eq!( parts.len(), 2,
-      "Model name should have format 'name:tag', got: {model_name}" );
+      "Model name should have format 'name:tag', got : {model_name}" );
   }
 
   /// Test that client can query available models before attempting chat.
@@ -84,7 +84,7 @@ mod private
     for model in &models.models
     {
       assert!( model.name.contains( ':' ) || model.name.contains( '/' ),
-        "Model name should include tag or namespace: {}", model.name );
+        "Model name should include tag or namespace : {}", model.name );
     }
   }
 
@@ -141,7 +141,7 @@ mod private
 
     // Error should indicate model not found
     assert!( error_msg.contains( "404" ) || error_msg.contains( "not found" ),
-      "Error should indicate model not found. Got: {error}" );
+      "Error should indicate model not found. Got : {error}" );
   }
 
   /// Test that examples use models that are likely to be installed.
@@ -165,7 +165,7 @@ mod private
 
     // Verify example uses a commonly available model
     assert!( acceptable_models.contains( &example_model ),
-      "Example should use a commonly installed model. Using: {example_model}" );
+      "Example should use a commonly installed model. Using : {example_model}" );
   }
 
   /// Test model name validation helper function.
@@ -178,7 +178,7 @@ mod private
   {
     fn is_valid_model_name( name : &str ) -> bool
     {
-      // Valid formats: "name:tag" or "namespace/name:tag"
+      // Valid formats : "name:tag" or "namespace/name:tag"
       name.contains( ':' ) || name.contains( '/' )
     }
 
@@ -236,7 +236,7 @@ mod private
     };
 
     let result = client.chat( request ).await;
-    assert!( result.is_ok(), "Chat should succeed with valid model name: {result:?}" );
+    assert!( result.is_ok(), "Chat should succeed with valid model name : {result:?}" );
 
     let response = result.unwrap();
     assert!( !response.message.content.is_empty(),

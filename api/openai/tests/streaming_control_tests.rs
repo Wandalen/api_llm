@@ -86,9 +86,9 @@ mod streaming_control_tests
     let token_clone = token.clone();
 
     // Cancel after a short delay
-    tokio::spawn( async move
+    tokio ::spawn( async move
     {
-      time::sleep( Duration::from_millis( 25 ) ).await;
+      time ::sleep( Duration::from_millis( 25 ) ).await;
       token_clone.cancel();
     });
 
@@ -146,7 +146,7 @@ mod streaming_control_tests
   async fn test_stream_control_elapsed_time()
   {
     let control = StreamControl::new();
-    time::sleep( Duration::from_millis( 10 ) ).await;
+    time ::sleep( Duration::from_millis( 10 ) ).await;
 
     let elapsed = control.elapsed();
     assert!( elapsed >= Duration::from_millis( 10 ) );
@@ -173,7 +173,7 @@ mod streaming_control_tests
       assert!( !serialized.is_empty() );
 
       // Test deserialization
-      let deserialized: StreamState = serde_json::from_str( &serialized )
+      let deserialized : StreamState = serde_json::from_str( &serialized )
         .expect( "Failed to deserialize state" );
 
       assert_eq!( state, deserialized );
@@ -217,7 +217,7 @@ mod streaming_control_tests
     assert!( !serialized.is_empty() );
 
     // Test deserialization
-    let deserialized: StreamControlConfig = serde_json::from_str( &serialized )
+    let deserialized : StreamControlConfig = serde_json::from_str( &serialized )
       .expect( "Failed to deserialize config" );
 
     assert_eq!( config.max_pause_duration, deserialized.max_pause_duration );
@@ -249,7 +249,7 @@ mod streaming_control_tests
 
     let result = StreamControlManager::with_cancellation( token_clone, || async
     {
-      time::sleep( Duration::from_millis( 100 ) ).await;
+      time ::sleep( Duration::from_millis( 100 ) ).await;
       42
     }).await;
 
@@ -264,15 +264,15 @@ mod streaming_control_tests
     let token_clone = token.clone();
 
     // Cancel after a short delay
-    tokio::spawn( async move
+    tokio ::spawn( async move
     {
-      time::sleep( Duration::from_millis( 25 ) ).await;
+      time ::sleep( Duration::from_millis( 25 ) ).await;
       token.cancel();
     });
 
     let result = StreamControlManager::with_cancellation( token_clone, || async
     {
-      time::sleep( Duration::from_millis( 100 ) ).await;
+      time ::sleep( Duration::from_millis( 100 ) ).await;
       42
     }).await;
 
@@ -288,13 +288,13 @@ mod streaming_control_tests
     assert!( !token.is_cancelled() );
 
     // Wait for the timeout to trigger with some buffer for scheduling delays
-    time::sleep( Duration::from_millis( 100 ) ).await;
+    time ::sleep( Duration::from_millis( 100 ) ).await;
 
     // Retry mechanism to handle timing variations
     let mut attempts = 0;
     while !token.is_cancelled() && attempts < 5
     {
-      time::sleep( Duration::from_millis( 10 ) ).await;
+      time ::sleep( Duration::from_millis( 10 ) ).await;
       attempts += 1;
     }
 
@@ -316,7 +316,7 @@ mod streaming_control_tests
     token2.cancel();
 
     // Wait for combination to propagate
-    time::sleep( Duration::from_millis( 20 ) ).await;
+    time ::sleep( Duration::from_millis( 20 ) ).await;
 
     assert!( combined.is_cancelled() );
   }
@@ -346,9 +346,9 @@ mod streaming_control_tests
     let ( sender, mut receiver ) = StreamControlManager::create_control_channel();
 
     // Send command after a delay
-    tokio::spawn( async move
+    tokio ::spawn( async move
     {
-      time::sleep( Duration::from_millis( 25 ) ).await;
+      time ::sleep( Duration::from_millis( 25 ) ).await;
       let _ = sender.pause();
     });
 

@@ -12,13 +12,13 @@ mod private
 {
   use std::
   {
-    collections::HashMap,
-    sync::Arc,
+    collections ::HashMap,
+    sync ::Arc,
   };
   use core::
   {
-    hash::Hash,
-    time::Duration,
+    hash ::Hash,
+    time ::Duration,
   };
   use std::time::Instant;
   use tokio::sync::RwLock;
@@ -29,15 +29,15 @@ mod private
   pub struct CacheConfig
   {
     /// Maximum number of entries in cache
-    pub max_entries: usize,
+    pub max_entries : usize,
     /// Default TTL for cached responses
-    pub default_ttl: Duration,
+    pub default_ttl : Duration,
     /// Maximum memory usage in bytes
-    pub max_memory_bytes: usize,
+    pub max_memory_bytes : usize,
     /// Enable compression for large responses
-    pub enable_compression: bool,
+    pub enable_compression : bool,
     /// Cache hit ratio monitoring interval
-    pub metrics_interval: Duration,
+    pub metrics_interval : Duration,
   }
 
   impl Default for CacheConfig
@@ -47,11 +47,11 @@ mod private
     {
       Self
       {
-        max_entries: 10000,
-        default_ttl: Duration::from_secs( 300 ), // 5 minutes
-        max_memory_bytes: 100 * 1024 * 1024, // 100MB
-        enable_compression: true,
-        metrics_interval: Duration::from_secs( 60 ),
+        max_entries : 10000,
+        default_ttl : Duration::from_secs( 300 ), // 5 minutes
+        max_memory_bytes : 100 * 1024 * 1024, // 100MB
+        enable_compression : true,
+        metrics_interval : Duration::from_secs( 60 ),
       }
     }
   }
@@ -61,13 +61,13 @@ mod private
   pub struct CacheKey
   {
     /// HTTP method (GET, POST, etc.)
-    pub method: String,
+    pub method : String,
     /// API endpoint path
-    pub path: String,
+    pub path : String,
     /// Request body hash (Blake3 for speed)
-    pub body_hash: Blake3Hash,
+    pub body_hash : Blake3Hash,
     /// Query parameters hash
-    pub query_hash: Blake3Hash,
+    pub query_hash : Blake3Hash,
   }
 
   impl CacheKey
@@ -75,7 +75,7 @@ mod private
     /// Create optimized cache key with fast hashing
     #[ inline ]
     #[ must_use ]
-    pub fn new( method: &str, path: &str, body: &[u8], query: &str ) -> Self
+    pub fn new( method : &str, path : &str, body : &[u8], query : &str ) -> Self
     {
       let mut body_hasher = Blake3Hasher::new();
       body_hasher.update( body );
@@ -87,8 +87,8 @@ mod private
 
       Self
       {
-        method: method.to_string(),
-        path: path.to_string(),
+        method : method.to_string(),
+        path : path.to_string(),
         body_hash,
         query_hash,
       }
@@ -97,7 +97,7 @@ mod private
     /// Generate cache key for GET requests (no body)
     #[ inline ]
     #[ must_use ]
-    pub fn for_get( path: &str, query: &str ) -> Self
+    pub fn for_get( path : &str, query : &str ) -> Self
     {
       Self::new( "GET", path, &[], query )
     }
@@ -105,7 +105,7 @@ mod private
     /// Generate cache key for POST requests with body
     #[ inline ]
     #[ must_use ]
-    pub fn for_post( path: &str, body: &[u8] ) -> Self
+    pub fn for_post( path : &str, body : &[u8] ) -> Self
     {
       Self::new( "POST", path, body, "" )
     }
@@ -116,21 +116,21 @@ mod private
   pub struct CachedResponse
   {
     /// Response data (potentially compressed)
-    pub data: Vec< u8 >,
+    pub data : Vec< u8 >,
     /// When this entry was cached
-    pub cached_at: Instant,
+    pub cached_at : Instant,
     /// When this entry expires
-    pub expires_at: Instant,
+    pub expires_at : Instant,
     /// Size in bytes for memory management
-    pub size_bytes: usize,
+    pub size_bytes : usize,
     /// Access count for LRU eviction
-    pub access_count: u64,
+    pub access_count : u64,
     /// Last access time
-    pub last_accessed: Instant,
+    pub last_accessed : Instant,
     /// Whether data is compressed
-    pub is_compressed: bool,
+    pub is_compressed : bool,
     /// Response content type
-    pub content_type: String,
+    pub content_type : String,
   }
 
   impl CachedResponse
@@ -138,7 +138,7 @@ mod private
     /// Create new cached response with automatic compression
     #[ inline ]
     #[ must_use ]
-    pub fn new( data: Vec< u8 >, ttl: Duration, content_type: String, enable_compression: bool ) -> Self
+    pub fn new( data : Vec< u8 >, ttl : Duration, content_type : String, enable_compression : bool ) -> Self
     {
       let now = Instant::now();
       let ( final_data, is_compressed ) = if enable_compression && data.len() > 1024
@@ -156,12 +156,12 @@ mod private
 
       Self
       {
-        size_bytes: final_data.len(),
-        data: final_data,
-        cached_at: now,
-        expires_at: now + ttl,
-        access_count: 1,
-        last_accessed: now,
+        size_bytes : final_data.len(),
+        data : final_data,
+        cached_at : now,
+        expires_at : now + ttl,
+        access_count : 1,
+        last_accessed : now,
         is_compressed,
         content_type,
       }
@@ -203,7 +203,7 @@ mod private
     }
 
     /// Compress data using fast algorithm
-    fn compress( data: &[u8] ) -> Result< Vec< u8 >, String >
+    fn compress( data : &[u8] ) -> Result< Vec< u8 >, String >
     {
       use flate2::{ write::GzEncoder, Compression };
       use std::io::Write;
@@ -214,7 +214,7 @@ mod private
     }
 
     /// Decompress data
-    fn decompress( data: &[u8] ) -> Result< Vec< u8 >, String >
+    fn decompress( data : &[u8] ) -> Result< Vec< u8 >, String >
     {
       use flate2::read::GzDecoder;
       use std::io::Read;
@@ -231,19 +231,19 @@ mod private
   pub struct CacheMetrics
   {
     /// Total cache hits
-    pub hits: u64,
+    pub hits : u64,
     /// Total cache misses
-    pub misses: u64,
+    pub misses : u64,
     /// Cache hit ratio (0.0 to 1.0)
-    pub hit_ratio: f64,
+    pub hit_ratio : f64,
     /// Current memory usage in bytes
-    pub memory_usage: usize,
+    pub memory_usage : usize,
     /// Number of evictions performed
-    pub evictions: u64,
+    pub evictions : u64,
     /// Average response time for cache hits (microseconds)
-    pub avg_hit_time_us: u64,
+    pub avg_hit_time_us : u64,
     /// Compression ratio (`compressed_size` / `original_size`)
-    pub compression_ratio: f64,
+    pub compression_ratio : f64,
   }
 
   impl CacheMetrics
@@ -262,13 +262,13 @@ mod private
   pub struct PerformanceCache
   {
     /// Cache storage with fast concurrent access
-    storage: Arc< RwLock< HashMap<  CacheKey, CachedResponse  > > >,
+    storage : Arc< RwLock< HashMap<  CacheKey, CachedResponse  > > >,
     /// Cache configuration
-    config: CacheConfig,
+    config : CacheConfig,
     /// Performance metrics
-    metrics: Arc< RwLock< CacheMetrics > >,
+    metrics : Arc< RwLock< CacheMetrics > >,
     /// Memory usage tracker
-    current_memory: Arc< RwLock< usize > >,
+    current_memory : Arc< RwLock< usize > >,
   }
 
   impl PerformanceCache
@@ -276,20 +276,20 @@ mod private
     /// Create new performance cache
     #[ inline ]
     #[ must_use ]
-    pub fn new( config: CacheConfig ) -> Self
+    pub fn new( config : CacheConfig ) -> Self
     {
       Self
       {
-        storage: Arc::new( RwLock::new( HashMap::with_capacity( config.max_entries ) ) ),
+        storage : Arc::new( RwLock::new( HashMap::with_capacity( config.max_entries ) ) ),
         config,
-        metrics: Arc::new( RwLock::new( CacheMetrics::default() ) ),
-        current_memory: Arc::new( RwLock::new( 0 ) ),
+        metrics : Arc::new( RwLock::new( CacheMetrics::default() ) ),
+        current_memory : Arc::new( RwLock::new( 0 ) ),
       }
     }
 
     /// Get cached response if available and not expired
     #[ inline ]
-    pub async fn get( &self, key: &CacheKey ) -> Option< Vec< u8 > >
+    pub async fn get( &self, key : &CacheKey ) -> Option< Vec< u8 > >
     {
       let start_time = Instant::now();
 
@@ -336,7 +336,7 @@ mod private
           // Decompression failed - need to remove entry
           let size_bytes = cached_response.size_bytes;
           // Drop the mutable reference by ending the scope
-          core::mem::drop( storage.remove( key ) );
+          core ::mem::drop( storage.remove( key ) );
           let mut memory = self.current_memory.write().await;
           *memory = memory.saturating_sub( size_bytes );
           None
@@ -354,14 +354,14 @@ mod private
 
     /// Store response in cache with automatic eviction
     #[ inline ]
-    pub async fn put( &self, key: CacheKey, data: Vec< u8 >, content_type: String )
+    pub async fn put( &self, key : CacheKey, data : Vec< u8 >, content_type : String )
     {
       self.put_with_ttl( key, data, content_type, self.config.default_ttl ).await;
     }
 
     /// Store response with custom TTL
     #[ inline ]
-    pub async fn put_with_ttl( &self, key: CacheKey, data: Vec< u8 >, content_type: String, ttl: Duration )
+    pub async fn put_with_ttl( &self, key : CacheKey, data : Vec< u8 >, content_type : String, ttl : Duration )
     {
       let cached_response = CachedResponse::new( data, ttl, content_type, self.config.enable_compression );
 
@@ -383,7 +383,7 @@ mod private
     }
 
     /// Ensure cache has capacity for new entry
-    async fn ensure_capacity( &self, needed_bytes: usize )
+    async fn ensure_capacity( &self, needed_bytes : usize )
     {
       let current_memory = *self.current_memory.read().await;
 
@@ -394,14 +394,14 @@ mod private
     }
 
     /// Evict least recently used entries
-    async fn evict_lru( &self, needed_bytes: usize )
+    async fn evict_lru( &self, needed_bytes : usize )
     {
       let mut storage = self.storage.write().await;
       let mut memory = self.current_memory.write().await;
       let mut freed_bytes = 0;
 
       // Collect entries sorted by access time (oldest first)
-      let mut entries: Vec< _ > = storage.iter().map( | ( k, v ) | ( k.clone(), v.last_accessed ) ).collect();
+      let mut entries : Vec< _ > = storage.iter().map( | ( k, v ) | ( k.clone(), v.last_accessed ) ).collect();
       entries.sort_by_key( | ( _, last_accessed ) | *last_accessed );
 
       // Remove oldest entries until we have enough space

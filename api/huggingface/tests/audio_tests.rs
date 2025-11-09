@@ -7,14 +7,14 @@
 use api_huggingface::
 {
   Client,
-  environment::HuggingFaceEnvironmentImpl,
-  secret::Secret,
-  audio::
+  environment ::HuggingFaceEnvironmentImpl,
+  secret ::Secret,
+  audio ::
   {
   AudioInput, TranscriptionResult, AudioClassificationResult,
   SpeechGenerationResult, AudioTransformResult,
   },
-  error::Result,
+  error ::Result,
 };
 use base64::Engine;
 
@@ -156,7 +156,7 @@ fn test_transcription_result_creation()
   let text = "Hello world".to_string();
 
   // Execution
-  let result = TranscriptionResult { text: text.clone() };
+  let result = TranscriptionResult { text : text.clone() };
 
   // Verification
   assert_eq!( result.text, text );

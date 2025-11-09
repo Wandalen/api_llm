@@ -10,8 +10,8 @@ mod private
 {
   use crate::
   {
-    error::{ OpenAIError, Result },
-    connection_manager::{ ConnectionEfficiencyMetrics, PoolStatistics },
+    error ::{ OpenAIError, Result },
+    connection_manager ::{ ConnectionEfficiencyMetrics, PoolStatistics },
   };
 
   // Feature-gated imports
@@ -24,14 +24,14 @@ mod private
 
   use std::
   {
-    collections::HashMap,
-    sync::Arc,
-    time::{ SystemTime, UNIX_EPOCH },
+    collections ::HashMap,
+    sync ::Arc,
+    time ::{ SystemTime, UNIX_EPOCH },
   };
   use core::
   {
-    fmt::Write,
-    time::Duration,
+    fmt ::Write,
+    time ::Duration,
   };
   use std::time::Instant;
   use tokio::sync::RwLock;
@@ -43,23 +43,23 @@ mod private
   pub struct MetricsConfig
   {
     /// Whether to collect connection metrics
-    pub collect_connection_metrics: bool,
+    pub collect_connection_metrics : bool,
     /// Whether to collect cache metrics
-    pub collect_cache_metrics: bool,
+    pub collect_cache_metrics : bool,
     /// Whether to collect circuit breaker metrics
-    pub collect_circuit_breaker_metrics: bool,
+    pub collect_circuit_breaker_metrics : bool,
     /// Whether to collect request timing metrics
-    pub collect_timing_metrics: bool,
+    pub collect_timing_metrics : bool,
     /// Whether to collect error metrics
-    pub collect_error_metrics: bool,
+    pub collect_error_metrics : bool,
     /// Maximum number of metric entries to retain
-    pub max_entries: usize,
+    pub max_entries : usize,
     /// Interval for automatic metric collection
-    pub collection_interval: Duration,
+    pub collection_interval : Duration,
     /// Data retention period
-    pub retention_period: Duration,
+    pub retention_period : Duration,
     /// Whether to enable real-time metric streaming
-    pub enable_streaming: bool,
+    pub enable_streaming : bool,
   }
 
   impl Default for MetricsConfig
@@ -69,15 +69,15 @@ mod private
     {
       Self
       {
-        collect_connection_metrics: true,
-        collect_cache_metrics: true,
-        collect_circuit_breaker_metrics: true,
-        collect_timing_metrics: true,
-        collect_error_metrics: true,
-        max_entries: 10000,
-        collection_interval: Duration::from_secs( 10 ),
-        retention_period: Duration::from_secs( 3600 ), // 1 hour
-        enable_streaming: false,
+        collect_connection_metrics : true,
+        collect_cache_metrics : true,
+        collect_circuit_breaker_metrics : true,
+        collect_timing_metrics : true,
+        collect_error_metrics : true,
+        max_entries : 10000,
+        collection_interval : Duration::from_secs( 10 ),
+        retention_period : Duration::from_secs( 3600 ), // 1 hour
+        enable_streaming : false,
       }
     }
   }
@@ -87,18 +87,18 @@ mod private
   pub struct MetricsSnapshot
   {
     /// Timestamp when metrics were collected
-    pub timestamp: u64,
+    pub timestamp : u64,
     /// Connection-related metrics
-    pub connection_metrics: Option< ConnectionMetrics >,
+    pub connection_metrics : Option< ConnectionMetrics >,
     /// Cache-related metrics
-    pub cache_metrics: Option< CacheMetrics >,
+    pub cache_metrics : Option< CacheMetrics >,
     /// Circuit breaker metrics
     #[ cfg( feature = "circuit_breaker" ) ]
-    pub circuit_breaker_metrics: Option< CircuitBreakerMetrics >,
+    pub circuit_breaker_metrics : Option< CircuitBreakerMetrics >,
     /// Request timing metrics
-    pub timing_metrics: Option< TimingMetrics >,
+    pub timing_metrics : Option< TimingMetrics >,
     /// Error metrics
-    pub error_metrics: Option< ErrorMetrics >,
+    pub error_metrics : Option< ErrorMetrics >,
   }
 
   /// Connection performance metrics
@@ -106,19 +106,19 @@ mod private
   pub struct ConnectionMetrics
   {
     /// Overall efficiency score
-    pub efficiency_score: f64,
+    pub efficiency_score : f64,
     /// Connection reuse ratio
-    pub connection_reuse_ratio: f64,
+    pub connection_reuse_ratio : f64,
     /// Average pool utilization
-    pub average_pool_utilization: f64,
+    pub average_pool_utilization : f64,
     /// Total requests served
-    pub total_requests_served: u64,
+    pub total_requests_served : u64,
     /// Average response time in seconds
-    pub average_response_time_seconds: f64,
+    pub average_response_time_seconds : f64,
     /// Current number of active connections
-    pub active_connections: usize,
+    pub active_connections : usize,
     /// Connection health score
-    pub health_score: f64,
+    pub health_score : f64,
   }
 
   /// Cache performance metrics
@@ -126,21 +126,21 @@ mod private
   pub struct CacheMetrics
   {
     /// Total cache requests
-    pub total_requests: u64,
+    pub total_requests : u64,
     /// Cache hits
-    pub cache_hits: u64,
+    pub cache_hits : u64,
     /// Cache misses
-    pub cache_misses: u64,
+    pub cache_misses : u64,
     /// Hit ratio (0.0 to 1.0)
-    pub hit_ratio: f64,
+    pub hit_ratio : f64,
     /// Current cached entries
-    pub current_entries: usize,
+    pub current_entries : usize,
     /// Total cached bytes
-    pub total_cached_bytes: usize,
+    pub total_cached_bytes : usize,
     /// Average TTL in seconds
-    pub average_ttl_seconds: f64,
+    pub average_ttl_seconds : f64,
     /// Cache efficiency score
-    pub efficiency_score: f64,
+    pub efficiency_score : f64,
   }
 
   /// Circuit breaker metrics
@@ -149,17 +149,17 @@ mod private
   pub struct CircuitBreakerMetrics
   {
     /// Current circuit breaker state
-    pub state: String,
+    pub state : String,
     /// Total requests through circuit breaker
-    pub total_requests: u64,
+    pub total_requests : u64,
     /// Total failures detected
-    pub total_failures: u64,
+    pub total_failures : u64,
     /// Number of times circuit breaker tripped
-    pub trip_count: u64,
+    pub trip_count : u64,
     /// Failure rate (0.0 to 1.0)
-    pub failure_rate: f64,
+    pub failure_rate : f64,
     /// Time in current state (seconds)
-    pub time_in_state_seconds: f64,
+    pub time_in_state_seconds : f64,
   }
 
   /// Request timing metrics
@@ -167,17 +167,17 @@ mod private
   pub struct TimingMetrics
   {
     /// Average request duration in milliseconds
-    pub average_duration_ms: f64,
+    pub average_duration_ms : f64,
     /// Minimum request duration in milliseconds
-    pub min_duration_ms: f64,
+    pub min_duration_ms : f64,
     /// Maximum request duration in milliseconds
-    pub max_duration_ms: f64,
+    pub max_duration_ms : f64,
     /// 95th percentile duration in milliseconds
-    pub p95_duration_ms: f64,
+    pub p95_duration_ms : f64,
     /// 99th percentile duration in milliseconds
-    pub p99_duration_ms: f64,
+    pub p99_duration_ms : f64,
     /// Total number of timed requests
-    pub total_requests: u64,
+    pub total_requests : u64,
   }
 
   /// Error tracking metrics
@@ -185,15 +185,15 @@ mod private
   pub struct ErrorMetrics
   {
     /// Total errors encountered
-    pub total_errors: u64,
+    pub total_errors : u64,
     /// Error breakdown by type
-    pub error_types: HashMap<  String, u64  >,
+    pub error_types : HashMap<  String, u64  >,
     /// Error rate (errors per minute)
-    pub error_rate_per_minute: f64,
+    pub error_rate_per_minute : f64,
     /// Most common error type
-    pub most_common_error: Option< String >,
+    pub most_common_error : Option< String >,
     /// Error trend (increasing, stable, decreasing)
-    pub trend: String,
+    pub trend : String,
   }
 
   /// Time-series data point for metrics
@@ -201,13 +201,13 @@ mod private
   pub struct MetricsDataPoint
   {
     /// Timestamp of the data point
-    pub timestamp: u64,
+    pub timestamp : u64,
     /// Metric name
-    pub metric_name: String,
+    pub metric_name : String,
     /// Metric value
-    pub value: f64,
+    pub value : f64,
     /// Additional tags/labels
-    pub tags: HashMap<  String, String  >,
+    pub tags : HashMap<  String, String  >,
   }
 
   /// Metrics aggregation statistics
@@ -215,15 +215,15 @@ mod private
   pub struct MetricsAggregation
   {
     /// Time period of aggregation
-    pub period_seconds: u64,
+    pub period_seconds : u64,
     /// Start timestamp
-    pub start_timestamp: u64,
+    pub start_timestamp : u64,
     /// End timestamp
-    pub end_timestamp: u64,
+    pub end_timestamp : u64,
     /// Aggregated metrics
-    pub aggregated_data: HashMap<  String, f64  >,
+    pub aggregated_data : HashMap<  String, f64  >,
     /// Data quality score
-    pub quality_score: f64,
+    pub quality_score : f64,
   }
 
   /// Comprehensive metrics analysis report
@@ -231,21 +231,21 @@ mod private
   pub struct MetricsAnalysisReport
   {
     /// Analysis timestamp
-    pub timestamp: u64,
+    pub timestamp : u64,
     /// Overall system health score (0.0 to 1.0)
-    pub health_score: f64,
+    pub health_score : f64,
     /// Performance grade (A, B, C, D, F)
-    pub performance_grade: String,
+    pub performance_grade : String,
     /// Key performance indicators
-    pub kpis: Vec< String >,
+    pub kpis : Vec< String >,
     /// Performance trends
-    pub trends: Vec< String >,
+    pub trends : Vec< String >,
     /// Identified issues
-    pub issues: Vec< String >,
+    pub issues : Vec< String >,
     /// Recommendations for improvement
-    pub recommendations: Vec< String >,
+    pub recommendations : Vec< String >,
     /// Risk assessment
-    pub risk_level: String,
+    pub risk_level : String,
   }
 
   /// Central metrics collector and analyzer
@@ -253,17 +253,17 @@ mod private
   pub struct MetricsCollector
   {
     /// Configuration
-    config: MetricsConfig,
+    config : MetricsConfig,
     /// Historical metrics data
-    metrics_history: Arc< RwLock< Vec< MetricsSnapshot > > >,
+    metrics_history : Arc< RwLock< Vec< MetricsSnapshot > > >,
     /// Request timing data
-    timing_data: Arc< RwLock< Vec< f64 > > >,
+    timing_data : Arc< RwLock< Vec< f64 > > >,
     /// Error tracking
-    error_counts: Arc< RwLock< HashMap<  String, u64  > > >,
+    error_counts : Arc< RwLock< HashMap<  String, u64  > > >,
     /// Collection start time
-    start_time: Instant,
+    start_time : Instant,
     /// Background collection task handle
-    collection_handle: Option< tokio::task::JoinHandle< () > >,
+    collection_handle : Option< tokio::task::JoinHandle< () > >,
   }
 
   impl Default for MetricsCollector
@@ -288,16 +288,16 @@ mod private
     /// Create a new metrics collector with custom configuration
     #[ inline ]
     #[ must_use ]
-    pub fn with_config( config: MetricsConfig ) -> Self
+    pub fn with_config( config : MetricsConfig ) -> Self
     {
       Self
       {
         config,
-        metrics_history: Arc::new( RwLock::new( Vec::new() ) ),
-        timing_data: Arc::new( RwLock::new( Vec::new() ) ),
-        error_counts: Arc::new( RwLock::new( HashMap::new() ) ),
-        start_time: Instant::now(),
-        collection_handle: None,
+        metrics_history : Arc::new( RwLock::new( Vec::new() ) ),
+        timing_data : Arc::new( RwLock::new( Vec::new() ) ),
+        error_counts : Arc::new( RwLock::new( HashMap::new() ) ),
+        start_time : Instant::now(),
+        collection_handle : None,
       }
     }
 
@@ -365,7 +365,7 @@ mod private
 
     /// Record a request timing
     #[ inline ]
-    pub async fn record_timing( &self, duration: Duration )
+    pub async fn record_timing( &self, duration : Duration )
     {
       if self.config.collect_timing_metrics
       {
@@ -376,7 +376,7 @@ mod private
 
     /// Record an error occurrence
     #[ inline ]
-    pub async fn record_error( &self, error_type: &str )
+    pub async fn record_error( &self, error_type : &str )
     {
       if self.config.collect_error_metrics
       {
@@ -389,13 +389,13 @@ mod private
     #[ inline ]
     pub async fn collect_snapshot(
       &self,
-      connection_metrics: Option< &ConnectionEfficiencyMetrics >,
-      pool_stats: Option< &Vec< PoolStatistics > >,
+      connection_metrics : Option< &ConnectionEfficiencyMetrics >,
+      pool_stats : Option< &Vec< PoolStatistics > >,
       #[ cfg( feature = "caching" ) ]
-      cache_stats: Option< &CacheStatistics >,
+      cache_stats : Option< &CacheStatistics >,
       #[ cfg( not( feature = "caching" ) ) ]
-      _cache_stats: Option< &() >,
-      _circuit_breaker_stats: Option< &() >, // Placeholder until circuit breaker provides stats
+      _cache_stats : Option< &() >,
+      _circuit_breaker_stats : Option< &() >, // Placeholder until circuit breaker provides stats
     ) -> MetricsSnapshot
     {
       let timestamp = SystemTime::now()
@@ -461,7 +461,7 @@ mod private
 
     /// Store metrics snapshot in history
     #[ inline ]
-    pub async fn store_snapshot( &self, snapshot: MetricsSnapshot )
+    pub async fn store_snapshot( &self, snapshot : MetricsSnapshot )
     {
       let mut history = self.metrics_history.write().await;
       history.push( snapshot );
@@ -496,13 +496,13 @@ mod private
         return MetricsAnalysisReport
         {
           timestamp,
-          health_score: 0.0,
-          performance_grade: "N/A".to_string(),
-          kpis: vec![ "No metrics data available".to_string() ],
-          trends: vec![],
-          issues: vec![ "Insufficient metrics data for analysis".to_string() ],
-          recommendations: vec![ "Enable metrics collection and allow time for data accumulation".to_string() ],
-          risk_level: "Unknown".to_string(),
+          health_score : 0.0,
+          performance_grade : "N/A".to_string(),
+          kpis : vec![ "No metrics data available".to_string() ],
+          trends : vec![],
+          issues : vec![ "Insufficient metrics data for analysis".to_string() ],
+          recommendations : vec![ "Enable metrics collection and allow time for data accumulation".to_string() ],
+          risk_level : "Unknown".to_string(),
         };
       }
 
@@ -517,7 +517,7 @@ mod private
       if let Some( ref conn_metrics ) = latest.connection_metrics
       {
         health_scores.push( conn_metrics.health_score );
-        kpis.push( format!( "Connection Efficiency: {:.1}%", conn_metrics.efficiency_score * 100.0 ) );
+        kpis.push( format!( "Connection Efficiency : {:.1}%", conn_metrics.efficiency_score * 100.0 ) );
 
         if conn_metrics.efficiency_score < 0.7
         {
@@ -530,7 +530,7 @@ mod private
       if let Some( ref cache_metrics ) = latest.cache_metrics
       {
         health_scores.push( cache_metrics.efficiency_score );
-        kpis.push( format!( "Cache Hit Ratio: {:.1}%", cache_metrics.hit_ratio * 100.0 ) );
+        kpis.push( format!( "Cache Hit Ratio : {:.1}%", cache_metrics.hit_ratio * 100.0 ) );
 
         if cache_metrics.hit_ratio < 0.5
         {
@@ -542,7 +542,7 @@ mod private
       // Analyze error metrics
       if let Some( ref error_metrics ) = latest.error_metrics
       {
-        kpis.push( format!( "Error Rate: {:.1}/min", error_metrics.error_rate_per_minute ) );
+        kpis.push( format!( "Error Rate : {:.1}/min", error_metrics.error_rate_per_minute ) );
 
         if error_metrics.error_rate_per_minute > 5.0
         {
@@ -593,12 +593,12 @@ mod private
       {
         timestamp,
         health_score,
-        performance_grade: performance_grade.to_string(),
+        performance_grade : performance_grade.to_string(),
         kpis,
         trends,
         issues,
         recommendations,
-        risk_level: risk_level.to_string(),
+        risk_level : risk_level.to_string(),
       }
     }
 
@@ -611,7 +611,7 @@ mod private
     pub async fn export_json( &self ) -> Result< String >
     {
       let history = self.get_history().await;
-      serde_json::to_string_pretty( &history )
+      serde_json ::to_string_pretty( &history )
         .map_err( | e | OpenAIError::Internal( format!( "Failed to export metrics to JSON: {e}" ) ).into() )
     }
 
@@ -662,7 +662,7 @@ mod private
 
     /// Update configuration
     #[ inline ]
-    pub fn update_config( &mut self, new_config: MetricsConfig )
+    pub fn update_config( &mut self, new_config : MetricsConfig )
     {
       self.config = new_config;
     }
@@ -670,8 +670,8 @@ mod private
     // Helper methods for building specific metric types
 
     fn build_connection_metrics(
-      conn_metrics: &ConnectionEfficiencyMetrics,
-      pool_stats: Option< &Vec< PoolStatistics > >
+      conn_metrics : &ConnectionEfficiencyMetrics,
+      pool_stats : Option< &Vec< PoolStatistics > >
     ) -> ConnectionMetrics
     {
       let active_connections = pool_stats
@@ -681,30 +681,30 @@ mod private
 
       ConnectionMetrics
       {
-        efficiency_score: conn_metrics.efficiency_score,
-        connection_reuse_ratio: conn_metrics.connection_reuse_ratio,
-        average_pool_utilization: conn_metrics.average_pool_utilization,
-        total_requests_served: conn_metrics.total_requests_served,
-        average_response_time_seconds: 0.0, // Note: Requires timing data collection infrastructure
+        efficiency_score : conn_metrics.efficiency_score,
+        connection_reuse_ratio : conn_metrics.connection_reuse_ratio,
+        average_pool_utilization : conn_metrics.average_pool_utilization,
+        total_requests_served : conn_metrics.total_requests_served,
+        average_response_time_seconds : 0.0, // Note : Requires timing data collection infrastructure
         active_connections,
         health_score,
       }
     }
 
     #[ cfg( feature = "caching" ) ]
-    fn build_cache_metrics( cache_stats: &CacheStatistics ) -> CacheMetrics
+    fn build_cache_metrics( cache_stats : &CacheStatistics ) -> CacheMetrics
     {
       let efficiency_score = if cache_stats.hit_ratio > 0.8 { 0.9 } else { cache_stats.hit_ratio };
 
       CacheMetrics
       {
-        total_requests: cache_stats.total_requests,
-        cache_hits: cache_stats.cache_hits,
-        cache_misses: cache_stats.cache_misses,
-        hit_ratio: cache_stats.hit_ratio,
-        current_entries: cache_stats.current_entries,
-        total_cached_bytes: cache_stats.total_cached_bytes,
-        average_ttl_seconds: cache_stats.average_ttl_seconds,
+        total_requests : cache_stats.total_requests,
+        cache_hits : cache_stats.cache_hits,
+        cache_misses : cache_stats.cache_misses,
+        hit_ratio : cache_stats.hit_ratio,
+        current_entries : cache_stats.current_entries,
+        total_cached_bytes : cache_stats.total_cached_bytes,
+        average_ttl_seconds : cache_stats.average_ttl_seconds,
         efficiency_score,
       }
     }
@@ -717,12 +717,12 @@ mod private
       {
         return TimingMetrics
         {
-          average_duration_ms: 0.0,
-          min_duration_ms: 0.0,
-          max_duration_ms: 0.0,
-          p95_duration_ms: 0.0,
-          p99_duration_ms: 0.0,
-          total_requests: 0,
+          average_duration_ms : 0.0,
+          min_duration_ms : 0.0,
+          max_duration_ms : 0.0,
+          p95_duration_ms : 0.0,
+          p99_duration_ms : 0.0,
+          total_requests : 0,
         };
       }
 
@@ -747,7 +747,7 @@ mod private
         max_duration_ms,
         p95_duration_ms,
         p99_duration_ms,
-        total_requests: sorted_data.len() as u64,
+        total_requests : sorted_data.len() as u64,
       }
     }
 
@@ -788,7 +788,7 @@ mod private
       ErrorMetrics
       {
         total_errors,
-        error_types: error_counts.clone(),
+        error_types : error_counts.clone(),
         error_rate_per_minute,
         most_common_error,
         trend,

@@ -38,33 +38,33 @@ mod private
   pub struct DynamicConfig
   {
     /// Request timeout duration
-    pub timeout: Duration,
+    pub timeout : Duration,
     /// Maximum retry attempts
-    pub retry_attempts: u32,
+    pub retry_attempts : u32,
     /// Base URL for API requests
-    pub base_url: String,
+    pub base_url : String,
     /// Whether to enable jitter in retry backoff
-    pub enable_jitter: bool,
+    pub enable_jitter : bool,
     /// Maximum delay between retries
-    pub max_retry_delay: Duration,
+    pub max_retry_delay : Duration,
     /// Base delay for retry backoff
-    pub base_retry_delay: Duration,
+    pub base_retry_delay : Duration,
     /// Backoff multiplier for retry delays
-    pub backoff_multiplier: f64,
+    pub backoff_multiplier : f64,
     /// Configuration source priority (higher = more important)
     #[ serde( skip_serializing_if = "Option::is_none" ) ]
-    pub source_priority: Option< u8 >,
+    pub source_priority : Option< u8 >,
     /// Configuration tags for categorization and filtering
     #[ serde( default ) ]
-    pub tags: HashMap<  String, String  >,
+    pub tags : HashMap<  String, String  >,
     /// Configuration validation cache key (for performance optimization)
     #[ serde( skip ) ]
-    pub validation_hash: Option< u64 >,
+    pub validation_hash : Option< u64 >,
   }
 
   impl Hash for DynamicConfig
   {
-    fn hash< H: Hasher >( &self, state: &mut H )
+    fn hash< H: Hasher >( &self, state : &mut H )
     {
       self.timeout.hash( state );
       self.retry_attempts.hash( state );
@@ -97,7 +97,7 @@ mod private
     /// Check if this configuration has meaningful changes compared to another
     #[ must_use ]
     #[ inline ]
-    pub fn has_changes( &self, other: &DynamicConfig ) -> bool
+    pub fn has_changes( &self, other : &DynamicConfig ) -> bool
     {
       self.compute_hash() != other.compute_hash()
     }
@@ -137,7 +137,7 @@ mod private
     /// Merge this configuration with another, using source priority
     #[ must_use ]
     #[ inline ]
-    pub fn merge_with( &self, other: &DynamicConfig ) -> DynamicConfig
+    pub fn merge_with( &self, other : &DynamicConfig ) -> DynamicConfig
     {
       let self_priority = self.source_priority.unwrap_or( 0 );
       let other_priority = other.source_priority.unwrap_or( 0 );
@@ -167,29 +167,29 @@ mod private
     }
 
     /// Load configuration from JSON file
-    pub async fn from_file< P: AsRef< Path > >( path: P ) -> Result< Self, crate::error::Error >
+    pub async fn from_file< P: AsRef< Path > >( path : P ) -> Result< Self, crate::error::Error >
     {
       let content = tokio::fs::read_to_string( path ).await
         .map_err( | e | crate::error::Error::ConfigurationError(
-          format!( "Failed to read configuration file: {}", e )
+          format!( "Failed to read configuration file : {}", e )
         ) )?;
 
-      let file_config: FileConfig = serde_json::from_str( &content )
+      let file_config : FileConfig = serde_json::from_str( &content )
         .map_err( | e | crate::error::Error::ConfigurationError(
-          format!( "Failed to parse configuration file: {}", e )
+          format!( "Failed to parse configuration file : {}", e )
         ) )?;
 
       let config = Self {
-        timeout: Duration::from_secs( file_config.timeout_seconds ),
-        retry_attempts: file_config.retry_attempts,
-        base_url: file_config.base_url,
-        enable_jitter: file_config.enable_jitter.unwrap_or( true ),
-        max_retry_delay: Duration::from_millis( file_config.max_retry_delay_ms.unwrap_or( 30000 ) ),
-        base_retry_delay: Duration::from_millis( file_config.base_retry_delay_ms.unwrap_or( 100 ) ),
-        backoff_multiplier: file_config.backoff_multiplier.unwrap_or( 2.0 ),
-        source_priority: Some( 75 ),
-        tags: HashMap::new(),
-        validation_hash: None,
+        timeout : Duration::from_secs( file_config.timeout_seconds ),
+        retry_attempts : file_config.retry_attempts,
+        base_url : file_config.base_url,
+        enable_jitter : file_config.enable_jitter.unwrap_or( true ),
+        max_retry_delay : Duration::from_millis( file_config.max_retry_delay_ms.unwrap_or( 30000 ) ),
+        base_retry_delay : Duration::from_millis( file_config.base_retry_delay_ms.unwrap_or( 100 ) ),
+        backoff_multiplier : file_config.backoff_multiplier.unwrap_or( 2.0 ),
+        source_priority : Some( 75 ),
+        tags : HashMap::new(),
+        validation_hash : None,
       };
 
       DynamicConfigBuilder::new().validate_config( &config )?;
@@ -202,16 +202,16 @@ mod private
     fn default() -> Self
     {
       Self {
-        timeout: Duration::from_secs( 30 ),
-        retry_attempts: 3,
-        base_url: "https://generativelanguage.googleapis.com".to_string(),
-        enable_jitter: true,
-        max_retry_delay: Duration::from_secs( 30 ),
-        base_retry_delay: Duration::from_millis( 100 ),
-        backoff_multiplier: 2.0,
-        source_priority: Some( 50 ),
-        tags: HashMap::new(),
-        validation_hash: None,
+        timeout : Duration::from_secs( 30 ),
+        retry_attempts : 3,
+        base_url : "https://generativelanguage.googleapis.com".to_string(),
+        enable_jitter : true,
+        max_retry_delay : Duration::from_secs( 30 ),
+        base_retry_delay : Duration::from_millis( 100 ),
+        backoff_multiplier : 2.0,
+        source_priority : Some( 50 ),
+        tags : HashMap::new(),
+        validation_hash : None,
       }
     }
   }
@@ -220,20 +220,20 @@ mod private
   #[ derive( Debug, Deserialize ) ]
   struct FileConfig
   {
-    timeout_seconds: u64,
-    retry_attempts: u32,
-    base_url: String,
-    enable_jitter: Option< bool >,
-    max_retry_delay_ms: Option< u64 >,
-    base_retry_delay_ms: Option< u64 >,
-    backoff_multiplier: Option< f64 >,
+    timeout_seconds : u64,
+    retry_attempts : u32,
+    base_url : String,
+    enable_jitter : Option< bool >,
+    max_retry_delay_ms : Option< u64 >,
+    base_retry_delay_ms : Option< u64 >,
+    backoff_multiplier : Option< f64 >,
   }
 
   /// Builder for DynamicConfig with validation
   #[ derive( Debug, Clone ) ]
   pub struct DynamicConfigBuilder
   {
-    config: DynamicConfig,
+    config : DynamicConfig,
   }
 
   impl DynamicConfigBuilder
@@ -242,68 +242,68 @@ mod private
     pub fn new() -> Self
     {
       Self {
-        config: DynamicConfig::default(),
+        config : DynamicConfig::default(),
       }
     }
 
     /// Set request timeout duration
-    pub fn timeout( mut self, timeout: Duration ) -> Self
+    pub fn timeout( mut self, timeout : Duration ) -> Self
     {
       self.config.timeout = timeout;
       self
     }
 
     /// Set maximum number of retry attempts
-    pub fn retry_attempts( mut self, attempts: u32 ) -> Self
+    pub fn retry_attempts( mut self, attempts : u32 ) -> Self
     {
       self.config.retry_attempts = attempts;
       self
     }
 
     /// Set base URL for API requests
-    pub fn base_url( mut self, url: String ) -> Self
+    pub fn base_url( mut self, url : String ) -> Self
     {
       self.config.base_url = url;
       self
     }
 
     /// Enable or disable jitter in retry backoff
-    pub fn enable_jitter( mut self, enable: bool ) -> Self
+    pub fn enable_jitter( mut self, enable : bool ) -> Self
     {
       self.config.enable_jitter = enable;
       self
     }
 
     /// Set maximum delay between retries
-    pub fn max_retry_delay( mut self, delay: Duration ) -> Self
+    pub fn max_retry_delay( mut self, delay : Duration ) -> Self
     {
       self.config.max_retry_delay = delay;
       self
     }
 
     /// Set base delay for retry backoff
-    pub fn base_retry_delay( mut self, delay: Duration ) -> Self
+    pub fn base_retry_delay( mut self, delay : Duration ) -> Self
     {
       self.config.base_retry_delay = delay;
       self
     }
 
     /// Set backoff multiplier for retry delays
-    pub fn backoff_multiplier( mut self, multiplier: f64 ) -> Self
+    pub fn backoff_multiplier( mut self, multiplier : f64 ) -> Self
     {
       self.config.backoff_multiplier = multiplier;
       self
     }
 
     /// Set configuration source priority (higher = more important, max 100)
-    pub fn source_priority( mut self, priority: u8 ) -> Self
+    pub fn source_priority( mut self, priority : u8 ) -> Self
     {
       self.config.source_priority = Some( priority );
       self
     }
 
     /// Add a configuration tag for categorization and filtering
-    pub fn tag( mut self, key: String, value: String ) -> Self
+    pub fn tag( mut self, key : String, value : String ) -> Self
     {
       self.config.tags.insert( key, value );
       self
@@ -316,7 +316,7 @@ mod private
       Ok( self.config )
     }
 
-    pub( crate ) fn validate_config( &self, config: &DynamicConfig ) -> Result< (), crate::error::Error >
+    pub( crate ) fn validate_config( &self, config : &DynamicConfig ) -> Result< (), crate::error::Error >
     {
       if config.timeout.is_zero()
       {
@@ -400,16 +400,16 @@ mod private
   #[ derive( Debug ) ]
   pub struct ConfigUpdate
   {
-    client: crate::client::Client,
-    new_config: DynamicConfig,
+    client : crate::client::Client,
+    new_config : DynamicConfig,
     #[ allow( dead_code ) ]
-    previous_config: DynamicConfig,
+    previous_config : DynamicConfig,
   }
 
   impl ConfigUpdate
   {
     /// Create a new configuration update operation
-    pub fn new( client: crate::client::Client, new_config: DynamicConfig ) -> Self
+    pub fn new( client : crate::client::Client, new_config : DynamicConfig ) -> Self
     {
       let previous_config = client.current_config();
       Self {
@@ -460,31 +460,31 @@ mod private
   #[ allow( missing_debug_implementations ) ] // Cannot derive Debug due to function pointers
   pub struct ConfigManager
   {
-    client: crate::client::Client,
-    history: Arc< RwLock< Vec< ConfigHistoryEntry > > >, // RwLock for better read concurrency
-    listeners: Arc< RwLock< Vec< Box< dyn Fn( ConfigChangeEvent ) + Send + Sync > > > >,
-    options: ConfigManagerOptions,
-    metrics: Arc< ConfigMetrics >,
-    last_cleanup: Arc< Mutex< Instant > >, // Track when cleanup was last performed
-    sync_context: Option< Arc< ConfigSyncContext > >, // Optional synchronization context for distributed systems
+    client : crate::client::Client,
+    history : Arc< RwLock< Vec< ConfigHistoryEntry > > >, // RwLock for better read concurrency
+    listeners : Arc< RwLock< Vec< Box< dyn Fn( ConfigChangeEvent ) + Send + Sync > > > >,
+    options : ConfigManagerOptions,
+    metrics : Arc< ConfigMetrics >,
+    last_cleanup : Arc< Mutex< Instant > >, // Track when cleanup was last performed
+    sync_context : Option< Arc< ConfigSyncContext > >, // Optional synchronization context for distributed systems
   }
 
   impl ConfigManager
   {
     /// Create a new configuration manager with default options
-    pub fn new( client: crate::client::Client ) -> Self
+    pub fn new( client : crate::client::Client ) -> Self
     {
       Self::with_options( client, ConfigManagerOptions::default() )
     }
 
     /// Create a new configuration manager with custom options
-    pub fn with_options( client: crate::client::Client, options: ConfigManagerOptions ) -> Self
+    pub fn with_options( client : crate::client::Client, options : ConfigManagerOptions ) -> Self
     {
       Self::with_sync_context( client, options, None )
     }
 
     /// Create a new configuration manager with synchronization context for distributed systems
-    pub fn with_sync_context( client: crate::client::Client, options: ConfigManagerOptions, sync_context: Option< Arc< ConfigSyncContext > > ) -> Self
+    pub fn with_sync_context( client : crate::client::Client, options : ConfigManagerOptions, sync_context : Option< Arc< ConfigSyncContext > > ) -> Self
     {
       let initial_config = client.current_config();
       let initial_entry = ConfigHistoryEntry::from_config(
@@ -498,11 +498,11 @@ mod private
 
       Self {
         client,
-        history: Arc::new( RwLock::new( vec![ initial_entry ] ) ),
-        listeners: Arc::new( RwLock::new( Vec::new() ) ),
+        history : Arc::new( RwLock::new( vec![ initial_entry ] ) ),
+        listeners : Arc::new( RwLock::new( Vec::new() ) ),
         options,
         metrics,
-        last_cleanup: Arc::new( Mutex::new( Instant::now() ) ),
+        last_cleanup : Arc::new( Mutex::new( Instant::now() ) ),
         sync_context,
       }
     }
@@ -514,13 +514,13 @@ mod private
     }
 
     /// Start a configuration update operation with optimized validation
-    pub fn update( &self, new_config: DynamicConfig ) -> ConfigUpdate
+    pub fn update( &self, new_config : DynamicConfig ) -> ConfigUpdate
     {
       ConfigUpdate::new( self.client.clone(), new_config )
     }
 
     /// Apply configuration update with metrics and history management
-    pub async fn apply_update( &self, mut config_update: ConfigUpdate ) -> Result< crate::client::Client, crate::error::Error >
+    pub async fn apply_update( &self, mut config_update : ConfigUpdate ) -> Result< crate::client::Client, crate::error::Error >
     {
       let start_time = Instant::now();
 
@@ -568,7 +568,7 @@ mod private
     }
 
     /// Load configuration from file with optimized handling
-    pub async fn load_from_file< P: AsRef< Path > >( &self, path: P ) -> Result< crate::client::Client, crate::error::Error >
+    pub async fn load_from_file< P: AsRef< Path > >( &self, path : P ) -> Result< crate::client::Client, crate::error::Error >
     {
       let config = DynamicConfig::from_file( path ).await?;
       let config_update = self.update( config );
@@ -595,7 +595,7 @@ mod private
     }
 
     /// Analyze the impact of rolling back to a specific version
-    pub fn analyze_version_rollback( &self, version_id: &str ) -> Result< RollbackAnalysis, crate::error::Error >
+    pub fn analyze_version_rollback( &self, version_id : &str ) -> Result< RollbackAnalysis, crate::error::Error >
     {
       let ( current_config, target_config ) = {
         let history = self.history.read().unwrap();
@@ -612,7 +612,7 @@ mod private
     }
 
     /// Rollback to the previous configuration with safety analysis
-    pub async fn rollback_with_analysis( &self, force: bool ) -> Result< crate::client::Client, crate::error::Error >
+    pub async fn rollback_with_analysis( &self, force : bool ) -> Result< crate::client::Client, crate::error::Error >
     {
       let analysis = self.analyze_previous_rollback()?;
 
@@ -620,7 +620,7 @@ mod private
       if !force && !analysis.is_safe
       {
         return Err( crate::error::Error::ConfigurationError(
-          format!( "Rollback not safe: {}", analysis.warnings.join( ", " ) )
+          format!( "Rollback not safe : {}", analysis.warnings.join( ", " ) )
         ) );
       }
 
@@ -637,7 +637,7 @@ mod private
     }
 
     /// Rollback to a specific configuration version with safety analysis
-    pub async fn rollback_to_version_with_analysis( &self, version_id: String, force: bool ) -> Result< crate::client::Client, crate::error::Error >
+    pub async fn rollback_to_version_with_analysis( &self, version_id : String, force : bool ) -> Result< crate::client::Client, crate::error::Error >
     {
       let analysis = self.analyze_version_rollback( &version_id )?;
 
@@ -645,7 +645,7 @@ mod private
       if !force && !analysis.is_safe
       {
         return Err( crate::error::Error::ConfigurationError(
-          format!( "Rollback to version '{}' not safe: {}", version_id, analysis.warnings.join( ", " ) )
+          format!( "Rollback to version '{}' not safe : {}", version_id, analysis.warnings.join( ", " ) )
         ) );
       }
 
@@ -655,7 +655,7 @@ mod private
     }
 
     /// Rollback to a specific configuration version with metrics (legacy method)
-    pub async fn rollback_to_version( &self, version_id: String ) -> Result< crate::client::Client, crate::error::Error >
+    pub async fn rollback_to_version( &self, version_id : String ) -> Result< crate::client::Client, crate::error::Error >
     {
       // Use the new analysis-based rollback with force=true for backward compatibility
       self.rollback_to_version_with_analysis( version_id, true ).await
@@ -729,7 +729,7 @@ mod private
     }
 
     /// Export metrics in Prometheus format for monitoring integration
-    pub fn export_prometheus_metrics( &self, instance_name: &str ) -> String
+    pub fn export_prometheus_metrics( &self, instance_name : &str ) -> String
     {
       self.metrics.to_prometheus_format( instance_name )
     }
@@ -753,7 +753,7 @@ mod private
     }
 
     /// Get cached configuration by key (if synchronization context is available)
-    pub async fn get_cached_config( &self, key: &str ) -> Option< DynamicConfig >
+    pub async fn get_cached_config( &self, key : &str ) -> Option< DynamicConfig >
     {
       if let Some( sync_context ) = &self.sync_context
       {
@@ -764,7 +764,7 @@ mod private
     }
 
     /// Cache a configuration with key (if synchronization context is available)
-    pub async fn cache_config( &self, key: String, config: DynamicConfig )
+    pub async fn cache_config( &self, key : String, config : DynamicConfig )
     {
       if let Some( sync_context ) = &self.sync_context
       {
@@ -790,7 +790,7 @@ mod private
     }
 
     /// Update synchronization status (if synchronization context is available)
-    pub async fn update_sync_status( &self, status: SyncStatus )
+    pub async fn update_sync_status( &self, status : SyncStatus )
     {
       if let Some( sync_context ) = &self.sync_context
       {
@@ -799,7 +799,7 @@ mod private
     }
 
     /// Merge configurations using registered strategies (if synchronization context is available)
-    pub fn merge_configs( &self, base: &DynamicConfig, overlay: &DynamicConfig, source: &str ) -> DynamicConfig
+    pub fn merge_configs( &self, base : &DynamicConfig, overlay : &DynamicConfig, source : &str ) -> DynamicConfig
     {
       if let Some( sync_context ) = &self.sync_context
       {
@@ -833,19 +833,19 @@ mod private
     }
 
     /// Register a listener for configuration changes with optimized access
-    pub fn on_change< F >( &self, listener: F ) -> ConfigChangeListener
+    pub fn on_change< F >( &self, listener : F ) -> ConfigChangeListener
     where
       F: Fn( ConfigChangeEvent ) + Send + Sync + 'static,
     {
       let mut listeners = self.listeners.write().unwrap(); // Use write lock only when needed
       listeners.push( Box::new( listener ) );
       ConfigChangeListener {
-        _handle: Arc::new( () ) // Placeholder for listener handle
+        _handle : Arc::new( () ) // Placeholder for listener handle
       }
     }
 
     /// Helper method to apply rollback operations with metrics
-    async fn apply_rollback( &self, config_update: ConfigUpdate, change_type: ConfigChangeType ) -> Result< crate::client::Client, crate::error::Error >
+    async fn apply_rollback( &self, config_update : ConfigUpdate, change_type : ConfigChangeType ) -> Result< crate::client::Client, crate::error::Error >
     {
       let start_time = Instant::now();
 
@@ -875,7 +875,7 @@ mod private
     }
 
     /// Add configuration to history with bounds management
-    fn add_to_history( &self, config: DynamicConfig, change_type: ConfigChangeType ) -> Result< (), crate::error::Error >
+    fn add_to_history( &self, config : DynamicConfig, change_type : ConfigChangeType ) -> Result< (), crate::error::Error >
     {
       let mut history = self.history.write().unwrap();
 
@@ -909,13 +909,13 @@ mod private
     }
 
     /// Send change notification to all listeners
-    async fn send_change_notification( &self, new_config: DynamicConfig, change_type: ConfigChangeType )
+    async fn send_change_notification( &self, new_config : DynamicConfig, change_type : ConfigChangeType )
     {
       let event = ConfigChangeEvent {
-        version_id: format!( "v{}", self.history.read().unwrap().len() ),
+        version_id : format!( "v{}", self.history.read().unwrap().len() ),
         change_type,
-        timestamp: SystemTime::now(),
-        previous_config: self.history.read().unwrap().last().map( | e | e.config.clone() ),
+        timestamp : SystemTime::now(),
+        previous_config : self.history.read().unwrap().last().map( | e | e.config.clone() ),
         new_config,
       };
 

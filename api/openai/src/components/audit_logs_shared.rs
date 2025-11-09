@@ -532,7 +532,7 @@ mod private
     /// The ID of this log entry.
     pub id : String,
     /// The type of event that occurred.
-    pub r#type : String, // Enum: AuditLogEventType
+    pub r#type : String, // Enum : AuditLogEventType
     /// The Unix timestamp (in seconds) of the event.
     pub effective_at : i64,
     /// The project that the action was scoped to. Absent for actions not scoped to projects.
@@ -632,7 +632,7 @@ mod private
   }
 } // end mod private
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use 
   {

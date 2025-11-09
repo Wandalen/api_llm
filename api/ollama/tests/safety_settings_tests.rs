@@ -61,9 +61,9 @@ async fn test_content_filtering_request_structure()
       compliance_mode : api_ollama::ComplianceMode::Standard,
     },
     filter_categories : vec![
-      api_ollama::FilterCategory::Harassment,
-      api_ollama::FilterCategory::Violence,
-      api_ollama::FilterCategory::Adult,
+      api_ollama ::FilterCategory::Harassment,
+      api_ollama ::FilterCategory::Violence,
+      api_ollama ::FilterCategory::Adult,
     ],
     severity_threshold : api_ollama::SeverityLevel::Medium,
   };
@@ -83,14 +83,14 @@ async fn test_harm_classification_response()
   {
     is_safe : false,
     harm_categories : vec![
-      api_ollama::HarmCategory
+      api_ollama ::HarmCategory
       {
         category : api_ollama::HarmType::Violence,
         confidence : 0.85,
         severity : api_ollama::SeverityLevel::High,
         description : "Content contains violent imagery".to_string(),
       },
-      api_ollama::HarmCategory
+      api_ollama ::HarmCategory
       {
         category : api_ollama::HarmType::Harassment,
         confidence : 0.72,
@@ -123,7 +123,7 @@ async fn test_safety_policy_enforcement()
     auto_block_violations : true,
     require_human_review : vec![ api_ollama::HarmType::Violence, api_ollama::HarmType::Adult ],
     escalation_rules : vec![
-      api_ollama::EscalationRule
+      api_ollama ::EscalationRule
       {
         trigger : api_ollama::EscalationTrigger::HighRiskScore( 0.8 ),
         action : api_ollama::EscalationAction::AlertAdministrator,
@@ -252,9 +252,9 @@ async fn test_harm_classification_integration()
   {
     content : "This is educational content about history".to_string(),
     classification_categories : vec![
-      api_ollama::HarmType::Violence,
-      api_ollama::HarmType::Harassment,
-      api_ollama::HarmType::Adult,
+      api_ollama ::HarmType::Violence,
+      api_ollama ::HarmType::Harassment,
+      api_ollama ::HarmType::Adult,
     ],
     confidence_threshold : 0.7,
     include_explanations : true,

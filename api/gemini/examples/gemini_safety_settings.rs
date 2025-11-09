@@ -67,7 +67,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     {
       if let Some( text ) = &part.text
       {
-        println!( "Response: {text}" );
+        println!( "Response : {text}" );
       }
     }
 
@@ -77,7 +77,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
       println!( "\nSafety Ratings:" );
       for rating in safety_ratings
       {
-        println!( "  - {}: {} (blocked: {})",
+        println!( "  - {}: {} (blocked : {})",
           rating.category,
           rating.probability,
           rating.blocked.unwrap_or( false )
@@ -154,7 +154,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
   {
     if let Some( block_reason ) = &prompt_feedback.block_reason
     {
-      println!( "Content was blocked! Reason: {block_reason}" );
+      println!( "Content was blocked! Reason : {block_reason}" );
 
       if let Some( safety_ratings ) = &prompt_feedback.safety_ratings
       {
@@ -173,7 +173,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     {
       if let Some( text ) = &part.text
       {
-        println!( "Response generated successfully: {}", &text[ ..text.len().min( 200 ) ] );
+        println!( "Response generated successfully : {}", &text[ ..text.len().min( 200 ) ] );
         println!( "..." );
       }
     }
@@ -249,7 +249,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     {
       if let Some( text ) = &part.text
       {
-        println!( "Educational response: {}", &text[ ..text.len().min( 300 ) ] );
+        println!( "Educational response : {}", &text[ ..text.len().min( 300 ) ] );
         println!( "..." );
       }
     }
@@ -278,7 +278,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
   println!( "\n=== Best Practices for Safety Settings ===" );
   println!( "1. Start with default settings and adjust based on your use case" );
   println!( "2. Use stricter settings for user-facing applications" );
-  println!( "3. Consider context: educational/medical content may need relaxed settings" );
+  println!( "3. Consider context : educational/medical content may need relaxed settings" );
   println!( "4. Always handle blocked content gracefully in your application" );
   println!( "5. Log safety ratings for monitoring and improvement" );
   println!( "6. Implement additional filtering layers for critical applications" );

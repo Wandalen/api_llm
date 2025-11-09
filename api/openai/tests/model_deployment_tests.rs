@@ -164,7 +164,7 @@ async fn test_serialization_roundtrip()
 {
   let status = DeploymentStatus::Active;
   let serialized = serde_json::to_string( &status ).unwrap();
-  let deserialized: DeploymentStatus = serde_json::from_str( &serialized ).unwrap();
+  let deserialized : DeploymentStatus = serde_json::from_str( &serialized ).unwrap();
   assert!( matches!( deserialized, DeploymentStatus::Active ) );
 }
 
@@ -173,7 +173,7 @@ async fn test_deployment_strategy_serialization()
 {
   let strategy = DeploymentStrategy::Rolling { max_surge : 2, max_unavailable : 1 };
   let serialized = serde_json::to_string( &strategy ).unwrap();
-  let deserialized: DeploymentStrategy = serde_json::from_str( &serialized ).unwrap();
+  let deserialized : DeploymentStrategy = serde_json::from_str( &serialized ).unwrap();
   assert!( matches!( deserialized, DeploymentStrategy::Rolling { .. } ) );
 }
 
@@ -189,7 +189,7 @@ async fn test_resource_requirements_serialization()
   };
 
   let serialized = serde_json::to_string( &resources ).unwrap();
-  let deserialized: ResourceRequirements = serde_json::from_str( &serialized ).unwrap();
+  let deserialized : ResourceRequirements = serde_json::from_str( &serialized ).unwrap();
 
   assert_eq!( deserialized.cpu, 4.0 );
   assert_eq!( deserialized.memory_mb, 8192 );
@@ -211,7 +211,7 @@ async fn test_auto_scaling_config_serialization()
   };
 
   let serialized = serde_json::to_string( &config ).unwrap();
-  let deserialized: AutoScalingConfig = serde_json::from_str( &serialized ).unwrap();
+  let deserialized : AutoScalingConfig = serde_json::from_str( &serialized ).unwrap();
 
   assert_eq!( deserialized.min_replicas, 2 );
   assert_eq!( deserialized.max_replicas, 10 );

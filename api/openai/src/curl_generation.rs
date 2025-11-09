@@ -27,7 +27,7 @@ mod private
     {
       Self
       {
-        supported_methods: vec![
+        supported_methods : vec![
           "GET".to_string(),
           "POST".to_string(),
           "PUT".to_string(),
@@ -72,10 +72,10 @@ mod private
     {
       Self
       {
-        method: "GET".to_string(),
-        url: String::new(),
-        headers: Vec::new(),
-        body: None,
+        method : "GET".to_string(),
+        url : String::new(),
+        headers : Vec::new(),
+        body : None,
       }
     }
 
@@ -122,10 +122,10 @@ mod private
     {
       CurlRequest
       {
-        method: self.method,
-        url: self.url,
-        headers: self.headers,
-        body: self.body,
+        method : self.method,
+        url : self.url,
+        headers : self.headers,
+        body : self.body,
       }
     }
   }
@@ -275,9 +275,9 @@ mod private
     {
       Self
       {
-        formatting: CurlFormattingOptions::default(),
-        connection: CurlConnectionOptions::default(),
-        timeout: None,
+        formatting : CurlFormattingOptions::default(),
+        connection : CurlConnectionOptions::default(),
+        timeout : None,
       }
     }
   }
@@ -289,9 +289,9 @@ mod private
     {
       Self
       {
-        pretty_print: false,
-        include_verbose: false,
-        include_silent: false,
+        pretty_print : false,
+        include_verbose : false,
+        include_silent : false,
       }
     }
   }
@@ -303,7 +303,7 @@ mod private
     {
       Self
       {
-        include_insecure: false,
+        include_insecure : false,
       }
     }
   }
@@ -387,10 +387,10 @@ mod private
   {
     CurlRequest
     {
-      method: method.to_string(),
-      url: url.to_string(),
-      headers: headers.to_vec(),
-      body: body.map( str::to_string ),
+      method : method.to_string(),
+      url : url.to_string(),
+      headers : headers.to_vec(),
+      body : body.map( str::to_string ),
     }
   }
 
@@ -402,8 +402,8 @@ mod private
   #[ inline ]
   pub fn serialize_request_to_json< T : Serialize >( request : &T ) -> Result< String >
   {
-    serde_json::to_string( request )
-      .map_err( |e| error_tools::Error::from( OpenAIError::Internal( format!( "Failed to serialize request: {e}" ) ) ) )
+    serde_json ::to_string( request )
+      .map_err( |e| error_tools::Error::from( OpenAIError::Internal( format!( "Failed to serialize request : {e}" ) ) ) )
   }
 
   impl Default for CurlGenerator
@@ -425,7 +425,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

@@ -10,9 +10,9 @@ mod private
 {
   use std::
   {
-    collections::{ HashMap, VecDeque },
-    sync::{ Arc, Mutex },
-    time::Instant,
+    collections ::{ HashMap, VecDeque },
+    sync ::{ Arc, Mutex },
+    time ::Instant,
   };
   use core::time::Duration;
   use serde::{ Deserialize, Serialize };
@@ -461,7 +461,7 @@ mod private
     #[ must_use ]
     pub fn create_state_watcher( initial_state : WebSocketState ) -> ( watch::Sender< WebSocketState >, watch::Receiver< WebSocketState > )
     {
-      watch::channel( initial_state )
+      watch ::channel( initial_state )
     }
 
     /// Validate WebSocket configuration
@@ -500,7 +500,7 @@ mod private
     {
       let ( tx, rx ) = mpsc::unbounded_channel();
 
-      tokio::spawn( async move
+      tokio ::spawn( async move
       {
         let mut ticker = tokio::time::interval( interval );
         loop
@@ -523,11 +523,11 @@ mod private
       let base_delay = Duration::from_millis( base_delay_ms );
       let max_delay = Duration::from_millis( max_delay_ms );
 
-      // Exponential backoff: base_delay * 2^attempt
+      // Exponential backoff : base_delay * 2^attempt
       let multiplier = 2_u64.saturating_pow( attempt );
       let calculated_delay = base_delay.saturating_mul( u32::try_from( multiplier ).unwrap_or( u32::MAX ) );
 
-      core::cmp::min( calculated_delay, max_delay )
+      core ::cmp::min( calculated_delay, max_delay )
     }
 
     /// Process message queue for a connection
@@ -738,7 +738,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use private::WebSocketState;
   exposed use private::WebSocketMessage;

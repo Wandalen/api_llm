@@ -119,7 +119,7 @@ mod private
     #[ inline ]
     pub fn init( &self ) -> Result< () >
     {
-      // Note: This is a basic initialization
+      // Note : This is a basic initialization
       // In production, you would use tracing_subscriber::registry()
       // with layers for different output formats
 
@@ -206,7 +206,7 @@ mod private
     {
       #[ cfg( feature = "structured_logging" ) ]
       {
-        tracing::info!(
+        tracing ::info!(
           request_id = %ctx.request_id,
           operation = %ctx.operation,
           model = ?ctx.model,
@@ -226,7 +226,7 @@ mod private
     {
       #[ cfg( feature = "structured_logging" ) ]
       {
-        tracing::info!(
+        tracing ::info!(
           request_id = %ctx.request_id,
           operation = %ctx.operation,
           duration_ms = ctx.elapsed_ms(),
@@ -246,7 +246,7 @@ mod private
     {
       #[ cfg( feature = "structured_logging" ) ]
       {
-        tracing::error!(
+        tracing ::error!(
           request_id = %ctx.request_id,
           operation = %ctx.operation,
           duration_ms = ctx.elapsed_ms(),
@@ -267,7 +267,7 @@ mod private
     {
       #[ cfg( feature = "structured_logging" ) ]
       {
-        tracing::debug!(
+        tracing ::debug!(
           request_id = %ctx.request_id,
           chunk = chunk_num,
           "Received streaming chunk"
@@ -283,7 +283,7 @@ mod private
 }
 
 #[ cfg( feature = "structured_logging" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use private::LoggingConfig;
   exposed use private::LogFormat;

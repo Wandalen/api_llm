@@ -36,6 +36,7 @@ mod private
     #[ cfg( feature = "audio_processing" ) ]
     pub( crate ) audio_config : Option< crate::audio::AudioProcessingConfig >,
     #[ cfg( feature = "cached_content" ) ]
+    #[ allow( dead_code ) ]
     pub( crate ) content_cache_manager : Option< crate::cached_content::IntelligentCacheManager >,
   }
 
@@ -43,7 +44,7 @@ mod private
   {
     /// Create a new Ollama client with the given base URL and timeout
     ///
-    /// Note: Timeout must be explicitly configured. Use recommended timeouts:
+    /// Note : Timeout must be explicitly configured. Use recommended timeouts:
     /// - `OllamaClient::recommended_timeout_default()` for general use (120s)
     /// - `OllamaClient::recommended_timeout_fast()` for quick operations (30s)
     /// - `OllamaClient::recommended_timeout_slow()` for heavy models (300s)
@@ -155,14 +156,14 @@ mod private
       let response = request_builder
         .send()
         .await
-        .map_err( | e | format_err!( "Network error: {}", e ) )?;
+        .map_err( | e | format_err!( "Network error : {}", e ) )?;
 
       if !response.status().is_success()
       {
-        return Err( format_err!( "API error {}: Failed to list models: {}", response.status().as_u16(), response.status() ) );
+        return Err( format_err!( "API error {}: Failed to list models : {}", response.status().as_u16(), response.status() ) );
       }
 
-      let tags : TagsResponse = response.json().await.map_err( | e | format_err!( "Parse error: {}", e ) )?;
+      let tags : TagsResponse = response.json().await.map_err( | e | format_err!( "Parse error : {}", e ) )?;
       Ok( tags )
     }
 
@@ -228,7 +229,7 @@ mod private
               {
                 if response.status().is_success()
                 {
-                  let chat_response : ChatResponse = response.json().await.map_err( | e | format_err!( "Parse error: {}", e ) )?;
+                  let chat_response : ChatResponse = response.json().await.map_err( | e | format_err!( "Parse error : {}", e ) )?;
 
                   // Record success in circuit breaker
                   #[ cfg( feature = "circuit_breaker" ) ]
@@ -241,11 +242,11 @@ mod private
 
                   return Ok( chat_response );
                 }
-                last_error = format_err!( "API error {}: Chat request failed: {}", response.status().as_u16(), response.status() );
+                last_error = format_err!( "API error {}: Chat request failed : {}", response.status().as_u16(), response.status() );
               },
               Err( e ) =>
               {
-                last_error = format_err!( "Network error: {}", e );
+                last_error = format_err!( "Network error : {}", e );
 
                 // Mark current endpoint as unhealthy
                 if let Some( ref failover_manager ) = &self.failover_manager
@@ -270,7 +271,7 @@ mod private
           }
 
           // If we get here, all endpoints failed
-          return Err( format_err!( "All failover endpoints failed. Last error: {}", last_error ) );
+          return Err( format_err!( "All failover endpoints failed. Last error : {}", last_error ) );
         }
       }
 
@@ -297,7 +298,7 @@ mod private
         {
           if response.status().is_success()
           {
-            let chat_response : ChatResponse = response.json().await.map_err( | e | format_err!( "Parse error: {}", e ) )?;
+            let chat_response : ChatResponse = response.json().await.map_err( | e | format_err!( "Parse error : {}", e ) )?;
 
             // Record success in circuit breaker
             #[ cfg( feature = "circuit_breaker" ) ]
@@ -312,7 +313,7 @@ mod private
           }
           else
           {
-            let error = format_err!( "API error {}: Chat request failed: {}", response.status().as_u16(), response.status() );
+            let error = format_err!( "API error {}: Chat request failed : {}", response.status().as_u16(), response.status() );
 
             // Record failure in circuit breaker
             #[ cfg( feature = "circuit_breaker" ) ]
@@ -328,7 +329,7 @@ mod private
         },
         Err( e ) =>
         {
-          let error = format_err!( "Network error: {}", e );
+          let error = format_err!( "Network error : {}", e );
 
           // Record failure in circuit breaker
           #[ cfg( feature = "circuit_breaker" ) ]
@@ -398,7 +399,7 @@ mod private
         {
           if response.status().is_success()
           {
-            let generate_response : GenerateResponse = response.json().await.map_err( | e | format_err!( "Parse error: {}", e ) )?;
+            let generate_response : GenerateResponse = response.json().await.map_err( | e | format_err!( "Parse error : {}", e ) )?;
 
             // Record success in circuit breaker
             #[ cfg( feature = "circuit_breaker" ) ]
@@ -413,7 +414,7 @@ mod private
           }
           else
           {
-            let error = format_err!( "API error {}: Generate request failed: {}", response.status().as_u16(), response.status() );
+            let error = format_err!( "API error {}: Generate request failed : {}", response.status().as_u16(), response.status() );
 
             // Record failure in circuit breaker
             #[ cfg( feature = "circuit_breaker" ) ]
@@ -429,7 +430,7 @@ mod private
         },
         Err( e ) =>
         {
-          let error = format_err!( "Network error: {}", e );
+          let error = format_err!( "Network error : {}", e );
 
           // Record failure in circuit breaker
           #[ cfg( feature = "circuit_breaker" ) ]
@@ -469,14 +470,14 @@ mod private
       let response = request_builder
         .send()
         .await
-        .map_err( | e | format_err!( "Network error: {}", e ) )?;
+        .map_err( | e | format_err!( "Network error : {}", e ) )?;
 
       if !response.status().is_success()
       {
-        return Err( format_err!( "API error {}: Model info request failed: {}", response.status().as_u16(), response.status() ) );
+        return Err( format_err!( "API error {}: Model info request failed : {}", response.status().as_u16(), response.status() ) );
       }
 
-      let model_info : ModelInfo = response.json().await.map_err( | e | format_err!( "Parse error: {}", e ) )?;
+      let model_info : ModelInfo = response.json().await.map_err( | e | format_err!( "Parse error : {}", e ) )?;
       Ok( model_info )
     }
 
@@ -504,14 +505,14 @@ mod private
       let response = request_builder
         .send()
         .await
-        .map_err( | e | format_err!( "Network error: {}", e ) )?;
+        .map_err( | e | format_err!( "Network error : {}", e ) )?;
 
       if !response.status().is_success()
       {
-        return Err( format_err!( "API error {}: Embeddings request failed: {}", response.status().as_u16(), response.status() ) );
+        return Err( format_err!( "API error {}: Embeddings request failed : {}", response.status().as_u16(), response.status() ) );
       }
 
-      let embeddings_response : EmbeddingsResponse = response.json().await.map_err( | e | format_err!( "Parse error: {}", e ) )?;
+      let embeddings_response : EmbeddingsResponse = response.json().await.map_err( | e | format_err!( "Parse error : {}", e ) )?;
       Ok( embeddings_response )
     }
 
@@ -550,7 +551,7 @@ mod private
 }
 
 #[ cfg( feature = "enabled" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

@@ -26,11 +26,11 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
 
   println!( "=== Multimodal (Vision) Example ===" );
 
-  // Note: In a real application, you would load actual image files
+  // Note : In a real application, you would load actual image files
   // For this demonstration, we'll show how the API structure works
   println!( "\n1. Single Image Analysis" );
   
-  println!( "Note: This example demonstrates the API structure for image analysis." );
+  println!( "Note : This example demonstrates the API structure for image analysis." );
   println!( "To use with real images, replace the test data with actual image files:" );
   println!( "  let image_data = fs::read(\"path/to/your/image.png\")?;" );
   println!( "  let image_base64 = base64::engine::general_purpose::STANDARD.encode(&image_data);" );
@@ -117,7 +117,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     {
       if let Some( text ) = &part.text
       {
-        println!( "\nModel's analysis: {text}" );
+        println!( "\nModel's analysis : {text}" );
       }
     }
   }
@@ -237,7 +237,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     {
       if let Some( text ) = &part.text
       {
-        println!( "\nComparison result: {text}" );
+        println!( "\nComparison result : {text}" );
       }
     }
   }
@@ -321,7 +321,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     {
       if let Some( text ) = &part.text
       {
-        println!( "\nStructured analysis: {text}" );
+        println!( "\nStructured analysis : {text}" );
       }
     }
   }
@@ -334,10 +334,10 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
 
   println!( "\n=== Key Points About Multimodal Input ===" );
   println!( "1. Images must be base64 encoded with proper MIME type" );
-  println!( "2. Supported formats: JPEG, PNG, GIF, WebP" );
+  println!( "2. Supported formats : JPEG, PNG, GIF, WebP" );
   println!( "3. Maximum image size depends on the model (usually 20MB)" );
   println!( "4. Multiple images can be included in a single request" );
-  println!( "5. Order matters: arrange images and text logically" );
+  println!( "5. Order matters : arrange images and text logically" );
   println!( "6. For best results, use high-quality, clear images" );
   println!( "7. Consider image compression to reduce token usage" );
 

@@ -118,7 +118,7 @@ mod cost_quota_tests
   {
     let pricing = ModelPricing::for_model( "gemini-1.5-flash" );
     let cost = pricing.calculate_cost( 1_000_000, 500_000 );
-    // Expected: (1M/1M)*0.075 + (500k/1M)*0.30 = 0.075 + 0.15 = 0.225
+    // Expected : (1M/1M)*0.075 + (500k/1M)*0.30 = 0.075 + 0.15 = 0.225
     assert!( ( cost - 0.225 ).abs() < 0.0001 );
   }
 
@@ -127,7 +127,7 @@ mod cost_quota_tests
   {
     let pricing = ModelPricing::for_model( "gemini-1.5-pro" );
     let cost = pricing.calculate_cost( 1_000_000, 500_000 );
-    // Expected: (1M/1M)*1.25 + (500k/1M)*5.0 = 1.25 + 2.5 = 3.75
+    // Expected : (1M/1M)*1.25 + (500k/1M)*5.0 = 1.25 + 2.5 = 3.75
     assert!( ( cost - 3.75 ).abs() < 0.0001 );
   }
 

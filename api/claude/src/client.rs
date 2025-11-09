@@ -1,6 +1,6 @@
 //! Anthropic API client implementation
 //!
-//! ## 🏛️ Governing Principle: "Thin Client, Rich API"
+//! ## 🏛️ Governing Principle : "Thin Client, Rich API"
 //!
 //! The `Client` implementation strictly adheres to the "Thin Client, Rich API" principle:
 //!
@@ -23,7 +23,7 @@
 
 mod private {}
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   layer types;
   layer implementation;

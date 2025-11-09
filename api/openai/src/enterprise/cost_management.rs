@@ -11,15 +11,15 @@ use std::collections::HashMap;
 pub struct CostTracker
 {
   /// Current daily spend in USD
-  pub daily_spend: f64,
+  pub daily_spend : f64,
   /// Current monthly spend in USD
-  pub monthly_spend: f64,
+  pub monthly_spend : f64,
   /// Budget limits configuration
-  pub budget_limits: BudgetLimits,
+  pub budget_limits : BudgetLimits,
   /// Active cost alerts
-  pub cost_alerts: Vec< CostAlert >,
+  pub cost_alerts : Vec< CostAlert >,
   /// Detailed usage breakdown
-  pub usage_breakdown: UsageBreakdown,
+  pub usage_breakdown : UsageBreakdown,
 }
 
 /// Budget limits and alert thresholds
@@ -27,15 +27,15 @@ pub struct CostTracker
 pub struct BudgetLimits
 {
   /// Daily spending limit in USD
-  pub daily_limit: Option< f64 >,
+  pub daily_limit : Option< f64 >,
   /// Monthly spending limit in USD
-  pub monthly_limit: Option< f64 >,
+  pub monthly_limit : Option< f64 >,
   /// Alert threshold as percentage of limit (0.0-1.0)
-  pub alert_threshold: f64,
+  pub alert_threshold : f64,
   /// Hard limit enforcement (stop requests when exceeded)
-  pub enforce_hard_limit: bool,
+  pub enforce_hard_limit : bool,
   /// Cost optimization settings
-  pub optimization_settings: CostOptimizationSettings,
+  pub optimization_settings : CostOptimizationSettings,
 }
 
 /// Cost alert notification
@@ -43,17 +43,17 @@ pub struct BudgetLimits
 pub struct CostAlert
 {
   /// Alert type
-  pub alert_type: AlertType,
+  pub alert_type : AlertType,
   /// Alert severity level
-  pub severity: AlertSeverity,
+  pub severity : AlertSeverity,
   /// Alert message
-  pub message: String,
+  pub message : String,
   /// Timestamp when alert was triggered
-  pub timestamp: u64,
+  pub timestamp : u64,
   /// Current spend amount that triggered alert
-  pub current_spend: f64,
+  pub current_spend : f64,
   /// Limit that was exceeded
-  pub limit: f64,
+  pub limit : f64,
 }
 
 /// Types of cost alerts
@@ -87,13 +87,13 @@ pub enum AlertSeverity
 pub struct UsageBreakdown
 {
   /// Usage by time periods
-  pub time_usage: Vec< TimeUsage >,
+  pub time_usage : Vec< TimeUsage >,
   /// Usage by token types
-  pub token_usage: Vec< TokenUsage >,
+  pub token_usage : Vec< TokenUsage >,
   /// Usage by model types
-  pub model_usage: HashMap<  String, f64  >,
+  pub model_usage : HashMap<  String, f64  >,
   /// Usage by operation types
-  pub operation_usage: HashMap<  String, f64  >,
+  pub operation_usage : HashMap<  String, f64  >,
 }
 
 /// Time-based usage tracking
@@ -101,13 +101,13 @@ pub struct UsageBreakdown
 pub struct TimeUsage
 {
   /// Time period start (Unix timestamp)
-  pub start_time: u64,
+  pub start_time : u64,
   /// Time period end (Unix timestamp)
-  pub end_time: u64,
+  pub end_time : u64,
   /// Total requests in this period
-  pub request_count: u64,
+  pub request_count : u64,
   /// Total cost in this period
-  pub cost: f64,
+  pub cost : f64,
 }
 
 /// Token usage tracking by type
@@ -115,13 +115,13 @@ pub struct TimeUsage
 pub struct TokenUsage
 {
   /// Token type (input, output, etc.)
-  pub token_type: String,
+  pub token_type : String,
   /// Total tokens used
-  pub count: u64,
+  pub count : u64,
   /// Cost per token
-  pub cost_per_token: f64,
+  pub cost_per_token : f64,
   /// Total cost for this token type
-  pub total_cost: f64,
+  pub total_cost : f64,
 }
 
 /// Cost optimization settings
@@ -130,15 +130,15 @@ pub struct TokenUsage
 pub struct CostOptimizationSettings
 {
   /// Enable automatic cost optimization
-  pub enabled: bool,
+  pub enabled : bool,
   /// Prefer cheaper models when possible
-  pub prefer_cheaper_models: bool,
+  pub prefer_cheaper_models : bool,
   /// Maximum acceptable latency increase for cost savings (in milliseconds)
-  pub max_latency_increase_ms: u32,
+  pub max_latency_increase_ms : u32,
   /// Enable request batching for cost efficiency
-  pub enable_request_batching: bool,
+  pub enable_request_batching : bool,
   /// Enable response caching to reduce redundant requests
-  pub enable_response_caching: bool,
+  pub enable_response_caching : bool,
 }
 
 impl Default for CostOptimizationSettings
@@ -148,11 +148,11 @@ impl Default for CostOptimizationSettings
   {
     Self
     {
-      enabled: false,
-      prefer_cheaper_models: false,
-      max_latency_increase_ms: 1000,
-      enable_request_batching: true,
-      enable_response_caching: true,
+      enabled : false,
+      prefer_cheaper_models : false,
+      max_latency_increase_ms : 1000,
+      enable_request_batching : true,
+      enable_response_caching : true,
     }
   }
 }
@@ -164,11 +164,11 @@ impl Default for BudgetLimits
   {
     Self
     {
-      daily_limit: None,
-      monthly_limit: None,
-      alert_threshold: 0.8, // Alert at 80% of limit
-      enforce_hard_limit: false,
-      optimization_settings: CostOptimizationSettings::default(),
+      daily_limit : None,
+      monthly_limit : None,
+      alert_threshold : 0.8, // Alert at 80% of limit
+      enforce_hard_limit : false,
+      optimization_settings : CostOptimizationSettings::default(),
     }
   }
 }
@@ -180,10 +180,10 @@ impl Default for UsageBreakdown
   {
     Self
     {
-      time_usage: Vec::new(),
-      token_usage: Vec::new(),
-      model_usage: HashMap::new(),
-      operation_usage: HashMap::new(),
+      time_usage : Vec::new(),
+      token_usage : Vec::new(),
+      model_usage : HashMap::new(),
+      operation_usage : HashMap::new(),
     }
   }
 }
@@ -195,11 +195,11 @@ impl Default for CostTracker
   {
     Self
     {
-      daily_spend: 0.0,
-      monthly_spend: 0.0,
-      budget_limits: BudgetLimits::default(),
-      cost_alerts: Vec::new(),
-      usage_breakdown: UsageBreakdown::default(),
+      daily_spend : 0.0,
+      monthly_spend : 0.0,
+      budget_limits : BudgetLimits::default(),
+      cost_alerts : Vec::new(),
+      usage_breakdown : UsageBreakdown::default(),
     }
   }
 }
@@ -217,11 +217,11 @@ impl CostTracker
   /// Create cost tracker with custom budget limits
   #[ must_use ]
   #[ inline ]
-  pub fn with_limits( daily_limit: Option< f64 >, monthly_limit: Option< f64 > ) -> Self
+  pub fn with_limits( daily_limit : Option< f64 >, monthly_limit : Option< f64 > ) -> Self
   {
     Self
     {
-      budget_limits: BudgetLimits
+      budget_limits : BudgetLimits
       {
         daily_limit,
         monthly_limit,
@@ -237,7 +237,7 @@ impl CostTracker
   ///
   /// Panics if the system time is before the Unix epoch when creating alert timestamps.
   #[ inline ]
-  pub fn update_spending( &mut self, daily_delta: f64, monthly_delta: f64 ) -> Vec< CostAlert >
+  pub fn update_spending( &mut self, daily_delta : f64, monthly_delta : f64 ) -> Vec< CostAlert >
   {
     self.daily_spend += daily_delta;
     self.monthly_spend += monthly_delta;
@@ -253,30 +253,30 @@ impl CostTracker
       {
         new_alerts.push( CostAlert
         {
-          alert_type: AlertType::DailyLimitExceeded,
-          severity: AlertSeverity::Critical,
-          message: format!( "Daily spending limit exceeded: ${:.2}", self.daily_spend ),
-          timestamp: std::time::SystemTime::now()
+          alert_type : AlertType::DailyLimitExceeded,
+          severity : AlertSeverity::Critical,
+          message : format!( "Daily spending limit exceeded : ${:.2}", self.daily_spend ),
+          timestamp : std::time::SystemTime::now()
             .duration_since( std::time::UNIX_EPOCH )
             .unwrap()
             .as_secs(),
-          current_spend: self.daily_spend,
-          limit: daily_limit,
+          current_spend : self.daily_spend,
+          limit : daily_limit,
         } );
       }
       else if self.daily_spend >= threshold
       {
         new_alerts.push( CostAlert
         {
-          alert_type: AlertType::DailyLimitApproaching,
-          severity: AlertSeverity::Warning,
-          message: format!( "Daily spending approaching limit: ${:.2}", self.daily_spend ),
-          timestamp: std::time::SystemTime::now()
+          alert_type : AlertType::DailyLimitApproaching,
+          severity : AlertSeverity::Warning,
+          message : format!( "Daily spending approaching limit : ${:.2}", self.daily_spend ),
+          timestamp : std::time::SystemTime::now()
             .duration_since( std::time::UNIX_EPOCH )
             .unwrap()
             .as_secs(),
-          current_spend: self.daily_spend,
-          limit: daily_limit,
+          current_spend : self.daily_spend,
+          limit : daily_limit,
         } );
       }
     }
@@ -290,30 +290,30 @@ impl CostTracker
       {
         new_alerts.push( CostAlert
         {
-          alert_type: AlertType::MonthlyLimitExceeded,
-          severity: AlertSeverity::Critical,
-          message: format!( "Monthly spending limit exceeded: ${:.2}", self.monthly_spend ),
-          timestamp: std::time::SystemTime::now()
+          alert_type : AlertType::MonthlyLimitExceeded,
+          severity : AlertSeverity::Critical,
+          message : format!( "Monthly spending limit exceeded : ${:.2}", self.monthly_spend ),
+          timestamp : std::time::SystemTime::now()
             .duration_since( std::time::UNIX_EPOCH )
             .unwrap()
             .as_secs(),
-          current_spend: self.monthly_spend,
-          limit: monthly_limit,
+          current_spend : self.monthly_spend,
+          limit : monthly_limit,
         } );
       }
       else if self.monthly_spend >= threshold
       {
         new_alerts.push( CostAlert
         {
-          alert_type: AlertType::MonthlyLimitApproaching,
-          severity: AlertSeverity::Warning,
-          message: format!( "Monthly spending approaching limit: ${:.2}", self.monthly_spend ),
-          timestamp: std::time::SystemTime::now()
+          alert_type : AlertType::MonthlyLimitApproaching,
+          severity : AlertSeverity::Warning,
+          message : format!( "Monthly spending approaching limit : ${:.2}", self.monthly_spend ),
+          timestamp : std::time::SystemTime::now()
             .duration_since( std::time::UNIX_EPOCH )
             .unwrap()
             .as_secs(),
-          current_spend: self.monthly_spend,
-          limit: monthly_limit,
+          current_spend : self.monthly_spend,
+          limit : monthly_limit,
         } );
       }
     }
@@ -354,7 +354,7 @@ impl CostTracker
       return 1.0;
     }
 
-    let total_requests: u64 = self.usage_breakdown.time_usage.iter()
+    let total_requests : u64 = self.usage_breakdown.time_usage.iter()
       .map( | usage | usage.request_count )
       .sum();
 
@@ -442,10 +442,10 @@ mod tests
     tracker.daily_spend = 10.0;
     tracker.usage_breakdown.time_usage.push( TimeUsage
     {
-      start_time: 0,
-      end_time: 100,
-      request_count: 100,
-      cost: 10.0,
+      start_time : 0,
+      end_time : 100,
+      request_count : 100,
+      cost : 10.0,
     } );
 
     let efficiency = tracker.get_cost_efficiency_ratio();

@@ -38,11 +38,11 @@ mod private
       let response = request_builder
         .send()
         .await
-        .map_err( | e | format_err!( "Network error: {}", e ) )?;
+        .map_err( | e | format_err!( "Network error : {}", e ) )?;
 
       if !response.status().is_success()
       {
-        return Err( format_err!( "API error {}: Streaming chat request failed: {}", response.status().as_u16(), response.status() ) );
+        return Err( format_err!( "API error {}: Streaming chat request failed : {}", response.status().as_u16(), response.status() ) );
       }
 
       let byte_stream = response.bytes_stream();
@@ -55,18 +55,18 @@ mod private
             Ok( bytes ) =>
             {
               let chunk_str = core::str::from_utf8( bytes.as_ref() )
-                .map_err( | e | format_err!( "Stream error: UTF-8 decode error: {}", e ) )?;
+                .map_err( | e | format_err!( "Stream error : UTF-8 decode error : {}", e ) )?;
 
               let chunk = chunk_str.trim();
               if chunk.is_empty()
               {
-                return Err( format_err!( "Stream error: Empty chunk" ) );
+                return Err( format_err!( "Stream error : Empty chunk" ) );
               }
 
-              let response : ChatResponse = serde_json::from_str( chunk ).map_err( | e | format_err!( "Parse error: {}", e ) )?;
+              let response : ChatResponse = serde_json::from_str( chunk ).map_err( | e | format_err!( "Parse error : {}", e ) )?;
               Ok( response )
             },
-            Err( e ) => Err( format_err!( "Stream error: Stream chunk error: {}", e ) ),
+            Err( e ) => Err( format_err!( "Stream error : Stream chunk error : {}", e ) ),
           }
         })
         .filter_map( | result |
@@ -108,11 +108,11 @@ mod private
       let response = request_builder
         .send()
         .await
-        .map_err( | e | format_err!( "Network error: {}", e ) )?;
+        .map_err( | e | format_err!( "Network error : {}", e ) )?;
 
       if !response.status().is_success()
       {
-        return Err( format_err!( "API error {}: Streaming generate request failed: {}", response.status().as_u16(), response.status() ) );
+        return Err( format_err!( "API error {}: Streaming generate request failed : {}", response.status().as_u16(), response.status() ) );
       }
 
       let byte_stream = response.bytes_stream();
@@ -125,18 +125,18 @@ mod private
             Ok( bytes ) =>
             {
               let chunk_str = core::str::from_utf8( bytes.as_ref() )
-                .map_err( | e | format_err!( "Stream error: UTF-8 decode error: {}", e ) )?;
+                .map_err( | e | format_err!( "Stream error : UTF-8 decode error : {}", e ) )?;
 
               let chunk = chunk_str.trim();
               if chunk.is_empty()
               {
-                return Err( format_err!( "Stream error: Empty chunk" ) );
+                return Err( format_err!( "Stream error : Empty chunk" ) );
               }
 
-              let response : GenerateResponse = serde_json::from_str( chunk ).map_err( | e | format_err!( "Parse error: {}", e ) )?;
+              let response : GenerateResponse = serde_json::from_str( chunk ).map_err( | e | format_err!( "Parse error : {}", e ) )?;
               Ok( response )
             },
-            Err( e ) => Err( format_err!( "Stream error: Stream chunk error: {}", e ) ),
+            Err( e ) => Err( format_err!( "Stream error : Stream chunk error : {}", e ) ),
           }
         })
         .filter_map( | result |

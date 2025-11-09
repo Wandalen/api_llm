@@ -6,13 +6,13 @@
 use api_huggingface::
 {
   Client,
-  environment::HuggingFaceEnvironmentImpl,
-  components::
+  environment ::HuggingFaceEnvironmentImpl,
+  components ::
   {
-  input::InferenceParameters,
-  models::Models,
+  input ::InferenceParameters,
+  models ::Models,
   },
-  secret::Secret,
+  secret ::Secret,
 };
 use std::{ collections::HashMap, time::Instant };
 
@@ -288,20 +288,20 @@ impl ContentGenerationPlatform
   if let Some( ref audience ) = request.target_audience
   {
       use core::fmt::Write;
-      write!( &mut prompt, " Target audience: {audience}." ).expect( "[build_prompt] Failed to write target_audience to String prompt - String write! should never fail" );
+      write!( &mut prompt, " Target audience : {audience}." ).expect( "[build_prompt] Failed to write target_audience to String prompt - String write! should never fail" );
   }
 
   if let Some( ref context ) = request.context
   {
       use core::fmt::Write;
-      write!( &mut prompt, " Additional context: {context}" ).expect( "[build_prompt] Failed to write context to String prompt - String write! should never fail" );
+      write!( &mut prompt, " Additional context : {context}" ).expect( "[build_prompt] Failed to write context to String prompt - String write! should never fail" );
   }
 
   // Use template if provided
   if let Some( ref template ) = request.template
   {
       use core::fmt::Write;
-      write!( &mut prompt, " Follow this structure: {}", template.template ).expect( "[build_prompt] Failed to write template structure to String prompt - String write! should never fail" );
+      write!( &mut prompt, " Follow this structure : {}", template.template ).expect( "[build_prompt] Failed to write template structure to String prompt - String write! should never fail" );
   }
 
   prompt.push_str( " Generate only the content, without any meta-commentary." );
@@ -549,7 +549,7 @@ mod tests
       {
   name : "marketing_email".to_string(),
   content_type : ContentType::Email,
-  template : "Subject: {subject}\n\nDear {name},\n\n{opening}\n\n{value_proposition}\n\n{call_to_action}\n\nBest regards,\n{sender}".to_string(),
+  template : "Subject : {subject}\n\nDear {name},\n\n{opening}\n\n{value_proposition}\n\n{call_to_action}\n\nBest regards,\n{sender}".to_string(),
   variables : vec![ "subject".to_string(), "name".to_string(), "opening".to_string(), "value_proposition".to_string(), "call_to_action".to_string(), "sender".to_string() ],
   default_tone : ContentTone::Professional,
       },
@@ -619,7 +619,7 @@ mod tests
   {
       name : "test_template".to_string(),
       content_type : ContentType::BlogPost,
-      template : "Title: {title}\nContent: {content}".to_string(),
+      template : "Title : {title}\nContent : {content}".to_string(),
       variables : vec![ "title".to_string(), "content".to_string() ],
       default_tone : ContentTone::Professional,
   };
@@ -792,7 +792,7 @@ mod tests
   assert!( cleaned.contains( "Technology is advancing rapidly" ) );
 
   // Test removal of meta-commentary
-  let meta_text = "I'll write a blog post for you.\nLet me start with the introduction.\nTechnology is important.\nNote: This is just an example.";
+  let meta_text = "I'll write a blog post for you.\nLet me start with the introduction.\nTechnology is important.\nNote : This is just an example.";
   let cleaned_meta = ContentGenerationPlatform::clean_generated_content( meta_text, &request );
   assert!( !cleaned_meta.contains( "I'll write" ) );
   assert!( !cleaned_meta.contains( "Let me" ) );

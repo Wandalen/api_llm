@@ -10,15 +10,15 @@ use std::time::{ Duration, SystemTime };
 pub struct DeploymentHealthCheckConfig
 {
   /// Health check endpoint
-  pub endpoint: String,
+  pub endpoint : String,
   /// Check interval
-  pub interval: Duration,
+  pub interval : Duration,
   /// Request timeout
-  pub timeout: Duration,
+  pub timeout : Duration,
   /// Number of consecutive failures before marking unhealthy
-  pub failure_threshold: usize,
+  pub failure_threshold : usize,
   /// Number of consecutive successes before marking healthy
-  pub success_threshold: usize,
+  pub success_threshold : usize,
 }
 
 impl Default for DeploymentHealthCheckConfig
@@ -26,11 +26,11 @@ impl Default for DeploymentHealthCheckConfig
   fn default() -> Self
   {
     Self {
-      endpoint: "/health".to_string(),
-      interval: Duration::from_secs( 30 ),
-      timeout: Duration::from_secs( 5 ),
-      failure_threshold: 3,
-      success_threshold: 1,
+      endpoint : "/health".to_string(),
+      interval : Duration::from_secs( 30 ),
+      timeout : Duration::from_secs( 5 ),
+      failure_threshold : 3,
+      success_threshold : 1,
     }
   }
 }
@@ -39,7 +39,7 @@ impl Default for DeploymentHealthCheckConfig
 #[ derive( Debug, Clone ) ]
 pub struct DeploymentHealthCheckConfigBuilder
 {
-  config: DeploymentHealthCheckConfig,
+  config : DeploymentHealthCheckConfig,
 }
 
 impl DeploymentHealthCheckConfigBuilder
@@ -48,40 +48,40 @@ impl DeploymentHealthCheckConfigBuilder
   pub fn new() -> Self
   {
     Self {
-      config: DeploymentHealthCheckConfig::default(),
+      config : DeploymentHealthCheckConfig::default(),
     }
   }
 
   /// Set health check endpoint
-  pub fn endpoint( mut self, endpoint: &str ) -> Self
+  pub fn endpoint( mut self, endpoint : &str ) -> Self
   {
     self.config.endpoint = endpoint.to_string();
     self
   }
 
   /// Set check interval
-  pub fn interval( mut self, interval: Duration ) -> Self
+  pub fn interval( mut self, interval : Duration ) -> Self
   {
     self.config.interval = interval;
     self
   }
 
   /// Set request timeout
-  pub fn timeout( mut self, timeout: Duration ) -> Self
+  pub fn timeout( mut self, timeout : Duration ) -> Self
   {
     self.config.timeout = timeout;
     self
   }
 
   /// Set failure threshold
-  pub fn failure_threshold( mut self, threshold: usize ) -> Self
+  pub fn failure_threshold( mut self, threshold : usize ) -> Self
   {
     self.config.failure_threshold = threshold;
     self
   }
 
   /// Set success threshold
-  pub fn success_threshold( mut self, threshold: usize ) -> Self
+  pub fn success_threshold( mut self, threshold : usize ) -> Self
   {
     self.config.success_threshold = threshold;
     self
@@ -115,17 +115,17 @@ impl DeploymentHealthCheckConfig
 pub struct MonitoringConfig
 {
   /// Whether to enable metrics collection
-  pub enable_metrics: bool,
+  pub enable_metrics : bool,
   /// Metrics collection interval
-  pub metrics_interval: Duration,
+  pub metrics_interval : Duration,
   /// Whether to enable logging
-  pub enable_logging: bool,
+  pub enable_logging : bool,
   /// Log level
-  pub log_level: String,
+  pub log_level : String,
   /// Whether to alert on errors
-  pub alert_on_errors: bool,
+  pub alert_on_errors : bool,
   /// Custom metric labels
-  pub metric_labels: HashMap<  String, String  >,
+  pub metric_labels : HashMap<  String, String  >,
 }
 
 impl Default for MonitoringConfig
@@ -133,12 +133,12 @@ impl Default for MonitoringConfig
   fn default() -> Self
   {
     Self {
-      enable_metrics: true,
-      metrics_interval: Duration::from_secs( 60 ),
-      enable_logging: true,
-      log_level: "INFO".to_string(),
-      alert_on_errors: true,
-      metric_labels: HashMap::new(),
+      enable_metrics : true,
+      metrics_interval : Duration::from_secs( 60 ),
+      enable_logging : true,
+      log_level : "INFO".to_string(),
+      alert_on_errors : true,
+      metric_labels : HashMap::new(),
     }
   }
 }
@@ -147,7 +147,7 @@ impl Default for MonitoringConfig
 #[ derive( Debug, Clone ) ]
 pub struct MonitoringConfigBuilder
 {
-  config: MonitoringConfig,
+  config : MonitoringConfig,
 }
 
 impl MonitoringConfigBuilder
@@ -156,47 +156,47 @@ impl MonitoringConfigBuilder
   pub fn new() -> Self
   {
     Self {
-      config: MonitoringConfig::default(),
+      config : MonitoringConfig::default(),
     }
   }
 
   /// Enable or disable metrics
-  pub fn enable_metrics( mut self, enable: bool ) -> Self
+  pub fn enable_metrics( mut self, enable : bool ) -> Self
   {
     self.config.enable_metrics = enable;
     self
   }
 
   /// Set metrics interval
-  pub fn metrics_interval( mut self, interval: Duration ) -> Self
+  pub fn metrics_interval( mut self, interval : Duration ) -> Self
   {
     self.config.metrics_interval = interval;
     self
   }
 
   /// Enable or disable logging
-  pub fn enable_logging( mut self, enable: bool ) -> Self
+  pub fn enable_logging( mut self, enable : bool ) -> Self
   {
     self.config.enable_logging = enable;
     self
   }
 
   /// Set log level
-  pub fn log_level( mut self, level: String ) -> Self
+  pub fn log_level( mut self, level : String ) -> Self
   {
     self.config.log_level = level;
     self
   }
 
   /// Enable or disable error alerting
-  pub fn alert_on_errors( mut self, alert: bool ) -> Self
+  pub fn alert_on_errors( mut self, alert : bool ) -> Self
   {
     self.config.alert_on_errors = alert;
     self
   }
 
   /// Add metric labels
-  pub fn metric_labels( mut self, labels: HashMap<  String, String  > ) -> Self
+  pub fn metric_labels( mut self, labels : HashMap<  String, String  > ) -> Self
   {
     self.config.metric_labels = labels;
     self
@@ -223,27 +223,27 @@ impl MonitoringConfig
 pub struct DeploymentMetrics
 {
   /// Number of active instances
-  pub instance_count: AtomicUsize,
+  pub instance_count : AtomicUsize,
   /// Current CPU utilization percentage (scaled by 100 for precision)
-  cpu_utilization_scaled: AtomicU64,
+  cpu_utilization_scaled : AtomicU64,
   /// Current memory utilization percentage (scaled by 100 for precision)
-  memory_utilization_scaled: AtomicU64,
+  memory_utilization_scaled : AtomicU64,
   /// Requests per second (scaled by 100 for precision)
-  request_rate_scaled: AtomicU64,
+  request_rate_scaled : AtomicU64,
   /// Error rate percentage (scaled by 100 for precision)
-  error_rate_scaled: AtomicU64,
+  error_rate_scaled : AtomicU64,
   /// Average response time in microseconds
-  pub response_time_us: AtomicU64,
+  pub response_time_us : AtomicU64,
   /// Uptime percentage (scaled by 100 for precision)
-  uptime_percentage_scaled: AtomicU64,
+  uptime_percentage_scaled : AtomicU64,
   /// Total requests processed
-  pub total_requests: AtomicU64,
+  pub total_requests : AtomicU64,
   /// Total errors encountered
-  pub total_errors: AtomicU64,
+  pub total_errors : AtomicU64,
   /// Last updated timestamp (microseconds since epoch)
-  pub last_updated_us: AtomicU64,
+  pub last_updated_us : AtomicU64,
   /// Deployment start time for uptime calculation
-  deployment_start_us: AtomicU64,
+  deployment_start_us : AtomicU64,
 }
 
 impl DeploymentMetrics
@@ -257,17 +257,17 @@ impl DeploymentMetrics
       .as_micros() as u64;
 
     Self {
-      instance_count: AtomicUsize::new( 0 ),
-      cpu_utilization_scaled: AtomicU64::new( 0 ),
-      memory_utilization_scaled: AtomicU64::new( 0 ),
-      request_rate_scaled: AtomicU64::new( 0 ),
-      error_rate_scaled: AtomicU64::new( 0 ),
-      response_time_us: AtomicU64::new( 0 ),
-      uptime_percentage_scaled: AtomicU64::new( 10000 ), // 100% * 100
-      total_requests: AtomicU64::new( 0 ),
-      total_errors: AtomicU64::new( 0 ),
-      last_updated_us: AtomicU64::new( now_us ),
-      deployment_start_us: AtomicU64::new( now_us ),
+      instance_count : AtomicUsize::new( 0 ),
+      cpu_utilization_scaled : AtomicU64::new( 0 ),
+      memory_utilization_scaled : AtomicU64::new( 0 ),
+      request_rate_scaled : AtomicU64::new( 0 ),
+      error_rate_scaled : AtomicU64::new( 0 ),
+      response_time_us : AtomicU64::new( 0 ),
+      uptime_percentage_scaled : AtomicU64::new( 10000 ), // 100% * 100
+      total_requests : AtomicU64::new( 0 ),
+      total_errors : AtomicU64::new( 0 ),
+      last_updated_us : AtomicU64::new( now_us ),
+      deployment_start_us : AtomicU64::new( now_us ),
     }
   }
 
@@ -278,7 +278,7 @@ impl DeploymentMetrics
   }
 
   /// Set CPU utilization
-  pub fn set_cpu_utilization( &self, value: f64 )
+  pub fn set_cpu_utilization( &self, value : f64 )
   {
     let scaled = ( value * 100.0 ).round() as u64;
     self.cpu_utilization_scaled.store( scaled, Ordering::Relaxed );
@@ -292,7 +292,7 @@ impl DeploymentMetrics
   }
 
   /// Set memory utilization
-  pub fn set_memory_utilization( &self, value: f64 )
+  pub fn set_memory_utilization( &self, value : f64 )
   {
     let scaled = ( value * 100.0 ).round() as u64;
     self.memory_utilization_scaled.store( scaled, Ordering::Relaxed );
@@ -306,7 +306,7 @@ impl DeploymentMetrics
   }
 
   /// Set request rate
-  pub fn set_request_rate( &self, value: f64 )
+  pub fn set_request_rate( &self, value : f64 )
   {
     let scaled = ( value * 100.0 ).round() as u64;
     self.request_rate_scaled.store( scaled, Ordering::Relaxed );
@@ -320,7 +320,7 @@ impl DeploymentMetrics
   }
 
   /// Record a new request
-  pub fn record_request( &self, response_time_us: u64, is_error: bool )
+  pub fn record_request( &self, response_time_us : u64, is_error : bool )
   {
     self.total_requests.fetch_add( 1, Ordering::Relaxed );
     if is_error
@@ -361,7 +361,7 @@ impl DeploymentMetrics
   }
 
   /// Update uptime based on current status
-  pub fn update_uptime( &self, is_healthy: bool )
+  pub fn update_uptime( &self, is_healthy : bool )
   {
     let now_us = SystemTime::now()
       .duration_since( SystemTime::UNIX_EPOCH )
@@ -400,7 +400,7 @@ impl DeploymentMetrics
   }
 
   /// Export metrics for monitoring systems (Prometheus format)
-  pub fn to_prometheus( &self, deployment_id: &str ) -> String
+  pub fn to_prometheus( &self, deployment_id : &str ) -> String
   {
     format!(
       "# HELP deployment_instance_count Number of active instances\n\
@@ -464,9 +464,9 @@ impl Default for DeploymentMetrics
 pub struct PerformanceOptimizer
 {
   /// Optimization recommendations
-  recommendations: Arc< Mutex< Vec< OptimizationRecommendation > > >,
+  recommendations : Arc< Mutex< Vec< OptimizationRecommendation > > >,
   /// Analysis history
-  analysis_history: Arc< Mutex< Vec< ( SystemTime, String ) > > >,
+  analysis_history : Arc< Mutex< Vec< ( SystemTime, String ) > > >,
 }
 
 impl PerformanceOptimizer
@@ -475,13 +475,13 @@ impl PerformanceOptimizer
   pub fn new() -> Self
   {
     Self {
-      recommendations: Arc::new( Mutex::new( Vec::new() ) ),
-      analysis_history: Arc::new( Mutex::new( Vec::new() ) ),
+      recommendations : Arc::new( Mutex::new( Vec::new() ) ),
+      analysis_history : Arc::new( Mutex::new( Vec::new() ) ),
     }
   }
 
   /// Analyze deployment performance and generate recommendations
-  pub fn analyze_deployment( &self, deployment: &super::orchestration::ModelDeployment ) -> Vec< OptimizationRecommendation >
+  pub fn analyze_deployment( &self, deployment : &super::orchestration::ModelDeployment ) -> Vec< OptimizationRecommendation >
   {
     let mut recommendations = Vec::new();
     let metrics = deployment.get_metrics();
@@ -490,15 +490,15 @@ impl PerformanceOptimizer
     if metrics.cpu_utilization() > 90.0
     {
       recommendations.push( OptimizationRecommendation {
-        category: OptimizationCategory::ResourceAllocation,
-        priority: OptimizationPriority::High,
-        title: "High CPU Utilization Detected".to_string(),
-        description: format!(
+        category : OptimizationCategory::ResourceAllocation,
+        priority : OptimizationPriority::High,
+        title : "High CPU Utilization Detected".to_string(),
+        description : format!(
           "CPU utilization is at {:.1}%, consider scaling up or optimizing compute resources",
           metrics.cpu_utilization()
         ),
-        estimated_impact: ImpactEstimate::High,
-        implementation_effort: ImplementationEffort::Medium,
+        estimated_impact : ImpactEstimate::High,
+        implementation_effort : ImplementationEffort::Medium,
       } );
     }
 
@@ -506,15 +506,15 @@ impl PerformanceOptimizer
     if metrics.memory_utilization() > 85.0
     {
       recommendations.push( OptimizationRecommendation {
-        category: OptimizationCategory::ResourceAllocation,
-        priority: OptimizationPriority::High,
-        title: "High Memory Utilization Detected".to_string(),
-        description: format!(
+        category : OptimizationCategory::ResourceAllocation,
+        priority : OptimizationPriority::High,
+        title : "High Memory Utilization Detected".to_string(),
+        description : format!(
           "Memory utilization is at {:.1}%, consider increasing memory allocation",
           metrics.memory_utilization()
         ),
-        estimated_impact: ImpactEstimate::High,
-        implementation_effort: ImplementationEffort::Low,
+        estimated_impact : ImpactEstimate::High,
+        implementation_effort : ImplementationEffort::Low,
       } );
     }
 
@@ -522,15 +522,15 @@ impl PerformanceOptimizer
     if metrics.response_time_ms() > 1000.0
     {
       recommendations.push( OptimizationRecommendation {
-        category: OptimizationCategory::Performance,
-        priority: OptimizationPriority::Medium,
-        title: "High Response Time Detected".to_string(),
-        description: format!(
+        category : OptimizationCategory::Performance,
+        priority : OptimizationPriority::Medium,
+        title : "High Response Time Detected".to_string(),
+        description : format!(
           "Average response time is {:.1}ms, consider optimizing model inference or adding caching",
           metrics.response_time_ms()
         ),
-        estimated_impact: ImpactEstimate::Medium,
-        implementation_effort: ImplementationEffort::High,
+        estimated_impact : ImpactEstimate::Medium,
+        implementation_effort : ImplementationEffort::High,
       } );
     }
 
@@ -538,15 +538,15 @@ impl PerformanceOptimizer
     if metrics.error_rate() > 5.0
     {
       recommendations.push( OptimizationRecommendation {
-        category: OptimizationCategory::Reliability,
-        priority: OptimizationPriority::High,
-        title: "High Error Rate Detected".to_string(),
-        description: format!(
+        category : OptimizationCategory::Reliability,
+        priority : OptimizationPriority::High,
+        title : "High Error Rate Detected".to_string(),
+        description : format!(
           "Error rate is {:.1}%, investigate error patterns and improve error handling",
           metrics.error_rate()
         ),
-        estimated_impact: ImpactEstimate::High,
-        implementation_effort: ImplementationEffort::Medium,
+        estimated_impact : ImpactEstimate::High,
+        implementation_effort : ImplementationEffort::Medium,
       } );
     }
 
@@ -584,17 +584,17 @@ impl PerformanceOptimizer
 pub struct OptimizationRecommendation
 {
   /// Category of optimization
-  pub category: OptimizationCategory,
+  pub category : OptimizationCategory,
   /// Priority level
-  pub priority: OptimizationPriority,
+  pub priority : OptimizationPriority,
   /// Recommendation title
-  pub title: String,
+  pub title : String,
   /// Detailed description
-  pub description: String,
+  pub description : String,
   /// Estimated impact
-  pub estimated_impact: ImpactEstimate,
+  pub estimated_impact : ImpactEstimate,
   /// Implementation effort required
-  pub implementation_effort: ImplementationEffort,
+  pub implementation_effort : ImplementationEffort,
 }
 
 /// Categories of optimization recommendations

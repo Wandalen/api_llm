@@ -102,7 +102,7 @@ mod private
   {
     fn default() -> Self
     {
-      // Default: 100 requests per minute
+      // Default : 100 requests per minute
       Self::per_minute( 100 )
     }
   }
@@ -280,7 +280,7 @@ mod private
     /// # Panics
     ///
     /// Panics if the internal mutex is poisoned.
-    #[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]  // Tokens always non-negative, bounded by capacity
+    #[ allow( clippy::cast_possible_truncation, clippy::cast_sign_loss) ]  // Tokens always non-negative, bounded by capacity
     pub fn available_tokens( &self ) -> usize
     {
       let mut state = self.state.lock().unwrap();
@@ -319,7 +319,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

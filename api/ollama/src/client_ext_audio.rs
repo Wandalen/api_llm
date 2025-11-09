@@ -11,7 +11,7 @@ impl OllamaClient
 {
   /// Configure audio processing settings
   #[ inline ]
-  pub fn with_audio_config( mut self, config: crate::audio::AudioProcessingConfig ) -> Self
+  pub fn with_audio_config( mut self, config : crate::audio::AudioProcessingConfig ) -> Self
   {
     self.audio_config = Some( config );
     self
@@ -43,7 +43,7 @@ impl OllamaClient
   /// - Network request fails
   /// - API returns an error
   #[ inline ]
-  pub async fn speech_to_text( &mut self, request: crate::audio::SpeechToTextRequest ) -> OllamaResult< crate::audio::SpeechToTextResponse >
+  pub async fn speech_to_text( &mut self, request : crate::audio::SpeechToTextRequest ) -> OllamaResult< crate::audio::SpeechToTextResponse >
   {
     // Validate audio format
     if !self.is_audio_format_supported( &request.format )
@@ -90,7 +90,7 @@ impl OllamaClient
       .part( "audio", reqwest::multipart::Part::bytes( request.audio_data )
         .file_name( format!( "audio.{}", request.format.file_extension() ) )
         .mime_str( request.format.mime_type() )
-        .map_err( | e | format_err!( "Failed to set MIME type: {}", e ) )?
+        .map_err( | e | format_err!( "Failed to set MIME type : {}", e ) )?
       );
 
     // Make request
@@ -111,10 +111,10 @@ impl OllamaClient
         if status.is_success()
         {
           let response_text = resp.text().await
-            .map_err( | e | format_err!( "Failed to read response: {}", e ) )?;
+            .map_err( | e | format_err!( "Failed to read response : {}", e ) )?;
 
-          let transcription: serde_json::Value = serde_json::from_str( &response_text )
-            .map_err( | e | format_err!( "Failed to parse response: {}", e ) )?;
+          let transcription : serde_json::Value = serde_json::from_str( &response_text )
+            .map_err( | e | format_err!( "Failed to parse response : {}", e ) )?;
 
           // Record success
           #[ cfg( feature = "circuit_breaker" ) ]
@@ -135,11 +135,11 @@ impl OllamaClient
 
           Ok( crate::audio::SpeechToTextResponse
           {
-            text: transcription[ "text" ].as_str().unwrap_or( "" ).to_string(),
-            confidence: transcription[ "confidence" ].as_f64(),
-            language: transcription[ "language" ].as_str().map( | s | s.to_string() ),
-            duration: Some( ( processing_time_ms as f64 ) / 1000.0 ),
-            metadata: None,
+            text : transcription[ "text" ].as_str().unwrap_or( "" ).to_string(),
+            confidence : transcription[ "confidence" ].as_f64(),
+            language : transcription[ "language" ].as_str().map( | s | s.to_string() ),
+            duration : Some( ( processing_time_ms as f64 ) / 1000.0 ),
+            metadata : None,
           })
         }
         else
@@ -163,7 +163,7 @@ impl OllamaClient
             }
           }
 
-          Err( format_err!( "Speech-to-text failed: {}", error_text ) )
+          Err( format_err!( "Speech-to-text failed : {}", error_text ) )
         }
       }
       Err( e ) =>
@@ -185,7 +185,7 @@ impl OllamaClient
           }
         }
 
-        Err( format_err!( "Speech-to-text request failed: {}", e ) )
+        Err( format_err!( "Speech-to-text request failed : {}", e ) )
       }
     }
   }
@@ -209,7 +209,7 @@ impl OllamaClient
   /// - Network request fails
   /// - API returns an error
   #[ inline ]
-  pub async fn text_to_speech( &mut self, request: crate::audio::TextToSpeechRequest ) -> OllamaResult< crate::audio::TextToSpeechResponse >
+  pub async fn text_to_speech( &mut self, request : crate::audio::TextToSpeechRequest ) -> OllamaResult< crate::audio::TextToSpeechResponse >
   {
     // Check circuit breaker
     #[ cfg( feature = "circuit_breaker" ) ]
@@ -267,7 +267,7 @@ impl OllamaClient
         if status.is_success()
         {
           let audio_data = resp.bytes().await
-            .map_err( | e | format_err!( "Failed to read audio data: {}", e ) )?;
+            .map_err( | e | format_err!( "Failed to read audio data : {}", e ) )?;
 
           // Record success
           #[ cfg( feature = "circuit_breaker" ) ]
@@ -288,11 +288,11 @@ impl OllamaClient
 
           Ok( crate::audio::TextToSpeechResponse
           {
-            audio_data: audio_data.to_vec(),
-            format: request.format,
-            duration: Some( ( processing_time_ms as f64 ) / 1000.0 ),
-            sample_rate: Some( 24000 ), // Default, would come from API in real implementation
-            metadata: None,
+            audio_data : audio_data.to_vec(),
+            format : request.format,
+            duration : Some( ( processing_time_ms as f64 ) / 1000.0 ),
+            sample_rate : Some( 24000 ), // Default, would come from API in real implementation
+            metadata : None,
           })
         }
         else
@@ -316,7 +316,7 @@ impl OllamaClient
             }
           }
 
-          Err( format_err!( "Text-to-speech failed: {}", error_text ) )
+          Err( format_err!( "Text-to-speech failed : {}", error_text ) )
         }
       }
       Err( e ) =>
@@ -338,20 +338,20 @@ impl OllamaClient
           }
         }
 
-        Err( format_err!( "Text-to-speech request failed: {}", e ) )
+        Err( format_err!( "Text-to-speech request failed : {}", e ) )
       }
     }
   }
 
   /// Check if audio format is supported
   #[ inline ]
-  fn is_audio_format_supported( &self, format: &crate::audio::AudioFormat ) -> bool
+  fn is_audio_format_supported( &self, format : &crate::audio::AudioFormat ) -> bool
   {
     matches!( format,
-      crate::audio::AudioFormat::Mp3 |
-      crate::audio::AudioFormat::Wav |
-      crate::audio::AudioFormat::Ogg |
-      crate::audio::AudioFormat::Flac
+      crate ::audio::AudioFormat::Mp3 |
+      crate ::audio::AudioFormat::Wav |
+      crate ::audio::AudioFormat::Ogg |
+      crate ::audio::AudioFormat::Flac
     )
   }
 
@@ -360,16 +360,16 @@ impl OllamaClient
   /// This is a convenience method that combines speech-to-text, chat, and text-to-speech
   /// into a single voice interaction.
   #[ inline ]
-  pub async fn voice_chat( &mut self, audio_input: Vec< u8 >, format: crate::audio::AudioFormat, model: String ) -> OllamaResult< crate::audio::TextToSpeechResponse >
+  pub async fn voice_chat( &mut self, audio_input : Vec< u8 >, format : crate::audio::AudioFormat, model : String ) -> OllamaResult< crate::audio::TextToSpeechResponse >
   {
     // Convert speech to text
     let stt_request = crate::audio::SpeechToTextRequest
     {
-      model: model.clone(),
-      audio_data: audio_input,
+      model : model.clone(),
+      audio_data : audio_input,
       format,
-      language: None,
-      options: None,
+      language : None,
+      options : None,
     };
 
     let transcription = self.speech_to_text( stt_request ).await?;
@@ -378,42 +378,42 @@ impl OllamaClient
     #[ cfg( feature = "vision_support" ) ]
     let chat_request = crate::ChatRequest
     {
-      model: model.clone(),
-      messages: vec![
-        crate::ChatMessage
+      model : model.clone(),
+      messages : vec![
+        crate ::ChatMessage
         {
-          role: crate::MessageRole::User,
-          content: transcription.text,
-          images: None,
+          role : crate::MessageRole::User,
+          content : transcription.text,
+          images : None,
           #[ cfg( feature = "tool_calling" ) ]
-          tool_calls: None,
+          tool_calls : None,
         }
       ],
-      stream: None,
-      options: None,
+      stream : None,
+      options : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tools: None,
+      tools : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tool_messages: None,
+      tool_messages : None,
     };
 
     #[ cfg( not( feature = "vision_support" ) ) ]
     let chat_request = crate::ChatRequest
     {
-      model: model.clone(),
-      messages: vec![
-        crate::Message
+      model : model.clone(),
+      messages : vec![
+        crate ::Message
         {
-          role: "user".to_string(),
-          content: transcription.text,
+          role : "user".to_string(),
+          content : transcription.text,
         }
       ],
-      stream: None,
-      options: None,
+      stream : None,
+      options : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tools: None,
+      tools : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tool_messages: None,
+      tool_messages : None,
     };
 
     let chat_response = self.chat( chat_request ).await?;
@@ -422,11 +422,11 @@ impl OllamaClient
     let tts_request = crate::audio::TextToSpeechRequest
     {
       model,
-      text: chat_response.message.content,
-      voice: Some( "default".to_string() ),
-      format: crate::audio::AudioFormat::Mp3,
-      speed: None,
-      options: None,
+      text : chat_response.message.content,
+      voice : Some( "default".to_string() ),
+      format : crate::audio::AudioFormat::Mp3,
+      speed : None,
+      options : None,
     };
 
     self.text_to_speech( tts_request ).await

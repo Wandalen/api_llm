@@ -167,7 +167,7 @@ fn test_count_multiple_texts()
 
   let count = counter.count_texts( &texts );
 
-  // Combined: "Helloworldfromrust" = 18 chars
+  // Combined : "Helloworldfromrust" = 18 chars
   assert_eq!( count.characters, 18 );
   assert_eq!( count.total, 5 ); // ceil( 18 / 4 ) = 5
 }

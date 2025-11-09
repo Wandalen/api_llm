@@ -53,7 +53,7 @@ fn test_sync_models_api()
       return;
     }
     Err(e) => {
-      panic!("Unexpected error type: {e:?}");
+      panic!("Unexpected error type : {e:?}");
     }
   }
 
@@ -64,7 +64,7 @@ fn test_sync_models_api()
       println!("✅ Sync model by_name successful");
     }
     Err(e) => {
-      println!("⚠️  Model by_name failed: {e:?}");
+      println!("⚠️  Model by_name failed : {e:?}");
     }
   }
 }
@@ -83,12 +83,12 @@ fn test_sync_content_generation()
     .expect("Failed to build sync client");
 
   let request = GenerateContentRequest {
-    contents: vec![Content {
-      parts: vec![Part {
-        text: Some("Hello, world!".to_string()),
+    contents : vec![Content {
+      parts : vec![Part {
+        text : Some("Hello, world!".to_string()),
         ..Default::default()
       }],
-      role: "user".to_string(),
+      role : "user".to_string(),
     }],
     ..Default::default()
   };
@@ -110,7 +110,7 @@ fn test_sync_content_generation()
         // Test passes - authentication error is expected behavior
       }
       Err(e) => {
-        panic!("Unexpected error type: {e:?}");
+        panic!("Unexpected error type : {e:?}");
       }
     }
   } else {
@@ -132,12 +132,12 @@ fn test_sync_embeddings()
     .expect("Failed to build sync client");
 
   let request = EmbedContentRequest {
-    content: Content {
-      parts: vec![Part {
-        text: Some("Test embedding content".to_string()),
+    content : Content {
+      parts : vec![Part {
+        text : Some("Test embedding content".to_string()),
         ..Default::default()
       }],
-      role: "user".to_string(),
+      role : "user".to_string(),
     },
     ..Default::default()
   };
@@ -159,7 +159,7 @@ fn test_sync_embeddings()
         // Test passes - authentication error is expected behavior
       }
       Err(e) => {
-        panic!("Unexpected error type: {e:?}");
+        panic!("Unexpected error type : {e:?}");
       }
     }
   } else {
@@ -206,7 +206,7 @@ fn test_sync_runtime_management()
           // Thread passes - authentication error is expected behavior
         }
         Err(e) => {
-          panic!("Thread {i} unexpected error type: {e:?}");
+          panic!("Thread {i} unexpected error type : {e:?}");
         }
       }
     });
@@ -235,12 +235,12 @@ fn test_sync_streaming_blocking()
     .expect("Failed to build sync client");
 
   let request = GenerateContentRequest {
-    contents: vec![Content {
-      parts: vec![Part {
-        text: Some("Tell me a short story".to_string()),
+    contents : vec![Content {
+      parts : vec![Part {
+        text : Some("Tell me a short story".to_string()),
         ..Default::default()
       }],
-      role: "user".to_string(),
+      role : "user".to_string(),
     }],
     ..Default::default()
   };
@@ -268,7 +268,7 @@ fn test_sync_streaming_blocking()
         // Test passes - API key error is expected behavior
       }
       Err(e) => {
-        panic!("Unexpected error type: {e:?}");
+        panic!("Unexpected error type : {e:?}");
       }
     }
   } else {
@@ -299,12 +299,12 @@ fn test_sync_wrapper_performance()
     .expect("Failed to build sync client");
 
   let request = GenerateContentRequest {
-    contents: vec![Content {
-      parts: vec![Part {
-        text: Some("Simple test".to_string()),
+    contents : vec![Content {
+      parts : vec![Part {
+        text : Some("Simple test".to_string()),
         ..Default::default()
       }],
-      role: "user".to_string(),
+      role : "user".to_string(),
     }],
     ..Default::default()
   };
@@ -334,10 +334,10 @@ fn test_sync_wrapper_performance()
 
             // Sync wrapper should not add more than 50% overhead
             let overhead_ratio = sync_duration.as_secs_f64() / async_duration.as_secs_f64();
-            assert!(overhead_ratio < 1.5, "Sync wrapper overhead too high: {overhead_ratio:.2}x");
-            println!("✅ Performance test successful - overhead: {overhead_ratio:.2}x");
+            assert!(overhead_ratio < 1.5, "Sync wrapper overhead too high : {overhead_ratio:.2}x");
+            println!("✅ Performance test successful - overhead : {overhead_ratio:.2}x");
           }
-          Err(e) => panic!("Sync call failed: {e:?}"),
+          Err(e) => panic!("Sync call failed : {e:?}"),
         }
       } else {
         panic!("Failed to get model for sync test");
@@ -349,7 +349,7 @@ fn test_sync_wrapper_performance()
       // Test passes - authentication error is expected behavior
     }
     Err(e) => {
-      panic!("Async call failed with unexpected error: {e:?}");
+      panic!("Async call failed with unexpected error : {e:?}");
     }
   }
 }
@@ -364,12 +364,12 @@ fn test_sync_error_handling()
     .expect("Failed to build sync client");
 
   let request = GenerateContentRequest {
-    contents: vec![Content {
-      parts: vec![Part {
-        text: Some("Test".to_string()),
+    contents : vec![Content {
+      parts : vec![Part {
+        text : Some("Test".to_string()),
         ..Default::default()
       }],
-      role: "user".to_string(),
+      role : "user".to_string(),
     }],
     ..Default::default()
   };
@@ -393,9 +393,9 @@ fn test_sync_error_handling()
 
     if is_auth_error
     {
-      println!("✅ Correct authentication error detected: {error_str}");
+      println!("✅ Correct authentication error detected : {error_str}");
     } else {
-      println!("⚠️  Unexpected error format: {error_str}");
+      println!("⚠️  Unexpected error format : {error_str}");
       // For now, accept any error as authentication issues can have various formats
     }
   }

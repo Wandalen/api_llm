@@ -16,7 +16,7 @@ mod compression_tests
 {
   use api_gemini::
   {
-    client::Client,
+    client ::Client,
     CompressionConfig,
     CompressionAlgorithm,
   };
@@ -185,7 +185,7 @@ mod compression_tests
     {
       Ok( key ) => key,
       Err( _ ) => {
-        eprintln!( "Skipping integration test: GEMINI_API_KEY not set" );
+        eprintln!( "Skipping integration test : GEMINI_API_KEY not set" );
         return;
       }
     };
@@ -207,7 +207,7 @@ mod compression_tests
 
     assert!(
       result.is_ok(),
-      "Request with compression should succeed: {:?}",
+      "Request with compression should succeed : {:?}",
       result.err()
     );
   }
@@ -222,7 +222,7 @@ mod compression_tests
     {
       Ok( key ) => key,
       Err( _ ) => {
-        eprintln!( "Skipping integration test: GEMINI_API_KEY not set" );
+        eprintln!( "Skipping integration test : GEMINI_API_KEY not set" );
         return;
       }
     };
@@ -240,7 +240,7 @@ mod compression_tests
 
     assert!(
       result.is_ok(),
-      "Request with compression and retry should succeed: {:?}",
+      "Request with compression and retry should succeed : {:?}",
       result.err()
     );
   }

@@ -20,7 +20,7 @@ impl Client
   #[ inline ]
   pub fn config( &self ) -> crate::models::config::ConfigManager
   {
-      crate::models::config::ConfigManager::new( self.clone() )
+      crate ::models::config::ConfigManager::new( self.clone() )
   }
 
   /// Get the current configuration as a `DynamicConfig` instance
@@ -28,7 +28,7 @@ impl Client
   #[ inline ]
   pub fn current_config( &self ) -> crate::models::config::DynamicConfig
   {
-      crate::models::config::DynamicConfig::builder()
+      crate ::models::config::DynamicConfig::builder()
           .timeout( self.timeout )
           .retry_attempts( {
               #[ cfg( feature = "retry" ) ]
@@ -73,7 +73,7 @@ impl Client
   /// Returns an error if the configuration validation fails or if applying the
   /// configuration encounters an internal error.
   #[ inline ]
-  pub fn apply_config( &mut self, config: crate::models::config::DynamicConfig ) -> Result< (), crate::error::Error >
+  pub fn apply_config( &mut self, config : crate::models::config::DynamicConfig ) -> Result< (), crate::error::Error >
   {
       // Update the base URL
       self.base_url = config.base_url;
@@ -88,7 +88,7 @@ impl Client
           self.backoff_multiplier = config.backoff_multiplier;
       }
 
-      // Note: timeout would need to be applied to the HTTP client
+      // Note : timeout would need to be applied to the HTTP client
       // For now, we store the configuration but don't recreate the HTTP client
 
       Ok( () )
@@ -103,7 +103,7 @@ impl Client
   #[ inline ]
   pub fn failover( &self ) -> crate::models::failover::FailoverBuilder
   {
-      crate::models::failover::FailoverBuilder::new( self.clone() )
+      crate ::models::failover::FailoverBuilder::new( self.clone() )
   }
 
   /// Create a configuration manager for dynamic configuration management
@@ -122,11 +122,11 @@ impl Client
   ///
   /// // Get current configuration
   /// let current = config_manager.current();
-  /// println!( "Current timeout: {:?}", current.timeout );
+  /// println!( "Current timeout : {:?}", current.timeout );
   ///
   /// // Monitor configuration health
   /// let health = config_manager.health_status();
-  /// println!( "Config health: {:?}", health );
+  /// println!( "Config health : {:?}", health );
   /// # Ok( () )
   /// # }
   /// ```
@@ -135,7 +135,7 @@ impl Client
   #[ inline ]
   pub fn create_config_manager( &self ) -> crate::models::config::ConfigManager
   {
-      crate::models::config::ConfigManager::new( self.clone() )
+      crate ::models::config::ConfigManager::new( self.clone() )
   }
 
   /// Create a configuration manager with custom options
@@ -159,11 +159,11 @@ impl Client
   ///
   /// // Create options for memory-constrained environment
   /// let options = ConfigManagerOptions {
-  ///     max_history_entries: 10,
-  ///     max_history_memory_bytes: 64 * 1024, // 64KB
-  ///     enable_change_notifications: false,
-  ///     enable_validation_caching: true,
-  ///     cleanup_interval: Some( Duration::from_secs( 300 ) ),
+  ///     max_history_entries : 10,
+  ///     max_history_memory_bytes : 64 * 1024, // 64KB
+  ///     enable_change_notifications : false,
+  ///     enable_validation_caching : true,
+  ///     cleanup_interval : Some( Duration::from_secs( 300 ) ),
   /// };
   ///
   /// let config_manager = client.create_config_manager_with_options( options );
@@ -173,9 +173,9 @@ impl Client
   #[ cfg( feature = "dynamic_configuration" ) ]
   #[ must_use ]
   #[ inline ]
-  pub fn create_config_manager_with_options( &self, options: crate::models::config::ConfigManagerOptions ) -> crate::models::config::ConfigManager
+  pub fn create_config_manager_with_options( &self, options : crate::models::config::ConfigManagerOptions ) -> crate::models::config::ConfigManager
   {
-      crate::models::config::ConfigManager::with_options( self.clone(), options )
+      crate ::models::config::ConfigManager::with_options( self.clone(), options )
   }
 
   /// Load configuration from multiple sources with priority-based merging
@@ -215,7 +215,7 @@ impl Client
   /// let client = Client::new()?;
   ///
   /// // Create configuration sources with priorities
-  /// let sources: Vec< Box< dyn api_gemini::models::config::ConfigSource > > = vec![
+  /// let sources : Vec< Box< dyn api_gemini::models::config::ConfigSource > > = vec![
   ///     Box::new( FileConfigSource::new( "config.yaml", 50 ) ),
   ///     Box::new( EnvironmentConfigSource::new( "GEMINI".to_string(), 75 ) ),
   /// ];
@@ -227,7 +227,7 @@ impl Client
   /// ```
   #[ cfg( feature = "dynamic_configuration" ) ]
   #[ inline ]
-  pub async fn load_from_sources( &self, sources: Vec< Box< dyn crate::models::config::ConfigSource > > ) -> Result< Self, crate::error::Error >
+  pub async fn load_from_sources( &self, sources : Vec< Box< dyn crate::models::config::ConfigSource > > ) -> Result< Self, crate::error::Error >
   {
       // Load configurations from all sources
       let mut configs = Vec::new();
@@ -238,7 +238,7 @@ impl Client
               Ok( config ) => configs.push( ( config, source.priority() ) ),
               Err( e ) => {
                   // Log error but continue with other sources
-                  tracing::warn!( "Failed to load config from source {}: {}", source.source_id(), e );
+                  tracing ::warn!( "Failed to load config from source {}: {}", source.source_id(), e );
               }
           }
       }
@@ -303,7 +303,7 @@ impl Client
   /// let client = Arc::new( Mutex::new( client ) );
   ///
   /// // Create configuration sources to watch
-  /// let sources: Vec< Box< dyn api_gemini::models::config::ConfigSource > > = vec![
+  /// let sources : Vec< Box< dyn api_gemini::models::config::ConfigSource > > = vec![
   ///     Box::new( FileConfigSource::new( "config.yaml", 50 ) ),
   ///     Box::new( EnvironmentConfigSource::new( "GEMINI".to_string(), 75 ) ),
   /// ];
@@ -312,7 +312,7 @@ impl Client
   /// let _watch_handle = client.lock().await.start_config_watching(
   ///     sources,
   ///     move | event | {
-  ///         println!( "Configuration changed from source: {}", event.source_id );
+  ///         println!( "Configuration changed from source : {}", event.source_id );
   ///         // Handle configuration update
   ///     }
   /// ).await?;
@@ -326,8 +326,8 @@ impl Client
   #[ inline ]
   pub async fn start_config_watching< F >(
       &self,
-      sources: Vec< Box< dyn crate::models::config::ConfigSource > >,
-      on_config_change: F
+      sources : Vec< Box< dyn crate::models::config::ConfigSource > >,
+      on_config_change : F
   ) -> Result< ConfigWatchHandle, crate::error::Error >
   where
       F: Fn( crate::models::config::ConfigSourceEvent ) + Send + Sync + 'static,
@@ -347,7 +347,7 @@ impl Client
 
       // Spawn background task to handle configuration changes
       let on_config_change = std::sync::Arc::new( on_config_change );
-      tokio::spawn( async move {
+      tokio ::spawn( async move {
           while let Some( event ) = receiver.recv().await
           {
               on_config_change( event );
@@ -355,7 +355,7 @@ impl Client
       } );
 
       Ok( ConfigWatchHandle {
-          _handle: std::sync::Arc::new( () ),
+          _handle : std::sync::Arc::new( () ),
       } )
   }
 
@@ -375,14 +375,14 @@ impl Client
   ///
   /// // Get configuration metrics
   /// let metrics = client.get_config_metrics( &config_manager );
-  /// println!( "Total updates: {}", metrics.total_updates );
-  /// println!( "Cache hit ratio: {:.1}%", metrics.cache_hit_ratio );
-  /// println!( "Average update time: {}μs", metrics.avg_update_time_us );
+  /// println!( "Total updates : {}", metrics.total_updates );
+  /// println!( "Cache hit ratio : {:.1}%", metrics.cache_hit_ratio );
+  /// println!( "Average update time : {}μs", metrics.avg_update_time_us );
   ///
   /// // Check health status
   /// let health = client.get_config_health( &config_manager );
   /// if !health.is_healthy() {
-  ///     println!( "Configuration issues detected: {:?}", health.get_all_messages() );
+  ///     println!( "Configuration issues detected : {:?}", health.get_all_messages() );
   /// }
   /// # Ok( () )
   /// # }
@@ -390,7 +390,7 @@ impl Client
   #[ cfg( feature = "dynamic_configuration" ) ]
   #[ must_use ]
   #[ inline ]
-  pub fn get_config_metrics( &self, config_manager: &crate::models::config::ConfigManager ) -> crate::models::config::ConfigMetricsReport
+  pub fn get_config_metrics( &self, config_manager : &crate::models::config::ConfigManager ) -> crate::models::config::ConfigMetricsReport
   {
       config_manager.generate_metrics_report()
   }
@@ -403,7 +403,7 @@ impl Client
   #[ cfg( feature = "dynamic_configuration" ) ]
   #[ must_use ]
   #[ inline ]
-  pub fn get_config_health( &self, config_manager: &crate::models::config::ConfigManager ) -> crate::models::config::ConfigHealthStatus
+  pub fn get_config_health( &self, config_manager : &crate::models::config::ConfigManager ) -> crate::models::config::ConfigHealthStatus
   {
       config_manager.health_status()
   }

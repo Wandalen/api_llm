@@ -66,7 +66,7 @@ fn benchmark_response_parsing( c : &mut Criterion )
   {
     b.iter( ||
     {
-      serde_json::from_str::< GenerateContentResponse >( json_response ).unwrap()
+      serde_json ::from_str::< GenerateContentResponse >( json_response ).unwrap()
     } );
   } );
 }

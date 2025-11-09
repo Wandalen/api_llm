@@ -8,8 +8,8 @@
 //! - Tests MUST FAIL IMMEDIATELY on any API endpoint errors
 //! - NO SILENT PASSES allowed when problems occur
 //!
-//! Run with: cargo test --features integration
-//! Requires: Valid `ANTHROPIC_API_KEY` in environment or ../../secret/-secrets.sh
+//! Run with : cargo test --features integration
+//! Requires : Valid `ANTHROPIC_API_KEY` in environment or ../../secret/-secrets.sh
 
 #[ allow( unused_imports ) ]
 use super::*;
@@ -18,7 +18,7 @@ use super::*;
 #[ cfg( feature = "integration" ) ]
 fn test_workspace_loading_integration()
 {
-    println!("🧪 Manual Testing: Anthropic API Workspace Secret Loading");
+    println!("🧪 Manual Testing : Anthropic API Workspace Secret Loading");
     println!("=========================================================");
     
     // Test 1: Check workspace_tools directly
@@ -27,12 +27,12 @@ fn test_workspace_loading_integration()
     {
         Ok(ws) => {
             let root_display = ws.root().display();
-            println!("✅ Workspace found: {root_display}");
+            println!("✅ Workspace found : {root_display}");
             let secret_path = ws.root().join("secret").join("-secrets.sh");
             let secret_path_display = secret_path.display();
-            println!("🔐 Secret file path: {secret_path_display}");
+            println!("🔐 Secret file path : {secret_path_display}");
             let secret_exists = secret_path.exists();
-            println!("🔐 Secret file exists: {secret_exists}");
+            println!("🔐 Secret file exists : {secret_exists}");
 
             if secret_path.exists()
             {
@@ -41,10 +41,10 @@ fn test_workspace_loading_integration()
                     Ok(secret) => {
                         let secret_preview = &secret[..15];
                         let secret_len = secret.len();
-                        println!("✅ Raw secret loaded: {secret_preview}... (length: {secret_len})");
+                        println!("✅ Raw secret loaded : {secret_preview}... (length : {secret_len})");
                     },
                     Err(e) => {
-                        println!("❌ Raw secret loading failed: {e}");
+                        println!("❌ Raw secret loading failed : {e}");
                     }
                 }
             }
@@ -62,9 +62,9 @@ fn test_workspace_loading_integration()
         Ok(secret) => {
             println!("✅ the_module::Secret::from_workspace() successful!");
             let key_preview = &secret.ANTHROPIC_API_KEY[..15];
-            println!("📝 API Key: {key_preview}...");
+            println!("📝 API Key : {key_preview}...");
             let key_len = secret.ANTHROPIC_API_KEY.len();
-            println!("📏 Length: {key_len}");
+            println!("📏 Length : {key_len}");
             
             // Validate the key format
             if secret.ANTHROPIC_API_KEY.starts_with("sk-ant-")
@@ -75,7 +75,7 @@ fn test_workspace_loading_integration()
             }
         },
         Err(e) => {
-            println!("❌ the_module::Secret::from_workspace() failed: {e}");
+            println!("❌ the_module::Secret::from_workspace() failed : {e}");
         }
     }
     
@@ -86,11 +86,11 @@ fn test_workspace_loading_integration()
         Ok(client) => {
             println!("✅ the_module::Client::from_workspace() successful!");
             let client_key_preview = &client.secret().ANTHROPIC_API_KEY[..15];
-            println!("📝 Client API Key: {client_key_preview}...");
+            println!("📝 Client API Key : {client_key_preview}...");
             println!("🔧 Client created successfully");
         },
         Err(e) => {
-            println!("❌ the_module::Client::from_workspace() failed: {e}");
+            println!("❌ the_module::Client::from_workspace() failed : {e}");
         }
     }
     

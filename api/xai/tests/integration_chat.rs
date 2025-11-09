@@ -67,8 +67,8 @@ async fn test_chat_completion_basic()
   );
 
   println!( "✅ Basic chat completion test passed" );
-  println!( "Response: {content}" );
-  println!( "Usage: {} prompt + {} completion = {} total tokens",
+  println!( "Response : {content}" );
+  println!( "Usage : {} prompt + {} completion = {} total tokens",
     response.usage.prompt_tokens,
     response.usage.completion_tokens,
     response.usage.total_tokens
@@ -97,7 +97,7 @@ async fn test_chat_completion_with_system_message()
   assert!( !content.is_empty() );
 
   println!( "✅ Chat with system message test passed" );
-  println!( "Pirate response: {content}" );
+  println!( "Pirate response : {content}" );
 }
 
 #[ tokio::test ]
@@ -120,7 +120,7 @@ async fn test_chat_completion_with_temperature()
   assert!( !content.is_empty() );
 
   println!( "✅ Chat with temperature test passed" );
-  println!( "Response: {content}" );
+  println!( "Response : {content}" );
 }
 
 #[ tokio::test ]
@@ -149,12 +149,12 @@ async fn test_chat_completion_with_max_tokens()
   let finish_reason = response.choices[ 0 ].finish_reason.as_deref();
   assert!(
     finish_reason == Some( "length" ) || finish_reason == Some( "stop" ),
-    "Finish reason should be 'length' or 'stop', got: {finish_reason:?}"
+    "Finish reason should be 'length' or 'stop', got : {finish_reason:?}"
   );
 
   println!( "✅ Chat with max_tokens test passed" );
-  println!( "Finish reason: {finish_reason:?}" );
-  println!( "Completion tokens: {}", response.usage.completion_tokens );
+  println!( "Finish reason : {finish_reason:?}" );
+  println!( "Completion tokens : {}", response.usage.completion_tokens );
 }
 
 #[ tokio::test ]
@@ -183,7 +183,7 @@ async fn test_chat_completion_with_multiple_messages()
   assert!( !content.is_empty() );
 
   println!( "✅ Chat with conversation history test passed" );
-  println!( "Response: {content}" );
+  println!( "Response : {content}" );
 }
 
 #[ tokio::test ]
@@ -203,12 +203,12 @@ async fn test_chat_completion_model_grok_beta()
   // Verify the model used
   assert!(
     response.model.contains( "grok" ),
-    "Response model should contain 'grok', got: {}",
+    "Response model should contain 'grok', got : {}",
     response.model
   );
 
   println!( "✅ Grok-beta model test passed" );
-  println!( "Model used: {}", response.model );
+  println!( "Model used : {}", response.model );
 }
 
 #[ tokio::test ]
@@ -230,7 +230,7 @@ async fn test_chat_completion_error_handling_invalid_model()
   let error_str = format!( "{error:?}" );
 
   println!( "✅ Invalid model error handling test passed" );
-  println!( "Error: {error_str}" );
+  println!( "Error : {error_str}" );
 }
 
 #[ tokio::test ]
@@ -250,12 +250,12 @@ async fn test_chat_completion_empty_message_handling()
   // Log the result (API might accept or reject empty messages)
   match result {
     Ok( response ) => {
-      println!( "✅ Empty message test: API accepted empty message" );
-      println!( "Response: {:?}", response.choices[ 0 ].message.content );
+      println!( "✅ Empty message test : API accepted empty message" );
+      println!( "Response : {:?}", response.choices[ 0 ].message.content );
     }
     Err( e ) => {
-      println!( "✅ Empty message test: API rejected empty message (expected)" );
-      println!( "Error: {e:?}" );
+      println!( "✅ Empty message test : API rejected empty message (expected)" );
+      println!( "Error : {e:?}" );
     }
   }
 }

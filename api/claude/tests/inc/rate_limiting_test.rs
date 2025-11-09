@@ -8,8 +8,8 @@
 //! - Tests MUST FAIL IMMEDIATELY on any API endpoint errors
 //! - NO SILENT PASSES allowed when problems occur
 //!
-//! Run with: cargo test --features integration
-//! Requires: Valid `ANTHROPIC_API_KEY` in environment or ../../secret/-secrets.sh
+//! Run with : cargo test --features integration
+//! Requires : Valid `ANTHROPIC_API_KEY` in environment or ../../secret/-secrets.sh
 
 
 use super::*;
@@ -98,7 +98,7 @@ mod rate_limiting_functionality_tests
     assert!( !rate_limiter.can_make_request( 1 ) );
 
     // Wait for tokens to refill (simulate time passage)
-    std::thread::sleep( Duration::from_millis( 100 ) );
+    std ::thread::sleep( Duration::from_millis( 100 ) );
     rate_limiter.refill();
 
     // Should have approximately 1 token (10 tokens/sec * 0.1 sec)
@@ -106,7 +106,7 @@ mod rate_limiting_functionality_tests
     assert!( tokens >= 1 && tokens <= 2, "Expected 1-2 tokens, got {}", tokens );
 
     // Wait longer for more tokens
-    std::thread::sleep( Duration::from_millis( 900 ) );
+    std ::thread::sleep( Duration::from_millis( 900 ) );
     rate_limiter.refill();
 
     // Should have approximately 10 tokens (10 tokens/sec * 1 sec total)
@@ -231,9 +231,9 @@ mod rate_limiting_functionality_tests
       model : "claude-sonnet-4-5-20250929".to_string(),
       max_tokens : 4000,
       messages : vec![
-        the_module::Message::user( "Very long message with lots of context..." ),
-        the_module::Message::assistant( "Previous response..." ),
-        the_module::Message::user( "Follow up question with more context..." ),
+        the_module ::Message::user( "Very long message with lots of context..." ),
+        the_module ::Message::assistant( "Previous response..." ),
+        the_module ::Message::user( "Follow up question with more context..." ),
       ],
       system : Some( vec![ the_module::SystemContent::text( "You are a helpful AI assistant with expertise in complex reasoning." ) ] ),
       temperature : Some( 0.7 ),
@@ -398,7 +398,7 @@ mod rate_limiting_integration_tests
           {
             consumed += 1;
           }
-          thread::sleep( Duration::from_millis( 1 ) );
+          thread ::sleep( Duration::from_millis( 1 ) );
         }
         consumed
       } );

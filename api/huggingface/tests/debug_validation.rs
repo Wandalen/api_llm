@@ -2,7 +2,7 @@
 
 use api_huggingface::
 {
-  components::input::InferenceParameters,
+  components ::input::InferenceParameters,
 };
 
 #[ test ]
@@ -15,7 +15,7 @@ fn debug_temperature_validation()
   match invalid_params
   {
   Ok( () ) => println!( "Expected error but got OK" ),
-  Err( e ) => println!( "Got error: {e}" ),
+  Err( e ) => println!( "Got error : {e}" ),
   }
 }
 
@@ -28,7 +28,7 @@ fn debug_model_identifier_validation()
   match result
   {
   Ok( () ) => println!( "Expected error but got OK" ),
-  Err( e ) => println!( "Got error: {e}" ),
+  Err( e ) => println!( "Got error : {e}" ),
   }
 }
 
@@ -42,7 +42,7 @@ fn debug_batch_validation()
   match result
   {
   Ok( () ) => println!( "Expected error but got OK" ),
-  Err( e ) => println!( "Got error: {e}" ),
+  Err( e ) => println!( "Got error : {e}" ),
   }
 }
 
@@ -53,9 +53,9 @@ mod integration_tests
   use api_huggingface::
   {
   Client,
-  environment::HuggingFaceEnvironmentImpl,
-  secret::Secret,
-  validation::{ validate_model_identifier, validate_batch_inputs },
+  environment ::HuggingFaceEnvironmentImpl,
+  secret ::Secret,
+  validation ::{ validate_model_identifier, validate_batch_inputs },
   };
 
   fn get_api_key_for_integration() -> Option< String >
@@ -120,7 +120,7 @@ mod integration_tests
       .await;
   
   // Should fail due to invalid model (either validation or API rejection)
-  assert!( result.is_err(), "Invalid model name should cause API failure: {result:?}" );
+  assert!( result.is_err(), "Invalid model name should cause API failure : {result:?}" );
   }
 
   #[ tokio::test ]
@@ -155,16 +155,16 @@ mod integration_tests
       Ok( embeddings ) => {
   match embeddings
   {
-          api_huggingface::components::embeddings::EmbeddingResponse::Batch( batch_embeddings ) => {
+          api_huggingface ::components::embeddings::EmbeddingResponse::Batch( batch_embeddings ) => {
       assert_eq!( batch_embeddings.len(), small_batch.len(), "Should get embedding for each input" );
           },
-          api_huggingface::components::embeddings::EmbeddingResponse::Single( _ ) => {
+          api_huggingface ::components::embeddings::EmbeddingResponse::Single( _ ) => {
       // Some APIs might return single response even for batches - that's ok for integration test
           }
   }
       },
       Err( e ) => {
-  println!( "Integration test skipped due to API unavailability: {e}" );
+  println!( "Integration test skipped due to API unavailability : {e}" );
   // Test passes - external API unavailability should not fail tests
       }
   }

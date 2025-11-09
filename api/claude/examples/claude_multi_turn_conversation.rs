@@ -7,7 +7,7 @@
 //! - Conversation history building and maintenance across multiple API calls
 //! - Role alternation (user → assistant → user → assistant)
 //! - Context retention across turns for coherent conversation flow
-//! - Natural conversation display format (User: / AI:)
+//! - Natural conversation display format (User : / AI:)
 //! - Technical notes about conversation mechanics and state management
 //! - Educational guidance on managing conversation context effectively
 //!
@@ -48,17 +48,17 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
   println!( "\n=== TURN 1: Starting Travel Planning Conversation ===\n" );
 
   let turn1_message = "I'm planning a trip to Japan for 2 weeks in spring. What are some must-visit places?";
-  println!( "User: {turn1_message}" );
+  println!( "User : {turn1_message}" );
 
   // Start with initial conversation history
   let mut conversation_history = vec![
     Message {
-      role: Role::User,
-      content: vec![ Content::Text {
-        r#type: "text".to_string(),
-        text: turn1_message.to_string(),
+      role : Role::User,
+      content : vec![ Content::Text {
+        r#type : "text".to_string(),
+        text : turn1_message.to_string(),
       } ],
-      cache_control: None,
+      cache_control : None,
     }
   ];
 
@@ -82,28 +82,28 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
 
   // Add AI response to conversation history
   conversation_history.push( Message {
-    role: Role::Assistant,
-    content: vec![ Content::Text {
-      r#type: "text".to_string(),
-      text: ai_response1.clone(),
+    role : Role::Assistant,
+    content : vec![ Content::Text {
+      r#type : "text".to_string(),
+      text : ai_response1.clone(),
     } ],
-    cache_control: None,
+    cache_control : None,
   });
 
   // === TURN 2: Follow-up Question ===
   println!( "\n=== TURN 2: Follow-up About Cherry Blossoms ===\n" );
 
   let turn2_message = "That sounds amazing! When exactly is the best time to see cherry blossoms, and which of those places you mentioned are best for hanami?";
-  println!( "User: {turn2_message}" );
+  println!( "User : {turn2_message}" );
 
   // Add second user message to conversation history
   conversation_history.push( Message {
-    role: Role::User,
-    content: vec![ Content::Text {
-      r#type: "text".to_string(),
-      text: turn2_message.to_string(),
+    role : Role::User,
+    content : vec![ Content::Text {
+      r#type : "text".to_string(),
+      text : turn2_message.to_string(),
     } ],
-    cache_control: None,
+    cache_control : None,
   });
 
   // Create second request with updated conversation history
@@ -126,28 +126,28 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
 
   // Add AI response to conversation history
   conversation_history.push( Message {
-    role: Role::Assistant,
-    content: vec![ Content::Text {
-      r#type: "text".to_string(),
-      text: ai_response2.clone(),
+    role : Role::Assistant,
+    content : vec![ Content::Text {
+      r#type : "text".to_string(),
+      text : ai_response2.clone(),
     } ],
-    cache_control: None,
+    cache_control : None,
   });
 
   // === TURN 3: Specific Planning Question ===
   println!( "\n=== TURN 3: Specific Planning Details ===\n" );
 
   let turn3_message = "Perfect timing! Could you help me plan a 3-day itinerary for Tokyo that includes both traditional temples and modern attractions?";
-  println!( "User: {turn3_message}" );
+  println!( "User : {turn3_message}" );
 
   // Add third user message to conversation history
   conversation_history.push( Message {
-    role: Role::User,
-    content: vec![ Content::Text {
-      r#type: "text".to_string(),
-      text: turn3_message.to_string(),
+    role : Role::User,
+    content : vec![ Content::Text {
+      r#type : "text".to_string(),
+      text : turn3_message.to_string(),
     } ],
-    cache_control: None,
+    cache_control : None,
   });
 
   // Create third request with full conversation history
@@ -170,24 +170,24 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
 
   // === Technical Analysis and Educational Notes ===
   println!( "\n" );
-  println!( "🔧 === Technical Analysis: Conversation Mechanics ===" );
-  println!( "• Total conversation turns: 3 (user-ai-user-ai-user-ai)" );
-  println!( "• Messages in final history: {} entries", conversation_history.len() + 1 );
-  println!( "• Context accumulation: Each API call includes all previous messages" );
-  println!( "• Role alternation: Strictly alternating User/Assistant roles maintained" );
-  println!( "• Context retention: AI references previous conversation context in each response" );
+  println!( "🔧 === Technical Analysis : Conversation Mechanics ===" );
+  println!( "• Total conversation turns : 3 (user-ai-user-ai-user-ai)" );
+  println!( "• Messages in final history : {} entries", conversation_history.len() + 1 );
+  println!( "• Context accumulation : Each API call includes all previous messages" );
+  println!( "• Role alternation : Strictly alternating User/Assistant roles maintained" );
+  println!( "• Context retention : AI references previous conversation context in each response" );
 
   // Display cumulative token usage
   let total_input_tokens = response1.usage.input_tokens + response2.usage.input_tokens + response3.usage.input_tokens;
   let total_output_tokens = response1.usage.output_tokens + response2.usage.output_tokens + response3.usage.output_tokens;
 
   println!( "\n💰 === Cumulative Resource Usage ===" );
-  println!( "Total input tokens: {total_input_tokens} (across 3 API calls)" );
-  println!( "Total output tokens: {total_output_tokens}" );
-  println!( "Total tokens: {}", total_input_tokens + total_output_tokens );
-  println!( "⚠️  Note: Input tokens increase with each turn due to growing conversation history" );
+  println!( "Total input tokens : {total_input_tokens} (across 3 API calls)" );
+  println!( "Total output tokens : {total_output_tokens}" );
+  println!( "Total tokens : {}", total_input_tokens + total_output_tokens );
+  println!( "⚠️  Note : Input tokens increase with each turn due to growing conversation history" );
 
-  println!( "\n📚 === Educational Notes: Context Management ===" );
+  println!( "\n📚 === Educational Notes : Context Management ===" );
   println!( "1. **Growing Context**: Each API call sends the entire conversation history," );
   println!( "   which means the input token cost increases with each turn." );
   println!();

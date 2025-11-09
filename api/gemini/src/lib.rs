@@ -2,7 +2,7 @@
 //!
 //! A Rust client library for Google's Gemini API.
 //!
-//! ## Governing Principle: "Thin Client, Rich API"
+//! ## Governing Principle : "Thin Client, Rich API"
 //!
 //! This client exposes all server-side functionality transparently while maintaining
 //! zero client-side intelligence or automatic behaviors. The client is a transparent

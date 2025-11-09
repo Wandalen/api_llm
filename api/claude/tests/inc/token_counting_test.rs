@@ -8,20 +8,20 @@
 //! - Tests MUST FAIL IMMEDIATELY on any API endpoint errors
 //! - NO SILENT PASSES allowed when problems occur
 //!
-//! Run with: cargo test --features integration
-//! Requires: Valid `ANTHROPIC_API_KEY` in environment or ../../secret/-secrets.sh
+//! Run with : cargo test --features integration
+//! Requires : Valid `ANTHROPIC_API_KEY` in environment or ../../secret/-secrets.sh
 
 #[ allow( unused_imports ) ]
 use super::*;
 
-// ===== Unit Tests: Token Counting Request Structure =====
+// ===== Unit Tests : Token Counting Request Structure =====
 
 #[ tokio::test ]
 async fn test_token_count_request_basic()
 {
   // Test basic token counting request construction
   let messages = vec![
-    the_module::Message::user( "What is the capital of France?".to_string() )
+    the_module ::Message::user( "What is the capital of France?".to_string() )
   ];
 
   let request = the_module::CountMessageTokensRequest
@@ -43,7 +43,7 @@ async fn test_token_count_request_with_system_prompt()
 {
   // Test token counting request with system prompt
   let messages = vec![
-    the_module::Message::user( "Explain quantum physics".to_string() )
+    the_module ::Message::user( "Explain quantum physics".to_string() )
   ];
 
   let request = the_module::CountMessageTokensRequest
@@ -65,7 +65,7 @@ async fn test_token_count_request_with_tools()
 {
   // Test token counting request with tool definitions
   let messages = vec![
-    the_module::Message::user( "What's the weather?".to_string() )
+    the_module ::Message::user( "What's the weather?".to_string() )
   ];
 
   let tool = the_module::ToolDefinition
@@ -100,9 +100,9 @@ async fn test_token_count_request_conversation()
 {
   // Test token counting for multi-turn conversation
   let messages = vec![
-    the_module::Message::user( "Hello!".to_string() ),
-    the_module::Message::assistant( "Hi! How can I help?".to_string() ),
-    the_module::Message::user( "Tell me a joke".to_string() ),
+    the_module ::Message::user( "Hello!".to_string() ),
+    the_module ::Message::assistant( "Hi! How can I help?".to_string() ),
+    the_module ::Message::user( "Tell me a joke".to_string() ),
   ];
 
   let request = the_module::CountMessageTokensRequest
@@ -167,7 +167,7 @@ async fn test_token_count_response_structure()
   assert!( response.input_tokens > 0 );
 }
 
-// ===== Integration Tests: Real API Calls =====
+// ===== Integration Tests : Real API Calls =====
 
 #[ cfg( feature = "integration" ) ]
 #[ tokio::test ]
@@ -182,7 +182,7 @@ async fn integration_token_count_basic_message()
   let client = the_module::Client::new( secret );
 
   let messages = vec![
-    the_module::Message::user( "Hello, Claude!".to_string() )
+    the_module ::Message::user( "Hello, Claude!".to_string() )
   ];
 
   let request = the_module::CountMessageTokensRequest
@@ -214,7 +214,7 @@ async fn integration_token_count_with_system_prompt()
   let client = the_module::Client::new( secret );
 
   let messages = vec![
-    the_module::Message::user( "Explain photosynthesis".to_string() )
+    the_module ::Message::user( "Explain photosynthesis".to_string() )
   ];
 
   let request = the_module::CountMessageTokensRequest
@@ -261,7 +261,7 @@ async fn integration_token_count_with_tools()
   };
 
   let messages = vec![
-    the_module::Message::user( "What is 15 multiplied by 23?".to_string() )
+    the_module ::Message::user( "What is 15 multiplied by 23?".to_string() )
   ];
 
   let request = the_module::CountMessageTokensRequest
@@ -291,11 +291,11 @@ async fn integration_token_count_conversation()
   let client = the_module::Client::new( secret );
 
   let messages = vec![
-    the_module::Message::user( "Hello!".to_string() ),
-    the_module::Message::assistant( "Hi! How can I help you today?".to_string() ),
-    the_module::Message::user( "Tell me about the solar system".to_string() ),
-    the_module::Message::assistant( "The solar system consists of the Sun and all objects that orbit it.".to_string() ),
-    the_module::Message::user( "How many planets are there?".to_string() ),
+    the_module ::Message::user( "Hello!".to_string() ),
+    the_module ::Message::assistant( "Hi! How can I help you today?".to_string() ),
+    the_module ::Message::user( "Tell me about the solar system".to_string() ),
+    the_module ::Message::assistant( "The solar system consists of the Sun and all objects that orbit it.".to_string() ),
+    the_module ::Message::user( "How many planets are there?".to_string() ),
   ];
 
   let request = the_module::CountMessageTokensRequest
@@ -325,7 +325,7 @@ async fn integration_token_count_different_models()
   let client = the_module::Client::new( secret );
 
   let messages = vec![
-    the_module::Message::user( "Test message for token counting".to_string() )
+    the_module ::Message::user( "Test message for token counting".to_string() )
   ];
 
   // Test with Sonnet model
@@ -371,7 +371,7 @@ async fn integration_token_count_error_invalid_model()
   let client = the_module::Client::new( secret );
 
   let messages = vec![
-    the_module::Message::user( "Test".to_string() )
+    the_module ::Message::user( "Test".to_string() )
   ];
 
   let request = the_module::CountMessageTokensRequest
@@ -422,7 +422,7 @@ async fn integration_token_count_authentication_required()
   let client = the_module::Client::new( invalid_secret );
 
   let messages = vec![
-    the_module::Message::user( "Test".to_string() )
+    the_module ::Message::user( "Test".to_string() )
   ];
 
   let request = the_module::CountMessageTokensRequest

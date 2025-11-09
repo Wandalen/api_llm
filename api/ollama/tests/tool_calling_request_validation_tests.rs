@@ -18,9 +18,9 @@ use serde_json::json;
 fn test_tool_definition_creation()
 {
   let tool = ToolDefinition {
-    name: "get_weather".to_string(),
-    description: "Get weather for a location".to_string(),
-    parameters: json!({
+    name : "get_weather".to_string(),
+    description : "Get weather for a location".to_string(),
+    parameters : json!({
       "type": "object",
       "properties": {
         "location": {
@@ -41,8 +41,8 @@ fn test_tool_definition_creation()
 fn test_tool_call_creation()
 {
   let tool_call = ToolCall {
-    id: "call_123".to_string(),
-    function: json!({
+    id : "call_123".to_string(),
+    function : json!({
       "name": "calculate",
       "arguments": {"x": 5, "y": 10}
     }),
@@ -57,9 +57,9 @@ fn test_chat_request_with_tools()
 {
   let tools = vec![
     ToolDefinition {
-      name: "search".to_string(),
-      description: "Search the web".to_string(),
-      parameters: json!({
+      name : "search".to_string(),
+      description : "Search the web".to_string(),
+      parameters : json!({
         "type": "object",
         "properties": {
           "query": {"type": "string"}
@@ -70,20 +70,20 @@ fn test_chat_request_with_tools()
   
   let messages = vec![
     ChatMessage {
-      role: MessageRole::User,
-      content: "Search for Rust tutorials".to_string(),
-      images: None,
-      tool_calls: None,
+      role : MessageRole::User,
+      content : "Search for Rust tutorials".to_string(),
+      images : None,
+      tool_calls : None,
     }
   ];
   
   let request = ChatRequest {
-    model: "tool-model".to_string(),
+    model : "tool-model".to_string(),
     messages,
-    stream: Some(false),
-    options: None,
-    tools: Some(tools),
-    tool_messages: None,
+    stream : Some(false),
+    options : None,
+    tools : Some(tools),
+    tool_messages : None,
   };
   
   assert!(request.tools.is_some());
@@ -95,8 +95,8 @@ fn test_message_with_tool_calls()
 {
   let tool_calls = vec![
     ToolCall {
-      id: "call_456".to_string(),
-      function: json!({
+      id : "call_456".to_string(),
+      function : json!({
         "name": "add_numbers",
         "arguments": {"a": 3, "b": 7}
       }),
@@ -104,10 +104,10 @@ fn test_message_with_tool_calls()
   ];
   
   let message = ChatMessage {
-    role: MessageRole::Assistant,
-    content: "I'll calculate that for you".to_string(),
-    images: None,
-    tool_calls: Some(tool_calls),
+    role : MessageRole::Assistant,
+    content : "I'll calculate that for you".to_string(),
+    images : None,
+    tool_calls : Some(tool_calls),
   };
   
   assert!(message.tool_calls.is_some());
@@ -118,13 +118,13 @@ fn test_message_with_tool_calls()
 fn test_tool_serialization()
 {
   let tool = ToolDefinition {
-    name: "test_func".to_string(),
-    description: "Test function".to_string(),
-    parameters: json!({"param": "value"}),
+    name : "test_func".to_string(),
+    description : "Test function".to_string(),
+    parameters : json!({"param": "value"}),
   };
   
   let serialized = serde_json::to_string(&tool).expect("Failed to serialize tool");
-  let deserialized: ToolDefinition = serde_json::from_str(&serialized)
+  let deserialized : ToolDefinition = serde_json::from_str(&serialized)
     .expect("Failed to deserialize tool");
   
   assert_eq!(deserialized.name, tool.name);

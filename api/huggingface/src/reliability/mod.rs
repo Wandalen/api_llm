@@ -16,17 +16,17 @@
 //! ```no_run
 //! # use api_huggingface::reliability::{CircuitBreaker, CircuitBreakerConfig};
 //! # use std::time::Duration;
-//! # async fn example() -> Result< (), Box< dyn std::error::Error >> {
+//! # async fn example() -> Result< (), Box< dyn std::error::Error > > {
 //! let circuit_breaker = CircuitBreaker::new(
 //!   CircuitBreakerConfig {
-//!     failure_threshold: 5,
-//!     success_threshold: 2,
-//!     timeout: Duration::from_secs(60),
+//!     failure_threshold : 5,
+//!     success_threshold : 2,
+//!     timeout : Duration::from_secs(60),
 //!   }
 //! );
 //!
 //! let _result = circuit_breaker.execute(async {
-//!   Ok::< String, Box< dyn std::error::Error >>("response".to_string())
+//!   Ok::< String, Box< dyn std::error::Error > >("response".to_string())
 //! }).await;
 //! # Ok(())
 //! # }
@@ -39,12 +39,12 @@
 //!
 //! ```no_run
 //! # use api_huggingface::reliability::{RateLimiter, RateLimiterConfig};
-//! # async fn example() -> Result< (), Box< dyn std::error::Error >> {
+//! # async fn example() -> Result< (), Box< dyn std::error::Error > > {
 //! let rate_limiter = RateLimiter::new(
 //!   RateLimiterConfig {
-//!     requests_per_second: Some(10),
-//!     requests_per_minute: Some(500),
-//!     requests_per_hour: Some(10000),
+//!     requests_per_second : Some(10),
+//!     requests_per_minute : Some(500),
+//!     requests_per_hour : Some(10000),
 //!   }
 //! );
 //!
@@ -63,24 +63,24 @@
 //! ```no_run
 //! # use api_huggingface::reliability::{FailoverManager, FailoverConfig, FailoverStrategy};
 //! # use std::time::Duration;
-//! # async fn example() -> Result< (), Box< dyn std::error::Error >> {
+//! # async fn example() -> Result< (), Box< dyn std::error::Error > > {
 //! let failover = FailoverManager::new(
 //!   FailoverConfig {
-//!     endpoints: vec![
+//!     endpoints : vec![
 //!       "https://api-inference.huggingface.co".to_string(),
 //!       "https://backup.huggingface.co".to_string(),
 //!     ],
-//!     strategy: FailoverStrategy::Priority,
-//!     max_retries: 3,
-//!     failure_window: Duration::from_secs(300),
-//!     failure_threshold: 5,
+//!     strategy : FailoverStrategy::Priority,
+//!     max_retries : 3,
+//!     failure_window : Duration::from_secs(300),
+//!     failure_threshold : 5,
 //!   }
 //! ).map_err(|e| format!("{:?}", e))?;
 //!
 //! // Execute with automatic failover
 //! let _result = failover.execute_with_failover(|_endpoint| {
 //!   Box::pin(async move {
-//!     Ok::< String, Box< dyn std::error::Error >>("response".to_string())
+//!     Ok::< String, Box< dyn std::error::Error > >("response".to_string())
 //!   })
 //! }).await;
 //! # Ok(())
@@ -95,14 +95,14 @@
 //! ```no_run
 //! # use api_huggingface::reliability::{HealthChecker, HealthCheckConfig, HealthCheckStrategy};
 //! # use std::time::Duration;
-//! # async fn example() -> Result< (), Box< dyn std::error::Error >> {
+//! # async fn example() -> Result< (), Box< dyn std::error::Error > > {
 //! let health_checker = HealthChecker::new(
 //!   HealthCheckConfig {
-//!     endpoint: "https://api-inference.huggingface.co".to_string(),
-//!     strategy: HealthCheckStrategy::LightweightApi,
-//!     check_interval: Duration::from_secs(30),
-//!     timeout: Duration::from_secs(5),
-//!     unhealthy_threshold: 3,
+//!     endpoint : "https://api-inference.huggingface.co".to_string(),
+//!     strategy : HealthCheckStrategy::LightweightApi,
+//!     check_interval : Duration::from_secs(30),
+//!     timeout : Duration::from_secs(5),
+//!     unhealthy_threshold : 3,
 //!   }
 //! );
 //!
@@ -111,7 +111,7 @@
 //!
 //! // Check current health
 //! let status = health_checker.get_status().await;
-//! println!("Healthy: {}, Latency: {}ms", status.healthy, status.latency_ms);
+//! println!("Healthy : {}, Latency : {}ms", status.healthy, status.latency_ms);
 //! # Ok(())
 //! # }
 //! ```

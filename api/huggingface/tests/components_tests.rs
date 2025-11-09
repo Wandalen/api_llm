@@ -2,9 +2,9 @@
 
 use api_huggingface::components::
 {
-  input::InferenceParameters,
-  models::Models,
-  output::InferenceOutput,
+  input ::InferenceParameters,
+  models ::Models,
+  output ::InferenceOutput,
 };
 
 #[ test ]
@@ -138,8 +138,8 @@ mod integration_tests
   use api_huggingface::
   {
   Client,
-  environment::HuggingFaceEnvironmentImpl,
-  secret::Secret,
+  environment ::HuggingFaceEnvironmentImpl,
+  secret ::Secret,
   };
 
   fn get_api_key_for_integration() -> Option< String >
@@ -172,7 +172,7 @@ mod integration_tests
 
   // Use inference API to validate parameters work with real API (with timeout)
   let response = tokio::time::timeout(
-      core::time::Duration::from_secs( 10 ),
+      core ::time::Duration::from_secs( 10 ),
       client.inference().create_with_parameters( "Hello", "gpt2", params )
   ).await;
 
@@ -182,14 +182,14 @@ mod integration_tests
       Ok( Ok( response_data ) ) => {
   match response_data
   {
-          api_huggingface::components::inference_shared::InferenceResponse::Single( output ) => {
+          api_huggingface ::components::inference_shared::InferenceResponse::Single( output ) => {
       assert!( !output.generated_text.is_empty(), "Generated text should not be empty" );
           },
-          api_huggingface::components::inference_shared::InferenceResponse::Batch( outputs ) => {
+          api_huggingface ::components::inference_shared::InferenceResponse::Batch( outputs ) => {
       assert!( !outputs.is_empty(), "Batch should not be empty" );
       assert!( !outputs[0].generated_text.is_empty(), "Generated text should not be empty" );
           },
-          api_huggingface::components::inference_shared::InferenceResponse::Summarization( summaries ) => {
+          api_huggingface ::components::inference_shared::InferenceResponse::Summarization( summaries ) => {
       assert!( !summaries.is_empty(), "Summarization should not be empty" );
       assert!( !summaries[0].summary_text.is_empty(), "Summary text should not be empty" );
           }
@@ -197,18 +197,18 @@ mod integration_tests
       },
       Ok( Err( e ) ) =>
       {
-  panic!( "Integration test FAILED - API error: {e}
+  panic!( "Integration test FAILED - API error : {e}
 
 SETUP REQUIRED:
-1. Get API key from: https:// huggingface.co/settings/tokens
-2. Save to: secret/-secrets.sh as HUGGINGFACE_API_KEY=your-key-here
-3. Re-run: cargo test
+1. Get API key from : https:// huggingface.co/settings/tokens
+2. Save to : secret/-secrets.sh as HUGGINGFACE_API_KEY=your-key-here
+3. Re-run : cargo test
 
 Integration tests MUST use real credentials to validate actual API behavior." );
       },
       Err( e ) =>
       {
-  panic!( "Integration test FAILED - API request timeout: {e:?}
+  panic!( "Integration test FAILED - API request timeout : {e:?}
 
 TROUBLESHOOTING:
 1. Check network connectivity
@@ -241,7 +241,7 @@ Integration tests require real API access to validate functionality." );
   
   // Use embeddings API to validate model constant works (with timeout)
   let response = tokio::time::timeout(
-      core::time::Duration::from_secs( 10 ),
+      core ::time::Duration::from_secs( 10 ),
       client.embeddings().create( "test text", model )
   ).await;
 
@@ -251,11 +251,11 @@ Integration tests require real API access to validate functionality." );
       Ok( Ok( embeddings ) ) => {
   match embeddings
   {
-          api_huggingface::components::embeddings::EmbeddingResponse::Single( embedding_vecs ) => {
+          api_huggingface ::components::embeddings::EmbeddingResponse::Single( embedding_vecs ) => {
       assert!( !embedding_vecs.is_empty(), "Embeddings should not be empty" );
       assert!( !embedding_vecs[0].is_empty(), "First embedding should have dimensions" );
           },
-          api_huggingface::components::embeddings::EmbeddingResponse::Batch( batch_embeddings ) => {
+          api_huggingface ::components::embeddings::EmbeddingResponse::Batch( batch_embeddings ) => {
       assert!( !batch_embeddings.is_empty(), "Batch embeddings should not be empty" );
       assert!( !batch_embeddings[0].is_empty(), "First batch should not be empty" );
       assert!( !batch_embeddings[0][0].is_empty(), "First embedding should have dimensions" );
@@ -264,18 +264,18 @@ Integration tests require real API access to validate functionality." );
       },
       Ok( Err( e ) ) =>
       {
-  panic!( "Integration test FAILED - API error: {e}
+  panic!( "Integration test FAILED - API error : {e}
 
 SETUP REQUIRED:
-1. Get API key from: https:// huggingface.co/settings/tokens
-2. Save to: secret/-secrets.sh as HUGGINGFACE_API_KEY=your-key-here
-3. Re-run: cargo test
+1. Get API key from : https:// huggingface.co/settings/tokens
+2. Save to : secret/-secrets.sh as HUGGINGFACE_API_KEY=your-key-here
+3. Re-run : cargo test
 
 Integration tests MUST use real credentials to validate actual API behavior." );
       },
       Err( e ) =>
       {
-  panic!( "Integration test FAILED - API request timeout: {e:?}
+  panic!( "Integration test FAILED - API request timeout : {e:?}
 
 TROUBLESHOOTING:
 1. Check network connectivity
@@ -305,7 +305,7 @@ Integration tests require real API access to validate functionality." );
 
   // Make real API call to get actual InferenceOutput (with timeout)
   let response = tokio::time::timeout(
-      core::time::Duration::from_secs( 10 ),
+      core ::time::Duration::from_secs( 10 ),
       client.inference().create_with_parameters( "The capital of France is", "gpt2", InferenceParameters::default().with_max_new_tokens( 20 ) )
   ).await;
 
@@ -316,7 +316,7 @@ Integration tests require real API access to validate functionality." );
   // Validate InferenceOutput structure with real data
   match response_data
   {
-          api_huggingface::components::inference_shared::InferenceResponse::Single( output ) => {
+          api_huggingface ::components::inference_shared::InferenceResponse::Single( output ) => {
       assert!( !output.generated_text.is_empty(), "Generated text should not be empty" );
       
       // Validate optional metadata fields are handled correctly
@@ -330,12 +330,12 @@ Integration tests require real API access to validate functionality." );
               assert!( generated_tokens > 0, "Generated tokens should be positive" );
       }
           },
-          api_huggingface::components::inference_shared::InferenceResponse::Batch( outputs ) => {
+          api_huggingface ::components::inference_shared::InferenceResponse::Batch( outputs ) => {
       assert!( !outputs.is_empty(), "Batch should not be empty" );
       let output = &outputs[0];
       assert!( !output.generated_text.is_empty(), "Generated text should not be empty" );
           },
-          api_huggingface::components::inference_shared::InferenceResponse::Summarization( summaries ) => {
+          api_huggingface ::components::inference_shared::InferenceResponse::Summarization( summaries ) => {
       assert!( !summaries.is_empty(), "Summarization should not be empty" );
       assert!( !summaries[0].summary_text.is_empty(), "Summary text should not be empty" );
           }
@@ -343,18 +343,18 @@ Integration tests require real API access to validate functionality." );
       },
       Ok( Err( e ) ) =>
       {
-  panic!( "Integration test FAILED - API error: {e}
+  panic!( "Integration test FAILED - API error : {e}
 
 SETUP REQUIRED:
-1. Get API key from: https:// huggingface.co/settings/tokens
-2. Save to: secret/-secrets.sh as HUGGINGFACE_API_KEY=your-key-here
-3. Re-run: cargo test
+1. Get API key from : https:// huggingface.co/settings/tokens
+2. Save to : secret/-secrets.sh as HUGGINGFACE_API_KEY=your-key-here
+3. Re-run : cargo test
 
 Integration tests MUST use real credentials to validate actual API behavior." );
       },
       Err( e ) =>
       {
-  panic!( "Integration test FAILED - API request timeout: {e:?}
+  panic!( "Integration test FAILED - API request timeout : {e:?}
 
 TROUBLESHOOTING:
 1. Check network connectivity

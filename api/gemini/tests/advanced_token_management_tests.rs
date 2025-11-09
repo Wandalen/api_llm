@@ -23,20 +23,20 @@ use api_gemini::models::
 /// # Returns
 ///
 /// Returns a [`CountTokensRequest`] with the provided text content.
-fn create_sample_count_request( text: &str ) -> CountTokensRequest
+fn create_sample_count_request( text : &str ) -> CountTokensRequest
 {
   CountTokensRequest {
-    contents: vec![ Content {
-      role: "user".to_string(),
-      parts: vec![ Part {
-        text: Some( text.to_string() ),
-        inline_data: None,
-        function_call: None,
-        function_response: None,
+    contents : vec![ Content {
+      role : "user".to_string(),
+      parts : vec![ Part {
+        text : Some( text.to_string() ),
+        inline_data : None,
+        function_call : None,
+        function_response : None,
         ..Default::default()
       } ],
     } ],
-    generate_content_request: None,
+    generate_content_request : None,
   }
 }
 
@@ -108,7 +108,7 @@ async fn test_batch_count_tokens_edge_cases() -> Result< (), Box< dyn std::error
   let client = create_integration_client();
   let models_api = client.models();
 
-  // Note: Empty strings and whitespace-only strings are rejected by the API as invalid
+  // Note : Empty strings and whitespace-only strings are rejected by the API as invalid
   // Only testing valid minimal content edge cases
   let requests = vec![
     create_sample_count_request( "A" ), // Single character
@@ -151,19 +151,19 @@ async fn test_analyze_tokens_with_breakdown() -> Result< (), Box< dyn std::error
   let models_api = client.models();
 
   let request = AnalyzeTokensRequest {
-    contents: vec![ Content {
-      role: "user".to_string(),
-      parts: vec![ Part {
-        text: Some( "Create a comprehensive analysis of machine learning algorithms including supervised, unsupervised, and reinforcement learning approaches. Provide detailed examples and use cases for each category.".to_string() ),
-        inline_data: None,
-        function_call: None,
-        function_response: None,
+    contents : vec![ Content {
+      role : "user".to_string(),
+      parts : vec![ Part {
+        text : Some( "Create a comprehensive analysis of machine learning algorithms including supervised, unsupervised, and reinforcement learning approaches. Provide detailed examples and use cases for each category.".to_string() ),
+        inline_data : None,
+        function_call : None,
+        function_response : None,
         ..Default::default()
       } ],
     } ],
-    generate_content_request: None,
-    include_breakdown: Some( true ),
-    estimate_generation_tokens: Some( true ),
+    generate_content_request : None,
+    include_breakdown : Some( true ),
+    estimate_generation_tokens : Some( true ),
   };
 
   let response = models_api.analyze_tokens( "gemini-2.0-flash-experimental", &request ).await?;
@@ -184,7 +184,7 @@ async fn test_analyze_tokens_with_breakdown() -> Result< (), Box< dyn std::error
 
     // Allow for small discrepancies due to overhead
     let diff = ( response.total_tokens - breakdown_total ).abs();
-    assert!( diff <= 5, "Breakdown total should closely match overall total (diff: {})", diff );
+    assert!( diff <= 5, "Breakdown total should closely match overall total (diff : {})", diff );
   }
 
   // Verify cost estimate is included when requested
@@ -204,7 +204,7 @@ async fn test_analyze_tokens_with_breakdown() -> Result< (), Box< dyn std::error
   }
 
   // Verify optimization suggestions are included when requested
-  if let Some( suggestions ) = &None::<Vec< String >>
+  if let Some( suggestions ) = &None::< Vec< String > >
   {
     assert!( !suggestions.is_empty(), "Should provide at least one optimization suggestion" );
 
@@ -215,17 +215,17 @@ async fn test_analyze_tokens_with_breakdown() -> Result< (), Box< dyn std::error
   }
 
   println!( "✓ Enhanced token analysis test passed" );
-  println!( "  Total tokens: {}", response.total_tokens );
+  println!( "  Total tokens : {}", response.total_tokens );
 
   if let Some( breakdown ) = response.token_breakdown
   {
-    println!( "  Text tokens: {:?}", breakdown.text_tokens );
-    println!( "  System tokens: {:?}", breakdown.system_tokens );
+    println!( "  Text tokens : {:?}", breakdown.text_tokens );
+    println!( "  System tokens : {:?}", breakdown.system_tokens );
   }
 
   if let Some( cost ) = response.cost_estimate
   {
-    println!( "  Estimated cost: ${:.6}", cost.total_cost.unwrap_or(0.0) );
+    println!( "  Estimated cost : ${:.6}", cost.total_cost.unwrap_or(0.0) );
   }
 
   Ok( () )
@@ -248,19 +248,19 @@ async fn test_analyze_tokens_minimal() -> Result< (), Box< dyn std::error::Error
   let models_api = client.models();
 
   let request = AnalyzeTokensRequest {
-    contents: vec![ Content {
-      role: "user".to_string(),
-      parts: vec![ Part {
-        text: Some( "Simple test message for token analysis.".to_string() ),
-        inline_data: None,
-        function_call: None,
-        function_response: None,
+    contents : vec![ Content {
+      role : "user".to_string(),
+      parts : vec![ Part {
+        text : Some( "Simple test message for token analysis.".to_string() ),
+        inline_data : None,
+        function_call : None,
+        function_response : None,
         ..Default::default()
       } ],
     } ],
-    generate_content_request: None,
-    include_breakdown: Some( false ),
-    estimate_generation_tokens: Some( false ),
+    generate_content_request : None,
+    include_breakdown : Some( false ),
+    estimate_generation_tokens : Some( false ),
   };
 
   let response = models_api.analyze_tokens( "gemini-2.0-flash-experimental", &request ).await?;
@@ -271,10 +271,10 @@ async fn test_analyze_tokens_minimal() -> Result< (), Box< dyn std::error::Error
   // Optional features should not be included
   assert!( response.token_breakdown.is_none(), "Breakdown should not be included when not requested" );
   assert!( response.cost_estimate.is_none(), "Cost estimate should not be included when not requested" );
-  assert!( None::<Vec< String >>.is_none(), "Optimization suggestions should not be included when not requested" );
+  assert!( None::< Vec< String > >.is_none(), "Optimization suggestions should not be included when not requested" );
 
   println!( "✓ Minimal token analysis test passed" );
-  println!( "  Total tokens: {}", response.total_tokens );
+  println!( "  Total tokens : {}", response.total_tokens );
 
   Ok( () )
 }
@@ -296,31 +296,31 @@ async fn test_analyze_tokens_complex_content() -> Result< (), Box< dyn std::erro
   let models_api = client.models();
 
   let request = AnalyzeTokensRequest {
-    contents: vec![
+    contents : vec![
       Content {
-        role: "user".to_string(),
-        parts: vec![ Part {
-          text: Some( "Analyze the following JSON data and explain its structure:".to_string() ),
-          inline_data: None,
-          function_call: None,
-          function_response: None,
+        role : "user".to_string(),
+        parts : vec![ Part {
+          text : Some( "Analyze the following JSON data and explain its structure:".to_string() ),
+          inline_data : None,
+          function_call : None,
+          function_response : None,
           ..Default::default()
         } ],
       },
       Content {
-        role: "user".to_string(),
-        parts: vec![ Part {
-          text: Some( r#"{"users": [{"id": 1, "name": "Alice", "roles": ["admin", "editor"]}, {"id": 2, "name": "Bob", "roles": ["viewer"]}], "metadata": {"version": "1.0", "created": "2024-01-15"}}"#.to_string() ),
-          inline_data: None,
-          function_call: None,
-          function_response: None,
+        role : "user".to_string(),
+        parts : vec![ Part {
+          text : Some( r#"{"users": [{"id": 1, "name": "Alice", "roles": ["admin", "editor"]}, {"id": 2, "name": "Bob", "roles": ["viewer"]}], "metadata": {"version": "1.0", "created": "2024-01-15"}}"#.to_string() ),
+          inline_data : None,
+          function_call : None,
+          function_response : None,
           ..Default::default()
         } ],
       },
     ],
-    generate_content_request: None,
-    include_breakdown: Some( true ),
-    estimate_generation_tokens: Some( true ),
+    generate_content_request : None,
+    include_breakdown : Some( true ),
+    estimate_generation_tokens : Some( true ),
   };
 
   let response = models_api.analyze_tokens( "gemini-2.0-flash-experimental", &request ).await?;
@@ -339,7 +339,7 @@ async fn test_analyze_tokens_complex_content() -> Result< (), Box< dyn std::erro
   }
 
   println!( "✓ Complex content token analysis test passed" );
-  println!( "  Total tokens for complex content: {}", response.total_tokens );
+  println!( "  Total tokens for complex content : {}", response.total_tokens );
 
   Ok( () )
 }
@@ -356,7 +356,7 @@ async fn test_token_management_error_handling() -> Result< (), Box< dyn std::err
 
   // Test with invalid model name
   let request = create_sample_count_request( "Test content" );
-  let batch_request = BatchCountTokensRequest { requests: vec![ request ] };
+  let batch_request = BatchCountTokensRequest { requests : vec![ request ] };
 
   let result = models_api.batch_count_tokens( "invalid-model-name", &batch_request ).await;
 
@@ -365,19 +365,19 @@ async fn test_token_management_error_handling() -> Result< (), Box< dyn std::err
 
   // Test analyze tokens with invalid model
   let analyze_request = AnalyzeTokensRequest {
-    contents: vec![ Content {
-      role: "user".to_string(),
-      parts: vec![ Part {
-        text: Some( "Test content".to_string() ),
-        inline_data: None,
-        function_call: None,
-        function_response: None,
+    contents : vec![ Content {
+      role : "user".to_string(),
+      parts : vec![ Part {
+        text : Some( "Test content".to_string() ),
+        inline_data : None,
+        function_call : None,
+        function_response : None,
         ..Default::default()
       } ],
     } ],
-    generate_content_request: None,
-    include_breakdown: Some( true ),
-    estimate_generation_tokens: Some( true ),
+    generate_content_request : None,
+    include_breakdown : Some( true ),
+    estimate_generation_tokens : Some( true ),
   };
 
   let result = models_api.analyze_tokens( "invalid-model-name", &analyze_request ).await;
@@ -438,7 +438,7 @@ async fn test_batch_count_tokens_performance() -> Result< (), Box< dyn std::erro
 
   println!( "✓ Performance test passed" );
   println!( "  Processed {} requests in {:.2}s", response.responses.len(), duration.as_secs_f64() );
-  println!( "  Average time per request: {:.2}ms", duration.as_millis() as f64 / 10.0 );
+  println!( "  Average time per request : {:.2}ms", duration.as_millis() as f64 / 10.0 );
 
   Ok( () )
 }

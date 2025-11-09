@@ -495,7 +495,7 @@ impl CodeAssistantPlatform
   let code = &request.code;
 
   format!(
-      "Review the following {language} code focusing on: {focus_areas}. Identify issues and provide suggestions:\n\n```{language}\n{code}\n```\n\nReview findings:"
+      "Review the following {language} code focusing on : {focus_areas}. Identify issues and provide suggestions:\n\n```{language}\n{code}\n```\n\nReview findings:"
   )
   }
 
@@ -510,7 +510,7 @@ impl CodeAssistantPlatform
   let topic = &request.topic;
 
   format!(
-      "Write {content_type} about '{topic}' for {audience} developers. Target length: {length} ({min_words}-{max_words} words).{examples_note}\n\nContent:"
+      "Write {content_type} about '{topic}' for {audience} developers. Target length : {length} ({min_words}-{max_words} words).{examples_note}\n\nContent:"
   )
   }
 
@@ -590,7 +590,7 @@ impl CodeAssistantPlatform
           suggestion :
           {
       let trimmed = line.trim();
-      Some( format!( "Consider improving: {trimmed}" ) )
+      Some( format!( "Consider improving : {trimmed}" ) )
           },
           confidence : 0.7,
   } );

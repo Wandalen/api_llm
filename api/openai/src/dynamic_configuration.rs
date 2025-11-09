@@ -8,9 +8,9 @@ mod private
 {
   use std::
   {
-    collections::HashMap,
-    sync::{ Arc, RwLock },
-    time::Instant,
+    collections ::HashMap,
+    sync ::{ Arc, RwLock },
+    time ::Instant,
   };
   use core::time::Duration;
   use serde::{ Deserialize, Serialize };
@@ -471,7 +471,7 @@ mod private
     #[ must_use ]
     pub fn create_value_watcher< T : Clone + Send + 'static >( initial_value : T ) -> ( watch::Sender< T >, watch::Receiver< T > )
     {
-      watch::channel( initial_value )
+      watch ::channel( initial_value )
     }
 
     /// Apply configuration changes atomically
@@ -502,7 +502,7 @@ mod private
     #[ must_use ]
     pub fn create_backup( snapshot : &ConfigSnapshot ) -> String
     {
-      serde_json::to_string( snapshot ).unwrap_or_else( | _ | "{}".to_string() )
+      serde_json ::to_string( snapshot ).unwrap_or_else( | _ | "{}".to_string() )
     }
 
     /// Restore configuration from backup
@@ -513,7 +513,7 @@ mod private
     #[ inline ]
     pub fn restore_from_backup( backup : &str ) -> Result< ConfigSnapshot, String >
     {
-      serde_json::from_str( backup ).map_err( | e | format!( "Failed to parse backup: {e}" ) )
+      serde_json ::from_str( backup ).map_err( | e | format!( "Failed to parse backup : {e}" ) )
     }
 
     /// Merge two configuration snapshots
@@ -594,7 +594,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use private::ConfigValue;
   exposed use private::ConfigChangeEvent;

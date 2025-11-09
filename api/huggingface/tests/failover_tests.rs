@@ -26,9 +26,9 @@
 
 use api_huggingface::{
   Client,
-  environment::HuggingFaceEnvironmentImpl,
-  providers::ChatMessage,
-  reliability::{
+  environment ::HuggingFaceEnvironmentImpl,
+  providers ::ChatMessage,
+  reliability ::{
   FailoverManager,
   FailoverConfig,
   FailoverStrategy,
@@ -41,7 +41,7 @@ use std::env;
 use std::sync::Arc;
 
 /// Create a test client with API key from environment
-fn create_test_client() -> Client<HuggingFaceEnvironmentImpl > 
+fn create_test_client() -> Client< HuggingFaceEnvironmentImpl > 
 {
   let api_key = env::var( "HUGGINGFACE_API_KEY" )
   .unwrap_or_else( |_| "test-key".to_string( ));
@@ -611,7 +611,7 @@ async fn test_health_tracking_recovers_after_success()
   assert!( !health[0 ].healthy, "Should be unhealthy after manual failure" );
 
   // Wait for failure window to expire
-  tokio::time::sleep( Duration::from_secs( 2 )).await;
+  tokio ::time::sleep( Duration::from_secs( 2 )).await;
 
   // Success should restore health
   let result = failover.execute_with_failover( |model| {

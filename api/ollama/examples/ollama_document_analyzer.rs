@@ -32,7 +32,7 @@ async fn setup_client_and_model() -> Result< ( OllamaClient, String ), Box< dyn 
   if !client.is_available().await
   {
     eprintln!( "❌ Ollama server is not available. Please start Ollama and try again." );
-    std::process::exit( 1 );
+    std ::process::exit( 1 );
   }
   
   // Get available models
@@ -40,8 +40,8 @@ async fn setup_client_and_model() -> Result< ( OllamaClient, String ), Box< dyn 
   if models.models.is_empty()
   {
     eprintln!( "❌ No models available. Please install a model first." );
-    eprintln!( "   Install with: ollama pull llama3.2" );
-    std::process::exit( 1 );
+    eprintln!( "   Install with : ollama pull llama3.2" );
+    std ::process::exit( 1 );
   }
   
   // Prefer smarter models over tinyllama
@@ -52,7 +52,7 @@ async fn setup_client_and_model() -> Result< ( OllamaClient, String ), Box< dyn 
     .find( |&preferred| models.models.iter().any( |m| m.name == *preferred ) )
     .map_or_else(|| models.models[ 0 ].name.clone(), |&name| name.to_string());
     
-  println!( "✅ Using model: {model_name}" );
+  println!( "✅ Using model : {model_name}" );
   
   Ok( ( client, model_name ) )
 }
@@ -78,10 +78,10 @@ async fn perform_document_analysis(
     // Add delay between requests to prevent overwhelming the server
     if i > 0
     {
-      tokio::time::sleep( tokio::time::Duration::from_millis( 500 ) ).await;
+      tokio ::time::sleep( tokio::time::Duration::from_millis( 500 ) ).await;
     }
 
-    println!( "🔍 Analyzing: {task_name}" );
+    println!( "🔍 Analyzing : {task_name}" );
     println!( "─────────────────────────" );
 
     let messages = vec![
@@ -116,8 +116,8 @@ async fn perform_document_analysis(
     };
 
     // Retry logic with exponential backoff
-    let mut attempts: u32 = 0;
-    let max_attempts: u32 = 3;
+    let mut attempts : u32 = 0;
+    let max_attempts : u32 = 3;
     let mut success = false;
 
     while attempts < max_attempts && !success
@@ -139,11 +139,11 @@ async fn perform_document_analysis(
             let delay = 1000 * ( 2_u64.pow( attempts ) ); // Exponential backoff
             eprintln!( "⚠️  Attempt {attempts} failed for {task_name}: {e}" );
             eprintln!( "   Retrying in {delay}ms..." );
-            tokio::time::sleep( tokio::time::Duration::from_millis( delay ) ).await;
+            tokio ::time::sleep( tokio::time::Duration::from_millis( delay ) ).await;
           }
           else
           {
-            eprintln!( "❌ Error analyzing {task_name} after {max_attempts} attempts: {e}" );
+            eprintln!( "❌ Error analyzing {task_name} after {max_attempts} attempts : {e}" );
           }
         }
       }
@@ -160,7 +160,7 @@ async fn generate_document_statistics(
 ) -> Result< (), Box< dyn core::error::Error > >
 {
   // Add delay before this final request
-  tokio::time::sleep( tokio::time::Duration::from_millis( 500 ) ).await;
+  tokio ::time::sleep( tokio::time::Duration::from_millis( 500 ) ).await;
 
   println!( "📊 Document Processing Statistics" );
   println!( "================================" );
@@ -194,8 +194,8 @@ async fn generate_document_statistics(
   };
 
   // Retry logic with exponential backoff
-  let mut attempts: u32 = 0;
-  let max_attempts: u32 = 3;
+  let mut attempts : u32 = 0;
+  let max_attempts : u32 = 3;
   let mut success = false;
 
   while attempts < max_attempts && !success
@@ -214,13 +214,13 @@ async fn generate_document_statistics(
         if attempts < max_attempts
         {
           let delay = 1000 * ( 2_u64.pow( attempts ) ); // Exponential backoff
-          eprintln!( "⚠️  Attempt {attempts} failed for statistics: {e}" );
+          eprintln!( "⚠️  Attempt {attempts} failed for statistics : {e}" );
           eprintln!( "   Retrying in {delay}ms..." );
-          tokio::time::sleep( tokio::time::Duration::from_millis( delay ) ).await;
+          tokio ::time::sleep( tokio::time::Duration::from_millis( delay ) ).await;
         }
         else
         {
-          eprintln!( "❌ Error generating statistics after {max_attempts} attempts: {e}" );
+          eprintln!( "❌ Error generating statistics after {max_attempts} attempts : {e}" );
         }
       }
     }
@@ -240,7 +240,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
   // Sample document (in real use, this would be loaded from files)
   let sample_document = if Path::new( "sample_document.txt" ).exists()
   {
-    fs::read_to_string( "sample_document.txt" )?
+    fs ::read_to_string( "sample_document.txt" )?
   }
   else
   {
@@ -265,13 +265,13 @@ technologies, it is crucial to ensure they are developed and deployed in ways th
 humanity as a whole while minimizing potential risks and negative consequences.
     ".trim().to_string();
     
-    fs::write( "sample_document.txt", &sample )?;
-    println!( "📝 Created sample document: sample_document.txt" );
+    fs ::write( "sample_document.txt", &sample )?;
+    println!( "📝 Created sample document : sample_document.txt" );
     sample
   };
   
   let char_count = sample_document.len();
-  println!( "📖 Document loaded: {char_count} characters" );
+  println!( "📖 Document loaded : {char_count} characters" );
   println!( "\n" );
   
   // Perform document analysis using helper function

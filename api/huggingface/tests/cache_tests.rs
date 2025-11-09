@@ -39,7 +39,7 @@ async fn test_basic_insert_and_get()
 #[ tokio::test ]
 async fn test_cache_miss() 
 {
-  let cache : Cache<&str, &str > = Cache::new( CacheConfig::default( ));
+  let cache : Cache< &str, &str > = Cache::new( CacheConfig::default( ));
 
   let value = cache.get( &"nonexistent" ).await;
   assert_eq!( value, None );
@@ -60,7 +60,7 @@ async fn test_update_existing_key()
 #[ tokio::test ]
 async fn test_cache_with_different_types() 
 {
-  let cache : Cache<i32, String > = Cache::new( CacheConfig::default( ));
+  let cache : Cache< i32, String > = Cache::new( CacheConfig::default( ));
 
   cache.insert( 1, "one".to_string( ), None ).await;
   cache.insert( 2, "two".to_string( ), None ).await;
@@ -85,7 +85,7 @@ async fn test_ttl_expiration()
   assert_eq!( cache.get( &"key1" ).await, Some( "value1" ));
 
   // Wait for expiration
-  tokio::time::sleep( Duration::from_millis( 150 )).await;
+  tokio ::time::sleep( Duration::from_millis( 150 )).await;
 
   // Should be expired
   assert_eq!( cache.get( &"key1" ).await, None );
@@ -104,7 +104,7 @@ async fn test_default_ttl()
   cache.insert( "key1", "value1", None ).await;
 
   // Should use default TTL
-  tokio::time::sleep( Duration::from_millis( 150 )).await;
+  tokio ::time::sleep( Duration::from_millis( 150 )).await;
 
   assert_eq!( cache.get( &"key1" ).await, None );
 }
@@ -121,7 +121,7 @@ async fn test_no_ttl_never_expires()
   cache.insert( "key1", "value1", None ).await;
 
   // Wait some time
-  tokio::time::sleep( Duration::from_millis( 100 )).await;
+  tokio ::time::sleep( Duration::from_millis( 100 )).await;
 
   // Should still exist
   assert_eq!( cache.get( &"key1" ).await, Some( "value1" ));
@@ -139,7 +139,7 @@ async fn test_override_default_ttl()
   // Override with shorter TTL
   cache.insert( "key1", "value1", Some( Duration::from_millis( 50 )) ).await;
 
-  tokio::time::sleep( Duration::from_millis( 100 )).await;
+  tokio ::time::sleep( Duration::from_millis( 100 )).await;
 
   // Should be expired ( using override, not default )
   assert_eq!( cache.get( &"key1" ).await, None );
@@ -180,17 +180,17 @@ async fn test_lru_eviction()
   let cache = Cache::new( config );
 
   cache.insert( "key1", "value1", None ).await;
-  tokio::time::sleep( Duration::from_millis( 10 )).await;
+  tokio ::time::sleep( Duration::from_millis( 10 )).await;
 
   cache.insert( "key2", "value2", None ).await;
-  tokio::time::sleep( Duration::from_millis( 10 )).await;
+  tokio ::time::sleep( Duration::from_millis( 10 )).await;
 
   cache.insert( "key3", "value3", None ).await;
-  tokio::time::sleep( Duration::from_millis( 10 )).await;
+  tokio ::time::sleep( Duration::from_millis( 10 )).await;
 
   // Access key1 to make it recently used
   cache.get( &"key1" ).await;
-  tokio::time::sleep( Duration::from_millis( 10 )).await;
+  tokio ::time::sleep( Duration::from_millis( 10 )).await;
 
   // Insert key4 - should evict key2 ( least recently used )
   cache.insert( "key4", "value4", None ).await;
@@ -243,7 +243,7 @@ async fn test_hit_statistics()
 #[ tokio::test ]
 async fn test_miss_statistics() 
 {
-  let cache : Cache<&str, &str > = Cache::new( CacheConfig::default( ));
+  let cache : Cache< &str, &str > = Cache::new( CacheConfig::default( ));
 
   // Miss
   cache.get( &"nonexistent" ).await;
@@ -328,7 +328,7 @@ async fn test_cleanup_expired_entries()
   cache.insert( "key3", "value3", None ).await;
 
   // Wait for key1 to expire
-  tokio::time::sleep( Duration::from_millis( 100 )).await;
+  tokio ::time::sleep( Duration::from_millis( 100 )).await;
 
   let removed = cache.cleanup_expired( ).await;
   assert_eq!( removed, 1 );
@@ -376,7 +376,7 @@ async fn test_remove_existing_key()
 #[ tokio::test ]
 async fn test_remove_nonexistent_key() 
 {
-  let cache : Cache<&str, &str > = Cache::new( CacheConfig::default( ));
+  let cache : Cache< &str, &str > = Cache::new( CacheConfig::default( ));
 
   let removed = cache.remove( &"nonexistent" ).await;
   assert_eq!( removed, None );
@@ -481,7 +481,7 @@ async fn test_concurrent_mixed_operations()
 #[ tokio::test ]
 async fn test_empty_cache() 
 {
-  let cache : Cache<&str, &str > = Cache::new( CacheConfig::default( ));
+  let cache : Cache< &str, &str > = Cache::new( CacheConfig::default( ));
 
   assert!( cache.is_empty( ).await );
   assert_eq!( cache.len( ).await, 0 );
@@ -543,7 +543,7 @@ async fn test_expired_entry_counts_as_miss()
 
   cache.insert( "key1", "value1", Some( Duration::from_millis( 50 )) ).await;
 
-  tokio::time::sleep( Duration::from_millis( 100 )).await;
+  tokio ::time::sleep( Duration::from_millis( 100 )).await;
 
   // Accessing expired entry should count as miss
   cache.get( &"key1" ).await;
@@ -574,7 +574,7 @@ async fn test_get_cache_config()
   default_ttl : Some( Duration::from_secs( 600 )),
   };
 
-  let cache : Cache<String, String > = Cache::new( config.clone( ));
+  let cache : Cache< String, String > = Cache::new( config.clone( ));
 
   let retrieved_config = cache.config( ).await;
   assert_eq!( retrieved_config.max_entries, 500 );
@@ -588,7 +588,7 @@ async fn test_get_cache_config()
 #[ tokio::test ]
 async fn test_response_caching_scenario() 
 {
-  let cache : Cache<String, Vec< u8 >> = Cache::new( CacheConfig {
+  let cache : Cache< String, Vec< u8 > > = Cache::new( CacheConfig {
   max_entries : 100,
   default_ttl : Some( Duration::from_secs( 60 )),
   } );

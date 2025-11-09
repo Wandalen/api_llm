@@ -794,7 +794,7 @@ impl SentimentAnalysisPlatform
   fn build_sentiment_prompt(&self, text : &str) -> Result< String, Box< dyn std::error::Error > > 
   {
   let prompt = format!(
-      "Analyze the sentiment of the following text and classify it as very positive, positive, neutral, negative, or very negative:\n\nText: {}\n\nSentiment:",
+      "Analyze the sentiment of the following text and classify it as very positive, positive, neutral, negative, or very negative:\n\nText : {}\n\nSentiment:",
       text
   );
   Ok(prompt)
@@ -1027,10 +1027,10 @@ impl SentimentSystemPlatform
   loop
   {
       print!("\n > ");
-      io::stdout().flush()?;
+      io ::stdout().flush()?;
 
       let mut input = String::new();
-      io::stdin().read_line(&mut input)?;
+      io ::stdin().read_line(&mut input)?;
       let input = input.trim();
 
       if input.is_empty()
@@ -1055,7 +1055,7 @@ impl SentimentSystemPlatform
   "/clear" => self.clear_history(),
   cmd if cmd.starts_with('/') =>
   {
-          println!("❌ Unknown command: {}. Type /help for available commands.", cmd);
+          println!("❌ Unknown command : {}. Type /help for available commands.", cmd);
   }
   text => {
           // Direct sentiment analysis
@@ -1089,7 +1089,7 @@ impl SentimentSystemPlatform
   /// Quick sentiment analysis
   async fn quick_analyze(&mut self, text : &str) -> Result< (), Box< dyn std::error::Error > > 
   {
-  println!("\n🔍 Analyzing: \"{}\"", text);
+  println!("\n🔍 Analyzing : \"{}\"", text);
 
   let start_time = std::time::Instant::now();
   match self.sentiment_platform.analyze_sentiment(text).await
@@ -1099,7 +1099,7 @@ impl SentimentSystemPlatform
   self.update_stats(&result, start_time.elapsed().as_millis() as u64);
       }
       Err(e) => {
-  println!("❌ Analysis failed: {}", e);
+  println!("❌ Analysis failed : {}", e);
       }
   }
 
@@ -1112,10 +1112,10 @@ impl SentimentSystemPlatform
   println!("\n📝 Interactive Sentiment Analysis");
   println!("=================================");
 
-  print!("Enter text to analyze: ");
-  io::stdout().flush()?;
+  print!("Enter text to analyze : ");
+  io ::stdout().flush()?;
   let mut text = String::new();
-  io::stdin().read_line(&mut text)?;
+  io ::stdin().read_line(&mut text)?;
   let text = text.trim();
 
   if text.is_empty()
@@ -1143,7 +1143,7 @@ impl SentimentSystemPlatform
   self.update_stats(&result, start_time.elapsed().as_millis() as u64);
       }
       Err(e) => {
-  println!("❌ Analysis failed: {}", e);
+  println!("❌ Analysis failed : {}", e);
       }
   }
 
@@ -1162,9 +1162,9 @@ impl SentimentSystemPlatform
   loop
   {
       print!("{}: ", texts.len() + 1);
-      io::stdout().flush()?;
+      io ::stdout().flush()?;
       let mut text = String::new();
-      io::stdin().read_line(&mut text)?;
+      io ::stdin().read_line(&mut text)?;
       let text = text.trim();
 
       if text.is_empty()
@@ -1202,19 +1202,19 @@ impl SentimentSystemPlatform
           match result
           {
       Ok(analysis) => {
-              println!("   Sentiment: {} {}", analysis.sentiment.name(), self.get_sentiment_icon(&analysis.sentiment));
-              println!("   Confidence: {:.1}%", analysis.confidence * 100.0);
+              println!("   Sentiment : {} {}", analysis.sentiment.name(), self.get_sentiment_icon(&analysis.sentiment));
+              println!("   Confidence : {:.1}%", analysis.confidence * 100.0);
               if !analysis.emotional_tones.is_empty()
               {
         let emotions : Vec< String > = analysis.emotional_tones.iter()
                   .map(|(tone, intensity)| format!("{} {:.1}", tone.icon(), intensity))
                   .collect();
-        println!("   Emotions: {}", emotions.join(" "));
+        println!("   Emotions : {}", emotions.join(" "));
               }
-              println!("   Moderation: {} {}", analysis.content_assessment.category.color(), analysis.content_assessment.category.name());
+              println!("   Moderation : {} {}", analysis.content_assessment.category.color(), analysis.content_assessment.category.name());
       }
       Err(e) => {
-              println!("   ❌ Failed: {}", e);
+              println!("   ❌ Failed : {}", e);
       }
           }
   }
@@ -1223,7 +1223,7 @@ impl SentimentSystemPlatform
   self.stats.total_response_time_ms += start_time.elapsed().as_millis() as u64;
       }
       Err(e) => {
-  println!("❌ Batch analysis failed: {}", e);
+  println!("❌ Batch analysis failed : {}", e);
       }
   }
 
@@ -1241,11 +1241,11 @@ impl SentimentSystemPlatform
       println!("{}. \"{}\"", i + 1, text);
   }
 
-  print!("\nSelect sample (1-{}) or 'all' for all samples: ", self.sample_texts.len());
-  io::stdout().flush()?;
+  print!("\nSelect sample (1-{}) or 'all' for all samples : ", self.sample_texts.len());
+  io ::stdout().flush()?;
 
   let mut input = String::new();
-  io::stdin().read_line(&mut input)?;
+  io ::stdin().read_line(&mut input)?;
   let input = input.trim();
 
   if input.eq_ignore_ascii_case("all")
@@ -1283,7 +1283,7 @@ impl SentimentSystemPlatform
       self.update_stats(&result, start_time.elapsed().as_millis() as u64);
           }
           Err(e) => {
-      println!("❌ Analysis failed: {}", e);
+      println!("❌ Analysis failed : {}", e);
           }
   }
       } else {
@@ -1326,7 +1326,7 @@ impl SentimentSystemPlatform
   
   for category in categories
   {
-      println!("{} {} - Severity Level: {}, Should Block: {}",
+      println!("{} {} - Severity Level : {}, Should Block : {}",
                category.color(),
                category.name(),
                category.severity_level(),
@@ -1343,7 +1343,7 @@ impl SentimentSystemPlatform
   
   for action in actions
   {
-      println!("{} {} - Severity: {}", action.icon(), action.name(), action.severity());
+      println!("{} {} - Severity : {}", action.icon(), action.name(), action.severity());
   }
   }
 
@@ -1354,18 +1354,18 @@ impl SentimentSystemPlatform
   
   println!("\n📊 System Statistics");
   println!("===================");
-  println!("Individual Analyses: {}", self.stats.analyses_completed);
-  println!("Batch Analyses: {}", self.stats.batch_analyses_completed);
-  println!("Total Platform Analyses: {}", platform_stats.total_count);
-  println!("Emotions Detected: {}", self.stats.emotions_detected);
-  println!("Content Blocked: {}", self.stats.content_blocked);
+  println!("Individual Analyses : {}", self.stats.analyses_completed);
+  println!("Batch Analyses : {}", self.stats.batch_analyses_completed);
+  println!("Total Platform Analyses : {}", platform_stats.total_count);
+  println!("Emotions Detected : {}", self.stats.emotions_detected);
+  println!("Content Blocked : {}", self.stats.content_blocked);
   
   println!("\n📈 Performance Metrics");
   println!("======================");
-  println!("Average Processing Time: {:.2}ms", platform_stats.performance_metrics.average_processing_time);
-  println!("Total Processing Time: {}ms", platform_stats.performance_metrics.total_processing_time);
-  println!("Throughput: {:.2} texts/second", platform_stats.performance_metrics.throughput);
-  println!("Memory Usage: {:.1}MB", platform_stats.performance_metrics.memory_usage_mb);
+  println!("Average Processing Time : {:.2}ms", platform_stats.performance_metrics.average_processing_time);
+  println!("Total Processing Time : {}ms", platform_stats.performance_metrics.total_processing_time);
+  println!("Throughput : {:.2} texts/second", platform_stats.performance_metrics.throughput);
+  println!("Memory Usage : {:.1}MB", platform_stats.performance_metrics.memory_usage_mb);
   
   if !platform_stats.sentiment_distribution.is_empty()
   {
@@ -1378,8 +1378,8 @@ impl SentimentSystemPlatform
                  sentiment.name(), 
                  count);
       }
-      println!("Average Sentiment Score: {:.2}", platform_stats.average_sentiment_score);
-      println!("Standard Deviation: {:.2}", platform_stats.sentiment_score_std_dev);
+      println!("Average Sentiment Score : {:.2}", platform_stats.average_sentiment_score);
+      println!("Standard Deviation : {:.2}", platform_stats.sentiment_score_std_dev);
   }
   
   if !platform_stats.top_emotional_tones.is_empty()
@@ -1400,8 +1400,8 @@ impl SentimentSystemPlatform
       {
   println!("{} {}: {}", category.color(), category.name(), count);
       }
-      println!("Average Toxicity Score: {:.2}", platform_stats.moderation_summary.average_toxicity_score);
-      println!("Blocked: {}, Flagged: {}", 
+      println!("Average Toxicity Score : {:.2}", platform_stats.moderation_summary.average_toxicity_score);
+      println!("Blocked : {}, Flagged : {}", 
                platform_stats.moderation_summary.blocked_count,
                platform_stats.moderation_summary.flagged_count);
   }
@@ -1414,9 +1414,9 @@ impl SentimentSystemPlatform
   println!("==========================");
   
   print!("Export filename (press Enter for default): ");
-  io::stdout().flush()?;
+  io ::stdout().flush()?;
   let mut filename = String::new();
-  io::stdin().read_line(&mut filename)?;
+  io ::stdin().read_line(&mut filename)?;
   let filename = filename.trim();
   
   let filename = if filename.is_empty()
@@ -1434,8 +1434,8 @@ impl SentimentSystemPlatform
       "export_timestamp": chrono::Utc::now().to_rfc3339()
   });
 
-  std::fs::write(&filename, serde_json::to_string_pretty(&export_data)?)?;
-  println!("✅ Results exported to: {}", filename);
+  std ::fs::write(&filename, serde_json::to_string_pretty(&export_data)?)?;
+  println!("✅ Results exported to : {}", filename);
   
   Ok(())
   }
@@ -1451,7 +1451,7 @@ impl SentimentSystemPlatform
   /// Display analysis result with basic formatting
   fn display_analysis_result(&self, result : &SentimentResult) 
   {
-  println!("📊 Sentiment: {} {} (Confidence: {:.1}%)",
+  println!("📊 Sentiment : {} {} (Confidence : {:.1}%)",
              self.get_sentiment_icon(&result.sentiment),
              result.sentiment.name(),
              result.confidence * 100.0);
@@ -1461,20 +1461,20 @@ impl SentimentSystemPlatform
       let emotions : Vec< String > = result.emotional_tones.iter()
   .map(|(tone, intensity)| format!("{} {} ({:.1})", tone.icon(), tone.name(), intensity))
   .collect();
-      println!("😊 Emotions: {}", emotions.join(", "));
+      println!("😊 Emotions : {}", emotions.join(", "));
   }
   
-  println!("🛡️  Moderation: {} {} (Toxicity: {:.1}%)",
+  println!("🛡️  Moderation : {} {} (Toxicity : {:.1}%)",
              result.content_assessment.category.color(),
              result.content_assessment.category.name(),
              result.content_assessment.toxicity_score * 100.0);
   
   if !result.content_assessment.flags.is_empty()
   {
-      println!("🚩 Flags: {}", result.content_assessment.flags.join(", "));
+      println!("🚩 Flags : {}", result.content_assessment.flags.join(", "));
   }
   
-  println!("⏱️  Processing Time: {}ms", result.processing_time_ms);
+  println!("⏱️  Processing Time : {}ms", result.processing_time_ms);
   }
 
   /// Display detailed analysis result
@@ -1482,24 +1482,24 @@ impl SentimentSystemPlatform
   {
   println!("\n🎭 Detailed Analysis Results");
   println!("=============================");
-  println!("Text: \"{}\"", result.text);
+  println!("Text : \"{}\"", result.text);
   println!();
   
   println!("📊 Sentiment Analysis:");
-  println!("  Category: {} {}", self.get_sentiment_icon(&result.sentiment), result.sentiment.name());
-  println!("  Score: {:.2} (Range: {:.1}-{:.1})", 
+  println!("  Category : {} {}", self.get_sentiment_icon(&result.sentiment), result.sentiment.name());
+  println!("  Score : {:.2} (Range : {:.1}-{:.1})", 
              result.sentiment_score,
              result.sentiment.score_range().0,
              result.sentiment.score_range().1);
-  println!("  Polarity: {:.2}", result.sentiment.polarity());
-  println!("  Confidence: {:.1}%", result.confidence * 100.0);
+  println!("  Polarity : {:.2}", result.sentiment.polarity());
+  println!("  Confidence : {:.1}%", result.confidence * 100.0);
   
   if !result.emotional_tones.is_empty()
   {
       println!("\n😊 Emotional Tones:");
       for (tone, intensity) in &result.emotional_tones
       {
-  println!("  {} {} - Intensity: {:.2} (Bias: {})",
+  println!("  {} {} - Intensity : {:.2} (Bias : {})",
                  tone.icon(),
                  tone.name(),
                  intensity,
@@ -1508,20 +1508,20 @@ impl SentimentSystemPlatform
   }
   
   println!("\n🛡️  Content Moderation:");
-  println!("  Category: {} {}", result.content_assessment.category.color(), result.content_assessment.category.name());
-  println!("  Severity Level: {}", result.content_assessment.category.severity_level());
-  println!("  Should Block: {}", if result.content_assessment.category.should_block() { "Yes" } else { "No" });
-  println!("  Toxicity Score: {:.1}%", result.content_assessment.toxicity_score * 100.0);
-  println!("  Confidence: {:.1}%", result.content_assessment.confidence * 100.0);
-  println!("  Recommendation: {} {}", result.content_assessment.recommendation.icon(), result.content_assessment.recommendation.name());
+  println!("  Category : {} {}", result.content_assessment.category.color(), result.content_assessment.category.name());
+  println!("  Severity Level : {}", result.content_assessment.category.severity_level());
+  println!("  Should Block : {}", if result.content_assessment.category.should_block() { "Yes" } else { "No" });
+  println!("  Toxicity Score : {:.1}%", result.content_assessment.toxicity_score * 100.0);
+  println!("  Confidence : {:.1}%", result.content_assessment.confidence * 100.0);
+  println!("  Recommendation : {} {}", result.content_assessment.recommendation.icon(), result.content_assessment.recommendation.name());
   
   if !result.content_assessment.flags.is_empty()
   {
-      println!("  Flags: {}", result.content_assessment.flags.join(", "));
+      println!("  Flags : {}", result.content_assessment.flags.join(", "));
   }
   
   println!("\n⏱️  Performance:");
-  println!("  Processing Time: {}ms", result.processing_time_ms);
+  println!("  Processing Time : {}ms", result.processing_time_ms);
   }
 
   /// Get sentiment icon

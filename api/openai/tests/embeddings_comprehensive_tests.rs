@@ -13,19 +13,19 @@
 use api_openai::ClientApiAccessors;
 use api_openai::components::
 {
-  embeddings::{ CreateEmbeddingResponse, Embedding },
-  embeddings_request::CreateEmbeddingRequest,
-  common::ResponseUsage,
+  embeddings ::{ CreateEmbeddingResponse, Embedding },
+  embeddings_request ::CreateEmbeddingRequest,
+  common ::ResponseUsage,
 };
 
 #[ cfg( feature = "integration" ) ]
 use api_openai::
 {
   Client,
-  error::Result,
-  environment::OpenaiEnvironmentImpl,
-  secret::Secret,
-  components::embeddings_request::EmbeddingInput,
+  error ::Result,
+  environment ::OpenaiEnvironmentImpl,
+  secret ::Secret,
+  components ::embeddings_request::EmbeddingInput,
 };
 
 // json macro is no longer needed with typed requests
@@ -40,9 +40,9 @@ fn test_embedding_structure_creation()
 {
   let embedding = Embedding
   {
-    index: 0,
-    embedding: vec![0.1, 0.2, 0.3],
-    object: "embedding".to_string(),
+    index : 0,
+    embedding : vec![0.1, 0.2, 0.3],
+    object : "embedding".to_string(),
   };
 
   assert_eq!(embedding.index, 0);
@@ -55,23 +55,23 @@ fn test_create_embedding_response_structure()
 {
   let usage = ResponseUsage
   {
-    prompt_tokens: 10,
-    completion_tokens: None,
-    total_tokens: 10,
+    prompt_tokens : 10,
+    completion_tokens : None,
+    total_tokens : 10,
   };
 
   let embedding = Embedding
   {
-    index: 0,
-    embedding: vec![0.1, 0.2, 0.3],
-    object: "embedding".to_string(),
+    index : 0,
+    embedding : vec![0.1, 0.2, 0.3],
+    object : "embedding".to_string(),
   };
 
   let response = CreateEmbeddingResponse
   {
-    data: vec![embedding],
-    model: "text-embedding-ada-002".to_string(),
-    object: "list".to_string(),
+    data : vec![embedding],
+    model : "text-embedding-ada-002".to_string(),
+    object : "list".to_string(),
     usage,
   };
 
@@ -86,9 +86,9 @@ fn test_embedding_serialization()
 {
   let embedding = Embedding
   {
-    index: 0,
-    embedding: vec![0.1, 0.2, 0.3],
-    object: "embedding".to_string(),
+    index : 0,
+    embedding : vec![0.1, 0.2, 0.3],
+    object : "embedding".to_string(),
   };
 
   let serialized = serde_json::to_string(&embedding).expect("Failed to serialize embedding");
@@ -108,7 +108,7 @@ fn test_embedding_deserialization()
   }
   "#;
 
-  let embedding: Embedding = serde_json::from_str(json_data).expect("Failed to deserialize embedding");
+  let embedding : Embedding = serde_json::from_str(json_data).expect("Failed to deserialize embedding");
   assert_eq!(embedding.index, 0);
   assert_eq!(embedding.embedding, vec![0.1, 0.2, 0.3]);
   assert_eq!(embedding.object, "embedding");
@@ -135,7 +135,7 @@ fn test_create_embedding_response_deserialization()
   }
   "#;
 
-  let response: CreateEmbeddingResponse = serde_json::from_str(json_data)
+  let response : CreateEmbeddingResponse = serde_json::from_str(json_data)
     .expect("Failed to deserialize embedding response");
 
   assert_eq!(response.data.len(), 1);
@@ -179,7 +179,7 @@ async fn test_basic_embedding_creation_ada_002()
     {
       assert_eq!(response.object, "list");
       assert!(response.model.starts_with("text-embedding-ada-002"),
-              "Expected model to start with 'text-embedding-ada-002', got: {}", response.model);
+              "Expected model to start with 'text-embedding-ada-002', got : {}", response.model);
       assert_eq!(response.data.len(), 1);
       assert_eq!(response.data[0].index, 0);
       assert_eq!(response.data[0].object, "embedding");
@@ -187,7 +187,7 @@ async fn test_basic_embedding_creation_ada_002()
       assert!(response.usage.prompt_tokens > 0);
       assert!(response.usage.total_tokens > 0);
     },
-    Err(e) => panic!("Expected successful embedding creation, got error: {e:?}"),
+    Err(e) => panic!("Expected successful embedding creation, got error : {e:?}"),
   }
 }
 
@@ -218,7 +218,7 @@ async fn test_embedding_creation_3_small()
       assert_eq!(response.data[0].embedding.len(), 1536); // default dimensions for 3-small
       assert!(response.usage.prompt_tokens > 0);
     },
-    Err(e) => panic!("Expected successful embedding creation, got error: {e:?}"),
+    Err(e) => panic!("Expected successful embedding creation, got error : {e:?}"),
   }
 }
 
@@ -249,7 +249,7 @@ async fn test_embedding_creation_3_large()
       assert_eq!(response.data[0].embedding.len(), 3072); // default dimensions for 3-large
       assert!(response.usage.prompt_tokens > 0);
     },
-    Err(e) => panic!("Expected successful embedding creation, got error: {e:?}"),
+    Err(e) => panic!("Expected successful embedding creation, got error : {e:?}"),
   }
 }
 
@@ -277,7 +277,7 @@ async fn test_embedding_with_custom_dimensions_3_small()
     {
       assert_eq!(response.data[0].embedding.len(), 512);
     },
-    Err(e) => panic!("Expected successful embedding creation with custom dimensions, got error: {e:?}"),
+    Err(e) => panic!("Expected successful embedding creation with custom dimensions, got error : {e:?}"),
   }
 }
 
@@ -305,7 +305,7 @@ async fn test_embedding_with_custom_dimensions_3_large()
     {
       assert_eq!(response.data[0].embedding.len(), 1024);
     },
-    Err(e) => panic!("Expected successful embedding creation with custom dimensions, got error: {e:?}"),
+    Err(e) => panic!("Expected successful embedding creation with custom dimensions, got error : {e:?}"),
   }
 }
 
@@ -343,7 +343,7 @@ async fn test_batch_embedding_creation()
         assert_eq!(embedding.embedding.len(), 1536);
       }
     },
-    Err(e) => panic!("Expected successful batch embedding creation, got error: {e:?}"),
+    Err(e) => panic!("Expected successful batch embedding creation, got error : {e:?}"),
   }
 }
 
@@ -372,7 +372,7 @@ async fn test_invalid_model_error()
       // Check if the error contains information about the invalid model
       let error_str = format!("{e:?}");
       assert!(error_str.contains("model") || error_str.contains("invalid"),
-              "Error should mention model or invalid: {error_str}");
+              "Error should mention model or invalid : {error_str}");
     },
   }
 }
@@ -402,7 +402,7 @@ async fn test_empty_input_invalid_model_error()
       // Check if the error contains information about the invalid model
       let error_str = format!("{e:?}");
       assert!(error_str.contains("model") || error_str.contains("invalid"),
-              "Error should mention model or invalid: {error_str}");
+              "Error should mention model or invalid : {error_str}");
     },
   }
 }
@@ -431,7 +431,7 @@ async fn test_invalid_dimensions_error()
       // Check if the error contains information about the invalid dimensions
       let error_str = format!("{e:?}");
       assert!(error_str.contains("dimensions") || error_str.contains("invalid"),
-              "Error should mention dimensions or invalid: {error_str}");
+              "Error should mention dimensions or invalid : {error_str}");
     },
   }
 }
@@ -460,7 +460,7 @@ async fn test_dimensions_with_ada_002_error()
       // Check if the error contains information about unsupported dimensions
       let error_str = format!("{e:?}");
       assert!(error_str.contains("dimensions") || error_str.contains("support"),
-              "Error should mention dimensions or support: {error_str}");
+              "Error should mention dimensions or support : {error_str}");
     },
   }
 }
@@ -490,10 +490,10 @@ async fn test_embedding_performance_benchmark()
     {
       assert_eq!(response.data.len(), 1);
       // Performance should be reasonable (under 10 seconds for single embedding)
-      assert!(duration.as_secs() < 10, "Embedding creation took too long: {duration:?}");
-      println!("Embedding creation time: {duration:?}");
+      assert!(duration.as_secs() < 10, "Embedding creation took too long : {duration:?}");
+      println!("Embedding creation time : {duration:?}");
     },
-    Err(e) => panic!("Performance test failed with error: {e:?}"),
+    Err(e) => panic!("Performance test failed with error : {e:?}"),
   }
 }
 
@@ -506,7 +506,7 @@ async fn test_batch_embedding_performance()
   let client = create_test_client().expect("Failed to create test client");
 
   let batch_size = 10;
-  let inputs: Vec< String > = (0..batch_size)
+  let inputs : Vec< String > = (0..batch_size)
     .map(|i| format!("Performance test sentence number {i}"))
     .collect();
 
@@ -525,9 +525,9 @@ async fn test_batch_embedding_performance()
     {
       assert_eq!(response.data.len(), batch_size);
       // Batch performance should be reasonable (under 30 seconds for 10 embeddings)
-      assert!(duration.as_secs() < 30, "Batch embedding creation took too long: {duration:?}");
-      println!("Batch embedding creation time for {batch_size} items: {duration:?}");
+      assert!(duration.as_secs() < 30, "Batch embedding creation took too long : {duration:?}");
+      println!("Batch embedding creation time for {batch_size} items : {duration:?}");
     },
-    Err(e) => panic!("Batch performance test failed with error: {e:?}"),
+    Err(e) => panic!("Batch performance test failed with error : {e:?}"),
   }
 }

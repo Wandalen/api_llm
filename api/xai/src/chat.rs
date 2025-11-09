@@ -32,7 +32,7 @@ mod private
   ///   .form();
   ///
   /// let response = client.chat().create( request ).await?;
-  /// println!( "Response: {:?}", response.choices[ 0 ].message.content );
+  /// println!( "Response : {:?}", response.choices[ 0 ].message.content );
   /// # Ok( () )
   /// # }
   /// ```
@@ -94,7 +94,7 @@ mod private
     ///
     /// for choice in response.choices {
     ///   if let Some( content ) = choice.message.content {
-    ///     println!( "Assistant: {}", content );
+    ///     println!( "Assistant : {}", content );
     ///   }
     /// }
     /// # Ok( () )
@@ -123,7 +123,7 @@ mod private
     ///
     /// # Returns
     ///
-    /// A pinned stream of `Result<ChatCompletionChunk>` events.
+    /// A pinned stream of `Result< ChatCompletionChunk >` events.
     ///
     /// # Errors
     ///
@@ -175,7 +175,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

@@ -13,7 +13,7 @@ async fn test_sse_parsing_valid_events()
   // This test would require a mock SSE server to send well-formed events
   // For now, we'll test that the client can be created and methods exist
   
-  // Note: from_env() doesn't exist in this API, so this test verifies structure exists
+  // Note : from_env() doesn't exist in this API, so this test verifies structure exists
   
   // Verify that the SSE parsing enhancement is in place
   // Test passes by verifying that eventsource-stream dependency is used

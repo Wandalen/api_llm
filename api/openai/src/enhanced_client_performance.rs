@@ -14,11 +14,11 @@ mod private
   pub struct ConnectionPerformanceReport
   {
     /// Overall efficiency metrics
-    pub efficiency_metrics: crate::connection_manager::ConnectionEfficiencyMetrics,
+    pub efficiency_metrics : crate::connection_manager::ConnectionEfficiencyMetrics,
     /// Per-pool statistics
-    pub pool_stats: Vec< crate::connection_manager::PoolStatistics >,
+    pub pool_stats : Vec< crate::connection_manager::PoolStatistics >,
     /// Performance analysis
-    pub analysis: PerformanceAnalysis,
+    pub analysis : PerformanceAnalysis,
   }
 
   /// Analysis of connection performance
@@ -26,13 +26,13 @@ mod private
   pub struct PerformanceAnalysis
   {
     /// Overall performance grade (A, B, C, D, F)
-    pub grade: String,
+    pub grade : String,
     /// Key performance indicators
-    pub kpis: Vec< String >,
+    pub kpis : Vec< String >,
     /// Recommendations for improvement
-    pub recommendations: Vec< String >,
+    pub recommendations : Vec< String >,
     /// Potential issues identified
-    pub issues: Vec< String >,
+    pub issues : Vec< String >,
   }
 
   /// Unified performance dashboard combining all components
@@ -40,27 +40,27 @@ mod private
   pub struct UnifiedPerformanceDashboard
   {
     /// Overall performance score (0-100)
-    pub overall_performance_score: f64,
+    pub overall_performance_score : f64,
     /// Connection performance metrics
-    pub connection_performance: ConnectionPerformanceReport,
+    pub connection_performance : ConnectionPerformanceReport,
     /// Cache performance statistics (if available)
     #[ cfg( feature = "caching" ) ]
-    pub cache_performance: Option< crate::response_cache::CacheStatistics >,
+    pub cache_performance : Option< crate::response_cache::CacheStatistics >,
     /// Placeholder for cache performance when feature is disabled
     #[ cfg( not( feature = "caching" ) ) ]
-    pub cache_performance: Option< () >,
+    pub cache_performance : Option< () >,
     /// Metrics summary (if available)
-    pub metrics_summary: Option< crate::metrics_framework::MetricsSnapshot >,
+    pub metrics_summary : Option< crate::metrics_framework::MetricsSnapshot >,
     /// Unified recommendations from all components
-    pub recommendations: Vec< String >,
+    pub recommendations : Vec< String >,
   }
 
   /// Analyze connection performance and provide recommendations
   #[ must_use ]
   #[ inline ]
   pub fn analyze_performance(
-    efficiency: &crate::connection_manager::ConnectionEfficiencyMetrics,
-    pools: &[ crate::connection_manager::PoolStatistics ],
+    efficiency : &crate::connection_manager::ConnectionEfficiencyMetrics,
+    pools : &[ crate::connection_manager::PoolStatistics ],
   ) -> PerformanceAnalysis
   {
     let mut kpis = Vec::new();
@@ -77,9 +77,9 @@ mod private
       _ => "F",
     };
 
-    kpis.push( format!( "Efficiency Score: {:.1}%", efficiency.efficiency_score * 100.0 ) );
-    kpis.push( format!( "Connection Reuse Ratio: {:.1}", efficiency.connection_reuse_ratio ) );
-    kpis.push( format!( "Average Pool Utilization: {:.1}%", efficiency.average_pool_utilization * 100.0 ) );
+    kpis.push( format!( "Efficiency Score : {:.1}%", efficiency.efficiency_score * 100.0 ) );
+    kpis.push( format!( "Connection Reuse Ratio : {:.1}", efficiency.connection_reuse_ratio ) );
+    kpis.push( format!( "Average Pool Utilization : {:.1}%", efficiency.average_pool_utilization * 100.0 ) );
 
     // Analyze connection reuse
     if efficiency.connection_reuse_ratio < 5.0
@@ -127,7 +127,7 @@ mod private
 
     PerformanceAnalysis
     {
-      grade: grade.to_string(),
+      grade : grade.to_string(),
       kpis,
       recommendations,
       issues,

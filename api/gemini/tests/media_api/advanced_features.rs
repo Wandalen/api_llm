@@ -1,4 +1,4 @@
-//! Advanced file handling tests: large files, multiple types, search, processing, versioning
+//! Advanced file handling tests : large files, multiple types, search, processing, versioning
 
 use super::*;
 
@@ -14,9 +14,9 @@ async fn test_large_file_handling() -> Result< (), Box< dyn std::error::Error > 
   let large_file_data = vec![ 0x42; large_file_size ];
 
   let upload_request = UploadFileRequest {
-    file_data: large_file_data,
-    mime_type: "application/octet-stream".to_string(),
-    display_name: Some( "Large File Test".to_string() ),
+    file_data : large_file_data,
+    mime_type : "application/octet-stream".to_string(),
+    display_name : Some( "Large File Test".to_string() ),
   };
 
   let upload_result = files_api.upload( &upload_request ).await;
@@ -25,8 +25,8 @@ async fn test_large_file_handling() -> Result< (), Box< dyn std::error::Error > 
   {
     Ok( response ) => {
       println!( "✓ Large file upload successful:" );
-      println!( "  - File name: {}", response.file.name );
-      println!( "  - File size: {:?} bytes", response.file.size_bytes );
+      println!( "  - File name : {}", response.file.name );
+      println!( "  - File size : {:?} bytes", response.file.size_bytes );
       let _ = files_api.delete( &response.file.name ).await;
     },
     Err( Error::ApiError( msg ) ) if msg.contains( "size" ) || msg.contains( "limit" ) =>
@@ -60,15 +60,15 @@ async fn test_multiple_file_types_upload() -> Result< (), Box< dyn std::error::E
   for ( mime_type, data, display_name ) in test_files
   {
     let upload_request = UploadFileRequest {
-      file_data: data,
-      mime_type: mime_type.to_string(),
-      display_name: Some( display_name.to_string() ),
+      file_data : data,
+      mime_type : mime_type.to_string(),
+      display_name : Some( display_name.to_string() ),
     };
 
     match files_api.upload( &upload_request ).await
     {
       Ok( response ) => {
-        println!( "✓ {} upload successful: {}", mime_type, response.file.name );
+        println!( "✓ {} upload successful : {}", mime_type, response.file.name );
         uploaded_files.push( response.file.name );
       },
       Err( e ) => {
@@ -77,7 +77,7 @@ async fn test_multiple_file_types_upload() -> Result< (), Box< dyn std::error::E
     }
   }
 
-  println!( "✓ Multiple file types test completed: {}/{} successful", uploaded_files.len(), 4 );
+  println!( "✓ Multiple file types test completed : {}/{} successful", uploaded_files.len(), 4 );
 
   for file_name in uploaded_files
   {
@@ -113,9 +113,9 @@ async fn test_media_search_and_filtering() -> Result< (), Box< dyn std::error::E
     };
 
     let upload_request = UploadFileRequest {
-      file_data: test_data,
-      mime_type: mime_type.to_string(),
-      display_name: Some( display_name.to_string() ),
+      file_data : test_data,
+      mime_type : mime_type.to_string(),
+      display_name : Some( display_name.to_string() ),
     };
 
     if let Ok( response ) = files_api.upload( &upload_request ).await
@@ -125,8 +125,8 @@ async fn test_media_search_and_filtering() -> Result< (), Box< dyn std::error::E
   }
 
   let list_request = ListFilesRequest {
-    page_size: Some( 100 ),
-    page_token: None,
+    page_size : Some( 100 ),
+    page_token : None,
   };
 
   let list_response = files_api.list( &list_request ).await?;
@@ -139,7 +139,7 @@ async fn test_media_search_and_filtering() -> Result< (), Box< dyn std::error::E
   }
 
   println!( "✓ Media search and filtering test results:" );
-  println!( "  - Total files: {}", list_response.files.len() );
+  println!( "  - Total files : {}", list_response.files.len() );
   for ( mime_type, count ) in type_counts
   {
     println!( "  - {}: {} files", mime_type, count );
@@ -162,34 +162,34 @@ async fn test_media_processing_capabilities() -> Result< (), Box< dyn std::error
 
   let test_image = vec![ 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A ];
   let upload_request = UploadFileRequest {
-    file_data: test_image,
-    mime_type: "image/png".to_string(),
-    display_name: Some( "Processing Test Image".to_string() ),
+    file_data : test_image,
+    mime_type : "image/png".to_string(),
+    display_name : Some( "Processing Test Image".to_string() ),
   };
 
   let upload_response = files_api.upload( &upload_request ).await?;
   let file_metadata = files_api.get( &upload_response.file.name ).await?;
 
   println!( "✓ Media processing capabilities test:" );
-  println!( "  - File uploaded: {}", file_metadata.name );
-  println!( "  - MIME type detected: {}", file_metadata.mime_type );
-  println!( "  - Size analyzed: {:?} bytes", file_metadata.size_bytes );
+  println!( "  - File uploaded : {}", file_metadata.name );
+  println!( "  - MIME type detected : {}", file_metadata.mime_type );
+  println!( "  - Size analyzed : {:?} bytes", file_metadata.size_bytes );
 
   if let Some( hash ) = &file_metadata.sha256_hash
   {
-    println!( "  - SHA256 hash computed: {}", hash );
+    println!( "  - SHA256 hash computed : {}", hash );
   }
 
   if let Some( state ) = &file_metadata.state
   {
-    println!( "  - Processing state: {}", state );
+    println!( "  - Processing state : {}", state );
   }
 
   if file_metadata.mime_type.starts_with( "video/" )
   {
     if let Some( video_meta ) = &file_metadata.video_metadata
     {
-      println!( "  - Video duration extracted: {:?}", video_meta.video_duration );
+      println!( "  - Video duration extracted : {:?}", video_meta.video_duration );
     }
   }
 
@@ -216,9 +216,9 @@ async fn test_media_versioning_management() -> Result< (), Box< dyn std::error::
   for ( version_name, data ) in versions
   {
     let upload_request = UploadFileRequest {
-      file_data: data,
-      mime_type: "image/png".to_string(),
-      display_name: Some( format!( "Versioned File - {}", version_name ) ),
+      file_data : data,
+      mime_type : "image/png".to_string(),
+      display_name : Some( format!( "Versioned File - {}", version_name ) ),
     };
 
     if let Ok( response ) = files_api.upload( &upload_request ).await
@@ -230,11 +230,11 @@ async fn test_media_versioning_management() -> Result< (), Box< dyn std::error::
   println!( "✓ Media versioning test results:" );
   for ( version, file_name, create_time ) in &uploaded_versions
   {
-    println!( "  - {}: {} (created: {:?})", version, file_name, create_time );
+    println!( "  - {}: {} (created : {:?})", version, file_name, create_time );
   }
 
   let list_response = files_api.list( &ListFilesRequest::default() ).await?;
-  let versioned_files: Vec< _ > = list_response.files.iter()
+  let versioned_files : Vec< _ > = list_response.files.iter()
     .filter( |f| f.display_name.as_ref().map_or( false, |name| name.contains( "Versioned File" ) ) )
     .collect();
 

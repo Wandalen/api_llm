@@ -17,11 +17,11 @@ use api_openai::ClientApiAccessors;
 use api_openai::
 {
   Client,
-  components::
+  components ::
   {
-    responses::{ CreateResponseRequest, ResponseInput },
-    input::{ InputItem, InputMessage, InputContentPart, InputText, InputImage },
-    output::{ OutputItem, OutputContentPart },
+    responses ::{ CreateResponseRequest, ResponseInput },
+    input ::{ InputItem, InputMessage, InputContentPart, InputText, InputImage },
+    output ::{ OutputItem, OutputContentPart },
   },
 };
 // use std::path::Path; // Not needed for this example
@@ -44,7 +44,7 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
 
   // Create sample image URLs for demonstration (using publicly available images)
   // In a real application, you would use actual local files or user-provided images
-  // Note: These URLs are tested to work with OpenAI's vision API (JPEG format works best)
+  // Note : These URLs are tested to work with OpenAI's vision API (JPEG format works best)
   let image_urls = [
     "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Cat_August_2010-4.jpg/256px-Cat_August_2010-4.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/320px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg",
@@ -76,7 +76,7 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
     // In a real app, you'd have different images for different scenarios
     let image_url = image_urls[scenario_idx % image_urls.len()];
     
-    println!("🖼️  Analyzing image: {image_url}");
+    println!("🖼️  Analyzing image : {image_url}");
     
     // Create input with image
     let request = CreateResponseRequest::former()
@@ -135,9 +135,9 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
     println!("\n📊 Analysis Statistics:");
     if let Some(usage) = &response.usage
     {
-      println!("  Prompt tokens: {}", usage.prompt_tokens);
-      println!("  Completion tokens: {:?}", usage.completion_tokens);
-      println!("  Total tokens: {}", usage.total_tokens);
+      println!("  Prompt tokens : {}", usage.prompt_tokens);
+      println!("  Completion tokens : {:?}", usage.completion_tokens);
+      println!("  Total tokens : {}", usage.total_tokens);
     }
 
     println!("\n{}\n", "=".repeat(80));
@@ -146,12 +146,12 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
     if scenario_idx < analysis_scenarios.len() - 1
     {
       println!("⏳ Preparing next analysis...\n");
-      tokio::time::sleep(tokio::time::Duration::from_secs(2)).await;
+      tokio ::time::sleep(tokio::time::Duration::from_secs(2)).await;
     }
   }
 
   // Demonstrate structured data extraction
-  println!("📋 Advanced Use Case: Structured Data Extraction");
+  println!("📋 Advanced Use Case : Structured Data Extraction");
   println!("{}", "-".repeat(60));
   
   let structured_prompt = r#"

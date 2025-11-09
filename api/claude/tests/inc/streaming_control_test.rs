@@ -108,7 +108,7 @@ mod streaming_control_tests
     // Test that cancelling clears any buffered events
     let control = StreamControl::new( 100 );
 
-    // Note: We can't directly test buffer_event since it's private,
+    // Note : We can't directly test buffer_event since it's private,
     // but we can verify buffer_size is 0 after cancel
     control.cancel();
 
@@ -204,7 +204,7 @@ mod streaming_control_tests
     // Pause via control1
     control1.pause().expect( "Pause should succeed" );
 
-    // Both should see paused state (shared Arc<Mutex<>>)
+    // Both should see paused state (shared Arc< Mutex<> >)
     assert!( control1.is_paused() );
     assert!( control2.is_paused() );
 
@@ -222,18 +222,18 @@ mod streaming_control_tests
     // Test complete state transition flow
     let control = StreamControl::new( 100 );
 
-    // Start: Running
+    // Start : Running
     assert_eq!( control.get_state(), StreamState::Running );
 
-    // Transition: Running -> Paused
+    // Transition : Running -> Paused
     control.pause().expect( "Should pause" );
     assert_eq!( control.get_state(), StreamState::Paused );
 
-    // Transition: Paused -> Running
+    // Transition : Paused -> Running
     control.resume().expect( "Should resume" );
     assert_eq!( control.get_state(), StreamState::Running );
 
-    // Transition: Running -> Cancelled
+    // Transition : Running -> Cancelled
     control.cancel();
     assert_eq!( control.get_state(), StreamState::Cancelled );
 
@@ -250,7 +250,7 @@ mod streaming_control_tests
     let control = StreamControl::new( 100 );
     assert_eq!( control.buffer_size(), 0 );
 
-    // Note: We can't test actual buffering without ControlledStream integration,
+    // Note : We can't test actual buffering without ControlledStream integration,
     // but we verify the method exists and returns correct initial value
   }
 

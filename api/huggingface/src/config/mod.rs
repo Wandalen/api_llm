@@ -17,17 +17,17 @@
 //! # use api_huggingface::config::{DynamicConfig, ReliabilityConfig};
 //! # use api_huggingface::reliability::CircuitBreakerConfig;
 //! # use std::{time::Duration, sync::Arc};
-//! # async fn example() -> Result< (), Box< dyn std::error::Error >> {
+//! # async fn example() -> Result< (), Box< dyn std::error::Error > > {
 //! let config = ReliabilityConfig {
-//!   circuit_breaker: Some(CircuitBreakerConfig {
-//!     failure_threshold: 5,
-//!     success_threshold: 2,
-//!     timeout: Duration::from_secs(60),
+//!   circuit_breaker : Some(CircuitBreakerConfig {
+//!     failure_threshold : 5,
+//!     success_threshold : 2,
+//!     timeout : Duration::from_secs(60),
 //!   }),
-//!   rate_limiter: None,
-//!   failover: None,
-//!   health_check: None,
-//!   timestamp: std::time::Instant::now(),
+//!   rate_limiter : None,
+//!   failover : None,
+//!   health_check : None,
+//!   timestamp : std::time::Instant::now(),
 //! };
 //!
 //! let dynamic_config = DynamicConfig::new(config);

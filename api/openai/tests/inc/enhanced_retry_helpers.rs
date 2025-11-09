@@ -13,12 +13,12 @@ pub mod helpers
 {
   use api_openai::
   {
-    error::{ OpenAIError, Result },
+    error ::{ OpenAIError, Result },
   };
 
   use std::
   {
-    sync::{ Arc, Mutex },
+    sync ::{ Arc, Mutex },
   };
   use core::time::Duration;
   use std::time::Instant;
@@ -41,7 +41,7 @@ pub mod helpers
     pub max_elapsed_time_ms : u64,
     /// Jitter amount in milliseconds to add randomness
     pub jitter_ms : u64,
-    /// Multiplier for exponential backoff (default: 2.0)
+    /// Multiplier for exponential backoff (default : 2.0)
     pub backoff_multiplier : f64,
   }
 
@@ -119,17 +119,17 @@ pub mod helpers
     }
 
     /// Calculate retry delay with exponential backoff and jitter
-    /// Formula: `base_delay` * `backoff_multiplier^attempt` + random(0, `jitter_ms`)
+    /// Formula : `base_delay` * `backoff_multiplier^attempt` + random(0, `jitter_ms`)
     #[ must_use ]
     pub fn calculate_delay( &self, attempt : u32 ) -> Duration
     {
       let max_delay = Duration::from_millis( self.max_delay_ms );
 
-      // Calculate exponential backoff: base_delay * multiplier^attempt
+      // Calculate exponential backoff : base_delay * multiplier^attempt
       #[ allow(clippy::cast_possible_truncation, clippy::cast_sign_loss, clippy::cast_possible_wrap) ]
       let exponential_delay = ( self.base_delay_ms as f64 * self.backoff_multiplier.powi( attempt as i32 ) ) as u64;
 
-      // Add jitter: random value between 0 and jitter_ms
+      // Add jitter : random value between 0 and jitter_ms
       let mut rng = rng();
       let jitter = rng.random_range( 0..=self.jitter_ms );
 
@@ -137,7 +137,7 @@ pub mod helpers
       let total_delay = Duration::from_millis( total_delay_ms );
 
       // Ensure delay doesn't exceed maximum
-      core::cmp::min( total_delay, max_delay )
+      core ::cmp::min( total_delay, max_delay )
     }
 
     /// Check if an error is retryable
@@ -146,14 +146,14 @@ pub mod helpers
     {
       match error
       {
-        // Retryable errors: network, timeout, rate limiting, stream, and websocket errors
+        // Retryable errors : network, timeout, rate limiting, stream, and websocket errors
         OpenAIError::Network( _ ) | OpenAIError::Timeout( _ ) | OpenAIError::RateLimit( _ ) | OpenAIError::Stream( _ ) | OpenAIError::Ws( _ ) => true,
-        // HTTP errors: check if message contains server error or rate limiting
+        // HTTP errors : check if message contains server error or rate limiting
         OpenAIError::Http( message ) =>
         {
           message.contains( '5' ) || message.contains( "429" ) || message.contains( "500" ) || message.contains( "502" ) || message.contains( "503" ) || message.contains( "504" )
         },
-        // Non-retryable errors: all client-side errors, invalid messages, and unknown errors
+        // Non-retryable errors : all client-side errors, invalid messages, and unknown errors
         _ => false,
       }
     }
@@ -288,10 +288,10 @@ pub mod helpers
   /// - Max elapsed time enforcement
   ///
   /// ⚠️ CODEBASE HYGIENE VIOLATION: This mock violates no-mocking rule
-  /// Justification: Testing retry logic requires controlled failure sequences
+  /// Justification : Testing retry logic requires controlled failure sequences
   /// that cannot be reliably reproduced with real API calls
   ///
-  /// Mitigation: Corresponding integration tests must verify retry behavior
+  /// Mitigation : Corresponding integration tests must verify retry behavior
   /// with real `OpenAI` API calls under actual failure conditions
   ///
   /// `TODO(hygiene-006)`: Create integration tests for:
@@ -300,7 +300,7 @@ pub mod helpers
   /// - Real timeout scenarios with retry limits
   /// - Real rate limit (429) handling with retry
   ///
-  /// Integration test file: `tests/retry_integration_tests.rs` (to be created)
+  /// Integration test file : `tests/retry_integration_tests.rs` (to be created)
   #[ derive( Debug ) ]
   pub struct MockHttpClient
   {
@@ -416,7 +416,7 @@ pub mod helpers
           let state = self.state.lock().unwrap();
           if state.is_elapsed_time_exceeded( max_elapsed_time )
           {
-            return Err( error_tools::untyped::Error::msg( format!( "Max elapsed time exceeded: {max_elapsed_time:?}" ) ) );
+            return Err( error_tools::untyped::Error::msg( format!( "Max elapsed time exceeded : {max_elapsed_time:?}" ) ) );
           }
         }
 

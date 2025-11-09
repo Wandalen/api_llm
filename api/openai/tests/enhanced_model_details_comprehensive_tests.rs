@@ -8,9 +8,9 @@ use api_openai::ClientApiAccessors;
 use api_openai::
 {
   Client,
-  environment::OpenaiEnvironmentImpl,
-  secret::Secret,
-  components::models::
+  environment ::OpenaiEnvironmentImpl,
+  secret ::Secret,
+  components ::models::
   {
     EnhancedModel,
     EnhancedListModelsResponse,
@@ -37,7 +37,7 @@ fn create_test_client() -> Result< Client< OpenaiEnvironmentImpl >, Box< dyn std
 /// Helper function to check if we should run integration tests
 fn should_run_integration_tests() -> bool
 {
-  std::env::var( "OPENAI_API_KEY" ).is_ok()
+  std ::env::var( "OPENAI_API_KEY" ).is_ok()
 }
 
 // === UNIT TESTS ===
@@ -48,38 +48,38 @@ fn test_enhanced_model_structure()
   // Test that enhanced model structure contains pricing information
   let enhanced_model = EnhancedModel
   {
-    id: "gpt-4".to_string(),
-    created: 1_678_935_615,
-    object: "model".to_string(),
-    owned_by: "openai".to_string(),
-    pricing: Some( ModelPricing
+    id : "gpt-4".to_string(),
+    created : 1_678_935_615,
+    object : "model".to_string(),
+    owned_by : "openai".to_string(),
+    pricing : Some( ModelPricing
     {
-      input_cost_per_1k_tokens: 0.03,
-      output_cost_per_1k_tokens: 0.06,
-      currency: "USD".to_string(),
-      effective_date: "2024-01-01".to_string(),
+      input_cost_per_1k_tokens : 0.03,
+      output_cost_per_1k_tokens : 0.06,
+      currency : "USD".to_string(),
+      effective_date : "2024-01-01".to_string(),
     }),
-    capabilities: ModelCapabilities
+    capabilities : ModelCapabilities
     {
-      supports_function_calling: true,
-      supports_vision: false,
-      supports_streaming: true,
-      max_context_window: 8192,
-      max_output_tokens: 4096,
-      supported_formats: vec![ "text".to_string() ],
+      supports_function_calling : true,
+      supports_vision : false,
+      supports_streaming : true,
+      max_context_window : 8192,
+      max_output_tokens : 4096,
+      supported_formats : vec![ "text".to_string() ],
     },
-    limitations: ModelLimitations
+    limitations : ModelLimitations
     {
-      rate_limit_rpm: Some( 3500 ),
-      rate_limit_tpm: Some( 90000 ),
-      concurrent_requests: Some( 200 ),
+      rate_limit_rpm : Some( 3500 ),
+      rate_limit_tpm : Some( 90000 ),
+      concurrent_requests : Some( 200 ),
     },
-    lifecycle: ModelLifecycle
+    lifecycle : ModelLifecycle
     {
-      status: ModelStatus::Active,
-      deprecation_date: None,
-      sunset_date: None,
-      replacement_model: None,
+      status : ModelStatus::Active,
+      deprecation_date : None,
+      sunset_date : None,
+      replacement_model : None,
     },
   };
 
@@ -94,10 +94,10 @@ fn test_model_pricing_structure()
 {
   let pricing = ModelPricing
   {
-    input_cost_per_1k_tokens: 0.01,
-    output_cost_per_1k_tokens: 0.03,
-    currency: "USD".to_string(),
-    effective_date: "2024-01-01".to_string(),
+    input_cost_per_1k_tokens : 0.01,
+    output_cost_per_1k_tokens : 0.03,
+    currency : "USD".to_string(),
+    effective_date : "2024-01-01".to_string(),
   };
 
   assert!( ( pricing.input_cost_per_1k_tokens - 0.01 ).abs() < f64::EPSILON );
@@ -110,12 +110,12 @@ fn test_model_capabilities_structure()
 {
   let capabilities = ModelCapabilities
   {
-    supports_function_calling: true,
-    supports_vision: true,
-    supports_streaming: true,
-    max_context_window: 128_000,
-    max_output_tokens: 4096,
-    supported_formats: vec![ "text".to_string(), "image".to_string() ],
+    supports_function_calling : true,
+    supports_vision : true,
+    supports_streaming : true,
+    max_context_window : 128_000,
+    max_output_tokens : 4096,
+    supported_formats : vec![ "text".to_string(), "image".to_string() ],
   };
 
   assert!(capabilities.supports_function_calling);
@@ -129,9 +129,9 @@ fn test_model_limitations_structure()
 {
   let limitations = ModelLimitations
   {
-    rate_limit_rpm: Some( 500 ),
-    rate_limit_tpm: Some( 30000 ),
-    concurrent_requests: Some( 50 ),
+    rate_limit_rpm : Some( 500 ),
+    rate_limit_tpm : Some( 30000 ),
+    concurrent_requests : Some( 50 ),
   };
 
   assert_eq!(limitations.rate_limit_rpm, Some( 500 ));
@@ -144,10 +144,10 @@ fn test_model_lifecycle_structure()
 {
   let lifecycle = ModelLifecycle
   {
-    status: ModelStatus::Deprecated,
-    deprecation_date: Some( "2024-06-01".to_string() ),
-    sunset_date: Some( "2024-12-31".to_string() ),
-    replacement_model: Some( "gpt-4o".to_string() ),
+    status : ModelStatus::Deprecated,
+    deprecation_date : Some( "2024-06-01".to_string() ),
+    sunset_date : Some( "2024-12-31".to_string() ),
+    replacement_model : Some( "gpt-4o".to_string() ),
   };
 
   assert_eq!(lifecycle.status, ModelStatus::Deprecated);
@@ -169,49 +169,49 @@ fn test_enhanced_list_models_response_structure()
 {
   let enhanced_response = EnhancedListModelsResponse
   {
-    object: "list".to_string(),
-    data: vec![ EnhancedModel
+    object : "list".to_string(),
+    data : vec![ EnhancedModel
     {
-      id: "gpt-4".to_string(),
-      created: 1_678_935_615,
-      object: "model".to_string(),
-      owned_by: "openai".to_string(),
-      pricing: Some( ModelPricing
+      id : "gpt-4".to_string(),
+      created : 1_678_935_615,
+      object : "model".to_string(),
+      owned_by : "openai".to_string(),
+      pricing : Some( ModelPricing
       {
-        input_cost_per_1k_tokens: 0.03,
-        output_cost_per_1k_tokens: 0.06,
-        currency: "USD".to_string(),
-        effective_date: "2024-01-01".to_string(),
+        input_cost_per_1k_tokens : 0.03,
+        output_cost_per_1k_tokens : 0.06,
+        currency : "USD".to_string(),
+        effective_date : "2024-01-01".to_string(),
       }),
-      capabilities: ModelCapabilities
+      capabilities : ModelCapabilities
       {
-        supports_function_calling: true,
-        supports_vision: false,
-        supports_streaming: true,
-        max_context_window: 8192,
-        max_output_tokens: 4096,
-        supported_formats: vec![ "text".to_string() ],
+        supports_function_calling : true,
+        supports_vision : false,
+        supports_streaming : true,
+        max_context_window : 8192,
+        max_output_tokens : 4096,
+        supported_formats : vec![ "text".to_string() ],
       },
-      limitations: ModelLimitations
+      limitations : ModelLimitations
       {
-        rate_limit_rpm: Some( 3500 ),
-        rate_limit_tpm: Some( 90000 ),
-        concurrent_requests: Some( 200 ),
+        rate_limit_rpm : Some( 3500 ),
+        rate_limit_tpm : Some( 90000 ),
+        concurrent_requests : Some( 200 ),
       },
-      lifecycle: ModelLifecycle
+      lifecycle : ModelLifecycle
       {
-        status: ModelStatus::Active,
-        deprecation_date: None,
-        sunset_date: None,
-        replacement_model: None,
+        status : ModelStatus::Active,
+        deprecation_date : None,
+        sunset_date : None,
+        replacement_model : None,
       },
     }],
-    metadata: ResponseMetadata
+    metadata : ResponseMetadata
     {
-      total_models: 1,
-      active_models: 1,
-      deprecated_models: 0,
-      beta_models: 0,
+      total_models : 1,
+      active_models : 1,
+      deprecated_models : 0,
+      beta_models : 0,
     },
   };
 
@@ -229,7 +229,7 @@ async fn test_enhanced_model_details_retrieval()
   // INTEGRATION TEST - STRICT FAILURE POLICY: Must have valid API key
   if !should_run_integration_tests()
   {
-    eprintln!("Skipping integration test: OPENAI_API_KEY not available");
+    eprintln!("Skipping integration test : OPENAI_API_KEY not available");
     return;
   }
 
@@ -258,7 +258,7 @@ async fn test_enhanced_model_details_retrieval()
       // Verify lifecycle information
       assert_ne!(enhanced_model.lifecycle.status, ModelStatus::Sunset);
     },
-    Err(e) => panic!("Expected successful enhanced model retrieval, got error: {e:?}"),
+    Err(e) => panic!("Expected successful enhanced model retrieval, got error : {e:?}"),
   }
 }
 
@@ -269,7 +269,7 @@ async fn test_enhanced_model_list_with_metadata()
   // INTEGRATION TEST - STRICT FAILURE POLICY: Must have valid API key
   if !should_run_integration_tests()
   {
-    eprintln!("Skipping integration test: OPENAI_API_KEY not available");
+    eprintln!("Skipping integration test : OPENAI_API_KEY not available");
     return;
   }
 
@@ -301,7 +301,7 @@ async fn test_enhanced_model_list_with_metadata()
         assert!(!model.capabilities.supported_formats.is_empty());
       }
     },
-    Err(e) => panic!("Expected successful enhanced model list, got error: {e:?}"),
+    Err(e) => panic!("Expected successful enhanced model list, got error : {e:?}"),
   }
 }
 
@@ -312,7 +312,7 @@ async fn test_model_pricing_accuracy()
   // INTEGRATION TEST - STRICT FAILURE POLICY: Must have valid API key
   if !should_run_integration_tests()
   {
-    eprintln!("Skipping integration test: OPENAI_API_KEY not available");
+    eprintln!("Skipping integration test : OPENAI_API_KEY not available");
     return;
   }
 
@@ -338,7 +338,7 @@ async fn test_model_pricing_accuracy()
         panic!("Expected pricing information for gpt-4");
       }
     },
-    Err(e) => panic!("Expected successful model retrieval, got error: {e:?}"),
+    Err(e) => panic!("Expected successful model retrieval, got error : {e:?}"),
   }
 }
 
@@ -349,7 +349,7 @@ async fn test_model_capabilities_validation()
   // INTEGRATION TEST - STRICT FAILURE POLICY: Must have valid API key
   if !should_run_integration_tests()
   {
-    eprintln!("Skipping integration test: OPENAI_API_KEY not available");
+    eprintln!("Skipping integration test : OPENAI_API_KEY not available");
     return;
   }
 
@@ -391,7 +391,7 @@ async fn test_model_lifecycle_information()
   // INTEGRATION TEST - STRICT FAILURE POLICY: Must have valid API key
   if !should_run_integration_tests()
   {
-    eprintln!("Skipping integration test: OPENAI_API_KEY not available");
+    eprintln!("Skipping integration test : OPENAI_API_KEY not available");
     return;
   }
 
@@ -434,7 +434,7 @@ async fn test_model_lifecycle_information()
         }
       }
     },
-    Err(e) => panic!("Expected successful model list, got error: {e:?}"),
+    Err(e) => panic!("Expected successful model list, got error : {e:?}"),
   }
 }
 
@@ -456,10 +456,10 @@ fn test_pricing_calculation_utilities()
 {
   let pricing = ModelPricing
   {
-    input_cost_per_1k_tokens: 0.01,
-    output_cost_per_1k_tokens: 0.03,
-    currency: "USD".to_string(),
-    effective_date: "2024-01-01".to_string(),
+    input_cost_per_1k_tokens : 0.01,
+    output_cost_per_1k_tokens : 0.03,
+    currency : "USD".to_string(),
+    effective_date : "2024-01-01".to_string(),
   };
 
   // Test cost calculation for a conversation
@@ -480,7 +480,7 @@ async fn test_enhanced_model_details_performance()
   // INTEGRATION TEST - STRICT FAILURE POLICY: Must have valid API key
   if !should_run_integration_tests()
   {
-    eprintln!("Skipping integration test: OPENAI_API_KEY not available");
+    eprintln!("Skipping integration test : OPENAI_API_KEY not available");
     return;
   }
 
@@ -501,7 +501,7 @@ async fn test_enhanced_model_details_performance()
 
   // Should complete within reasonable time (5 seconds for 3 models)
   assert!(elapsed < Duration::from_secs(5),
-          "Enhanced model details retrieval took too long: {elapsed:?}");
+          "Enhanced model details retrieval took too long : {elapsed:?}");
 }
 
 #[ test ]
@@ -517,7 +517,7 @@ fn test_model_serialization_deserialization()
   assert!(serialized.contains("\"limitations\""));
   assert!(serialized.contains("\"lifecycle\""));
 
-  let deserialized: EnhancedModel = serde_json::from_str(&serialized)
+  let deserialized : EnhancedModel = serde_json::from_str(&serialized)
     .expect("Enhanced model should deserialize");
 
   assert_eq!(deserialized.id, enhanced_model.id);
@@ -528,46 +528,46 @@ fn test_model_serialization_deserialization()
 
 /// Create a test enhanced model with specified parameters
 fn create_test_enhanced_model(
-  id: &str,
-  context_window: u32,
-  input_cost: f64,
-  output_cost: f64
+  id : &str,
+  context_window : u32,
+  input_cost : f64,
+  output_cost : f64
 ) -> EnhancedModel
 {
   EnhancedModel
   {
-    id: id.to_string(),
-    created: 1_678_935_615,
-    object: "model".to_string(),
-    owned_by: "openai".to_string(),
-    pricing: Some( ModelPricing
+    id : id.to_string(),
+    created : 1_678_935_615,
+    object : "model".to_string(),
+    owned_by : "openai".to_string(),
+    pricing : Some( ModelPricing
     {
-      input_cost_per_1k_tokens: input_cost,
-      output_cost_per_1k_tokens: output_cost,
-      currency: "USD".to_string(),
-      effective_date: "2024-01-01".to_string(),
+      input_cost_per_1k_tokens : input_cost,
+      output_cost_per_1k_tokens : output_cost,
+      currency : "USD".to_string(),
+      effective_date : "2024-01-01".to_string(),
     }),
-    capabilities: ModelCapabilities
+    capabilities : ModelCapabilities
     {
-      supports_function_calling: true,
-      supports_vision: false,
-      supports_streaming: true,
-      max_context_window: context_window,
-      max_output_tokens: context_window / 2,
-      supported_formats: vec![ "text".to_string() ],
+      supports_function_calling : true,
+      supports_vision : false,
+      supports_streaming : true,
+      max_context_window : context_window,
+      max_output_tokens : context_window / 2,
+      supported_formats : vec![ "text".to_string() ],
     },
-    limitations: ModelLimitations
+    limitations : ModelLimitations
     {
-      rate_limit_rpm: Some( 3500 ),
-      rate_limit_tpm: Some( 90000 ),
-      concurrent_requests: Some( 200 ),
+      rate_limit_rpm : Some( 3500 ),
+      rate_limit_tpm : Some( 90000 ),
+      concurrent_requests : Some( 200 ),
     },
-    lifecycle: ModelLifecycle
+    lifecycle : ModelLifecycle
     {
-      status: ModelStatus::Active,
-      deprecation_date: None,
-      sunset_date: None,
-      replacement_model: None,
+      status : ModelStatus::Active,
+      deprecation_date : None,
+      sunset_date : None,
+      replacement_model : None,
     },
   }
 }

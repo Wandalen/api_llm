@@ -14,15 +14,15 @@ use tokio::sync::{ mpsc, broadcast };
 pub struct WebSocketConnectionManager
 {
   /// Active connections mapped by session ID
-  connections: Arc< RwLock< HashMap< String, Arc< WebSocketStreamSession > > > >,
+  connections : Arc< RwLock< HashMap< String, Arc< WebSocketStreamSession > > > >,
   /// Connection pool configuration
-  pool_config: WebSocketPoolConfig,
+  pool_config : WebSocketPoolConfig,
   /// Global connection metrics
-  global_metrics: Arc< RwLock< WebSocketMetrics > >,
+  global_metrics : Arc< RwLock< WebSocketMetrics > >,
   /// Connection counter for generating unique IDs
-  connection_counter: Arc< AtomicU64 >,
+  connection_counter : Arc< AtomicU64 >,
   /// Manager status
-  is_running: Arc< AtomicBool >,
+  is_running : Arc< AtomicBool >,
 }
 
 /// Individual WebSocket streaming session
@@ -30,23 +30,23 @@ pub struct WebSocketConnectionManager
 pub struct WebSocketStreamSession
 {
   /// Unique session identifier
-  pub session_id: String,
+  pub session_id : String,
   /// Session state
-  state: Arc< RwLock< StreamSessionState > >,
+  state : Arc< RwLock< StreamSessionState > >,
   /// WebSocket connection
-  connection: WebSocketConnection,
+  connection : WebSocketConnection,
   /// Message sender for outbound messages
-  message_sender: mpsc::UnboundedSender< WebSocketStreamMessage >,
+  message_sender : mpsc::UnboundedSender< WebSocketStreamMessage >,
   /// Message receiver for inbound messages
-  message_receiver: Arc< RwLock< Option< mpsc::UnboundedReceiver< WebSocketStreamMessage > > > >,
+  message_receiver : Arc< RwLock< Option< mpsc::UnboundedReceiver< WebSocketStreamMessage > > > >,
   /// Broadcast sender for publishing messages to multiple listeners
-  broadcast_sender: broadcast::Sender< WebSocketStreamMessage >,
+  broadcast_sender : broadcast::Sender< WebSocketStreamMessage >,
   /// Session configuration
-  config: WebSocketConfig,
+  config : WebSocketConfig,
   /// Session metrics
-  metrics: Arc< RwLock< SessionMetrics > >,
+  metrics : Arc< RwLock< SessionMetrics > >,
   /// Creation timestamp
-  created_at: Instant,
+  created_at : Instant,
 }
 
 /// Streaming control interface for managing active streams
@@ -54,22 +54,22 @@ pub struct WebSocketStreamSession
 pub struct StreamController
 {
   /// Reference to session
-  session: Arc< WebSocketStreamSession >,
+  session : Arc< WebSocketStreamSession >,
   /// Control message sender
-  control_sender: mpsc::UnboundedSender< StreamControl >,
+  control_sender : mpsc::UnboundedSender< StreamControl >,
 }
 
 impl WebSocketConnectionManager
 {
   /// Create a new WebSocket connection manager
-  pub fn new( pool_config: WebSocketPoolConfig ) -> Self
+  pub fn new( pool_config : WebSocketPoolConfig ) -> Self
   {
     Self {
-      connections: Arc::new( RwLock::new( HashMap::new() ) ),
+      connections : Arc::new( RwLock::new( HashMap::new() ) ),
       pool_config,
-      global_metrics: Arc::new( RwLock::new( WebSocketMetrics::default() ) ),
-      connection_counter: Arc::new( AtomicU64::new( 0 ) ),
-      is_running: Arc::new( AtomicBool::new( false ) ),
+      global_metrics : Arc::new( RwLock::new( WebSocketMetrics::default() ) ),
+      connection_counter : Arc::new( AtomicU64::new( 0 ) ),
+      is_running : Arc::new( AtomicBool::new( false ) ),
     }
   }
 
@@ -98,7 +98,7 @@ impl WebSocketConnectionManager
   }
 
   /// Create a new WebSocket streaming session
-  pub async fn create_session( &self, endpoint: &str, config: WebSocketConfig ) -> Result< String, Error >
+  pub async fn create_session( &self, endpoint : &str, config : WebSocketConfig ) -> Result< String, Error >
   {
     let session_id = format!( "ws_session_{}", self.connection_counter.fetch_add( 1, Ordering::Relaxed ) );
 
@@ -110,15 +110,15 @@ impl WebSocketConnectionManager
     let ( broadcast_sender, _broadcast_receiver ) = broadcast::channel( 1000 );
 
     let session = Arc::new( WebSocketStreamSession {
-      session_id: session_id.clone(),
-      state: Arc::new( RwLock::new( StreamSessionState::Initializing ) ),
+      session_id : session_id.clone(),
+      state : Arc::new( RwLock::new( StreamSessionState::Initializing ) ),
       connection,
       message_sender,
-      message_receiver: Arc::new( RwLock::new( Some( message_receiver ) ) ),
+      message_receiver : Arc::new( RwLock::new( Some( message_receiver ) ) ),
       broadcast_sender,
       config,
-      metrics: Arc::new( RwLock::new( SessionMetrics::default() ) ),
-      created_at: Instant::now(),
+      metrics : Arc::new( RwLock::new( SessionMetrics::default() ) ),
+      created_at : Instant::now(),
     } );
 
     // Store session
@@ -131,7 +131,7 @@ impl WebSocketConnectionManager
   }
 
   /// Get a session by ID
-  pub fn get_session( &self, session_id: &str ) -> Option< Arc< WebSocketStreamSession > >
+  pub fn get_session( &self, session_id : &str ) -> Option< Arc< WebSocketStreamSession > >
   {
     if let Ok( connections ) = self.connections.read()
     {
@@ -142,7 +142,7 @@ impl WebSocketConnectionManager
   }
 
   /// Remove a session
-  pub async fn remove_session( &self, session_id: &str ) -> Result< (), Error >
+  pub async fn remove_session( &self, session_id : &str ) -> Result< (), Error >
   {
     if let Ok( mut connections ) = self.connections.write()
     {
@@ -181,10 +181,10 @@ impl WebSocketConnectionManager
 impl WebSocketStreamSession
 {
   /// Send a message through the stream
-  pub async fn send_message( &self, message: WebSocketStreamMessage ) -> Result< (), Error >
+  pub async fn send_message( &self, message : WebSocketStreamMessage ) -> Result< (), Error >
   {
     self.message_sender.send( message )
-      .map_err( | e | Error::ServerError( format!( "Failed to send message: {}", e ) ) )?;
+      .map_err( | e | Error::ServerError( format!( "Failed to send message : {}", e ) ) )?;
 
     // Update metrics
     if let Ok( mut metrics ) = self.metrics.write()
@@ -209,7 +209,7 @@ impl WebSocketStreamSession
   }
 
   /// Set session state
-  pub fn set_state( &self, new_state: StreamSessionState )
+  pub fn set_state( &self, new_state : StreamSessionState )
   {
     if let Ok( mut state ) = self.state.write()
     {
@@ -252,7 +252,7 @@ impl WebSocketStreamSession
 impl StreamController
 {
   /// Create a new stream controller
-  pub fn new( session: Arc< WebSocketStreamSession > ) -> Self
+  pub fn new( session : Arc< WebSocketStreamSession > ) -> Self
   {
     let ( control_sender, _control_receiver ) = mpsc::unbounded_channel();
 
@@ -298,16 +298,16 @@ impl StreamController
   }
 
   /// Send control command
-  async fn send_control( &self, command: StreamControl ) -> Result< (), Error >
+  async fn send_control( &self, command : StreamControl ) -> Result< (), Error >
   {
     // Send control command through control channel
     self.control_sender.send( command.clone() )
-      .map_err( | e | Error::ServerError( format!( "Failed to send control command: {}", e ) ) )?;
+      .map_err( | e | Error::ServerError( format!( "Failed to send control command : {}", e ) ) )?;
 
     // Also send as WebSocket message
     let control_message = WebSocketStreamMessage::Control {
       command,
-      metadata: None,
+      metadata : None,
     };
 
     self.session.send_message( control_message ).await

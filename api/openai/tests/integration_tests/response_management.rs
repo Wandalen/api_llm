@@ -18,7 +18,7 @@ use api_openai::ClientApiAccessors;
 use super::shared::{ *, IsolatedClient };
 
 /// Tests response retrieval functionality.
-/// Test Combination: R2.1
+/// Test Combination : R2.1
 /// Uses proper test isolation to prevent shared state issues.
 #[ tokio::test ]
 #[ allow( deprecated ) ]
@@ -45,18 +45,18 @@ async fn retrieve_response()
         assert_valid_response(&retrieved_response);
       },
       Err(e) => {
-        panic!("Failed to retrieve response: {e:?}");
+        panic!("Failed to retrieve response : {e:?}");
       }
     }
   },
   Err(e) => {
-    panic!("Failed to create response for retrieval test: {e:?}");
+    panic!("Failed to create response for retrieval test : {e:?}");
   }
   }
 }
 
 /// Tests listing response input items functionality.
-/// Test Combination: R2.2
+/// Test Combination : R2.2
 /// Uses proper test isolation to prevent shared state issues.
 #[ tokio::test ]
 #[ allow( deprecated ) ]
@@ -74,7 +74,7 @@ async fn list_response_input_items()
   {
     Ok(created_response) => {
       // Now list the input items
-      let list_query = ListQuery { limit: None };
+      let list_query = ListQuery { limit : None };
       let list_result = client.responses().list_input_items(&created_response.id, Some(list_query)).await;
       
       match list_result
@@ -84,18 +84,18 @@ async fn list_response_input_items()
           // Input items list might be empty or contain items - both are valid
         },
         Err(e) => {
-          panic!("Failed to list response input items: {:?}", e);
+          panic!("Failed to list response input items : {:?}", e);
         }
       }
     },
     Err(e) => {
-      panic!("Failed to create response for list test: {:?}", e);
+      panic!("Failed to create response for list test : {:?}", e);
     }
   }
 }
 
 /// Tests response deletion functionality.
-/// Test Combination: R2.3
+/// Test Combination : R2.3
 /// Uses proper test isolation to prevent shared state issues.
 #[ tokio::test ]
 #[ allow( deprecated ) ]
@@ -134,18 +134,18 @@ async fn delete_response()
           }
         },
         Err(e) => {
-          panic!("Failed to delete response: {:?}", e);
+          panic!("Failed to delete response : {:?}", e);
         }
       }
     },
     Err(e) => {
-      panic!("Failed to create response for deletion test: {:?}", e);
+      panic!("Failed to create response for deletion test : {:?}", e);
     }
   }
 }
 
 /// Tests response updating functionality.
-/// Test Combination: R2.4
+/// Test Combination : R2.4
 /// Uses proper test isolation to prevent shared state issues.
 /// 
 /// **Note**: As of current `OpenAI` API version, response updates are not supported (HTTP 405).
@@ -191,19 +191,19 @@ async fn update_response()
             println!("Update operation correctly rejected by API (responses are immutable)");
             // This is the expected behavior - the test passes
           } else {
-            panic!("Failed to update response: {e:?}");
+            panic!("Failed to update response : {e:?}");
           }
         }
       }
     },
     Err(e) => {
-      panic!("Failed to create response for update test: {e:?}");
+      panic!("Failed to create response for update test : {e:?}");
     }
   }
 }
 
 /// Tests response cancellation functionality.
-/// Test Combination: R2.5
+/// Test Combination : R2.5
 /// Uses proper test isolation to prevent shared state issues.
 #[ tokio::test ]
 #[ allow( deprecated ) ]
@@ -236,7 +236,7 @@ async fn cancel_response()
           // Status might be 'completed' or 'cancelled' depending on timing
           assert!(
             cancelled_response.status == "completed" || cancelled_response.status == "cancelled",
-            "Response status should be completed or cancelled, got: {}", 
+            "Response status should be completed or cancelled, got : {}", 
             cancelled_response.status
           );
         },
@@ -247,7 +247,7 @@ async fn cancel_response()
       }
     },
     Err(e) => {
-      panic!("Failed to create response for cancellation test: {:?}", e);
+      panic!("Failed to create response for cancellation test : {:?}", e);
     }
   }
 }

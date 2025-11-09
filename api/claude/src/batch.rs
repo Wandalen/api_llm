@@ -108,8 +108,8 @@ mod private
       for ( idx, item ) in self.requests.iter().enumerate()
       {
         item.validate().map_err( | e |
-          crate::AnthropicError::InvalidArgument(
-            format!( "Batch request item {idx} invalid: {e}" )
+          crate ::AnthropicError::InvalidArgument(
+            format!( "Batch request item {idx} invalid : {e}" )
           )
         )?;
       }
@@ -241,7 +241,7 @@ mod private
 }
 
 #[ cfg( feature = "batch-processing" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {
@@ -257,7 +257,7 @@ crate::mod_interface!
 }
 
 #[ cfg( not( feature = "batch-processing" ) ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   // Empty - types not available without feature
 }

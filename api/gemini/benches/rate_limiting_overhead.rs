@@ -4,15 +4,15 @@
 use criterion::{ criterion_group, criterion_main, Criterion };
 use std::time::{ Duration, Instant };
 
-fn benchmark_token_bucket_check( c: &mut Criterion )
+fn benchmark_token_bucket_check( c : &mut Criterion )
 {
   c.bench_function( "check_token_availability", |b|
   {
     let bucket = TokenBucket {
-      tokens: 8.0,
-      max_tokens: 10.0,
-      refill_rate: 10.0,
-      last_refill: Instant::now(),
+      tokens : 8.0,
+      max_tokens : 10.0,
+      refill_rate : 10.0,
+      last_refill : Instant::now(),
     };
 
     b.iter( ||
@@ -23,15 +23,15 @@ fn benchmark_token_bucket_check( c: &mut Criterion )
   } );
 }
 
-fn benchmark_token_refill_calculation( c: &mut Criterion )
+fn benchmark_token_refill_calculation( c : &mut Criterion )
 {
   c.bench_function( "calculate_token_refill", |b|
   {
     let mut bucket = TokenBucket {
-      tokens: 5.0,
-      max_tokens: 10.0,
-      refill_rate: 10.0,
-      last_refill: Instant::now() - Duration::from_millis( 100 ),
+      tokens : 5.0,
+      max_tokens : 10.0,
+      refill_rate : 10.0,
+      last_refill : Instant::now() - Duration::from_millis( 100 ),
     };
 
     b.iter( ||
@@ -49,17 +49,17 @@ fn benchmark_token_refill_calculation( c: &mut Criterion )
   } );
 }
 
-fn benchmark_token_consumption( c: &mut Criterion )
+fn benchmark_token_consumption( c : &mut Criterion )
 {
   c.bench_function( "consume_token", |b|
   {
     b.iter( ||
     {
       let mut bucket = TokenBucket {
-        tokens: 8.0,
-        max_tokens: 10.0,
-        refill_rate: 10.0,
-        last_refill: Instant::now(),
+        tokens : 8.0,
+        max_tokens : 10.0,
+        refill_rate : 10.0,
+        last_refill : Instant::now(),
       };
 
       // Simulate token consumption
@@ -74,15 +74,15 @@ fn benchmark_token_consumption( c: &mut Criterion )
   } );
 }
 
-fn benchmark_wait_time_calculation( c: &mut Criterion )
+fn benchmark_wait_time_calculation( c : &mut Criterion )
 {
   c.bench_function( "calculate_wait_time", |b|
   {
     let bucket = TokenBucket {
-      tokens: 0.0,
-      max_tokens: 10.0,
-      refill_rate: 10.0,
-      last_refill: Instant::now(),
+      tokens : 0.0,
+      max_tokens : 10.0,
+      refill_rate : 10.0,
+      last_refill : Instant::now(),
     };
 
     b.iter( ||
@@ -100,18 +100,18 @@ fn benchmark_wait_time_calculation( c: &mut Criterion )
   } );
 }
 
-fn benchmark_sliding_window_check( c: &mut Criterion )
+fn benchmark_sliding_window_check( c : &mut Criterion )
 {
   c.bench_function( "check_sliding_window_limit", |b|
   {
     let window = SlidingWindow {
-      requests: vec![
+      requests : vec![
         Instant::now() - Duration::from_secs( 5 ),
         Instant::now() - Duration::from_secs( 3 ),
         Instant::now() - Duration::from_secs( 1 ),
       ],
-      window_size: Duration::from_secs( 60 ),
-      max_requests: 10,
+      window_size : Duration::from_secs( 60 ),
+      max_requests : 10,
     };
 
     b.iter( ||
@@ -129,19 +129,19 @@ fn benchmark_sliding_window_check( c: &mut Criterion )
 #[ derive( Debug, Clone ) ]
 struct TokenBucket
 {
-  tokens: f64,
-  max_tokens: f64,
-  refill_rate: f64,
-  last_refill: Instant,
+  tokens : f64,
+  max_tokens : f64,
+  refill_rate : f64,
+  last_refill : Instant,
 }
 
 // Sliding window for benchmarking
 #[ derive( Debug, Clone ) ]
 struct SlidingWindow
 {
-  requests: Vec< Instant >,
-  window_size: Duration,
-  max_requests: usize,
+  requests : Vec< Instant >,
+  window_size : Duration,
+  max_requests : usize,
 }
 
 criterion_group!(

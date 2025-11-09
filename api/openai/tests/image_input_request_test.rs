@@ -7,10 +7,10 @@ use api_openai::ClientApiAccessors;
 use api_openai::
 {
   Client,
-  components::
+  components ::
   {
-    responses::{ CreateResponseRequest, ResponseInput },
-    input::{ InputItem, InputMessage, InputContentPart, InputText, InputImage },
+    responses ::{ CreateResponseRequest, ResponseInput },
+    input ::{ InputItem, InputMessage, InputContentPart, InputText, InputImage },
   },
 };
 
@@ -94,7 +94,7 @@ async fn test_image_input_request_structure_failure()
       println!( "✅ Response contains appropriate image description content" );
     },
     Err(e) => {
-      panic!("Image input request failed: {e:?}");
+      panic!("Image input request failed : {e:?}");
     }
   }
 }

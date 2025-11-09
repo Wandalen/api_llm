@@ -302,7 +302,7 @@ impl QASystem
   let mut context_question = question.clone();
   if !session_context.is_empty()
   {
-      context_question.context = Some( format!( "{}\n\nPrevious context: {}", 
+      context_question.context = Some( format!( "{}\n\nPrevious context : {}", 
   context_question.context.unwrap_or_default(), session_context ) );
   }
 
@@ -404,10 +404,10 @@ impl QASystem
 
   if let Some( context ) = &question.context
   {
-      prompt.push_str( &format!( "Context: {}\n\n", context ) );
+      prompt.push_str( &format!( "Context : {}\n\n", context ) );
   }
 
-  prompt.push_str( &format!( "Question: {}\n", question.text ) );
+  prompt.push_str( &format!( "Question : {}\n", question.text ) );
   
   match question.question_type
   {

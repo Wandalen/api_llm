@@ -14,12 +14,12 @@
 //!
 //! ```no_run
 //! # use api_huggingface::reliability::{RateLimiter, RateLimiterConfig};
-//! # async fn example( ) -> Result< ( ), Box< dyn std::error::Error >> {
+//! # async fn example( ) -> Result< ( ), Box< dyn std::error::Error > > {
 //! let rate_limiter = RateLimiter::new(
 //!   RateLimiterConfig {
-//!     requests_per_second: Some( 10 ),
-//!     requests_per_minute: Some( 500 ),
-//!     requests_per_hour: Some( 10000 ),
+//!     requests_per_second : Some( 10 ),
+//!     requests_per_minute : Some( 500 ),
+//!     requests_per_hour : Some( 10000 ),
 //!   }
 //! );
 //!
@@ -232,7 +232,7 @@ impl RateLimiter
       // Otherwise, wait for the longest required duration
       if let Some( wait_duration ) = max_wait
       {
-  tokio::time::sleep( wait_duration ).await;
+  tokio ::time::sleep( wait_duration ).await;
       }
   }
   }
@@ -370,7 +370,7 @@ pub enum RateLimitError
 impl core::fmt::Display for RateLimitError 
 {
   #[ inline ]
-  fn fmt( &self, f : &mut core::fmt::Formatter<'_ > ) -> core::fmt::Result 
+  fn fmt( &self, f : &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result 
   {
   match self
   {
@@ -430,7 +430,7 @@ mod tests {
   assert!( limiter.try_acquire( ).await.is_err( ));
 
   // Wait for refill
-  tokio::time::sleep( Duration::from_millis( 150 )).await;
+  tokio ::time::sleep( Duration::from_millis( 150 )).await;
 
   // Should have at least one token
   assert!( limiter.try_acquire( ).await.is_ok( ));

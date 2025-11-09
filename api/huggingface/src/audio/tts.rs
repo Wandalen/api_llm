@@ -4,9 +4,9 @@
 
 use crate::
 {
-  error::Result,
-  audio::{ Audio, SpeechGenerationResult },
-  environment::HuggingFaceEnvironment,
+  error ::Result,
+  audio ::{ Audio, SpeechGenerationResult },
+  environment ::HuggingFaceEnvironment,
 };
 use serde::Serialize;
 
@@ -39,7 +39,7 @@ where
   /// # use api_huggingface::{Client, environment::HuggingFaceEnvironmentImpl, secret::Secret};
   /// # use api_huggingface::audio::AudioInput;
   /// # use std::fs;
-  /// # async fn example() -> Result< (), Box< dyn std::error::Error >> {
+  /// # async fn example() -> Result< (), Box< dyn std::error::Error > > {
   /// # let api_key = Secret::new("test".to_string());
   /// # let env = HuggingFaceEnvironmentImpl::build(api_key, None)?;
   /// # let client = Client::build(env)?;

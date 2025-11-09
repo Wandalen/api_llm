@@ -1,6 +1,6 @@
 //! Enhanced Retry Logic Tests with Anthropic Header Parsing
 //!
-//! # Knowledge: Anthropic Rate Limit Header Integration
+//! # Knowledge : Anthropic Rate Limit Header Integration
 //!
 //! ## Why 6 Headers Matter
 //!
@@ -19,7 +19,7 @@
 //! - `tokens_usage_percentage = (limit - remaining) / limit`
 //!
 //! **Example:** If limit=1000, remaining=250:
-//! - Used: 750 requests (75% of quota)
+//! - Used : 750 requests (75% of quota)
 //! - This signals approaching rate limit, can trigger warnings/throttling
 //!
 //! ## Server-Provided retry-after
@@ -33,8 +33,8 @@
 //! ## Integration with Retry Strategy
 //!
 //! Our retry strategy respects server guidance:
-//! 1. If `retry-after` present: use that duration (server knows best)
-//! 2. If rate limit headers present: calculate optimal delay from reset times
+//! 1. If `retry-after` present : use that duration (server knows best)
+//! 2. If rate limit headers present : calculate optimal delay from reset times
 //! 3. Fallback to exponential backoff only when no server guidance available
 //!
 //! ## Zero Overhead Design
@@ -178,8 +178,8 @@ mod enhanced_retry_tests
     let display = format!( "{}", error );
     assert!( display.contains( "Rate limit exceeded" ) );
     assert!( display.contains( "retry after 30s" ) );
-    assert!( display.contains( "[requests: 50/1000]" ) );
-    assert!( display.contains( "[tokens: 25000/100000]" ) );
+    assert!( display.contains( "[requests : 50/1000]" ) );
+    assert!( display.contains( "[tokens : 25000/100000]" ) );
   }
 
   #[ test ]
@@ -232,7 +232,7 @@ mod enhanced_retry_tests
 
     let info = the_module::AnthropicRateLimitInfo::from_headers( &HeaderMap::new() );
     let rate_error = the_module::AnthropicError::RateLimit(
-      the_module::RateLimitError::with_headers(
+      the_module ::RateLimitError::with_headers(
         "Rate limit".to_string(),
         None,
         "requests".to_string(),
@@ -262,7 +262,7 @@ mod enhanced_retry_tests
     assert!( valid_config.validate().is_ok() );
     assert!( valid_config.is_valid() );
 
-    // Invalid: max_delay < base_delay
+    // Invalid : max_delay < base_delay
     let invalid_config = the_module::RetryConfig::new()
       .with_base_delay_ms( 5000 )
       .with_max_delay_ms( 1000 );
@@ -363,7 +363,7 @@ mod enhanced_retry_tests
 
     // Record failure
     let error = the_module::AnthropicError::RateLimit(
-      the_module::RateLimitError::new(
+      the_module ::RateLimitError::new(
         "Rate limit".to_string(),
         None,
         "requests".to_string()
@@ -383,7 +383,7 @@ mod enhanced_retry_tests
       .expect( "Failed to create client from workspace secrets" );
 
     // Test explicit retry with manual configuration by making a simple API call
-    // Note: This won't actually retry unless there's an error, but it tests the pattern
+    // Note : This won't actually retry unless there's an error, but it tests the pattern
     let result = client
       .explicit_retry()
       .with_attempts( 3 )

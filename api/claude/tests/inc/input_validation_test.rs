@@ -260,9 +260,9 @@ fn test_valid_request()
     max_tokens : 1000,
     messages : vec!
     [
-      the_module::Message::user( "Hello!" ),
-      the_module::Message::assistant( "Hi there!" ),
-      the_module::Message::user( "How are you?" ),
+      the_module ::Message::user( "Hello!" ),
+      the_module ::Message::assistant( "Hi there!" ),
+      the_module ::Message::user( "How are you?" ),
     ],
     system : Some( vec![ the_module::SystemContent::text( "You are helpful" ) ] ),
     temperature : Some( 0.7 ),
@@ -460,7 +460,7 @@ fn test_too_many_tools()
   // Test that more than 64 tools is rejected
   let tools : Vec< the_module::ToolDefinition > = ( 0..65 ).map( |i|
   {
-    the_module::ToolDefinition
+    the_module ::ToolDefinition
     {
       name : format!( "tool_{i}" ),
       description : format!( "Tool number {i}" ),
@@ -683,7 +683,7 @@ async fn integration_validation_allows_valid_requests()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION: Valid request must work: {err}" ),
+    Err( err ) => panic!( "INTEGRATION: Valid request must work : {err}" ),
   };
 
   assert!( !response.id.is_empty() );

@@ -4,15 +4,15 @@
 use criterion::{ criterion_group, criterion_main, Criterion };
 use std::time::{ Duration, Instant };
 
-fn benchmark_circuit_breaker_state_check( c: &mut Criterion )
+fn benchmark_circuit_breaker_state_check( c : &mut Criterion )
 {
   c.bench_function( "check_circuit_breaker_state", |b|
   {
     let breaker = CircuitBreakerState {
-      state: State::Closed,
-      failure_count: 0,
-      last_failure_time: None,
-      half_open_successes: 0,
+      state : State::Closed,
+      failure_count : 0,
+      last_failure_time : None,
+      half_open_successes : 0,
     };
 
     b.iter( ||
@@ -23,17 +23,17 @@ fn benchmark_circuit_breaker_state_check( c: &mut Criterion )
   } );
 }
 
-fn benchmark_failure_recording( c: &mut Criterion )
+fn benchmark_failure_recording( c : &mut Criterion )
 {
   c.bench_function( "record_failure", |b|
   {
     b.iter( ||
     {
       let mut breaker = CircuitBreakerState {
-        state: State::Closed,
-        failure_count: 4,
-        last_failure_time: None,
-        half_open_successes: 0,
+        state : State::Closed,
+        failure_count : 4,
+        last_failure_time : None,
+        half_open_successes : 0,
       };
 
       // Simulate failure recording
@@ -50,17 +50,17 @@ fn benchmark_failure_recording( c: &mut Criterion )
   } );
 }
 
-fn benchmark_success_recording( c: &mut Criterion )
+fn benchmark_success_recording( c : &mut Criterion )
 {
   c.bench_function( "record_success", |b|
   {
     b.iter( ||
     {
       let mut breaker = CircuitBreakerState {
-        state: State::HalfOpen,
-        failure_count: 0,
-        last_failure_time: None,
-        half_open_successes: 1,
+        state : State::HalfOpen,
+        failure_count : 0,
+        last_failure_time : None,
+        half_open_successes : 1,
       };
 
       // Simulate success recording in half-open state
@@ -78,15 +78,15 @@ fn benchmark_success_recording( c: &mut Criterion )
   } );
 }
 
-fn benchmark_timeout_check( c: &mut Criterion )
+fn benchmark_timeout_check( c : &mut Criterion )
 {
   c.bench_function( "check_timeout_for_half_open", |b|
   {
     let breaker = CircuitBreakerState {
-      state: State::Open,
-      failure_count: 5,
-      last_failure_time: Some( Instant::now() - Duration::from_secs( 61 ) ),
-      half_open_successes: 0,
+      state : State::Open,
+      failure_count : 5,
+      last_failure_time : Some( Instant::now() - Duration::from_secs( 61 ) ),
+      half_open_successes : 0,
     };
 
     let timeout = Duration::from_secs( 60 );
@@ -117,10 +117,10 @@ enum State
 #[ derive( Debug, Clone ) ]
 struct CircuitBreakerState
 {
-  state: State,
-  failure_count: u32,
-  last_failure_time: Option< Instant >,
-  half_open_successes: u32,
+  state : State,
+  failure_count : u32,
+  last_failure_time : Option< Instant >,
+  half_open_successes : u32,
 }
 
 criterion_group!(

@@ -15,8 +15,8 @@ mod private
   #[ derive( Debug, Clone ) ]
   struct SecretEntry
   {
-    value: String,
-    expires_at: Option< u64 >,
+    value : String,
+    expires_at : Option< u64 >,
   }
 
   /// Secure secret storage for credentials
@@ -24,14 +24,14 @@ mod private
   #[ derive( Clone ) ]
   pub struct SecretStore
   {
-    secrets: HashMap<  String, SecretEntry  >,
+    secrets : HashMap<  String, SecretEntry  >,
   }
 
   #[ cfg( feature = "secret_management" ) ]
   impl core::fmt::Debug for SecretStore
   {
     #[ inline ]
-    fn fmt( &self, f: &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result
+    fn fmt( &self, f : &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result
     {
       f.debug_struct( "SecretStore" )
         .field( "secrets_count", &self.secrets.len() )
@@ -45,7 +45,7 @@ mod private
   #[ derive( Debug, Clone ) ]
   pub struct SecretConfig
   {
-    secrets: HashMap<  String, String  >,
+    secrets : HashMap<  String, String  >,
   }
 
   /// Workspace configuration for Ollama client
@@ -54,7 +54,7 @@ mod private
   pub struct WorkspaceConfig
   {
     /// Ollama server configuration
-    pub ollama: OllamaServerConfig,
+    pub ollama : OllamaServerConfig,
   }
 
   /// Ollama server configuration within workspace
@@ -63,19 +63,19 @@ mod private
   pub struct OllamaServerConfig
   {
     /// Server URL for Ollama API
-    pub server_url: String,
+    pub server_url : String,
     /// Default model to use
     #[ serde( default ) ]
-    pub default_model: Option< String >,
+    pub default_model : Option< String >,
     /// Request timeout in seconds
     #[ serde( default ) ]
-    pub timeout_secs: Option< u64 >,
+    pub timeout_secs : Option< u64 >,
     /// Preferred models list
     #[ serde( default ) ]
-    pub models: Vec< String >,
+    pub models : Vec< String >,
     /// API key for authentication
     #[ serde( default ) ]
-    pub api_key: Option< String >,
+    pub api_key : Option< String >,
   }
 
   // =====================================
@@ -113,7 +113,7 @@ mod private
     {
       // Look for ollama.toml in current directory
       let current_dir = std::env::current_dir()
-        .map_err( | e | format_err!( "Failed to get current directory: {}", e ) )?;
+        .map_err( | e | format_err!( "Failed to get current directory : {}", e ) )?;
 
       let config_path = current_dir.join( "ollama.toml" );
       if config_path.exists()
@@ -197,9 +197,12 @@ mod private
       let workspace_config = if config_file.exists()
       {
         Self::from_file( config_file )?
-      } else {
+      }
+      else
+      {
         // Create default config
-        Self {
+        Self
+        {
           ollama : OllamaServerConfig {
             server_url : "http://localhost:11434".to_string(),
             default_model : None,
@@ -240,18 +243,18 @@ mod private
     {
       Self
       {
-        secrets: HashMap::new(),
+        secrets : HashMap::new(),
       }
     }
 
     /// Create a secret store from a configuration
     #[ inline ]
     #[ must_use ]
-    pub fn from_config( config: SecretConfig ) -> Self
+    pub fn from_config( config : SecretConfig ) -> Self
     {
       let secrets = config.secrets.into_iter().map( | ( k, v ) |
       {
-        ( k, SecretEntry { value: v, expires_at: None } )
+        ( k, SecretEntry { value : v, expires_at : None } )
       } ).collect();
 
       Self { secrets }
@@ -259,31 +262,31 @@ mod private
 
     /// Store a secret with optional expiration
     #[ inline ]
-    pub fn set( &mut self, key: &str, value: &str ) -> Result< () >
+    pub fn set( &mut self, key : &str, value : &str ) -> Result< () >
     {
       self.secrets.insert( key.to_string(), SecretEntry
       {
-        value: value.to_string(),
-        expires_at: None,
+        value : value.to_string(),
+        expires_at : None,
       } );
       Ok( () )
     }
 
     /// Store a secret with expiration timestamp
     #[ inline ]
-    pub fn set_with_expiry( &mut self, key: &str, value: &str, expires_at: u64 ) -> Result< () >
+    pub fn set_with_expiry( &mut self, key : &str, value : &str, expires_at : u64 ) -> Result< () >
     {
       self.secrets.insert( key.to_string(), SecretEntry
       {
-        value: value.to_string(),
-        expires_at: Some( expires_at ),
+        value : value.to_string(),
+        expires_at : Some( expires_at ),
       } );
       Ok( () )
     }
 
     /// Retrieve a secret if it exists and hasn't expired
     #[ inline ]
-    pub fn get( &self, key: &str ) -> Result< Option< String > >
+    pub fn get( &self, key : &str ) -> Result< Option< String > >
     {
       if let Some( entry ) = self.secrets.get( key )
       {
@@ -292,7 +295,7 @@ mod private
         {
           let now = std::time::SystemTime::now()
             .duration_since( std::time::UNIX_EPOCH )
-            .map_err( | e | format_err!( "System time error: {e}" ) )?
+            .map_err( | e | format_err!( "System time error : {e}" ) )?
             .as_secs();
 
           if now > expires_at
@@ -311,7 +314,7 @@ mod private
 
     /// Remove a secret from the store
     #[ inline ]
-    pub fn remove( &mut self, key: &str ) -> Option< String >
+    pub fn remove( &mut self, key : &str ) -> Option< String >
     {
       self.secrets.remove( key ).map( | entry | entry.value )
     }
@@ -334,7 +337,7 @@ mod private
     /// Check if a secret exists
     #[ inline ]
     #[ must_use ]
-    pub fn contains( &self, key: &str ) -> bool
+    pub fn contains( &self, key : &str ) -> bool
     {
       self.secrets.contains_key( key )
     }
@@ -357,7 +360,7 @@ mod private
 
     /// Create a secret store from a workspace path
     #[ inline ]
-    pub fn from_path< P: AsRef< std::path::Path > >( path: P ) -> Result< Self >
+    pub fn from_path< P: AsRef< std::path::Path > >( path : P ) -> Result< Self >
     {
       #[ cfg( feature = "workspace" ) ]
       {
@@ -392,7 +395,7 @@ mod private
         use workspace_tools::workspace;
 
         let ws = workspace()
-          .map_err( | e | format_err!( "Failed to resolve workspace: {}", e ) )?;
+          .map_err( | e | format_err!( "Failed to resolve workspace : {}", e ) )?;
 
         let workspace_secrets = ws.load_secrets_from_file( "-secrets.sh" )
           .unwrap_or_else( | _ | std::collections::HashMap::new() );
@@ -414,7 +417,7 @@ mod private
 
     /// Get a secret with environment variable fallback
     #[ inline ]
-    pub fn get_with_fallback( &self, key: &str ) -> Result< String >
+    pub fn get_with_fallback( &self, key : &str ) -> Result< String >
     {
       // First try the secret store
       if let Ok( Some( value ) ) = self.get( key )
@@ -423,27 +426,27 @@ mod private
       }
 
       // Fallback to environment variable
-      std::env::var( key )
+      std ::env::var( key )
         .map_err( | _ | format_err!( "Secret '{}' not found in store or environment", key ) )
     }
 
     /// Rotate a secret (replace existing secret with new value)
     #[ inline ]
-    pub fn rotate( &mut self, key: &str, value: &str ) -> Result< () >
+    pub fn rotate( &mut self, key : &str, value : &str ) -> Result< () >
     {
       self.set( key, value )
     }
 
     /// Alias for set_with_expiry for backward compatibility
     #[ inline ]
-    pub fn set_with_expiration( &mut self, key: &str, value: &str, expires_at: u64 ) -> Result< () >
+    pub fn set_with_expiration( &mut self, key : &str, value : &str, expires_at : u64 ) -> Result< () >
     {
       self.set_with_expiry( key, value, expires_at )
     }
 
     /// Validate secret name
     #[ inline ]
-    pub fn validate_secret_name( &self, name: &str ) -> Result< () >
+    pub fn validate_secret_name( &self, name : &str ) -> Result< () >
     {
       if name.is_empty()
       {
@@ -454,7 +457,7 @@ mod private
 
     /// Validate secret value
     #[ inline ]
-    pub fn validate_secret_value( &self, value: &str ) -> Result< () >
+    pub fn validate_secret_value( &self, value : &str ) -> Result< () >
     {
       if value.is_empty()
       {
@@ -484,14 +487,14 @@ mod private
     {
       Self
       {
-        secrets: HashMap::new(),
+        secrets : HashMap::new(),
       }
     }
 
     /// Add a secret to the configuration
     #[ inline ]
     #[ must_use ]
-    pub fn with_secret( mut self, key: &str, value: &str ) -> Self
+    pub fn with_secret( mut self, key : &str, value : &str ) -> Self
     {
       self.secrets.insert( key.to_string(), value.to_string() );
       self
@@ -500,7 +503,7 @@ mod private
     /// Create configuration from a HashMap
     #[ inline ]
     #[ must_use ]
-    pub fn from_map( secrets: HashMap<  String, String  > ) -> Self
+    pub fn from_map( secrets : HashMap<  String, String  > ) -> Self
     {
       Self { secrets }
     }
@@ -528,7 +531,7 @@ mod private
     /// Expect method for result handling
     #[ inline ]
     #[ must_use ]
-    pub fn expect( self, _msg: &str ) -> Self
+    pub fn expect( self, _msg : &str ) -> Self
     {
       self
     }
@@ -549,7 +552,7 @@ mod private
 
     /// Get a secret value by key
     #[ inline ]
-    pub fn get( &self, key: &str ) -> Option< &String >
+    pub fn get( &self, key : &str ) -> Option< &String >
     {
       self.secrets.get( key )
     }
@@ -575,7 +578,7 @@ mod private
   {
     /// Apply authentication to a request builder using secret store
     #[ inline ]
-    pub fn apply_authentication( secret_store: &mut Option< SecretStore >, request_builder: reqwest::RequestBuilder ) -> reqwest::RequestBuilder
+    pub fn apply_authentication( secret_store : &mut Option< SecretStore >, request_builder : reqwest::RequestBuilder ) -> reqwest::RequestBuilder
     {
       if let Some( store ) = secret_store
       {
@@ -605,7 +608,7 @@ mod private
 }
 
 #[ cfg( any( feature = "secret_management", feature = "workspace" ) ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   #[ cfg( feature = "secret_management" ) ]
   exposed use private::SecretStore;

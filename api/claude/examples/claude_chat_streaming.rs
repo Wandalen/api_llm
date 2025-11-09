@@ -1,5 +1,5 @@
 //! Streaming conversation example using real Anthropic API
-//! Run with: cargo run --example `claude_chat_streaming` --features integration
+//! Run with : cargo run --example `claude_chat_streaming` --features integration
 
 use api_claude::{ Client, CreateMessageRequest, Message };
 use std::io::{ self, Write };
@@ -21,11 +21,11 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     
     loop
     {
-        print!("You: ");
-        io::stdout().flush()?;
+        print!("You : ");
+        io ::stdout().flush()?;
         
         let mut input = String::new();
-        io::stdin().read_line(&mut input)?;
+        io ::stdin().read_line(&mut input)?;
         let user_message = input.trim().to_string();
         
         match user_message.to_lowercase().as_str()
@@ -49,18 +49,18 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
         conversation_count += 1;
         
         let stream_request = CreateMessageRequest {
-            model: "claude-3-5-haiku-20241022".to_string(), // Fast model for chat
-            max_tokens: 500,
-            messages: conversation_history.clone(),
-            stream: Some(false), // Note: Real streaming implementation would require additional setup
-            temperature: Some(0.8),
-            system: Some( vec![ api_claude::SystemContent::text( "You are Claude, a helpful AI assistant. Be conversational, engaging, and concise. Show personality while being helpful." ) ] ),
-            tools: None,
-            tool_choice: None,
+            model : "claude-3-5-haiku-20241022".to_string(), // Fast model for chat
+            max_tokens : 500,
+            messages : conversation_history.clone(),
+            stream : Some(false), // Note : Real streaming implementation would require additional setup
+            temperature : Some(0.8),
+            system : Some( vec![ api_claude::SystemContent::text( "You are Claude, a helpful AI assistant. Be conversational, engaging, and concise. Show personality while being helpful." ) ] ),
+            tools : None,
+            tool_choice : None,
         };
         
-        print!("Claude: ");
-        io::stdout().flush()?;
+        print!("Claude : ");
+        io ::stdout().flush()?;
         
         match client.create_message(stream_request).await
         {
@@ -70,7 +70,7 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
                     if let Some(text) = &text_content.text
                     {
                         // Simulate streaming effect by printing with delays
-                        let words: Vec< &str > = text.split_whitespace().collect();
+                        let words : Vec< &str > = text.split_whitespace().collect();
                         for (i, word) in words.iter().enumerate()
                         {
                             print!("{word}");
@@ -78,10 +78,10 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
                             {
                                 print!(" ");
                             }
-                            io::stdout().flush()?;
+                            io ::stdout().flush()?;
                             
                             // Small delay to simulate streaming
-                            tokio::time::sleep(tokio::time::Duration::from_millis(50)).await;
+                            tokio ::time::sleep(tokio::time::Duration::from_millis(50)).await;
                         }
                         println!("\n");
                         
@@ -97,14 +97,14 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
                         // Show conversation stats
                         if conversation_count % 5 == 0
                         {
-                            println!("📊 Chat Stats: {} exchanges, {} tokens in last response", 
+                            println!("📊 Chat Stats : {} exchanges, {} tokens in last response", 
                                 conversation_count, response.usage.output_tokens);
                         }
                     }
                 }
             }
             Err(e) => {
-                println!("❌ Error: {e}");
+                println!("❌ Error : {e}");
                 println!("Please try again or type 'quit' to exit.");
                 // Remove the last user message if there was an error
                 conversation_history.pop();
@@ -115,9 +115,9 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
     if conversation_count > 0
     {
         println!("\n📈 Session Summary:");
-        println!("   • Total exchanges: {conversation_count}");
-        let history_len = conversation_history.len(); println!("   • Messages in history: {history_len}");
-        println!("   • Model used: claude-3-5-haiku-20241022");
+        println!("   • Total exchanges : {conversation_count}");
+        let history_len = conversation_history.len(); println!("   • Messages in history : {history_len}");
+        println!("   • Model used : claude-3-5-haiku-20241022");
     }
     
     Ok(())

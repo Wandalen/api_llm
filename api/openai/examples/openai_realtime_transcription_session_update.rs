@@ -16,10 +16,10 @@
 use api_openai::ClientApiAccessors;
 use api_openai::
 {
-  client::Client,
-  error::OpenAIError,
-  api::realtime::{ RealtimeClient, ws::WsSession },
-  components::realtime_shared::
+  client ::Client,
+  error ::OpenAIError,
+  api ::realtime::{ RealtimeClient, ws::WsSession },
+  components ::realtime_shared::
   {
     RealtimeTranscriptionSessionCreateRequest,
     RealtimeClientEventTranscriptionSessionUpdate,
@@ -41,25 +41,25 @@ async fn main() -> Result< (), OpenAIError >
   .init();
 
   // Load environment variables
-  dotenv::from_filename( "./secret/-secret.sh" ).ok();
+  dotenv ::from_filename( "./secret/-secret.sh" ).ok();
 
   // 1. Create a new OpenAI client.
-  tracing::info!( "Initializing client..." );
+  tracing ::info!( "Initializing client..." );
   let client = Client::new();
 
   // 2. **WARNING:** Creating a standard session here. A real transcription update
   //    scenario requires creating a transcription session via the REST API first.
-  tracing::info!( "Building standard session request (for demo purposes)..." );
+  tracing ::info!( "Building standard session request (for demo purposes)..." );
   let initial_request = RealtimeTranscriptionSessionCreateRequest::former()
   .input_audio_format( "pcm16" ) // Need input format configured
   .input_audio_transcription( RealtimeSessionInputAudioTranscription::former().model( "whisper-1".to_string() ).form() )
   .form();
 
-  tracing::info!( "Sending request to OpenAI API to create standard session..." );
+  tracing ::info!( "Sending request to OpenAI API to create standard session..." );
   // 3. Call the API endpoint to get session details.
   let session = client.realtime().create_transcription( initial_request ).await?;
 
-  tracing::info!( "Creating Realtime WebSocket Session Client..." );
+  tracing ::info!( "Creating Realtime WebSocket Session Client..." );
   let token = session.client_secret.expect("Client secret").value;
   // 4. Establish the WebSocket connection using the session token.
   let session_client  = WsSession::connect( client.environment().clone(), Some( &token ) ).await?;
@@ -74,10 +74,10 @@ async fn main() -> Result< (), OpenAIError >
     RealtimeSessionInputAudioTranscription::former()
     .model( new_model )
     .language( new_language )
-    // .prompt("Focus on technical terms.") // Example: Add a prompt
+    // .prompt("Focus on technical terms.") // Example : Add a prompt
     .form()
   )
-  // Example: update turn detection settings for the transcription session
+  // Example : update turn detection settings for the transcription session
   // .turn_detection(RealtimeSessionTurnDetection::former().silence_duration_ms(700).form())
   .form();
 
@@ -86,13 +86,13 @@ async fn main() -> Result< (), OpenAIError >
   .session( transcription_update_payload ) // Embed the update payload
   .form();
 
-  tracing::info!( language = new_language, "Sending transcription_session.update event..." );
+  tracing ::info!( language = new_language, "Sending transcription_session.update event..." );
   // 7. Send the transcription session update event over the WebSocket.
   session_client.transcription_session_update( tsu_update ).await?;
 
   // 8. Loop to read responses. We expect either TranscriptionSessionUpdated (if context was correct)
   //    or an Error (more likely given the standard session setup).
-  tracing::info!( "Waiting for transcription_session.updated or error confirmation..." );
+  tracing ::info!( "Waiting for transcription_session.updated or error confirmation..." );
   let mut confirmation_received = false; // Tracks if TranscriptionSessionUpdated was received
   let mut error_received = false; // Tracks if a relevant error was received
 
@@ -125,7 +125,7 @@ async fn main() -> Result< (), OpenAIError >
             }
             else
             {
-              eprintln!( "Received transcription_session.updated confirmation, but changes did not match request fully (Lang match: {}, Include match: {}).", lang_matches, include_matches);
+              eprintln!( "Received transcription_session.updated confirmation, but changes did not match request fully (Lang match : {}, Include match : {}).", lang_matches, include_matches);
               break; // Break, but don't confirm success
             }
           }
@@ -157,7 +157,7 @@ async fn main() -> Result< (), OpenAIError >
       }
       Err( e ) =>
       {
-        eprintln!( "\nError reading from WebSocket: {:?}", e );
+        eprintln!( "\nError reading from WebSocket : {:?}", e );
         return Err( e ); // Propagate the error
       }
     }
@@ -172,7 +172,7 @@ async fn main() -> Result< (), OpenAIError >
 
 if confirmation_received
 {
-    println!( "Successfully updated transcription session (Note: This implies the initial session WAS a transcription session)." );
+    println!( "Successfully updated transcription session (Note : This implies the initial session WAS a transcription session)." );
   } else if error_received
   {
     println!( "Received expected error when trying to update a standard session as if it were a transcription session. This demonstrates the event sending mechanism." );

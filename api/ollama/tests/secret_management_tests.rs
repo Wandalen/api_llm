@@ -57,8 +57,8 @@ async fn test_secret_store_secure_debug()
 async fn test_secret_config_from_env()
 {
   // Set environment variables for testing
-  env::set_var("OLLAMA_API_KEY", "env-api-key-456");
-  env::set_var("OLLAMA_SECRET_TOKEN", "env-secret-789");
+  env ::set_var("OLLAMA_API_KEY", "env-api-key-456");
+  env ::set_var("OLLAMA_SECRET_TOKEN", "env-secret-789");
   
   // Create secret config from environment
   let secret_config = SecretConfig::from_env().expect("Failed to create config from environment");
@@ -68,8 +68,8 @@ async fn test_secret_config_from_env()
   assert_eq!(secret_config.secret_token().unwrap(), "env-secret-789");
   
   // Cleanup
-  env::remove_var("OLLAMA_API_KEY");
-  env::remove_var("OLLAMA_SECRET_TOKEN");
+  env ::remove_var("OLLAMA_API_KEY");
+  env ::remove_var("OLLAMA_SECRET_TOKEN");
 }
 
 #[ tokio::test ] 
@@ -155,7 +155,7 @@ async fn test_secret_expiration()
   assert!(secret_store.get("temp_secret").unwrap().is_some());
   
   // Wait for expiration
-  tokio::time::sleep(tokio::time::Duration::from_millis(2000)).await;
+  tokio ::time::sleep(tokio::time::Duration::from_millis(2000)).await;
   
   // Secret should be expired and unavailable
   assert!(secret_store.get("temp_secret").unwrap().is_none());

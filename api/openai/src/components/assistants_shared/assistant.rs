@@ -64,7 +64,7 @@ mod private
   #[ serde( untagged ) ] // Allows deserialization from string or object
   pub enum AssistantsApiToolChoiceOption
   {
-    /// String options: "none", "auto", "required".
+    /// String options : "none", "auto", "required".
     String( String ),
     /// Specifies a specific tool to call.
     Named( AssistantsNamedToolChoice ),
@@ -251,7 +251,7 @@ mod private
     /// The vector store IDs attached to the assistant or thread. Maximum 1 ID.
     #[ serde( skip_serializing_if = "Option::is_none" ) ]
     pub vector_store_ids : Option< Vec< String > >,
-    // Note: 'vector_stores' field from CreateAssistantRequest/CreateThreadRequest is not part of the response object.
+    // Note : 'vector_stores' field from CreateAssistantRequest/CreateThreadRequest is not part of the response object.
   }
 
   /// Response containing a list of assistants.
@@ -289,7 +289,7 @@ mod private
   }
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use private::AssistantSupportedModels;
   exposed use private::AssistantsApiResponseFormatOption;

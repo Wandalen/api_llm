@@ -26,8 +26,8 @@ pub fn create_integration_client() -> Client
     panic!(
       "\n\n❌ INTEGRATION TEST FAILURE: No valid API key found!\n\
       \n🔑 API Key Required From:\n\
-      \n   1. Environment variable: GEMINI_API_KEY\n\
-      \n   2. Workspace secret file: secret/gemini_api_key\n\
+      \n   1. Environment variable : GEMINI_API_KEY\n\
+      \n   2. Workspace secret file : secret/gemini_api_key\n\
       \n      (using workspace_tools 0.6.0 for secret loading)\n\
       \n📋 This integration test validates functionality with REAL Gemini API calls\n\
       \n🚫 Integration tests NEVER skip silently - missing API keys cause explicit failures\n\

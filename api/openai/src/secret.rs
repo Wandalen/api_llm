@@ -18,8 +18,8 @@ mod private
 
   /// Validates the format of an API key secret
   /// 
-  /// `OpenAI` API keys should follow the pattern: sk-[48 characters]
-  /// Test keys should follow the pattern: sk-test-[24 characters]
+  /// `OpenAI` API keys should follow the pattern : sk-[48 characters]
+  /// Test keys should follow the pattern : sk-test-[24 characters]
   fn validate_api_key_format( secret : &str ) -> Result< () >
   {
     let trimmed = secret.trim();
@@ -84,7 +84,7 @@ mod private
   /// 
   /// // Create without validation (for testing)
   /// let secret = Secret::new_unchecked("test-key".to_string());
-  /// # Ok::<(), Box< dyn core::error::Error >>(())
+  /// # Ok::<(), Box< dyn core::error::Error > >(())
   /// ```
   #[ derive( Debug, Clone ) ] // Removed PartialEq, Eq, Hash, PartialOrd, Ord
   #[ non_exhaustive ]
@@ -129,9 +129,9 @@ mod private
     pub fn load_with_path( path : &Path ) -> Result< Self > // Corrected path
     {
       let secret_string = std::fs::read_to_string( path )
-      .map_err( | e | error_tools::Error::from( crate::error::OpenAIError::File( format!( "Failed to read secret file: {e}" ) ) ) )?; // Corrected path
+      .map_err( | e | error_tools::Error::from( crate::error::OpenAIError::File( format!( "Failed to read secret file : {e}" ) ) ) )?; // Corrected path
       Self::new( secret_string.trim().to_string() )
-        .map_err( | e | error_tools::Error::from( crate::error::OpenAIError::File( format!( "Invalid secret format in file: {e}" ) ) ) )
+        .map_err( | e | error_tools::Error::from( crate::error::OpenAIError::File( format!( "Invalid secret format in file : {e}" ) ) ) )
     }
 
     /// Loads a secret from an environment variable.
@@ -162,7 +162,7 @@ mod private
     pub fn load_from_workspace( key_name : &str, filename : &str ) -> Result< Self >
     {
       let ws = workspace()
-        .map_err( | e | error_tools::Error::from( crate::error::OpenAIError::MissingEnvironment( format!( "Failed to access workspace: {e}" ) ) ) )?;
+        .map_err( | e | error_tools::Error::from( crate::error::OpenAIError::MissingEnvironment( format!( "Failed to access workspace : {e}" ) ) ) )?;
       
       let secret_string = ws.load_secret_key( key_name, filename )
         .map_err( | e | error_tools::Error::from( crate::error::OpenAIError::MissingEnvironment( format!( "Failed to load secret {key_name} from {filename}: {e}" ) ) ) )?;
@@ -191,7 +191,7 @@ mod private
     /// 
     /// // Tries environment variable first, then workspace secrets
     /// let secret = Secret::load_with_fallbacks("OPENAI_API_KEY")?;
-    /// # Ok::<(), Box< dyn std::error::Error >>(())
+    /// # Ok::<(), Box< dyn std::error::Error > >(())
     /// ```
     #[ inline ]
     pub fn load_with_fallbacks( key_name : &str ) -> Result< Self >
@@ -241,7 +241,7 @@ mod private
     }
   }
 
-  impl ExposeSecret<str> for Secret
+  impl ExposeSecret< str > for Secret
   {
     #[ inline ]
     fn expose_secret( &self ) -> &str
@@ -259,7 +259,7 @@ mod private
       };
       
       eprintln!(
-        "[AUDIT] Secret exposure #{} - Hash: {:x} - Caller: {}:{}:{}", 
+        "[AUDIT] Secret exposure #{} - Hash : {:x} - Caller : {}:{}:{}", 
         exposure_count,
         secret_hash,
         file!(),
@@ -291,7 +291,7 @@ mod private
   
 } // end mod private
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   // Expose all structs defined in this module
   exposed use 

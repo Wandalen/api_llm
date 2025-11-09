@@ -39,7 +39,7 @@
 //!
 //! **Zero Magic Principle:**
 //! - Sync API is purely blocking wrappers, no automatic behavior
-//! - One-to-one mapping: sync call → async call → HTTP request
+//! - One-to-one mapping : sync call → async call → HTTP request
 //! - No retry logic, circuit breakers, or implicit state
 //! - Developers have full control over execution
 //!
@@ -67,7 +67,7 @@ fn test_sync_client_creation()
   use api_huggingface::sync::SyncClient;
 
   let result = SyncClient::new( "hf_test_key_1234567890abcdefghij".to_string() );
-  assert!( result.is_ok(), "[test_sync_client_creation] Failed to create SyncClient with valid API key - check Tokio runtime initialization. Error: {:?}", result.err() );
+  assert!( result.is_ok(), "[test_sync_client_creation] Failed to create SyncClient with valid API key - check Tokio runtime initialization. Error : {:?}", result.err() );
 
   {
     let _client = result.expect( "[test_sync_client_creation] SyncClient should be Ok after is_ok() check - check SyncClient::new() implementation" );
@@ -80,7 +80,7 @@ fn test_sync_client_with_custom_base_url()
   use api_huggingface::sync::SyncClient;
 
   let result = SyncClient::with_base_url( "hf_test_key_1234567890abcdefghij".to_string(), "https://api-inference.huggingface.co/v1/".to_string() );
-  assert!( result.is_ok(), "[test_sync_client_with_custom_base_url] Failed to create SyncClient with custom base URL. Error: {:?}", result.err() );
+  assert!( result.is_ok(), "[test_sync_client_with_custom_base_url] Failed to create SyncClient with custom base URL. Error : {:?}", result.err() );
 }
 
 #[ cfg( feature = "integration" ) ]
@@ -101,7 +101,7 @@ fn test_sync_inference_basic()
   let client = SyncClient::new( api_key ).expect( "[test_sync_inference_basic] Failed to create SyncClient" );
 
   let result = client.inference().create( "What is 2+2?", "meta-llama/Llama-3.2-1B-Instruct" );
-  assert!( result.is_ok(), "[test_sync_inference_basic] Sync inference call failed. Error: {:?}", result.err() );
+  assert!( result.is_ok(), "[test_sync_inference_basic] Sync inference call failed. Error : {:?}", result.err() );
 
   let response = result.expect( "[test_sync_inference_basic] Inference result should be Ok after is_ok() check - check SyncInference::create() implementation" );
   let text = response.extract_text_or_default( "" );
@@ -127,7 +127,7 @@ fn test_sync_inference_with_parameters()
 
   let params = InferenceParameters::new().with_temperature( 0.7 ).with_max_new_tokens( 50 );
   let result = client.inference().create_with_parameters( "Explain quantum computing in one sentence", "meta-llama/Llama-3.2-1B-Instruct", params );
-  assert!( result.is_ok(), "[test_sync_inference_with_parameters] Sync inference with parameters failed. Error: {:?}", result.err() );
+  assert!( result.is_ok(), "[test_sync_inference_with_parameters] Sync inference with parameters failed. Error : {:?}", result.err() );
 }
 
 #[ cfg( feature = "integration" ) ]
@@ -148,7 +148,7 @@ fn test_sync_chat_completion()
   let client = SyncClient::new( api_key ).expect( "[test_sync_chat_completion] Failed to create SyncClient" );
 
   let result = client.inference().create( "Hello, how are you?", "meta-llama/Llama-3.2-1B-Instruct" );
-  assert!( result.is_ok(), "[test_sync_chat_completion] Sync chat-style inference failed. Error: {:?}", result.err() );
+  assert!( result.is_ok(), "[test_sync_chat_completion] Sync chat-style inference failed. Error : {:?}", result.err() );
 }
 
 #[ test ]
@@ -162,7 +162,7 @@ fn test_sync_client_thread_safety()
 
   let handles : Vec< _ > = ( 0..5 ).map( |i| {
     let client_clone = Arc::clone( &client );
-    thread::spawn( move || {
+    thread ::spawn( move || {
       let _inference = client_clone.inference();
       let _counter = client_clone.token_counter();
       format!( "Thread {i} completed" )
@@ -171,7 +171,7 @@ fn test_sync_client_thread_safety()
 
   for ( idx, handle ) in handles.into_iter().enumerate() {
     let result = handle.join();
-    assert!( result.is_ok(), "[test_sync_client_thread_safety] Thread {idx} panicked - SyncClient may not be thread-safe. Error: {:?}", result.err() );
+    assert!( result.is_ok(), "[test_sync_client_thread_safety] Thread {idx} panicked - SyncClient may not be thread-safe. Error : {:?}", result.err() );
   }
 }
 
@@ -239,7 +239,7 @@ fn test_sync_performance_overhead()
   let _sync_result = sync_client.inference().create( "Test prompt", "meta-llama/Llama-3.2-1B-Instruct" );
   let sync_duration = start.elapsed();
 
-  println!( "[test_sync_performance_overhead] Sync call took: {:.2?}", sync_duration );
+  println!( "[test_sync_performance_overhead] Sync call took : {:.2?}", sync_duration );
 }
 
 #[ test ]
@@ -291,11 +291,11 @@ fn test_sync_api_complete_workflow()
   let client = SyncClient::new( api_key ).expect( "[test_sync_api_complete_workflow] Failed to create SyncClient" );
 
   let basic_result = client.inference().create( "Hello, world!", "meta-llama/Llama-3.2-1B-Instruct" );
-  assert!( basic_result.is_ok(), "[test_sync_api_complete_workflow] Basic inference failed. Error: {:?}", basic_result.err() );
+  assert!( basic_result.is_ok(), "[test_sync_api_complete_workflow] Basic inference failed. Error : {:?}", basic_result.err() );
 
   let params = InferenceParameters::new().with_temperature( 0.8 ).with_max_new_tokens( 100 );
   let param_result = client.inference().create_with_parameters( "Explain AI in simple terms", "meta-llama/Llama-3.2-1B-Instruct", params );
-  assert!( param_result.is_ok(), "[test_sync_api_complete_workflow] Parametrized inference failed. Error: {:?}", param_result.err() );
+  assert!( param_result.is_ok(), "[test_sync_api_complete_workflow] Parametrized inference failed. Error : {:?}", param_result.err() );
 
   let counter = client.token_counter();
   let token_count = counter.count_tokens( "This is a test message" );

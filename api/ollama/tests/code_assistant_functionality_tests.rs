@@ -16,7 +16,7 @@ mod tests
       (
         "Rust Function with Potential Issues",
         r"
-fn process_user_data( data: Vec< String > ) -> Vec< i32 >
+fn process_user_data( data : Vec< String > ) -> Vec< i32 >
 {
     let mut results = Vec::new();
     for item in data
@@ -56,11 +56,11 @@ function findDuplicates(arr) {
     
     // Test analysis tasks structure
     let analysis_tasks = [
-      "Code Review: Identify potential bugs, error handling issues, and code quality problems.",
-      "Security Analysis: Look for security vulnerabilities, unsafe practices, or potential attack vectors.",
-      "Performance Optimization: Suggest performance improvements and more efficient approaches.",
-      "Best Practices: Recommend coding best practices and modern language features that could be used.",
-      "Refactoring: Provide a refactored version that addresses the identified issues.",
+      "Code Review : Identify potential bugs, error handling issues, and code quality problems.",
+      "Security Analysis : Look for security vulnerabilities, unsafe practices, or potential attack vectors.",
+      "Performance Optimization : Suggest performance improvements and more efficient approaches.",
+      "Best Practices : Recommend coding best practices and modern language features that could be used.",
+      "Refactoring : Provide a refactored version that addresses the identified issues.",
     ];
     
     assert_eq!( analysis_tasks.len(), 5 );
@@ -109,7 +109,7 @@ function findDuplicates(arr) {
   {
     // Test the code explanation functionality
     let complex_code = r"
-fn merge_sort< T: Ord + Clone >( mut vec: Vec< T > ) -> Vec< T >
+fn merge_sort< T: Ord + Clone >( mut vec : Vec< T > ) -> Vec< T >
 {
     if vec.len() <= 1
     {

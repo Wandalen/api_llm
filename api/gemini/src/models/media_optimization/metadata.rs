@@ -14,13 +14,13 @@ use bytes::{ Bytes, BytesMut };
 pub struct MediaCache
 {
   /// Cache configuration
-  config: MediaProcessingConfig,
+  config : MediaProcessingConfig,
   /// Cached media entries with access timestamps
-  entries: Arc< RwLock< HashMap<  String, CachedMediaEntry  > > >,
+  entries : Arc< RwLock< HashMap<  String, CachedMediaEntry  > > >,
   /// Total cache size in bytes
-  total_size_bytes: AtomicUsize,
+  total_size_bytes : AtomicUsize,
   /// Cache access statistics
-  stats: Arc< MediaCacheStats >,
+  stats : Arc< MediaCacheStats >,
 }
 
 /// Cached media entry with metadata
@@ -28,13 +28,13 @@ pub struct MediaCache
 struct CachedMediaEntry
 {
   /// Original file data (possibly compressed)
-  data: Bytes,
+  data : Bytes,
   /// Metadata about the cached file
-  metadata: CachedMediaMetadata,
+  metadata : CachedMediaMetadata,
   /// Last access timestamp
-  last_accessed: SystemTime,
+  last_accessed : SystemTime,
   /// Size in bytes
-  size_bytes: usize,
+  size_bytes : usize,
 }
 
 /// Metadata for cached media
@@ -42,16 +42,16 @@ struct CachedMediaEntry
 pub struct CachedMediaMetadata
 {
   /// Original MIME type
-  pub mime_type: String,
+  pub mime_type : String,
   /// Original file size
-  pub original_size: usize,
+  pub original_size : usize,
   /// Whether data is compressed
-  pub is_compressed: bool,
+  pub is_compressed : bool,
   /// Compression ratio achieved
-  pub compression_ratio: f64,
+  pub compression_ratio : f64,
   /// File hash for integrity verification
   #[ allow(dead_code) ]
-  content_hash: String,
+  content_hash : String,
 }
 
 /// Cache statistics for performance monitoring
@@ -59,15 +59,15 @@ pub struct CachedMediaMetadata
 pub struct MediaCacheStats
 {
   /// Cache hits
-  pub hits: AtomicU64,
+  pub hits : AtomicU64,
   /// Cache misses
-  pub misses: AtomicU64,
+  pub misses : AtomicU64,
   /// Number of evictions performed
-  pub evictions: AtomicU64,
+  pub evictions : AtomicU64,
   /// Total bytes compressed
-  pub total_compressed_bytes: AtomicU64,
+  pub total_compressed_bytes : AtomicU64,
   /// Total compression time in microseconds
-  pub total_compression_time_us: AtomicU64,
+  pub total_compression_time_us : AtomicU64,
 }
 
 impl Default for MediaCacheStats
@@ -75,11 +75,11 @@ impl Default for MediaCacheStats
   fn default() -> Self
   {
     Self {
-      hits: AtomicU64::new( 0 ),
-      misses: AtomicU64::new( 0 ),
-      evictions: AtomicU64::new( 0 ),
-      total_compressed_bytes: AtomicU64::new( 0 ),
-      total_compression_time_us: AtomicU64::new( 0 ),
+      hits : AtomicU64::new( 0 ),
+      misses : AtomicU64::new( 0 ),
+      evictions : AtomicU64::new( 0 ),
+      total_compressed_bytes : AtomicU64::new( 0 ),
+      total_compression_time_us : AtomicU64::new( 0 ),
     }
   }
 }
@@ -89,19 +89,19 @@ impl MediaCache
   /// Create a new media cache
   #[ inline ]
   #[ must_use ]
-  pub fn new( config: MediaProcessingConfig ) -> Self
+  pub fn new( config : MediaProcessingConfig ) -> Self
   {
     Self {
       config,
-      entries: Arc::new( RwLock::new( HashMap::new() ) ),
-      total_size_bytes: AtomicUsize::new( 0 ),
-      stats: Arc::new( MediaCacheStats::default() ),
+      entries : Arc::new( RwLock::new( HashMap::new() ) ),
+      total_size_bytes : AtomicUsize::new( 0 ),
+      stats : Arc::new( MediaCacheStats::default() ),
     }
   }
 
   /// Get media from cache
   #[ inline ]
-  pub fn get( &self, key: &str ) -> Option< ( Bytes, CachedMediaMetadata ) >
+  pub fn get( &self, key : &str ) -> Option< ( Bytes, CachedMediaMetadata ) >
   {
     let mut entries = self.entries.write().unwrap();
 
@@ -131,7 +131,7 @@ impl MediaCache
 
   /// Put media in cache with optional compression
   #[ inline ]
-  pub fn put( &self, key: String, data: Bytes, mime_type: String ) -> Result< (), crate::error::Error >
+  pub fn put( &self, key : String, data : Bytes, mime_type : String ) -> Result< (), crate::error::Error >
   {
     let original_size = data.len();
     let start_time = Instant::now();
@@ -174,10 +174,10 @@ impl MediaCache
     };
 
     let entry = CachedMediaEntry {
-      data: final_data,
+      data : final_data,
       metadata,
-      last_accessed: SystemTime::now(),
-      size_bytes: entry_size,
+      last_accessed : SystemTime::now(),
+      size_bytes : entry_size,
     };
 
     // Insert into cache
@@ -201,7 +201,7 @@ impl MediaCache
 
   /// Check if MIME type should be compressed
   #[ inline ]
-  fn should_compress( &self, mime_type: &str ) -> bool
+  fn should_compress( &self, mime_type : &str ) -> bool
   {
     // Don't compress already compressed formats
     !matches!( mime_type,
@@ -214,7 +214,7 @@ impl MediaCache
 
   /// Compress data using deflate algorithm
   #[ inline ]
-  fn compress_data( &self, data: &Bytes ) -> Result< Bytes, std::io::Error >
+  fn compress_data( &self, data : &Bytes ) -> Result< Bytes, std::io::Error >
   {
 
     // Simple compression simulation (in production, use actual compression library)
@@ -259,7 +259,7 @@ impl MediaCache
   }
 
   /// Calculate hash of data for integrity verification
-  fn calculate_hash( &self, data: &Bytes ) -> String
+  fn calculate_hash( &self, data : &Bytes ) -> String
   {
     let mut hasher = DefaultHasher::new();
     data.hash( &mut hasher );
@@ -267,10 +267,10 @@ impl MediaCache
   }
 
   /// Evict LRU entries to make space
-  fn evict_lru_entries( &self, required_space: usize )
+  fn evict_lru_entries( &self, required_space : usize )
   {
     let mut entries = self.entries.write().unwrap();
-    let mut entries_by_access: Vec< _ > = entries.iter()
+    let mut entries_by_access : Vec< _ > = entries.iter()
       .map( | ( key, entry ) | ( key.clone(), entry.last_accessed, entry.size_bytes ) )
       .collect();
 
@@ -310,10 +310,10 @@ impl MediaCache
       hits,
       misses,
       hit_rate,
-      evictions: self.stats.evictions.load( Ordering::Relaxed ),
-      total_size_bytes: self.total_size_bytes.load( Ordering::Relaxed ),
-      total_compressed_bytes: self.stats.total_compressed_bytes.load( Ordering::Relaxed ),
-      avg_compression_time_us: {
+      evictions : self.stats.evictions.load( Ordering::Relaxed ),
+      total_size_bytes : self.total_size_bytes.load( Ordering::Relaxed ),
+      total_compressed_bytes : self.stats.total_compressed_bytes.load( Ordering::Relaxed ),
+      avg_compression_time_us : {
         let total_time = self.stats.total_compression_time_us.load( Ordering::Relaxed );
         let total_compressed = self.stats.total_compressed_bytes.load( Ordering::Relaxed );
         if total_compressed > 0 { total_time / total_compressed } else { 0 }
@@ -336,19 +336,19 @@ impl MediaCache
 pub struct ThumbnailGenerator
 {
   /// Configuration for thumbnail generation
-  config: ThumbnailConfig,
+  config : ThumbnailConfig,
 }
 
 impl ThumbnailGenerator
 {
   /// Create a new thumbnail generator
-  pub fn new( config: ThumbnailConfig ) -> Self
+  pub fn new( config : ThumbnailConfig ) -> Self
   {
     Self { config }
   }
 
   /// Generate thumbnail for image data
-  pub async fn generate_thumbnail( &self, _image_data: &Bytes, mime_type: &str ) -> Result< Bytes, crate::error::Error >
+  pub async fn generate_thumbnail( &self, _image_data : &Bytes, mime_type : &str ) -> Result< Bytes, crate::error::Error >
   {
     if !self.config.enabled
     {
@@ -362,7 +362,7 @@ impl ThumbnailGenerator
   }
 
   /// Create a placeholder thumbnail (simplified implementation)
-  fn create_placeholder_thumbnail( &self, _mime_type: &str ) -> Bytes
+  fn create_placeholder_thumbnail( &self, _mime_type : &str ) -> Bytes
   {
     // Create a simple byte pattern representing a thumbnail
     let mut thumbnail = BytesMut::new();

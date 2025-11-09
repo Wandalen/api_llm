@@ -66,7 +66,7 @@ impl SyncClientBuilder
     ) )?;
 
     let rt = tokio::runtime::Runtime::new()
-      .map_err( |e| Error::NetworkError( format!( "Failed to create tokio runtime: {e}" ) ) )?;
+      .map_err( |e| Error::NetworkError( format!( "Failed to create tokio runtime : {e}" ) ) )?;
 
     let client = rt.block_on( async {
       let mut builder = Client::builder().api_key( api_key );
@@ -76,7 +76,7 @@ impl SyncClientBuilder
         builder = builder.timeout( timeout );
       }
 
-      // Note: max_retries might not be available on ClientBuilder API
+      // Note : max_retries might not be available on ClientBuilder API
       // This would be a future enhancement when the builder API supports it
 
       builder.build()
@@ -226,7 +226,7 @@ impl SyncModelApi< '_ >
       let mut results = Vec::new();
 
       // Pin the stream to make it Unpin
-      tokio::pin!( stream );
+      tokio ::pin!( stream );
 
       while let Some( response_result ) = stream.next().await
       {

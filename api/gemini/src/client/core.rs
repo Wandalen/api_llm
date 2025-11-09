@@ -9,7 +9,7 @@ use super::sync::SyncClientBuilder;
 
   /// The main client for interacting with the Gemini API.
   ///
-  /// ## Design Principle: Thin Client
+  /// ## Design Principle : Thin Client
   ///
   /// This client provides transparent access to Gemini API endpoints without
   /// client-side intelligence or automatic behaviors. All operations are explicit
@@ -33,7 +33,7 @@ use super::sync::SyncClientBuilder;
   ///
   ///   // List available models
   ///   let models = client.models().list().await?;
-  ///   println!( "Available models: {}", models.models.len() );
+  ///   println!( "Available models : {}", models.models.len() );
   ///
   ///   Ok( () )
   /// }
@@ -55,21 +55,21 @@ use super::sync::SyncClientBuilder;
     #[ cfg( feature = "retry" ) ]
     pub( crate ) enable_jitter : bool,
     #[ cfg( feature = "retry" ) ]
-    // xxx: @team : Implement per-request timeout override mechanism
+    // xxx : @team : Implement per-request timeout override mechanism
     // Currently client-level timeout applies to all requests uniformly
     #[ allow( dead_code ) ]
     pub( crate ) request_timeout : Option< Duration >,
     #[ cfg( feature = "retry" ) ]
     pub( crate ) backoff_multiplier : f64,
     #[ cfg( feature = "retry" ) ]
-    // xxx: @team : Implement retry metrics collection and aggregation
+    // xxx : @team : Implement retry metrics collection and aggregation
     // Track retry attempts, backoff timing, success/failure rates per endpoint
     #[ allow( dead_code ) ]
     pub( crate ) enable_retry_metrics : bool,
     #[ cfg( feature = "retry" ) ]
     pub( crate ) max_elapsed_time : Option< Duration >,
     #[ cfg( feature = "circuit_breaker" ) ]
-    // xxx: @team : Integrate circuit breaker from internal/http.rs into Client API
+    // xxx : @team : Integrate circuit breaker from internal/http.rs into Client API
     // Circuit breaker is fully implemented in internal::http::CircuitBreaker
     // Need to expose it through Client methods (execute_with_circuit_breaker)
     #[ allow( dead_code ) ]
@@ -84,15 +84,15 @@ use super::sync::SyncClientBuilder;
     #[ allow( dead_code ) ]
     pub( crate ) circuit_breaker_timeout : Duration,
     #[ cfg( feature = "circuit_breaker" ) ]
-    // xxx: @team : Expose circuit breaker metrics through Client::get_circuit_breaker_metrics()
+    // xxx : @team : Expose circuit breaker metrics through Client::get_circuit_breaker_metrics()
     #[ allow( dead_code ) ]
     pub( crate ) enable_circuit_breaker_metrics : bool,
     #[ cfg( feature = "circuit_breaker" ) ]
-    // xxx: @team : Implement Arc-based shared circuit breaker state across client instances
+    // xxx : @team : Implement Arc-based shared circuit breaker state across client instances
     #[ allow( dead_code ) ]
     pub( crate ) circuit_breaker_shared_state : bool,
     #[ cfg( feature = "caching" ) ]
-    // xxx: @team : Implement general HTTP response caching layer
+    // xxx : @team : Implement general HTTP response caching layer
     // Domain-specific caches exist (WorkspaceCache, SemanticCache, MediaCache)
     // Need general request/response cache with LRU eviction for all API calls
     #[ allow( dead_code ) ]
@@ -104,14 +104,14 @@ use super::sync::SyncClientBuilder;
     #[ allow( dead_code ) ]
     pub( crate ) cache_max_size : usize,
     #[ cfg( feature = "caching" ) ]
-    // xxx: @team : Track cache hit/miss rates, eviction statistics
+    // xxx : @team : Track cache hit/miss rates, eviction statistics
     #[ allow( dead_code ) ]
     pub( crate ) enable_cache_metrics : bool,
     #[ cfg( feature = "caching" ) ]
     /// General HTTP request cache instance
     pub( crate ) request_cache : Option< std::sync::Arc< crate::internal::http::RequestCache > >,
     #[ cfg( feature = "rate_limiting" ) ]
-    // xxx: @team : Integrate rate limiter from internal/http.rs into Client API
+    // xxx : @team : Integrate rate limiter from internal/http.rs into Client API
     // Rate limiter is fully implemented in internal::http::RateLimiter
     // Need to expose it through Client methods (execute_with_rate_limiting)
     #[ allow( dead_code ) ]
@@ -126,7 +126,7 @@ use super::sync::SyncClientBuilder;
     #[ allow( dead_code ) ]
     pub( crate ) rate_limit_bucket_size : usize,
     #[ cfg( feature = "rate_limiting" ) ]
-    // xxx: @team : Expose rate limiting metrics through Client::get_rate_limiter_metrics()
+    // xxx : @team : Expose rate limiting metrics through Client::get_rate_limiter_metrics()
     #[ allow( dead_code ) ]
     pub( crate ) enable_rate_limiting_metrics : bool,
     #[ cfg( feature = "compression" ) ]
@@ -162,8 +162,8 @@ use super::sync::SyncClientBuilder;
       /// Create a new client using the `GEMINI_API_KEY` from workspace secrets or environment.
       ///
       /// This method attempts to load the API key in the following order:
-      /// 1. Workspace secrets file: `secret/-secrets.sh` (using `workspace_tools` 0.6.0)
-      /// 2. Environment variable: `GEMINI_API_KEY`
+      /// 1. Workspace secrets file : `secret/-secrets.sh` (using `workspace_tools` 0.6.0)
+      /// 2. Environment variable : `GEMINI_API_KEY`
       ///
       /// **Note**: `workspace_tools` 0.6.0 uses `secret/` (visible directory, NO dot prefix).
       ///
@@ -179,7 +179,7 @@ use super::sync::SyncClientBuilder;
       ///
       /// // Will try workspace secrets first, then environment variable
       /// let client = Client::new()?;
-      /// # Ok::<(), Box< dyn std::error::Error >>(())
+      /// # Ok::<(), Box< dyn std::error::Error > >(())
       /// ```
     #[ inline ]
     pub fn new() -> Result< Client, Error >
@@ -197,12 +197,12 @@ use super::sync::SyncClientBuilder;
                 return Err( Error::AuthenticationError(
                   format!(
                     "GEMINI_API_KEY not found. Tried:\n  \
-                    1. Workspace secrets: secret/-secrets.sh ({})\n  \
-                    2. Environment variable: GEMINI_API_KEY (not set or empty)\n\n  \
+                    1. Workspace secrets : secret/-secrets.sh ({})\n  \
+                    2. Environment variable : GEMINI_API_KEY (not set or empty)\n\n  \
                     Setup instructions:\n  \
-                    - Add to workspace secrets: echo 'export GEMINI_API_KEY=\"your-key\"' >> secret/-secrets.sh\n  \
-                    - Or set environment: export GEMINI_API_KEY=\"your-key\"\n  \
-                    - Note: workspace_tools 0.6.0 uses secret/ (visible directory, NO dot prefix)\n  \
+                    - Add to workspace secrets : echo 'export GEMINI_API_KEY=\"your-key\"' > > secret/-secrets.sh\n  \
+                    - Or set environment : export GEMINI_API_KEY=\"your-key\"\n  \
+                    - Note : workspace_tools 0.6.0 uses secret/ (visible directory, NO dot prefix)\n  \
                     - See tests/readme.md for detailed setup guide",
                     secret_err
                   )
@@ -232,11 +232,11 @@ use super::sync::SyncClientBuilder;
 
         // Use workspace_tools to properly load secrets from workspace
         let ws = workspace::workspace()
-          .map_err( | e | Error::Io( format!( "Failed to resolve workspace: {e}" ) ) )?;
+          .map_err( | e | Error::Io( format!( "Failed to resolve workspace : {e}" ) ) )?;
 
         // Load GEMINI_API_KEY from -secrets.sh file in secret directory
         let api_key = ws.load_secret_key( "GEMINI_API_KEY", "-secrets.sh" )
-          .map_err( | e | Error::AuthenticationError( format!( "key not found or file unreadable: {e}" ) ) )?;
+          .map_err( | e | Error::AuthenticationError( format!( "key not found or file unreadable : {e}" ) ) )?;
 
         Ok( api_key )
     }
@@ -289,8 +289,8 @@ use super::sync::SyncClientBuilder;
     #[ inline ]
     pub fn serialize_request_body( &self, body : &serde_json::Value ) -> Result< String, Error >
     {
-        serde_json::to_string( body )
-          .map_err( | e | Error::SerializationError( format!( "Failed to serialize request body: {e}" ) ) )
+        serde_json ::to_string( body )
+          .map_err( | e | Error::SerializationError( format!( "Failed to serialize request body : {e}" ) ) )
     }
 
       /// Deserialize response text to the specified type
@@ -303,8 +303,8 @@ use super::sync::SyncClientBuilder;
     where
       T : for< 'de > serde::Deserialize< 'de >,
     {
-        serde_json::from_str( response_text )
-          .map_err( | e | Error::DeserializationError( format!( "Failed to deserialize response: {e}" ) ) )
+        serde_json ::from_str( response_text )
+          .map_err( | e | Error::DeserializationError( format!( "Failed to deserialize response : {e}" ) ) )
     }
 
       /// Add API key as query parameter to URL

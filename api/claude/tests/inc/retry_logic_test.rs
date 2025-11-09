@@ -127,7 +127,7 @@ fn test_retry_condition_evaluation()
 
   // Test retryable errors
   let rate_limit_error = the_module::AnthropicError::RateLimit(
-    the_module::RateLimitError::new(
+    the_module ::RateLimitError::new(
       "requests".to_string(),
       Some( 60 ),
       "Rate limit exceeded".to_string()

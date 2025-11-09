@@ -205,19 +205,19 @@ mod private
     ///   .max_tokens( 1000 )
     ///   .messages( vec![
     ///     Message {
-    ///       role: Role::User,
-    ///       content: vec![ Content::Text {
-    ///         r#type: "text".to_string(),
-    ///         text: "Hello, Claude!".to_string()
+    ///       role : Role::User,
+    ///       content : vec![ Content::Text {
+    ///         r#type : "text".to_string(),
+    ///         text : "Hello, Claude!".to_string()
     ///       } ],
-    ///       cache_control: None,
+    ///       cache_control : None,
     ///     }
     ///   ] )
     ///   .build();
     ///
     /// // Send the request
     /// let response = client.create_message( request ).await?;
-    /// println!( "Response: {:?}", response.content );
+    /// println!( "Response : {:?}", response.content );
     /// # Ok( () )
     /// # }
     /// ```
@@ -298,7 +298,7 @@ mod private
     /// };
     ///
     /// let response = client.count_message_tokens( request ).await?;
-    /// println!( "Input tokens: {}", response.input_tokens );
+    /// println!( "Input tokens : {}", response.input_tokens );
     /// # Ok( () )
     /// # }
     /// ```
@@ -320,7 +320,7 @@ mod private
         .await
         .map_err( AnthropicError::from )?;
 
-      handle_response::< CountMessageTokensResponse >( response ).await
+      handle_response ::< CountMessageTokensResponse >( response ).await
     }
 
     /// Create messages in batch
@@ -350,7 +350,7 @@ mod private
         .await
         .map_err( AnthropicError::from )?;
 
-      handle_response::< crate::BatchResponse >( response ).await
+      handle_response ::< crate::BatchResponse >( response ).await
     }
 
     /// Retrieve batch status and information
@@ -380,7 +380,7 @@ mod private
         .await
         .map_err( AnthropicError::from )?;
 
-      handle_response::< crate::BatchResponse >( response ).await
+      handle_response ::< crate::BatchResponse >( response ).await
     }
 
     /// List all batches with optional pagination
@@ -425,7 +425,7 @@ mod private
         .await
         .map_err( AnthropicError::from )?;
 
-      handle_response::< crate::BatchListResponse >( response ).await
+      handle_response ::< crate::BatchListResponse >( response ).await
     }
 
     /// Cancel a batch that is in progress
@@ -455,7 +455,7 @@ mod private
         .await
         .map_err( AnthropicError::from )?;
 
-      handle_response::< crate::BatchResponse >( response ).await
+      handle_response ::< crate::BatchResponse >( response ).await
     }
 
     /// Create a message with context for error tracking
@@ -477,12 +477,12 @@ mod private
           let error_context = crate::ErrorContext::new(
             "create_message_with_context_tracking".to_string(),
             "req_test_123".to_string(),
-            std::collections::HashMap::new()
+            std ::collections::HashMap::new()
           );
           
           let enhanced = crate::EnhancedAnthropicError::new(
-            crate::ErrorType::InvalidRequest,
-            format!( "create_message_with_context: {basic_error}" ),
+            crate ::ErrorType::InvalidRequest,
+            format!( "create_message_with_context : {basic_error}" ),
             Some( error_context )
           )
           .with_stack_trace( vec![ "create_message_with_context_tracking".to_string() ] )
@@ -560,9 +560,9 @@ mod private
         request.validate().map_err( | e |
         {
           #[ cfg( feature = "error-handling" ) ]
-          return AnthropicError::InvalidArgument( format!( "Request at index {index} invalid: {e}" ) );
+          return AnthropicError::InvalidArgument( format!( "Request at index {index} invalid : {e}" ) );
           #[ cfg( not( feature = "error-handling" ) ) ]
-          return error_tools::Error::msg( format!( "Request at index {index} invalid: {e}" ) );
+          return error_tools::Error::msg( format!( "Request at index {index} invalid : {e}" ) );
         } )?;
       }
 
@@ -633,7 +633,7 @@ mod private
     /// let rate_info = client.rate_limit_info();
     /// if rate_info.remaining_requests() < 10 {
     ///     // Developer decides to wait or use alternative strategy
-    ///     println!( "Rate limit approaching: {} requests remaining", rate_info.remaining_requests() );
+    ///     println!( "Rate limit approaching : {} requests remaining", rate_info.remaining_requests() );
     /// }
     /// # Ok( () )
     /// # }
@@ -666,7 +666,7 @@ mod private
     /// let health = client.health();
     /// if health.consecutive_failures() > 5 {
     ///     // Developer decides to wait or use alternative strategy
-    ///     println!( "High failure rate detected: {} failures", health.consecutive_failures() );
+    ///     println!( "High failure rate detected : {} failures", health.consecutive_failures() );
     /// }
     /// # Ok( () )
     /// # }
@@ -781,7 +781,7 @@ mod private
   include!( "implementation_helpers.rs" );
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use Client;
   exposed use RateLimitInfo;

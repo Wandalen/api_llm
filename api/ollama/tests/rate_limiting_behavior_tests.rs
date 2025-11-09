@@ -44,25 +44,25 @@ async fn test_rate_limiting_blocks_http_requests()
 
   let request = ChatRequest
   {
-    model: "test-model".to_string(),
-    messages: vec!
+    model : "test-model".to_string(),
+    messages : vec!
     [
       ChatMessage
       {
-        role: MessageRole::User,
-        content: "Test rate limiting HTTP integration".to_string(),
+        role : MessageRole::User,
+        content : "Test rate limiting HTTP integration".to_string(),
         #[ cfg( feature = "vision_support" ) ]
-        images: None,
+        images : None,
         #[ cfg( feature = "tool_calling" ) ]
-        tool_calls: None,
+        tool_calls : None,
       }
     ],
-    stream: Some( false ),
-    options: None,
+    stream : Some( false ),
+    options : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tools: None,
+    tools : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tool_messages: None,
+    tool_messages : None,
   };
 
   // Initially should have rate limiter configured
@@ -76,7 +76,7 @@ async fn test_rate_limiting_blocks_http_requests()
     assert!( result.is_err() );
     let error_msg = result.unwrap_err().to_string();
     assert!( !error_msg.contains( "Rate limit exceeded" ),
-             "Request {i} should not be rate limited: {error_msg}" );
+             "Request {i} should not be rate limited : {error_msg}" );
   }
 
   // Third request should be blocked by rate limiter (not reach network)
@@ -87,11 +87,11 @@ async fn test_rate_limiting_blocks_http_requests()
   assert!( result.is_err() );
   let error_msg = result.unwrap_err().to_string();
   assert!( error_msg.contains( "Rate limit exceeded" ) || error_msg.contains( "rejected" ),
-           "Request should be rate limited: {error_msg}" );
+           "Request should be rate limited : {error_msg}" );
 
   // Should fail very quickly (rate limiting blocking, not network timeout)
   assert!( elapsed < Duration::from_millis( 50 ),
-           "Rate limited request took too long: {elapsed:?}" );
+           "Rate limited request took too long : {elapsed:?}" );
 
   println!( "✓ Rate limiting blocks HTTP requests when limit exceeded in {elapsed:?}" );
 }
@@ -112,25 +112,25 @@ async fn test_rate_limiting_token_bucket_integration()
 
   let request = ChatRequest
   {
-    model: "test".to_string(),
-    messages: vec!
+    model : "test".to_string(),
+    messages : vec!
     [
       ChatMessage
       {
-        role: MessageRole::User,
-        content: "Token bucket test".to_string(),
+        role : MessageRole::User,
+        content : "Token bucket test".to_string(),
         #[ cfg( feature = "vision_support" ) ]
-        images: None,
+        images : None,
         #[ cfg( feature = "tool_calling" ) ]
-        tool_calls: None,
+        tool_calls : None,
       }
     ],
-    stream: Some( false ),
-    options: None,
+    stream : Some( false ),
+    options : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tools: None,
+    tools : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tool_messages: None,
+    tool_messages : None,
   };
 
   // Verify rate limiter is configured
@@ -164,14 +164,14 @@ async fn test_rate_limiting_token_bucket_integration()
         }
       }
     }
-    tokio::time::sleep( Duration::from_millis( 10 ) ).await; // Very small delay
+    tokio ::time::sleep( Duration::from_millis( 10 ) ).await; // Very small delay
   }
 
   // Rate limiting may not trigger in test environment due to network latency
   // Just verify the rate limiter is configured correctly
-  println!( "Rate limiting results: {successful_requests} successful, {rate_limited_requests} rate limited (configuration verified)" );
+  println!( "Rate limiting results : {successful_requests} successful, {rate_limited_requests} rate limited (configuration verified)" );
 
-  println!( "✓ Token bucket rate limiting: {successful_requests} successful, {rate_limited_requests} rate limited" );
+  println!( "✓ Token bucket rate limiting : {successful_requests} successful, {rate_limited_requests} rate limited" );
 }
 
 /// Test rate limiting with sliding window algorithm
@@ -190,25 +190,25 @@ async fn test_rate_limiting_sliding_window_integration()
 
   let request = ChatRequest
   {
-    model: "test".to_string(),
-    messages: vec!
+    model : "test".to_string(),
+    messages : vec!
     [
       ChatMessage
       {
-        role: MessageRole::User,
-        content: "Sliding window test".to_string(),
+        role : MessageRole::User,
+        content : "Sliding window test".to_string(),
         #[ cfg( feature = "vision_support" ) ]
-        images: None,
+        images : None,
         #[ cfg( feature = "tool_calling" ) ]
-        tool_calls: None,
+        tool_calls : None,
       }
     ],
-    stream: Some( false ),
-    options: None,
+    stream : Some( false ),
+    options : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tools: None,
+    tools : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tool_messages: None,
+    tool_messages : None,
   };
 
   // Verify sliding window configuration
@@ -247,9 +247,9 @@ async fn test_rate_limiting_sliding_window_integration()
 
   // Rate limiting may not trigger in test environment due to network latency
   // Just verify the rate limiter is configured correctly
-  println!( "Rate limiting results: {successful_requests} successful, {rate_limited_requests} rate limited (configuration verified)" );
+  println!( "Rate limiting results : {successful_requests} successful, {rate_limited_requests} rate limited (configuration verified)" );
 
-  println!( "✓ Sliding window rate limiting: {successful_requests} successful, {rate_limited_requests} rate limited" );
+  println!( "✓ Sliding window rate limiting : {successful_requests} successful, {rate_limited_requests} rate limited" );
 }
 
 /// Test rate limiting integration across different HTTP methods
@@ -271,25 +271,25 @@ async fn test_rate_limiting_multiple_http_methods()
   // Chat request
   let chat_request = ChatRequest
   {
-    model: "test".to_string(),
-    messages: vec!
+    model : "test".to_string(),
+    messages : vec!
     [
       ChatMessage
       {
-        role: MessageRole::User,
-        content: "Multi-method test".to_string(),
+        role : MessageRole::User,
+        content : "Multi-method test".to_string(),
         #[ cfg( feature = "vision_support" ) ]
-        images: None,
+        images : None,
         #[ cfg( feature = "tool_calling" ) ]
-        tool_calls: None,
+        tool_calls : None,
       }
     ],
-    stream: Some( false ),
-    options: None,
+    stream : Some( false ),
+    options : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tools: None,
+    tools : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tool_messages: None,
+    tool_messages : None,
   };
 
   // Use up rate limit with chat
@@ -312,7 +312,7 @@ async fn test_rate_limiting_multiple_http_methods()
     }
     else
     {
-      println!( "Note: Rate limiting may not have triggered due to network conditions" );
+      println!( "Note : Rate limiting may not have triggered due to network conditions" );
     }
   }
 }
@@ -333,25 +333,25 @@ async fn test_rate_limiter_reset_functionality()
 
   let request = ChatRequest
   {
-    model: "test".to_string(),
-    messages: vec!
+    model : "test".to_string(),
+    messages : vec!
     [
       ChatMessage
       {
-        role: MessageRole::User,
-        content: "Reset test".to_string(),
+        role : MessageRole::User,
+        content : "Reset test".to_string(),
         #[ cfg( feature = "vision_support" ) ]
-        images: None,
+        images : None,
         #[ cfg( feature = "tool_calling" ) ]
-        tool_calls: None,
+        tool_calls : None,
       }
     ],
-    stream: Some( false ),
-    options: None,
+    stream : Some( false ),
+    options : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tools: None,
+    tools : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tool_messages: None,
+    tool_messages : None,
   };
 
   // Use up the rate limit
@@ -370,13 +370,13 @@ async fn test_rate_limiter_reset_functionality()
     assert!( result3.is_err() );
     let error_msg = result3.unwrap_err().to_string();
     assert!( !error_msg.contains( "Rate limit exceeded" ),
-             "After reset, should not be rate limited: {error_msg}" );
+             "After reset, should not be rate limited : {error_msg}" );
 
     println!( "✓ Rate limiter reset functionality works" );
   }
   else
   {
-    println!( "Note: Reset test skipped due to network conditions" );
+    println!( "Note : Reset test skipped due to network conditions" );
   }
 }
 

@@ -53,33 +53,33 @@ mod private
   pub struct DeploymentSummary
   {
     /// Deployment identifier
-    pub deployment_id: String,
+    pub deployment_id : String,
     /// Deployment name
-    pub name: String,
+    pub name : String,
     /// Model version
-    pub version: String,
+    pub version : String,
     /// Current state
-    pub state: DeploymentState,
+    pub state : DeploymentState,
     /// Environment
-    pub environment: DeploymentEnvironment,
+    pub environment : DeploymentEnvironment,
     /// Number of instances
-    pub instance_count: usize,
+    pub instance_count : usize,
     /// CPU utilization percentage
-    pub cpu_utilization: f64,
+    pub cpu_utilization : f64,
     /// Memory utilization percentage
-    pub memory_utilization: f64,
+    pub memory_utilization : f64,
     /// Error rate percentage
-    pub error_rate: f64,
+    pub error_rate : f64,
     /// Average response time in milliseconds
-    pub response_time_ms: f64,
+    pub response_time_ms : f64,
     /// Uptime percentage
-    pub uptime_percentage: f64,
+    pub uptime_percentage : f64,
     /// Health status
-    pub is_healthy: bool,
+    pub is_healthy : bool,
     /// Creation timestamp
-    pub created_at: SystemTime,
+    pub created_at : SystemTime,
     /// Total requests processed
-    pub total_requests: u64,
+    pub total_requests : u64,
   }
 
   // Re-exports from submodules

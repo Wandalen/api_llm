@@ -4,7 +4,7 @@
 use criterion::{ criterion_group, criterion_main, Criterion };
 use std::time::Duration;
 
-fn benchmark_retry_config_creation( c: &mut Criterion )
+fn benchmark_retry_config_creation( c : &mut Criterion )
 {
   c.bench_function( "create_retry_config", |b|
   {
@@ -12,24 +12,24 @@ fn benchmark_retry_config_creation( c: &mut Criterion )
     {
       // Simulate retry configuration creation
       RetryConfig {
-        max_attempts: 3,
-        initial_delay: Duration::from_millis( 100 ),
-        max_delay: Duration::from_secs( 10 ),
-        backoff_multiplier: 2.0,
-        enable_jitter: true,
+        max_attempts : 3,
+        initial_delay : Duration::from_millis( 100 ),
+        max_delay : Duration::from_secs( 10 ),
+        backoff_multiplier : 2.0,
+        enable_jitter : true,
       }
     } );
   } );
 }
 
-fn benchmark_retry_decision( c: &mut Criterion )
+fn benchmark_retry_decision( c : &mut Criterion )
 {
   let config = RetryConfig {
-    max_attempts: 3,
-    initial_delay: Duration::from_millis( 100 ),
-    max_delay: Duration::from_secs( 10 ),
-    backoff_multiplier: 2.0,
-    enable_jitter: true,
+    max_attempts : 3,
+    initial_delay : Duration::from_millis( 100 ),
+    max_delay : Duration::from_secs( 10 ),
+    backoff_multiplier : 2.0,
+    enable_jitter : true,
   };
 
   c.bench_function( "retry_decision_logic", |b|
@@ -43,14 +43,14 @@ fn benchmark_retry_decision( c: &mut Criterion )
   } );
 }
 
-fn benchmark_backoff_calculation( c: &mut Criterion )
+fn benchmark_backoff_calculation( c : &mut Criterion )
 {
   let config = RetryConfig {
-    max_attempts: 3,
-    initial_delay: Duration::from_millis( 100 ),
-    max_delay: Duration::from_secs( 10 ),
-    backoff_multiplier: 2.0,
-    enable_jitter: true,
+    max_attempts : 3,
+    initial_delay : Duration::from_millis( 100 ),
+    max_delay : Duration::from_secs( 10 ),
+    backoff_multiplier : 2.0,
+    enable_jitter : true,
   };
 
   c.bench_function( "calculate_backoff_delay", |b|
@@ -74,7 +74,7 @@ fn benchmark_backoff_calculation( c: &mut Criterion )
   } );
 }
 
-fn benchmark_error_classification( c: &mut Criterion )
+fn benchmark_error_classification( c : &mut Criterion )
 {
   c.bench_function( "classify_retryable_error", |b|
   {
@@ -92,11 +92,11 @@ fn benchmark_error_classification( c: &mut Criterion )
 #[ derive( Debug, Clone ) ]
 struct RetryConfig
 {
-  max_attempts: u32,
-  initial_delay: Duration,
-  max_delay: Duration,
-  backoff_multiplier: f64,
-  enable_jitter: bool,
+  max_attempts : u32,
+  initial_delay : Duration,
+  max_delay : Duration,
+  backoff_multiplier : f64,
+  enable_jitter : bool,
 }
 
 criterion_group!(

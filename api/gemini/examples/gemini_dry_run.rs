@@ -50,14 +50,14 @@ fn main()
   .build()
   {
     Ok( _ ) => println!( "   Client::builder() works correctly" ),
-    Err( e ) => println!( "   Client::builder() failed: {e}" ),
+    Err( e ) => println!( "   Client::builder() failed : {e}" ),
   }
 
   // Without API key (should fail)
   match Client::builder().build()
   {
     Ok( _ ) => println!( "   Empty API key should fail" ),
-    Err( e ) => println!( "   Empty API key correctly fails: {e}" ),
+    Err( e ) => println!( "   Empty API key correctly fails : {e}" ),
   }
 
   // Test 2: Request structures
@@ -181,7 +181,7 @@ fn main()
     output_dimensionality : None,
   };
   let task_type = embed_request.task_type.as_ref().unwrap();
-  println!( "   Embeddings request created with task type: {task_type}" );
+  println!( "   Embeddings request created with task type : {task_type}" );
 
   // Multimodal
   let image_data = vec![ 0x89, 0x50, 0x4E, 0x47 ]; // PNG header
@@ -236,15 +236,15 @@ fn main()
   // Test different error types
   let errors = vec!
   [
-    api_gemini::error::Error::AuthenticationError( "API key missing".to_string() ),
-    api_gemini::error::Error::NetworkError( "Connection timeout".to_string() ),
-    api_gemini::error::Error::RateLimitError( "Too many requests".to_string() ),
-    api_gemini::error::Error::InvalidArgument( "Invalid model name".to_string() ),
+    api_gemini ::error::Error::AuthenticationError( "API key missing".to_string() ),
+    api_gemini ::error::Error::NetworkError( "Connection timeout".to_string() ),
+    api_gemini ::error::Error::RateLimitError( "Too many requests".to_string() ),
+    api_gemini ::error::Error::InvalidArgument( "Invalid model name".to_string() ),
   ];
 
   for error in &errors
   {
-    println!( "   Error type handled: {error}" );
+    println!( "   Error type handled : {error}" );
   }
 
   println!( "\n=== Summary ===" );

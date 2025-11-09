@@ -9,15 +9,15 @@ use serde::{ Serialize, Deserialize };
 pub struct ImageGenerationConfig
 {
   /// Model to use for generation
-  pub model: ImageModel,
+  pub model : ImageModel,
   /// Image size
-  pub size: ImageSize,
+  pub size : ImageSize,
   /// Image quality
-  pub quality: ImageQuality,
+  pub quality : ImageQuality,
   /// Image style
-  pub style: ImageStyle,
+  pub style : ImageStyle,
   /// Response format
-  pub response_format: ImageResponseFormat,
+  pub response_format : ImageResponseFormat,
 }
 
 impl Default for ImageGenerationConfig
@@ -27,11 +27,11 @@ impl Default for ImageGenerationConfig
   {
     Self
     {
-      model: ImageModel::DallE3,
-      size: ImageSize::Square1024,
-      quality: ImageQuality::Standard,
-      style: ImageStyle::Vivid,
-      response_format: ImageResponseFormat::Url,
+      model : ImageModel::DallE3,
+      size : ImageSize::Square1024,
+      quality : ImageQuality::Standard,
+      style : ImageStyle::Vivid,
+      response_format : ImageResponseFormat::Url,
     }
   }
 }
@@ -99,11 +99,11 @@ pub enum ImageResponseFormat
 pub struct ImageResult
 {
   /// Image URL or base64 data
-  pub url: Option< String >,
+  pub url : Option< String >,
   /// Base64-encoded image data
-  pub b64_json: Option< String >,
+  pub b64_json : Option< String >,
   /// Image metadata
-  pub metadata: ImageMetadata,
+  pub metadata : ImageMetadata,
 }
 
 /// Metadata about generated image.
@@ -111,11 +111,11 @@ pub struct ImageResult
 pub struct ImageMetadata
 {
   /// Image width in pixels
-  pub width: u32,
+  pub width : u32,
   /// Image height in pixels
-  pub height: u32,
+  pub height : u32,
   /// Image format (PNG, JPEG, etc.)
-  pub format: String,
+  pub format : String,
   /// Generation time in milliseconds
-  pub generation_time_ms: u64,
+  pub generation_time_ms : u64,
 }

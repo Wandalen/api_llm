@@ -3,25 +3,25 @@
 
 use std::env;
 
-fn main() -> Result<(), Box< dyn std::error::Error >>
+fn main() -> Result<(), Box< dyn std::error::Error > >
 {
-    println!("🧪 Manual Testing: workspace_tools Secret Loading");
+    println!("🧪 Manual Testing : workspace_tools Secret Loading");
     println!("=================================================");
     
     // Test 1: Check current directory
-    println!("\n📍 Current directory: {}", env::current_dir()?.display());
+    println!("\n📍 Current directory : {}", env::current_dir()?.display());
     
     // Test 2: Try to use workspace_tools directly
     println!("\n🔍 Testing workspace_tools directly...");
     match workspace_tools::workspace()
     {
         Ok(ws) => {
-            println!("✅ Workspace found: {}", ws.root().display());
+            println!("✅ Workspace found : {}", ws.root().display());
             
             // Test 3: Check if secret directory exists
             let secret_dir = ws.root().join("secret");
-            println!("🔐 Secret directory: {}", secret_dir.display());
-            println!("🔐 Secret dir exists: {}", secret_dir.exists());
+            println!("🔐 Secret directory : {}", secret_dir.display());
+            println!("🔐 Secret dir exists : {}", secret_dir.exists());
             
             // Test 4: Try to load secret
             println!("\n🔑 Testing secret loading...");
@@ -29,16 +29,16 @@ fn main() -> Result<(), Box< dyn std::error::Error >>
             {
                 Ok(secret) => {
                     println!("✅ Secret loaded successfully!");
-                    println!("📝 Secret starts with: {}...", &secret[..20]);
-                    println!("📏 Secret length: {}", secret.len());
+                    println!("📝 Secret starts with : {}...", &secret[..20]);
+                    println!("📏 Secret length : {}", secret.len());
                 },
                 Err(e) => {
-                    println!("❌ Secret loading failed: {}", e);
+                    println!("❌ Secret loading failed : {}", e);
                 }
             }
         },
         Err(e) => {
-            println!("❌ Workspace not found: {}", e);
+            println!("❌ Workspace not found : {}", e);
         }
     }
     
@@ -48,7 +48,7 @@ fn main() -> Result<(), Box< dyn std::error::Error >>
     {
         Ok(env_secret) => {
             println!("✅ Environment variable found!");
-            println!("📝 Env secret starts with: {}...", &env_secret[..20]);
+            println!("📝 Env secret starts with : {}...", &env_secret[..20]);
         },
         Err(_) => {
             println!("ℹ️ No environment variable set (expected)");

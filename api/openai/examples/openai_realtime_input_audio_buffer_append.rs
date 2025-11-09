@@ -14,10 +14,10 @@
 use api_openai::ClientApiAccessors;
 use api_openai::
 {
-  client::Client,
-  error::OpenAIError,
-  api::realtime::{ RealtimeClient, ws::WsSession },
-  components::realtime_shared::
+  client ::Client,
+  error ::OpenAIError,
+  api ::realtime::{ RealtimeClient, ws::WsSession },
+  components ::realtime_shared::
   {
     RealtimeSessionCreateRequest,
     RealtimeClientEventInputAudioBufferAppend,
@@ -38,29 +38,29 @@ async fn main() -> Result< (), OpenAIError >
   .init();
 
   // Load environment variables
-  dotenv::from_filename( "./secret/-secret.sh" ).ok();
+  dotenv ::from_filename( "./secret/-secret.sh" ).ok();
 
   // 1. Create a new OpenAI client.
-  tracing::info!( "Initializing client..." );
+  tracing ::info!( "Initializing client..." );
   let client = Client::new();
 
   // 2. Create the request payload to initiate the session, configuring audio input.
-  tracing::info!( "Building realtime session request..." );
+  tracing ::info!( "Building realtime session request..." );
   let request = RealtimeSessionCreateRequest::former()
   .model( "gpt-4o-realtime-preview".to_string() )
   .input_audio_format( "pcm16" ) // Specify the format of the audio we'll send
-  // Optional: Configure transcription if you want to see results
+  // Optional : Configure transcription if you want to see results
   // .input_audio_transcription( RealtimeSessionInputAudioTranscription::former().model( "whisper-1" ).form() )
-  // Optional: Configure VAD
+  // Optional : Configure VAD
   // .turn_detection( RealtimeSessionTurnDetection::former().r#type( "server_vad" ).form() )
   .temperature( 0.7 )
   .form();
 
-  tracing::info!( "Sending request to OpenAI API to create session..." );
+  tracing ::info!( "Sending request to OpenAI API to create session..." );
   // 3. Call the API endpoint to get session details.
   let session = client.realtime().create( request ).await?;
 
-  tracing::info!( "Creating Realtime WebSocket Session Client..." );
+  tracing ::info!( "Creating Realtime WebSocket Session Client..." );
   let token = session.client_secret.value;
   // 4. Establish the WebSocket connection using the session token.
   let session_client  = WsSession::connect( client.environment().clone(), Some( &token ) ).await?;
@@ -74,14 +74,14 @@ async fn main() -> Result< (), OpenAIError >
   .audio( audio_base64 ) // Provide the base64 encoded audio
   .form();
 
-  tracing::info!( "Sending input_audio_buffer.append event..." );
+  tracing ::info!( "Sending input_audio_buffer.append event..." );
   // 6. Send the append event over the WebSocket.
   session_client.input_audio_buffer_append( iaba_append ).await?;
-  tracing::info!( "Audio append event sent." );
+  tracing ::info!( "Audio append event sent." );
 
   // 7. Wait briefly and read any subsequent events (like VAD or transcription).
   //    There's no direct 'appended' confirmation.
-  tracing::info!( "Waiting briefly for any subsequent events (no direct confirmation expected)..." );
+  tracing ::info!( "Waiting briefly for any subsequent events (no direct confirmation expected)..." );
   let wait_duration = tokio::time::Duration::from_secs( 2 ); // Wait for 2 seconds
   let start_time = tokio::time::Instant::now();
   loop
@@ -114,7 +114,7 @@ if start_time.elapsed() > wait_duration
         }
         Err( e ) =>
         {
-          eprintln!("\nError reading from WebSocket: {:?}", e);
+          eprintln!("\nError reading from WebSocket : {:?}", e);
           return Err(e);
         }
       },

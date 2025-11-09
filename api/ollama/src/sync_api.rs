@@ -145,7 +145,7 @@ mod private
     {
       let async_client = OllamaClient::new( base_url.to_string(), timeout );
       let runtime = tokio::runtime::Builder::new_current_thread().enable_all().build()
-        .map_err( | e | format_err!( "Failed to create tokio runtime: {}", e ) )?;
+        .map_err( | e | format_err!( "Failed to create tokio runtime : {}", e ) )?;
       let config = SyncApiConfig {
         base_url : base_url.to_string(),
         timeout,
@@ -175,7 +175,7 @@ mod private
       builder.enable_all();
 
       let runtime = builder.build()
-        .map_err( | e | format_err!( "Failed to create tokio runtime: {}", e ) )?;
+        .map_err( | e | format_err!( "Failed to create tokio runtime : {}", e ) )?;
 
       Ok( SyncOllamaClient {
         async_client,
@@ -193,7 +193,7 @@ mod private
     pub fn from_async( async_client : OllamaClient ) -> OllamaResult< Self >
     {
       let runtime = tokio::runtime::Builder::new_current_thread().enable_all().build()
-        .map_err( | e | format_err!( "Failed to create tokio runtime: {}", e ) )?;
+        .map_err( | e | format_err!( "Failed to create tokio runtime : {}", e ) )?;
       let config = SyncApiConfig::default();
 
       Ok( SyncOllamaClient {
@@ -578,7 +578,7 @@ mod private
 }
 
 #[ cfg( feature = "sync_api" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use private::SyncOllamaClient;
   exposed use private::SyncApiConfig;

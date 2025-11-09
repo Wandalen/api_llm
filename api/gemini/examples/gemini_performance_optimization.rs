@@ -2,7 +2,7 @@
 //!
 //! This example demonstrates various techniques to optimize performance
 //! when using the Gemini API client in production applications.
-//! Note: No benchmarking - focuses on usage patterns and best practices.
+//! Note : No benchmarking - focuses on usage patterns and best practices.
 
 use api_gemini::{ client::Client, models::*, error::Error };
 use std::time::Instant;
@@ -44,7 +44,7 @@ async fn demonstrate_client_reuse() -> Result< (), Box< dyn core::error::Error >
     let _ = make_simple_request( &client, prompt ).await;
   }
   let inefficient_time = start.elapsed();
-  println!( "❌ Multiple clients: {inefficient_time:?}" );
+  println!( "❌ Multiple clients : {inefficient_time:?}" );
 
   // ✅ EFFICIENT: Reusing single client instance
   let start = Instant::now();
@@ -54,9 +54,9 @@ async fn demonstrate_client_reuse() -> Result< (), Box< dyn core::error::Error >
     let _ = make_simple_request( &client, prompt ).await;
   }
   let efficient_time = start.elapsed();
-  println!( "✅ Single client: {efficient_time:?}" );
+  println!( "✅ Single client : {efficient_time:?}" );
 
-  println!( "💡 Performance improvement: ~{:.1}x faster\n",
+  println!( "💡 Performance improvement : ~{:.1}x faster\n",
     inefficient_time.as_secs_f64() / efficient_time.as_secs_f64() );
 
   Ok( () )
@@ -74,17 +74,17 @@ async fn demonstrate_request_optimization() -> Result< (), Box< dyn core::error:
   for i in 0..3
   {
     let request = GenerateContentRequest {
-      contents: vec![ Content {
-        parts: vec![ Part {
-          text: Some( format!( "Request {i}" ) ),
+      contents : vec![ Content {
+        parts : vec![ Part {
+          text : Some( format!( "Request {i}" ) ),
           ..Default::default()
         } ],
-        role: "user".to_string(),
+        role : "user".to_string(),
       } ],
-      generation_config: Some( GenerationConfig {
-        temperature: Some( 0.7 ),
-        top_k: Some( 40 ),
-        max_output_tokens: Some( 100 ),
+      generation_config : Some( GenerationConfig {
+        temperature : Some( 0.7 ),
+        top_k : Some( 40 ),
+        max_output_tokens : Some( 100 ),
         ..Default::default()
       } ),
       ..Default::default()
@@ -92,22 +92,22 @@ async fn demonstrate_request_optimization() -> Result< (), Box< dyn core::error:
     let _ = client.models().by_name( "gemini-2.0-flash-exp" ).generate_content( &request ).await;
   }
   let inefficient_time = start.elapsed();
-  println!( "❌ Recreating request structure: {inefficient_time:?}" );
+  println!( "❌ Recreating request structure : {inefficient_time:?}" );
 
   // ✅ EFFICIENT: Reusing template and modifying only necessary parts
   let start = Instant::now();
   let mut request_template = GenerateContentRequest {
-    contents: vec![ Content {
-      parts: vec![ Part {
-        text: Some( String::new() ), // Will be updated
+    contents : vec![ Content {
+      parts : vec![ Part {
+        text : Some( String::new() ), // Will be updated
         ..Default::default()
       } ],
-      role: "user".to_string(),
+      role : "user".to_string(),
     } ],
-    generation_config: Some( GenerationConfig {
-      temperature: Some( 0.7 ),
-      top_k: Some( 40 ),
-      max_output_tokens: Some( 100 ),
+    generation_config : Some( GenerationConfig {
+      temperature : Some( 0.7 ),
+      top_k : Some( 40 ),
+      max_output_tokens : Some( 100 ),
       ..Default::default()
     } ),
     ..Default::default()
@@ -120,7 +120,7 @@ async fn demonstrate_request_optimization() -> Result< (), Box< dyn core::error:
     let _ = client.models().by_name( "gemini-2.0-flash-exp" ).generate_content( &request_template ).await;
   }
   let efficient_time = start.elapsed();
-  println!( "✅ Reusing request template: {efficient_time:?}" );
+  println!( "✅ Reusing request template : {efficient_time:?}" );
 
   println!( "💡 Serialization overhead reduced\n" );
 
@@ -143,7 +143,7 @@ async fn demonstrate_batch_processing() -> Result< (), Box< dyn core::error::Err
     // No rate limiting - may hit API limits
   }
   let uncontrolled_time = start.elapsed();
-  println!( "❌ Uncontrolled sequential: {uncontrolled_time:?}" );
+  println!( "❌ Uncontrolled sequential : {uncontrolled_time:?}" );
 
   // ✅ EFFICIENT: Controlled batch processing
   let start = Instant::now();
@@ -153,17 +153,17 @@ async fn demonstrate_batch_processing() -> Result< (), Box< dyn core::error::Err
   for batch in prompts.chunks( batch_size )
   {
     // Process batch concurrently
-    let batch_futures: Vec< _ > = batch.iter()
+    let batch_futures : Vec< _ > = batch.iter()
       .map( |prompt| make_simple_request( &client, prompt ) )
       .collect();
 
-    let _batch_results: Vec< _ > = futures::future::join_all( batch_futures ).await;
+    let _batch_results : Vec< _ > = futures::future::join_all( batch_futures ).await;
 
     // Rate limiting between batches
     sleep( delay_between_batches ).await;
   }
   let controlled_time = start.elapsed();
-  println!( "✅ Controlled batch processing: {controlled_time:?}" );
+  println!( "✅ Controlled batch processing : {controlled_time:?}" );
 
   println!( "💡 Better rate limit compliance and predictable load\n" );
 
@@ -181,12 +181,12 @@ async fn demonstrate_error_resilience() -> Result< (), Box< dyn core::error::Err
   match make_request_with_timeout( &client, "Test prompt", Duration::from_secs( 5 ) ).await
   {
     Ok( _response ) => println!( "✅ Request succeeded" ),
-    Err( Error::TimeoutError( msg ) ) => println!( "⏱️ Timeout handled gracefully: {msg}" ),
+    Err( Error::TimeoutError( msg ) ) => println!( "⏱️ Timeout handled gracefully : {msg}" ),
     Err( Error::RateLimitError( msg ) ) => {
-      println!( "🚦 Rate limit detected: {msg}" );
+      println!( "🚦 Rate limit detected : {msg}" );
       println!( "💡 Application can implement exponential backoff" );
     },
-    Err( e ) => println!( "❌ Other error: {e}" ),
+    Err( e ) => println!( "❌ Other error : {e}" ),
   }
 
   // ✅ RESILIENT: Circuit breaker pattern (simulation)
@@ -217,18 +217,18 @@ async fn demonstrate_error_resilience() -> Result< (), Box< dyn core::error::Err
 }
 
 /// Helper function to make a simple request
-async fn make_simple_request( client: &Client, prompt: &str ) -> Result< GenerateContentResponse, Error >
+async fn make_simple_request( client : &Client, prompt : &str ) -> Result< GenerateContentResponse, Error >
 {
   let request = GenerateContentRequest {
-    contents: vec![ Content {
-      parts: vec![ Part {
-        text: Some( prompt.to_string() ),
+    contents : vec![ Content {
+      parts : vec![ Part {
+        text : Some( prompt.to_string() ),
         ..Default::default()
       } ],
-      role: "user".to_string(),
+      role : "user".to_string(),
     } ],
-    generation_config: Some( GenerationConfig {
-      max_output_tokens: Some( 50 ), // Keep responses small for performance
+    generation_config : Some( GenerationConfig {
+      max_output_tokens : Some( 50 ), // Keep responses small for performance
       ..Default::default()
     } ),
     ..Default::default()
@@ -243,9 +243,9 @@ async fn make_simple_request( client: &Client, prompt: &str ) -> Result< Generat
 
 /// Helper function to make a request with timeout
 async fn make_request_with_timeout(
-  client: &Client,
-  prompt: &str,
-  timeout: Duration
+  client : &Client,
+  prompt : &str,
+  timeout : Duration
 ) -> Result< GenerateContentResponse, Error >
 {
   let request_future = make_simple_request( client, prompt );

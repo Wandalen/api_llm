@@ -22,7 +22,7 @@ timeout_secs = 300
 
   let temp_dir = env::temp_dir();
   let config_path = temp_dir.join("test_workspace.toml");
-  fs::write(&config_path, config_content).expect("Failed to write test config");
+  fs ::write(&config_path, config_content).expect("Failed to write test config");
 
   // Load workspace config
   let workspace_config = WorkspaceConfig::from_file(&config_path)
@@ -48,7 +48,7 @@ timeout_secs = 60
 
   let temp_dir = env::temp_dir();
   let config_path = temp_dir.join("test_workspace2.toml");
-  fs::write(&config_path, config_content).expect("Failed to write test config");
+  fs ::write(&config_path, config_content).expect("Failed to write test config");
 
   // Create client from workspace config
   let client = OllamaClient::from_workspace(&config_path)
@@ -72,7 +72,7 @@ server_url = "http://auto-discovered:8888"
 
   let current_dir = env::current_dir().expect("Failed to get current dir");
   let config_path = current_dir.join("ollama.toml");
-  fs::write(&config_path, config_content).expect("Failed to write config");
+  fs ::write(&config_path, config_content).expect("Failed to write config");
 
   // Auto-discover workspace config
   let workspace_config = WorkspaceConfig::auto_discover()
@@ -114,7 +114,7 @@ api_key = "workspace-key-123"
 
   let temp_dir = env::temp_dir();
   let config_path = temp_dir.join("test_workspace_auth.toml");
-  fs::write(&config_path, config_content).expect("Failed to write test config");
+  fs ::write(&config_path, config_content).expect("Failed to write test config");
 
   // Load workspace config to verify authentication data is parsed
   let workspace_config = WorkspaceConfig::from_file(&config_path)
@@ -163,7 +163,7 @@ models = ["model1", "model2", "preferred-model"]
 
   let temp_dir = env::temp_dir();
   let config_path = temp_dir.join("test_workspace_models.toml");
-  fs::write(&config_path, config_content).expect("Failed to write test config");
+  fs ::write(&config_path, config_content).expect("Failed to write test config");
 
   let workspace_config = WorkspaceConfig::from_file(&config_path)
     .expect("Failed to load workspace config");

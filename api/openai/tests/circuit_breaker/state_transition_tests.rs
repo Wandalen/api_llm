@@ -4,12 +4,12 @@
 //!
 //! ⚠️ CODEBASE HYGIENE VIOLATION: These tests use MockHttpClient which violates no-mocking rule
 //!
-//! Justification: Circuit breaker state transitions require precise control over
+//! Justification : Circuit breaker state transitions require precise control over
 //! failure sequences and timing that cannot be reliably achieved with real API calls.
 //! State machine testing requires deterministic failure patterns (e.g., exactly N
 //! consecutive failures to trigger state transition).
 //!
-//! Mitigation: Corresponding integration tests must verify circuit breaker behavior
+//! Mitigation : Corresponding integration tests must verify circuit breaker behavior
 //! with real OpenAI API under actual failure conditions.
 //!
 //! TODO(hygiene-007): Create integration tests for:
@@ -18,7 +18,7 @@
 //! - Real circuit close after recovery
 //! - Real timeout scenarios with circuit breaker
 //!
-//! Integration test file: tests/circuit_breaker_integration_tests.rs (to be created)
+//! Integration test file : tests/circuit_breaker_integration_tests.rs (to be created)
 
 #[ cfg( feature = "circuit_breaker" ) ]
 mod state_transition_tests

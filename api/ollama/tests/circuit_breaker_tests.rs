@@ -155,20 +155,20 @@ async fn test_circuit_breaker_integration_with_ollama_client()
 
   // Create a request that will fail
   let request = ChatRequest {
-    model: "test-model".to_string(),
-    messages: vec![ChatMessage {
-      role: MessageRole::User,
-      content: "Hello".to_string(),
-      images: None,
+    model : "test-model".to_string(),
+    messages : vec![ChatMessage {
+      role : MessageRole::User,
+      content : "Hello".to_string(),
+      images : None,
       #[ cfg( feature = "tool_calling" ) ]
-      tool_calls: None,
+      tool_calls : None,
     }],
-    stream: Some(false),
-    options: None,
+    stream : Some(false),
+    options : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tools: None,
+    tools : None,
     #[ cfg( feature = "tool_calling" ) ]
-    tool_messages: None,
+    tool_messages : None,
   };
 
   // Make failed requests - should eventually open circuit breaker
@@ -209,10 +209,10 @@ async fn test_circuit_breaker_recovery_mechanism()
 
   // Force circuit breaker to open
   let request = GenerateRequest {
-    model: "test-model".to_string(),
-    prompt: "test".to_string(),
-    stream: Some(false),
-    options: None,
+    model : "test-model".to_string(),
+    prompt : "test".to_string(),
+    stream : Some(false),
+    options : None,
   };
 
   for _ in 0..2
@@ -253,7 +253,7 @@ async fn test_circuit_breaker_performance_overhead()
   // Circuit breaker overhead should be minimal (< 1 microsecond per check)
   assert!(overhead_per_check < Duration::from_micros(1));
 
-  println!("Circuit breaker overhead: {overhead_per_check:?} per check");
+  println!("Circuit breaker overhead : {overhead_per_check:?} per check");
 }
 
 #[ tokio::test ]
@@ -329,5 +329,5 @@ async fn test_circuit_breaker_debug_and_display()
   // Test Display implementation
   let display_output = format!("{circuit_breaker}");
   assert!(display_output.contains("Circuit breaker"));
-  assert!(display_output.contains("state: Closed"));
+  assert!(display_output.contains("state : Closed"));
 }

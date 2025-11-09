@@ -27,7 +27,7 @@ mod private
   #[ cfg( feature = "streaming_control" ) ]
   impl core::fmt::Display for StreamState
   {
-    fn fmt( &self, f: &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result
+    fn fmt( &self, f : &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result
     {
       match self
       {
@@ -47,16 +47,16 @@ mod private
     /// Invalid state transition attempted
     InvalidStateTransition {
       /// The state transitioning from
-      from: StreamState,
+      from : StreamState,
       /// The state attempting to transition to
-      to: StreamState
+      to : StreamState
     },
     /// Stream operation timed out
     TimeoutError,
     /// Buffer overflow occurred
     BufferOverflow {
       /// The buffer size limit that was exceeded
-      limit: usize
+      limit : usize
     },
     /// Stream was cancelled
     StreamCancelled,
@@ -67,7 +67,7 @@ mod private
   #[ cfg( feature = "streaming_control" ) ]
   impl core::fmt::Display for StreamControlError
   {
-    fn fmt( &self, f: &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result
+    fn fmt( &self, f : &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result
     {
       match self
       {
@@ -76,10 +76,10 @@ mod private
         },
         StreamControlError::TimeoutError => write!( f, "Stream control operation timed out" ),
         StreamControlError::BufferOverflow { limit } => {
-          write!( f, "Buffer overflow: exceeded limit of {limit} bytes" )
+          write!( f, "Buffer overflow : exceeded limit of {limit} bytes" )
         },
         StreamControlError::StreamCancelled => write!( f, "Stream was cancelled" ),
-        StreamControlError::GeneralError( msg ) => write!( f, "Stream control error: {msg}" ),
+        StreamControlError::GeneralError( msg ) => write!( f, "Stream control error : {msg}" ),
       }
     }
   }
@@ -94,15 +94,15 @@ mod private
   pub struct StreamMetrics
   {
     /// Number of times stream was paused
-    pub pause_count: u64,
+    pub pause_count : u64,
     /// Number of times stream was resumed
-    pub resume_count: u64,
+    pub resume_count : u64,
     /// Total time spent in paused state
-    pub total_pause_duration: Duration,
+    pub total_pause_duration : Duration,
     /// Time when last pause started
-    pub last_pause_start: Option< std::time::Instant >,
+    pub last_pause_start : Option< std::time::Instant >,
     /// Total bytes buffered during pause
-    pub total_buffered_bytes: u64,
+    pub total_buffered_bytes : u64,
   }
 
   #[ cfg( feature = "streaming_control" ) ]
@@ -114,11 +114,11 @@ mod private
     pub fn new() -> Self
     {
       Self {
-        pause_count: 0,
-        resume_count: 0,
-        total_pause_duration: Duration::from_secs( 0 ),
-        last_pause_start: None,
-        total_buffered_bytes: 0,
+        pause_count : 0,
+        resume_count : 0,
+        total_pause_duration : Duration::from_secs( 0 ),
+        last_pause_start : None,
+        total_buffered_bytes : 0,
       }
     }
 
@@ -143,7 +143,7 @@ mod private
 
     /// Record buffered bytes
     #[ inline ]
-    pub fn record_buffered_bytes( &mut self, bytes: u64 )
+    pub fn record_buffered_bytes( &mut self, bytes : u64 )
     {
       self.total_buffered_bytes += bytes;
     }
@@ -164,9 +164,9 @@ mod private
   pub struct StreamBuffer
   {
     /// Internal buffer storage
-    buffer: Arc< tokio::sync::Mutex< Vec< u8 > > >,
+    buffer : Arc< tokio::sync::Mutex< Vec< u8 > > >,
     /// Maximum buffer capacity
-    capacity: usize,
+    capacity : usize,
   }
 
   #[ cfg( feature = "streaming_control" ) ]
@@ -175,23 +175,23 @@ mod private
     /// Create a new stream buffer with specified capacity
     #[ inline ]
     #[ must_use ]
-    pub fn new( capacity: usize ) -> Self
+    pub fn new( capacity : usize ) -> Self
     {
       Self {
-        buffer: Arc::new( tokio::sync::Mutex::new( Vec::with_capacity( capacity ) ) ),
+        buffer : Arc::new( tokio::sync::Mutex::new( Vec::with_capacity( capacity ) ) ),
         capacity,
       }
     }
 
     /// Write data to the buffer
     #[ inline ]
-    pub async fn write( &self, data: Vec< u8 > ) -> Result< (), StreamControlError >
+    pub async fn write( &self, data : Vec< u8 > ) -> Result< (), StreamControlError >
     {
       let mut buffer = self.buffer.lock().await;
 
       if buffer.len() + data.len() > self.capacity
       {
-        return Err( StreamControlError::BufferOverflow { limit: self.capacity } );
+        return Err( StreamControlError::BufferOverflow { limit : self.capacity } );
       }
 
       buffer.extend( data );
@@ -200,7 +200,7 @@ mod private
 
     /// Read data from the buffer
     #[ inline ]
-    pub async fn read( &self, size: usize ) -> Result< Vec< u8 >, StreamControlError >
+    pub async fn read( &self, size : usize ) -> Result< Vec< u8 >, StreamControlError >
     {
       let mut buffer = self.buffer.lock().await;
 
@@ -246,15 +246,15 @@ mod private
   pub struct StreamControl
   {
     /// Current stream state
-    state: Arc< tokio::sync::RwLock< StreamState > >,
+    state : Arc< tokio::sync::RwLock< StreamState > >,
     /// Stream metrics
-    metrics: Arc< tokio::sync::Mutex< StreamMetrics > >,
+    metrics : Arc< tokio::sync::Mutex< StreamMetrics > >,
     /// Timeout for paused streams
-    timeout: Option< Duration >,
+    timeout : Option< Duration >,
     /// Cancellation token
-    cancellation_token: Arc< tokio::sync::Mutex< Option< tokio_util::sync::CancellationToken > > >,
+    cancellation_token : Arc< tokio::sync::Mutex< Option< tokio_util::sync::CancellationToken > > >,
     /// State change callbacks
-    state_callbacks: Arc< tokio::sync::Mutex< Vec< Box< dyn Fn( StreamState, StreamState ) + Send + Sync > > > >,
+    state_callbacks : Arc< tokio::sync::Mutex< Vec< Box< dyn Fn( StreamState, StreamState ) + Send + Sync > > > >,
   }
 
   #[ cfg( feature = "streaming_control" ) ]
@@ -266,25 +266,25 @@ mod private
     pub fn new() -> Self
     {
       Self {
-        state: Arc::new( tokio::sync::RwLock::new( StreamState::Ready ) ),
-        metrics: Arc::new( tokio::sync::Mutex::new( StreamMetrics::new() ) ),
-        timeout: None,
-        cancellation_token: Arc::new( tokio::sync::Mutex::new( None ) ),
-        state_callbacks: Arc::new( tokio::sync::Mutex::new( Vec::new() ) ),
+        state : Arc::new( tokio::sync::RwLock::new( StreamState::Ready ) ),
+        metrics : Arc::new( tokio::sync::Mutex::new( StreamMetrics::new() ) ),
+        timeout : None,
+        cancellation_token : Arc::new( tokio::sync::Mutex::new( None ) ),
+        state_callbacks : Arc::new( tokio::sync::Mutex::new( Vec::new() ) ),
       }
     }
 
     /// Create a new stream control instance with timeout
     #[ inline ]
     #[ must_use ]
-    pub fn with_timeout( timeout: Duration ) -> Self
+    pub fn with_timeout( timeout : Duration ) -> Self
     {
       Self {
-        state: Arc::new( tokio::sync::RwLock::new( StreamState::Ready ) ),
-        metrics: Arc::new( tokio::sync::Mutex::new( StreamMetrics::new() ) ),
-        timeout: Some( timeout ),
-        cancellation_token: Arc::new( tokio::sync::Mutex::new( None ) ),
-        state_callbacks: Arc::new( tokio::sync::Mutex::new( Vec::new() ) ),
+        state : Arc::new( tokio::sync::RwLock::new( StreamState::Ready ) ),
+        metrics : Arc::new( tokio::sync::Mutex::new( StreamMetrics::new() ) ),
+        timeout : Some( timeout ),
+        cancellation_token : Arc::new( tokio::sync::Mutex::new( None ) ),
+        state_callbacks : Arc::new( tokio::sync::Mutex::new( Vec::new() ) ),
       }
     }
 
@@ -318,8 +318,8 @@ mod private
       if *state != StreamState::Ready
       {
         return Err( StreamControlError::InvalidStateTransition {
-          from: *state,
-          to: StreamState::Streaming,
+          from : *state,
+          to : StreamState::Streaming,
         } );
       }
 
@@ -347,8 +347,8 @@ mod private
       if *state != StreamState::Streaming
       {
         return Err( StreamControlError::InvalidStateTransition {
-          from: *state,
-          to: StreamState::Paused,
+          from : *state,
+          to : StreamState::Paused,
         } );
       }
 
@@ -365,8 +365,8 @@ mod private
       if let Some( timeout ) = self.timeout
       {
         let control_clone = self.clone();
-        tokio::spawn( async move {
-          tokio::time::sleep( timeout ).await;
+        tokio ::spawn( async move {
+          tokio ::time::sleep( timeout ).await;
           let current_state = control_clone.state().await;
           if current_state == StreamState::Paused
           {
@@ -408,8 +408,8 @@ mod private
         },
         _ => {
           Err( StreamControlError::InvalidStateTransition {
-            from: *state,
-            to: StreamState::Streaming,
+            from : *state,
+            to : StreamState::Streaming,
           } )
         }
       }
@@ -446,7 +446,7 @@ mod private
 
     /// Trigger cleanup when stream is cancelled
     #[ inline ]
-    pub async fn cleanup_on_cancel( &self, buffer: &StreamBuffer ) -> Result< (), StreamControlError >
+    pub async fn cleanup_on_cancel( &self, buffer : &StreamBuffer ) -> Result< (), StreamControlError >
     {
       if self.is_cancelled().await
       {
@@ -464,7 +464,7 @@ mod private
 
     /// Register callback for state changes
     #[ inline ]
-    pub async fn on_state_change< F >( &self, callback: F )
+    pub async fn on_state_change< F >( &self, callback : F )
     where
       F: Fn( StreamState, StreamState ) + Send + Sync + 'static,
     {
@@ -473,7 +473,7 @@ mod private
     }
 
     /// Notify all callbacks of state change
-    async fn notify_state_change( &self, old_state: StreamState, new_state: StreamState )
+    async fn notify_state_change( &self, old_state : StreamState, new_state : StreamState )
     {
       let callbacks = self.state_callbacks.lock().await;
       for callback in callbacks.iter()
@@ -494,7 +494,7 @@ mod private
   impl core::fmt::Debug for StreamControl
   {
     #[ inline ]
-    fn fmt( &self, f: &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result
+    fn fmt( &self, f : &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result
     {
       f.debug_struct( "StreamControl" )
         .field( "timeout", &self.timeout )
@@ -509,11 +509,11 @@ mod private
     fn clone( &self ) -> Self
     {
       Self {
-        state: self.state.clone(),
-        metrics: self.metrics.clone(),
-        timeout: self.timeout,
-        cancellation_token: self.cancellation_token.clone(),
-        state_callbacks: self.state_callbacks.clone(),
+        state : self.state.clone(),
+        metrics : self.metrics.clone(),
+        timeout : self.timeout,
+        cancellation_token : self.cancellation_token.clone(),
+        state_callbacks : self.state_callbacks.clone(),
       }
     }
   }
@@ -534,19 +534,19 @@ mod private
   {
     /// The underlying stream
     #[ allow( dead_code ) ]
-    stream: std::pin::Pin< Box< dyn futures_core::Stream< Item = T > + Send > >,
+    stream : std::pin::Pin< Box< dyn futures_core::Stream< Item = T > + Send > >,
     /// Control interface
-    control: StreamControl,
+    control : StreamControl,
     /// Buffer for pause/resume functionality
     #[ allow( dead_code ) ]
-    buffer: StreamBuffer,
+    buffer : StreamBuffer,
   }
 
   #[ cfg( all( feature = "streaming", feature = "streaming_control" ) ) ]
   impl< T > core::fmt::Debug for ControlledStream< T >
   {
     #[ inline ]
-    fn fmt( &self, f: &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result
+    fn fmt( &self, f : &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result
     {
       f.debug_struct( "ControlledStream" )
         .field( "control", &self.control )
@@ -562,14 +562,14 @@ mod private
     #[ inline ]
     #[ must_use ]
     pub fn new(
-      stream: std::pin::Pin< Box< dyn futures_core::Stream< Item = T > + Send > >,
-      control: StreamControl
+      stream : std::pin::Pin< Box< dyn futures_core::Stream< Item = T > + Send > >,
+      control : StreamControl
     ) -> Self
     {
       Self {
         stream,
         control,
-        buffer: StreamBuffer::new( 1024 * 1024 ), // 1MB default buffer
+        buffer : StreamBuffer::new( 1024 * 1024 ), // 1MB default buffer
       }
     }
 
@@ -600,7 +600,7 @@ mod private
 }
 
 #[ cfg( feature = "streaming_control" ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

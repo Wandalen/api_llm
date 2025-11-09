@@ -11,13 +11,13 @@ mod private
 {
   use crate::
   {
-    error::{ OpenAIError, Result },
+    error ::{ OpenAIError, Result },
   };
 
   use std::
   {
-    sync::{ Arc, Mutex },
-    time::Instant,
+    sync ::{ Arc, Mutex },
+    time ::Instant,
   };
   use core::time::Duration;
 
@@ -559,7 +559,7 @@ pub mod private
 pub use private::EnhancedCircuitBreakerConfig;
 
 // Export for mod_interface
-crate::mod_interface!
+crate ::mod_interface!
 {
   #[ cfg( feature = "circuit_breaker" ) ]
   exposed use

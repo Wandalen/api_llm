@@ -49,25 +49,25 @@ mod retry_configuration_tests
     let valid_config = EnhancedRetryConfig::default();
     assert!( valid_config.validate().is_ok() );
 
-    // Invalid: max_attempts = 0
+    // Invalid : max_attempts = 0
     let invalid_config = EnhancedRetryConfig::default().with_max_attempts( 0 );
     assert!( invalid_config.validate().is_err() );
 
-    // Invalid: base_delay_ms = 0
+    // Invalid : base_delay_ms = 0
     let invalid_config = EnhancedRetryConfig::default().with_base_delay( 0 );
     assert!( invalid_config.validate().is_err() );
 
-    // Invalid: max_delay_ms < base_delay_ms
+    // Invalid : max_delay_ms < base_delay_ms
     let invalid_config = EnhancedRetryConfig::default()
       .with_base_delay( 5000 )
       .with_max_delay( 1000 );
     assert!( invalid_config.validate().is_err() );
 
-    // Invalid: max_elapsed_time_ms = 0
+    // Invalid : max_elapsed_time_ms = 0
     let invalid_config = EnhancedRetryConfig::default().with_max_elapsed_time( 0 );
     assert!( invalid_config.validate().is_err() );
 
-    // Invalid: backoff_multiplier <= 0
+    // Invalid : backoff_multiplier <= 0
     let invalid_config = EnhancedRetryConfig::default().with_backoff_multiplier( 0.0 );
     assert!( invalid_config.validate().is_err() );
   }

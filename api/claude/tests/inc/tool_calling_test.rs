@@ -8,8 +8,8 @@
 //! - Tests MUST FAIL IMMEDIATELY on any API endpoint errors
 //! - NO SILENT PASSES allowed when problems occur
 //!
-//! Run with: cargo test --features tools,integration
-//! Requires: Valid `ANTHROPIC_API_KEY` in environment or ../../secret/-secrets.sh
+//! Run with : cargo test --features tools,integration
+//! Requires : Valid `ANTHROPIC_API_KEY` in environment or ../../secret/-secrets.sh
 
 #[ allow( unused_imports ) ]
 use super::*;
@@ -84,7 +84,7 @@ async fn test_tool_result_error_structure()
   {
     r#type : "tool_result".to_string(),
     tool_use_id : "toolu_01A09q90qw90lkasdjfl".to_string(),
-    content : "Unable to fetch weather data: API timeout".to_string(),
+    content : "Unable to fetch weather data : API timeout".to_string(),
     is_error : Some( true ),
   };
   
@@ -98,7 +98,7 @@ async fn test_message_with_tool_definitions()
 {
   // Test CreateMessageRequest with tools parameter
   let tools = vec![
-    the_module::ToolDefinition
+    the_module ::ToolDefinition
     {
       name : "get_weather".to_string(),
       description : "Get current weather".to_string(),
@@ -110,7 +110,7 @@ async fn test_message_with_tool_definitions()
         }
       }),
     },
-    the_module::ToolDefinition
+    the_module ::ToolDefinition
     {
       name : "calculate_math".to_string(),
       description : "Perform mathematical calculations".to_string(),
@@ -149,7 +149,7 @@ async fn test_tool_choice_none()
   
   match request.tool_choice.unwrap()
   {
-    the_module::ToolChoice::None => {},
+    the_module ::ToolChoice::None => {},
     _ => panic!( "Expected ToolChoice::None" ),
   }
 }
@@ -167,7 +167,7 @@ async fn test_tool_choice_auto()
   
   match request.tool_choice.unwrap()
   {
-    the_module::ToolChoice::Auto => {},
+    the_module ::ToolChoice::Auto => {},
     _ => panic!( "Expected ToolChoice::Auto" ),
   }
 }
@@ -187,7 +187,7 @@ async fn test_tool_choice_specific_tool()
   
   match request.tool_choice.unwrap()
   {
-    the_module::ToolChoice::Tool { name } => 
+    the_module ::ToolChoice::Tool { name } => 
     {
       assert_eq!( name, "get_weather" );
     },
@@ -211,7 +211,7 @@ async fn test_message_content_with_tool_use()
   
   match message.role
   {
-    the_module::Role::Assistant => {},
+    the_module ::Role::Assistant => {},
     _ => panic!( "Expected Assistant role" ),
   }
   
@@ -235,7 +235,7 @@ async fn test_message_content_with_tool_result()
   
   match message.role
   {
-    the_module::Role::User => {},
+    the_module ::Role::User => {},
     _ => panic!( "Expected User role" ),
   }
   
@@ -247,9 +247,9 @@ async fn test_tool_calling_conversation_flow()
 {
   // Test complete tool calling conversation flow
   let messages = vec![
-    the_module::Message::user( "What's the weather like in Paris?".to_string() ),
-    the_module::Message::assistant_with_tool_use( vec![
-      the_module::ToolUseContent
+    the_module ::Message::user( "What's the weather like in Paris?".to_string() ),
+    the_module ::Message::assistant_with_tool_use( vec![
+      the_module ::ToolUseContent
       {
         r#type : "tool_use".to_string(),
         id : "toolu_456".to_string(),
@@ -257,8 +257,8 @@ async fn test_tool_calling_conversation_flow()
         input : serde_json::json!({ "location": "Paris, France" }),
       }
     ] ),
-    the_module::Message::user_with_tool_result( vec![
-      the_module::ToolResultContent
+    the_module ::Message::user_with_tool_result( vec![
+      the_module ::ToolResultContent
       {
         r#type : "tool_result".to_string(),
         tool_use_id : "toolu_456".to_string(),
@@ -279,19 +279,19 @@ async fn test_tool_calling_conversation_flow()
   // Verify conversation flow
   match request.messages[0].role
   {
-    the_module::Role::User => {},
+    the_module ::Role::User => {},
     _ => panic!( "Expected first message to be User" ),
   }
   
   match request.messages[1].role
   {
-    the_module::Role::Assistant => {},
+    the_module ::Role::Assistant => {},
     _ => panic!( "Expected second message to be Assistant" ),
   }
   
   match request.messages[2].role
   {
-    the_module::Role::User => {},
+    the_module ::Role::User => {},
     _ => panic!( "Expected third message to be User" ),
   }
 }
@@ -350,7 +350,7 @@ async fn test_multiple_tools_with_different_schemas()
 {
   // Test multiple tools with complex input schemas
   let tools = vec![
-    the_module::ToolDefinition
+    the_module ::ToolDefinition
     {
       name : "file_manager".to_string(),
       description : "Manage files and directories".to_string(),
@@ -365,7 +365,7 @@ async fn test_multiple_tools_with_different_schemas()
         "required": ["action", "path"]
       }),
     },
-    the_module::ToolDefinition
+    the_module ::ToolDefinition
     {
       name : "database_query".to_string(),
       description : "Query database".to_string(),
@@ -410,7 +410,7 @@ async fn test_tool_calling_with_streaming()
     .max_tokens( 300 )
     .message( the_module::Message::user( "Use tools and stream the response".to_string() ) )
     .tools( vec![
-      the_module::ToolDefinition
+      the_module ::ToolDefinition
       {
         name : "info_lookup".to_string(),
         description : "Look up information".to_string(),
@@ -487,9 +487,9 @@ async fn integration_tool_calling_real_math_tool()
   };
 
   // Fix(issue-002): Use Claude 3.5 Haiku for tool calling tests
-  // Root cause: Sonnet 4.5 does not support tool calling - it's a text-only model
+  // Root cause : Sonnet 4.5 does not support tool calling - it's a text-only model
   // Haiku 3.5 supports tools and is perfect for testing tool calling functionality
-  // Pitfall: Always verify model capabilities when selecting models for feature-specific tests
+  // Pitfall : Always verify model capabilities when selecting models for feature-specific tests
   let request = the_module::CreateMessageRequest
   {
     model : "claude-3-5-haiku-20241022".to_string(),
@@ -510,7 +510,7 @@ async fn integration_tool_calling_real_math_tool()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted - this confirms real API usage" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION: Tool calling request must work: {err}" ),
+    Err( err ) => panic!( "INTEGRATION: Tool calling request must work : {err}" ),
   };
 
   // Verify response structure
@@ -536,7 +536,7 @@ async fn integration_tool_calling_real_math_tool()
     println!( "   Content {i}: type={}", content.r#type );
     if let Some( text ) = &content.text
     {
-      println!( "     Text: {text}" );
+      println!( "     Text : {text}" );
     }
   }
 }
@@ -571,15 +571,15 @@ async fn integration_tool_calling_multiple_tools()
   };
 
   // Fix(issue-002): Use Claude 3.5 Haiku for tool calling tests
-  // Root cause: Sonnet 4.5 does not support tool calling - it's a text-only model
+  // Root cause : Sonnet 4.5 does not support tool calling - it's a text-only model
   // Haiku 3.5 supports tools and is perfect for testing tool calling functionality
-  // Pitfall: Always verify model capabilities when selecting models for feature-specific tests
+  // Pitfall : Always verify model capabilities when selecting models for feature-specific tests
   let request = the_module::CreateMessageRequest
   {
     model : "claude-3-5-haiku-20241022".to_string(),
     max_tokens : 150,
     messages : vec![
-      the_module::Message::user( "I have a calculator and weather tool available. What's 8 + 5?".to_string() )
+      the_module ::Message::user( "I have a calculator and weather tool available. What's 8 + 5?".to_string() )
     ],
     system : Some( vec![ the_module::SystemContent::text( "You have access to calculator and weather tools. Use the appropriate tool for the user's request." ) ] ),
     temperature : Some( 0.0 ),
@@ -596,7 +596,7 @@ async fn integration_tool_calling_multiple_tools()
       println!( "INTEGRATION TEST SKIPPED: Credit balance exhausted - this confirms real API usage" );
       return;
     },
-    Err( err ) => panic!( "INTEGRATION: Multiple tools request must work: {err}" ),
+    Err( err ) => panic!( "INTEGRATION: Multiple tools request must work : {err}" ),
   };
 
   // Verify the response handles multiple tool availability
@@ -615,6 +615,6 @@ async fn integration_tool_calling_multiple_tools()
   assert!( has_math_response, "Multiple tools response should handle math question" );
 
   println!( "✅ Multiple tools integration test passed!" );
-  println!( "   Tools available: calculator, weather" );
+  println!( "   Tools available : calculator, weather" );
   println!( "   Response handled math question appropriately" );
 }

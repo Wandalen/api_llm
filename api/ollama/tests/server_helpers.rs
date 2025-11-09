@@ -27,9 +27,9 @@ const QUICK_RESPONSE_TIMEOUT: Duration = Duration::from_secs(60); // Extended ti
 #[ derive( Debug ) ]
 pub struct TestServer
 {
-  process: Child,
-  port: u16,
-  client: OllamaClient,
+  process : Child,
+  port : u16,
+  client : OllamaClient,
 }
 
 impl TestServer
@@ -57,7 +57,7 @@ impl TestServer
     // Check if Ollama is available before attempting to start server
     if !Self::is_ollama_available()
     {
-      return Err("Ollama binary not found in PATH\n\nThis is expected in CI/automated test environments.\nResolution steps for local development:\n1. Install Ollama: curl -fsSL https://ollama.ai/install.sh | sh\n2. Ensure Ollama is in PATH\n3. Run 'ollama --version' to verify installation".to_string());
+      return Err("Ollama binary not found in PATH\n\nThis is expected in CI/automated test environments.\nResolution steps for local development:\n1. Install Ollama : curl -fsSL https://ollama.ai/install.sh | sh\n2. Ensure Ollama is in PATH\n3. Run 'ollama --version' to verify installation".to_string());
     }
 
     println!("🚀 Starting Ollama test server on port {TEST_PORT}...");
@@ -70,7 +70,7 @@ impl TestServer
       .stderr(Stdio::null())
       .spawn()
       .map_err(|e| format!(
-        "Failed to start Ollama server: {e}\n\nResolution steps:\n1. Install Ollama: curl -fsSL https://ollama.ai/install.sh | sh\n2. Ensure Ollama is in PATH\n3. Run 'ollama --version' to verify installation"
+        "Failed to start Ollama server : {e}\n\nResolution steps:\n1. Install Ollama : curl -fsSL https://ollama.ai/install.sh | sh\n2. Ensure Ollama is in PATH\n3. Run 'ollama --version' to verify installation"
       ))?;
 
     let mut client = OllamaClient::new(format!("http://127.0.0.1:{TEST_PORT}"), Duration::from_secs(120)); // Extended timeout for integration tests to handle model processing delays
@@ -95,10 +95,10 @@ impl TestServer
         break;
       }
       
-      tokio::time::sleep(Duration::from_millis(500)).await;
+      tokio ::time::sleep(Duration::from_millis(500)).await;
     }
     
-    let mut server = TestServer { process, port: TEST_PORT, client };
+    let mut server = TestServer { process, port : TEST_PORT, client };
     
     // Ensure test model is available
     server.ensure_test_model_available().await?;
@@ -158,13 +158,13 @@ impl TestServer
       {
         let stderr = String::from_utf8_lossy(&output.stderr);
         return Err(format!(
-          "Failed to pull test model '{TEST_MODEL}': {stderr}\n\nResolution steps:\n1. Check internet connectivity\n2. Verify Ollama registry access\n3. Ensure sufficient disk space\n4. Try manual pull: ollama pull {TEST_MODEL}"
+          "Failed to pull test model '{TEST_MODEL}': {stderr}\n\nResolution steps:\n1. Check internet connectivity\n2. Verify Ollama registry access\n3. Ensure sufficient disk space\n4. Try manual pull : ollama pull {TEST_MODEL}"
         ));
       }
       Err(e) => 
       {
         return Err(format!(
-          "Failed to execute model pull: {e}\n\nResolution steps:\n1. Verify Ollama CLI is available\n2. Check PATH configuration\n3. Try manual pull: ollama pull {TEST_MODEL}"
+          "Failed to execute model pull : {e}\n\nResolution steps:\n1. Verify Ollama CLI is available\n2. Check PATH configuration\n3. Try manual pull : ollama pull {TEST_MODEL}"
         ));
       }
     }
@@ -186,7 +186,7 @@ impl TestServer
         Ok(())
       }
       _ => Err(format!(
-        "Test model '{TEST_MODEL}' not found after pull\n\nResolution steps:\n1. Check Ollama model registry\n2. Verify model pull completed\n3. Try: ollama list"
+        "Test model '{TEST_MODEL}' not found after pull\n\nResolution steps:\n1. Check Ollama model registry\n2. Verify model pull completed\n3. Try : ollama list"
       ))
     }
   }
@@ -203,10 +203,10 @@ impl TestServer
     
     let request = GenerateRequest
     {
-      model: TEST_MODEL.to_string(),
-      prompt: "Hi".to_string(),
-      stream: Some(false),
-      options: None,
+      model : TEST_MODEL.to_string(),
+      prompt : "Hi".to_string(),
+      stream : Some(false),
+      options : None,
     };
     
     let start_time = std::time::Instant::now();
@@ -279,7 +279,7 @@ pub async fn get_test_server() -> Result< Arc< Mutex< Option< TestServer > > >, 
   
   // Check if server needs to be initialized
   let needs_init = {
-    let server_guard = server_arc.lock().map_err(|e| format!("Failed to acquire test server mutex for initialization check: {e}"))?;
+    let server_guard = server_arc.lock().map_err(|e| format!("Failed to acquire test server mutex for initialization check : {e}"))?;
     server_guard.is_none()
   };
   
@@ -289,13 +289,13 @@ pub async fn get_test_server() -> Result< Arc< Mutex< Option< TestServer > > >, 
     {
       Ok(server) => 
       {
-        let mut server_guard = server_arc.lock().map_err(|e| format!("Failed to acquire test server mutex for initialization: {e}"))?;
+        let mut server_guard = server_arc.lock().map_err(|e| format!("Failed to acquire test server mutex for initialization : {e}"))?;
         *server_guard = Some(server);
         println!("🎯 Test server initialized successfully");
       }
       Err(e) => 
       {
-        return Err(format!("Failed to initialize test server: {e}"));
+        return Err(format!("Failed to initialize test server : {e}"));
       }
     }
   }
@@ -310,7 +310,7 @@ pub async fn get_test_server() -> Result< Arc< Mutex< Option< TestServer > > >, 
 pub async fn get_test_client() -> Result< ( OllamaClient, String ), String >
 {
   let server_arc = get_test_server().await?;
-  let server_guard = server_arc.lock().map_err(|e| format!("Failed to acquire test server mutex: {e}"))?;
+  let server_guard = server_arc.lock().map_err(|e| format!("Failed to acquire test server mutex : {e}"))?;
   let server = server_guard.as_ref().ok_or("Test server not initialized")?;
 
   // Clone the client and get model name
@@ -345,7 +345,7 @@ mod tests
   {
     // Test that we can get a test server
     let result = get_test_client().await;
-    assert!(result.is_ok(), "Failed to get test client: {:?}", result.err());
+    assert!(result.is_ok(), "Failed to get test client : {:?}", result.err());
     
     let (mut client, model) = result.unwrap();
     

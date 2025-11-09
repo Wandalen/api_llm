@@ -28,22 +28,22 @@
 
 use std::
 {
-  collections::HashMap,
-  sync::{ Arc, Mutex },
+  collections ::HashMap,
+  sync ::{ Arc, Mutex },
   thread,
-  time::Instant,
+  time ::Instant,
 };
 
 use api_openai::exposed::
 {
-  components::
+  components ::
   {
-    responses::
+    responses ::
     {
       CreateResponseRequest,
       ResponseInput,
     },
-    input::
+    input ::
     {
       InputMessage,
       InputContentPart,
@@ -51,7 +51,7 @@ use api_openai::exposed::
       InputImage,
       InputItem,
     },
-    tools::
+    tools ::
     {
       Tool,
       ToolChoice,
@@ -60,12 +60,12 @@ use api_openai::exposed::
       ComputerTool,
       WebSearchTool,
     },
-    common::
+    common ::
     {
       ModelIdsResponses,
       Metadata,
     },
-    query::
+    query ::
     {
       ListQuery,
     },
@@ -334,7 +334,7 @@ fn test_builder_serialization_compatibility()
   assert!(json_str.contains("\"temperature\""));
   assert!(json_str.contains("Serialization test"));
 
-  // Note: CreateResponseRequest doesn't implement Deserialize as it's primarily for API requests
+  // Note : CreateResponseRequest doesn't implement Deserialize as it's primarily for API requests
   // We skip the deserialization test since it's not meant to be deserialized
 }
 
@@ -359,7 +359,7 @@ fn test_builder_performance()
   println!("Built 1000 requests in {:?}", duration);
 
   // Should be fast - less than 100ms for 1000 simple builds
-  assert!(duration.as_millis() < 1000, "Builder performance should be reasonable: {:?}", duration);
+  assert!(duration.as_millis() < 1000, "Builder performance should be reasonable : {:?}", duration);
 }
 
 /// Test builder thread safety
@@ -402,12 +402,12 @@ fn test_builder_thread_safety()
     let _expected_model = ModelIdsResponses::from(format!("gpt-4-thread-{}", i));
     let _expected_input = ResponseInput::String(format!("Thread {} input", i));
 
-    // Note: The order might not match due to thread execution order,
+    // Note : The order might not match due to thread execution order,
     // so we check that all expected values exist
     let model_str = &request.model.value;
 
     // Check that this is one of our thread-generated models
-    assert!(model_str.starts_with("gpt-4-thread-"), "Model should be thread-specific: {}", model_str);
+    assert!(model_str.starts_with("gpt-4-thread-"), "Model should be thread-specific : {}", model_str);
   }
 }
 
@@ -420,7 +420,7 @@ fn test_builder_clone_functionality()
     .model(ModelIdsResponses::from("gpt-4".to_string()))
     .temperature(0.7);
 
-  // Note: The builder itself may not be cloneable, so we test cloning the final result
+  // Note : The builder itself may not be cloneable, so we test cloning the final result
   let cloned_request1 = CreateResponseRequest::former()
     .model(ModelIdsResponses::from("gpt-4".to_string()))
     .temperature(0.7)
@@ -465,7 +465,7 @@ fn test_builder_debug_implementation()
   assert!(debug_output.contains("temperature"));
   assert!(debug_output.contains("Debug test"));
 
-  println!("Debug output: {}", debug_output);
+  println!("Debug output : {}", debug_output);
 }
 
 /// Test builder PartialEq implementation

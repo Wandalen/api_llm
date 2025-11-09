@@ -21,7 +21,7 @@ mod private
   use serde::{ Deserialize, Serialize };
   use serde::
   {
-    de::{ self, Deserializer, MapAccess, Visitor },
+    de ::{ self, Deserializer, MapAccess, Visitor },
   };
 
   // --- Annotation Structs (Restored) ---
@@ -135,7 +135,7 @@ mod private
       {
         type Value = Annotation;
 
-        fn expecting( &self, formatter : &mut fmt::Formatter<'_> ) -> fmt::Result
+        fn expecting( &self, formatter : &mut fmt::Formatter< '_ > ) -> fmt::Result
         {
           formatter.write_str( "struct Annotation" )
         }
@@ -303,11 +303,11 @@ mod private
       /// The refusal explanation.
       refusal : String,
     },
-    // Note: Other output types like audio might be added here in the future
+    // Note : Other output types like audio might be added here in the future
   }
 
   // --- FileSearchResultItem (Moved from file_search.rs for dependency reasons) ---
-  // Note: Ideally, this would stay in file_search.rs, but OutputItem needs it.
+  // Note : Ideally, this would stay in file_search.rs, but OutputItem needs it.
   // Consider refactoring later if this becomes problematic.
   /// Represents a single item found during a file search.
   ///
@@ -331,7 +331,7 @@ mod private
   }
 
   // --- ComputerScreenshotImage (Moved from computer_use.rs for dependency reasons) ---
-  // Note: Ideally, this would stay in computer_use.rs.
+  // Note : Ideally, this would stay in computer_use.rs.
   /// Represents the output of a computer tool action, typically a screenshot.
   ///
   /// # Used By
@@ -350,7 +350,7 @@ mod private
 
 } // end mod private
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use 
   {
@@ -369,9 +369,9 @@ crate::mod_interface!
   // Re-export types used within the exposed items
   own use crate::components::
   {
-    common::{ VectorStoreFileAttributes, Reasoning }, // Corrected ReasoningItem to Reasoning
-    input::ListedInputContentPart,
-    tools::
+    common ::{ VectorStoreFileAttributes, Reasoning }, // Corrected ReasoningItem to Reasoning
+    input ::ListedInputContentPart,
+    tools ::
     {
       FileSearchToolCall,
       FunctionToolCall,
@@ -379,6 +379,6 @@ crate::mod_interface!
       ComputerToolCall,
     },
     // Import OutputMessage from responses.rs
-    responses::OutputMessage,
+    responses ::OutputMessage,
   };
 }

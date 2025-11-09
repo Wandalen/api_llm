@@ -31,10 +31,10 @@
 use api_huggingface::
 {
   Client,
-  environment::HuggingFaceEnvironmentImpl,
-  cache::{ Cache, CacheConfig },
-  components::input::InferenceParameters,
-  secret::Secret,
+  environment ::HuggingFaceEnvironmentImpl,
+  cache ::{ Cache, CacheConfig },
+  components ::input::InferenceParameters,
+  secret ::Secret,
 };
 use std::io::{ self, Write as IoWrite };
 use core::time::Duration;
@@ -78,8 +78,8 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
   // Use a fast, efficient model for chat
   let model = "moonshotai/Kimi-K2-Instruct-0905:groq";
 
-  println!( "ℹ️  Cache configured: 100 entries max, 5-minute TTL" );
-  println!( "ℹ️  Model: {model}" );
+  println!( "ℹ️  Cache configured : 100 entries max, 5-minute TTL" );
+  println!( "ℹ️  Model : {model}" );
   println!( "\n💡 Commands:" );
   println!( "   /stats  - Show cache statistics" );
   println!( "   /clear  - Clear cache" );
@@ -89,11 +89,11 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
   loop
   {
   // Prompt for user input
-  print!( "You: " );
-  io::stdout().flush()?;
+  print!( "You : " );
+  io ::stdout().flush()?;
 
   let mut user_input = String::new();
-  io::stdin().read_line( &mut user_input )?;
+  io ::stdin().read_line( &mut user_input )?;
   let user_input = user_input.trim();
 
   // Handle empty input
@@ -114,12 +114,12 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
       {
   let stats = cache.stats().await;
   println!( "\n📊 Cache Statistics:" );
-  println!( "   Total requests: {}", stats.total_requests() );
-  println!( "   Cache hits: {}", stats.hits );
-  println!( "   Cache misses: {}", stats.misses );
-  println!( "   Hit rate: {:.1}%", stats.hit_rate() * 100.0 );
-  println!( "   Current entries: {}", stats.entries );
-  println!( "   Evictions: {}\n", stats.evictions );
+  println!( "   Total requests : {}", stats.total_requests() );
+  println!( "   Cache hits : {}", stats.hits );
+  println!( "   Cache misses : {}", stats.misses );
+  println!( "   Hit rate : {:.1}%", stats.hit_rate() * 100.0 );
+  println!( "   Current entries : {}", stats.entries );
+  println!( "   Evictions : {}\n", stats.evictions );
   continue;
       }
       "/clear" =>
@@ -140,13 +140,13 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
       println!( "Assistant (cached): {cached_response}" );
 
       let stats = cache.stats().await;
-      println!( "💾 Cache hit! Hit rate: {:.1}%\n", stats.hit_rate() * 100.0 );
+      println!( "💾 Cache hit! Hit rate : {:.1}%\n", stats.hit_rate() * 100.0 );
       continue;
   }
 
   // Cache miss - make API call
-  print!( "Assistant: " );
-  io::stdout().flush()?;
+  print!( "Assistant : " );
+  io ::stdout().flush()?;
 
   match client.inference().create_with_parameters(
       user_input,
@@ -163,11 +163,11 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
   cache.insert( cache_key, response_text, None ).await;
 
   let stats = cache.stats().await;
-  println!( "🌐 API call made. Hit rate: {:.1}%\n", stats.hit_rate() * 100.0 );
+  println!( "🌐 API call made. Hit rate : {:.1}%\n", stats.hit_rate() * 100.0 );
       }
       Err( e ) =>
       {
-  println!( "❌ Error: {e}\n" );
+  println!( "❌ Error : {e}\n" );
       }
   }
   }
@@ -175,16 +175,16 @@ async fn main() -> Result< (), Box< dyn std::error::Error > >
   // Display final statistics
   let final_stats = cache.stats().await;
   println!( "\n📊 Final Cache Statistics:" );
-  println!( "   Total requests: {}", final_stats.total_requests() );
-  println!( "   Cache hits: {}", final_stats.hits );
-  println!( "   Cache misses: {}", final_stats.misses );
-  println!( "   Final hit rate: {:.1}%", final_stats.hit_rate() * 100.0 );
-  println!( "   Entries cached: {}", final_stats.entries );
+  println!( "   Total requests : {}", final_stats.total_requests() );
+  println!( "   Cache hits : {}", final_stats.hits );
+  println!( "   Cache misses : {}", final_stats.misses );
+  println!( "   Final hit rate : {:.1}%", final_stats.hit_rate() * 100.0 );
+  println!( "   Entries cached : {}", final_stats.entries );
 
   // Calculate cost savings (assuming $0.50 per 1000 tokens, ~200 tokens per response)
   let api_calls_saved = final_stats.hits;
   let estimated_savings = api_calls_saved as f64 * 0.0001; // $0.0001 per response
-  println!( "   💰 Estimated savings: ${estimated_savings:.4}\n" );
+  println!( "   💰 Estimated savings : ${estimated_savings:.4}\n" );
 
   Ok( () )
 }

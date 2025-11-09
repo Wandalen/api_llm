@@ -8,8 +8,8 @@
 //! - Tests MUST FAIL IMMEDIATELY on any API endpoint errors
 //! - NO SILENT PASSES allowed when problems occur
 //!
-//! Run with: cargo test --features streaming,integration
-//! Requires: Valid `ANTHROPIC_API_KEY` in environment or ../../secret/-secrets.sh
+//! Run with : cargo test --features streaming,integration
+//! Requires : Valid `ANTHROPIC_API_KEY` in environment or ../../secret/-secrets.sh
 
 #[ allow( unused_imports ) ]
 use super::*;
@@ -17,7 +17,7 @@ use super::*;
 #[ tokio::test ]
 async fn test_streaming_message_request_construction()
 {
-  // Test creating a streaming request with stream: true
+  // Test creating a streaming request with stream : true
   let request = the_module::CreateMessageRequest::builder()
     .model( "claude-sonnet-4-5-20250929" )
     .max_tokens( 100 )
@@ -62,8 +62,8 @@ async fn test_streaming_with_vision_structure()
   // Test streaming with image content
   let image_source = the_module::ImageSource::jpeg( "base64_image_data" );
   let image_content = the_module::ImageContent {
-    r#type: "image".to_string(),
-    source: image_source,
+    r#type : "image".to_string(),
+    source : image_source,
   };
 
   let message = the_module::Message::user_with_image(
@@ -120,7 +120,7 @@ async fn integration_streaming_real_api()
     },
     Err( error ) => {
       // If streaming fails, it might be due to incomplete implementation
-      println!( "⚠️ Streaming integration test - method exists but returned error: {error}" );
+      println!( "⚠️ Streaming integration test - method exists but returned error : {error}" );
       // This is still a pass since we're testing the API exists
     }
   }

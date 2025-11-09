@@ -8,10 +8,10 @@ mod private
 {
   use crate::
   {
-    client::Client,
-    environment::{ OpenaiEnvironment, EnvironmentInterface },
-    error::{ OpenAIError, Result },
-    diagnostics::{ RequestMetrics, ResponseMetrics },
+    client ::Client,
+    environment ::{ OpenaiEnvironment, EnvironmentInterface },
+    error ::{ OpenAIError, Result },
+    diagnostics ::{ RequestMetrics, ResponseMetrics },
   };
 
   use reqwest::Method;
@@ -38,9 +38,9 @@ mod private
       let ( tx, rx ) = mpsc::channel( 100 );
       let tx_arc = Arc::new( tx ); // Wrap tx in Arc
 
-      tokio::spawn( async move
+      tokio ::spawn( async move
       {
-        let tx_clone = Arc::<_>::clone( &tx_arc ); // Clone the Arc< Sender >
+        let tx_clone = Arc::< _ >::clone( &tx_arc ); // Clone the Arc< Sender >
         let response = match request.send().await
         {
           Ok( res ) => res,
@@ -90,7 +90,7 @@ mod private
             Err( e ) =>
             {
               // Handle any streaming errors
-              let error_msg = format!( "SSE streaming error: {e}" );
+              let error_msg = format!( "SSE streaming error : {e}" );
               let _ = tx_clone.send( Err( OpenAIError::Stream( error_msg ).into() ) ).await;
               break;
             },
@@ -116,10 +116,10 @@ mod private
       {
         let request_metrics = RequestMetrics
         {
-          timestamp: start_time,
-          method: "POST".to_string(),
-          endpoint: path.to_string(),
-          headers: if diagnostics.config.collection.request_headers
+          timestamp : start_time,
+          method : "POST".to_string(),
+          endpoint : path.to_string(),
+          headers : if diagnostics.config.collection.request_headers
           {
             vec![ ( "Content-Type".to_string(), "multipart/form-data".to_string() ) ]
           }
@@ -127,8 +127,8 @@ mod private
           {
             vec![]
           },
-          body_size: 0, // Cannot easily calculate multipart form size
-          user_agent: "api_openai/0.2.0".to_string(),
+          body_size : 0, // Cannot easily calculate multipart form size
+          user_agent : "api_openai/0.2.0".to_string(),
         };
         diagnostics.record_request( &request_metrics );
       }
@@ -149,10 +149,10 @@ mod private
         let status = response.status();
         let error_text = response.text().await.unwrap_or_else( | _ | "Unknown error".to_string() );
         Err( OpenAIError::Api( crate::error::ApiError {
-          code: Some( status.as_u16().to_string() ),
-          message: error_text,
-          param: None,
-          r#type: Some( "http_error".to_string() ),
+          code : Some( status.as_u16().to_string() ),
+          message : error_text,
+          param : None,
+          r#type : Some( "http_error".to_string() ),
         } ).into() )
       }
     }
@@ -173,10 +173,10 @@ mod private
         let request_body_size = serde_json::to_vec( body ).map( |v| v.len() ).unwrap_or( 0 );
         let request_metrics = RequestMetrics
         {
-          timestamp: start_time,
-          method: "POST".to_string(),
-          endpoint: path.to_string(),
-          headers: if diagnostics.config.collection.request_headers
+          timestamp : start_time,
+          method : "POST".to_string(),
+          endpoint : path.to_string(),
+          headers : if diagnostics.config.collection.request_headers
           {
             vec![ ( "Content-Type".to_string(), "application/json".to_string() ) ]
           }
@@ -184,8 +184,8 @@ mod private
           {
             vec![]
           },
-          body_size: request_body_size,
-          user_agent: "api_openai/0.2.0".to_string(),
+          body_size : request_body_size,
+          user_agent : "api_openai/0.2.0".to_string(),
         };
         diagnostics.record_request( &request_metrics );
       }
@@ -206,18 +206,18 @@ mod private
           if response.status().is_success()
           {
             let bytes = response.bytes().await
-              .map_err( | e | OpenAIError::Internal( format!( "Failed to read response bytes: {e}" ) ) )?;
+              .map_err( | e | OpenAIError::Internal( format!( "Failed to read response bytes : {e}" ) ) )?;
 
             // Record response metrics if diagnostics are enabled
             if let Some( diagnostics ) = &self.diagnostics
             {
               let response_metrics = ResponseMetrics
               {
-                timestamp: start_time,
+                timestamp : start_time,
                 status_code,
                 response_time,
-                body_size: bytes.len(),
-                headers: if diagnostics.config.collection.response_headers
+                body_size : bytes.len(),
+                headers : if diagnostics.config.collection.response_headers
                 {
                   vec![ ( "Content-Type".to_string(), "application/octet-stream".to_string() ) ]
                 }
@@ -225,7 +225,7 @@ mod private
                 {
                   vec![]
                 },
-                tokens_used: None,
+                tokens_used : None,
               };
               diagnostics.record_response( &response_metrics );
             }
@@ -236,10 +236,10 @@ mod private
           {
             let error_text = response.text().await.unwrap_or_else( | _ | "Unknown error".to_string() );
             Err( OpenAIError::Api( crate::error::ApiError {
-              code: Some( status_code.to_string() ),
-              message: error_text,
-              param: None,
-              r#type: Some( "http_error".to_string() ),
+              code : Some( status_code.to_string() ),
+              message : error_text,
+              param : None,
+              r#type : Some( "http_error".to_string() ),
             } ).into() )
           }
         }
@@ -260,10 +260,10 @@ mod private
       {
         let request_metrics = RequestMetrics
         {
-          timestamp: start_time,
-          method: "GET".to_string(),
-          endpoint: path.to_string(),
-          headers: if diagnostics.config.collection.request_headers
+          timestamp : start_time,
+          method : "GET".to_string(),
+          endpoint : path.to_string(),
+          headers : if diagnostics.config.collection.request_headers
           {
             vec![ ( "Accept".to_string(), "application/octet-stream".to_string() ) ]
           }
@@ -271,8 +271,8 @@ mod private
           {
             vec![]
           },
-          body_size: 0,
-          user_agent: "api_openai/0.2.0".to_string(),
+          body_size : 0,
+          user_agent : "api_openai/0.2.0".to_string(),
         };
         diagnostics.record_request( &request_metrics );
       }
@@ -293,18 +293,18 @@ mod private
           if response.status().is_success()
           {
             let bytes = response.bytes().await
-              .map_err( | e | OpenAIError::Internal( format!( "Failed to read response bytes: {e}" ) ) )?;
+              .map_err( | e | OpenAIError::Internal( format!( "Failed to read response bytes : {e}" ) ) )?;
 
             // Record response metrics if diagnostics are enabled
             if let Some( diagnostics ) = &self.diagnostics
             {
               let response_metrics = ResponseMetrics
               {
-                timestamp: start_time,
+                timestamp : start_time,
                 status_code,
                 response_time,
-                body_size: bytes.len(),
-                headers: if diagnostics.config.collection.response_headers
+                body_size : bytes.len(),
+                headers : if diagnostics.config.collection.response_headers
                 {
                   vec![ ( "Content-Type".to_string(), "application/octet-stream".to_string() ) ]
                 }
@@ -312,7 +312,7 @@ mod private
                 {
                   vec![]
                 },
-                tokens_used: None,
+                tokens_used : None,
               };
               diagnostics.record_response( &response_metrics );
             }
@@ -323,10 +323,10 @@ mod private
           {
             let error_text = response.text().await.unwrap_or_else( | _ | "Unknown error".to_string() );
             Err( OpenAIError::Api( crate::error::ApiError {
-              code: Some( status_code.to_string() ),
-              message: error_text,
-              param: None,
-              r#type: Some( "http_error".to_string() ),
+              code : Some( status_code.to_string() ),
+              message : error_text,
+              param : None,
+              r#type : Some( "http_error".to_string() ),
             } ).into() )
           }
         }

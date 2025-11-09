@@ -59,21 +59,21 @@ mod private
   {
     /// The content type (`input_text`, `input_audio`, `item_reference`, `text`).
     #[ serde( skip_serializing_if = "Option::is_none" ) ]
-    pub r#type: Option< String >,
+    pub r#type : Option< String >,
     /// The text content, used for `input_text` and `text` content types.
     #[ serde( skip_serializing_if = "Option::is_none" ) ]
-    pub text: Option< String >,
+    pub text : Option< String >,
     /// ID of a previous conversation item to reference
     /// (for `item_reference` content types in `response.create` events).
     /// These can reference both client and server created items.
     #[ serde( skip_serializing_if = "Option::is_none" ) ]
-    pub id: Option< String >,
+    pub id : Option< String >,
     /// Base64-encoded audio bytes, used for `input_audio` content type.
     #[ serde( skip_serializing_if = "Option::is_none" ) ]
-    pub audio: Option< String >,
+    pub audio : Option< String >,
     /// The transcript of the audio, used for `input_audio` content type.
     #[ serde( skip_serializing_if = "Option::is_none" ) ]
-    pub transcript: Option< String >,
+    pub transcript : Option< String >,
   }
 
   /// Represents a reference to an existing conversation item or a new item definition.
@@ -89,9 +89,9 @@ mod private
     Reference
     {
       /// The ID of the item to reference.
-      id: String,
+      id : String,
       /// The type of item to reference, must be "`item_reference`".
-      r#type: String
+      r#type : String
     },
     /// A full definition of a new item to include in the context.
     Item( RealtimeConversationItem ),
@@ -112,7 +112,7 @@ mod private
 
 } // end mod private
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use 
   {

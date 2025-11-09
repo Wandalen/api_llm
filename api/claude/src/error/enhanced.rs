@@ -391,7 +391,7 @@ mod private
   include!( "enhanced_impls.rs" );
 }
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   #[ cfg( feature = "error-handling" ) ]
   exposed use

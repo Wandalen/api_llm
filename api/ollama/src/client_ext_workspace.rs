@@ -55,7 +55,7 @@ mod private
 
           Ok( client )
         },
-        Err( e ) => Err( format_err!( "No workspace configuration found: {}", e ) ),
+        Err( e ) => Err( format_err!( "No workspace configuration found : {}", e ) ),
       }
     }
 
@@ -75,7 +75,7 @@ mod private
         use workspace_tools::{ workspace, WorkspaceError };
 
         let ws = workspace()
-          .map_err( | e | format_err!( "Failed to resolve workspace: {}", e ) )?;
+          .map_err( | e | format_err!( "Failed to resolve workspace : {}", e ) )?;
 
         // Load secrets from workspace secret/-secrets.sh
         let workspace_secrets = match ws.load_secrets_from_file( "-secrets.sh" )
@@ -83,12 +83,12 @@ mod private
           Ok( secrets ) => secrets,
           Err( WorkspaceError::IoError( _ ) ) => {
             // Secret file doesnt exist - try environment fallback
-            std::collections::HashMap::new()
+            std ::collections::HashMap::new()
           },
           Err( e ) => {
             // Sanitize error message to avoid exposing secret-related terms
             let sanitized = crate::workspace::WorkspaceSecretStore::sanitize_error( &format!( "{e}" ) );
-            return Err( format_err!( "Failed to load workspace configuration: {}", sanitized ) );
+            return Err( format_err!( "Failed to load workspace configuration : {}", sanitized ) );
           },
         };
 
@@ -170,12 +170,12 @@ mod private
           Ok( secrets ) => secrets,
           Err( WorkspaceError::IoError( _ ) ) => {
             // Secret file doesnt exist - use empty map, will fallback to environment
-            std::collections::HashMap::new()
+            std ::collections::HashMap::new()
           },
           Err( e ) => {
             // Sanitize error message to avoid exposing secret-related terms
             let sanitized = crate::workspace::WorkspaceSecretStore::sanitize_error( &format!( "{e}" ) );
-            return Err( format_err!( "Failed to load workspace configuration: {}", sanitized ) );
+            return Err( format_err!( "Failed to load workspace configuration : {}", sanitized ) );
           },
         };
 
@@ -248,7 +248,7 @@ mod private
 }
 
 #[ cfg( any( feature = "workspace", all( feature = "workspace", feature = "secret_management" ) ) ) ]
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use {};
 }

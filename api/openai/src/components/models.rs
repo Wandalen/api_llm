@@ -205,7 +205,7 @@ mod private
     pub fn compare( model_a : &EnhancedModel, model_b : &EnhancedModel ) -> Self
     {
       let context_ratio = f64::from( model_a.capabilities.max_context_window ) /
-                         f64::from( model_b.capabilities.max_context_window );
+                         f64 ::from( model_b.capabilities.max_context_window );
 
       let cost_ratio = if let ( Some( pricing_a ), Some( pricing_b ) ) = ( &model_a.pricing, &model_b.pricing )
       {
@@ -221,9 +221,9 @@ mod private
 
       Self
       {
-        context_window_ratio: context_ratio,
-        cost_efficiency_ratio: cost_ratio,
-        capability_score_diff: score_a - score_b,
+        context_window_ratio : context_ratio,
+        cost_efficiency_ratio : cost_ratio,
+        capability_score_diff : score_a - score_b,
       }
     }
   }
@@ -239,7 +239,7 @@ mod private
   }
 } // end mod private
 
-crate::mod_interface!
+crate ::mod_interface!
 {
   exposed use
   {

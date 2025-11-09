@@ -73,7 +73,7 @@ fn test_chat_completion_request_basic_curl()
   assert!( curl_command.contains( "curl" ) );
   assert!( curl_command.contains( "https://router.huggingface.co/v1/chat/completions" ) );
   assert!( curl_command.contains( "POST" ) );
-  assert!( curl_command.contains( "Content-Type: application/json" ) );
+  assert!( curl_command.contains( "Content-Type : application/json" ) );
   assert!( curl_command.contains( "Authorization" ) );
 }
 
@@ -181,7 +181,7 @@ fn test_curl_json_serialization()
       ChatMessage
       {
   role : "user".to_string(),
-  content : "Test with special chars: \"quotes\" and 'apostrophes'".to_string(),
+  content : "Test with special chars : \"quotes\" and 'apostrophes'".to_string(),
   tool_calls : None,
   tool_call_id : None,
       }
@@ -366,7 +366,7 @@ fn test_curl_special_characters_escaping()
       ChatMessage
       {
   role : "user".to_string(),
-  content : "Test with: \"quotes\", 'apostrophes', and \nnewlines".to_string(),
+  content : "Test with : \"quotes\", 'apostrophes', and \nnewlines".to_string(),
   tool_calls : None,
   tool_call_id : None,
       }

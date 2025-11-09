@@ -578,10 +578,10 @@ impl TranslationPlatform
 
   if let Some(ref context) = request.context
   {
-      prompt.push_str(&format!(" Context: {}", context));
+      prompt.push_str(&format!(" Context : {}", context));
   }
 
-  prompt.push_str(&format!("\n\nText: {}\n\nTranslation:", request.text));
+  prompt.push_str(&format!("\n\nText : {}\n\nTranslation:", request.text));
 
   Ok(prompt)
   }
@@ -785,10 +785,10 @@ impl TranslationSystemPlatform
   loop
   {
       print!("\n > ");
-      io::stdout().flush()?;
+      io ::stdout().flush()?;
 
       let mut input = String::new();
-      io::stdin().read_line(&mut input)?;
+      io ::stdin().read_line(&mut input)?;
       let input = input.trim();
 
       if input.is_empty()
@@ -812,7 +812,7 @@ impl TranslationSystemPlatform
   "/export" => self.export_translations()?,
   cmd if cmd.starts_with('/') =>
   {
-          println!("❌ Unknown command: {}. Type /help for available commands.", cmd);
+          println!("❌ Unknown command : {}. Type /help for available commands.", cmd);
   }
   text => {
           // Direct translation input
@@ -861,7 +861,7 @@ impl TranslationSystemPlatform
   self.update_stats(&result, start_time.elapsed().as_millis() as u64);
       }
       Err(e) => {
-  println!("❌ Translation failed: {}", e);
+  println!("❌ Translation failed : {}", e);
       }
   }
 
@@ -874,10 +874,10 @@ impl TranslationSystemPlatform
   println!("\n📝 Interactive Translation");
   println!("=========================");
   
-  print!("Enter text to translate: ");
-  io::stdout().flush()?;
+  print!("Enter text to translate : ");
+  io ::stdout().flush()?;
   let mut text = String::new();
-  io::stdin().read_line(&mut text)?;
+  io ::stdin().read_line(&mut text)?;
   let text = text.trim();
 
   if text.is_empty()
@@ -903,9 +903,9 @@ impl TranslationSystemPlatform
 
   // Optional context
   print!("Context (optional, press Enter to skip): ");
-  io::stdout().flush()?;
+  io ::stdout().flush()?;
   let mut context = String::new();
-  io::stdin().read_line(&mut context)?;
+  io ::stdin().read_line(&mut context)?;
   let context = context.trim();
 
   let mut request = TranslationRequest::new(text.to_string(), source_lang, target_lang)
@@ -927,7 +927,7 @@ impl TranslationSystemPlatform
   self.update_stats(&result, start_time.elapsed().as_millis() as u64);
       }
       Err(e) => {
-  println!("❌ Translation failed: {}", e);
+  println!("❌ Translation failed : {}", e);
       }
   }
 
@@ -946,9 +946,9 @@ impl TranslationSystemPlatform
   loop
   {
       print!("{}: ", texts.len() + 1);
-      io::stdout().flush()?;
+      io ::stdout().flush()?;
       let mut text = String::new();
-      io::stdin().read_line(&mut text)?;
+      io ::stdin().read_line(&mut text)?;
       let text = text.trim();
       
       if text.is_empty()
@@ -985,15 +985,15 @@ impl TranslationSystemPlatform
   println!("\n📋 Batch Results:");
   for (i, result) in results.iter().enumerate()
   {
-          println!("\n{}. Original: {}", i + 1, batch_request.texts[i]);
+          println!("\n{}. Original : {}", i + 1, batch_request.texts[i]);
           match result
           {
       Ok(translation) => {
-              println!("   Translation: {}", translation.translated_text);
-              println!("   Confidence: {:.1}%", translation.confidence_score * 100.0);
+              println!("   Translation : {}", translation.translated_text);
+              println!("   Confidence : {:.1}%", translation.confidence_score * 100.0);
       }
       Err(e) => {
-              println!("   ❌ Failed: {}", e);
+              println!("   ❌ Failed : {}", e);
       }
           }
   }
@@ -1002,7 +1002,7 @@ impl TranslationSystemPlatform
   self.stats.total_response_time_ms += start_time.elapsed().as_millis() as u64;
       }
       Err(e) => {
-  println!("❌ Batch translation failed: {}", e);
+  println!("❌ Batch translation failed : {}", e);
       }
   }
 
@@ -1015,10 +1015,10 @@ impl TranslationSystemPlatform
   println!("\n🔍 Language Detection");
   println!("====================");
   
-  print!("Enter text to detect language: ");
-  io::stdout().flush()?;
+  print!("Enter text to detect language : ");
+  io ::stdout().flush()?;
   let mut text = String::new();
-  io::stdin().read_line(&mut text)?;
+  io ::stdin().read_line(&mut text)?;
   let text = text.trim();
 
   if text.is_empty()
@@ -1033,7 +1033,7 @@ impl TranslationSystemPlatform
   {
       Ok(result) => {
   println!("\n📊 Detection Results:");
-  println!("Detected Language: {} ({:.1}% confidence)", 
+  println!("Detected Language : {} ({:.1}% confidence)", 
                  result.detected_language.display_with_code(), 
                  result.confidence * 100.0);
   
@@ -1046,12 +1046,12 @@ impl TranslationSystemPlatform
           }
   }
   
-  println!("Sample analyzed: \"{}\"", result.sample_text);
+  println!("Sample analyzed : \"{}\"", result.sample_text);
   
   self.stats.language_detections_performed += 1;
       }
       Err(e) => {
-  println!("❌ Language detection failed: {}", e);
+  println!("❌ Language detection failed : {}", e);
       }
   }
 
@@ -1073,15 +1073,15 @@ impl TranslationSystemPlatform
                request.text);
       if let Some(ref context) = request.context
       {
-  println!("   Context: {}", context);
+  println!("   Context : {}", context);
       }
   }
 
-  print!("\nSelect sample (1-{}) or press Enter to skip: ", self.sample_requests.len());
-  io::stdout().flush()?;
+  print!("\nSelect sample (1-{}) or press Enter to skip : ", self.sample_requests.len());
+  io ::stdout().flush()?;
   
   let mut input = String::new();
-  io::stdin().read_line(&mut input)?;
+  io ::stdin().read_line(&mut input)?;
   let input = input.trim();
   
   if let Ok(index) = input.parse::< usize >()
@@ -1100,7 +1100,7 @@ impl TranslationSystemPlatform
       self.update_stats(&result, start_time.elapsed().as_millis() as u64);
           }
           Err(e) => {
-      println!("❌ Sample translation failed: {}", e);
+      println!("❌ Sample translation failed : {}", e);
           }
   }
       } else {
@@ -1131,7 +1131,7 @@ impl TranslationSystemPlatform
   println!("\n* Languages with complex writing systems");
   
   let total_pairs = languages.len() * (languages.len() - 1);
-  println!("Total supported translation pairs: {}", total_pairs);
+  println!("Total supported translation pairs : {}", total_pairs);
   }
 
   /// Show system statistics
@@ -1141,19 +1141,19 @@ impl TranslationSystemPlatform
   
   println!("\n📊 System Statistics");
   println!("===================");
-  println!("Individual Translations: {}", self.stats.translations_completed);
-  println!("Batch Translations: {}", self.stats.batch_translations_completed);
-  println!("Language Detections: {}", self.stats.language_detections_performed);
-  println!("Total Platform Translations: {}", platform_stats.total_translations);
-  println!("Average Quality Score: {:.2}", platform_stats.average_quality_score);
-  println!("Average Response Time: {:.2}ms", 
+  println!("Individual Translations : {}", self.stats.translations_completed);
+  println!("Batch Translations : {}", self.stats.batch_translations_completed);
+  println!("Language Detections : {}", self.stats.language_detections_performed);
+  println!("Total Platform Translations : {}", platform_stats.total_translations);
+  println!("Average Quality Score : {:.2}", platform_stats.average_quality_score);
+  println!("Average Response Time : {:.2}ms", 
              if self.stats.translations_completed > 0
              {
                self.stats.total_response_time_ms as f64 / self.stats.translations_completed as f64
              } else {
                0.0
              });
-  println!("Cache Size: {}", self.translation_platform.translation_cache.len());
+  println!("Cache Size : {}", self.translation_platform.translation_cache.len());
   
   if !platform_stats.popular_language_pairs.is_empty()
   {
@@ -1175,9 +1175,9 @@ impl TranslationSystemPlatform
   println!("=========================");
   
   print!("Export filename (press Enter for default): ");
-  io::stdout().flush()?;
+  io ::stdout().flush()?;
   let mut filename = String::new();
-  io::stdin().read_line(&mut filename)?;
+  io ::stdin().read_line(&mut filename)?;
   let filename = filename.trim();
   
   let filename = if filename.is_empty()
@@ -1197,8 +1197,8 @@ impl TranslationSystemPlatform
       "cache_size": self.translation_platform.translation_cache.len()
   });
 
-  std::fs::write(&filename, serde_json::to_string_pretty(&export_data)?)?;
-  println!("✅ Translation data exported to: {}", filename);
+  std ::fs::write(&filename, serde_json::to_string_pretty(&export_data)?)?;
+  println!("✅ Translation data exported to : {}", filename);
   
   Ok(())
   }
@@ -1214,11 +1214,11 @@ impl TranslationSystemPlatform
       println!("{}. {}", i + 1, lang.display_with_code());
   }
   
-  print!("Enter number (1-{}) or language code: ", languages.len());
-  io::stdout().flush()?;
+  print!("Enter number (1-{}) or language code : ", languages.len());
+  io ::stdout().flush()?;
   
   let mut input = String::new();
-  io::stdin().read_line(&mut input)?;
+  io ::stdin().read_line(&mut input)?;
   let input = input.trim();
   
   // Try parsing as number first
@@ -1250,10 +1250,10 @@ impl TranslationSystemPlatform
   println!("4. Expert - Near-native quality translation");
   
   print!("Select quality (1-4): ");
-  io::stdout().flush()?;
+  io ::stdout().flush()?;
   
   let mut input = String::new();
-  io::stdin().read_line(&mut input)?;
+  io ::stdin().read_line(&mut input)?;
   
   match input.trim()
   {
@@ -1273,18 +1273,18 @@ impl TranslationSystemPlatform
   {
   println!("\n✨ Translation Result");
   println!("====================");
-  println!("Translation: {}", result.translated_text);
+  println!("Translation : {}", result.translated_text);
   println!();
-  println!("Quality Assessment: {}", result.quality_assessment.as_str());
-  println!("Confidence: {:.1}%", result.confidence_score * 100.0);
-  println!("Response Time: {}ms", result.response_time_ms);
-  println!("Model Used: {}", result.model_used);
+  println!("Quality Assessment : {}", result.quality_assessment.as_str());
+  println!("Confidence : {:.1}%", result.confidence_score * 100.0);
+  println!("Response Time : {}ms", result.response_time_ms);
+  println!("Model Used : {}", result.model_used);
   
   println!("\nQuality Metrics:");
-  println!("  Fluency: {}/100", result.quality_metrics.fluency_score);
-  println!("  Adequacy: {}/100", result.quality_metrics.adequacy_score);
-  println!("  Lexical Accuracy: {}/100", result.quality_metrics.lexical_accuracy);
-  println!("  Grammar: {}/100", result.quality_metrics.grammar_score);
+  println!("  Fluency : {}/100", result.quality_metrics.fluency_score);
+  println!("  Adequacy : {}/100", result.quality_metrics.adequacy_score);
+  println!("  Lexical Accuracy : {}/100", result.quality_metrics.lexical_accuracy);
+  println!("  Grammar : {}/100", result.quality_metrics.grammar_score);
   }
 
   /// Update system statistics

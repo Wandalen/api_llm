@@ -11,9 +11,9 @@ mod rate_limiting_integration_tests
   {
     Client,
     ClientApiAccessors,
-    environment::{ OpenaiEnvironmentImpl, OpenAIRecommended },
-    secret::Secret,
-    enhanced_rate_limiting::{ EnhancedRateLimitingConfig, RateLimitingAlgorithm },
+    environment ::{ OpenaiEnvironmentImpl, OpenAIRecommended },
+    secret ::Secret,
+    enhanced_rate_limiting ::{ EnhancedRateLimitingConfig, RateLimitingAlgorithm },
   };
 
   use core::time::Duration;
@@ -186,8 +186,8 @@ mod no_rate_limiting_integration_tests
   use api_openai::
   {
     Client,
-    environment::{ OpenaiEnvironmentImpl, OpenAIRecommended },
-    secret::Secret,
+    environment ::{ OpenaiEnvironmentImpl, OpenAIRecommended },
+    secret ::Secret,
   };
 
   #[ tokio::test ]
