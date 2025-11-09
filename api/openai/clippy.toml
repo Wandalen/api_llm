@@ -1,0 +1,40 @@
+# Custom clippy configuration for api_openai
+# Extends workspace-level configuration with project-specific rules
+
+# === Threshold Configuration ===
+
+# Allow more arguments for API methods and builder patterns
+too-many-arguments-threshold = 7
+
+# Allow more lines in functions for comprehensive API handlers
+too-many-lines-threshold = 150
+
+# Allow complex types for comprehensive API coverage
+type-complexity-threshold = 250
+
+# Allow larger enum variants for API response structures
+enum-variant-size-threshold = 300
+
+# === Behavioral Configuration ===
+
+# Allow certain patterns that might not follow all Rust conventions
+# but are necessary for API client functionality
+
+# Allow single character lifetime names in generics
+# Allow assertions in non-test code for API validation
+# Allow default trait access patterns for API objects
+
+# === Documentation Requirements ===
+
+# Require documentation for error handling in public APIs
+# This helps users understand potential failure modes
+
+# === Performance and Security ===
+
+# Focus on preventing common performance and security issues
+# while allowing flexibility needed for API client patterns
+
+# === Testing Configuration ===
+
+# Allow testing patterns that might be restricted in production code
+# Tests need comprehensive coverage and may require complex setups

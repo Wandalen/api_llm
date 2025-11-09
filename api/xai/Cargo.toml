@@ -1,0 +1,169 @@
+[package]
+name = "api_xai"
+version = "0.1.0"
+edition = "2021"
+authors = [
+  "Kostiantyn Wandalen <wandalen@obox.systems>",
+]
+license = "MIT"
+readme = "readme.md"
+documentation = "https://docs.rs/api_xai"
+repository = "https://github.com/Wandalen/api_llm/tree/master/api/xai"
+homepage = "https://github.com/Wandalen/api_llm/tree/master/api/xai"
+description = """
+X.AI Grok API client for accessing large language models (LLMs).
+"""
+categories = [ "algorithms", "development-tools" ]
+keywords = [ "fundamental", "general-purpose", "xai", "grok", "ai" ]
+
+[lints]
+workspace = true
+
+[package.metadata.docs.rs]
+features = [ "full" ]
+all-features = false
+
+[features]
+# Default enables everything for ease of use
+default = [ "full" ]
+
+# 'full' enables all features, including the base 'enabled'
+full = [
+  "enabled",
+  "integration",
+  "streaming",
+  "tool_calling",
+  "retry",
+  "circuit_breaker",
+  "rate_limiting",
+  "failover",
+  "enhanced_tools",
+  "health_checks",
+  "structured_logging",
+  "count_tokens",
+  "caching",
+  "input_validation",
+  "curl_diagnostics",
+  "batch_operations",
+  "performance_metrics",
+  "sync_api",
+]
+
+# 'enabled' is the master switch for the crate's core functionality
+enabled = [
+  "dep:mod_interface",
+  "dep:error_tools",
+  "dep:workspace_tools",
+  "dep:serde",
+  "dep:serde_json",
+  "dep:secrecy",
+  "dep:former",
+  "dep:futures-core",
+  "dep:futures-util",
+  "dep:tokio",
+  "dep:reqwest",
+  "dep:url",
+]
+
+# Feature for running integration tests with real API
+integration = []
+
+# Feature for Server-Sent Events streaming support
+streaming = [ "dep:eventsource-stream", "dep:bytes" ]
+
+# Feature for tool calling functionality
+tool_calling = []
+
+# Feature for retry logic functionality
+retry = []
+
+# Feature for circuit breaker functionality
+circuit_breaker = []
+
+# Feature for rate limiting functionality
+rate_limiting = [ "tokio/time" ]
+
+# Feature for failover support functionality
+failover = []
+
+# Feature for enhanced function calling (parallel execution, helpers)
+enhanced_tools = []
+
+# Feature for health checks functionality
+health_checks = []
+
+# Feature for structured logging with tracing
+structured_logging = [ "dep:tracing" ]
+
+# Feature for token counting
+count_tokens = [ "dep:tiktoken-rs" ]
+
+# Feature for response caching
+caching = [ "dep:lru" ]
+
+# Feature for input validation
+input_validation = []
+
+# Feature for CURL diagnostics
+curl_diagnostics = []
+
+# Feature for batch operations
+batch_operations = [ "tokio/sync" ]
+
+# Feature for performance metrics
+performance_metrics = [ "dep:prometheus" ]
+
+# Feature for sync API
+sync_api = [ "tokio/rt-multi-thread" ]
+
+[dependencies]
+
+## wTools ecosystem dependencies
+
+mod_interface = { workspace = true, optional = true }
+error_tools = { workspace = true, optional = true }
+workspace_tools = { workspace = true, features = [ "secrets" ], optional = true }
+
+## Serialization dependencies
+
+serde = { workspace = true, features = [ "derive" ], optional = true }
+serde_json = { workspace = true, optional = true }
+secrecy = { workspace = true, optional = true }
+
+## Builder pattern dependencies
+
+former = { workspace = true, optional = true }
+
+## Async dependencies
+
+futures-core = { workspace = true, optional = true }
+futures-util = { workspace = true, optional = true }
+tokio = { workspace = true, features = [ "macros" ], optional = true }
+
+## HTTP dependencies
+
+reqwest = { workspace = true, features = [ "json", "rustls-tls", "stream" ], default-features = false, optional = true }
+url = { workspace = true, optional = true }
+
+## Streaming dependencies (optional)
+
+eventsource-stream = { workspace = true, optional = true }
+bytes = { workspace = true, optional = true }
+
+## Logging dependencies (optional)
+
+tracing = { workspace = true, optional = true }
+
+## New feature dependencies
+
+tiktoken-rs = { workspace = true, optional = true }
+lru = { workspace = true, optional = true }
+prometheus = { workspace = true, optional = true }
+
+[dev-dependencies]
+
+## Runtime for examples and tests
+
+tokio = { workspace = true, features = [ "rt-multi-thread", "macros" ] }
+futures-util = { workspace = true }
+serde_json = { workspace = true }

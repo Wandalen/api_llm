@@ -1,0 +1,768 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "xAI REST API",
+    "description": "The xAI Enterprise API is a robust, high-performance RESTful interface designed for seamless integration into existing systems. It offers advanced AI capabilities with full compatibility with the OpenAI REST API. Source: https://github.com/zuplo-samples/xAI-OpenAPI",
+    "license": { "name": "MIT" },
+    "version": "1.0.0"
+  },
+  "servers": [{ "url": "https://api.x.ai" }],
+  "security": [{ "bearerAuth": [] }],
+  "paths": {
+    "/v1/api-key": {
+      "get": {
+        "tags": ["API Keys"],
+        "summary": "Get API Key Info",
+        "description": "Get information about an API key, including name, status, permissions and users who created or modified this key.",
+        "operationId": "getApiKeyInfo",
+        "parameters": [{ "$ref": "#/components/parameters/Authorization" }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ApiKey" }
+              }
+            }
+          },
+          "400": { "description": "Bad request" }
+        }
+      }
+    },
+    "/v1/chat/completions": {
+      "post": {
+        "summary": "Chat Completions",
+        "tags": ["Chat"],
+        "description": "Create a language model response for a given chat conversation. This endpoint is compatible with the OpenAI API.",
+        "operationId": "createChatCompletion",
+        "parameters": [{ "$ref": "#/components/parameters/Authorization" }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ChatRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ChatResponse" }
+              }
+            }
+          },
+          "400": { "description": "Bad request" }
+        }
+      }
+    },
+    "/v1/completions": {
+      "post": {
+        "summary": "Completions (Legacy)",
+        "tags": ["Completions"],
+        "description": "Create a language model response for a given prompt. This endpoint is compatible with the OpenAI API. (Legacy endpoint, use /chat/completions instead)",
+        "operationId": "createCompletion",
+        "parameters": [{ "$ref": "#/components/parameters/Authorization" }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/SampleRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SampleResponse" }
+              }
+            }
+          },
+          "400": { "description": "Bad request" }
+        }
+      }
+    },
+    "/v1/complete": {
+      "post": {
+        "summary": "Complete (Anthropic-compatible)",
+        "tags": ["Completions"],
+        "description": "Complete endpoint. This endpoint is compatible with the Anthropic API.",
+        "operationId": "complete",
+        "parameters": [{ "$ref": "#/components/parameters/Authorization" }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CompleteRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CompleteResponse" }
+              }
+            }
+          },
+          "400": { "description": "Bad request" }
+        }
+      }
+    },
+    "/v1/messages": {
+      "post": {
+        "tags": ["Messages"],
+        "summary": "Create Messages (Anthropic-compatible)",
+        "description": "Messages endpoint. This endpoint is compatible with the Anthropic API.",
+        "operationId": "createMessages",
+        "parameters": [{ "$ref": "#/components/parameters/Authorization" }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/MessageRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/MessageResponse" }
+              }
+            }
+          },
+          "400": { "description": "Bad request" }
+        }
+      }
+    },
+    "/v1/models": {
+      "get": {
+        "tags": ["Models"],
+        "summary": "List Models",
+        "description": "List all models available. OpenAI-compatible endpoint.",
+        "operationId": "listModels",
+        "parameters": [{ "$ref": "#/components/parameters/Authorization" }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ListModelsResponse" }
+              }
+            }
+          },
+          "400": { "description": "Bad request" }
+        }
+      }
+    },
+    "/v1/models/{model_id}": {
+      "get": {
+        "tags": ["Models"],
+        "summary": "Get Model",
+        "description": "Get information about a specific model. OpenAI-compatible endpoint.",
+        "operationId": "getModel",
+        "parameters": [
+          {
+            "name": "model_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          { "$ref": "#/components/parameters/Authorization" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Model" }
+              }
+            }
+          },
+          "400": { "description": "Bad request" },
+          "404": { "description": "Model not found" }
+        }
+      }
+    },
+    "/v1/language-models": {
+      "get": {
+        "summary": "List Language Models",
+        "tags": ["Models"],
+        "description": "List all language models available with detailed information.",
+        "operationId": "listLanguageModels",
+        "parameters": [{ "$ref": "#/components/parameters/Authorization" }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ListLanguageModelsResponse" }
+              }
+            }
+          },
+          "400": { "description": "Bad request" }
+        }
+      }
+    },
+    "/v1/language-models/{model_id}": {
+      "get": {
+        "tags": ["Models"],
+        "summary": "Get Language Model",
+        "description": "Get detailed information about a language model.",
+        "operationId": "getLanguageModel",
+        "parameters": [
+          {
+            "name": "model_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          { "$ref": "#/components/parameters/Authorization" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/LanguageModel" }
+              }
+            }
+          },
+          "400": { "description": "Bad request" },
+          "404": { "description": "Model not found" }
+        }
+      }
+    },
+    "/v1/embeddings": {
+      "post": {
+        "summary": "Create Embeddings",
+        "tags": ["Embeddings"],
+        "description": "Create an embedding vector representation corresponding to the input text. OpenAI-compatible endpoint.",
+        "operationId": "createEmbedding",
+        "parameters": [{ "$ref": "#/components/parameters/Authorization" }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/EmbeddingRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/EmbeddingResponse" }
+              }
+            }
+          },
+          "400": { "description": "Bad request" }
+        }
+      }
+    },
+    "/v1/embedding-models": {
+      "get": {
+        "summary": "List Embedding Models",
+        "tags": ["Embeddings"],
+        "description": "List all embedding models available.",
+        "operationId": "listEmbeddingModels",
+        "parameters": [{ "$ref": "#/components/parameters/Authorization" }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ListEmbeddingModelsResponse" }
+              }
+            }
+          },
+          "400": { "description": "Bad request" }
+        }
+      }
+    },
+    "/v1/embedding-models/{model_id}": {
+      "get": {
+        "summary": "Get Embedding Model",
+        "tags": ["Embeddings"],
+        "description": "Get detailed information about an embedding model.",
+        "operationId": "getEmbeddingModel",
+        "parameters": [
+          {
+            "name": "model_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          { "$ref": "#/components/parameters/Authorization" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/EmbeddingModel" }
+              }
+            }
+          },
+          "400": { "description": "Bad request" },
+          "404": { "description": "Model not found" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "API Key obtained from xAI console. Format: Bearer xai-YOUR_API_KEY"
+      }
+    },
+    "parameters": {
+      "Authorization": {
+        "name": "Authorization",
+        "in": "header",
+        "description": "API Key, obtained from xAI console. Format: Bearer YOUR_API_KEY",
+        "required": true,
+        "schema": { "type": "string" },
+        "example": "Bearer xai-abc1234"
+      }
+    },
+    "schemas": {
+      "ChatRequest": {
+        "type": "object",
+        "required": ["model", "messages"],
+        "properties": {
+          "model": {
+            "type": "string",
+            "description": "Model ID (e.g., 'grok-beta')",
+            "example": "grok-beta"
+          },
+          "messages": {
+            "type": "array",
+            "description": "Array of message objects",
+            "items": { "$ref": "#/components/schemas/Message" }
+          },
+          "temperature": {
+            "type": "number",
+            "format": "float",
+            "description": "Sampling temperature (0-2)",
+            "minimum": 0,
+            "maximum": 2,
+            "nullable": true
+          },
+          "max_tokens": {
+            "type": "integer",
+            "description": "Maximum tokens to generate",
+            "nullable": true
+          },
+          "stream": {
+            "type": "boolean",
+            "description": "Enable SSE streaming",
+            "nullable": true
+          },
+          "tools": {
+            "type": "array",
+            "description": "Available function/tool definitions",
+            "items": { "$ref": "#/components/schemas/Tool" },
+            "nullable": true
+          },
+          "tool_choice": {
+            "description": "Tool selection strategy",
+            "nullable": true
+          },
+          "top_p": {
+            "type": "number",
+            "format": "float",
+            "description": "Nucleus sampling parameter",
+            "nullable": true
+          },
+          "frequency_penalty": {
+            "type": "number",
+            "format": "float",
+            "description": "Frequency penalty (-2 to 2)",
+            "nullable": true
+          },
+          "presence_penalty": {
+            "type": "number",
+            "format": "float",
+            "description": "Presence penalty (-2 to 2)",
+            "nullable": true
+          },
+          "stop": {
+            "type": "array",
+            "description": "Stop sequences",
+            "items": { "type": "string" },
+            "nullable": true
+          },
+          "user": {
+            "type": "string",
+            "description": "End-user identifier",
+            "nullable": true
+          }
+        }
+      },
+      "ChatResponse": {
+        "type": "object",
+        "required": ["id", "object", "created", "model", "choices"],
+        "properties": {
+          "id": { "type": "string" },
+          "object": { "type": "string", "example": "chat.completion" },
+          "created": { "type": "integer", "format": "int64" },
+          "model": { "type": "string" },
+          "choices": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Choice" }
+          },
+          "usage": { "$ref": "#/components/schemas/Usage" },
+          "system_fingerprint": { "type": "string", "nullable": true }
+        }
+      },
+      "Message": {
+        "type": "object",
+        "required": ["role", "content"],
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": ["system", "user", "assistant", "tool", "function"]
+          },
+          "content": {
+            "description": "String or array of content parts",
+            "oneOf": [
+              { "type": "string" },
+              { "type": "array", "items": { "type": "object" } }
+            ]
+          },
+          "name": { "type": "string", "nullable": true },
+          "tool_calls": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ToolCall" },
+            "nullable": true
+          }
+        }
+      },
+      "Choice": {
+        "type": "object",
+        "required": ["index", "message"],
+        "properties": {
+          "index": { "type": "integer" },
+          "message": { "type": "object" },
+          "finish_reason": {
+            "type": "string",
+            "enum": ["stop", "length", "tool_calls", "content_filter"],
+            "nullable": true
+          }
+        }
+      },
+      "Usage": {
+        "type": "object",
+        "required": ["prompt_tokens", "completion_tokens", "total_tokens"],
+        "properties": {
+          "prompt_tokens": { "type": "integer" },
+          "completion_tokens": { "type": "integer" },
+          "total_tokens": { "type": "integer" }
+        }
+      },
+      "Tool": {
+        "type": "object",
+        "required": ["type", "function"],
+        "properties": {
+          "type": { "type": "string", "enum": ["function"] },
+          "function": {
+            "type": "object",
+            "required": ["name", "parameters"],
+            "properties": {
+              "name": { "type": "string" },
+              "description": { "type": "string" },
+              "parameters": { "type": "object" }
+            }
+          }
+        }
+      },
+      "ToolCall": {
+        "type": "object",
+        "required": ["id", "type", "function"],
+        "properties": {
+          "id": { "type": "string" },
+          "type": { "type": "string" },
+          "function": {
+            "type": "object",
+            "required": ["name", "arguments"],
+            "properties": {
+              "name": { "type": "string" },
+              "arguments": { "type": "string" }
+            }
+          }
+        }
+      },
+      "Model": {
+        "type": "object",
+        "required": ["id", "created", "object", "owned_by"],
+        "properties": {
+          "id": { "type": "string" },
+          "created": { "type": "integer", "format": "int64" },
+          "object": { "type": "string" },
+          "owned_by": { "type": "string" }
+        }
+      },
+      "ListModelsResponse": {
+        "type": "object",
+        "required": ["models"],
+        "properties": {
+          "models": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Model" }
+          }
+        }
+      },
+      "LanguageModel": {
+        "type": "object",
+        "description": "Detailed language model information",
+        "required": ["id", "created", "object", "owned_by"],
+        "properties": {
+          "id": { "type": "string" },
+          "created": { "type": "integer", "format": "int64" },
+          "object": { "type": "string" },
+          "owned_by": { "type": "string" },
+          "version": { "type": "string" },
+          "input_modalities": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "output_modalities": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "prompt_text_token_price": { "type": "integer", "format": "int64" },
+          "prompt_image_token_price": { "type": "integer", "format": "int64" },
+          "completion_text_token_price": { "type": "integer", "format": "int64" }
+        }
+      },
+      "ListLanguageModelsResponse": {
+        "type": "object",
+        "required": ["models"],
+        "properties": {
+          "models": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/LanguageModel" }
+          }
+        }
+      },
+      "EmbeddingRequest": {
+        "type": "object",
+        "required": ["input", "model"],
+        "properties": {
+          "input": {
+            "description": "String or array of strings to embed",
+            "oneOf": [
+              { "type": "string" },
+              { "type": "array", "items": { "type": "string" } }
+            ]
+          },
+          "model": { "type": "string", "example": "v1" },
+          "encoding_format": {
+            "type": "string",
+            "enum": ["float", "base64"],
+            "nullable": true
+          },
+          "dimensions": {
+            "type": "integer",
+            "description": "Output embedding dimensions",
+            "nullable": true
+          },
+          "user": { "type": "string", "nullable": true }
+        }
+      },
+      "EmbeddingResponse": {
+        "type": "object",
+        "required": ["object", "model", "data"],
+        "properties": {
+          "object": { "type": "string", "example": "list" },
+          "model": { "type": "string" },
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Embedding" }
+          },
+          "usage": { "$ref": "#/components/schemas/Usage" }
+        }
+      },
+      "Embedding": {
+        "type": "object",
+        "required": ["index", "embedding", "object"],
+        "properties": {
+          "index": { "type": "integer" },
+          "embedding": {
+            "description": "Float array or base64 string",
+            "oneOf": [
+              { "type": "array", "items": { "type": "number" } },
+              { "type": "string" }
+            ]
+          },
+          "object": { "type": "string", "example": "embedding" }
+        }
+      },
+      "EmbeddingModel": {
+        "type": "object",
+        "required": ["id", "created", "object", "owned_by"],
+        "properties": {
+          "id": { "type": "string" },
+          "created": { "type": "integer", "format": "int64" },
+          "object": { "type": "string" },
+          "owned_by": { "type": "string" },
+          "version": { "type": "string" },
+          "input_modalities": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "prompt_text_token_price": { "type": "integer", "format": "int64" },
+          "prompt_image_token_price": { "type": "integer", "format": "int64" }
+        }
+      },
+      "ListEmbeddingModelsResponse": {
+        "type": "object",
+        "required": ["models"],
+        "properties": {
+          "models": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/EmbeddingModel" }
+          }
+        }
+      },
+      "SampleRequest": {
+        "type": "object",
+        "description": "Legacy completions endpoint request",
+        "required": ["prompt", "model"],
+        "properties": {
+          "prompt": {
+            "description": "String or array of strings",
+            "oneOf": [
+              { "type": "string" },
+              { "type": "array", "items": { "type": "string" } }
+            ]
+          },
+          "model": { "type": "string" },
+          "max_tokens": { "type": "integer", "nullable": true },
+          "temperature": { "type": "number", "format": "float", "nullable": true },
+          "top_p": { "type": "number", "format": "float", "nullable": true },
+          "stream": { "type": "boolean", "nullable": true },
+          "stop": {
+            "type": "array",
+            "items": { "type": "string" },
+            "nullable": true
+          }
+        }
+      },
+      "SampleResponse": {
+        "type": "object",
+        "required": ["id", "object", "created", "model", "choices"],
+        "properties": {
+          "id": { "type": "string" },
+          "object": { "type": "string", "example": "text_completion" },
+          "created": { "type": "integer", "format": "int64" },
+          "model": { "type": "string" },
+          "choices": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "index": { "type": "integer" },
+                "text": { "type": "string" },
+                "finish_reason": { "type": "string" }
+              }
+            }
+          },
+          "usage": { "$ref": "#/components/schemas/Usage" }
+        }
+      },
+      "CompleteRequest": {
+        "type": "object",
+        "description": "Anthropic-compatible completions",
+        "required": ["model", "prompt", "max_tokens_to_sample"],
+        "properties": {
+          "model": { "type": "string" },
+          "prompt": { "type": "string" },
+          "max_tokens_to_sample": { "type": "integer" },
+          "temperature": { "type": "number", "format": "float", "nullable": true },
+          "top_p": { "type": "number", "format": "float", "nullable": true },
+          "top_k": { "type": "integer", "nullable": true },
+          "stop_sequences": {
+            "type": "array",
+            "items": { "type": "string" },
+            "nullable": true
+          },
+          "stream": { "type": "boolean", "nullable": true }
+        }
+      },
+      "CompleteResponse": {
+        "type": "object",
+        "required": ["type", "id", "completion", "model"],
+        "properties": {
+          "type": { "type": "string", "example": "completion" },
+          "id": { "type": "string" },
+          "completion": { "type": "string" },
+          "model": { "type": "string" },
+          "stop_reason": { "type": "string", "nullable": true }
+        }
+      },
+      "MessageRequest": {
+        "type": "object",
+        "description": "Anthropic-compatible messages endpoint",
+        "required": ["model", "messages", "max_tokens"],
+        "properties": {
+          "model": { "type": "string" },
+          "messages": {
+            "type": "array",
+            "items": { "type": "object" }
+          },
+          "max_tokens": { "type": "integer" },
+          "temperature": { "type": "number", "format": "float", "nullable": true },
+          "stream": { "type": "boolean", "nullable": true }
+        }
+      },
+      "MessageResponse": {
+        "type": "object",
+        "required": ["id", "type", "role", "content", "model", "usage"],
+        "properties": {
+          "id": { "type": "string" },
+          "type": { "type": "string", "example": "message" },
+          "role": { "type": "string" },
+          "content": {
+            "type": "array",
+            "items": { "type": "object" }
+          },
+          "model": { "type": "string" },
+          "stop_reason": { "type": "string", "nullable": true },
+          "usage": { "type": "object" }
+        }
+      },
+      "ApiKey": {
+        "type": "object",
+        "description": "API key information",
+        "required": ["api_key_id", "redacted_api_key", "name"],
+        "properties": {
+          "api_key_id": { "type": "string" },
+          "redacted_api_key": { "type": "string" },
+          "name": { "type": "string" },
+          "user_id": { "type": "string" },
+          "team_id": { "type": "string" },
+          "create_time": { "type": "string", "format": "date-time" },
+          "modify_time": { "type": "string", "format": "date-time" },
+          "acls": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "api_key_blocked": { "type": "boolean" },
+          "api_key_disabled": { "type": "boolean" },
+          "team_blocked": { "type": "boolean" }
+        }
+      }
+    }
+  }
+}
