@@ -143,6 +143,12 @@ crate ::mod_interface!
   layer streaming_control;
   #[ cfg( feature = "sync-api" ) ]
   layer sync_api;
+  #[ cfg( feature = "model-comparison" ) ]
+  layer model_comparison;
+  #[ cfg( feature = "request-templates" ) ]
+  layer request_templates;
+  #[ cfg( feature = "buffered-streaming" ) ]
+  layer buffered_streaming;
 }
 
 /// Serde-related exports.

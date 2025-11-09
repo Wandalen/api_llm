@@ -235,6 +235,58 @@ where
   
   self.client.post_stream( url.as_str(), &request ).await
   }
+
+  /// Create a controlled stream with pause/resume/cancel support
+  ///
+  /// This returns a tuple of (ControlledStream, ControlHandle) that allows
+  /// runtime control of the streaming operation.
+  ///
+  /// # Arguments
+  /// - `inputs`: Text input for generation
+  /// - `model`: Model identifier to use
+  /// - `parameters`: Inference parameters with streaming enabled
+  ///
+  /// # Returns
+  /// A tuple of (ControlledStream for consuming events, ControlHandle for control)
+  ///
+  /// # Errors
+  /// Returns error if the request fails
+  ///
+  /// # Example
+  ///
+  /// ```rust,ignore
+  /// let ( stream, control ) = inference
+  ///   .create_controlled_stream( "Hello", "gpt2", params )
+  ///   .await?;
+  ///
+  /// // Pause streaming
+  /// control.pause().await?;
+  ///
+  /// // Resume streaming
+  /// control.resume().await?;
+  ///
+  /// // Consume stream
+  /// while let Some( result ) = stream.next().await
+  /// {
+  ///   match result
+  ///   {
+  ///     Ok( text ) => println!( "{}", text ),
+  ///     Err( e ) => eprintln!( "Error: {}", e ),
+  ///   }
+  /// }
+  /// ```
+  #[ cfg( feature = "streaming-control" ) ]
+  #[ inline ]
+  pub async fn create_controlled_stream(
+  &self,
+  inputs : impl Into< String >,
+  model : impl AsRef< str >,
+  parameters : InferenceParameters,
+  ) -> Result< ( crate::streaming_control::ControlledStream, crate::streaming_control::ControlHandle ) >
+  {
+  let receiver = self.create_stream( inputs, model, parameters ).await?;
+  Ok( crate::streaming_control::wrap_stream( receiver ) )
+  }
 }
 
 // Basic implementation for when env-config is not available

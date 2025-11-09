@@ -114,6 +114,10 @@ pub mod audio;
 #[ cfg( feature = "sync" ) ]
 pub mod sync;
 
+// Streaming control module (available with streaming-control feature)
+#[ cfg( feature = "streaming-control" ) ]
+pub mod streaming_control;
+
 crate ::mod_interface!
 {
   // Always available core functionality

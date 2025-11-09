@@ -153,6 +153,18 @@ pub mod logging;
 pub mod input_validation;
 #[ cfg( feature = "enhanced_function_calling" ) ]
 pub mod enhanced_function_calling;
+#[ cfg( feature = "model_comparison" ) ]
+pub mod model_comparison;
+#[ cfg( feature = "request_templates" ) ]
+pub mod request_templates;
+#[ cfg( all( feature = "buffered_streaming", feature = "streaming" ) ) ]
+pub mod buffered_streaming;
+#[ cfg( feature = "compression" ) ]
+pub mod compression;
+#[ cfg( feature = "enterprise_quota" ) ]
+pub mod enterprise_quota;
+#[ cfg( feature = "curl_diagnostics" ) ]
+pub mod curl_diagnostics;
 
 // Client extension modules (impl blocks for OllamaClient)
 #[ cfg( feature = "count_tokens" ) ]
@@ -362,6 +374,16 @@ crate ::mod_interface!
     messages ::ToolMessage,
   };
 
+  #[ cfg( feature = "enhanced_function_calling" ) ]
+  exposed use
+  {
+    enhanced_function_calling ::ToolExecutor,
+    enhanced_function_calling ::ToolRegistry,
+    enhanced_function_calling ::ToolResult,
+    enhanced_function_calling ::helpers,
+    enhanced_function_calling ::orchestration,
+  };
+
   #[ cfg( feature = "circuit_breaker" ) ]
   exposed use
   {
@@ -396,6 +418,9 @@ crate ::mod_interface!
     diagnostics ::ErrorAnalysis,
     diagnostics ::PerformanceReport,
     diagnostics ::ComprehensiveReport,
+    diagnostics ::WindowedMetrics,
+    diagnostics ::WindowMetrics,
+    diagnostics ::ThroughputReport,
   };
 
   #[ cfg( feature = "model_details" ) ]

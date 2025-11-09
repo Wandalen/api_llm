@@ -111,3 +111,18 @@ pub use enterprise::
 // Re-export diagnostic types when feature is enabled
 #[ cfg( feature = "diagnostics_curl" ) ]
 pub use diagnostics::{ InlineData, CurlOptions };
+
+// Re-export streaming control types when feature is enabled
+#[ cfg( feature = "streaming_control" ) ]
+pub use models::streaming_control::
+{
+  StreamState,
+  StreamControlConfig,
+  StreamControlConfigBuilder,
+  StreamMetrics,
+  StreamMetricsSnapshot,
+  BufferStrategy,
+  MetricsLevel,
+  ControllableStream,
+  ControllableStreamBuilder,
+};

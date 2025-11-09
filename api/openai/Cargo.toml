@@ -32,7 +32,7 @@ all-features = false
 # Default enables everything for ease of use
 default = [ "full" ]
 # 'full' enables all features, including the base 'enabled'
-full = [ "enabled", "integration", "retry", "circuit_breaker", "rate_limiting", "failover", "health_checks", "enterprise", "caching", "batching", "compression", "streaming_control", "audio", "moderation" ]
+full = [ "enabled", "integration", "retry", "circuit_breaker", "rate_limiting", "failover", "health_checks", "enterprise", "caching", "batching", "compression", "streaming_control", "audio", "moderation", "model_comparison", "request_templates", "buffered_streaming" ]
 # 'enabled' is the master switch for the crate's core functionality
 enabled = [
   "dep:mod_interface",
@@ -85,6 +85,11 @@ moderation = []
 
 # Enterprise features
 enterprise = []
+
+# Additional features
+model_comparison = []
+request_templates = []
+buffered_streaming = []
 
 # Performance-focused feature combinations
 performance = [

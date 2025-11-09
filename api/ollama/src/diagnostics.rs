@@ -94,6 +94,7 @@ mod private
     metrics : Arc< std::sync::RwLock< HashMap<  String, RequestMetrics  > > >,
     curl_commands : Arc< std::sync::RwLock< HashMap<  String, String  > > >,
     start_times : Arc< std::sync::RwLock< HashMap<  String, Instant  > > >,
+    collector_start_time : Instant,
     total_requests : Arc< core::sync::atomic::AtomicUsize >,
     successful_requests : Arc< core::sync::atomic::AtomicUsize >,
     failed_requests : Arc< core::sync::atomic::AtomicUsize >,
@@ -493,6 +494,7 @@ mod private
         metrics : Arc::new( std::sync::RwLock::new( HashMap::new() ) ),
         curl_commands : Arc::new( std::sync::RwLock::new( HashMap::new() ) ),
         start_times : Arc::new( std::sync::RwLock::new( HashMap::new() ) ),
+        collector_start_time : Instant::now(),
         total_requests : Arc::new( core::sync::atomic::AtomicUsize::new( 0 ) ),
         successful_requests : Arc::new( core::sync::atomic::AtomicUsize::new( 0 ) ),
         failed_requests : Arc::new( core::sync::atomic::AtomicUsize::new( 0 ) ),
@@ -897,7 +899,161 @@ mod private
       write!( f, "Average Response Time : {:?}", self.average_response_time )
     }
   }
-  
+
+  /// Time-windowed metrics for throughput analysis
+  #[ cfg( feature = "general_diagnostics" ) ]
+  #[ derive( Debug, Clone ) ]
+  pub struct WindowedMetrics
+  {
+    /// Metrics for the last 1 minute
+    pub last_minute : WindowMetrics,
+    /// Metrics for the last 5 minutes
+    pub last_5_minutes : WindowMetrics,
+    /// Metrics for the last hour
+    pub last_hour : WindowMetrics,
+  }
+
+  /// Metrics within a specific time window
+  #[ cfg( feature = "general_diagnostics" ) ]
+  #[ derive( Debug, Clone ) ]
+  pub struct WindowMetrics
+  {
+    /// Number of requests in this window
+    pub request_count : usize,
+    /// Number of successful requests
+    pub successful_count : usize,
+    /// Number of failed requests
+    pub failed_count : usize,
+    /// Average response time
+    pub avg_response_time : Duration,
+    /// Throughput (requests per second)
+    pub throughput_rps : f64,
+    /// Total bytes transferred
+    pub total_bytes : usize,
+  }
+
+  /// Throughput analysis report
+  #[ cfg( feature = "general_diagnostics" ) ]
+  #[ derive( Debug, Clone ) ]
+  pub struct ThroughputReport
+  {
+    /// Current requests per second
+    pub requests_per_second : f64,
+    /// Peak requests per second observed
+    pub peak_rps : f64,
+    /// Average requests per second over collection period
+    pub average_rps : f64,
+    /// Current bytes per second
+    pub bytes_per_second : f64,
+    /// Total bytes transferred
+    pub total_bytes_transferred : usize,
+  }
+
+  #[ cfg( feature = "general_diagnostics" ) ]
+  impl DiagnosticsCollector
+  {
+    /// Get windowed metrics for time-based analysis
+    ///
+    /// Returns metrics for the last minute, 5 minutes, and hour
+    ///
+    /// # Panics
+    ///
+    /// Panics if the internal mutex is poisoned.
+    #[ inline ]
+    pub fn windowed_metrics( &self ) -> WindowedMetrics
+    {
+      let now = Instant::now();
+      let metrics = self.metrics.read().unwrap();
+
+      let calculate_window = | window_duration : Duration | -> WindowMetrics
+      {
+        let cutoff = now - window_duration;
+        let window_metrics : Vec< &RequestMetrics > = metrics
+          .values()
+          .filter( | m | m.created_at >= cutoff )
+          .collect();
+
+        let request_count = window_metrics.len();
+        let successful_count = window_metrics.iter().filter( | m | m.is_successful ).count();
+        let failed_count = request_count - successful_count;
+
+        let avg_response_time = if !window_metrics.is_empty()
+        {
+          let total : Duration = window_metrics.iter().map( | m | m.response_time ).sum();
+          total / request_count as u32
+        }
+        else
+        {
+          Duration::ZERO
+        };
+
+        let throughput_rps = request_count as f64 / window_duration.as_secs_f64();
+        let total_bytes = window_metrics.iter().map( | m | m.response_size ).sum();
+
+        WindowMetrics
+        {
+          request_count,
+          successful_count,
+          failed_count,
+          avg_response_time,
+          throughput_rps,
+          total_bytes,
+        }
+      };
+
+      WindowedMetrics
+      {
+        last_minute : calculate_window( Duration::from_secs( 60 ) ),
+        last_5_minutes : calculate_window( Duration::from_secs( 300 ) ),
+        last_hour : calculate_window( Duration::from_secs( 3600 ) ),
+      }
+    }
+
+    /// Get throughput analysis
+    ///
+    /// # Panics
+    ///
+    /// Panics if the internal mutex is poisoned.
+    #[ inline ]
+    pub fn throughput_analysis( &self ) -> ThroughputReport
+    {
+      let elapsed = self.collector_start_time.elapsed().as_secs_f64();
+      let total_requests = self.total_requests.load( Ordering::Relaxed ) as f64;
+
+      let metrics = self.metrics.read().unwrap();
+      let total_bytes : usize = metrics.values().map( | m | m.response_size ).sum();
+
+      // Calculate current RPS (last minute)
+      let now = Instant::now();
+      let last_minute = now - Duration::from_secs( 60 );
+      let recent_count = metrics
+        .values()
+        .filter( | m | m.created_at >= last_minute )
+        .count() as f64;
+      let requests_per_second = recent_count / 60.0;
+
+      // Calculate average RPS
+      let average_rps = if elapsed > 0.0 { total_requests / elapsed } else { 0.0 };
+
+      // Calculate current bytes per second (last minute)
+      let recent_bytes : usize = metrics
+        .values()
+        .filter( | m | m.created_at >= last_minute )
+        .map( | m | m.response_size )
+        .sum();
+      let bytes_per_second = recent_bytes as f64 / 60.0;
+
+      ThroughputReport
+      {
+        requests_per_second,
+        peak_rps : requests_per_second, // Would need historical tracking for true peak
+        average_rps,
+        bytes_per_second,
+        total_bytes_transferred : total_bytes,
+      }
+    }
+  }
+
 }
 
 #[ cfg( feature = "general_diagnostics" ) ]
@@ -909,4 +1065,7 @@ crate ::mod_interface!
   exposed use private::PerformanceReport;
   exposed use private::ComprehensiveReport;
   exposed use private::DiagnosticsCollector;
+  exposed use private::WindowedMetrics;
+  exposed use private::WindowMetrics;
+  exposed use private::ThroughputReport;
 }

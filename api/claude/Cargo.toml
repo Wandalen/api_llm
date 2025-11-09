@@ -27,7 +27,7 @@ all-features = false
 # Default enables everything for ease of use
 default = [ "full" ]
 # 'full' enables all features, including the base 'enabled'
-full = [ "enabled", "integration", "streaming", "authentication", "content-generation", "model-management", "error-handling", "tools", "vision", "embeddings", "curl-diagnostics", "general-diagnostics", "sync-api", "retry-logic", "circuit-breaker", "rate-limiting", "failover", "health-checks", "batch-processing", "count-tokens", "request-caching", "streaming-control", "compression", "enterprise-quota", "dynamic-config" ]
+full = [ "enabled", "integration", "streaming", "authentication", "content-generation", "model-management", "error-handling", "tools", "vision", "embeddings", "curl-diagnostics", "general-diagnostics", "sync-api", "retry-logic", "circuit-breaker", "rate-limiting", "failover", "health-checks", "batch-processing", "count-tokens", "request-caching", "streaming-control", "compression", "enterprise-quota", "dynamic-config", "model-comparison", "request-templates", "buffered-streaming" ]
 # 'enabled' is the master switch for the crate's core functionality
 enabled = [
   "dep:mod_interface",
@@ -89,6 +89,12 @@ compression = [ "flate2" ]
 enterprise-quota = [ "parking_lot", "chrono" ]
 # Feature for dynamic configuration with hot-reloading
 dynamic-config = [ "notify", "parking_lot" ]
+# Feature for model comparison and A/B testing
+model-comparison = []
+# Feature for request templates and presets
+request-templates = []
+# Feature for buffered streaming with smoother UX
+buffered-streaming = [ "streaming" ]
 
 [dependencies]
 

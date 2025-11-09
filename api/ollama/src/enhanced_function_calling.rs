@@ -350,6 +350,95 @@ mod private
       }
     }
   }
+
+  /// Orchestration helpers for managing tool execution workflows
+  pub mod orchestration
+  {
+    /// Extract tool calls from a chat response message
+    ///
+    /// # Returns
+    ///
+    /// Returns tool calls if present
+    #[ cfg( all( feature = "vision_support", feature = "tool_calling" ) ) ]
+    #[ inline ]
+    pub fn extract_tool_calls( message : &crate::ChatMessage ) -> Option< &Vec< crate::ToolCall > >
+    {
+      message.tool_calls.as_ref()
+    }
+
+    /// Execute multiple tools in sequence using a registry
+    ///
+    /// Returns vector of results (success or error messages)
+    #[ cfg( feature = "tool_calling" ) ]
+    #[ inline ]
+    pub fn execute_tools_sequential(
+      registry : &crate::enhanced_function_calling::ToolRegistry,
+      tool_calls : &[ crate::ToolCall ]
+    ) -> Vec< String >
+    {
+      tool_calls
+        .iter()
+        .map( | call |
+        {
+          match registry.execute( call )
+          {
+            Ok( result ) => result,
+            Err( e ) => format!( "Error : {}", e ),
+          }
+        })
+        .collect()
+    }
+
+    /// Format tool results into tool messages for chat continuation
+    ///
+    /// # Returns
+    ///
+    /// Vector of tool messages ready to be added to chat history
+    #[ cfg( all( feature = "vision_support", feature = "tool_calling" ) ) ]
+    #[ inline ]
+    pub fn format_tool_results(
+      tool_calls : &[ crate::ToolCall ],
+      results : Vec< String >
+    ) -> Vec< crate::ToolMessage >
+    {
+      tool_calls
+        .iter()
+        .zip( results )
+        .map( | ( call, result ) |
+        {
+          crate::ToolMessage
+          {
+            role : crate::MessageRole::Tool,
+            content : result,
+            tool_call_id : call.id.clone(),
+          }
+        })
+        .collect()
+    }
+
+    /// Complete orchestration: extract, execute, format
+    ///
+    /// Helper that combines extraction, execution, and formatting in one call
+    ///
+    /// Returns tool messages if any tool calls were present, otherwise returns empty vector
+    #[ cfg( all( feature = "vision_support", feature = "tool_calling" ) ) ]
+    #[ inline ]
+    pub fn orchestrate_tool_calls(
+      registry : &crate::enhanced_function_calling::ToolRegistry,
+      response_message : &crate::ChatMessage
+    ) -> Vec< crate::ToolMessage >
+    {
+      if let Some( tool_calls ) = extract_tool_calls( response_message )
+      {
+        let results = execute_tools_sequential( registry, tool_calls );
+        format_tool_results( tool_calls, results )
+      }
+      else
+      {
+        Vec::new()
+      }
+    }
+  }
 }
 
 #[ cfg( feature = "enhanced_function_calling" ) ]
@@ -359,4 +448,5 @@ crate ::mod_interface!
   exposed use private::ToolRegistry;
   exposed use private::ToolResult;
   exposed use private::helpers;
+  exposed use private::orchestration;
 }

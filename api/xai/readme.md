@@ -2,7 +2,7 @@
 
 [![experimental](https://raster.shields.io/static/v1?label=stability&message=experimental&color=orange&logoColor=eee)](https://github.com/emersion/stability-badges#experimental)
 
-**Production-ready Rust client for X.AI's Grok API with 65% feature coverage**
+**Production-ready Rust client for X.AI's Grok API with 73% feature coverage**
 
 A comprehensive, feature-rich HTTP client for interacting with X.AI's Grok API. Built with the "Thin Client, Rich API" principle, providing transparent access to all server-side functionality plus powerful client-side enhancements.
 
@@ -34,17 +34,18 @@ A comprehensive, feature-rich HTTP client for interacting with X.AI's Grok API. 
 ### 🎨 Developer Experience
 - **🔑 Secret Management** - workspace_tools integration with fallback chain
 - **🎯 Type Safety** - Former builder pattern for requests
-- **📚 Rich Documentation** - 124 doc tests and comprehensive examples
+- **📚 Rich Documentation** - 122 doc tests and 10 comprehensive examples
 - **🧪 Zero Mocking** - Real integration tests only
 - **⚙️ Feature Flags** - Fine-grained control over dependencies
 
 ## 📊 Feature Coverage
 
-**Overall**: 30/46 features implemented (65%)
+**Overall**: 33/45 features implemented (73%)
 
 | Category | Coverage | Status |
 |----------|----------|--------|
-| Core Features | 75% (6/8) | ✅ |
+| Core Features | 73% (8/11) | ✅ |
+| Standard Chat Examples | 100% (3/3) | ✅ |
 | Enterprise Reliability | 100% (5/5) | ✅ |
 | Client-Side Enhancements | 100% (7/7) | ✅ |
 | Monitoring & Analytics | 100% (1/1) | ✅ |
@@ -52,7 +53,7 @@ A comprehensive, feature-rich HTTP client for interacting with X.AI's Grok API. 
 | Configuration Management | 100% (3/3) | ✅ |
 | API Patterns | 80% (4/5) | 🟢 |
 
-**Note**: Remaining 35% unimplemented features are API limitations (vision, audio, embeddings, etc.) that cannot be implemented without XAI API support.
+**Note**: Remaining 27% unimplemented features are primarily API limitations (vision, audio, embeddings, safety, moderation, model tuning, etc.) that cannot be implemented without XAI API support, plus 1 intentionally skipped feature (Sync Streaming - not recommended).
 
 ## 🚀 Quick Start
 
@@ -222,8 +223,17 @@ api_xai/
 │   ├── sync_api.rs       # Sync wrappers (NEW)
 │   └── ...               # Core features
 ├── tests/                # Comprehensive test suite
-├── examples/             # Usage demonstrations
-│   └── client_side_enhancements.rs # NEW features demo
+├── examples/             # Usage demonstrations (10 examples)
+│   ├── basic_chat.rs     # Simple single-turn chat
+│   ├── interactive_chat.rs # Multi-turn conversation
+│   ├── cached_interactive_chat.rs # Interactive with caching (NEW)
+│   ├── streaming_chat.rs # SSE streaming example
+│   ├── tool_calling.rs   # Function calling demo
+│   ├── enhanced_tools_demo.rs # Parallel tool execution
+│   ├── client_side_enhancements.rs # All NEW features
+│   ├── enterprise_features.rs # Reliability stack
+│   ├── failover_demo.rs  # Multi-endpoint failover
+│   └── list_models.rs    # Model catalog
 └── spec.md               # Project specification
 ```
 
@@ -246,9 +256,9 @@ cargo doc --no-deps --all-features --open
 **⚠️ Note:** Integration tests require valid `XAI_API_KEY` and use real API calls (NO MOCKING policy).
 
 **Test Coverage:**
-- 124 doc tests (all passing)
-- 42 unit tests (secret, environment, components, error, streaming, tools)
-- Integration tests for real API validation
+- 122 doc tests (all passing, 1 ignored)
+- 107 integration tests (all passing)
+- **229 total tests** with real API validation (NO MOCKING policy)
 
 ## 📋 Feature Flags
 

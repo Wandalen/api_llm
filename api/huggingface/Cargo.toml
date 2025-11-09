@@ -60,6 +60,7 @@ audio = ["client", "dep:base64"]
 inference-streaming = ["inference", "dep:tokio-stream", "dep:futures-util"]
 inference-parameters = ["inference"]
 inference-retry = ["inference", "dep:backoff"]
+streaming-control = ["inference-streaming", "dep:futures-core"]
 
 # Embedding Sub-Features
 embeddings-similarity = ["embeddings"]
@@ -89,10 +90,10 @@ integration-tests = ["inference", "embeddings", "models"]
 basic = ["inference", "embeddings", "models", "env-config"]
 full = [
   "enabled", "basic", "inference-streaming", "inference-retry",
-  "embeddings-similarity", "embeddings-batch", "model-constants",
-  "logging", "sync", "reliability", "circuit-breaker", "rate-limiting",
-  "failover", "health-checks", "performance-metrics", "caching",
-  "token-counting", "dynamic-config", "vision", "audio"
+  "streaming-control", "embeddings-similarity", "embeddings-batch",
+  "model-constants", "logging", "sync", "reliability", "circuit-breaker",
+  "rate-limiting", "failover", "health-checks", "performance-metrics",
+  "caching", "token-counting", "dynamic-config", "vision", "audio"
 ]
 
 # Integration testing configuration

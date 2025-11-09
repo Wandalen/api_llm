@@ -222,10 +222,11 @@ graph TD
 default = ["full"]  # Full feature set enabled by default
 full = [
   "enabled", "integration", "diagnostics_curl", "logging", "streaming",
-  "chat", "retry", "circuit_breaker", "rate_limiting", "failover",
-  "health_checks", "builder_patterns", "caching", "dynamic_configuration",
-  "batch_operations", "compression", "enterprise_quota", "model_comparison",
-  "request_templates", "buffered_streaming"
+  "websocket_streaming", "streaming_control", "chat", "retry",
+  "circuit_breaker", "rate_limiting", "failover", "health_checks",
+  "builder_patterns", "caching", "dynamic_configuration", "batch_operations",
+  "compression", "enterprise_quota", "model_comparison", "request_templates",
+  "buffered_streaming"
 ]
 enabled = []               # Master switch for core functionality
 integration = []           # Integration testing (enabled in default)
@@ -608,6 +609,12 @@ The api_gemini crate represents an **excellent, production-ready Rust client** f
 
 ### 17. Version History
 
+### v0.8.1 (2025-11-09) - Feature Exposure Complete
+- ✅ **WebSocket Streaming Exposed** - Added `websocket_streaming` to `full` feature (already implemented with 12 tests)
+- ✅ **Streaming Control Exposed** - Added `streaming_control` to `full` feature and exported types in lib.rs (already implemented with 14 tests)
+- ✅ **100% Feature Coverage** - All implemented production features now exposed in default build
+- ✅ **Zero Breaking Changes** - Additive changes only, backward compatible
+
 ### v0.8 (2025-11-08) - Enterprise Extensions Complete
 - ✅ **Enterprise Quota Management** - Usage tracking, cost estimation, limit enforcement (16 tests)
 - ✅ **Compression Integration** - Gzip, Deflate, Brotli with configurable levels (client builder integration)
@@ -660,7 +667,7 @@ The api_gemini crate represents an **excellent, production-ready Rust client** f
 
 ---
 
-**Document Status**: Updated to reflect v0.8 completion - all core, enterprise, and advanced features implemented including quota management, compression, model comparison, request templates, and buffered streaming.
+**Document Status**: Updated to reflect v0.8.1 completion - all implemented production features now properly exposed in default build (websocket_streaming and streaming_control added to full feature).
 **Next Review**: After performance benchmarking completion
 **Maintainer**: Development team
-**Last Updated**: 2025-11-08
+**Last Updated**: 2025-11-09

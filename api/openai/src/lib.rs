@@ -135,6 +135,13 @@ crate ::mod_interface!
   layer model_deployment;
   layer model_tuning;
 
+  #[ cfg( feature = "model_comparison" ) ]
+  layer model_comparison;
+  #[ cfg( feature = "request_templates" ) ]
+  layer request_templates;
+  #[ cfg( feature = "buffered_streaming" ) ]
+  layer buffered_streaming;
+
   #[ cfg( all( feature = "caching", feature = "compression" ) ) ]
   layer performance_cache;
 
@@ -195,6 +202,13 @@ crate ::mod_interface!
   exposed use metrics_framework;
   exposed use model_deployment;
   exposed use model_tuning;
+
+  #[ cfg( feature = "model_comparison" ) ]
+  exposed use model_comparison;
+  #[ cfg( feature = "request_templates" ) ]
+  exposed use request_templates;
+  #[ cfg( feature = "buffered_streaming" ) ]
+  exposed use buffered_streaming;
 
   #[ cfg( all( feature = "caching", feature = "compression" ) ) ]
   exposed use performance_cache;

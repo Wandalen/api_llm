@@ -176,6 +176,24 @@ mod private
     #[ allow( clippy::too_many_lines ) ]
     pub async fn chat( &mut self, request : ChatRequest ) -> OllamaResult< ChatResponse >
     {
+      // Validate request before processing
+      #[ cfg( feature = "input_validation" ) ]
+      {
+        use crate::input_validation::Validate;
+        if let Err( validation_errors ) = request.validate()
+        {
+          let error_messages : Vec< String > = validation_errors
+            .iter()
+            .map( | e | format!( "{}", e ) )
+            .collect();
+          return Err( format_err!( "Request validation failed : {}", error_messages.join( "; " ) ) );
+        }
+      }
+
+      // Start performance metrics recording
+      #[ cfg( feature = "general_diagnostics" ) ]
+      let _start_time = std::time::Instant::now();
+
       // Check circuit breaker before making request
       #[ cfg( feature = "circuit_breaker" ) ]
       {
@@ -353,6 +371,20 @@ mod private
     #[ inline ]
     pub async fn generate( &mut self, request : GenerateRequest ) -> OllamaResult< GenerateResponse >
     {
+      // Validate request before processing
+      #[ cfg( feature = "input_validation" ) ]
+      {
+        use crate::input_validation::Validate;
+        if let Err( validation_errors ) = request.validate()
+        {
+          let error_messages : Vec< String > = validation_errors
+            .iter()
+            .map( | e | format!( "{}", e ) )
+            .collect();
+          return Err( format_err!( "Request validation failed : {}", error_messages.join( "; " ) ) );
+        }
+      }
+
       // Check circuit breaker before making request
       #[ cfg( feature = "circuit_breaker" ) ]
       {
@@ -490,6 +522,20 @@ mod private
     #[ inline ]
     pub async fn embeddings( &mut self, request : EmbeddingsRequest ) -> OllamaResult< EmbeddingsResponse >
     {
+      // Validate request before processing
+      #[ cfg( feature = "input_validation" ) ]
+      {
+        use crate::input_validation::Validate;
+        if let Err( validation_errors ) = request.validate()
+        {
+          let error_messages : Vec< String > = validation_errors
+            .iter()
+            .map( | e | format!( "{}", e ) )
+            .collect();
+          return Err( format_err!( "Request validation failed : {}", error_messages.join( "; " ) ) );
+        }
+      }
+
       let url = format!( "{}/api/embeddings", self.base_url );
 
       let request_builder = self.client

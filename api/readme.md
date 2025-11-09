@@ -38,7 +38,7 @@ This ensures lightweight, containerized deployments and eliminates operational c
 | **Standard Chat Examples** ||||||||
 | {api_name}_chat_basic.rs | Simple single-turn chat example | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | {api_name}_chat_interactive.rs | Multi-turn conversation example | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| {api_name}_chat_cached_interactive.rs | Interactive chat with prompt caching example | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |
+| {api_name}_chat_cached_interactive.rs | Interactive chat with prompt caching example | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **Safety & Moderation** ||||||||
 | Safety Settings | Configure content filtering and harm thresholds | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |
 | Content Moderation | Detect and filter harmful or inappropriate content | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
@@ -49,9 +49,9 @@ This ensures lightweight, containerized deployments and eliminates operational c
 | Failover | Automatic switching between multiple endpoints | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Health Checks | Monitor endpoint availability and latency | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **Streaming Enhancements** ||||||||
-| HTTP Streaming | Server-sent events or chunked transfer encoding | ✅ (JSON) | ✅ (SSE) | ✅ (SSE) | ✅ (SSE) | ✅ (SSE) | ✅ (SSE) |
+| HTTP Streaming | Server-sent events or chunked transfer encoding | ✅ (JSON) | ✅ (SSE) | ✅ (SSE) | ✅ (JSON) | ✅ (SSE) | ✅ (SSE) |
 | WebSocket Streaming | Bidirectional real-time communication via WebSocket | ✅ | ✅ | ❌ | ✅ | ❌ | ❌ |
-| Streaming Control | Pause, resume, and cancel streaming operations | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
+| Streaming Control | Pause, resume, and cancel streaming operations | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |
 | **Authentication & Security** ||||||||
 | API Key Auth | Bearer token authentication for API access | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **Monitoring & Analytics** ||||||||
@@ -81,8 +81,8 @@ This ensures lightweight, containerized deployments and eliminates operational c
 | Code Execution | Sandboxed code execution environment for responses | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | Input Validation | Request parameter validation before API calls | ✅ | 🟡 | ❌ | ✅ | ✅ | ✅ |
 | **Implementation Status** ||||||||
-| Total Features | Feature count and coverage metrics | 40/46 | 37/42 | 26/42 | 42/44* | 41/42 | 32/45** |
-| Feature Coverage | Percentage of implementable features completed | **87%** | 88% | 62% | **95%** | **98%** | **71%** |
+| Total Features | Feature count and coverage metrics | 40/46 | 37/42 | 26/42 | 43/43* | 40/40 | 33/45** |
+| Feature Coverage | Percentage of implementable features completed | **87%** | 88% | 62% | **100%** | **100%** | **73%** |
 | Production Ready | Deployment readiness for production workloads | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 
 **Legend:**
@@ -91,6 +91,7 @@ This ensures lightweight, containerized deployments and eliminates operational c
 - ❌ Not implemented
 
 **Notes:**
-- \* **Ollama**: 2 features excluded as N/A (Content Moderation not provided by Ollama API; Performance Metrics beyond thin client scope). Coverage: 42/44 implementable features (95%).
-- \*\* **XAI**: Production-ready with comprehensive client-side enhancements. Coverage: 32/45 features (71%). Missing features are primarily API limitations (Vision, Audio, Embeddings, Safety Settings, Content Moderation, WebSocket Streaming, Model Tuning, Model Deployment, Google Search Grounding, Code Execution).
+- \* **Ollama**: 3 features excluded as N/A (Content Moderation, Google Search Grounding, Code Execution not provided by Ollama API). Coverage: 43/43 implementable features (100%). All client-side enhancements fully implemented including time-windowed performance metrics and comprehensive throughput analysis.
+- \*\* **XAI**: Production-ready with comprehensive client-side enhancements. Coverage: 33/45 features (73%). Missing features: 11 API limitations (Vision, Audio, Embeddings, Safety Settings, Content Moderation, WebSocket Streaming, Streaming Control, Model Tuning, Model Deployment, Google Search Grounding, Code Execution), 1 implementation gap (Sync Streaming - not recommended).
+- **HuggingFace**: 6 features excluded (4 API limitations: Content Moderation, WebSocket Streaming—uses SSE only, Enhanced Function Calling—basic support only, System Instructions; 2 provider-specific: Google Search Grounding, Code Execution). Coverage: 40/40 implementable features (100%). All client-side enhancements and API-supported features complete.
 

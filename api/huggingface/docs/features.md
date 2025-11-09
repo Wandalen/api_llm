@@ -14,6 +14,7 @@ Complete reference of implemented and planned features for the HuggingFace API c
 | **Embeddings API** | ✅ Complete | 1 | Generate embeddings with similarity calculations |
 | **Model Management** | ✅ Complete | 1 | Query model info, availability, status |
 | **Streaming** | ✅ Complete | 1 | Real-time streaming responses |
+| **Streaming Control** | ✅ Complete | 2 | Pause, resume, and cancel streaming operations with runtime control |
 | **Function Calling** | ✅ Complete | 1 | OpenAI-compatible function calling with tool definitions and choice controls |
 
 ### Enterprise Features
@@ -112,6 +113,7 @@ Control which functionality is included in your build:
 ### Capability Features
 
 - `inference-streaming`: Streaming support for text generation
+- `streaming-control`: Pause, resume, and cancel operations for controlled streams
 - `embeddings-similarity`: Similarity calculation utilities
 - `sync`: Synchronous API wrappers
 

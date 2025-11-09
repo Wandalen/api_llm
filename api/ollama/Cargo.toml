@@ -29,7 +29,7 @@ default = [ "full" ]
 # The master switch that activates all dependencies
 enabled = [ "dep:reqwest", "dep:serde", "dep:serde_json", "dep:tokio", "dep:futures-core", "dep:futures-util", "dep:error_tools", "dep:mod_interface", "vision_support" ]
 # The 'full' feature enables all other features, including 'enabled'
-full = [ "enabled", "streaming", "integration", "authentication", "advanced", "workspace", "secret_management", "embeddings", "builder_patterns", "retry_logic", "vision_support", "tool_calling", "integration_tests", "circuit_breaker", "general_diagnostics", "model_details", "sync_api", "failover", "health_checks", "dynamic_config", "streaming_control", "websocket_streaming", "model_tuning", "model_deployment", "rate_limiting", "retry", "request_caching", "audio_processing", "count_tokens", "cached_content", "batch_operations", "safety_settings", "structured_logging", "input_validation", "enhanced_function_calling" ]
+full = [ "enabled", "streaming", "integration", "authentication", "advanced", "workspace", "secret_management", "embeddings", "builder_patterns", "retry_logic", "vision_support", "tool_calling", "integration_tests", "circuit_breaker", "general_diagnostics", "model_details", "sync_api", "failover", "health_checks", "dynamic_config", "streaming_control", "websocket_streaming", "model_tuning", "model_deployment", "rate_limiting", "retry", "request_caching", "audio_processing", "count_tokens", "cached_content", "batch_operations", "safety_settings", "structured_logging", "input_validation", "enhanced_function_calling", "model_comparison", "request_templates", "buffered_streaming", "compression", "enterprise_quota", "curl_diagnostics" ]
 # Feature for streaming responses
 streaming = []
 # Feature for running integration tests with real API
@@ -98,6 +98,18 @@ structured_logging = [ "dep:tracing" ]
 input_validation = []
 # Feature for enhanced function calling with type-safe execution framework
 enhanced_function_calling = [ "tool_calling" ]
+# Feature for model comparison and A/B testing
+model_comparison = []
+# Feature for request templates and presets
+request_templates = []
+# Feature for buffered streaming with smoother UX
+buffered_streaming = [ "streaming" ]
+# Feature for HTTP compression (request/response)
+compression = [ "dep:flate2" ]
+# Feature for enterprise quota management and usage tracking
+enterprise_quota = []
+# Feature for CURL diagnostics and debugging
+curl_diagnostics = []
 
 [dependencies]
 # All dependencies are optional
@@ -120,6 +132,7 @@ tempfile = { workspace = true, optional = true }
 tracing = { workspace = true, optional = true }
 tokio-tungstenite = { workspace = true, optional = true }
 futures-channel = { workspace = true, optional = true }
+flate2 = { version = "1.0", optional = true }
 
 [dev-dependencies]
 tokio = { workspace = true, features = [ "macros", "rt-multi-thread" ] }

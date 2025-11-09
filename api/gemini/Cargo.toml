@@ -1,6 +1,6 @@
 [package]
 name = "api_gemini"
-version = "0.3.0"
+version = "0.3.1"
 edition = "2021"
 authors = [
   "Kostiantyn Wandalen <wandalen@obox.systems>",
@@ -81,7 +81,7 @@ all-features = false
 # Default enables everything for ease of use
 default = [ "full" ]
 # 'full' enables all features, including the base 'enabled'
-full = [ "enabled", "integration", "diagnostics_curl", "logging", "streaming", "chat", "retry", "circuit_breaker", "rate_limiting", "failover", "health_checks", "builder_patterns", "caching", "dynamic_configuration", "batch_operations", "compression", "enterprise_quota", "model_comparison", "request_templates", "buffered_streaming" ]
+full = [ "enabled", "integration", "diagnostics_curl", "logging", "streaming", "websocket_streaming", "streaming_control", "chat", "retry", "circuit_breaker", "rate_limiting", "failover", "health_checks", "builder_patterns", "caching", "dynamic_configuration", "batch_operations", "compression", "enterprise_quota", "model_comparison", "request_templates", "buffered_streaming" ]
 # 'enabled' is the master switch for the crate's core functionality
 enabled = []
 # Feature for running integration tests with real API
