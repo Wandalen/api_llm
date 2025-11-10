@@ -238,7 +238,7 @@ mod private
           {
             assert!( text.contains( "Custom prompt" ) );
           },
-          _ => panic!( "Expected text content" ),
+          crate::components::chat_shared::ChatCompletionRequestMessageContent::Parts( _ ) => panic!( "Expected text content" ),
         }
       }
       else

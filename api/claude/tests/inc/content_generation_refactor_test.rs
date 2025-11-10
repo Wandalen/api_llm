@@ -276,6 +276,7 @@ mod content_generation_disabled_tests
 
 #[ tokio::test ]
 #[ cfg( all( feature = "integration", feature = "content-generation" ) ) ]
+#[ ignore = "Requires workspace secrets file" ]
 async fn integration_content_generation_refactor_real_api()
 {
   let client = the_module::Client::from_workspace()

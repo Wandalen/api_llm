@@ -110,7 +110,7 @@ mod tests
     }
   }
 
-  /// Test validation of top_p out of range
+  /// Test validation of `top_p` out of range
   #[ test ]
   fn test_validate_top_p_out_of_range()
   {
@@ -187,13 +187,11 @@ mod tests
     }
   }
 
-  /// Test ChatRequest validation
+  /// Test `ChatRequest` validation
   #[ test ]
   #[ cfg( feature = "vision_support" ) ]
   fn test_validate_chat_request()
   {
-    use api_ollama::{ ChatMessage, MessageRole };
-
     let request = ChatRequest
     {
       model : "llama2".to_string(),
@@ -215,7 +213,7 @@ mod tests
     }
   }
 
-  /// Test ValidationError display
+  /// Test `ValidationError` display
   #[ test ]
   fn test_validation_error_display()
   {
@@ -227,7 +225,7 @@ mod tests
       constraint : "[0.0, 2.0]".to_string(),
     };
 
-    let display = format!( "{}", error );
+    let display = format!( "{error}" );
     assert!( display.contains( "temperature" ) );
     assert!( display.contains( "Value out of range" ) );
     assert!( display.contains( "3.0" ) );

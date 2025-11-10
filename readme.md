@@ -79,8 +79,8 @@ All features are:
 | Request Caching | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Failover | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Health Checks | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Streaming Control | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
-| Dynamic Config | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
+| Streaming Control | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |
+| Dynamic Config | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
 | Token Counting | ✅ | ✅ | 🔶 | ✅ | ❌ | ✅ |
 | Batch Operations | ✅ | 🔶 | ✅ | ✅ | ❌ | ✅ |
 | Safety/Moderation | 🚫 | ✅ | ✅ | ✅ | ❌ | 🚫 |

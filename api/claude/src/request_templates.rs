@@ -117,11 +117,11 @@ mod private
       self
     }
 
-    /// Build a CreateMessageRequest with user message
+    /// Build a `CreateMessageRequest` with user message
     #[ must_use ]
     pub fn build( self, user_message : impl Into< String > ) -> CreateMessageRequest
     {
-      let request = CreateMessageRequest
+      CreateMessageRequest
       {
         model : self.model,
         max_tokens : self.max_tokens,
@@ -147,9 +147,7 @@ mod private
         tools : None,
         #[ cfg( feature = "tools" ) ]
         tool_choice : None,
-      };
-
-      request
+      }
     }
   }
 

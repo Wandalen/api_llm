@@ -50,6 +50,7 @@ mod private
   {
     /// Calculate success rate across all models
     #[ must_use ]
+    #[ inline ]
     pub fn success_rate( &self ) -> f64
     {
       if self.results.is_empty()
@@ -62,6 +63,7 @@ mod private
 
     /// Get average response time in milliseconds
     #[ must_use ]
+    #[ inline ]
     pub fn average_response_time_ms( &self ) -> u64
     {
       if self.results.is_empty()
@@ -74,6 +76,7 @@ mod private
 
     /// Get total tokens used across all models
     #[ must_use ]
+    #[ inline ]
     pub fn total_tokens_used( &self ) -> i32
     {
       self.results
@@ -94,6 +97,7 @@ mod private
   }
 
   /// Model comparator for A/B testing
+  #[ derive( Debug ) ]
   pub struct ModelComparator< 'a, E >
   where
     E : OpenaiEnvironment + EnvironmentInterface + Send + Sync + 'static,
@@ -108,6 +112,7 @@ mod private
   {
     /// Create a new model comparator
     #[ must_use ]
+    #[ inline ]
     pub fn new( client : &'a Client< E > ) -> Self
     {
       Self
@@ -119,6 +124,7 @@ mod private
 
     /// Set comparison mode
     #[ must_use ]
+    #[ inline ]
     pub fn with_mode( mut self, mode : ComparisonMode ) -> Self
     {
       self.mode = mode;
@@ -151,6 +157,7 @@ mod private
         },
       };
 
+      #[ allow( clippy::cast_possible_truncation ) ]
       let total_time_ms = start_time.elapsed().as_millis() as u64;
 
       let fastest_model = results
@@ -187,7 +194,7 @@ mod private
       for model_name in models
       {
         let mut request = base_request.clone();
-        request.model = model_name.clone();
+        request.model.clone_from( model_name );
 
         let result = self.test_single_model( model_name, request ).await;
         results.push( result );
@@ -211,7 +218,7 @@ mod private
         .map( | model_name |
         {
           let mut request = base_request.clone();
-          request.model = model_name.clone();
+          request.model.clone_from( model_name );
           self.test_single_model( model_name, request )
         } )
         .collect::< Vec< _ > >();
@@ -237,6 +244,7 @@ mod private
       {
         Ok( response ) =>
         {
+          #[ allow( clippy::cast_possible_truncation ) ]
           let response_time_ms = start_time.elapsed().as_millis() as u64;
           let total_tokens = response.usage.as_ref().map( | u | u.total_tokens );
 
@@ -252,6 +260,7 @@ mod private
         },
         Err( e ) =>
         {
+          #[ allow( clippy::cast_possible_truncation ) ]
           let response_time_ms = start_time.elapsed().as_millis() as u64;
 
           ModelComparisonResult
@@ -269,7 +278,7 @@ mod private
             },
             response_time_ms,
             success : false,
-            error_message : Some( format!( "{}", e ) ),
+            error_message : Some( format!( "{e}" ) ),
             total_tokens : None,
           }
         }
@@ -339,7 +348,7 @@ mod private
         slowest_model : Some( "model2".to_string() ),
       };
 
-      assert_eq!( results.success_rate(), 0.5 );
+      assert!( ( results.success_rate() - 0.5 ).abs() < f64::EPSILON, "Expected success rate of 0.5, got {}", results.success_rate() );
     }
 
     #[ test ]

@@ -238,7 +238,7 @@ where
 
   /// Create a controlled stream with pause/resume/cancel support
   ///
-  /// This returns a tuple of (ControlledStream, ControlHandle) that allows
+  /// This returns a tuple of (`ControlledStream`, `ControlHandle`) that allows
   /// runtime control of the streaming operation.
   ///
   /// # Arguments
@@ -247,7 +247,7 @@ where
   /// - `parameters`: Inference parameters with streaming enabled
   ///
   /// # Returns
-  /// A tuple of (ControlledStream for consuming events, ControlHandle for control)
+  /// A tuple of (`ControlledStream` for consuming events, `ControlHandle` for control)
   ///
   /// # Errors
   /// Returns error if the request fails

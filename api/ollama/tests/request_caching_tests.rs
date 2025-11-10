@@ -448,7 +448,7 @@ async fn test_cache_debug_and_display()
   // Test Debug implementation
   let debug_output = format!("{cache:?}");
   assert!(debug_output.contains("RequestCache"));
-  assert!(debug_output.contains("entries : 0"));
+  assert!(debug_output.contains("entries: 0"));
 
   // Test Display implementation
   let display_output = format!("{cache}");

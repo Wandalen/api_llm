@@ -55,7 +55,7 @@ mod private
   {
     /// Unique identifier for the endpoint
     pub id : String,
-    /// Endpoint URL (e.g., "< https://api.anthropic.com >")
+    /// Endpoint URL (e.g., "<https://api.anthropic.com>")
     pub url : String,
     /// Priority level (higher = more preferred)
     pub priority : i32,

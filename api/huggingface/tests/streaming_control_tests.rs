@@ -22,7 +22,7 @@ mod tests
     {
       for i in 0..10
       {
-        if tx.send( Ok( format!( "chunk_{}", i ) ) ).await.is_err()
+        if tx.send( Ok( format!( "chunk_{i}" ) ) ).await.is_err()
         {
           break;
         }
@@ -122,7 +122,7 @@ mod tests
     control.cancel().await.unwrap();
   }
 
-  /// Test is_cancelled state query
+  /// Test `is_cancelled` state query
   #[ tokio::test ]
   async fn test_is_cancelled()
   {
@@ -137,7 +137,7 @@ mod tests
     // Stream state changes during polling, so we just verify the API
   }
 
-  /// Test try_pause (non-blocking)
+  /// Test `try_pause` (non-blocking)
   #[ tokio::test ]
   async fn test_try_pause()
   {
@@ -152,7 +152,7 @@ mod tests
     while stream.next().await.is_some() {}
   }
 
-  /// Test try_resume (non-blocking)
+  /// Test `try_resume` (non-blocking)
   #[ tokio::test ]
   async fn test_try_resume()
   {
@@ -169,7 +169,7 @@ mod tests
     while stream.next().await.is_some() {}
   }
 
-  /// Test try_cancel (non-blocking)
+  /// Test `try_cancel` (non-blocking)
   #[ tokio::test ]
   async fn test_try_cancel()
   {
@@ -194,7 +194,7 @@ mod tests
     for cycle in 0..3
     {
       // Read one chunk
-      assert!( stream.next().await.is_some(), "Failed at cycle {}", cycle );
+      assert!( stream.next().await.is_some(), "Failed at cycle {cycle}" );
 
       // Pause
       control.pause().await.unwrap();
@@ -300,7 +300,7 @@ mod tests
         }
         else
         {
-          tx.send( Ok( format!( "chunk_{}", i ) ) ).await.ok();
+          tx.send( Ok( format!( "chunk_{i}" ) ) ).await.ok();
         }
         tokio::time::sleep( tokio::time::Duration::from_millis( 50 ) ).await;
       }
@@ -337,7 +337,7 @@ mod tests
     let ( stream, handle ) = wrap_stream( rx );
 
     // Verify Debug trait works
-    let _ = format!( "{:?}", stream );
-    let _ = format!( "{:?}", handle );
+    let _ = format!( "{stream:?}" );
+    let _ = format!( "{handle:?}" );
   }
 }

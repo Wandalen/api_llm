@@ -14,6 +14,8 @@ mod private
     secret ::Secret,
     Message, messages::{ Content, Role },
   };
+  #[ cfg( feature = "count-tokens" ) ]
+  use crate::{ CountMessageTokensRequest, CountMessageTokensResponse };
   use std::{ sync::Arc, time::Duration };
   use tokio::runtime::Runtime;
 
@@ -220,6 +222,19 @@ mod private
         stream,
         runtime : self.runtime.clone(),
       } )
+    }
+
+    /// Count message tokens synchronously
+    ///
+    /// Returns token count for the given request without making an API call
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the request fails or token counting cannot be performed
+    #[ cfg( feature = "count-tokens" ) ]
+    pub fn count_message_tokens( &self, request : &CountMessageTokensRequest ) -> AnthropicResult< CountMessageTokensResponse >
+    {
+      self.runtime.block_on( self.inner.count_message_tokens( request.clone() ) )
     }
   }
 

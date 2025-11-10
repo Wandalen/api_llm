@@ -33,6 +33,12 @@ mod private
 
   use crate::{ ChatCompletionRequest, ChatCompletionResponse, Client, XaiEnvironment, ClientApiAccessors };
   use crate::error::Result;
+  #[ cfg( feature = "streaming" ) ]
+  use crate::ChatCompletionChunk;
+  #[ cfg( feature = "streaming" ) ]
+  use futures_core::Stream;
+  #[ cfg( feature = "streaming" ) ]
+  use std::pin::Pin;
 
   #[ cfg( feature = "sync_api" ) ]
   use tokio::runtime::Runtime;
@@ -175,6 +181,73 @@ mod private
       self.runtime.block_on( self.client.chat().create( request ) )
     }
 
+    /// Creates a streaming chat completion request (blocking iterator).
+    ///
+    /// Returns a blocking iterator over streaming chunks.
+    ///
+    /// # Arguments
+    ///
+    /// * `request` - The chat completion request
+    ///
+    /// # Returns
+    ///
+    /// A blocking iterator that yields `ChatCompletionChunk` items.
+    ///
+    /// # Errors
+    ///
+    /// Returns errors from the underlying API client.
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// # #[ cfg( all( feature = "sync_api", feature = "streaming" ) ) ]
+    /// # {
+    /// use api_xai::{ SyncClient, Client, Secret, XaiEnvironmentImpl, ChatCompletionRequest, Message };
+    ///
+    /// # fn example() -> Result< (), Box< dyn std::error::Error > > {
+    /// let secret = Secret::new( "xai-key".to_string() )?;
+    /// let env = XaiEnvironmentImpl::new( secret )?;
+    /// let client = Client::build( env )?;
+    /// let sync_client = SyncClient::new( client )?;
+    ///
+    /// let request = ChatCompletionRequest::former()
+    ///   .model( "grok-3".to_string() )
+    ///   .messages( vec![ Message::user( "Hello!" ) ] )
+    ///   .form();
+    ///
+    /// let mut stream = sync_client.create_stream( request )?;
+    /// for chunk in stream
+    /// {
+    ///   let chunk = chunk?;
+    ///   if let Some( choice ) = chunk.choices.first()
+    ///   {
+    ///     if let Some( ref content ) = choice.delta.content
+    ///     {
+    ///       print!( "{}", content );
+    ///     }
+    ///   }
+    /// }
+    /// # Ok( () )
+    /// # }
+    /// # }
+    /// ```
+    #[ cfg( feature = "streaming" ) ]
+    pub fn create_stream( &self, request : ChatCompletionRequest ) -> Result< SyncStreamIterator< E > >
+    {
+      let stream = self.runtime.block_on( self.client.chat().create_stream( request ) )?;
+
+      Ok
+      (
+        SyncStreamIterator
+        {
+          stream,
+          runtime : Runtime::new()
+            .map_err( | e | crate::error::XaiError::ApiError( format!( "Runtime error : {e}" ) ) )?,
+          _phantom : core::marker::PhantomData,
+        }
+      )
+    }
+
     /// Lists available models (blocking).
     ///
     /// # Returns
@@ -248,6 +321,48 @@ mod private
     pub fn get_model( &self, model_id : &str ) -> Result< crate::components::Model >
     {
       self.runtime.block_on( self.client.models().get( model_id ) )
+    }
+  }
+
+  /// Synchronous iterator wrapper around async streaming.
+  ///
+  /// Provides a blocking iterator over `ChatCompletionChunk` items
+  /// by wrapping the async stream in a dedicated tokio runtime.
+  #[ cfg( feature = "streaming" ) ]
+  pub struct SyncStreamIterator< E >
+  where
+    E : XaiEnvironment + Send + Sync + 'static,
+  {
+    stream : Pin< Box< dyn Stream< Item = Result< ChatCompletionChunk > > + Send + 'static > >,
+    runtime : Runtime,
+    _phantom : core::marker::PhantomData< E >,
+  }
+
+  #[ cfg( feature = "streaming" ) ]
+  impl< E > core::fmt::Debug for SyncStreamIterator< E >
+  where
+    E : XaiEnvironment + Send + Sync + 'static,
+  {
+    fn fmt( &self, f : &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result
+    {
+      f.debug_struct( "SyncStreamIterator" )
+        .field( "runtime", &self.runtime )
+        .finish_non_exhaustive()
+    }
+  }
+
+  #[ cfg( feature = "streaming" ) ]
+  impl< E > Iterator for SyncStreamIterator< E >
+  where
+    E : XaiEnvironment + Send + Sync + 'static,
+  {
+    type Item = Result< ChatCompletionChunk >;
+
+    fn next( &mut self ) -> Option< Self::Item >
+    {
+      use futures_util::StreamExt;
+
+      self.runtime.block_on( self.stream.next() )
     }
   }
 
@@ -469,6 +584,12 @@ crate ::mod_interface!
   exposed use
   {
     SyncClient,
+  };
+
+  #[ cfg( all( feature = "sync_api", feature = "streaming" ) ) ]
+  exposed use
+  {
+    SyncStreamIterator,
   };
 
   #[ cfg( all( feature = "sync_api", feature = "count_tokens" ) ) ]

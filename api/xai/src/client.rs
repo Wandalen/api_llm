@@ -310,7 +310,7 @@ mod private
       &self,
       path : &str,
       body : &I
-    ) -> Result< Pin< Box< dyn Stream< Item = Result< O > > + Send + '_ > > >
+    ) -> Result< Pin< Box< dyn Stream< Item = Result< O > > + Send + 'static > > >
     where
       I : Serialize,
       O : DeserializeOwned + Send + 'static,

@@ -46,7 +46,8 @@ mod sync_api_functionality_tests
 
   /// Test sync message creation and sending
   #[ test ]
-  fn test_sync_message_operations()
+  #[ ignore = "Requires workspace secrets file" ]
+fn test_sync_message_operations()
   {
     use the_module::{ SyncClient, CreateMessageRequest, Message };
 
@@ -87,7 +88,8 @@ mod sync_api_functionality_tests
 
   /// Test sync message with system prompts
   #[ test ]
-  fn test_sync_message_with_system_prompt()
+  #[ ignore = "Requires workspace secrets file" ]
+fn test_sync_message_with_system_prompt()
   {
     use the_module::{ SyncClient, CreateMessageRequest };
 
@@ -124,7 +126,8 @@ mod sync_api_functionality_tests
 
   /// Test sync conversation flow
   #[ test ]
-  fn test_sync_conversation_flow()
+  #[ ignore = "Requires workspace secrets file" ]
+fn test_sync_conversation_flow()
   {
     use the_module::{ SyncClient, CreateMessageRequest, Message };
 
@@ -170,7 +173,8 @@ mod sync_api_functionality_tests
 
   /// Test sync client with different models
   #[ test ]
-  fn test_sync_client_multiple_models()
+  #[ ignore = "Requires workspace secrets file" ]
+fn test_sync_client_multiple_models()
   {
     use the_module::{ SyncClient, CreateMessageRequest };
 

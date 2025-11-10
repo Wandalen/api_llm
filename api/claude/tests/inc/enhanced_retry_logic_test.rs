@@ -375,6 +375,7 @@ mod enhanced_retry_tests
 
   #[ cfg( feature = "integration" ) ]
   #[ tokio::test ]
+  #[ ignore = "Requires workspace secrets file" ]
   async fn integration_retry_with_explicit_config()
   {
     use std::time::Duration;

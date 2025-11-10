@@ -1,6 +1,6 @@
 //! Tests for enhanced function calling functionality
 //!
-//! Verifies the ToolExecutor trait, ToolRegistry, and helper functions
+//! Verifies the `ToolExecutor` trait, `ToolRegistry`, and helper functions
 //! for type-safe tool execution.
 
 #[ cfg( all( test, feature = "enhanced_function_calling" ) ) ]
@@ -8,8 +8,7 @@ mod tests
 {
   use api_ollama::
   {
-    enhanced_function_calling ::{ ToolExecutor, ToolRegistry, ToolResult, helpers },
-    ToolDefinition,
+    enhanced_function_calling::{ ToolExecutor, ToolRegistry, ToolResult, helpers },
     ToolCall,
   };
   use serde_json::json;
@@ -19,12 +18,12 @@ mod tests
 
   impl ToolExecutor for WeatherTool
   {
-    fn name( &self ) -> &str
+    fn name( &self ) -> &'static str
     {
       "get_weather"
     }
 
-    fn description( &self ) -> &str
+    fn description( &self ) -> &'static str
     {
       "Get current weather for a location"
     }
@@ -68,12 +67,12 @@ mod tests
 
   impl ToolExecutor for CalculatorTool
   {
-    fn name( &self ) -> &str
+    fn name( &self ) -> &'static str
     {
       "calculate"
     }
 
-    fn description( &self ) -> &str
+    fn description( &self ) -> &'static str
     {
       "Perform basic arithmetic"
     }
@@ -119,10 +118,10 @@ mod tests
           }
           a / b
         },
-        _ => return Err( format!( "Unknown operation : {}", operation ) ),
+        _ => return Err( format!( "Unknown operation : {operation}" ) ),
       };
 
-      Ok( format!( "{}", result ) )
+      Ok( format!( "{result}" ) )
     }
   }
 
@@ -310,7 +309,7 @@ mod tests
     assert!( result.unwrap_err().contains( "Division by zero" ) );
   }
 
-  /// Test helper : create_simple_tool
+  /// Test helper : `create_simple_tool`
   #[ test ]
   fn test_helper_create_simple_tool()
   {
@@ -338,7 +337,7 @@ mod tests
     assert_eq!( required[ 0 ], "param1" );
   }
 
-  /// Test helper : create_enum_tool
+  /// Test helper : `create_enum_tool`
   #[ test ]
   fn test_helper_create_enum_tool()
   {
@@ -371,7 +370,7 @@ mod tests
     let mut registry = ToolRegistry::new();
     registry.register( Box::new( WeatherTool ) );
 
-    let debug_output = format!( "{:?}", registry );
+    let debug_output = format!( "{registry:?}" );
     assert!( debug_output.contains( "ToolRegistry" ) );
     assert!( debug_output.contains( "get_weather" ) );
   }

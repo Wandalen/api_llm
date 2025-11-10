@@ -31,7 +31,7 @@ mod private
   #[ derive( Debug, Clone, Serialize, Deserialize, PartialEq ) ]
   pub struct RuntimeConfig
   {
-    /// Base URL for API requests (default : < https://api.anthropic.com >)
+    /// Base URL for API requests (default: <https://api.anthropic.com>)
     #[ serde( default = "default_base_url" ) ]
     pub base_url : String,
     /// API version (default : "2023-06-01")

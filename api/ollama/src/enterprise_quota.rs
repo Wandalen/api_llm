@@ -84,24 +84,13 @@ mod private
 
   /// Quota configuration
   #[ derive( Debug, Clone, PartialEq ) ]
+  #[ derive( Default ) ]
   pub struct QuotaConfig
   {
     /// Maximum requests allowed
     pub max_requests : Option< u64 >,
     /// Maximum total tokens allowed
     pub max_tokens : Option< u64 >,
-  }
-
-  impl Default for QuotaConfig
-  {
-    fn default() -> Self
-    {
-      Self
-      {
-        max_requests : None,
-        max_tokens : None,
-      }
-    }
   }
 
   impl QuotaConfig

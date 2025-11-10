@@ -109,7 +109,7 @@ async fn error_chain_propagation()
   {
   HuggingFaceError::InvalidArgument( msg ) =>
   {
-      assert!( msg.contains( "Wrapped:" ), "Should contain wrapped error context" );
+      assert!( msg.contains( "Wrapped :" ), "Should contain wrapped error context" );
       assert!( msg.contains( "Connection failed" ), "Should contain original error message" );
   },
   other => panic!( "Expected InvalidArgument error, got : {other:?}" ),

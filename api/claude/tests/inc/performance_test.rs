@@ -231,6 +231,7 @@ async fn test_concurrent_request_construction_performance()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
+  #[ ignore = "Requires workspace secrets file" ]
 async fn integration_performance_api_response_time()
 {
   let client = the_module::Client::from_workspace()
@@ -279,6 +280,7 @@ async fn integration_performance_api_response_time()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
+  #[ ignore = "Requires workspace secrets file" ]
 async fn integration_performance_concurrent_api_requests()
 {
   let client = the_module::Client::from_workspace()

@@ -426,7 +426,7 @@ async fn test_diagnostics_debug_and_display()
   // Test Debug implementation
   let debug_output = format!("{collector:?}");
   assert!(debug_output.contains("DiagnosticsCollector"));
-  assert!(debug_output.contains("total_requests : 0"));
+  assert!(debug_output.contains("total_requests: 0"));
 
   // Test Display implementation for reports
   let report = collector.generate_report();

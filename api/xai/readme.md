@@ -2,7 +2,7 @@
 
 [![experimental](https://raster.shields.io/static/v1?label=stability&message=experimental&color=orange&logoColor=eee)](https://github.com/emersion/stability-badges#experimental)
 
-**Production-ready Rust client for X.AI's Grok API with 73% feature coverage**
+**Production-ready Rust client for X.AI's Grok API with 76% feature coverage**
 
 A comprehensive, feature-rich HTTP client for interacting with X.AI's Grok API. Built with the "Thin Client, Rich API" principle, providing transparent access to all server-side functionality plus powerful client-side enhancements.
 

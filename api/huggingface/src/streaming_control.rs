@@ -28,7 +28,7 @@ mod private
   use crate::error::{ Result, HuggingFaceError };
   use tokio::sync::mpsc;
   use futures_core::Stream;
-  use std::{ pin::Pin, task::{ Context, Poll } };
+  use core::{ pin::Pin, task::{ Context, Poll } };
 
   /// Control signal for stream operations
   #[ derive( Debug, Clone, Copy, PartialEq, Eq ) ]
@@ -226,6 +226,7 @@ mod private
   {
     type Item = Result< String >;
 
+    #[ inline ]
     fn poll_next( mut self : Pin< &mut Self >, cx : &mut Context< '_ > ) -> Poll< Option< Self::Item > >
     {
       // Process all pending control signals
@@ -283,17 +284,18 @@ mod private
 
   impl core::fmt::Debug for ControlledStream
   {
+    #[ inline ]
     fn fmt( &self, f : &mut core::fmt::Formatter< '_ > ) -> core::fmt::Result
     {
       f.debug_struct( "ControlledStream" )
         .field( "state", &self.state )
-        .finish()
+        .finish_non_exhaustive()
     }
   }
 
   /// Create a controlled stream from an existing receiver
   ///
-  /// Returns a tuple of (ControlledStream, ControlHandle)
+  /// Returns a tuple of (`ControlledStream`, `ControlHandle`)
   ///
   /// # Arguments
   ///

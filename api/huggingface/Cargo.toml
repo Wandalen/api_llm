@@ -172,8 +172,8 @@ name = "huggingface_multi_turn_conversation"
 path = "examples/huggingface_multi_turn_conversation.rs"
 
 [[example]]
-name = "interactive_chat"
-path = "examples/interactive_chat.rs"
+name = "hf_interactive_chat"
+path = "examples/hf_interactive_chat.rs"
 
 [[example]]
 name = "inference_create"

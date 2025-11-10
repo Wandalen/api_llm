@@ -148,6 +148,11 @@ crate ::mod_interface!
   layer performance_monitoring;
   layer platform_specific;
 
+  #[ cfg( feature = "input_validation" ) ]
+  layer input_validation;
+  #[ cfg( feature = "input_validation" ) ]
+  layer request_validation;
+
   #[ cfg( feature = "batching" ) ]
   layer request_batching;
 

@@ -71,6 +71,7 @@ mod private
   }
 
   /// Buffered stream wrapper
+  #[ derive( Debug ) ]
   pub struct BufferedStream< S >
   {
     inner : S,

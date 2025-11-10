@@ -9,6 +9,7 @@ mod private
   use serde::Serialize;
 
   /// CURL command generator
+  #[ derive( Debug ) ]
   pub struct CurlGenerator;
 
   impl CurlGenerator

@@ -977,14 +977,12 @@ mod private
         let successful_count = window_metrics.iter().filter( | m | m.is_successful ).count();
         let failed_count = request_count - successful_count;
 
-        let avg_response_time = if !window_metrics.is_empty()
-        {
-          let total : Duration = window_metrics.iter().map( | m | m.response_time ).sum();
-          total / request_count as u32
-        }
-        else
+        let avg_response_time = if window_metrics.is_empty()
         {
           Duration::ZERO
+        } else {
+          let total : Duration = window_metrics.iter().map( | m | m.response_time ).sum();
+          total / request_count as u32
         };
 
         let throughput_rps = request_count as f64 / window_duration.as_secs_f64();

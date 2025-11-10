@@ -164,6 +164,7 @@ mod embeddings_integration_tests
 
   /// Test embedding API error handling for unsupported endpoint
   #[ tokio::test ]
+  #[ ignore = "Requires workspace secrets file" ]
   async fn test_embedding_api_not_supported_error()
   {
     // Since Anthropic doesn't support embeddings yet, test proper error handling
@@ -191,6 +192,7 @@ mod embeddings_integration_tests
 
   /// Test embedding workflow placeholder for future implementation
   #[ tokio::test ]
+  #[ ignore = "Requires workspace secrets file" ]
   async fn test_embedding_workflow_placeholder()
   {
     let client = the_module::Client::from_workspace()

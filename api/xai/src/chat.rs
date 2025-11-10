@@ -165,7 +165,7 @@ mod private
     pub async fn create_stream(
       &self,
       mut request : ChatCompletionRequest
-    ) -> Result< Pin< Box< dyn Stream< Item = Result< ChatCompletionChunk > > + Send + '_ > > >
+    ) -> Result< Pin< Box< dyn Stream< Item = Result< ChatCompletionChunk > > + Send + 'static > > >
     {
       // Enable streaming
       request.stream = Some( true );

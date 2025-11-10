@@ -2,7 +2,7 @@
 
 [![experimental](https://raster.shields.io/static/v1?label=stability&message=experimental&color=orange&logoColor=eee)](https://github.com/emersion/stability-badges#experimental)
 
-**Production-ready Rust client for Anthropic's Claude API**
+**Production-ready Rust client for Anthropic's Claude API with 83% feature coverage**
 
 A comprehensive, feature-rich HTTP client for interacting with Anthropic's Claude API. Built with safety, performance, and developer experience in mind.
 

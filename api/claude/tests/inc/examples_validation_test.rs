@@ -62,6 +62,7 @@ fn test_function_calling_tool_choice_format()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
+  #[ ignore = "Requires workspace secrets file" ]
 async fn test_function_calling_real_api_basic()
 {
     // Test that function calling works with real API

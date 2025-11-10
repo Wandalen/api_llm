@@ -99,6 +99,7 @@ mod private
   }
 
   /// Model comparator for A/B testing
+  #[ derive( Debug ) ]
   pub struct ModelComparator< 'a >
   {
     client : &'a mut OllamaClient,
@@ -127,7 +128,7 @@ mod private
     {
       if model_names.is_empty()
       {
-        return Err( error_tools::untyped::format_err!( "At least one model required" ).into() );
+        return Err( error_tools::untyped::format_err!( "At least one model required" ) );
       }
 
       let start = Instant::now();

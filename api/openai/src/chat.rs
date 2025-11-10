@@ -75,6 +75,20 @@ mod private
     #[ inline ]
     pub async fn create( &self, request : ChatCompletionRequest ) -> Result< CreateChatCompletionResponse >
     {
+      // Validate request before processing
+      #[ cfg( feature = "input_validation" ) ]
+      {
+        use crate::input_validation::Validate;
+        if let Err( validation_errors ) = request.validate()
+        {
+          let error_messages : Vec< String > = validation_errors
+            .iter()
+            .map( | e | format!( "{e}" ) )
+            .collect();
+          return Err( error_tools::Error::from( crate::error::OpenAIError::InvalidArgument( format!( "Request validation failed : {}", error_messages.join( "; " ) ) ) ) );
+        }
+      }
+
       self.client.post( "chat/completions", &request ).await
     }
 
@@ -88,6 +102,20 @@ mod private
     #[ inline ]
     pub async fn create_stream( &self, request : ChatCompletionRequest ) -> Result< mpsc::Receiver< Result< ChatCompletionStreamResponse > > >
     {
+      // Validate request before processing
+      #[ cfg( feature = "input_validation" ) ]
+      {
+        use crate::input_validation::Validate;
+        if let Err( validation_errors ) = request.validate()
+        {
+          let error_messages : Vec< String > = validation_errors
+            .iter()
+            .map( | e | format!( "{e}" ) )
+            .collect();
+          return Err( error_tools::Error::from( crate::error::OpenAIError::InvalidArgument( format!( "Request validation failed : {}", error_messages.join( "; " ) ) ) ) );
+        }
+      }
+
       self.client.post_stream( "chat/completions", &request ).await
     }
   }

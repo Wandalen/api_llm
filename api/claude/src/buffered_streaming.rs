@@ -71,12 +71,14 @@ mod private
   }
 
   /// Buffered stream wrapper
+  #[ derive( Debug ) ]
   pub struct BufferedStream< S >
   {
     inner : S,
     buffer : String,
     config : BufferConfig,
     last_flush : Instant,
+    #[ allow( dead_code ) ]
     flush_timer : Option< Pin< Box< Sleep > > >,
   }
 

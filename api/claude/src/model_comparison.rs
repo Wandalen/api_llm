@@ -99,6 +99,7 @@ mod private
   }
 
   /// Model comparator for A/B testing
+  #[ derive( Debug ) ]
   pub struct ModelComparator< 'a >
   {
     client : &'a Client,
@@ -146,7 +147,8 @@ mod private
         match self.client.create_message( request ).await
         {
           Ok( response ) => {
-            let elapsed = request_start.elapsed().as_millis() as u64;
+            #[ allow( clippy::cast_possible_truncation ) ]
+            let elapsed = request_start.elapsed().as_millis().min( u128::from( u64::MAX ) ) as u64;
 
             results.push( ModelComparisonResult
             {
@@ -160,7 +162,8 @@ mod private
             } );
           },
           Err( err ) => {
-            let elapsed = request_start.elapsed().as_millis() as u64;
+            #[ allow( clippy::cast_possible_truncation ) ]
+            let elapsed = request_start.elapsed().as_millis().min( u128::from( u64::MAX ) ) as u64;
 
             // Create empty response for failed request
             let empty_response = CreateMessageResponse
@@ -195,7 +198,8 @@ mod private
         }
       }
 
-      let total_time_ms = start.elapsed().as_millis() as u64;
+      #[ allow( clippy::cast_possible_truncation ) ]
+      let total_time_ms = start.elapsed().as_millis().min( u128::from( u64::MAX ) ) as u64;
 
       // Identify fastest and slowest models
       let fastest_model = results
@@ -253,7 +257,8 @@ mod private
           match self.client.create_message( request ).await
           {
             Ok( response ) => {
-              let elapsed = request_start.elapsed().as_millis() as u64;
+              #[ allow( clippy::cast_possible_truncation ) ]
+              let elapsed = request_start.elapsed().as_millis().min( u128::from( u64::MAX ) ) as u64;
 
               ModelComparisonResult
               {
@@ -267,7 +272,8 @@ mod private
               }
             },
             Err( err ) => {
-              let elapsed = request_start.elapsed().as_millis() as u64;
+              #[ allow( clippy::cast_possible_truncation ) ]
+              let elapsed = request_start.elapsed().as_millis().min( u128::from( u64::MAX ) ) as u64;
 
               // Create empty response for failed request
               let empty_response = CreateMessageResponse
@@ -306,7 +312,8 @@ mod private
       // Execute all requests in parallel
       let results = futures::future::join_all( futures ).await;
 
-      let total_time_ms = start.elapsed().as_millis() as u64;
+      #[ allow( clippy::cast_possible_truncation ) ]
+      let total_time_ms = start.elapsed().as_millis().min( u128::from( u64::MAX ) ) as u64;
 
       // Identify fastest and slowest models
       let fastest_model = results
