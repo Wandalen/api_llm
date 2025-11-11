@@ -149,6 +149,10 @@ crate ::mod_interface!
   layer request_templates;
   #[ cfg( feature = "buffered-streaming" ) ]
   layer buffered_streaming;
+  #[ cfg( feature = "input-validation" ) ]
+  layer input_validation;
+  #[ cfg( feature = "enhanced-function-calling" ) ]
+  layer enhanced_function_calling;
 }
 
 /// Serde-related exports.

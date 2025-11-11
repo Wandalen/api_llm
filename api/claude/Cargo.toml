@@ -27,7 +27,7 @@ all-features = false
 # Default enables everything for ease of use
 default = [ "full" ]
 # 'full' enables all features, including the base 'enabled'
-full = [ "enabled", "integration", "streaming", "authentication", "content-generation", "model-management", "error-handling", "tools", "vision", "embeddings", "curl-diagnostics", "general-diagnostics", "sync-api", "retry-logic", "circuit-breaker", "rate-limiting", "failover", "health-checks", "batch-processing", "count-tokens", "request-caching", "streaming-control", "compression", "enterprise-quota", "dynamic-config", "model-comparison", "request-templates", "buffered-streaming" ]
+full = [ "enabled", "integration", "streaming", "authentication", "content-generation", "model-management", "error-handling", "tools", "vision", "embeddings", "curl-diagnostics", "general-diagnostics", "sync-api", "retry-logic", "circuit-breaker", "rate-limiting", "failover", "health-checks", "batch-processing", "count-tokens", "request-caching", "streaming-control", "compression", "enterprise-quota", "dynamic-config", "model-comparison", "request-templates", "buffered-streaming", "input-validation", "enhanced-function-calling" ]
 # 'enabled' is the master switch for the crate's core functionality
 enabled = [
   "dep:mod_interface",
@@ -95,6 +95,10 @@ model-comparison = []
 request-templates = []
 # Feature for buffered streaming with smoother UX
 buffered-streaming = [ "streaming" ]
+# Feature for input validation before API calls
+input-validation = []
+# Feature for enhanced function calling with type-safe execution
+enhanced-function-calling = [ "tools" ]
 
 [dependencies]
 
