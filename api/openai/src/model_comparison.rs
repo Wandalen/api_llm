@@ -136,6 +136,7 @@ mod private
     /// # Errors
     ///
     /// Returns error if client fails to execute requests
+    #[ inline ]
     pub async fn compare
     (
       &self,
@@ -293,6 +294,7 @@ mod private
   {
     /// Create a model comparator for A/B testing
     #[ must_use ]
+    #[ inline ]
     pub fn comparator( &self ) -> ModelComparator< '_, E >
     {
       ModelComparator::new( self )

@@ -44,12 +44,6 @@ fn create_sample_text_data() -> Vec< u8 >
 
 #[ tokio::test ]
 
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini API schema mismatch - sizeBytes returned as string instead of i64
-// RE-ENABLE: When API fixes schema or update models to handle string sizeBytes
-// APPROVED: self (test author)
-// TRACKING: API schema compatibility
-#[ ignore ]
 async fn test_upload_image_file() -> Result< (), Box< dyn std::error::Error > >
 {
   let client = create_integration_client();
@@ -79,12 +73,6 @@ async fn test_upload_image_file() -> Result< (), Box< dyn std::error::Error > >
 
 #[ tokio::test ]
 
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini API schema mismatch - sizeBytes returned as string instead of i64
-// RE-ENABLE: When API fixes schema or update models to handle string sizeBytes
-// APPROVED: self (test author)
-// TRACKING: API schema compatibility
-#[ ignore ]
 async fn test_upload_text_file() -> Result< (), Box< dyn std::error::Error > >
 {
   let client = create_integration_client();
@@ -114,12 +102,6 @@ async fn test_upload_text_file() -> Result< (), Box< dyn std::error::Error > >
 
 #[ tokio::test ]
 
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini API schema mismatch - sizeBytes returned as string instead of i64, causing deserialization error
-// RE-ENABLE: When API fixes schema or update models to handle string sizeBytes
-// APPROVED: self (test author)
-// TRACKING: API schema compatibility
-#[ ignore ]
 async fn test_list_files() -> Result< (), Box< dyn std::error::Error > >
 {
   let client = create_integration_client();
@@ -162,12 +144,6 @@ async fn test_list_files() -> Result< (), Box< dyn std::error::Error > >
 
 #[ tokio::test ]
 
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini API schema mismatch - sizeBytes returned as string instead of i64, causing deserialization error
-// RE-ENABLE: When API fixes schema or update models to handle string sizeBytes
-// APPROVED: self (test author)
-// TRACKING: API schema compatibility
-#[ ignore ]
 async fn test_list_files_with_pagination() -> Result< (), Box< dyn std::error::Error > >
 {
   let client = create_integration_client();
@@ -209,12 +185,6 @@ async fn test_list_files_with_pagination() -> Result< (), Box< dyn std::error::E
 
 #[ tokio::test ]
 
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini API schema mismatch - sizeBytes returned as string instead of i64, causing deserialization error
-// RE-ENABLE: When API fixes schema or update models to handle string sizeBytes
-// APPROVED: self (test author)
-// TRACKING: API schema compatibility
-#[ ignore ]
 async fn test_get_file_metadata() -> Result< (), Box< dyn std::error::Error > >
 {
   let client = create_integration_client();
@@ -259,12 +229,6 @@ async fn test_get_file_metadata() -> Result< (), Box< dyn std::error::Error > >
 
 #[ tokio::test ]
 
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini API schema mismatch - sizeBytes returned as string instead of i64, causing deserialization error
-// RE-ENABLE: When API fixes schema or update models to handle string sizeBytes
-// APPROVED: self (test author)
-// TRACKING: API schema compatibility
-#[ ignore ]
 async fn test_delete_file() -> Result< (), Box< dyn std::error::Error > >
 {
   let client = create_integration_client();
@@ -297,12 +261,6 @@ async fn test_delete_file() -> Result< (), Box< dyn std::error::Error > >
 
 #[ tokio::test ]
 
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini API schema mismatch - sizeBytes returned as string instead of i64
-// RE-ENABLE: When API fixes schema or update models to handle string sizeBytes
-// APPROVED: self (test author)
-// TRACKING: API schema compatibility
-#[ ignore ]
 async fn test_upload_large_file() -> Result< (), Box< dyn std::error::Error > >
 {
   let client = create_integration_client();
@@ -343,12 +301,6 @@ async fn test_upload_large_file() -> Result< (), Box< dyn std::error::Error > >
 
 #[ tokio::test ]
 
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini API schema mismatch - sizeBytes returned as string instead of i64
-// RE-ENABLE: When API fixes schema or update models to handle string sizeBytes
-// APPROVED: self (test author)
-// TRACKING: API schema compatibility
-#[ ignore ]
 async fn test_upload_file_without_display_name() -> Result< (), Box< dyn std::error::Error > >
 {
   let client = create_integration_client();
@@ -450,12 +402,6 @@ async fn test_upload_unsupported_file_type() -> Result< (), Box< dyn std::error:
 
 #[ tokio::test ]
 
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini API schema mismatch - sizeBytes returned as string instead of i64, causing deserialization error
-// RE-ENABLE: When API fixes schema or update models to handle string sizeBytes
-// APPROVED: self (test author)
-// TRACKING: API schema compatibility
-#[ ignore ]
 async fn test_file_upload_lifecycle() -> Result< (), Box< dyn std::error::Error > >
 {
   let client = create_integration_client();

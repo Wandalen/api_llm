@@ -114,11 +114,11 @@ mod private
       Ok( () )
     }
 
-    /// Validate max_tokens (must be positive, Claude supports up to 4096)
+    /// Validate `max_tokens` (must be positive, Claude supports up to 4096)
     ///
     /// # Errors
     ///
-    /// Returns error if max_tokens is non-positive or exceeds 4096
+    /// Returns error if `max_tokens` is non-positive or exceeds 4096
     pub fn validate_max_tokens( max_tokens : u32 ) -> Result< (), ValidationError >
     {
       if max_tokens == 0
@@ -161,11 +161,11 @@ mod private
       Ok( () )
     }
 
-    /// Validate top_p (0.0 to 1.0)
+    /// Validate `top_p` (0.0 to 1.0)
     ///
     /// # Errors
     ///
-    /// Returns error if top_p is outside 0.0-1.0
+    /// Returns error if `top_p` is outside 0.0-1.0
     pub fn validate_top_p( top_p : f32 ) -> Result< (), ValidationError >
     {
       if !( 0.0..=1.0 ).contains( &top_p )
@@ -179,11 +179,11 @@ mod private
       Ok( () )
     }
 
-    /// Validate top_k (must be positive)
+    /// Validate `top_k` (must be positive)
     ///
     /// # Errors
     ///
-    /// Returns error if top_k is non-positive or exceeds reasonable limit
+    /// Returns error if `top_k` is non-positive or exceeds reasonable limit
     pub fn validate_top_k( top_k : u32 ) -> Result< (), ValidationError >
     {
       if top_k == 0
@@ -357,7 +357,7 @@ mod private
         .with_value( "2.5" )
         .with_constraint( "0.0 <= temperature <= 1.0" );
 
-      let display = format!( "{}", err );
+      let display = format!( "{err}" );
       assert!( display.contains( "temperature" ) );
       assert!( display.contains( "Invalid value" ) );
       assert!( display.contains( "2.5" ) );

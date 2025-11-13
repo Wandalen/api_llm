@@ -83,8 +83,8 @@ fn test_curl_command_generation_basic()
   assert!(curl_command.contains("curl"));
   assert!(curl_command.contains("-X POST"));
   assert!(curl_command.contains("https://api.openai.com/v1/embeddings"));
-  assert!(curl_command.contains("-H 'Authorization : Bearer sk-test'"));
-  assert!(curl_command.contains("-H 'Content-Type : application/json'"));
+  assert!(curl_command.contains("-H 'Authorization: Bearer sk-test'"));
+  assert!(curl_command.contains("-H 'Content-Type: application/json'"));
   assert!(curl_command.contains("-d"));
   assert!(curl_command.contains("text-embedding-ada-002"));
 }
@@ -127,7 +127,7 @@ fn test_curl_command_get_request()
   assert!(curl_command.contains("curl"));
   assert!(curl_command.contains("-X GET"));
   assert!(curl_command.contains("https://api.openai.com/v1/models"));
-  assert!(curl_command.contains("-H 'Authorization : Bearer sk-test'"));
+  assert!(curl_command.contains("-H 'Authorization: Bearer sk-test'"));
   assert!(!curl_command.contains("-d")); // No body for GET request
 }
 
@@ -202,7 +202,7 @@ fn test_models_list_request_to_curl()
   assert!(curl_command.contains("curl"));
   assert!(curl_command.contains("-X GET"));
   assert!(curl_command.contains("https://api.openai.com/v1/models"));
-  assert!(curl_command.contains("Authorization : Bearer") || curl_command.contains("authorization : Bearer"));
+  assert!(curl_command.contains("Authorization: Bearer") || curl_command.contains("authorization: Bearer"));
 }
 
 #[ test ]
@@ -215,7 +215,7 @@ fn test_models_retrieve_request_to_curl()
   assert!(curl_command.contains("curl"));
   assert!(curl_command.contains("-X GET"));
   assert!(curl_command.contains("https://api.openai.com/v1/models/gpt-3.5-turbo"));
-  assert!(curl_command.contains("Authorization : Bearer") || curl_command.contains("authorization : Bearer"));
+  assert!(curl_command.contains("Authorization: Bearer") || curl_command.contains("authorization: Bearer"));
 }
 
 #[ test ]
@@ -236,8 +236,8 @@ fn test_curl_generation_with_custom_headers()
     .to_curl_with_headers(&request, &custom_headers)
     .expect("Failed to generate cURL");
 
-  assert!(curl_command.contains("-H 'X-Custom-Header : custom-value'"));
-  assert!(curl_command.contains("-H 'User-Agent : MyApp/1.0'"));
+  assert!(curl_command.contains("-H 'X-Custom-Header: custom-value'"));
+  assert!(curl_command.contains("-H 'User-Agent: MyApp/1.0'"));
 }
 
 #[ test ]
@@ -262,8 +262,8 @@ fn test_curl_generation_with_organization_project()
 
   let curl_command = client.embeddings().to_curl(&request).expect("Failed to generate cURL");
 
-  assert!(curl_command.contains("-H 'openai-organization : org-123'"));
-  assert!(curl_command.contains("-H 'openai-project : proj-456'"));
+  assert!(curl_command.contains("-H 'openai-organization: org-123'"));
+  assert!(curl_command.contains("-H 'openai-project: proj-456'"));
 }
 
 #[ test ]
@@ -279,7 +279,7 @@ fn test_curl_security_header_redaction()
   let curl_command = client.embeddings().to_curl_safe(&request).expect("Failed to generate safe cURL");
 
   // API key should be redacted for security
-  assert!(curl_command.contains("Authorization : Bearer [REDACTED]"));
+  assert!(curl_command.contains("Authorization: Bearer [REDACTED]"));
   assert!(!curl_command.contains("sk-")); // No actual API keys should be present
 }
 

@@ -21,6 +21,7 @@ mod private
   {
     /// Create a chat template with balanced parameters
     #[ must_use ]
+    #[ inline ]
     pub fn chat( model : impl Into< String > ) -> Self
     {
       Self
@@ -34,6 +35,7 @@ mod private
 
     /// Create a code generation template
     #[ must_use ]
+    #[ inline ]
     pub fn code_generation( model : impl Into< String > ) -> Self
     {
       Self
@@ -47,6 +49,7 @@ mod private
 
     /// Create a creative writing template
     #[ must_use ]
+    #[ inline ]
     pub fn creative_writing( model : impl Into< String > ) -> Self
     {
       Self
@@ -60,6 +63,7 @@ mod private
 
     /// Create a factual Q&A template
     #[ must_use ]
+    #[ inline ]
     pub fn factual_qa( model : impl Into< String > ) -> Self
     {
       Self
@@ -73,6 +77,7 @@ mod private
 
     /// Create a summarization template
     #[ must_use ]
+    #[ inline ]
     pub fn summarization( model : impl Into< String > ) -> Self
     {
       Self
@@ -86,6 +91,7 @@ mod private
 
     /// Set custom system prompt
     #[ must_use ]
+    #[ inline ]
     pub fn with_prompt( mut self, prompt : impl Into< String > ) -> Self
     {
       self.system_prompt = Some( prompt.into() );
@@ -94,6 +100,7 @@ mod private
 
     /// Set temperature
     #[ must_use ]
+    #[ inline ]
     pub fn with_temperature( mut self, temperature : f32 ) -> Self
     {
       self.temperature = Some( temperature );
@@ -102,6 +109,7 @@ mod private
 
     /// Set max tokens
     #[ must_use ]
+    #[ inline ]
     pub fn with_max_tokens( mut self, max_tokens : i32 ) -> Self
     {
       self.max_tokens = Some( max_tokens );
@@ -110,6 +118,7 @@ mod private
 
     /// Build the final chat completion request
     #[ must_use ]
+    #[ inline ]
     pub fn build( self, user_message : impl Into< String > ) -> ChatCompletionRequest
     {
       use crate::components::chat_shared::ChatCompletionRequestMessageContent;

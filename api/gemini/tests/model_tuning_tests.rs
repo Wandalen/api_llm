@@ -34,12 +34,6 @@ fn create_sample_training_data() -> Dataset
 }
 
 /// Test listing tuned models.
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini API schema mismatch - API returns empty object {} but code expects tunedModels field
-// RE-ENABLE: When API includes tunedModels field in response or update model to handle empty responses
-// APPROVED: self (test author)
-// TRACKING: API schema compatibility
-#[ ignore ]
 #[ tokio::test ]
 async fn test_list_tuned_models() -> Result< (), Box< dyn std::error::Error > >
 {
@@ -134,12 +128,6 @@ async fn test_create_tuned_model() -> Result< (), Box< dyn std::error::Error > >
 }
 
 /// Test getting a specific tuned model.
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini API schema mismatch - API response incompatible with expected tuned model structure
-// RE-ENABLE: When API schema is fixed or update models to match actual API response
-// APPROVED: self (test author)
-// TRACKING: API schema compatibility
-#[ ignore ]
 #[ tokio::test ]
 async fn test_get_tuned_model() -> Result< (), Box< dyn std::error::Error > >
 {

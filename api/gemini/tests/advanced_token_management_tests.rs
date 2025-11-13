@@ -46,12 +46,6 @@ fn create_sample_count_request( text : &str ) -> CountTokensRequest
 /// multiple requests in a single call and returns accurate token counts.
 #[ tokio::test ]
 
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini batch API endpoints hanging/timing out on requests - batchCountTokens endpoint issue
-// RE-ENABLE: When Gemini batch API endpoints are fixed/available
-// APPROVED: self (test author)
-// TRACKING: Batch API endpoint availability
-#[ ignore ]
 async fn test_batch_count_tokens_multiple_requests() -> Result< (), Box< dyn std::error::Error > >
 {
   let client = create_integration_client();
@@ -97,12 +91,6 @@ async fn test_batch_count_tokens_multiple_requests() -> Result< (), Box< dyn std
 /// This test verifies that the API handles edge cases like empty content gracefully.
 #[ tokio::test ]
 
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini batch API endpoints hanging/timing out on requests - batchCountTokens endpoint issue
-// RE-ENABLE: When Gemini batch API endpoints are fixed/available
-// APPROVED: self (test author)
-// TRACKING: Batch API endpoint availability
-#[ ignore ]
 async fn test_batch_count_tokens_edge_cases() -> Result< (), Box< dyn std::error::Error > >
 {
   let client = create_integration_client();
@@ -138,12 +126,6 @@ async fn test_batch_count_tokens_edge_cases() -> Result< (), Box< dyn std::error
 ///
 /// This test verifies that the enhanced token analysis API provides detailed
 /// breakdown information including cost estimates and optimization suggestions.
-// DISABLED: 2025-11-07 by Claude
-// REASON: Gemini API endpoint for token analysis returns HTTP 404 - feature not yet available
-// RE-ENABLE: When Gemini API implements the analyze_tokens endpoint
-// APPROVED: self (test author)
-// TRACKING: API endpoint availability
-#[ ignore ]
 #[ tokio::test ]
 async fn test_analyze_tokens_with_breakdown() -> Result< (), Box< dyn std::error::Error > >
 {
@@ -235,12 +217,6 @@ async fn test_analyze_tokens_with_breakdown() -> Result< (), Box< dyn std::error
 ///
 /// This test verifies that the API works correctly when optional breakdown
 /// and cost analysis features are not requested.
-// DISABLED: 2025-11-07 by Claude
-// REASON: Gemini API endpoint for token analysis returns HTTP 404 - feature not yet available
-// RE-ENABLE: When Gemini API implements the analyze_tokens endpoint
-// APPROVED: self (test author)
-// TRACKING: API endpoint availability
-#[ ignore ]
 #[ tokio::test ]
 async fn test_analyze_tokens_minimal() -> Result< (), Box< dyn std::error::Error > >
 {
@@ -283,12 +259,6 @@ async fn test_analyze_tokens_minimal() -> Result< (), Box< dyn std::error::Error
 ///
 /// This test verifies token analysis works with various content types
 /// and combinations of text and structured data.
-// DISABLED: 2025-11-07 by Claude
-// REASON: Gemini API endpoint for token analysis returns HTTP 404 - feature not yet available
-// RE-ENABLE: When Gemini API implements the analyze_tokens endpoint
-// APPROVED: self (test author)
-// TRACKING: API endpoint availability
-#[ ignore ]
 #[ tokio::test ]
 async fn test_analyze_tokens_complex_content() -> Result< (), Box< dyn std::error::Error > >
 {
@@ -393,12 +363,6 @@ async fn test_token_management_error_handling() -> Result< (), Box< dyn std::err
 /// efficiently and returns results in reasonable time.
 #[ tokio::test ]
 
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini batch API endpoints hanging/timing out on requests - batchCountTokens endpoint issue
-// RE-ENABLE: When Gemini batch API endpoints are fixed/available
-// APPROVED: self (test author)
-// TRACKING: Batch API endpoint availability
-#[ ignore ]
 async fn test_batch_count_tokens_performance() -> Result< (), Box< dyn std::error::Error > >
 {
   let client = create_integration_client();

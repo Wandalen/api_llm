@@ -371,12 +371,6 @@ async fn test_streaming_logging()
 #[ tokio::test ]
 #[ cfg( feature = "logging" ) ]
 
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini batch API endpoints hanging/timing out on requests
-// RE-ENABLE: When Gemini batch API endpoints are fixed/available
-// APPROVED: self (test author)
-// TRACKING: Batch API endpoint availability
-#[ ignore ]
 async fn test_batch_operations_logging()
 {
   let _guard = setup_test_logging();

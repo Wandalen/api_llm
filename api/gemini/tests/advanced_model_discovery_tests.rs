@@ -18,12 +18,6 @@ use api_gemini::models::
 ///
 /// This test verifies that the model comparison API correctly analyzes
 /// multiple models and provides meaningful comparison data.
-// DISABLED: 2025-11-07 by Claude
-// REASON: Gemini API endpoint for model comparison returns HTTP 404 - feature not yet available
-// RE-ENABLE: When Gemini API implements the compare_models endpoint
-// APPROVED: self (test author)
-// TRACKING: API endpoint availability
-#[ ignore ]
 #[ tokio::test ]
 async fn test_compare_models_basic() -> Result< (), Box< dyn std::error::Error > >
 {
@@ -105,12 +99,6 @@ async fn test_compare_models_basic() -> Result< (), Box< dyn std::error::Error >
 ///
 /// This test verifies that the recommendation API provides appropriate
 /// model suggestions based on use case requirements.
-// DISABLED: 2025-11-07 by Claude
-// REASON: Gemini API endpoint for get_recommendations returns HTTP 404 - feature not yet available
-// RE-ENABLE: When Gemini API implements the get_recommendations endpoint
-// APPROVED: self (test author)
-// TRACKING: API endpoint availability
-#[ ignore ]
 #[ tokio::test ]
 async fn test_get_recommendations_chatbot() -> Result< (), Box< dyn std::error::Error > >
 {
@@ -187,12 +175,6 @@ async fn test_get_recommendations_chatbot() -> Result< (), Box< dyn std::error::
 ///
 /// This test verifies that the API provides different recommendations
 /// for different use case types.
-// DISABLED: 2025-11-07 by Claude
-// REASON: Gemini API endpoint for get_recommendations returns HTTP 404 - feature not yet available
-// RE-ENABLE: When Gemini API implements the get_recommendations endpoint
-// APPROVED: self (test author)
-// TRACKING: API endpoint availability
-#[ ignore ]
 #[ tokio::test ]
 async fn test_get_recommendations_different_use_cases() -> Result< (), Box< dyn std::error::Error > >
 {
@@ -249,12 +231,6 @@ async fn test_get_recommendations_different_use_cases() -> Result< (), Box< dyn 
 ///
 /// This test verifies that the advanced filtering API correctly
 /// filters models based on various criteria.
-// DISABLED: 2025-11-07 by Claude
-// REASON: Gemini API endpoint /v1beta/models:filter returns HTTP 404 - feature not yet available
-// RE-ENABLE: When Gemini API implements the models:filter endpoint
-// APPROVED: self (test author)
-// TRACKING: API endpoint availability
-#[ ignore ]
 #[ tokio::test ]
 async fn test_advanced_filter_comprehensive() -> Result< (), Box< dyn std::error::Error > >
 {
@@ -312,12 +288,6 @@ async fn test_advanced_filter_comprehensive() -> Result< (), Box< dyn std::error
 ///
 /// This test verifies that different filter combinations produce
 /// appropriate results.
-// DISABLED: 2025-11-07 by Claude
-// REASON: Gemini API endpoint /v1beta/models:filter returns HTTP 404 - feature not yet available
-// RE-ENABLE: When Gemini API implements the models:filter endpoint
-// APPROVED: self (test author)
-// TRACKING: API endpoint availability
-#[ ignore ]
 #[ tokio::test ]
 async fn test_advanced_filter_different_criteria() -> Result< (), Box< dyn std::error::Error > >
 {
@@ -366,12 +336,6 @@ async fn test_advanced_filter_different_criteria() -> Result< (), Box< dyn std::
 ///
 /// This test verifies that the model status API provides accurate
 /// availability and health information.
-// DISABLED: 2025-11-07 by Claude
-// REASON: Gemini API endpoint for get_model_status returns HTTP 404 - feature not yet available
-// RE-ENABLE: When Gemini API implements the get_model_status endpoint
-// APPROVED: self (test author)
-// TRACKING: API endpoint availability
-#[ ignore ]
 #[ tokio::test ]
 async fn test_model_status_monitoring() -> Result< (), Box< dyn std::error::Error > >
 {
@@ -490,12 +454,6 @@ async fn test_model_discovery_error_handling() -> Result< (), Box< dyn std::erro
 ///
 /// This test demonstrates a realistic workflow that uses multiple
 /// model discovery APIs together.
-// DISABLED: 2025-11-07 by Claude
-// REASON: Combines multiple non-existent Gemini API endpoints (get_recommendations, compare_models, get_model_status, advanced_filter) - all return HTTP 404
-// RE-ENABLE: When Gemini API implements the advanced model discovery endpoints
-// APPROVED: self (test author)
-// TRACKING: API endpoint availability
-#[ ignore ]
 #[ tokio::test ]
 async fn test_model_discovery_workflow() -> Result< (), Box< dyn std::error::Error > >
 {

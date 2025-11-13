@@ -28,12 +28,6 @@ fn create_test_client() -> Client
 }
 
 /// Test batch text embedding operations
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini batch API endpoints hanging/timing out on requests
-// RE-ENABLE: When Gemini batch API endpoints are fixed/available
-// APPROVED: self (test author)
-// TRACKING: Batch API endpoint availability
-#[ ignore ]
 #[ tokio::test ]
 async fn test_batch_embed_texts_basic()
 {
@@ -68,12 +62,6 @@ async fn test_batch_embed_texts_basic()
 }
 
 /// Test batch content embedding with mixed content types
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini batch API endpoints hanging/timing out on requests
-// RE-ENABLE: When Gemini batch API endpoints are fixed/available
-// APPROVED: self (test author)
-// TRACKING: Batch API endpoint availability
-#[ ignore ]
 #[ tokio::test ]
 async fn test_batch_embed_contents_mixed()
 {
@@ -114,12 +102,6 @@ async fn test_batch_embed_contents_mixed()
 }
 
 /// Test batch content generation
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini batch API endpoints hanging/timing out on requests
-// RE-ENABLE: When Gemini batch API endpoints are fixed/available
-// APPROVED: self (test author)
-// TRACKING: Batch API endpoint availability
-#[ ignore ]
 #[ tokio::test ]
 async fn test_batch_generate_content_basic()
 {
@@ -153,12 +135,6 @@ async fn test_batch_generate_content_basic()
 }
 
 /// Test batch operations with empty input
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini batch API endpoints hanging/timing out on requests
-// RE-ENABLE: When Gemini batch API endpoints are fixed/available
-// APPROVED: self (test author)
-// TRACKING: Batch API endpoint availability
-#[ ignore ]
 #[ tokio::test ]
 async fn test_batch_operations_empty_input()
 {
@@ -186,12 +162,6 @@ async fn test_batch_operations_empty_input()
 }
 
 /// Test batch operations with size limits
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini batch API endpoints hanging/timing out on requests
-// RE-ENABLE: When Gemini batch API endpoints are fixed/available
-// APPROVED: self (test author)
-// TRACKING: Batch API endpoint availability
-#[ ignore ]
 #[ tokio::test ]
 async fn test_batch_operations_size_limits()
 {
@@ -219,12 +189,6 @@ async fn test_batch_operations_size_limits()
 }
 
 /// Test batch operations error handling with partial failures
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini batch API endpoints hanging/timing out on requests
-// RE-ENABLE: When Gemini batch API endpoints are fixed/available
-// APPROVED: self (test author)
-// TRACKING: Batch API endpoint availability
-#[ ignore ]
 #[ tokio::test ]
 async fn test_batch_operations_partial_failure_handling()
 {
@@ -265,12 +229,6 @@ async fn test_batch_operations_partial_failure_handling()
 }
 
 /// Test batch request builder pattern
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini batch API endpoints hanging/timing out on requests
-// RE-ENABLE: When Gemini batch API endpoints are fixed/available
-// APPROVED: self (test author)
-// TRACKING: Batch API endpoint availability
-#[ ignore ]
 #[ tokio::test ]
 async fn test_batch_request_builder()
 {
@@ -300,12 +258,6 @@ async fn test_batch_request_builder()
 }
 
 /// Performance test : compare batch vs individual operations
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini batch API endpoints hanging/timing out on requests
-// RE-ENABLE: When Gemini batch API endpoints are fixed/available
-// APPROVED: self (test author)
-// TRACKING: Batch API endpoint availability
-#[ ignore ]
 #[ tokio::test ]
 async fn test_batch_vs_individual_performance()
 {
@@ -353,12 +305,6 @@ async fn test_batch_vs_individual_performance()
 }
 
 /// Test batch operations with different models
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini batch API endpoints hanging/timing out on requests
-// RE-ENABLE: When Gemini batch API endpoints are fixed/available
-// APPROVED: self (test author)
-// TRACKING: Batch API endpoint availability
-#[ ignore ]
 #[ tokio::test ]
 async fn test_batch_operations_different_models()
 {
@@ -394,12 +340,6 @@ async fn test_batch_operations_different_models()
 }
 
 /// Test concurrent batch operations
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini batch API endpoints hanging/timing out on requests
-// RE-ENABLE: When Gemini batch API endpoints are fixed/available
-// APPROVED: self (test author)
-// TRACKING: Batch API endpoint availability
-#[ ignore ]
 #[ tokio::test ]
 async fn test_concurrent_batch_operations()
 {

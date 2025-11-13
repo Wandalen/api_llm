@@ -84,7 +84,7 @@ mod private
 
     /// Get full tool definition for API requests
     ///
-    /// Automatically generates ToolDefinition from tool metadata
+    /// Automatically generates `ToolDefinition` from tool metadata
     fn definition( &self ) -> crate::ToolDefinition
     {
       crate::ToolDefinition
@@ -103,6 +103,16 @@ mod private
   pub struct ToolRegistry
   {
     tools : HashMap< String, Box< dyn ToolExecutor > >,
+  }
+
+  impl std::fmt::Debug for ToolRegistry
+  {
+    fn fmt( &self, f : &mut std::fmt::Formatter< '_ > ) -> std::fmt::Result
+    {
+      f.debug_struct( "ToolRegistry" )
+        .field( "tool_count", &self.tools.len() )
+        .finish()
+    }
   }
 
   impl ToolRegistry
@@ -140,7 +150,7 @@ mod private
     pub fn execute( &self, name : &str, params : Value ) -> ToolResult
     {
       let tool = self.get( name )
-        .ok_or_else( || format!( "Tool '{}' not found in registry", name ) )?;
+        .ok_or_else( || format!( "Tool '{name}' not found in registry" ) )?;
 
       tool.execute( params )
     }
@@ -211,8 +221,8 @@ mod private
   /// Helper for creating a parameter schema
   #[ must_use ]
   pub fn create_parameter_schema(
-    properties : Value,
-    required : Vec< String >,
+    properties : &Value,
+    required : &[ String ],
   ) -> Value
   {
     serde_json::json!(
@@ -396,7 +406,7 @@ mod private
         }
       });
 
-      let schema = create_parameter_schema( properties, vec![ "location".to_string() ] );
+      let schema = create_parameter_schema( &properties, &[ "location".to_string() ] );
 
       assert_eq!( schema[ "type" ], "object" );
       assert!( schema[ "properties" ][ "location" ].is_object() );
@@ -410,8 +420,8 @@ mod private
 
       impl ToolExecutor for MinimalTool
       {
-        fn name( &self ) -> &str { "minimal" }
-        fn description( &self ) -> &str { "Minimal tool" }
+        fn name( &self ) -> &'static str { "minimal" }
+        fn description( &self ) -> &'static str { "Minimal tool" }
         fn execute( &self, _params : Value ) -> ToolResult
         {
           Ok( "done".to_string() )

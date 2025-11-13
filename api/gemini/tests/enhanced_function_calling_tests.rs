@@ -50,12 +50,6 @@ fn create_weather_function() -> FunctionDeclaration
 /// correctly controls when and how functions are called.
 #[ tokio::test ]
 
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini API returns HTTP 404: model "gemini-2.0-flash-experimental" not found for v1beta API
-// RE-ENABLE: When model is available or update test to use available model name
-// APPROVED: self (test author)
-// TRACKING: Model availability
-#[ ignore ]
 async fn test_enhanced_function_calling_auto_mode() -> Result< (), Box< dyn std::error::Error > >
 {
   let client = create_integration_client();
@@ -133,12 +127,6 @@ async fn test_enhanced_function_calling_auto_mode() -> Result< (), Box< dyn std:
 /// This test verifies that ANY mode forces the model to call a function.
 #[ tokio::test ]
 
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini API returns HTTP 404: model "gemini-2.0-flash-experimental" not found for v1beta API
-// RE-ENABLE: When model is available or update test to use available model name
-// APPROVED: self (test author)
-// TRACKING: Model availability
-#[ ignore ]
 async fn test_enhanced_function_calling_any_mode() -> Result< (), Box< dyn std::error::Error > >
 {
   let client = create_integration_client();
@@ -203,12 +191,6 @@ async fn test_enhanced_function_calling_any_mode() -> Result< (), Box< dyn std::
 /// This test verifies that NONE mode disables all function calling.
 #[ tokio::test ]
 
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini API returns HTTP 404: model "gemini-2.0-flash-experimental" not found for v1beta API
-// RE-ENABLE: When model is available or update test to use available model name
-// APPROVED: self (test author)
-// TRACKING: Model availability
-#[ ignore ]
 async fn test_enhanced_function_calling_none_mode() -> Result< (), Box< dyn std::error::Error > >
 {
   let client = create_integration_client();
@@ -275,12 +257,6 @@ async fn test_enhanced_function_calling_none_mode() -> Result< (), Box< dyn std:
 /// and attribution in the response.
 #[ tokio::test ]
 
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini API returns HTTP 404: model "gemini-2.0-flash-experimental" not found for v1beta API
-// RE-ENABLE: When model is available or update test to use available model name
-// APPROVED: self (test author)
-// TRACKING: Model availability
-#[ ignore ]
 async fn test_google_search_grounding() -> Result< (), Box< dyn std::error::Error > >
 {
   let client = create_integration_client();
@@ -374,12 +350,6 @@ async fn test_google_search_grounding() -> Result< (), Box< dyn std::error::Erro
 /// Test system instructions functionality.
 ///
 /// This test verifies that system instructions properly guide model behavior.
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini API returns HTTP 404: model "gemini-2.0-flash-experimental" not found for v1beta API
-// RE-ENABLE: When model is available or update test to use available model name
-// APPROVED: self (test author)
-// TRACKING: Model availability
-#[ ignore ]
 #[ tokio::test ]
 async fn test_system_instructions() -> Result< (), Box< dyn std::error::Error > >
 {
@@ -450,12 +420,6 @@ async fn test_system_instructions() -> Result< (), Box< dyn std::error::Error > 
 /// Test code execution tool integration.
 ///
 /// This test verifies that the code execution tool can run Python code.
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini API returns HTTP 400: Unknown field "codeExecutionTool" - feature not available/changed
-// RE-ENABLE: When Gemini API supports codeExecutionTool or update test to use correct field name
-// APPROVED: self (test author)
-// TRACKING: API field name compatibility
-#[ ignore ]
 #[ tokio::test ]
 async fn test_code_execution_tool() -> Result< (), Box< dyn std::error::Error > >
 {
@@ -533,12 +497,6 @@ async fn test_code_execution_tool() -> Result< (), Box< dyn std::error::Error > 
 /// Test comprehensive enhanced features combination.
 ///
 /// This test combines multiple enhanced features to verify they work together.
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini API returns HTTP 404: model "gemini-2.0-flash-experimental" not found for v1beta API
-// RE-ENABLE: When model is available or update test to use available model name
-// APPROVED: self (test author)
-// TRACKING: Model availability
-#[ ignore ]
 #[ tokio::test ]
 async fn test_enhanced_features_combination() -> Result< (), Box< dyn std::error::Error > >
 {

@@ -466,15 +466,14 @@ async fn integration_test_http_large_request_real_api()
 async fn integration_test_retry_logic_real_network()
 {
   let _client_check = create_integration_client();
-  
+
   // Create client with retry enabled - will panic if API key not available
   let api_key = match std::env::var( "GEMINI_API_KEY" )
     .or_else( |_| std::fs::read_to_string( "secret/gemini_api_key" ).map( |s| s.trim().to_string() ) )
   {
     Ok( key ) => key,
     Err( _ ) => {
-      eprintln!( "⚠️  Skipping test - API key not available" );
-      return;
+      panic!( "❌ GEMINI_API_KEY not found in environment or secret/gemini_api_key file. Integration tests require valid API credentials." );
     }
   };
   let client = Client::builder()
@@ -559,15 +558,14 @@ async fn integration_test_circuit_breaker_real_api()
 async fn integration_test_rate_limiting_real_api()
 {
   let _client_check = create_integration_client();
-  
+
   // Create client with rate limiting - will panic if API key not available
   let api_key = match std::env::var( "GEMINI_API_KEY" )
     .or_else( |_| std::fs::read_to_string( "secret/gemini_api_key" ).map( |s| s.trim().to_string() ) )
   {
     Ok( key ) => key,
     Err( _ ) => {
-      eprintln!( "⚠️  Skipping test - API key not available" );
-      return;
+      panic!( "❌ GEMINI_API_KEY not found in environment or secret/gemini_api_key file. Integration tests require valid API credentials." );
     }
   };
   let client = Client::builder()
@@ -613,15 +611,14 @@ async fn integration_test_rate_limiting_real_api()
 async fn integration_test_request_caching_real_api()
 {
   let _client_check = create_integration_client();
-  
+
   // Create client with caching enabled - will panic if API key not available
   let api_key = match std::env::var( "GEMINI_API_KEY" )
     .or_else( |_| std::fs::read_to_string( "secret/gemini_api_key" ).map( |s| s.trim().to_string() ) )
   {
     Ok( key ) => key,
     Err( _ ) => {
-      eprintln!( "⚠️  Skipping test - API key not available" );
-      return;
+      panic!( "❌ GEMINI_API_KEY not found in environment or secret/gemini_api_key file. Integration tests require valid API credentials." );
     }
   };
   let client = Client::builder()

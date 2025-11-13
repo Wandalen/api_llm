@@ -65,12 +65,6 @@ fn create_sample_embed_request( text : &str ) -> EmbedContentRequest
   }
 }
 
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini batch API endpoints hanging/timing out on requests - batchGenerateContent endpoint issue
-// RE-ENABLE: When Gemini batch API endpoints are fixed/available
-// APPROVED: self (test author)
-// TRACKING: Batch API endpoint availability
-#[ ignore ]
 #[ tokio::test ]
 async fn test_batch_generate_content_single_request() -> Result< (), Box< dyn std::error::Error > >
 {
@@ -109,12 +103,6 @@ async fn test_batch_generate_content_single_request() -> Result< (), Box< dyn st
   Ok( () )
 }
 
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini batch API endpoints hanging/timing out on requests - batchGenerateContent endpoint issue
-// RE-ENABLE: When Gemini batch API endpoints are fixed/available
-// APPROVED: self (test author)
-// TRACKING: Batch API endpoint availability
-#[ ignore ]
 #[ tokio::test ]
 async fn test_batch_generate_content_multiple_requests() -> Result< (), Box< dyn std::error::Error > >
 {
@@ -158,12 +146,6 @@ async fn test_batch_generate_content_multiple_requests() -> Result< (), Box< dyn
 }
 
 
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini batch API endpoints hanging/timing out on requests - batch endpoint issues
-// RE-ENABLE: When Gemini batch API endpoints are fixed/available
-// APPROVED: self (test author)
-// TRACKING: Batch API endpoint availability
-#[ ignore ]
 #[ tokio::test ]
 async fn test_batch_embed_contents_single_request() -> Result< (), Box< dyn std::error::Error > >
 {
@@ -197,12 +179,6 @@ async fn test_batch_embed_contents_single_request() -> Result< (), Box< dyn std:
 }
 
 
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini batch API endpoints hanging/timing out on requests - batch endpoint issues
-// RE-ENABLE: When Gemini batch API endpoints are fixed/available
-// APPROVED: self (test author)
-// TRACKING: Batch API endpoint availability
-#[ ignore ]
 #[ tokio::test ]
 async fn test_batch_embed_contents_multiple_requests() -> Result< (), Box< dyn std::error::Error > >
 {
@@ -251,12 +227,6 @@ async fn test_batch_embed_contents_multiple_requests() -> Result< (), Box< dyn s
 }
 
 
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini batch API endpoints hanging/timing out on requests - batch endpoint issues
-// RE-ENABLE: When Gemini batch API endpoints are fixed/available
-// APPROVED: self (test author)
-// TRACKING: Batch API endpoint availability
-#[ ignore ]
 #[ tokio::test ]
 async fn test_batch_generate_content_empty_request() -> Result< (), Box< dyn std::error::Error > >
 {
@@ -287,12 +257,6 @@ async fn test_batch_generate_content_empty_request() -> Result< (), Box< dyn std
 }
 
 
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini batch API endpoints hanging/timing out on requests - batch endpoint issues
-// RE-ENABLE: When Gemini batch API endpoints are fixed/available
-// APPROVED: self (test author)
-// TRACKING: Batch API endpoint availability
-#[ ignore ]
 #[ tokio::test ]
 async fn test_batch_embed_contents_empty_request() -> Result< (), Box< dyn std::error::Error > >
 {
@@ -323,12 +287,6 @@ async fn test_batch_embed_contents_empty_request() -> Result< (), Box< dyn std::
 }
 
 
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini batch API endpoints hanging/timing out on requests - batch endpoint issues
-// RE-ENABLE: When Gemini batch API endpoints are fixed/available
-// APPROVED: self (test author)
-// TRACKING: Batch API endpoint availability
-#[ ignore ]
 #[ tokio::test ]
 async fn test_batch_generate_content_large_batch() -> Result< (), Box< dyn std::error::Error > >
 {
@@ -376,12 +334,6 @@ async fn test_batch_generate_content_large_batch() -> Result< (), Box< dyn std::
 }
 
 
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini batch API endpoints hanging/timing out on requests - batch endpoint issues
-// RE-ENABLE: When Gemini batch API endpoints are fixed/available
-// APPROVED: self (test author)
-// TRACKING: Batch API endpoint availability
-#[ ignore ]
 #[ tokio::test ]
 async fn test_batch_embed_contents_large_batch() -> Result< (), Box< dyn std::error::Error > >
 {
@@ -430,12 +382,6 @@ async fn test_batch_embed_contents_large_batch() -> Result< (), Box< dyn std::er
 }
 
 
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini batch API endpoints hanging/timing out on requests - batch endpoint issues
-// RE-ENABLE: When Gemini batch API endpoints are fixed/available
-// APPROVED: self (test author)
-// TRACKING: Batch API endpoint availability
-#[ ignore ]
 #[ tokio::test ]
 async fn test_batch_generate_content_invalid_model() -> Result< (), Box< dyn std::error::Error > >
 {
@@ -462,12 +408,6 @@ async fn test_batch_generate_content_invalid_model() -> Result< (), Box< dyn std
 }
 
 
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini batch API endpoints hanging/timing out on requests - batch endpoint issues
-// RE-ENABLE: When Gemini batch API endpoints are fixed/available
-// APPROVED: self (test author)
-// TRACKING: Batch API endpoint availability
-#[ ignore ]
 #[ tokio::test ]
 async fn test_batch_embed_contents_invalid_model() -> Result< (), Box< dyn std::error::Error > >
 {
@@ -495,12 +435,6 @@ async fn test_batch_embed_contents_invalid_model() -> Result< (), Box< dyn std::
 
 #[ cfg( feature = "performance" ) ]
 
-// DISABLED: 2025-11-08 by Claude
-// REASON: Gemini batch API endpoints hanging/timing out on requests - batch endpoint issues
-// RE-ENABLE: When Gemini batch API endpoints are fixed/available
-// APPROVED: self (test author)
-// TRACKING: Batch API endpoint availability
-#[ ignore ]
 #[ tokio::test ]
 async fn test_batch_vs_individual_performance() -> Result< (), Box< dyn std::error::Error > >
 {

@@ -5,9 +5,10 @@
 /// Define a private namespace for all its items.
 mod private
 {
-  use std::time::{ Duration, Instant };
-  use std::pin::Pin;
-  use std::task::{ Context, Poll };
+  use core::time::Duration;
+  use std::time::Instant;
+  use core::pin::Pin;
+  use core::task::{ Context, Poll };
   use futures_core::Stream;
   use tokio::time::Sleep;
 
@@ -25,6 +26,7 @@ mod private
 
   impl Default for BufferConfig
   {
+    #[ inline ]
     fn default() -> Self
     {
       Self
@@ -40,6 +42,7 @@ mod private
   {
     /// Create new buffer configuration
     #[ must_use ]
+    #[ inline ]
     pub fn new() -> Self
     {
       Self::default()
@@ -47,6 +50,7 @@ mod private
 
     /// Set maximum buffer size
     #[ must_use ]
+    #[ inline ]
     pub fn with_max_size( mut self, size : usize ) -> Self
     {
       self.max_buffer_size = size;
@@ -55,6 +59,7 @@ mod private
 
     /// Set maximum buffer time
     #[ must_use ]
+    #[ inline ]
     pub fn with_max_time( mut self, time : Duration ) -> Self
     {
       self.max_buffer_time = time;
@@ -63,6 +68,7 @@ mod private
 
     /// Enable or disable flush on newline
     #[ must_use ]
+    #[ inline ]
     pub fn with_flush_on_newline( mut self, enabled : bool ) -> Self
     {
       self.flush_on_newline = enabled;
@@ -86,6 +92,7 @@ mod private
     S : Stream< Item = String > + Unpin,
   {
     /// Create new buffered stream
+    #[ inline ]
     pub fn new( stream : S, config : BufferConfig ) -> Self
     {
       Self
@@ -99,6 +106,7 @@ mod private
     }
 
     /// Check if buffer should be flushed
+    #[ inline ]
     fn should_flush( &self ) -> bool
     {
       if self.buffer.is_empty()
@@ -128,6 +136,7 @@ mod private
     }
 
     /// Flush the buffer
+    #[ inline ]
     fn flush( &mut self ) -> Option< String >
     {
       if self.buffer.is_empty()
@@ -148,6 +157,7 @@ mod private
   {
     type Item = String;
 
+    #[ inline ]
     fn poll_next( mut self : Pin< &mut Self >, cx : &mut Context< '_ > ) -> Poll< Option< Self::Item > >
     {
       loop
@@ -197,12 +207,14 @@ mod private
   pub trait StreamBufferExt : Stream< Item = String > + Sized + Unpin
   {
     /// Add buffering to the stream
+    #[ inline ]
     fn with_buffer( self, config : BufferConfig ) -> BufferedStream< Self >
     {
       BufferedStream::new( self, config )
     }
 
     /// Add buffering with default configuration
+    #[ inline ]
     fn with_buffer_default( self ) -> BufferedStream< Self >
     {
       BufferedStream::new( self, BufferConfig::default() )
