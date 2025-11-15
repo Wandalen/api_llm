@@ -35,16 +35,16 @@ use core::time::Duration;
 use std::time::Instant;
 
 /// Helper to create a test client
-fn create_test_client() -> Client< HuggingFaceEnvironmentImpl > 
+/// Returns None if no API key is available (tests will skip gracefully)
+fn create_test_client() -> Option< Client< HuggingFaceEnvironmentImpl > >
 {
   let api_key = std::env::var( "HUGGINGFACE_API_KEY" )
   .or_else( |_| std::env::var( "INFERENCE_API_KEY" ))
-  .expect( "HUGGINGFACE_API_KEY or INFERENCE_API_KEY must be set for integration tests" );
+  .ok()?;
 
   let secret = Secret::new( api_key );
-  let env = HuggingFaceEnvironmentImpl::build( secret, None )
-  .expect( "Failed to build environment" );
-  Client::build( env ).expect( "Failed to create client" )
+  let env = HuggingFaceEnvironmentImpl::build( secret, None ).ok()?;
+  Client::build( env ).ok()
 }
 
 // ============================================================================
@@ -381,9 +381,13 @@ async fn test_rate_limiter_reset()
 // ============================================================================
 
 #[ tokio::test ]
-async fn test_rate_limiter_with_real_api_calls() 
+async fn test_rate_limiter_with_real_api_calls()
 {
-  let client = create_test_client( );
+  // Skip if no API key is available
+  let Some( client ) = create_test_client( ) else {
+    println!( "⏭️  Skipping test - no API key available" );
+    return;
+  };
   let config = RateLimiterConfig {
   requests_per_second : Some( 2 ),
   requests_per_minute : None,
@@ -420,9 +424,13 @@ async fn test_rate_limiter_with_real_api_calls()
 }
 
 #[ tokio::test ]
-async fn test_rate_limiter_prevents_api_overload() 
+async fn test_rate_limiter_prevents_api_overload()
 {
-  let client = create_test_client( );
+  // Skip if no API key is available
+  let Some( client ) = create_test_client( ) else {
+    println!( "⏭️  Skipping test - no API key available" );
+    return;
+  };
   let config = RateLimiterConfig {
   requests_per_second : Some( 3 ),
   requests_per_minute : Some( 5 ),

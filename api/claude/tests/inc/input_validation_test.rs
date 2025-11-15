@@ -617,6 +617,7 @@ fn test_system_instructions_valid()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
+#[ ignore = "Requires workspace secrets file" ]
 async fn integration_validation_prevents_invalid_requests()
 {
   // Test that validation prevents invalid requests from reaching the API
@@ -650,6 +651,7 @@ async fn integration_validation_prevents_invalid_requests()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
+#[ ignore = "Requires workspace secrets file" ]
 async fn integration_validation_allows_valid_requests()
 {
   // Test that validation allows valid requests

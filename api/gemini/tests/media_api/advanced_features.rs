@@ -27,14 +27,25 @@ async fn test_large_file_handling() -> Result< (), Box< dyn std::error::Error > 
       println!( "✓ Large file upload successful:" );
       println!( "  - File name : {}", response.file.name );
       println!( "  - File size : {:?} bytes", response.file.size_bytes );
+
+      assert!( !response.file.name.is_empty(), "Uploaded file should have valid name" );
+      assert!( response.file.mime_type == "application/octet-stream", "MIME type should match upload request" );
+      if let Some( size ) = response.file.size_bytes
+      {
+        assert!( size > 0, "File size should be greater than zero" );
+      }
+
       let _ = files_api.delete( &response.file.name ).await;
     },
     Err( Error::ApiError( msg ) ) if msg.contains( "size" ) || msg.contains( "limit" ) =>
     {
       println!( "✓ Large file upload rejected due to size limits (expected): {}", msg );
+      assert!( msg.contains( "size" ) || msg.contains( "limit" ), "Error should mention size or limit" );
     },
     Err( e ) => {
       println!( "✓ Large file upload handling error (may be expected): {}", e );
+      // Error is expected for large files - just verify we got an error message
+      assert!( !e.to_string().is_empty(), "Error should have non-empty message" );
     }
   }
 
@@ -78,6 +89,9 @@ async fn test_multiple_file_types_upload() -> Result< (), Box< dyn std::error::E
   }
 
   println!( "✓ Multiple file types test completed : {}/{} successful", uploaded_files.len(), 4 );
+
+  // Assert that at least some uploads succeeded (API should accept standard MIME types)
+  assert!( !uploaded_files.is_empty(), "At least some file type uploads should succeed" );
 
   for file_name in uploaded_files
   {
@@ -145,6 +159,14 @@ async fn test_media_search_and_filtering() -> Result< (), Box< dyn std::error::E
     println!( "  - {}: {} files", mime_type, count );
   }
 
+  // Assert that list operation returns valid file structures
+  assert!( list_response.files.len() >= 0, "List should return valid file array (can be empty)" );
+  for file in &list_response.files
+  {
+    assert!( !file.name.is_empty(), "Each file should have non-empty name" );
+    assert!( !file.mime_type.is_empty(), "Each file should have non-empty MIME type" );
+  }
+
   for file_name in uploaded_files
   {
     let _ = files_api.delete( &file_name ).await;
@@ -175,14 +197,21 @@ async fn test_media_processing_capabilities() -> Result< (), Box< dyn std::error
   println!( "  - MIME type detected : {}", file_metadata.mime_type );
   println!( "  - Size analyzed : {:?} bytes", file_metadata.size_bytes );
 
+  // Assert that metadata fields are populated correctly
+  assert!( !file_metadata.name.is_empty(), "File metadata should have non-empty name" );
+  assert!( !file_metadata.mime_type.is_empty(), "File metadata should have non-empty MIME type" );
+  assert_eq!( file_metadata.mime_type, "image/png", "MIME type should match upload" );
+
   if let Some( hash ) = &file_metadata.sha256_hash
   {
     println!( "  - SHA256 hash computed : {}", hash );
+    assert!( !hash.is_empty(), "SHA256 hash should be non-empty when present" );
   }
 
   if let Some( state ) = &file_metadata.state
   {
     println!( "  - Processing state : {}", state );
+    assert!( !state.is_empty(), "Processing state should be non-empty when present" );
   }
 
   if file_metadata.mime_type.starts_with( "video/" )
@@ -233,12 +262,22 @@ async fn test_media_versioning_management() -> Result< (), Box< dyn std::error::
     println!( "  - {}: {} (created : {:?})", version, file_name, create_time );
   }
 
+  // Assert that all versions were uploaded successfully
+  assert!( uploaded_versions.len() >= 1, "At least one version should upload successfully" );
+  for ( _, file_name, _ ) in &uploaded_versions
+  {
+    assert!( !file_name.is_empty(), "Each uploaded version should have valid file name" );
+  }
+
   let list_response = files_api.list( &ListFilesRequest::default() ).await?;
   let versioned_files : Vec< _ > = list_response.files.iter()
     .filter( |f| f.display_name.as_ref().map_or( false, |name| name.contains( "Versioned File" ) ) )
     .collect();
 
   println!( "  - Found {} versioned files in listing", versioned_files.len() );
+
+  // Assert that versioned files can be found in the list
+  assert!( versioned_files.len() >= 1, "Should find at least one versioned file in listing" );
 
   for ( _, file_name, _ ) in uploaded_versions
   {

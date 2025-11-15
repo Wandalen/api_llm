@@ -27,8 +27,10 @@ fn test_integration_failure_without_api_key()
   
   if has_api_key
   {
-    // API key is available - this test passes (integration tests will work)
+    // API key is available - verify client creation succeeds
     println!( "API key available - integration tests will run normally" );
+    let _client = Client::new().expect( "Client creation should succeed with valid API key" );
+    // Client created successfully - test passes
     return;
   }
   

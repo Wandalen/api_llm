@@ -262,13 +262,6 @@ mod compression_tests
   }
 }
 
-#[ cfg( not( feature = "compression" ) ) ]
-mod compression_feature_disabled
-{
-  #[ test ]
-  fn test_compression_feature_disabled()
-  {
-    // When compression feature is disabled, this test verifies
-    // that compilation succeeds without the feature
-  }
-}
+// Compilation test removed - if this module compiles, the test suite passes
+// Empty tests that only verify compilation are unnecessary and violate
+// "Loud Failures" principle (they silently pass without testing anything)

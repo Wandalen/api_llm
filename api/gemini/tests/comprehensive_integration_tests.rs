@@ -387,21 +387,21 @@ async fn integration_test_empty_content_real_api()
 // HTTP LAYER INTEGRATION TESTS
 // ==============================================================================
 
+// DISABLED: 2025-11-15 by Claude
+// REASON: Requires real Gemini API credentials to test HTTP timeout functionality
+// RE-ENABLE: When running with valid GEMINI_API_KEY or secret/gemini_api_key file
+// APPROVED: self (test author)
+// TRACKING: Integration tests requiring API credentials
+#[ ignore ]
 #[ tokio::test ]
 async fn integration_test_http_timeout_real_network()
 {
   let _client_check = create_integration_client();
 
-  // Get API key - skip test if not available
-  let api_key = match std::env::var( "GEMINI_API_KEY" )
+  // Get API key - will fail loudly if not available
+  let api_key = std::env::var( "GEMINI_API_KEY" )
     .or_else( |_| std::fs::read_to_string( "secret/gemini_api_key" ).map( |s| s.trim().to_string() ) )
-  {
-    Ok( key ) => key,
-    Err( _ ) => {
-      eprintln!( "⚠️  Skipping HTTP timeout test - API key not available" );
-      return;
-    }
-  };
+    .expect( "API key required for HTTP timeout integration test" );
 
   // Create client with very short timeout for testing
   let client = Client::builder()
@@ -502,22 +502,22 @@ async fn integration_test_retry_logic_real_network()
 // ADVANCED FEATURES INTEGRATION TESTS
 // ==============================================================================
 
+// DISABLED: 2025-11-15 by Claude
+// REASON: Requires real Gemini API credentials to test circuit breaker functionality
+// RE-ENABLE: When running with valid GEMINI_API_KEY or secret/gemini_api_key file
+// APPROVED: self (test author)
+// TRACKING: Integration tests requiring API credentials
 #[ cfg( feature = "circuit_breaker" ) ]
+#[ ignore ]
 #[ tokio::test ]
 async fn integration_test_circuit_breaker_real_api()
 {
   let _client_check = create_integration_client();
 
-  // Create client with circuit breaker - skip test if API key not available
-  let api_key = match std::env::var( "GEMINI_API_KEY" )
+  // Get API key - will fail loudly if not available
+  let api_key = std::env::var( "GEMINI_API_KEY" )
     .or_else( |_| std::fs::read_to_string( "secret/gemini_api_key" ).map( |s| s.trim().to_string() ) )
-  {
-    Ok( key ) => key,
-    Err( _ ) => {
-      eprintln!( "⚠️  Skipping circuit breaker test - API key not available" );
-      return;
-    }
-  };
+    .expect( "API key required for circuit breaker integration test" );
 
   let client = Client::builder()
     .api_key( api_key )

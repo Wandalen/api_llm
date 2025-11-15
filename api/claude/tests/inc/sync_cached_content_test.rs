@@ -53,6 +53,7 @@ fn test_sync_system_prompt_caching()
 
 #[ test ]
 #[ cfg( feature = "integration" ) ]
+#[ ignore = "Requires workspace secrets file" ]
 fn integration_sync_cached_content_creation()
 {
   // Test synchronous cached content creation
@@ -106,6 +107,7 @@ fn integration_sync_cached_content_creation()
 
 #[ test ]
 #[ cfg( feature = "integration" ) ]
+#[ ignore = "Requires workspace secrets file" ]
 fn integration_sync_cache_hit_scenario()
 {
   // Test that subsequent requests hit the cache
@@ -181,6 +183,7 @@ fn integration_sync_cache_hit_scenario()
 
 #[ test ]
 #[ cfg( feature = "integration" ) ]
+#[ ignore = "Requires workspace secrets file" ]
 fn integration_sync_cache_error_handling()
 {
   // Test error handling with invalid cached content configuration
@@ -219,6 +222,7 @@ fn integration_sync_cache_error_handling()
 
 #[ test ]
 #[ cfg( feature = "integration" ) ]
+#[ ignore = "Requires workspace secrets file" ]
 fn integration_sync_cached_content_cost_savings()
 {
   // Test that cached content demonstrates cost savings

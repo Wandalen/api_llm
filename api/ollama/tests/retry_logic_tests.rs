@@ -20,6 +20,7 @@ use api_ollama::{
   OllamaClient,
   ChatRequest,
   GenerateRequest,
+  EmbeddingsRequest,
   ChatMessage,
   MessageRole,
 };
@@ -158,15 +159,33 @@ async fn test_generate_error_transparency()
 
 /// Test that embeddings requests fail transparently without automatic retries
 ///
-/// Fix(issue-silent-failure-008): Replaced silent skip with proper #[ignore] annotation
-/// Root cause : Empty test body with println+return violated "No Disabled Tests" rule
-/// Pitfall : Use #[ignore] with permission tracking, not empty test body per `codebase_hygiene.rulebook.md`
+/// Fix(issue-embeddings-transparency-001): Implemented test for embeddings error transparency
+/// Root cause: Test was marked as waiting for refactoring but `EmbeddingsRequest` was already available
+/// Pitfall: Always verify actual codebase state before assuming features are missing - check for existing types/APIs
 #[ tokio::test ]
 async fn test_embeddings_error_transparency()
 {
-  // TODO: Rewrite test once models module refactoring complete
-  // Test should verify embeddings requests fail without retries
-  panic!("Test not yet implemented - EmbeddingsRequest in models module");
+  let mut client = OllamaClient::new( "http://unreachable.test:99999".to_string(), Duration::from_millis(50) );
+
+  let request = EmbeddingsRequest
+  {
+    model : "test-model".to_string(),
+    prompt : "Test prompt".to_string(),
+    options : None,
+  };
+
+  // Should fail immediately without retries
+  let start_time = std::time::Instant::now();
+  let result = client.embeddings( request ).await;
+  let elapsed = start_time.elapsed();
+
+  assert!( elapsed < Duration::from_millis(200) );
+  assert!( result.is_err() );
+
+  // Error should be transparent, not retry-wrapped
+  let error_str = result.unwrap_err().to_string();
+  assert!( !error_str.contains( "failed after" ) );
+  assert!( !error_str.contains( "attempts" ) );
 }
 
 /// Test that model info requests fail transparently without automatic retries

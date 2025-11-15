@@ -34,15 +34,21 @@ use api_huggingface::{
 use core::time::Duration;
 
 /// Helper to create a test client
-fn create_test_client() -> Client< HuggingFaceEnvironmentImpl > 
+fn create_test_client() -> Client< HuggingFaceEnvironmentImpl >
 {
-  let api_key = std::env::var( "HUGGINGFACE_API_KEY" )
-  .or_else( |_| std::env::var( "INFERENCE_API_KEY" ))
-  .expect( "HUGGINGFACE_API_KEY or INFERENCE_API_KEY must be set for integration tests" );
+  use workspace_tools as workspace;
+
+  let workspace = workspace::workspace()
+    .expect( "[create_test_client] Failed to access workspace - required for integration tests" );
+  let secrets = workspace.load_secrets_from_file( "-secrets.sh" )
+    .expect( "[create_test_client] Failed to load secret/-secrets.sh - required for integration tests" );
+  let api_key = secrets.get( "HUGGINGFACE_API_KEY" )
+    .expect( "[create_test_client] HUGGINGFACE_API_KEY not found in secret/-secrets.sh - required for integration tests. Get your token from https://huggingface.co/settings/tokens" )
+    .clone();
 
   let secret = Secret::new( api_key );
   let env = HuggingFaceEnvironmentImpl::build( secret, None )
-  .expect( "Failed to build environment" );
+    .expect( "Failed to build environment" );
   Client::build( env ).expect( "Failed to create client" )
 }
 
@@ -60,6 +66,7 @@ async fn test_circuit_breaker_initial_state_is_closed()
   assert_eq!( circuit_breaker.failure_count( ).await, 0 );
 }
 
+#[ cfg( feature = "integration" ) ]
 #[ tokio::test ]
 async fn test_circuit_breaker_successful_request_keeps_closed() 
 {
@@ -81,6 +88,7 @@ async fn test_circuit_breaker_successful_request_keeps_closed()
   assert_eq!( circuit_breaker.failure_count( ).await, 0, "Failure count should be 0" );
 }
 
+#[ cfg( feature = "integration" ) ]
 #[ tokio::test ]
 async fn test_circuit_breaker_resets_failure_count_on_success() 
 {
@@ -128,6 +136,7 @@ async fn test_circuit_breaker_resets_failure_count_on_success()
 // Circuit Opening Tests
 // ============================================================================
 
+#[ cfg( feature = "integration" ) ]
 #[ tokio::test ]
 async fn test_circuit_breaker_opens_after_threshold_failures() 
 {
@@ -162,6 +171,7 @@ async fn test_circuit_breaker_opens_after_threshold_failures()
   assert_eq!( circuit_breaker.failure_count( ).await, 3 );
 }
 
+#[ cfg( feature = "integration" ) ]
 #[ tokio::test ]
 async fn test_circuit_breaker_rejects_requests_when_open() 
 {
@@ -214,6 +224,7 @@ async fn test_circuit_breaker_rejects_requests_when_open()
 // Half-Open State and Recovery Tests
 // ============================================================================
 
+#[ cfg( feature = "integration" ) ]
 #[ tokio::test ]
 async fn test_circuit_breaker_transitions_to_half_open_after_timeout() 
 {
@@ -259,6 +270,7 @@ async fn test_circuit_breaker_transitions_to_half_open_after_timeout()
   assert!( !circuit_breaker.is_open( ).await, "Circuit should not be open" );
 }
 
+#[ cfg( feature = "integration" ) ]
 #[ tokio::test ]
 async fn test_circuit_breaker_closes_after_success_threshold_in_half_open() 
 {
@@ -308,6 +320,7 @@ async fn test_circuit_breaker_closes_after_success_threshold_in_half_open()
   assert!( circuit_breaker.is_closed( ).await, "Circuit should be closed after success threshold" );
 }
 
+#[ cfg( feature = "integration" ) ]
 #[ tokio::test ]
 async fn test_circuit_breaker_reopens_on_failure_in_half_open() 
 {
@@ -368,6 +381,7 @@ async fn test_circuit_breaker_reopens_on_failure_in_half_open()
 // Reset Tests
 // ============================================================================
 
+#[ cfg( feature = "integration" ) ]
 #[ tokio::test ]
 async fn test_circuit_breaker_reset_clears_all_state() 
 {

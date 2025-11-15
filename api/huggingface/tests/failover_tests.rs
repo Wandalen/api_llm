@@ -1,7 +1,7 @@
 //! Integration tests for Failover
 //!
 //! These tests verify the failover functionality using real `HuggingFace` API endpoints.
-//! Tests are marked with `#[ ignore ]` to prevent them from running during normal test runs.
+//! Tests are marked with `#[ ignore = "integration test requiring real API - run manually" ]` to prevent them from running during normal test runs.
 //!
 //! To run these tests:
 //! ```bash
@@ -37,19 +37,25 @@ use api_huggingface::{
   Secret,
 };
 use core::time::Duration;
-use std::env;
 use std::sync::Arc;
 
-/// Create a test client with API key from environment
-fn create_test_client() -> Client< HuggingFaceEnvironmentImpl > 
+/// Create a test client with API key from workspace secrets
+fn create_test_client() -> Client< HuggingFaceEnvironmentImpl >
 {
-  let api_key = env::var( "HUGGINGFACE_API_KEY" )
-  .unwrap_or_else( |_| "test-key".to_string( ));
+  use workspace_tools as workspace;
+
+  let workspace = workspace::workspace()
+    .expect( "[create_test_client] Failed to access workspace - required for integration tests" );
+  let secrets = workspace.load_secrets_from_file( "-secrets.sh" )
+    .expect( "[create_test_client] Failed to load secret/-secrets.sh - required for integration tests" );
+  let api_key = secrets.get( "HUGGINGFACE_API_KEY" )
+    .expect( "[create_test_client] HUGGINGFACE_API_KEY not found in secret/-secrets.sh - required for integration tests. Get your token from https://huggingface.co/settings/tokens" )
+    .clone();
 
   let env = HuggingFaceEnvironmentImpl::build( Secret::new( api_key ), None )
-  .expect( "Environment creation should succeed" );
+    .expect( "Environment creation should succeed" );
   Client::build( env )
-  .expect( "Client creation should succeed" )
+    .expect( "Client creation should succeed" )
 }
 
 /// Helper function to create test messages
@@ -67,6 +73,8 @@ fn create_test_messages() -> Vec< ChatMessage >
 // Priority Strategy Tests
 // ============================================================================
 
+#[ cfg( feature = "integration" ) ]
+#[ ignore = "integration test requiring real API - run manually" ]
 #[ tokio::test ]
 async fn test_priority_failover_first_endpoint_succeeds() 
 {
@@ -103,6 +111,8 @@ async fn test_priority_failover_first_endpoint_succeeds()
   assert!( result.is_ok( ), "First endpoint should succeed" );
 }
 
+#[ cfg( feature = "integration" ) ]
+#[ ignore = "integration test requiring real API - run manually" ]
 #[ tokio::test ]
 async fn test_priority_failover_first_fails_second_succeeds() 
 {
@@ -149,6 +159,8 @@ async fn test_priority_failover_first_fails_second_succeeds()
   assert!( health[1 ].healthy, "Second endpoint should be healthy" );
 }
 
+#[ cfg( feature = "integration" ) ]
+#[ ignore = "integration test requiring real API - run manually" ]
 #[ tokio::test ]
 async fn test_priority_failover_all_endpoints_fail() 
 {
@@ -197,6 +209,8 @@ async fn test_priority_failover_all_endpoints_fail()
 // RoundRobin Strategy Tests
 // ============================================================================
 
+#[ cfg( feature = "integration" ) ]
+#[ ignore = "integration test requiring real API - run manually" ]
 #[ tokio::test ]
 async fn test_round_robin_cycles_through_endpoints() 
 {
@@ -241,6 +255,8 @@ async fn test_round_robin_cycles_through_endpoints()
   assert!( health[1 ].requests > 0, "Second endpoint should have requests" );
 }
 
+#[ cfg( feature = "integration" ) ]
+#[ ignore = "integration test requiring real API - run manually" ]
 #[ tokio::test ]
 async fn test_round_robin_skips_unhealthy_endpoints() 
 {
@@ -294,6 +310,8 @@ async fn test_round_robin_skips_unhealthy_endpoints()
 // Random Strategy Tests
 // ============================================================================
 
+#[ cfg( feature = "integration" ) ]
+#[ ignore = "integration test requiring real API - run manually" ]
 #[ tokio::test ]
 async fn test_random_strategy_uses_random_endpoints() 
 {
@@ -338,6 +356,8 @@ async fn test_random_strategy_uses_random_endpoints()
   assert_eq!( total_requests, 5, "Should have made 5 requests total" );
 }
 
+#[ cfg( feature = "integration" ) ]
+#[ ignore = "integration test requiring real API - run manually" ]
 #[ tokio::test ]
 async fn test_random_strategy_avoids_unhealthy_endpoints() 
 {
@@ -403,6 +423,8 @@ async fn test_random_strategy_avoids_unhealthy_endpoints()
 // Sticky Strategy Tests
 // ============================================================================
 
+#[ cfg( feature = "integration" ) ]
+#[ ignore = "integration test requiring real API - run manually" ]
 #[ tokio::test ]
 async fn test_sticky_strategy_uses_same_endpoint() 
 {
@@ -451,6 +473,8 @@ async fn test_sticky_strategy_uses_same_endpoint()
   assert_eq!( endpoints_used[0 ].requests, 5, "Should have all 5 requests" );
 }
 
+#[ cfg( feature = "integration" ) ]
+#[ ignore = "integration test requiring real API - run manually" ]
 #[ tokio::test ]
 async fn test_sticky_strategy_switches_on_failure() 
 {
@@ -516,6 +540,8 @@ async fn test_sticky_strategy_switches_on_failure()
 // Health Tracking Tests
 // ============================================================================
 
+#[ cfg( feature = "integration" ) ]
+#[ ignore = "integration test requiring real API - run manually" ]
 #[ tokio::test ]
 async fn test_health_tracking_marks_unhealthy_after_threshold() 
 {
@@ -570,6 +596,8 @@ async fn test_health_tracking_marks_unhealthy_after_threshold()
   assert!( !health[0 ].healthy, "Should be unhealthy after reaching threshold" );
 }
 
+#[ cfg( feature = "integration" ) ]
+#[ ignore = "integration test requiring real API - run manually" ]
 #[ tokio::test ]
 async fn test_health_tracking_recovers_after_success() 
 {
@@ -623,6 +651,8 @@ async fn test_health_tracking_recovers_after_success()
   assert!( health[0 ].healthy, "Should be healthy after success" );
 }
 
+#[ cfg( feature = "integration" ) ]
+#[ ignore = "integration test requiring real API - run manually" ]
 #[ tokio::test ]
 async fn test_health_status_reflects_request_counts() 
 {
@@ -668,6 +698,8 @@ async fn test_health_status_reflects_request_counts()
 // Reset Tests
 // ============================================================================
 
+#[ cfg( feature = "integration" ) ]
+#[ ignore = "integration test requiring real API - run manually" ]
 #[ tokio::test ]
 async fn test_reset_clears_health_tracking() 
 {
@@ -704,6 +736,8 @@ async fn test_reset_clears_health_tracking()
 // Concurrent Access Tests
 // ============================================================================
 
+#[ cfg( feature = "integration" ) ]
+#[ ignore = "integration test requiring real API - run manually" ]
 #[ tokio::test ]
 async fn test_concurrent_requests_with_failover() 
 {
@@ -770,6 +804,8 @@ async fn test_concurrent_requests_with_failover()
 // Edge Cases
 // ============================================================================
 
+#[ cfg( feature = "integration" ) ]
+#[ ignore = "integration test requiring real API - run manually" ]
 #[ tokio::test ]
 async fn test_empty_endpoints_list() 
 {
@@ -791,6 +827,8 @@ async fn test_empty_endpoints_list()
   }
 }
 
+#[ cfg( feature = "integration" ) ]
+#[ ignore = "integration test requiring real API - run manually" ]
 #[ tokio::test ]
 async fn test_single_endpoint_failover() 
 {
@@ -813,6 +851,8 @@ async fn test_single_endpoint_failover()
   assert!( endpoint.is_ok( ), "Should select single endpoint" );
 }
 
+#[ cfg( feature = "integration" ) ]
+#[ ignore = "integration test requiring real API - run manually" ]
 #[ tokio::test ]
 async fn test_max_retries_limits_attempts() 
 {

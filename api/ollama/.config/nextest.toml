@@ -1,0 +1,22 @@
+# Nextest configuration for api_ollama
+#
+# This configuration addresses integration test timeout issues while maintaining
+# strict "fail loudly" behavior per codebase requirements (issue-silent-failure-003).
+#
+# Integration tests require extended timeouts because they:
+# 1. Start real Ollama servers on custom ports
+# 2. Pull AI models (tinyllama, etc.) on first run
+# 3. Perform end-to-end API validation against live services
+#
+# Per "dont tolerate silent failing" directive: Tests MUST fail loudly if
+# dependencies are unavailable, never silently skip.
+
+[ profile.default ]
+# Default timeout for regular unit tests (3 minutes)
+slow-timeout = { period = "180s", terminate-after = 2 }
+
+# Integration tests need extended timeouts for model pulling and server startup
+# Use package filter for all api_ollama integration tests
+[ profile.default.overrides ]
+filter = 'package(api_ollama) and (test(embeddings) or test(integration) or test(server) or test(streaming) or test(tool) or test(builder_patterns) or test(vision) or test(api_comprehensive))'
+slow-timeout = { period = "600s", terminate-after = 2 }  # 10 minutes for integration tests

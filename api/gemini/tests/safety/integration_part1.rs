@@ -600,3 +600,36 @@ mod integration_tests
 
     let processing_time = start_time.elapsed();
 
+    // Test 3: Verify batch processing results
+    println!( "  - Batch request created with {} items", batch_request.content_items.len() );
+    println!( "  - Batch size configured : {}", batch_request.batch_size );
+    println!( "  - Parallel processing enabled : {}", batch_request.parallel_processing );
+    println!( "  - Processing completed in {:?}", processing_time );
+    println!( "  - Results generated for {} items", batch_results.len() );
+
+    // Assert batch processing completed successfully
+    assert_eq!( batch_results.len(), 5, "Should generate results for all 5 content items" );
+    assert_eq!( batch_results.len(), content_items.len(), "Results should match input count" );
+
+    // Assert all items were processed with valid risk scores
+    for ( item_id, result ) in &batch_results
+    {
+      assert!( !item_id.is_empty(), "Item ID should not be empty" );
+      assert!( result.overall_risk_score >= 0.0 && result.overall_risk_score <= 1.0, "Risk score should be in valid range [0, 1]" );
+      assert!( result.confidence_score > 0.0 && result.confidence_score <= 1.0, "Confidence score should be in valid range (0, 1]" );
+      assert!( !result.category_scores.is_empty(), "Should have category scores" );
+      assert!( !result.recommendations.is_empty(), "Should have recommendations" );
+    }
+
+    // Verify low-risk content items have appropriate scores
+    let educational_result = batch_results.iter().find( |( id, _ )| id == "item_001" ).unwrap();
+    assert!( educational_result.1.overall_risk_score < 0.2, "Educational content should have low risk score" );
+
+    let guidelines_result = batch_results.iter().find( |( id, _ )| id == "item_005" ).unwrap();
+    assert!( guidelines_result.1.overall_risk_score < 0.1, "Guidelines content should have very low risk score" );
+
+    println!( "✓ Batch content moderation test completed successfully" );
+
+    Ok( () )
+  }
+

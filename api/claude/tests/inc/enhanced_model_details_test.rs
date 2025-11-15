@@ -329,7 +329,8 @@ mod enhanced_model_details_integration_tests
 
   /// Test end-to-end enhanced model details retrieval
   #[ tokio::test ]
-  async fn test_end_to_end_enhanced_model_details()
+  #[ ignore = "Requires workspace secrets file" ]
+async fn test_end_to_end_enhanced_model_details()
   {
     use the_module::EnhancedModelDetails;
 
@@ -359,7 +360,8 @@ mod enhanced_model_details_integration_tests
 
   /// Test model details caching and performance
   #[ tokio::test ]
-  async fn test_enhanced_model_details_caching()
+  #[ ignore = "Requires workspace secrets file" ]
+async fn test_enhanced_model_details_caching()
   {
     use the_module::{ EnhancedModelDetails, ModelDetailsCache };
 
@@ -425,7 +427,8 @@ mod enhanced_model_details_integration_tests
 
   /// Test pricing information accuracy with real data
   #[ tokio::test ]
-  async fn test_real_pricing_accuracy()
+  #[ ignore = "Requires workspace secrets file" ]
+async fn test_real_pricing_accuracy()
   {
     use the_module::ModelPricing;
 
@@ -455,7 +458,8 @@ mod enhanced_model_details_integration_tests
 
   /// Test model lifecycle status validation
   #[ tokio::test ]
-  async fn test_model_lifecycle_validation()
+  #[ ignore = "Requires workspace secrets file" ]
+async fn test_model_lifecycle_validation()
   {
     use the_module::ModelLifecycle;
 

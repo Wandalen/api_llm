@@ -1,7 +1,7 @@
 //! Integration tests for Health Checks
 //!
 //! These tests verify the health checking functionality using real endpoints.
-//! Tests are marked with `#[ ignore ]` to prevent them from running during normal test runs.
+//! Tests are marked with `#[ ignore = "integration test requiring real API - run manually" ]` to prevent them from running during normal test runs.
 //!
 //! To run these tests:
 //! ```bash
@@ -252,6 +252,7 @@ async fn test_health_recovery_after_success()
 // ============================================================================
 
 #[ tokio::test ]
+#[ ignore = "integration test requiring real API - run manually" ]
 async fn test_background_monitoring_performs_checks() 
 {
   let config = HealthCheckConfig {

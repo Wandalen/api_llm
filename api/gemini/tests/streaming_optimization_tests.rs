@@ -132,16 +132,19 @@ async fn test_metrics_levels() -> Result< (), Box< dyn std::error::Error > >
     match level
     {
       MetricsLevel::None => {
-        // Metrics might be zero or minimal
+        // Metrics might be zero or minimal - just verify we got metrics object
         println!( "✓ MetricsLevel::None - minimal metrics collection" );
+        // No strong assertion for None level, but at least verify the call succeeds
       },
       MetricsLevel::Basic => {
-        // Basic metrics should be collected
+        // Basic metrics should be collected - verify chunks were counted
         println!( "✓ MetricsLevel::Basic - basic metrics collected (total_chunks : {})", metrics.total_chunks );
+        assert!( metrics.total_chunks > 0, "Basic metrics should count chunks" );
       },
       MetricsLevel::Detailed => {
-        // Detailed metrics should include response times
+        // Detailed metrics should include response times and chunks
         println!( "✓ MetricsLevel::Detailed - detailed metrics collected (total_chunks : {})", metrics.total_chunks );
+        assert!( metrics.total_chunks > 0, "Detailed metrics should count chunks" );
       },
     }
   }

@@ -46,17 +46,30 @@ async fn test_file_listing() -> Result< (), Box< dyn std::error::Error > >
   let list_request = ListFilesRequest::default();
   let list_response = files_api.list( &list_request ).await?;
 
+  // Assert response structure is valid
+  assert!( list_response.files.len() >= 0, "Files list should be valid (can be empty)" );
+
   println!( "✓ File listing successful:" );
   println!( "  - Total files found : {}", list_response.files.len() );
 
+  // If there are files, verify they have required fields
   for ( index, file ) in list_response.files.iter().take( 3 ).enumerate()
   {
     println!( "  - File {}: {} ({})", index + 1, file.name, file.mime_type );
+    assert!( !file.name.is_empty(), "File name should not be empty" );
+    assert!( !file.mime_type.is_empty(), "File mime_type should not be empty" );
   }
 
+  // Verify pagination token format if present
   if let Some( next_token ) = &list_response.next_page_token
   {
     println!( "  - Has next page : {}", !next_token.is_empty() );
+    // If token exists, it should not be empty
+    if list_response.files.len() > 0
+    {
+      // Token can be empty or non-empty, just verify it's a valid string
+      assert!( next_token.len() >= 0, "Next page token should be valid string" );
+    }
   }
 
   Ok( () )

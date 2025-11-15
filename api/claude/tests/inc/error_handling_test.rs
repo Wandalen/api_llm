@@ -647,6 +647,7 @@ async fn test_custom_error_types_and_chaining()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
+#[ ignore = "Requires workspace secrets file" ]
 async fn integration_error_handling_network_timeout()
 {
   let client = the_module::Client::from_workspace()
@@ -696,6 +697,7 @@ async fn integration_error_handling_network_timeout()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
+#[ ignore = "Requires workspace secrets file" ]
 async fn integration_error_handling_invalid_parameters()
 {
   // Skip test if API key is not available

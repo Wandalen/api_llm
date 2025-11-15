@@ -231,6 +231,9 @@ mod integration_tests {
       },
       ( Ok( () ), state ) => {
         println!( "⚠ Resume succeeded but stream in unexpected state : {:?}", state );
+        // Even in unexpected state, verify metrics show pause activity
+        let metrics = controllable_stream.get_metrics();
+        assert!( metrics.pause_count >= 1, "Should have at least one pause event" );
         return Ok( () );
       }
     }
@@ -455,7 +458,13 @@ mod integration_tests {
       assert_eq!( controllable_stream.state(), StreamState::Paused );
     } else {
       println!( "⚠ Stream completed before we could test pause, state : {:?}", controllable_stream.state() );
-      return Ok( () ); // Exit gracefully if stream completed
+      // Verify stream reached a terminal state
+      let state = controllable_stream.state();
+      assert!(
+        state == StreamState::Completed || state == StreamState::Cancelled || state == StreamState::Error,
+        "Stream should be in a terminal state if not running : {:?}", state
+      );
+      return Ok( () );
     }
 
     // Test double pause (should fail)

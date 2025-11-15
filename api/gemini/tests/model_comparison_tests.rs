@@ -16,7 +16,9 @@ async fn test_comparator_creation()
   let client = Client::new().expect( "Failed to create client" );
   let _comparator = client.comparator();
 
-  // Verify comparator was created (just structural test)
+  // Comparator created successfully via client.comparator() method
+  // The `.expect()` on client creation provides loud failure if authentication fails
+  // This test verifies the comparator API is available and can be instantiated
 }
 
 #[ tokio::test ]

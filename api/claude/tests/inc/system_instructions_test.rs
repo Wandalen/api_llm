@@ -111,6 +111,7 @@ fn test_system_content_with_cache_serialization()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
+#[ ignore = "Requires workspace secrets file" ]
 async fn integration_single_system_instruction()
 {
   // Test using a single system instruction in API call
@@ -152,6 +153,7 @@ async fn integration_single_system_instruction()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
+#[ ignore = "Requires workspace secrets file" ]
 async fn integration_multi_part_system_instructions()
 {
   // Test using multi-part system instructions
@@ -198,6 +200,7 @@ async fn integration_multi_part_system_instructions()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
+#[ ignore = "Requires workspace secrets file" ]
 async fn integration_system_instructions_with_caching()
 {
   // Test system instructions with prompt caching
@@ -246,6 +249,7 @@ async fn integration_system_instructions_with_caching()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
+#[ ignore = "Requires workspace secrets file" ]
 async fn integration_empty_system_instructions()
 {
   // Test that empty system instructions work (should be same as no system)
@@ -285,6 +289,7 @@ async fn integration_empty_system_instructions()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
+#[ ignore = "Requires workspace secrets file" ]
 async fn integration_long_system_instruction()
 {
   // Test with a very long system instruction

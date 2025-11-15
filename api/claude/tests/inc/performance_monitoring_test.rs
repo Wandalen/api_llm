@@ -230,6 +230,7 @@ fn simple_operation() -> u64
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
+#[ ignore = "Requires workspace secrets file" ]
 async fn integration_performance_monitoring_api_request()
 {
   // Test monitoring real API request performance
@@ -284,6 +285,7 @@ async fn integration_performance_monitoring_api_request()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
+#[ ignore = "Requires workspace secrets file" ]
 async fn integration_performance_monitoring_multiple_requests()
 {
   // Test monitoring multiple API requests
@@ -350,6 +352,7 @@ async fn integration_performance_monitoring_multiple_requests()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
+#[ ignore = "Requires workspace secrets file" ]
 async fn integration_performance_monitoring_throughput_measurement()
 {
   // Test measuring request throughput

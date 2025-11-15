@@ -257,6 +257,7 @@ async fn test_authentication_performance_metrics()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
+#[ ignore = "Requires workspace secrets file" ]
 async fn test_workspace_tools_secret_loading()
 {
   // INTEGRATION TEST - STRICT FAILURE POLICY: NO GRACEFUL FALLBACKS
@@ -285,6 +286,7 @@ async fn test_workspace_tools_secret_loading()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
+#[ ignore = "Requires workspace secrets file" ]
 async fn test_workspace_secret_fallback_to_environment()
 {
   // INTEGRATION TEST - STRICT FAILURE POLICY: SECRET LOADING MUST WORK
@@ -333,6 +335,7 @@ async fn test_workspace_secret_fallback_to_environment()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
+#[ ignore = "Requires workspace secrets file" ]
 async fn test_real_api_call_must_work_no_graceful_fallbacks()
 {
   // INTEGRATION TEST - STRICT FAILURE POLICY: MUST MAKE REAL API CALL

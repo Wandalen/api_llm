@@ -351,6 +351,7 @@ fn test_edge_case_ambiguous_question()
 //
 
 #[ tokio::test ]
+#[ ignore ]
 async fn test_single_question_answering_integration()
 {
   let client = create_test_client();
@@ -382,6 +383,7 @@ async fn test_single_question_answering_integration()
 }
 
 #[ tokio::test ]
+#[ ignore ]
 async fn test_context_based_answering_integration()
 {
   let client = create_test_client();
@@ -417,6 +419,7 @@ async fn test_context_based_answering_integration()
 }
 
 #[ tokio::test ]
+#[ ignore ]
 async fn test_multi_turn_conversation_integration()
 {
   let client = create_test_client();

@@ -9,11 +9,26 @@
 use api_huggingface::sync::SyncClient;
 use api_huggingface::components::input::InferenceParameters;
 
+/// Helper to get API key from workspace secrets
+fn get_api_key() -> String
+{
+  use workspace_tools as workspace;
+
+  let workspace = workspace::workspace()
+    .expect( "[get_api_key] Failed to access workspace - required for integration tests" );
+  let secrets = workspace.load_secrets_from_file( "-secrets.sh" )
+    .expect( "[get_api_key] Failed to load secret/-secrets.sh - required for integration tests" );
+  secrets.get( "HUGGINGFACE_API_KEY" )
+    .expect( "[get_api_key] HUGGINGFACE_API_KEY not found in secret/-secrets.sh - required for integration tests. Get your token from https://huggingface.co/settings/tokens" )
+    .clone()
+}
+
+#[ cfg( feature = "integration" ) ]
+#[ ignore = "integration test requiring real API - run manually" ]
 #[ test ]
 fn test_sync_stream_basic()
 {
-  let api_key = std::env::var( "HUGGINGFACE_API_KEY" )
-  .expect( "HUGGINGFACE_API_KEY must be set for integration tests" );
+  let api_key = get_api_key();
 
   let client = SyncClient::new( api_key )
   .expect( "Failed to create client" );
@@ -45,11 +60,12 @@ fn test_sync_stream_basic()
   assert!( token_count > 0, "Should receive at least one token" );
 }
 
+#[ cfg( feature = "integration" ) ]
+#[ ignore = "integration test requiring real API - run manually" ]
 #[ test ]
 fn test_sync_stream_iterator_pattern()
 {
-  let api_key = std::env::var( "HUGGINGFACE_API_KEY" )
-  .expect( "HUGGINGFACE_API_KEY must be set" );
+  let api_key = get_api_key();
 
   let client = SyncClient::new( api_key )
   .expect( "Failed to create client" );
@@ -68,11 +84,12 @@ fn test_sync_stream_iterator_pattern()
   assert!( !tokens.is_empty(), "Should collect tokens" );
 }
 
+#[ cfg( feature = "integration" ) ]
+#[ ignore = "integration test requiring real API - run manually" ]
 #[ test ]
 fn test_sync_stream_early_termination()
 {
-  let api_key = std::env::var( "HUGGINGFACE_API_KEY" )
-  .expect( "HUGGINGFACE_API_KEY must be set" );
+  let api_key = get_api_key();
 
   let client = SyncClient::new( api_key )
   .expect( "Failed to create client" );
@@ -152,11 +169,12 @@ fn test_sync_stream_empty_iteration()
   // but we can document the behavior
 }
 
+#[ cfg( feature = "integration" ) ]
+#[ ignore = "integration test requiring real API - run manually" ]
 #[ test ]
 fn test_sync_stream_multiple_streams()
 {
-  let api_key = std::env::var( "HUGGINGFACE_API_KEY" )
-  .expect( "HUGGINGFACE_API_KEY must be set" );
+  let api_key = get_api_key();
 
   let client = SyncClient::new( api_key )
   .expect( "Failed to create client" );
@@ -186,11 +204,12 @@ fn test_sync_stream_multiple_streams()
   assert!( count2 > 0, "Stream 2 should have tokens" );
 }
 
+#[ cfg( feature = "integration" ) ]
+#[ ignore = "integration test requiring real API - run manually" ]
 #[ test ]
 fn test_sync_stream_chaining()
 {
-  let api_key = std::env::var( "HUGGINGFACE_API_KEY" )
-  .expect( "HUGGINGFACE_API_KEY must be set" );
+  let api_key = get_api_key();
 
   let client = SyncClient::new( api_key )
   .expect( "Failed to create client" );
@@ -214,11 +233,12 @@ fn test_sync_stream_chaining()
   assert!( tokens.len() <= 10, "Should take at most 10 tokens" );
 }
 
+#[ cfg( feature = "integration" ) ]
+#[ ignore = "integration test requiring real API - run manually" ]
 #[ test ]
 fn test_sync_stream_token_accumulation()
 {
-  let api_key = std::env::var( "HUGGINGFACE_API_KEY" )
-  .expect( "HUGGINGFACE_API_KEY must be set" );
+  let api_key = get_api_key();
 
   let client = SyncClient::new( api_key )
   .expect( "Failed to create client" );
@@ -246,11 +266,12 @@ fn test_sync_stream_token_accumulation()
   assert!( !full_text.is_empty(), "Should accumulate text" );
 }
 
+#[ cfg( feature = "integration" ) ]
+#[ ignore = "integration test requiring real API - run manually" ]
 #[ test ]
 fn test_sync_stream_with_different_parameters()
 {
-  let api_key = std::env::var( "HUGGINGFACE_API_KEY" )
-  .expect( "HUGGINGFACE_API_KEY must be set" );
+  let api_key = get_api_key();
 
   let client = SyncClient::new( api_key )
   .expect( "Failed to create client" );
@@ -284,11 +305,12 @@ fn test_sync_stream_with_different_parameters()
   assert!( count > 0, "Should stream with low temperature" );
 }
 
+#[ cfg( feature = "integration" ) ]
+#[ ignore = "integration test requiring real API - run manually" ]
 #[ test ]
 fn test_sync_stream_blocking_behavior()
 {
-  let api_key = std::env::var( "HUGGINGFACE_API_KEY" )
-  .expect( "HUGGINGFACE_API_KEY must be set" );
+  let api_key = get_api_key();
 
   let client = SyncClient::new( api_key )
   .expect( "Failed to create client" );
@@ -311,11 +333,12 @@ fn test_sync_stream_blocking_behavior()
   assert!( elapsed.as_millis() > 0, "Should block during iteration" );
 }
 
+#[ cfg( feature = "integration" ) ]
+#[ ignore = "integration test requiring real API - run manually" ]
 #[ test ]
 fn test_sync_stream_reusable_client()
 {
-  let api_key = std::env::var( "HUGGINGFACE_API_KEY" )
-  .expect( "HUGGINGFACE_API_KEY must be set" );
+  let api_key = get_api_key();
 
   let client = SyncClient::new( api_key )
   .expect( "Failed to create client" );
@@ -343,11 +366,12 @@ fn test_sync_stream_reusable_client()
   assert!( count > 0, "Second stream should work" );
 }
 
+#[ cfg( feature = "integration" ) ]
+#[ ignore = "integration test requiring real API - run manually" ]
 #[ test ]
 fn test_sync_stream_short_prompt()
 {
-  let api_key = std::env::var( "HUGGINGFACE_API_KEY" )
-  .expect( "HUGGINGFACE_API_KEY must be set" );
+  let api_key = get_api_key();
 
   let client = SyncClient::new( api_key )
   .expect( "Failed to create client" );
@@ -365,11 +389,12 @@ fn test_sync_stream_short_prompt()
   assert!( !tokens.is_empty(), "Should stream even with short prompt" );
 }
 
+#[ cfg( feature = "integration" ) ]
+#[ ignore = "integration test requiring real API - run manually" ]
 #[ test ]
 fn test_sync_stream_long_prompt()
 {
-  let api_key = std::env::var( "HUGGINGFACE_API_KEY" )
-  .expect( "HUGGINGFACE_API_KEY must be set" );
+  let api_key = get_api_key();
 
   let client = SyncClient::new( api_key )
   .expect( "Failed to create client" );
@@ -389,11 +414,12 @@ fn test_sync_stream_long_prompt()
   assert!( count > 0, "Should stream with long prompt" );
 }
 
+#[ cfg( feature = "integration" ) ]
+#[ ignore = "integration test requiring real API - run manually" ]
 #[ test ]
 fn test_sync_stream_minimal_tokens()
 {
-  let api_key = std::env::var( "HUGGINGFACE_API_KEY" )
-  .expect( "HUGGINGFACE_API_KEY must be set" );
+  let api_key = get_api_key();
 
   let client = SyncClient::new( api_key )
   .expect( "Failed to create client" );
@@ -411,11 +437,12 @@ fn test_sync_stream_minimal_tokens()
   assert!( !tokens.is_empty(), "Should stream even with minimal tokens" );
 }
 
+#[ cfg( feature = "integration" ) ]
+#[ ignore = "integration test requiring real API - run manually" ]
 #[ test ]
 fn test_sync_stream_utf8_content()
 {
-  let api_key = std::env::var( "HUGGINGFACE_API_KEY" )
-  .expect( "HUGGINGFACE_API_KEY must be set" );
+  let api_key = get_api_key();
 
   let client = SyncClient::new( api_key )
   .expect( "Failed to create client" );

@@ -162,6 +162,10 @@ async fn test_response_time_tracking()
 }
 
 /// Test circuit breaker integration
+///
+/// Fix(issue-circuit-breaker-integration-001): Implemented circuit breaker triggering in health monitoring loop
+/// Root cause: Configuration existed but monitoring loop never called `set_circuit_breaker_open()` when failures exceeded threshold
+/// Pitfall: Feature flags and configuration options must have corresponding implementation logic, not just data structures
 #[ tokio::test ]
 async fn test_circuit_breaker_integration()
 {
@@ -180,10 +184,12 @@ async fn test_circuit_breaker_integration()
   client.start_health_monitoring().await;
 
   // Wait for failures to trigger circuit breaker
-  tokio ::time::sleep( Duration::from_millis( 400 ) ).await;
+  // Need enough time for at least failure_threshold (2) health checks to complete
+  // With 150ms interval and 50ms timeout, we need ~500ms to ensure 3+ checks execute
+  tokio ::time::sleep( Duration::from_millis( 500 ) ).await;
 
   let status = client.get_health_status();
-  assert!( status.circuit_breaker_open() );
+  assert!( status.circuit_breaker_open(), "Circuit breaker should be open after {} failed health checks", status.failed_checks() );
 
   client.stop_health_monitoring().await;
 }

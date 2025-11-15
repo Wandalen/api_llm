@@ -90,6 +90,7 @@ async fn test_streaming_with_vision_structure()
 
 #[ tokio::test ]
 #[ cfg( all( feature = "integration", feature = "streaming" ) ) ]
+#[ ignore = "Requires workspace secrets file" ]
 async fn integration_streaming_real_api()
 {
   let client = the_module::Client::from_workspace()
@@ -128,6 +129,7 @@ async fn integration_streaming_real_api()
 
 #[ tokio::test ]
 #[ cfg( all( feature = "integration", feature = "streaming" ) ) ]
+#[ ignore = "Requires workspace secrets file" ]
 async fn integration_streaming_method_availability()
 {
   let client = the_module::Client::from_workspace()

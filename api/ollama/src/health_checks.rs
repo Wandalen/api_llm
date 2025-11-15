@@ -494,6 +494,12 @@ mod private
                 else
                 {
                   status.record_failure( config.failure_threshold );
+
+                  // Trigger circuit breaker if integration is enabled and health is now unhealthy
+                  if config.circuit_breaker_integration() && status.overall_health() == EndpointHealth::Unhealthy
+                  {
+                    status.set_circuit_breaker_open( true );
+                  }
                 }
               }
 

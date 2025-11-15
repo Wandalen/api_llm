@@ -15,6 +15,7 @@ use api_openai::
 };
 
 #[ tokio::test ]
+#[ ignore = "integration test requiring real OpenAI API with vision model - may fail due to external service issues like 502 errors" ]
 async fn test_image_input_request_structure_failure()
 {
   // This test should initially fail, demonstrating the issue
