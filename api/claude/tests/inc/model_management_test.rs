@@ -24,7 +24,6 @@ use super::*;
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
-#[ ignore = "Requires network connectivity and API access" ]
 async fn integration_model_management_real_model_validation()
 {
   let client = the_module::Client::from_workspace()
@@ -76,7 +75,6 @@ async fn integration_model_management_real_model_validation()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
-  #[ ignore = "Requires workspace secrets file" ]
 async fn integration_model_management_invalid_model_handling()
 {
   let client = the_module::Client::from_workspace()
@@ -120,7 +118,6 @@ async fn integration_model_management_invalid_model_handling()
 
 #[ tokio::test ]
 #[ cfg( all( feature = "integration", feature = "tools" ) ) ]
-  #[ ignore = "Requires workspace secrets file" ]
 async fn integration_model_management_capability_validation()
 {
   let client = the_module::Client::from_workspace()

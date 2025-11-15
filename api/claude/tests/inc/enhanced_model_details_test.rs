@@ -33,12 +33,6 @@ mod enhanced_model_details_functionality_tests
 
   /// Test comprehensive model metadata retrieval
   ///
-  /// DISABLED: 2025-11-06
-  /// REASON: TDD test for EnhancedModelDetails type not yet implemented
-  /// RE-ENABLE: When EnhancedModelDetails type implementation complete (target : 2025-12-01)
-  /// APPROVED: Project maintainer
-  /// TRACKING: issue-002
-  #[ ignore = "TDD test for EnhancedModelDetails not yet implemented" ]
   #[ test ]
   fn test_enhanced_model_metadata_retrieval()
   {
@@ -59,12 +53,6 @@ mod enhanced_model_details_functionality_tests
 
   /// Test model pricing information accuracy
   ///
-  /// DISABLED: 2025-11-06
-  /// REASON: TDD test for ModelPricing type not yet implemented
-  /// RE-ENABLE: When ModelPricing type implementation complete (target : 2025-12-01)
-  /// APPROVED: Project maintainer
-  /// TRACKING: issue-002
-  #[ ignore = "TDD test for ModelPricing not yet implemented" ]
   #[ test ]
   fn test_model_pricing_information()
   {
@@ -82,12 +70,6 @@ mod enhanced_model_details_functionality_tests
 
   /// Test capabilities and limitations reporting
   ///
-  /// DISABLED: 2025-11-06
-  /// REASON: TDD test for EnhancedModelCapabilities type not yet implemented
-  /// RE-ENABLE: When EnhancedModelCapabilities type implementation complete (target : 2025-12-01)
-  /// APPROVED: Project maintainer
-  /// TRACKING: issue-002
-  #[ ignore = "TDD test for EnhancedModelCapabilities not yet implemented" ]
   #[ test ]
   fn test_model_capabilities_and_limitations()
   {
@@ -127,12 +109,6 @@ mod enhanced_model_details_functionality_tests
 
   /// Test context window and token limit validation
   ///
-  /// DISABLED: 2025-11-06
-  /// REASON: TDD test for ContextWindowDetails type not yet implemented
-  /// RE-ENABLE: When ContextWindowDetails type implementation complete (target : 2025-12-01)
-  /// APPROVED: Project maintainer
-  /// TRACKING: issue-002
-  #[ ignore = "TDD test for ContextWindowDetails not yet implemented" ]
   #[ test ]
   fn test_context_window_and_token_limits()
   {
@@ -317,12 +293,6 @@ mod enhanced_model_details_functionality_tests
 
   /// Test model feature compatibility matrix
   ///
-  /// DISABLED: 2025-11-06
-  /// REASON: TDD test for FeatureCompatibilityMatrix type not yet implemented
-  /// RE-ENABLE: When FeatureCompatibilityMatrix type implementation complete (target : 2025-12-01)
-  /// APPROVED: Project maintainer
-  /// TRACKING: issue-002
-  #[ ignore = "TDD test for FeatureCompatibilityMatrix not yet implemented" ]
   #[ test ]
   fn test_model_feature_compatibility()
   {
@@ -359,7 +329,6 @@ mod enhanced_model_details_integration_tests
 
   /// Test end-to-end enhanced model details retrieval
   #[ tokio::test ]
-  #[ ignore = "Requires workspace secrets file" ]
   async fn test_end_to_end_enhanced_model_details()
   {
     use the_module::EnhancedModelDetails;
@@ -390,7 +359,6 @@ mod enhanced_model_details_integration_tests
 
   /// Test model details caching and performance
   #[ tokio::test ]
-  #[ ignore = "Requires workspace secrets file" ]
   async fn test_enhanced_model_details_caching()
   {
     use the_module::{ EnhancedModelDetails, ModelDetailsCache };
@@ -457,7 +425,6 @@ mod enhanced_model_details_integration_tests
 
   /// Test pricing information accuracy with real data
   #[ tokio::test ]
-  #[ ignore = "Requires workspace secrets file" ]
   async fn test_real_pricing_accuracy()
   {
     use the_module::ModelPricing;
@@ -488,7 +455,6 @@ mod enhanced_model_details_integration_tests
 
   /// Test model lifecycle status validation
   #[ tokio::test ]
-  #[ ignore = "Requires workspace secrets file" ]
   async fn test_model_lifecycle_validation()
   {
     use the_module::ModelLifecycle;

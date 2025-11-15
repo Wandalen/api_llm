@@ -83,7 +83,6 @@ async fn test_client_from_missing_environment_variable()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
-#[ ignore = "Requires workspace secrets file" ]
 async fn integration_client_real_api_lifecycle()
 {
   let client = the_module::Client::from_workspace()
@@ -130,7 +129,6 @@ async fn integration_client_real_api_lifecycle()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
-#[ ignore = "Requires workspace secrets file" ]
 async fn integration_client_concurrent_requests()
 {
   let client = the_module::Client::from_workspace()

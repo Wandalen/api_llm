@@ -74,14 +74,7 @@ async fn test_integration_model_info()
     }
   });
 }
-
-// DISABLED: 2025-11-07 by Development Team
-// REASON: Integration test times out - requires stable Ollama server infrastructure
-// RE-ENABLE: When stable Ollama server infrastructure is available
-// APPROVED: Team Lead
-// TRACKING: issue-test-integration-disabled
 #[ tokio::test ]
-#[ ignore = "Integration test disabled - requires stable server" ]
 async fn test_integration_simple_generation()
 {
   with_test_server!(|mut client : OllamaClient, model : String| async move {
@@ -103,14 +96,7 @@ async fn test_integration_simple_generation()
     println!("Generated response : '{}'", response.response.trim());
   });
 }
-
-// DISABLED: 2025-11-08 by Development Team
-// REASON: Integration test times out - requires stable Ollama server infrastructure
-// RE-ENABLE: When stable Ollama server infrastructure is available
-// APPROVED: Team Lead
-// TRACKING: issue-test-integration-disabled
 #[ tokio::test ]
-#[ ignore = "Integration test disabled - requires stable server infrastructure" ]
 async fn test_integration_simple_chat()
 {
   with_test_server!(|mut client : OllamaClient, model : String| async move {

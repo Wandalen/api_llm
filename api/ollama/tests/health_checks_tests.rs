@@ -162,13 +162,7 @@ async fn test_response_time_tracking()
 }
 
 /// Test circuit breaker integration
-// DISABLED: 2025-11-07 by Development Team
-// REASON: Requires actual circuit breaker integration which is not yet implemented
-// RE-ENABLE: When circuit breaker feature is fully integrated
-// APPROVED: Team Lead
-// TRACKING: issue-test-circuit-breaker-disabled
 #[ tokio::test ]
-#[ ignore = "Integration test disabled - requires stable server infrastructure" ]
 async fn test_circuit_breaker_integration()
 {
   let config = HealthCheckConfig::new()

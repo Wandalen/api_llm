@@ -83,7 +83,6 @@ fn test_tool_choice_serialization()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
-#[ ignore = "Requires workspace secrets file" ]
 async fn integration_tool_choice_auto_mode()
 {
   // Test AUTO mode - model decides whether to use tools
@@ -136,7 +135,6 @@ async fn integration_tool_choice_auto_mode()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
-#[ ignore = "Requires workspace secrets file" ]
 async fn integration_tool_choice_any_mode()
 {
   // Test ANY mode - force use of any available tool
@@ -191,7 +189,6 @@ async fn integration_tool_choice_any_mode()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
-#[ ignore = "Requires workspace secrets file" ]
 async fn integration_tool_choice_none_mode()
 {
   // Test NONE mode - disable all tool calling
@@ -246,7 +243,6 @@ async fn integration_tool_choice_none_mode()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
-#[ ignore = "Requires workspace secrets file" ]
 async fn integration_tool_choice_mode_transitions()
 {
   // Test switching between different tool choice modes

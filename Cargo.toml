@@ -96,10 +96,10 @@ default-features = false
 ## Peer
 
 [workspace.dependencies.mod_interface]
-version = "0.47.0"
+version = "0.52.0"
 
 [workspace.dependencies.former]
-version = "2.31.0"
+version = "2.37.0"
 
 [workspace.dependencies.format_tools]
 version = "0.6.0"
@@ -151,7 +151,7 @@ version = "2.5.7"
 version = "1.0.228"
 
 [workspace.dependencies.serde_with]
-version = "3.14.0"
+version = "3.15.1"
 
 [workspace.dependencies.serde_json]
 version = "1.0.145"
@@ -166,28 +166,34 @@ version = "0.22.1"
 version = "0.10.3"
 
 [workspace.dependencies.urlencoding]
-version = "2.1"
+version = "2.1.3"
 
 ## crypto and compression
 
 [workspace.dependencies.blake3]
-version = "1.8"
+version = "1.8.2"
 
 [workspace.dependencies.sha2]
 version = "0.10"
 
 [workspace.dependencies.flate2]
-version = "1.1"
+version = "1.1.5"
+
+[workspace.dependencies.brotli]
+version = "8.0.2"
+
+[workspace.dependencies.async-compression]
+version = "0.4.33"
 
 ## system
 
 [workspace.dependencies.ctrlc]
-version = "3.5"
+version = "3.5.1"
 
 ## sync primitives
 
 [workspace.dependencies.parking_lot]
-version = "0.12.3"
+version = "0.12.5"
 
 ## async
 
@@ -210,13 +216,13 @@ version = "=6.0.8"
 version = "0.4.0"
 
 [workspace.dependencies.tokio]
-version = "1.47.2"
+version = "1.48.0"
 
 [workspace.dependencies.tokio-stream]
 version = "0.1.17"
 
 [workspace.dependencies.tokio-util]
-version = "0.7.16"
+version = "0.7.17"
 
 [workspace.dependencies.tokio-test]
 version = "0.4.4"
@@ -252,7 +258,7 @@ version = "0.28.0"
 version = "0.4.42"
 
 [workspace.dependencies.toml]
-version = "0.9.6"
+version = "0.9.8"
 
 [workspace.dependencies.tempfile]
 version = "3.23.0"
@@ -275,7 +281,7 @@ version = "0.3.21"
 version = "2.5.0"
 
 [workspace.dependencies.notify]
-version = "8.2"
+version = "8.2.0"
 
 [workspace.dependencies.uuid]
 version = "1.18.1"

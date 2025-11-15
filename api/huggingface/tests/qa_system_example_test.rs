@@ -350,13 +350,7 @@ fn test_edge_case_ambiguous_question()
 // Integration Tests - Real API Calls
 //
 
-// DISABLED: 2025-11-06 by system
-// REASON: Integration test requires real HuggingFace API key and makes actual API calls
-// RE-ENABLE: Run manually with `cargo test --test qa_system_example_test -- --ignored` when API key available
-// APPROVED: self (test suite owner)
-// TRACKING: N/A - intentional integration test exclusion from CI
 #[ tokio::test ]
-#[ ignore ]
 async fn test_single_question_answering_integration()
 {
   let client = create_test_client();
@@ -387,13 +381,7 @@ async fn test_single_question_answering_integration()
   println!( "Confidence : {:.2}%", answer.confidence * 100.0 );
 }
 
-// DISABLED: 2025-11-06 by system
-// REASON: Integration test requires real HuggingFace API key and makes actual API calls
-// RE-ENABLE: Run manually with `cargo test --test qa_system_example_test -- --ignored` when API key available
-// APPROVED: self (test suite owner)
-// TRACKING: N/A - intentional integration test exclusion from CI
 #[ tokio::test ]
-#[ ignore ]
 async fn test_context_based_answering_integration()
 {
   let client = create_test_client();
@@ -428,13 +416,7 @@ async fn test_context_based_answering_integration()
   println!( "Relates to context : {}", has_rust_content );
 }
 
-// DISABLED: 2025-11-06 by system
-// REASON: Integration test requires real HuggingFace API key and makes actual API calls
-// RE-ENABLE: Run manually with `cargo test --test qa_system_example_test -- --ignored` when API key available
-// APPROVED: self (test suite owner)
-// TRACKING: N/A - intentional integration test exclusion from CI
 #[ tokio::test ]
-#[ ignore ]
 async fn test_multi_turn_conversation_integration()
 {
   let client = create_test_client();
@@ -493,13 +475,7 @@ async fn test_multi_turn_conversation_integration()
   assert_eq!( session.turns.len(), 2, "Should have 2 turns" );
 }
 
-// DISABLED: 2025-11-06 by system
-// REASON: Integration test requires real HuggingFace API key and makes actual API calls
-// RE-ENABLE: Run manually with `cargo test --test qa_system_example_test -- --ignored` when API key available
-// APPROVED: self (test suite owner)
-// TRACKING: N/A - intentional integration test exclusion from CI
 #[ tokio::test ]
-#[ ignore ]
 async fn test_error_handling_scenarios()
 {
   let client = create_test_client();

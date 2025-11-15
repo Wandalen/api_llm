@@ -465,17 +465,12 @@ async fn integration_test_http_large_request_real_api()
 #[ tokio::test ]
 async fn integration_test_retry_logic_real_network()
 {
-  let _client_check = create_integration_client();
-
-  // Create client with retry enabled - will panic if API key not available
-  let api_key = match std::env::var( "GEMINI_API_KEY" )
-    .or_else( |_| std::fs::read_to_string( "secret/gemini_api_key" ).map( |s| s.trim().to_string() ) )
-  {
-    Ok( key ) => key,
-    Err( _ ) => {
-      panic!( "❌ GEMINI_API_KEY not found in environment or secret/gemini_api_key file. Integration tests require valid API credentials." );
-    }
-  };
+  // Get API key using workspace_tools (same as create_integration_client)
+  use workspace_tools as workspace;
+  let ws = workspace::workspace().expect( "Failed to resolve workspace" );
+  let api_key = ws.load_secret_key( "GEMINI_API_KEY", "-secrets.sh" )
+    .or_else( |_| std::env::var( "GEMINI_API_KEY" ) )
+    .expect( "❌ GEMINI_API_KEY not found in workspace secrets or environment" );
   let client = Client::builder()
     .api_key( api_key )
     .max_retries( 3 )
@@ -557,17 +552,12 @@ async fn integration_test_circuit_breaker_real_api()
 #[ tokio::test ]
 async fn integration_test_rate_limiting_real_api()
 {
-  let _client_check = create_integration_client();
-
-  // Create client with rate limiting - will panic if API key not available
-  let api_key = match std::env::var( "GEMINI_API_KEY" )
-    .or_else( |_| std::fs::read_to_string( "secret/gemini_api_key" ).map( |s| s.trim().to_string() ) )
-  {
-    Ok( key ) => key,
-    Err( _ ) => {
-      panic!( "❌ GEMINI_API_KEY not found in environment or secret/gemini_api_key file. Integration tests require valid API credentials." );
-    }
-  };
+  // Get API key using workspace_tools (same as create_integration_client)
+  use workspace_tools as workspace;
+  let ws = workspace::workspace().expect( "Failed to resolve workspace" );
+  let api_key = ws.load_secret_key( "GEMINI_API_KEY", "-secrets.sh" )
+    .or_else( |_| std::env::var( "GEMINI_API_KEY" ) )
+    .expect( "❌ GEMINI_API_KEY not found in workspace secrets or environment" );
   let client = Client::builder()
     .api_key( api_key )
     .enable_rate_limiting( true )
@@ -610,17 +600,12 @@ async fn integration_test_rate_limiting_real_api()
 #[ tokio::test ]
 async fn integration_test_request_caching_real_api()
 {
-  let _client_check = create_integration_client();
-
-  // Create client with caching enabled - will panic if API key not available
-  let api_key = match std::env::var( "GEMINI_API_KEY" )
-    .or_else( |_| std::fs::read_to_string( "secret/gemini_api_key" ).map( |s| s.trim().to_string() ) )
-  {
-    Ok( key ) => key,
-    Err( _ ) => {
-      panic!( "❌ GEMINI_API_KEY not found in environment or secret/gemini_api_key file. Integration tests require valid API credentials." );
-    }
-  };
+  // Get API key using workspace_tools (same as create_integration_client)
+  use workspace_tools as workspace;
+  let ws = workspace::workspace().expect( "Failed to resolve workspace" );
+  let api_key = ws.load_secret_key( "GEMINI_API_KEY", "-secrets.sh" )
+    .or_else( |_| std::env::var( "GEMINI_API_KEY" ) )
+    .expect( "❌ GEMINI_API_KEY not found in workspace secrets or environment" );
   let client = Client::builder()
     .api_key( api_key )
     .enable_request_cache( true )

@@ -68,7 +68,6 @@ fn create_test_messages() -> Vec< ChatMessage >
 // ============================================================================
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_priority_failover_first_endpoint_succeeds() 
 {
   let client = create_test_client( );
@@ -105,7 +104,6 @@ async fn test_priority_failover_first_endpoint_succeeds()
 }
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_priority_failover_first_fails_second_succeeds() 
 {
   let client = create_test_client( );
@@ -152,7 +150,6 @@ async fn test_priority_failover_first_fails_second_succeeds()
 }
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_priority_failover_all_endpoints_fail() 
 {
   let client = create_test_client( );
@@ -201,7 +198,6 @@ async fn test_priority_failover_all_endpoints_fail()
 // ============================================================================
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_round_robin_cycles_through_endpoints() 
 {
   let client = create_test_client( );
@@ -246,7 +242,6 @@ async fn test_round_robin_cycles_through_endpoints()
 }
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_round_robin_skips_unhealthy_endpoints() 
 {
   let client = create_test_client( );
@@ -300,7 +295,6 @@ async fn test_round_robin_skips_unhealthy_endpoints()
 // ============================================================================
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_random_strategy_uses_random_endpoints() 
 {
   let client = create_test_client( );
@@ -345,7 +339,6 @@ async fn test_random_strategy_uses_random_endpoints()
 }
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_random_strategy_avoids_unhealthy_endpoints() 
 {
   let client = create_test_client( );
@@ -411,7 +404,6 @@ async fn test_random_strategy_avoids_unhealthy_endpoints()
 // ============================================================================
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_sticky_strategy_uses_same_endpoint() 
 {
   let client = create_test_client( );
@@ -460,7 +452,6 @@ async fn test_sticky_strategy_uses_same_endpoint()
 }
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_sticky_strategy_switches_on_failure() 
 {
   let client = create_test_client( );
@@ -526,7 +517,6 @@ async fn test_sticky_strategy_switches_on_failure()
 // ============================================================================
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_health_tracking_marks_unhealthy_after_threshold() 
 {
   let client = create_test_client( );
@@ -581,7 +571,6 @@ async fn test_health_tracking_marks_unhealthy_after_threshold()
 }
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_health_tracking_recovers_after_success() 
 {
   let client = create_test_client( );
@@ -635,7 +624,6 @@ async fn test_health_tracking_recovers_after_success()
 }
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_health_status_reflects_request_counts() 
 {
   let client = create_test_client( );
@@ -717,7 +705,6 @@ async fn test_reset_clears_health_tracking()
 // ============================================================================
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_concurrent_requests_with_failover() 
 {
   let client = Arc::new( create_test_client( ));
@@ -827,7 +814,6 @@ async fn test_single_endpoint_failover()
 }
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_max_retries_limits_attempts() 
 {
   let client = create_test_client( );

@@ -14,7 +14,6 @@ mod sync_api_functionality_tests
 
   /// Test basic sync client construction and configuration
   #[ test ]
-  #[ ignore = "Requires ANTHROPIC_API_KEY environment variable" ]
   fn test_sync_client_construction()
   {
     use the_module::SyncClient;
@@ -46,7 +45,6 @@ mod sync_api_functionality_tests
 
   /// Test sync message creation and sending
   #[ test ]
-  #[ ignore = "Requires workspace secrets file" ]
 fn test_sync_message_operations()
   {
     use the_module::{ SyncClient, CreateMessageRequest, Message };
@@ -88,7 +86,6 @@ fn test_sync_message_operations()
 
   /// Test sync message with system prompts
   #[ test ]
-  #[ ignore = "Requires workspace secrets file" ]
 fn test_sync_message_with_system_prompt()
   {
     use the_module::{ SyncClient, CreateMessageRequest };
@@ -126,7 +123,6 @@ fn test_sync_message_with_system_prompt()
 
   /// Test sync conversation flow
   #[ test ]
-  #[ ignore = "Requires workspace secrets file" ]
 fn test_sync_conversation_flow()
   {
     use the_module::{ SyncClient, CreateMessageRequest, Message };
@@ -173,7 +169,6 @@ fn test_sync_conversation_flow()
 
   /// Test sync client with different models
   #[ test ]
-  #[ ignore = "Requires workspace secrets file" ]
 fn test_sync_client_multiple_models()
   {
     use the_module::{ SyncClient, CreateMessageRequest };
@@ -209,7 +204,6 @@ fn test_sync_client_multiple_models()
 
   /// Test sync client timeout handling
   #[ test ]
-  #[ ignore = "Requires ANTHROPIC_API_KEY environment variable" ]
   fn test_sync_client_timeout_configuration()
   {
     use the_module::SyncClientBuilder;
@@ -469,7 +463,6 @@ mod sync_api_integration_tests
 
   /// Test sync error handling and propagation
   #[ test ]
-  #[ ignore = "Requires ANTHROPIC_API_KEY environment variable" ]
   fn test_sync_error_handling()
   {
     use the_module::{ SyncClient, CreateMessageRequest };

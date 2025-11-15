@@ -16,7 +16,6 @@ use super::*;
 
 #[ test ]
 #[ cfg( feature = "integration" ) ]
-#[ ignore = "Requires workspace secrets file" ]
 fn test_spec_verification_integration()
 {
     // INTEGRATION TEST - STRICT FAILURE POLICY: NO GRACEFUL FALLBACKS

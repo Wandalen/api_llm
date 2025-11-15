@@ -107,7 +107,6 @@ mod tests
   }
 
   #[ tokio::test ]
-  #[ ignore = "requires live API key and Pro plan subscription" ]
   async fn test_basic_function_calling()
   {
   let client = setup_client();
@@ -159,7 +158,6 @@ mod tests
   }
 
   #[ tokio::test ]
-  #[ ignore = "requires live API key and Pro plan subscription" ]
   async fn test_tool_choice_none()
   {
   let client = setup_client();
@@ -197,7 +195,6 @@ mod tests
   }
 
   #[ tokio::test ]
-  #[ ignore = "requires live API key and Pro plan subscription" ]
   async fn test_tool_choice_required()
   {
   let client = setup_client();
@@ -234,7 +231,6 @@ mod tests
   }
 
   #[ tokio::test ]
-  #[ ignore = "requires live API key and Pro plan subscription" ]
   async fn test_multiple_tools()
   {
   let client = setup_client();
@@ -276,7 +272,6 @@ mod tests
   }
 
   #[ tokio::test ]
-  #[ ignore = "requires live API key and Pro plan subscription" ]
   async fn test_function_calling_conversation_flow()
   {
   let client = setup_client();

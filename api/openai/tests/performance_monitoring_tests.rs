@@ -56,13 +56,6 @@ mod performance_monitoring_tests
     let overhead = result.unwrap();
     assert!(overhead.as_millis() < 10, "Request overhead should be less than 10ms");
   }
-
-  // DISABLED: 2025-11-08 by Claude
-  // REASON: Flaky performance test - timing assertions may fail inconsistently under load
-  // RE-ENABLE: After making test more robust or relaxing timing constraints
-  // APPROVED: self (test author)
-  // TRACKING: Test flakiness
-  #[ ignore = "Test flakiness" ]
   #[ tokio::test ]
   async fn test_multiple_request_overhead_consistency_succeeds()
   {

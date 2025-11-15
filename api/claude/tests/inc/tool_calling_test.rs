@@ -464,7 +464,6 @@ async fn test_tool_validation_errors()
 
 #[ tokio::test ]
 #[ cfg( all( feature = "integration", feature = "tools" ) ) ]
-  #[ ignore = "Requires workspace secrets file" ]
 async fn integration_tool_calling_real_math_tool()
 {
   let client = the_module::Client::from_workspace()
@@ -544,7 +543,6 @@ async fn integration_tool_calling_real_math_tool()
 
 #[ tokio::test ]
 #[ cfg( all( feature = "integration", feature = "tools" ) ) ]
-  #[ ignore = "Requires workspace secrets file" ]
 async fn integration_tool_calling_multiple_tools()
 {
   let client = the_module::Client::from_workspace()

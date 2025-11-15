@@ -27,14 +27,7 @@ use api_ollama::{
 };
 use core::time::Duration;
 use futures_util::StreamExt;
-
-// DISABLED: 2025-11-07 by Development Team
-// REASON: Integration test times out - requires stable Ollama server infrastructure
-// RE-ENABLE: When stable Ollama server infrastructure is available
-// APPROVED: Team Lead
-// TRACKING: issue-test-integration-disabled
 #[ tokio::test ]
-#[ ignore = "Integration test disabled - requires stable server infrastructure" ]
 async fn test_streaming_chat_basic()
 {
   with_test_server!(|mut client : OllamaClient, model : String| async move {

@@ -23,7 +23,6 @@ fn test_sync_stream_iterator_structure()
 
 #[ test ]
 #[ cfg( feature = "integration" ) ]
-#[ ignore = "Requires workspace secrets file" ]
 fn integration_sync_streaming_text_generation()
 {
   // Test synchronous streaming for text generation
@@ -82,7 +81,6 @@ fn integration_sync_streaming_text_generation()
 
 #[ test ]
 #[ cfg( feature = "integration" ) ]
-#[ ignore = "Requires workspace secrets file" ]
 fn integration_sync_streaming_error_handling()
 {
   // Test error handling in sync streaming with invalid request
@@ -111,7 +109,6 @@ fn integration_sync_streaming_error_handling()
 
 #[ test ]
 #[ cfg( feature = "integration" ) ]
-#[ ignore = "Requires workspace secrets file" ]
 fn integration_sync_streaming_blocking_iteration()
 {
   // Test that sync streaming blocks properly and doesn't require async/await

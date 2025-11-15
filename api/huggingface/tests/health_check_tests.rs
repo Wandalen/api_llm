@@ -33,7 +33,6 @@ use std::sync::Arc;
 // ============================================================================
 
 #[ tokio::test ]
-#[ ignore = "requires network access" ]
 async fn test_ping_strategy_healthy_endpoint() 
 {
   let config = HealthCheckConfig {
@@ -58,7 +57,6 @@ async fn test_ping_strategy_healthy_endpoint()
 }
 
 #[ tokio::test ]
-#[ ignore = "requires network access" ]
 async fn test_ping_strategy_unhealthy_endpoint() 
 {
   let config = HealthCheckConfig {
@@ -93,7 +91,6 @@ async fn test_ping_strategy_unhealthy_endpoint()
 // ============================================================================
 
 #[ tokio::test ]
-#[ ignore = "requires network access" ]
 async fn test_lightweight_api_strategy_healthy() 
 {
   let config = HealthCheckConfig {
@@ -116,7 +113,6 @@ async fn test_lightweight_api_strategy_healthy()
 }
 
 #[ tokio::test ]
-#[ ignore = "requires network access" ]
 async fn test_lightweight_api_strategy_404_is_unhealthy() 
 {
   let config = HealthCheckConfig {
@@ -142,7 +138,6 @@ async fn test_lightweight_api_strategy_404_is_unhealthy()
 // ============================================================================
 
 #[ tokio::test ]
-#[ ignore = "requires network access" ]
 async fn test_full_endpoint_strategy_healthy() 
 {
   let config = HealthCheckConfig {
@@ -165,7 +160,6 @@ async fn test_full_endpoint_strategy_healthy()
 }
 
 #[ tokio::test ]
-#[ ignore = "requires network access" ]
 async fn test_full_endpoint_strategy_accepts_client_errors() 
 {
   // Full endpoint check accepts 4xx errors as "endpoint is responding"
@@ -190,7 +184,6 @@ async fn test_full_endpoint_strategy_accepts_client_errors()
 // ============================================================================
 
 #[ tokio::test ]
-#[ ignore = "requires network access" ]
 async fn test_unhealthy_threshold_gradual_failure() 
 {
   let config = HealthCheckConfig {
@@ -223,7 +216,6 @@ async fn test_unhealthy_threshold_gradual_failure()
 }
 
 #[ tokio::test ]
-#[ ignore = "requires network access" ]
 async fn test_health_recovery_after_success() 
 {
   let config = HealthCheckConfig {
@@ -260,7 +252,6 @@ async fn test_health_recovery_after_success()
 // ============================================================================
 
 #[ tokio::test ]
-#[ ignore = "requires network access" ]
 async fn test_background_monitoring_performs_checks() 
 {
   let config = HealthCheckConfig {
@@ -291,7 +282,6 @@ async fn test_background_monitoring_performs_checks()
 }
 
 #[ tokio::test ]
-#[ ignore = "requires network access" ]
 async fn test_monitoring_can_be_started_and_stopped() 
 {
   let config = HealthCheckConfig {
@@ -323,7 +313,6 @@ async fn test_monitoring_can_be_started_and_stopped()
 // ============================================================================
 
 #[ tokio::test ]
-#[ ignore = "requires network access" ]
 async fn test_latency_tracking_measures_response_time() 
 {
   let config = HealthCheckConfig {
@@ -345,7 +334,6 @@ async fn test_latency_tracking_measures_response_time()
 }
 
 #[ tokio::test ]
-#[ ignore = "requires network access" ]
 async fn test_multiple_checks_update_latency() 
 {
   let config = HealthCheckConfig {
@@ -378,7 +366,6 @@ async fn test_multiple_checks_update_latency()
 // ============================================================================
 
 #[ tokio::test ]
-#[ ignore = "requires network access" ]
 async fn test_timeout_marks_check_as_failed() 
 {
   let config = HealthCheckConfig {
@@ -405,7 +392,6 @@ async fn test_timeout_marks_check_as_failed()
 // ============================================================================
 
 #[ tokio::test ]
-#[ ignore = "requires network access" ]
 async fn test_concurrent_health_checks() 
 {
   let config = HealthCheckConfig {
@@ -488,7 +474,6 @@ async fn test_reset_clears_all_state()
 // ============================================================================
 
 #[ tokio::test ]
-#[ ignore = "requires network access" ]
 async fn test_https_redirect_is_healthy() 
 {
   let config = HealthCheckConfig {

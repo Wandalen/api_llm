@@ -272,7 +272,6 @@ mod general_diagnostics_integration_tests
 
   /// Test end-to-end diagnostics collection
   #[ tokio::test ]
-  #[ ignore = "Requires network connectivity and API access" ]
   async fn test_end_to_end_diagnostics()
   {
     use the_module::DiagnosticsCollector;
@@ -329,7 +328,6 @@ mod general_diagnostics_integration_tests
 
   /// Test diagnostics under load
   #[ tokio::test ]
-    #[ ignore = "Requires workspace secrets file" ]
   async fn test_diagnostics_under_load()
   {
     use the_module::{ DiagnosticsCollector, LoadTester };

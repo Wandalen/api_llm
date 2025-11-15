@@ -15,7 +15,6 @@ use super::*;
 
 #[ test ]
 #[ cfg( feature = "integration" ) ]
-#[ ignore = "Requires workspace secrets file" ]
 fn test_workspace_token_loading_and_format_validation()
 {
   println!( "🔐 Token Loading & Format Validation Test" );
@@ -71,7 +70,6 @@ fn test_workspace_token_loading_and_format_validation()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
-  #[ ignore = "Requires workspace secrets file" ]
 async fn test_live_token_authentication_verification()
 {
   println!( "\n🌐 Live Token Authentication Verification" );
@@ -174,7 +172,6 @@ async fn test_live_token_authentication_verification()
 
 #[ test ]
 #[ cfg( feature = "integration" ) ]
-#[ ignore = "Requires workspace secrets file" ]
 fn test_token_security_and_workspace_integration()
 {
   println!( "\n🛡️ Token Security & Workspace Integration Test" );

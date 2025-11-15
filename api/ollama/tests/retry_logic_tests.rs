@@ -161,13 +161,7 @@ async fn test_generate_error_transparency()
 /// Fix(issue-silent-failure-008): Replaced silent skip with proper #[ignore] annotation
 /// Root cause : Empty test body with println+return violated "No Disabled Tests" rule
 /// Pitfall : Use #[ignore] with permission tracking, not empty test body per `codebase_hygiene.rulebook.md`
-// DISABLED: 2025-11-07 by Claude Code
-// REASON: EmbeddingsRequest moved to models module during refactoring - test needs rewrite
-// RE-ENABLE: After models module refactoring complete (target : 2025-11-14)
-// APPROVED: self (codebase hygiene enforcement)
-// TRACKING: models-module-refactor
 #[ tokio::test ]
-#[ ignore = "Integration test disabled - requires stable server infrastructure" ]
 async fn test_embeddings_error_transparency()
 {
   // TODO: Rewrite test once models module refactoring complete

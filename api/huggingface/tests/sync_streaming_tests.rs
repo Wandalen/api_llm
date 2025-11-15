@@ -10,7 +10,6 @@ use api_huggingface::sync::SyncClient;
 use api_huggingface::components::input::InferenceParameters;
 
 #[ test ]
-#[ ignore = "requires live API access" ]
 fn test_sync_stream_basic()
 {
   let api_key = std::env::var( "HUGGINGFACE_API_KEY" )
@@ -47,7 +46,6 @@ fn test_sync_stream_basic()
 }
 
 #[ test ]
-#[ ignore = "requires live API access" ]
 fn test_sync_stream_iterator_pattern()
 {
   let api_key = std::env::var( "HUGGINGFACE_API_KEY" )
@@ -71,7 +69,6 @@ fn test_sync_stream_iterator_pattern()
 }
 
 #[ test ]
-#[ ignore = "requires live API access" ]
 fn test_sync_stream_early_termination()
 {
   let api_key = std::env::var( "HUGGINGFACE_API_KEY" )
@@ -111,7 +108,6 @@ fn test_sync_stream_early_termination()
 }
 
 #[ test ]
-#[ ignore = "requires live API access" ]
 fn test_sync_stream_error_handling()
 {
   let api_key = "invalid_key".to_string();
@@ -157,7 +153,6 @@ fn test_sync_stream_empty_iteration()
 }
 
 #[ test ]
-#[ ignore = "requires live API access" ]
 fn test_sync_stream_multiple_streams()
 {
   let api_key = std::env::var( "HUGGINGFACE_API_KEY" )
@@ -192,7 +187,6 @@ fn test_sync_stream_multiple_streams()
 }
 
 #[ test ]
-#[ ignore = "requires live API access" ]
 fn test_sync_stream_chaining()
 {
   let api_key = std::env::var( "HUGGINGFACE_API_KEY" )
@@ -221,7 +215,6 @@ fn test_sync_stream_chaining()
 }
 
 #[ test ]
-#[ ignore = "requires live API access" ]
 fn test_sync_stream_token_accumulation()
 {
   let api_key = std::env::var( "HUGGINGFACE_API_KEY" )
@@ -254,7 +247,6 @@ fn test_sync_stream_token_accumulation()
 }
 
 #[ test ]
-#[ ignore = "requires live API access" ]
 fn test_sync_stream_with_different_parameters()
 {
   let api_key = std::env::var( "HUGGINGFACE_API_KEY" )
@@ -293,7 +285,6 @@ fn test_sync_stream_with_different_parameters()
 }
 
 #[ test ]
-#[ ignore = "requires live API access" ]
 fn test_sync_stream_blocking_behavior()
 {
   let api_key = std::env::var( "HUGGINGFACE_API_KEY" )
@@ -321,7 +312,6 @@ fn test_sync_stream_blocking_behavior()
 }
 
 #[ test ]
-#[ ignore = "requires live API access" ]
 fn test_sync_stream_reusable_client()
 {
   let api_key = std::env::var( "HUGGINGFACE_API_KEY" )
@@ -354,7 +344,6 @@ fn test_sync_stream_reusable_client()
 }
 
 #[ test ]
-#[ ignore = "requires live API access" ]
 fn test_sync_stream_short_prompt()
 {
   let api_key = std::env::var( "HUGGINGFACE_API_KEY" )
@@ -377,7 +366,6 @@ fn test_sync_stream_short_prompt()
 }
 
 #[ test ]
-#[ ignore = "requires live API access" ]
 fn test_sync_stream_long_prompt()
 {
   let api_key = std::env::var( "HUGGINGFACE_API_KEY" )
@@ -402,7 +390,6 @@ fn test_sync_stream_long_prompt()
 }
 
 #[ test ]
-#[ ignore = "requires live API access" ]
 fn test_sync_stream_minimal_tokens()
 {
   let api_key = std::env::var( "HUGGINGFACE_API_KEY" )
@@ -425,7 +412,6 @@ fn test_sync_stream_minimal_tokens()
 }
 
 #[ test ]
-#[ ignore = "requires live API access" ]
 fn test_sync_stream_utf8_content()
 {
   let api_key = std::env::var( "HUGGINGFACE_API_KEY" )

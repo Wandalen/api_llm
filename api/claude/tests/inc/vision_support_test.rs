@@ -452,7 +452,6 @@ async fn test_mixed_content_serialization()
 
 #[ tokio::test ]
 #[ cfg( all( feature = "integration", feature = "vision" ) ) ]
-  #[ ignore = "Requires workspace secrets file" ]
 async fn integration_vision_real_image_processing()
 {
   let client = the_module::Client::from_workspace()
@@ -521,7 +520,6 @@ async fn integration_vision_real_image_processing()
 
 #[ tokio::test ]
 #[ cfg( all( feature = "integration", feature = "vision" ) ) ]
-#[ ignore = "Requires network connectivity and vision API access" ]
 async fn integration_vision_mixed_content_real_api()
 {
   let client = the_module::Client::from_workspace()

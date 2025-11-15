@@ -24,7 +24,6 @@ mod curl_diagnostics_functionality_tests
 
   /// Test `AsCurl` trait implementation for basic message requests
   #[ test ]
-  #[ ignore = "AsCurl trait not yet implemented - TDD placeholder" ]
   fn test_message_request_as_curl()
   {
     // This test will fail until AsCurl trait is implemented
@@ -48,7 +47,6 @@ mod curl_diagnostics_functionality_tests
 
   /// Test `AsCurl` trait with authentication headers
   #[ test ]
-  #[ ignore = "AsCurl trait not yet implemented - TDD placeholder" ]
   fn test_curl_with_authentication()
   {
     let request = the_module::CreateMessageRequest::builder()
@@ -253,7 +251,6 @@ mod curl_diagnostics_integration_tests
 
   /// Test generated cURL command actually works with real API
   #[ tokio::test ]
-  #[ ignore = "Requires workspace secrets file" ]
   async fn test_curl_command_execution_equivalence()
   {
     let client = the_module::Client::from_workspace()
@@ -279,7 +276,6 @@ mod curl_diagnostics_integration_tests
 
   /// Test cURL generation maintains request fidelity
   #[ tokio::test ]
-  #[ ignore = "Requires workspace secrets file" ]
   async fn test_curl_request_fidelity()
   {
     let client = the_module::Client::from_workspace()

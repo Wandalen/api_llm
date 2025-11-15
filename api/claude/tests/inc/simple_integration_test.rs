@@ -77,7 +77,6 @@ async fn test_integration_test_message_construction()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
-  #[ ignore = "Requires workspace secrets file" ]
 async fn integration_messages_basic_text_generation()
 {
   let client = the_module::Client::from_workspace()
@@ -128,7 +127,6 @@ async fn integration_messages_basic_text_generation()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
-  #[ ignore = "Requires workspace secrets file" ]
 async fn integration_messages_with_system_prompt()
 {
   let client = the_module::Client::from_workspace()
@@ -173,7 +171,6 @@ async fn integration_messages_with_system_prompt()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
-  #[ ignore = "Requires workspace secrets file" ]
 async fn integration_messages_conversation_flow()
 {
   let client = the_module::Client::from_workspace()
@@ -223,7 +220,6 @@ async fn integration_messages_conversation_flow()
 
 #[ tokio::test ]
 #[ cfg( all( feature = "integration", feature = "tools" ) ) ]
-#[ ignore = "Requires network connectivity and API access" ]
 async fn integration_tool_calling_basic()
 {
   let client = the_module::Client::from_workspace()
@@ -282,7 +278,6 @@ async fn integration_tool_calling_basic()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
-  #[ ignore = "Requires workspace secrets file" ]
 async fn integration_error_handling_invalid_model()
 {
   let client = the_module::Client::from_workspace()
@@ -329,7 +324,6 @@ async fn integration_error_handling_invalid_model()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
-  #[ ignore = "Requires workspace secrets file" ]
 async fn integration_performance_response_time()
 {
   let client = the_module::Client::from_workspace()

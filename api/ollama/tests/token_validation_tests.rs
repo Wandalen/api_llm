@@ -8,14 +8,7 @@
 use api_ollama::{ OllamaClient, SecretStore };
 use std::env;
 use std::fs;
-
-// DISABLED: 2025-11-07 by Development Team
-// REASON: SecretStore::from_path() is a placeholder implementation - full implementation pending
-// RE-ENABLE: When SecretStore::from_path() is fully implemented
-// APPROVED: Team Lead
-// TRACKING: issue-test-secret-store-disabled
 #[ tokio::test ]
-#[ ignore = "Integration test disabled - requires stable server infrastructure" ]
 async fn test_comprehensive_token_validation()
 {
   // Create a temporary workspace with realistic tokens
@@ -122,14 +115,7 @@ export SHORT_TOKEN="abc123"
 
   println!("🎉 All token validation tests passed!");
 }
-
-// DISABLED: 2025-11-07 by Development Team
-// REASON: SecretStore::from_path() is a placeholder implementation - full implementation pending
-// RE-ENABLE: When SecretStore::from_path() is fully implemented
-// APPROVED: Team Lead
-// TRACKING: issue-test-secret-store-disabled
 #[ tokio::test ]
-#[ ignore = "Integration test disabled - requires stable server infrastructure" ]
 async fn test_token_validation_edge_cases()
 {
   // Test edge cases for token validation

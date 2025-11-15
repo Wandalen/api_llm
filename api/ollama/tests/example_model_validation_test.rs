@@ -58,13 +58,7 @@ mod private
   /// **Fix(issue-001)**: Examples should discover available models dynamically.
   /// **Root cause**: Hardcoded model names don't adapt to user's installation.
   /// **Pitfall**: Query `list_models()` first to discover what's installed.
-  // DISABLED: 2025-11-07 by Development Team
-  // REASON: Requires running Ollama server - integration test needs live server infrastructure
-  // RE-ENABLE: When Ollama server infrastructure is available for tests
-  // APPROVED: Team Lead
-  // TRACKING: issue-test-integration-disabled
   #[ tokio::test ]
-  #[ ignore = "Integration test disabled - requires stable server infrastructure" ]
   async fn test_model_discovery()
   {
     let mut client = OllamaClient::new(
@@ -93,13 +87,7 @@ mod private
   /// **Fix(issue-001)**: Improved error handling for missing models.
   /// **Root cause**: Generic 404 errors didn't explain model name issue.
   /// **Pitfall**: Provide helpful error messages when models aren't found.
-  // DISABLED: 2025-11-07 by Development Team
-  // REASON: Requires running Ollama server - integration test needs live server infrastructure
-  // RE-ENABLE: When Ollama server infrastructure is available for tests
-  // APPROVED: Team Lead
-  // TRACKING: issue-test-integration-disabled
   #[ tokio::test ]
-  #[ ignore = "Integration test disabled - requires stable server infrastructure" ]
   async fn test_invalid_model_name_error()
   {
     let mut client = OllamaClient::new(
@@ -198,13 +186,7 @@ mod private
   /// **Fix(issue-001)**: Verified fix works with real Ollama API.
   /// **Root cause**: Examples used incomplete model names.
   /// **Pitfall**: Always test examples against real API before release.
-  // DISABLED: 2025-11-07 by Development Team
-  // REASON: Requires running Ollama server with llama3.2:3b model - specific model dependency
-  // RE-ENABLE: When Ollama server with llama3.2:3b model is available for tests
-  // APPROVED: Team Lead
-  // TRACKING: issue-test-integration-disabled
   #[ tokio::test ]
-  #[ ignore = "Integration test disabled - requires stable server infrastructure" ]
   async fn test_chat_with_valid_model()
   {
     let mut client = OllamaClient::new(

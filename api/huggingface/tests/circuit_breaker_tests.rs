@@ -51,7 +51,6 @@ fn create_test_client() -> Client< HuggingFaceEnvironmentImpl >
 // ============================================================================
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_circuit_breaker_initial_state_is_closed() 
 {
   let circuit_breaker = CircuitBreaker::new( CircuitBreakerConfig::default( ));
@@ -62,7 +61,6 @@ async fn test_circuit_breaker_initial_state_is_closed()
 }
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_circuit_breaker_successful_request_keeps_closed() 
 {
   let client = create_test_client( );
@@ -84,7 +82,6 @@ async fn test_circuit_breaker_successful_request_keeps_closed()
 }
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_circuit_breaker_resets_failure_count_on_success() 
 {
   let client = create_test_client( );
@@ -132,7 +129,6 @@ async fn test_circuit_breaker_resets_failure_count_on_success()
 // ============================================================================
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_circuit_breaker_opens_after_threshold_failures() 
 {
   let client = create_test_client( );
@@ -167,7 +163,6 @@ async fn test_circuit_breaker_opens_after_threshold_failures()
 }
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_circuit_breaker_rejects_requests_when_open() 
 {
   let client = create_test_client( );
@@ -220,7 +215,6 @@ async fn test_circuit_breaker_rejects_requests_when_open()
 // ============================================================================
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_circuit_breaker_transitions_to_half_open_after_timeout() 
 {
   let client = create_test_client( );
@@ -266,7 +260,6 @@ async fn test_circuit_breaker_transitions_to_half_open_after_timeout()
 }
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_circuit_breaker_closes_after_success_threshold_in_half_open() 
 {
   let client = create_test_client( );
@@ -316,7 +309,6 @@ async fn test_circuit_breaker_closes_after_success_threshold_in_half_open()
 }
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_circuit_breaker_reopens_on_failure_in_half_open() 
 {
   let client = create_test_client( );
@@ -377,7 +369,6 @@ async fn test_circuit_breaker_reopens_on_failure_in_half_open()
 // ============================================================================
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_circuit_breaker_reset_clears_all_state() 
 {
   let client = create_test_client( );
@@ -432,7 +423,6 @@ async fn test_circuit_breaker_reset_clears_all_state()
 // ============================================================================
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_circuit_breaker_default_config() 
 {
   let config = CircuitBreakerConfig::default( );
@@ -446,7 +436,6 @@ async fn test_circuit_breaker_default_config()
 }
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_circuit_breaker_custom_config() 
 {
   let config = CircuitBreakerConfig {

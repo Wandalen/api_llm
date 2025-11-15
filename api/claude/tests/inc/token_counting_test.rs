@@ -171,7 +171,6 @@ async fn test_token_count_response_structure()
 
 #[ cfg( feature = "integration" ) ]
 #[ tokio::test ]
-  #[ ignore = "Requires workspace secrets file" ]
 async fn integration_token_count_basic_message()
 {
   // INTEGRATION TEST - STRICT FAILURE POLICY: NO GRACEFUL FALLBACKS
@@ -207,7 +206,6 @@ async fn integration_token_count_basic_message()
 
 #[ cfg( feature = "integration" ) ]
 #[ tokio::test ]
-  #[ ignore = "Requires workspace secrets file" ]
 async fn integration_token_count_with_system_prompt()
 {
   let secret = the_module::Secret::from_workspace()
@@ -238,7 +236,6 @@ async fn integration_token_count_with_system_prompt()
 
 #[ cfg( all( feature = "integration", feature = "tools" ) ) ]
 #[ tokio::test ]
-  #[ ignore = "Requires workspace secrets file" ]
 async fn integration_token_count_with_tools()
 {
   let secret = the_module::Secret::from_workspace()
@@ -286,7 +283,6 @@ async fn integration_token_count_with_tools()
 
 #[ cfg( feature = "integration" ) ]
 #[ tokio::test ]
-  #[ ignore = "Requires workspace secrets file" ]
 async fn integration_token_count_conversation()
 {
   let secret = the_module::Secret::from_workspace()
@@ -321,7 +317,6 @@ async fn integration_token_count_conversation()
 
 #[ cfg( feature = "integration" ) ]
 #[ tokio::test ]
-  #[ ignore = "Requires workspace secrets file" ]
 async fn integration_token_count_different_models()
 {
   let secret = the_module::Secret::from_workspace()
@@ -368,7 +363,6 @@ async fn integration_token_count_different_models()
 
 #[ cfg( feature = "integration" ) ]
 #[ tokio::test ]
-  #[ ignore = "Requires workspace secrets file" ]
 async fn integration_token_count_error_invalid_model()
 {
   let secret = the_module::Secret::from_workspace()
@@ -396,7 +390,6 @@ async fn integration_token_count_error_invalid_model()
 
 #[ cfg( feature = "integration" ) ]
 #[ tokio::test ]
-  #[ ignore = "Requires workspace secrets file" ]
 async fn integration_token_count_empty_messages()
 {
   let secret = the_module::Secret::from_workspace()

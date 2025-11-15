@@ -251,7 +251,6 @@ fn simple_operation() -> u64
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
-  #[ ignore = "Requires workspace secrets file" ]
 async fn integration_log_api_request_response()
 {
   // Test logging real API request and response
@@ -305,7 +304,6 @@ async fn integration_log_api_request_response()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
-  #[ ignore = "Requires workspace secrets file" ]
 async fn integration_log_api_error()
 {
   // Test logging API error
@@ -355,7 +353,6 @@ async fn integration_log_api_error()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
-  #[ ignore = "Requires workspace secrets file" ]
 async fn integration_structured_logging_with_context()
 {
   // Test structured logging with request context

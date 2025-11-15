@@ -162,7 +162,6 @@ fn test_expected_example_count()
 ///
 /// This ensures examples dont have compilation errors.
 #[ test ]
-#[ ignore = "requires API dependencies and is slow" ]
 fn test_examples_compile_all_features()
 {
   let output = Command::new( "cargo" )
@@ -184,7 +183,6 @@ fn test_examples_compile_all_features()
 ///
 /// This is more thorough than building all examples at once.
 #[ test ]
-#[ ignore = "takes significant time to compile each example individually" ]
 fn test_each_example_compiles()
 {
   let cargo_toml = fs::read_to_string( "Cargo.toml" )

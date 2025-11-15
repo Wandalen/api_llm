@@ -150,7 +150,6 @@ mod integration_tests
   }
 
   #[ tokio::test ]
-  #[ ignore = "Requires HuggingFace API credentials" ]
   async fn integration_inference_parameters_with_real_api()
   {
   // INTEGRATION TEST - STRICT FAILURE POLICY: Must have valid API key
@@ -222,7 +221,6 @@ Integration tests require real API access to validate functionality." );
   }
 
   #[ tokio::test ]
-  #[ ignore = "Requires HuggingFace API credentials" ]
   async fn integration_model_constants_with_real_api()
   {
   // Get real API key - skip test if not available
@@ -289,7 +287,6 @@ Integration tests require real API access to validate functionality." );
   }
 
   #[ tokio::test ]
-  #[ ignore = "Requires HuggingFace API credentials" ]
   async fn integration_inference_output_with_real_response()
   {
   // Get real API key - skip test if not available

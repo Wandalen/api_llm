@@ -289,7 +289,6 @@ async fn test_request_json_serialization()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
-#[ ignore = "Requires workspace secrets file" ]
 async fn integration_content_generation_temperature_control()
 {
   let client = the_module::Client::from_workspace()
@@ -364,7 +363,6 @@ async fn integration_content_generation_temperature_control()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
-#[ ignore = "Requires workspace secrets file" ]
 async fn integration_content_generation_max_tokens_control()
 {
   let client = the_module::Client::from_workspace()

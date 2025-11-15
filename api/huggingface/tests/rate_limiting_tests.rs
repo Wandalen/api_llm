@@ -52,7 +52,6 @@ fn create_test_client() -> Client< HuggingFaceEnvironmentImpl >
 // ============================================================================
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_rate_limiter_per_second_limit() 
 {
   let config = RateLimiterConfig {
@@ -71,7 +70,6 @@ async fn test_rate_limiter_per_second_limit()
 }
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_rate_limiter_per_minute_limit() 
 {
   let config = RateLimiterConfig {
@@ -92,7 +90,6 @@ async fn test_rate_limiter_per_minute_limit()
 }
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_rate_limiter_per_hour_limit() 
 {
   let config = RateLimiterConfig {
@@ -117,7 +114,6 @@ async fn test_rate_limiter_per_hour_limit()
 // ============================================================================
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_rate_limiter_token_refill() 
 {
   let config = RateLimiterConfig {
@@ -144,7 +140,6 @@ async fn test_rate_limiter_token_refill()
 }
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_rate_limiter_gradual_refill() 
 {
   let config = RateLimiterConfig {
@@ -184,7 +179,6 @@ async fn test_rate_limiter_gradual_refill()
 // ============================================================================
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_rate_limiter_multiple_windows() 
 {
   let config = RateLimiterConfig {
@@ -206,7 +200,6 @@ async fn test_rate_limiter_multiple_windows()
 }
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_rate_limiter_minute_limit_after_second_refill() 
 {
   let config = RateLimiterConfig {
@@ -241,7 +234,6 @@ async fn test_rate_limiter_minute_limit_after_second_refill()
 // ============================================================================
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_rate_limiter_acquire_blocks_and_succeeds() 
 {
   let config = RateLimiterConfig {
@@ -265,7 +257,6 @@ async fn test_rate_limiter_acquire_blocks_and_succeeds()
 }
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_rate_limiter_acquire_with_available_tokens() 
 {
   let config = RateLimiterConfig {
@@ -289,7 +280,6 @@ async fn test_rate_limiter_acquire_with_available_tokens()
 // ============================================================================
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_rate_limiter_available_tokens_initial() 
 {
   let config = RateLimiterConfig {
@@ -306,7 +296,6 @@ async fn test_rate_limiter_available_tokens_initial()
 }
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_rate_limiter_available_tokens_after_consumption() 
 {
   let config = RateLimiterConfig {
@@ -327,7 +316,6 @@ async fn test_rate_limiter_available_tokens_after_consumption()
 }
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_rate_limiter_available_tokens_tracks_refill() 
 {
   let config = RateLimiterConfig {
@@ -358,7 +346,6 @@ async fn test_rate_limiter_available_tokens_tracks_refill()
 // ============================================================================
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_rate_limiter_reset() 
 {
   let config = RateLimiterConfig {
@@ -394,7 +381,6 @@ async fn test_rate_limiter_reset()
 // ============================================================================
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_rate_limiter_with_real_api_calls() 
 {
   let client = create_test_client( );
@@ -434,7 +420,6 @@ async fn test_rate_limiter_with_real_api_calls()
 }
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_rate_limiter_prevents_api_overload() 
 {
   let client = create_test_client( );
@@ -483,7 +468,6 @@ async fn test_rate_limiter_prevents_api_overload()
 // ============================================================================
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_rate_limiter_concurrent_acquire() 
 {
   let config = RateLimiterConfig {
@@ -514,7 +498,6 @@ async fn test_rate_limiter_concurrent_acquire()
 }
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_rate_limiter_concurrent_try_acquire() 
 {
   let config = RateLimiterConfig {
@@ -560,7 +543,6 @@ async fn test_rate_limiter_concurrent_try_acquire()
 // ============================================================================
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_rate_limiter_no_limits() 
 {
   let config = RateLimiterConfig {
@@ -578,7 +560,6 @@ async fn test_rate_limiter_no_limits()
 }
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_rate_limiter_default_config() 
 {
   let config = RateLimiterConfig::default( );
@@ -599,7 +580,6 @@ async fn test_rate_limiter_default_config()
 }
 
 #[ tokio::test ]
-#[ ignore = "requires live API access" ]
 async fn test_rate_limiter_very_low_limit() 
 {
   let config = RateLimiterConfig {

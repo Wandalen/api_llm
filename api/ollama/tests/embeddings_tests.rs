@@ -22,14 +22,7 @@ mod server_helpers;
 
 use api_ollama::{ OllamaClient, EmbeddingsRequest };
 use core::time::Duration;
-
-// DISABLED: 2025-11-08 by Development Team
-// REASON: Integration test times out - requires stable Ollama server infrastructure
-// RE-ENABLE: When stable Ollama server infrastructure is available
-// APPROVED: Team Lead
-// TRACKING: issue-test-integration-disabled
 #[ tokio::test ]
-#[ ignore = "Integration test disabled - requires stable server infrastructure" ]
 async fn test_embeddings_basic()
 {
   with_test_server!(|mut client : OllamaClient, model : String| async move {
@@ -54,14 +47,7 @@ async fn test_embeddings_basic()
     println!("✓ Basic embeddings generation successful");
   });
 }
-
-// DISABLED: 2025-11-08 by Development Team
-// REASON: Integration test times out - requires stable Ollama server infrastructure
-// RE-ENABLE: When stable Ollama server infrastructure is available
-// APPROVED: Team Lead
-// TRACKING: issue-test-integration-disabled
 #[ tokio::test ]
-#[ ignore = "Integration test disabled - requires stable server infrastructure" ]
 async fn test_embeddings_multiple_prompts()
 {
   with_test_server!(|mut client : OllamaClient, model : String| async move {
@@ -172,14 +158,7 @@ async fn test_embeddings_invalid_model()
     println!("✓ Invalid model error handling successful");
   });
 }
-
-// DISABLED: 2025-11-07 by Development Team
-// REASON: Integration test times out - requires stable Ollama server infrastructure
-// RE-ENABLE: When stable Ollama server infrastructure is available
-// APPROVED: Team Lead
-// TRACKING: issue-test-integration-disabled
 #[ tokio::test ]
-#[ ignore = "Integration test disabled - requires stable server infrastructure" ]
 async fn test_embeddings_with_options()
 {
   with_test_server!(|mut client : OllamaClient, model : String| async move {
@@ -205,14 +184,7 @@ async fn test_embeddings_with_options()
     println!("✓ Embeddings with options successful");
   });
 }
-
-// DISABLED: 2025-11-08 by Development Team
-// REASON: Integration test times out - requires stable Ollama server infrastructure
-// RE-ENABLE: When stable Ollama server infrastructure is available
-// APPROVED: Team Lead
-// TRACKING: issue-test-integration-disabled
 #[ tokio::test ]
-#[ ignore = "Integration test disabled - requires stable server infrastructure" ]
 async fn test_embeddings_long_prompt()
 {
   with_test_server!(|mut client : OllamaClient, model : String| async move {
@@ -236,14 +208,7 @@ async fn test_embeddings_long_prompt()
     println!("✓ Long prompt embeddings generation successful");
   });
 }
-
-// DISABLED: 2025-11-07 by Development Team
-// REASON: Integration test times out - requires stable Ollama server infrastructure
-// RE-ENABLE: When stable Ollama server infrastructure is available
-// APPROVED: Team Lead
-// TRACKING: issue-test-integration-disabled
 #[ tokio::test ]
-#[ ignore = "Integration test disabled - requires stable server infrastructure" ]
 async fn test_embeddings_special_characters()
 {
   with_test_server!(|mut client : OllamaClient, model : String| async move {
@@ -265,14 +230,7 @@ async fn test_embeddings_special_characters()
     println!("✓ Special characters embeddings generation successful");
   });
 }
-
-// DISABLED: 2025-11-08 by Development Team
-// REASON: Integration test times out - requires stable Ollama server infrastructure
-// RE-ENABLE: When stable Ollama server infrastructure is available
-// APPROVED: Team Lead
-// TRACKING: issue-test-integration-disabled
 #[ tokio::test ]
-#[ ignore = "Integration test disabled - requires stable server infrastructure" ]
 async fn test_embeddings_consistency()
 {
   with_test_server!(|mut client : OllamaClient, model : String| async move {
@@ -320,14 +278,7 @@ async fn test_embeddings_consistency()
     println!("✓ Embeddings consistency test successful (similarity : {cosine_similarity:.4})");
   });
 }
-
-// DISABLED: 2025-11-08 by Development Team
-// REASON: Integration test times out - requires stable Ollama server infrastructure
-// RE-ENABLE: When stable Ollama server infrastructure is available
-// APPROVED: Team Lead
-// TRACKING: issue-test-integration-disabled
 #[ tokio::test ]
-#[ ignore = "Integration test disabled - requires stable server infrastructure" ]
 async fn test_embeddings_authentication()
 {
   #[ cfg( feature = "secret_management" ) ]

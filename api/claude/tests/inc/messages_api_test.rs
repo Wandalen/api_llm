@@ -311,7 +311,6 @@ async fn test_create_message_response_structure()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
-  #[ ignore = "Requires workspace secrets file" ]
 async fn integration_messages_api_real_request_response_structures()
 {
   let client = the_module::Client::from_workspace()
@@ -370,7 +369,6 @@ async fn integration_messages_api_real_request_response_structures()
 
 #[ tokio::test ]
 #[ cfg( feature = "integration" ) ]
-  #[ ignore = "Requires workspace secrets file" ]
 async fn integration_messages_api_real_serialization_roundtrip()
 {
   let client = the_module::Client::from_workspace()
