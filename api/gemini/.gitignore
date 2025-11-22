@@ -1,0 +1,21 @@
+# Build artifacts
+/target/
+
+# IDE files
+.vscode/
+.idea/
+
+# Temporary files (prefix with hyphen)
+-*
+
+# Log files
+*.log
+
+# Editor backups
+*~
+.#*
+#*#
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,149 @@
+[package]
+name = "api_ollama"
+version = "0.1.0"
+edition = "2021"
+authors = [
+  "Kostiantyn Wandalen <wandalen@obox.systems>",
+]
+license = "MIT"
+readme = "readme.md"
+documentation = "https://docs.rs/api_ollama"
+repository = "https://github.com/Wandalen/api_llm/tree/master/api/ollama"
+homepage = "https://github.com/Wandalen/api_llm/tree/master/api/ollama"
+description = """
+Ollama local LLM runtime API client for HTTP communication.
+"""
+categories = [ "api-bindings", "web-programming" ]
+keywords = [ "ollama", "llm", "ai", "local", "api" ]
+
+[lints]
+workspace = true
+
+[package.metadata.docs.rs]
+features = [ "full" ]
+all-features = false
+
+[features]
+# Default enables everything for ease of use
+default = [ "full" ]
+# The master switch that activates all dependencies
+enabled = [ "dep:reqwest", "dep:serde", "dep:serde_json", "dep:tokio", "dep:futures-core", "dep:futures-util", "dep:error_tools", "dep:mod_interface", "vision_support" ]
+# The 'full' feature enables all other features, including 'enabled'
+full = [ "enabled", "streaming", "integration", "authentication", "advanced", "workspace", "secret_management", "embeddings", "builder_patterns", "retry_logic", "vision_support", "tool_calling", "integration_tests", "circuit_breaker", "general_diagnostics", "model_details", "sync_api", "failover", "health_checks", "dynamic_config", "streaming_control", "websocket_streaming", "model_tuning", "model_deployment", "rate_limiting", "retry", "request_caching", "audio_processing", "count_tokens", "cached_content", "batch_operations", "safety_settings", "structured_logging", "input_validation", "enhanced_function_calling", "model_comparison", "request_templates", "buffered_streaming", "compression", "enterprise_quota", "curl_diagnostics" ]
+# Feature for streaming responses
+streaming = []
+# Feature for running integration tests with real API
+integration = []
+# Feature for authentication security
+authentication = []
+# Feature for advanced production features
+advanced = [ "dep:tokio-util" ]
+# Feature for workspace integration
+workspace = [ "dep:serde_yaml", "dep:toml", "dep:workspace_tools" ]
+# Feature for secure secret management
+secret_management = []
+# Feature for embeddings API
+embeddings = []
+# Feature for builder patterns
+builder_patterns = []
+# Feature for retry logic with exponential backoff
+retry_logic = [ "dep:fastrand" ]
+# Feature for vision support with image inputs
+vision_support = [ "dep:base64" ]
+# Feature for tool calling and function invocation
+tool_calling = []
+# Feature for external integration tests (requires live Ollama server)
+integration_tests = []
+# Feature for circuit breaker pattern to prevent cascading failures
+circuit_breaker = []
+# Feature for general diagnostics and metrics collection
+general_diagnostics = []
+# Feature for enhanced model details and management
+model_details = []
+# Feature for synchronous API with blocking wrappers
+sync_api = []
+# Feature for automatic failover to backup endpoints
+failover = [ "dep:url" ]
+# Feature for health checks and endpoint monitoring
+health_checks = [ "dep:tokio" ]
+# Feature for dynamic configuration management with hot reloading
+dynamic_config = [ ]
+# Feature for streaming control with pause/resume/cancel operations
+streaming_control = [ "dep:tokio-util" ]
+# Feature for WebSocket-based streaming with real-time bidirectional communication
+websocket_streaming = [ "dep:tokio-tungstenite", "dep:futures-channel" ]
+# Feature for model fine-tuning and custom training capabilities
+model_tuning = [ "dep:serde_yaml" ]
+# Feature for model deployment and hosting capabilities
+model_deployment = [ "dep:serde_yaml", "dep:url" ]
+# Feature for enhanced retry logic with exponential backoff and jitter
+retry = [ "dep:fastrand" ]
+# Feature for rate limiting with token bucket and sliding window algorithms
+rate_limiting = []
+# Feature for request caching with TTL and size limits
+request_caching = []
+# Feature for audio processing with speech-to-text and text-to-speech
+audio_processing = [ "reqwest/multipart" ]
+# Feature for token counting with cost estimation and optimization
+count_tokens = []
+# Feature for advanced content caching with intelligent cache management
+cached_content = []
+# Feature for batch operations with multiple requests optimization
+batch_operations = []
+# Feature for safety settings with content filtering and harm prevention
+safety_settings = []
+# Feature for structured logging with tracing integration
+structured_logging = [ "dep:tracing" ]
+# Feature for input validation with comprehensive error messages
+input_validation = []
+# Feature for enhanced function calling with type-safe execution framework
+enhanced_function_calling = [ "tool_calling" ]
+# Feature for model comparison and A/B testing
+model_comparison = []
+# Feature for request templates and presets
+request_templates = []
+# Feature for buffered streaming with smoother UX
+buffered_streaming = [ "streaming" ]
+# Feature for HTTP compression (request/response)
+compression = [ "dep:flate2" ]
+# Feature for enterprise quota management and usage tracking
+enterprise_quota = []
+# Feature for CURL diagnostics and debugging
+curl_diagnostics = []
+
+[dependencies]
+# All dependencies are optional
+reqwest = { workspace = true, features = [ "json", "stream" ], optional = true }
+serde = { workspace = true, features = [ "derive" ], optional = true }
+serde_json = { workspace = true, optional = true }
+tokio = { workspace = true, features = [ "time", "macros" ], optional = true }
+futures-core = { workspace = true, optional = true }
+futures-util = { workspace = true, optional = true }
+error_tools = { workspace = true, optional = true }
+mod_interface = { workspace = true, optional = true }
+tokio-util = { workspace = true, optional = true }
+serde_yaml = { workspace = true, optional = true }
+toml = { workspace = true, optional = true }
+fastrand = { workspace = true, optional = true }
+base64 = { workspace = true, optional = true }
+workspace_tools = { workspace = true, features = [ "secrets" ], optional = true }
+url = { workspace = true, optional = true }
+tempfile = { workspace = true, optional = true }
+tracing = { workspace = true, optional = true }
+tokio-tungstenite = { workspace = true, optional = true }
+futures-channel = { workspace = true, optional = true }
+flate2 = { version = "1.0", optional = true }
+
+[dev-dependencies]
+tokio = { workspace = true, features = [ "macros", "rt-multi-thread" ] }
+tokio-stream = { workspace = true }
+futures-util = { workspace = true }
+tempfile = { workspace = true }
+
+[[bench]]
+name = "diagnostics_performance"
+harness = false
+
+[[bench]]
+name = "cache_performance"
+harness = false

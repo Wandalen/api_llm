@@ -1,0 +1,278 @@
+[package]
+name = "api_openai"
+version = "0.2.0"
+edition = "2021"
+rust-version = "1.70.0"
+authors = [
+  "Kostiantyn Wandalen <wandalen@obox.systems>",
+]
+license = "MIT"
+readme = "readme.md"
+documentation = "https://docs.rs/api_openai"
+repository = "https://github.com/Wandalen/api_llm/tree/master/api/openai"
+homepage = "https://github.com/Wandalen/api_llm/tree/master/api/openai"
+description = """
+OpenAI's API for accessing large language models (LLMs).
+"""
+categories = [ "algorithms", "development-tools" ]
+keywords = [ "fundamental", "general-purpose" ]
+autoexamples = false
+
+[lints]
+workspace = true
+
+[package.metadata.cargo-udeps.ignore]
+development = [ "tracing-subscriber" ]
+
+[package.metadata.docs.rs]
+features = [ "full" ]
+all-features = false
+
+[features]
+# Default enables everything for ease of use
+default = [ "full" ]
+# 'full' enables all features, including the base 'enabled'
+full = [ "enabled", "integration", "retry", "circuit_breaker", "rate_limiting", "failover", "health_checks", "enterprise", "caching", "batching", "compression", "streaming_control", "audio", "moderation", "input_validation", "model_comparison", "request_templates", "buffered_streaming" ]
+# 'enabled' is the master switch for the crate's core functionality
+enabled = [
+  "dep:mod_interface",
+  "dep:former",
+  "dep:error_tools",
+  "dep:derive_tools",
+  "dep:workspace_tools",
+  "dep:async-trait",
+  "dep:url",
+  "dep:rand",
+  "dep:chrono",
+  "dep:uuid",
+  "dep:regex",
+  "dep:serde",
+  "dep:serde_json",
+  "dep:serde_yaml",
+  "dep:base64",
+  "dep:secrecy",
+  "dep:futures-core",
+  "dep:futures-util",
+  "dep:futures",
+  "dep:backoff",
+  "dep:tokio",
+  "dep:bytes",
+  "dep:eventsource-stream",
+  "dep:reqwest",
+  "dep:tracing",
+  "dep:tokio-tungstenite",
+]
+
+# Feature for running integration tests with real API
+integration = []
+
+# Enhanced reliability features
+retry = []
+circuit_breaker = []
+rate_limiting = []
+failover = []
+health_checks = []
+
+# Performance optimization features
+caching = [ "sha2", "blake3" ]
+compression = [ "flate2" ]
+batching = [ "blake3" ]
+
+# API features
+streaming_control = []
+audio = []
+moderation = []
+input_validation = []
+
+# Enterprise features
+enterprise = []
+
+# Additional features
+model_comparison = []
+request_templates = []
+buffered_streaming = []
+
+# Performance-focused feature combinations
+performance = [
+  "retry",
+  "circuit_breaker",
+  "rate_limiting",
+  "failover",
+  "health_checks",
+  "caching",
+  "batching"
+]
+
+# All optimization features
+optimized = [
+  "performance",
+  "compression",
+  "enterprise"
+]
+
+minimal = []
+
+# Development optimizations
+dev-optimized = [
+  "retry",
+  "circuit_breaker",
+  "caching"
+]
+
+[dependencies]
+
+## peers
+
+mod_interface = { workspace = true, optional = true }
+former = { workspace = true, optional = true }
+error_tools = { workspace = true, optional = true }
+derive_tools = { workspace = true, optional = true }
+workspace_tools = { workspace = true, features = [ "secrets" ], optional = true }
+
+async-trait = { workspace = true, optional = true }
+url = { workspace = true, optional = true }
+#
+
+
+## unsorted
+
+rand = { workspace = true, optional = true }
+chrono = { workspace = true, optional = true }
+uuid = { workspace = true, features = ["v4"], optional = true }
+
+## serialization
+
+regex = { workspace = true, optional = true }
+serde = { workspace = true, features = ["derive"], optional = true }
+serde_json = { workspace = true, optional = true }
+serde_yaml = { workspace = true, optional = true }
+base64 = { workspace = true, optional = true }
+secrecy = { workspace = true, optional = true }
+
+## performance and compression
+
+blake3 = { workspace = true, optional = true }
+flate2 = { workspace = true, optional = true }
+sha2 = { workspace = true, optional = true }
+
+## async
+
+futures-core = { workspace = true, optional = true }
+futures-util = { workspace = true, optional = true }
+futures = { workspace = true, optional = true }
+backoff = { workspace = true, features = [ "tokio" ], optional = true }
+tokio = { workspace = true, features = [ "macros", "sync", "time", "rt-multi-thread" ], optional = true }
+bytes = { workspace = true, optional = true }
+eventsource-stream = { workspace = true, optional = true }
+
+## web
+
+reqwest = { workspace = true, features = [
+  "json",
+  "stream",
+  "multipart",
+  "rustls-tls",
+], default-features = false, optional = true }
+tracing = { workspace = true, optional = true }
+tokio-tungstenite = { workspace = true, optional = true }
+# tracing-capture = { workspace = true }
+
+[dev-dependencies]
+tempfile = { workspace = true }
+tracing-subscriber = { workspace = true }
+
+# Standard Chat Examples (Required)
+[[example]]
+name = "openai_chat"
+path = "examples/openai_chat.rs"
+
+[[example]]
+name = "openai_multi_turn_conversation"
+path = "examples/openai_multi_turn_conversation.rs"
+
+[[example]]
+name = "openai_interactive_chat"
+path = "examples/openai_interactive_chat.rs"
+
+# Specialized Examples
+[[example]]
+name = "openai_responses_create_with_tools"
+path = "examples/openai_responses_create_with_tools.rs"
+
+[[example]]
+name = "openai_responses_create_image_input"
+path = "examples/openai_responses_create_image_input.rs"
+
+# Advanced Application Examples
+[[example]]
+name = "openai_ai_code_reviewer"
+path = "examples/openai_ai_code_reviewer.rs"
+
+[[example]]
+name = "openai_web_research_assistant"
+path = "examples/openai_web_research_assistant.rs"
+
+[[example]]
+name = "openai_document_analyzer_vision"
+path = "examples/openai_document_analyzer_vision.rs"
+
+[[example]]
+name = "openai_batch_content_processor"
+path = "examples/openai_batch_content_processor.rs"
+
+[[example]]
+name = "openai_cached_interactive_chat"
+path = "examples/openai_cached_interactive_chat.rs"
+
+[[example]]
+name = "openai_request_batching_demo"
+path = "examples/openai_request_batching_demo.rs"
+
+# NOTE: 17 example files exist but are NOT registered due to compilation errors from outdated API usage.
+#
+# COMMON FIXES NEEDED (apply to all broken examples):
+#
+# 1. Client Construction - Replace Client::new() with proper environment setup:
+#    OLD: let client = Client::new();
+#    NEW: use api_openai::{ Client, Secret, environment::{ OpenaiEnvironmentImpl, OpenAIRecommended } };
+#         let secret = Secret::load_from_env("OPENAI_API_KEY")?;
+#         let env = OpenaiEnvironmentImpl::build(secret, None, None,
+#                    OpenAIRecommended::base_url().to_string(),
+#                    OpenAIRecommended::realtime_base_url().to_string())?;
+#         let client = Client::build(env)?;
+#
+# 2. Remove dotenv - workspace_tools handles secrets:
+#    OLD: dotenv::from_filename("./secret/-secret.sh").ok();
+#    NEW: (remove entirely - Secret::load_from_env handles fallback chain)
+#
+# 3. Error Variants - Check OpenAIError enum for current variants:
+#    OLD: OpenAIError::WsConnectionClosed
+#    NEW: Review src/error.rs for available error types
+#
+# 4. Tracing Setup - API changed:
+#    OLD: fmt().with_env_filter(EnvFilter::from_default_env()...)
+#    NEW: Consult tracing_subscriber docs or use simpler setup
+#
+# BROKEN FILES (19 total - need above fixes):
+# - openai_enhanced_client_with_caching.rs (DevEnvironment/CreateChatCompletionRequest dont exist)
+# - openai_enhanced_error_recovery_demo.rs (common fixes + API updates)
+# - openai_comprehensive_metrics_demo.rs (common fixes + API updates)
+# - openai_responses_cancel.rs (common fixes + type mismatches)
+# - openai_responses_delete.rs (COMMENTED OUT + needs common fixes)
+# - openai_responses_get.rs (COMMENTED OUT + needs common fixes)
+# - openai_responses_list_input_items.rs (COMMENTED OUT + needs common fixes)
+# - openai_responses_update.rs (common fixes)
+# - openai_realtime_conversation_item_create.rs (common fixes)
+# - openai_realtime_conversation_item_delete.rs (common fixes)
+# - openai_realtime_conversation_item_retrieve.rs (common fixes)
+# - openai_realtime_conversation_item_truncate.rs (common fixes)
+# - openai_realtime_input_audio_buffer_append.rs (common fixes)
+# - openai_realtime_input_audio_buffer_clear.rs (common fixes)
+# - openai_realtime_input_audio_buffer_commit.rs (common fixes)
+# - openai_realtime_response_cancel.rs (common fixes)
+# - openai_realtime_response_create.rs (common fixes)
+# - openai_realtime_session_update.rs (common fixes)
+# - openai_realtime_transcription_session_update.rs (common fixes)
+
+# Profile configurations moved to workspace root Cargo.toml
+

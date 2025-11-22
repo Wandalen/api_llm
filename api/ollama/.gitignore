@@ -1,0 +1,30 @@
+# Rust build artifacts
+/target/
+**/*.rs.bk
+Cargo.lock
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files (hyphen-prefixed per rulebook)
+-*
+temp_file
+*.tmp
+
+# Secrets (CRITICAL - per Files Structure Rulebook)
+secret/
+*.key
+*.pem
+*_secret*
+
+# Test artifacts
+*.profraw
+*.profdata

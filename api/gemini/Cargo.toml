@@ -1,0 +1,219 @@
+[package]
+name = "api_gemini"
+version = "0.3.1"
+edition = "2021"
+authors = [
+  "Kostiantyn Wandalen <wandalen@obox.systems>",
+]
+license = "MIT"
+readme = "readme.md"
+documentation = "https://docs.rs/api_gemini"
+repository = "https://github.com/Wandalen/api_llm/tree/master/api/gemini"
+homepage = "https://github.com/Wandalen/api_llm/tree/master/api/gemini"
+description = """
+Gemini's API for accessing large language models (LLMs).
+"""
+categories = [ "algorithms", "development-tools" ]
+keywords = [ "fundamental", "general-purpose" ]
+
+[lints.rust]
+# Core safety and correctness lints from workspace
+rust_2018_idioms = { level = "warn", priority = -1 }
+future_incompatible = { level = "warn", priority = -1 }
+missing_docs = "warn"
+missing_debug_implementations = "warn"
+unsafe-code = "deny"
+
+[lints.clippy]
+# Important safety and correctness lints
+undocumented_unsafe_blocks = "deny"
+std_instead_of_core = "allow"
+doc_include_without_cfg = "warn"
+
+# Temporarily allow pedantic lints that cause bulk violations during TDD cleanup
+missing_inline_in_public_items = "allow"
+must_use_candidate = "allow"
+return_self_not_must_use = "allow"
+double_must_use = "allow"
+missing_errors_doc = "allow"
+uninlined_format_args = "allow"
+new_without_default = "allow"
+unused_self = "allow"
+needless_borrows_for_generic_args = "allow"
+manual_map = "allow"
+unnecessary_map_or = "allow"
+manual_range_contains = "allow"
+await_holding_lock = "allow"
+derivable_impls = "allow"
+redundant_closure = "allow"
+type_complexity = "allow"
+clone_on_copy = "allow"
+drain_collect = "allow"
+extend_with_drain = "allow"
+let_unit_value = "allow"
+unused_unit = "allow"
+collapsible_if = "allow"
+manual_clamp = "allow"
+too_many_arguments = "allow"
+assertions_on_constants = "allow"
+nonminimal_bool = "allow"
+useless_vec = "allow"
+
+# Keep important workspace exceptions
+single_call_fn = "allow"
+inline_always = "allow"
+module_name_repetitions = "allow"
+absolute_paths = "allow"
+wildcard_imports = "allow"
+std_instead_of_alloc = "allow"
+items_after_statements = "allow"
+cast_precision_loss = "allow"
+pub_use = "allow"
+question_mark_used = "allow"
+implicit_return = "allow"
+arbitrary_source_item_ordering = "allow"
+
+[package.metadata.docs.rs]
+features = [ "full" ]
+all-features = false
+
+[features]
+# Default enables everything for ease of use
+default = [ "full" ]
+# 'full' enables all features, including the base 'enabled'
+full = [ "enabled", "integration", "diagnostics_curl", "logging", "streaming", "websocket_streaming", "streaming_control", "chat", "retry", "circuit_breaker", "rate_limiting", "failover", "health_checks", "builder_patterns", "caching", "dynamic_configuration", "batch_operations", "compression", "enterprise_quota", "model_comparison", "request_templates", "buffered_streaming" ]
+# 'enabled' is the master switch for the crate's core functionality
+enabled = []
+# Feature for running integration tests with real API
+integration = []
+# Feature for diagnostics curl command generation
+diagnostics_curl = []
+# Feature for structured logging with tracing
+logging = []
+# Feature for streaming response support with JSON array buffering
+streaming = []
+# Feature for WebSocket streaming with bidirectional real-time communication
+websocket_streaming = []
+# Feature for streaming control with pause, resume, and cancel operations
+streaming_control = []
+# Feature for chat completion functionality with conversation management
+chat = []
+# Feature for retry logic with exponential backoff
+retry = []
+# Planned for v2.4 - circuit breaker pattern with failure threshold management
+circuit_breaker = []
+# Planned for v2.4 - rate limiting with token bucket and sliding window algorithms
+rate_limiting = []
+# Planned for v2.4 - failover support with multi-endpoint configuration
+failover = []
+# Planned for v2.4 - health checks with periodic endpoint monitoring
+health_checks = []
+# Feature for advanced builder patterns with fluent API design
+builder_patterns = []
+# Feature for request caching functionality (planned)
+caching = []
+# Feature for stress testing (planned)
+stress = []
+# Feature for performance testing (planned)
+performance = []
+# Feature for dynamic configuration management with hot-reloading and multiple sources
+dynamic_configuration = [ "notify", "async-trait" ]
+# Feature for batch operations with async job-based processing (mock implementation awaiting API)
+batch_operations = []
+# Feature for request/response compression (gzip, deflate, brotli)
+compression = [ "flate2", "brotli", "async-compression" ]
+# Feature for model comparison and A/B testing
+model_comparison = []
+# Feature for request templates and presets
+request_templates = []
+# Feature for buffered streaming with smoother UX
+buffered_streaming = []
+# Feature for cost-based enterprise quota management with usage tracking
+enterprise_quota = [ "parking_lot", "chrono" ]
+
+[dependencies]
+
+## peers
+
+mod_interface = { workspace = true }
+error_tools = { workspace = true }
+workspace_tools = { workspace = true, features = [ "secrets" ] }
+former = { workspace = true }
+
+## unsorted
+
+rand = { workspace = true }
+uuid = { workspace = true, features = ["v4"] }
+
+## serialization
+
+regex = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
+serde_with = { workspace = true }
+serde_json = { workspace = true }
+serde_yaml = { workspace = true }
+base64 = { workspace = true }
+secrecy = { workspace = true, features = ["serde"] }
+urlencoding = { workspace = true }
+
+## async
+
+futures-core = { workspace = true }
+futures-util = { workspace = true }
+futures = { workspace = true }
+async-stream = { workspace = true }
+backoff = { workspace = true, features = [ "tokio" ] }
+tokio = { workspace = true, features = [ "macros", "sync", "time", "rt-multi-thread" ] }
+tokio-stream = { workspace = true }
+bytes = { workspace = true }
+
+## web
+
+reqwest = { workspace = true, features = [
+  "json",
+  "stream",
+  "multipart",
+  "rustls-tls",
+], default-features = false }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true, features = [ "env-filter", "fmt" ] }
+tokio-tungstenite = { workspace = true, features = [ "native-tls" ] }
+# tracing-capture = { workspace = true }
+
+## dynamic configuration (optional)
+notify = { workspace = true, optional = true, features = [ "macos_fsevent" ] }
+async-trait = { workspace = true, optional = true }
+
+## compression (optional)
+flate2 = { workspace = true, optional = true }
+brotli = { workspace = true, optional = true }
+async-compression = { workspace = true, optional = true, features = [ "tokio", "gzip", "deflate", "brotli" ] }
+
+## enterprise quota (optional)
+parking_lot = { workspace = true, optional = true }
+chrono = { workspace = true, optional = true }
+
+[dev-dependencies]
+criterion = "0.5"
+# test_tools = { workspace = true }
+# mockito = { workspace = true } # Mock functionality merged into integration tests
+
+[[bench]]
+name = "client_overhead"
+harness = false
+
+[[bench]]
+name = "retry_logic_overhead"
+harness = false
+
+[[bench]]
+name = "circuit_breaker_overhead"
+harness = false
+
+[[bench]]
+name = "rate_limiting_overhead"
+harness = false
+
+[[bench]]
+name = "streaming_overhead"
+harness = false

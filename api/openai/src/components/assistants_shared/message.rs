@@ -1,0 +1,579 @@
+//! Message-related types and structures for the Assistants API.
+
+/// Define a private namespace for message-related items.
+mod private
+{
+  // Use full paths from crate root for components
+  use crate::components::common::Metadata;
+  use crate::components::tools::Tool;
+  use crate::components::output::Annotation;
+
+  // Add serde imports
+  use serde::{ Serialize, Deserialize };
+
+  /// References an image File in the content of a message.
+  ///
+  /// # Used By
+  /// - `MessageContent`
+  /// - `MessageDeltaContent`
+  #[ derive( Debug, Serialize, Deserialize, Clone, PartialEq ) ]
+  pub struct MessageContentImageFileObject
+  {
+    /// Always `image_file`.
+    pub r#type : String,
+    /// Contains the file ID and optional detail level.
+    pub image_file : ImageFileContent,
+  }
+
+  /// Contains the file ID and detail level for an image file content part.
+  ///
+  /// # Used By
+  /// - `MessageContentImageFileObject`
+  #[ derive( Debug, Serialize, Deserialize, Clone, PartialEq ) ]
+  pub struct ImageFileContent
+  {
+    /// The File ID of the image in the message content.
+    pub file_id : String,
+    /// Specifies the detail level of the image if specified by the user (`auto`, `low`, `high`).
+    #[ serde( skip_serializing_if = "Option::is_none" ) ]
+    pub detail : Option< String >,
+  }
+
+  /// References an image URL in the content of a message.
+  ///
+  /// # Used By
+  /// - `MessageContent`
+  /// - `MessageDeltaContent`
+  #[ derive( Debug, Serialize, Deserialize, Clone, PartialEq ) ]
+  pub struct MessageContentImageUrlObject
+  {
+    /// Always `image_url`.
+    pub r#type : String,
+    /// Contains the image URL and optional detail level.
+    pub image_url : ImageUrlContent,
+  }
+
+  /// Contains the URL and detail level for an image URL content part.
+  ///
+  /// # Used By
+  /// - `MessageContentImageUrlObject`
+  /// - `MessageDeltaContentImageUrlObject`
+  #[ derive( Debug, Serialize, Deserialize, Clone, PartialEq ) ]
+  pub struct ImageUrlContent
+  {
+    /// The external URL of the image.
+    pub url : String,
+    /// Specifies the detail level of the image (`auto`, `low`, `high`). Defaults to `auto`.
+    #[ serde( skip_serializing_if = "Option::is_none" ) ]
+    pub detail : Option< String >,
+  }
+
+  /// A citation within the message that points to a specific quote from a specific File.
+  ///
+  /// # Used By
+  /// - `Annotation::FileCitation` (within `output.rs`)
+  #[ derive( Debug, Deserialize, Clone, PartialEq ) ]
+  pub struct MessageContentTextAnnotationsFileCitationObject
+  {
+    /// Always `file_citation`.
+    pub r#type : String,
+    /// The text in the message content that needs to be replaced.
+    pub text : String,
+    /// Details of the file citation.
+    pub file_citation : FileCitationAnnotation,
+    /// Start index of the citation in the text.
+    pub start_index : i32,
+    /// End index of the citation in the text.
+    pub end_index : i32,
+  }
+
+  /// Details for a file citation annotation.
+  ///
+  /// # Used By
+  /// - `MessageContentTextAnnotationsFileCitationObject`
+  #[ derive( Debug, Deserialize, Clone, PartialEq ) ]
+  pub struct FileCitationAnnotation
+  {
+    /// The ID of the specific File the citation is from.
+    pub file_id : String,
+  }
+
+  /// A URL for the file that's generated when the assistant used the `code_interpreter` tool.
+  ///
+  /// # Used By
+  /// - `Annotation::FilePath` (within `output.rs`)
+  #[ derive( Debug, Deserialize, Clone, PartialEq ) ]
+  pub struct MessageContentTextAnnotationsFilePathObject
+  {
+    /// Always `file_path`.
+    pub r#type : String,
+    /// The text in the message content that needs to be replaced.
+    pub text : String,
+    /// Details of the file path.
+    pub file_path : FilePathAnnotation,
+    /// Start index of the file path in the text.
+    pub start_index : i32,
+    /// End index of the file path in the text.
+    pub end_index : i32,
+  }
+
+  /// Details for a file path annotation.
+  ///
+  /// # Used By
+  /// - `MessageContentTextAnnotationsFilePathObject`
+  /// - `MessageDeltaContentTextAnnotationsFilePathObject`
+  #[ derive( Debug, Deserialize, Clone, PartialEq ) ]
+  pub struct FilePathAnnotation
+  {
+    /// The ID of the file that was generated.
+    pub file_id : String,
+  }
+
+  /// The text content that is part of a message.
+  ///
+  /// # Used By
+  /// - `MessageContent`
+  #[ derive( Debug, Serialize, Deserialize, Clone, PartialEq ) ] // Added Serialize
+  pub struct MessageContentTextObject
+  {
+    /// Always `text`.
+    pub r#type : String,
+    /// The text content and its annotations.
+    pub text : TextContent,
+  }
+
+  /// Contains the text value and annotations for a text content part.
+  ///
+  /// # Used By
+  /// - `MessageContentTextObject`
+  #[ derive( Debug, Serialize, Deserialize, Clone, PartialEq ) ] // Added Serialize
+  pub struct TextContent
+  {
+    /// The data that makes up the text.
+    pub value : String,
+    /// A list of annotations, if any.
+    pub annotations : Vec< Annotation >,
+  }
+
+  /// The refusal content generated by the assistant.
+  ///
+  /// # Used By
+  /// - `MessageContent`
+  #[ derive( Debug, Serialize, Deserialize, Clone, PartialEq ) ] // Added Serialize
+  pub struct MessageContentRefusalObject
+  {
+    /// Always `refusal`.
+    pub r#type : String,
+    /// The refusal message.
+    pub refusal : String,
+  }
+
+  /// Represents the different types of content within a message.
+  ///
+  /// # Used By
+  /// - `MessageObject`
+  #[ derive( Debug, Serialize, Deserialize, Clone, PartialEq ) ] // Added Serialize
+  #[ serde( untagged ) ]
+  pub enum MessageContent
+  {
+    /// Image file content.
+    ImageFile( MessageContentImageFileObject ),
+    /// Image URL content.
+    ImageUrl( MessageContentImageUrlObject ),
+    /// Text content.
+    Text( MessageContentTextObject ),
+    /// Refusal content.
+    Refusal( MessageContentRefusalObject ),
+  }
+
+  /// Represents a file attached to a message.
+  ///
+  /// # Used By
+  /// - `MessageObject`
+  /// - `CreateMessageRequest` (within `requests/assistants.rs` - *assuming it exists*)
+  #[ derive( Debug, Serialize, Deserialize, Clone, PartialEq ) ]
+  pub struct MessageAttachment
+  {
+    /// The ID of the file to attach.
+    pub file_id : String,
+    /// The tools to add this file to.
+    pub tools : Vec< Tool >,
+  }
+
+  /// Represents a message within a thread.
+  ///
+  /// # Used By
+  /// - `/threads/{thread_id}/messages` (GET - in `ListMessagesResponse`, POST response)
+  /// - `/threads/{thread_id}/messages/{message_id}` (GET, POST response)
+  /// - `AssistantStreamEvent::ThreadMessageCreated`
+  /// - `AssistantStreamEvent::ThreadMessageInProgress`
+  /// - `AssistantStreamEvent::ThreadMessageCompleted`
+  /// - `AssistantStreamEvent::ThreadMessageIncomplete`
+  #[ derive( Debug, Serialize, Deserialize, Clone, PartialEq ) ] // Added Serialize
+  pub struct MessageObject
+  {
+    /// The identifier, which can be referenced in API endpoints.
+    pub id : String,
+    /// The object type, which is always `thread.message`.
+    pub object : String,
+    /// The Unix timestamp (in seconds) for when the message was created.
+    pub created_at : i64,
+    /// The thread ID that this message belongs to.
+    pub thread_id : String,
+    /// The status of the message (`in_progress`, `incomplete`, or `completed`).
+    pub status : String,
+    /// Details on why the message is incomplete, if applicable.
+    #[ serde( skip_serializing_if = "Option::is_none" ) ]
+    pub incomplete_details : Option< IncompleteDetails >,
+    /// The Unix timestamp (in seconds) for when the message was completed.
+    #[ serde( skip_serializing_if = "Option::is_none" ) ]
+    pub completed_at : Option< i64 >,
+    /// The Unix timestamp (in seconds) for when the message was marked as incomplete.
+    #[ serde( skip_serializing_if = "Option::is_none" ) ]
+    pub incomplete_at : Option< i64 >,
+    /// The entity that produced the message (`user` or `assistant`).
+    pub role : String,
+    /// The content of the message in array of text and/or images.
+    pub content : Vec< MessageContent >,
+    /// If applicable, the ID of the assistant that authored this message.
+    #[ serde( skip_serializing_if = "Option::is_none" ) ]
+    pub assistant_id : Option< String >,
+    /// The ID of the run associated with the creation of this message. Null for manually created messages.
+    #[ serde( skip_serializing_if = "Option::is_none" ) ]
+    pub run_id : Option< String >,
+    /// A list of files attached to the message.
+    #[ serde( default, skip_serializing_if = "Option::is_none" ) ] // Default to empty vec if None
+    pub attachments : Option< Vec< MessageAttachment > >,
+    /// Set of 16 key-value pairs attached to the object.
+    #[ serde( skip_serializing_if = "Option::is_none" ) ]
+    pub metadata : Option< Metadata >,
+  }
+
+  /// Details on why a message or run is incomplete.
+  ///
+  /// # Used By
+  /// - `MessageObject`
+  /// - `RunObject`
+  #[ derive( Debug, Serialize, Deserialize, Clone, PartialEq ) ] // Added Serialize
+  pub struct IncompleteDetails
+  {
+    /// The reason the message/run is incomplete (e.g., `content_filter`, `max_tokens`).
+    pub reason : String,
+  }
+
+  /// Response containing a list of messages.
+  ///
+  /// # Used By
+  /// - `/threads/{thread_id}/messages` (GET)
+  #[ derive( Debug, Deserialize, Clone, PartialEq ) ]
+  pub struct ListMessagesResponse
+  {
+    /// The object type, always "list".
+    pub object : String,
+    /// A list of message objects.
+    pub data : Vec< MessageObject >,
+    /// The ID of the first message in the list.
+    pub first_id : String,
+    /// The ID of the last message in the list.
+    pub last_id : String,
+    /// Indicates whether there are more messages available.
+    pub has_more : bool,
+  }
+
+  // --- Delta Objects for Streaming ---
+
+  /// Represents a delta for an image file content part during streaming.
+  ///
+  /// # Used By
+  /// - `MessageDeltaContent`
+  #[ derive( Debug, Deserialize, Clone, PartialEq ) ]
+  pub struct MessageDeltaContentImageFileObject
+  {
+    /// The index of the content part in the message.
+    pub index : i32,
+    /// Always `image_file`.
+    pub r#type : String,
+    /// Details of the image file.
+    pub image_file : Option< ImageFileContent >,
+  }
+
+  /// Represents a delta for a file citation annotation during streaming.
+  ///
+  /// # Used By
+  /// - `MessageDeltaTextAnnotation`
+  #[ derive( Debug, Deserialize, Clone, PartialEq ) ]
+  pub struct MessageDeltaContentTextAnnotationsFileCitationObject
+  {
+    /// The index of the annotation in the text content part.
+    pub index : i32,
+    /// Always `file_citation`.
+    pub r#type : String,
+    /// The text in the message content that needs to be replaced.
+    pub text : Option< String >,
+    /// Details of the file citation.
+    pub file_citation : Option< FileCitationAnnotationDetails >,
+    /// Start index of the citation in the text.
+    pub start_index : Option< i32 >,
+    /// End index of the citation in the text.
+    pub end_index : Option< i32 >,
+  }
+
+  /// Details for a file citation annotation delta.
+  ///
+  /// # Used By
+  /// - `MessageDeltaContentTextAnnotationsFileCitationObject`
+  #[ derive( Debug, Deserialize, Clone, PartialEq ) ]
+  pub struct FileCitationAnnotationDetails
+  {
+    /// The ID of the specific File the citation is from.
+    pub file_id : Option< String >,
+    /// The specific quote in the file.
+    pub quote : Option< String >,
+  }
+
+  /// Represents a delta for a file path annotation during streaming.
+  ///
+  /// # Used By
+  /// - `MessageDeltaTextAnnotation`
+  #[ derive( Debug, Deserialize, Clone, PartialEq ) ]
+  pub struct MessageDeltaContentTextAnnotationsFilePathObject
+  {
+    /// The index of the annotation in the text content part.
+    pub index : i32,
+    /// Always `file_path`.
+    pub r#type : String,
+    /// The text in the message content that needs to be replaced.
+    pub text : Option< String >,
+    /// Details of the file path.
+    pub file_path : Option< FilePathAnnotation >,
+    /// Start index of the file path in the text.
+    pub start_index : Option< i32 >,
+    /// End index of the file path in the text.
+    pub end_index : Option< i32 >,
+  }
+
+  /// Represents the delta for a text annotation (file citation or file path).
+  ///
+  /// # Used By
+  /// - `MessageDeltaTextContent`
+  #[ derive( Debug, Deserialize, Clone, PartialEq ) ]
+  #[ serde( untagged ) ]
+  pub enum MessageDeltaTextAnnotation
+  {
+    /// File citation annotation delta.
+    FileCitation( MessageDeltaContentTextAnnotationsFileCitationObject ),
+    /// File path annotation delta.
+    FilePath( MessageDeltaContentTextAnnotationsFilePathObject ),
+  }
+
+  /// Represents the delta for text content within a message.
+  ///
+  /// # Used By
+  /// - `MessageDeltaContentTextObject`
+  #[ derive( Debug, Deserialize, Clone, PartialEq ) ]
+  pub struct MessageDeltaTextContent
+  {
+    /// The text delta.
+    pub value : Option< String >,
+    /// Annotations associated with the delta.
+    pub annotations : Option< Vec< MessageDeltaTextAnnotation > >,
+  }
+
+  /// Represents a delta for a text content part during streaming.
+  ///
+  /// # Used By
+  /// - `MessageDeltaContent`
+  #[ derive( Debug, Deserialize, Clone, PartialEq ) ]
+  pub struct MessageDeltaContentTextObject
+  {
+    /// The index of the content part in the message.
+    pub index : i32,
+    /// Always `text`.
+    pub r#type : String,
+    /// The text content delta.
+    pub text : Option< MessageDeltaTextContent >,
+  }
+
+  /// Represents a delta for a refusal content part during streaming.
+  ///
+  /// # Used By
+  /// - `MessageDeltaContent`
+  #[ derive( Debug, Deserialize, Clone, PartialEq ) ]
+  pub struct MessageDeltaContentRefusalObject
+  {
+    /// The index of the refusal part in the message.
+    pub index : i32,
+    /// Always `refusal`.
+    pub r#type : String,
+    /// The refusal text delta.
+    pub refusal : Option< String >,
+  }
+
+  /// Represents a delta for an image URL content part during streaming.
+  ///
+  /// # Used By
+  /// - `MessageDeltaContent`
+  #[ derive( Debug, Deserialize, Clone, PartialEq ) ]
+  pub struct MessageDeltaContentImageUrlObject
+  {
+    /// The index of the content part in the message.
+    pub index : i32,
+    /// Always `image_url`.
+    pub r#type : String,
+    /// Image URL details.
+    pub image_url : Option< ImageUrlContent >,
+  }
+
+  /// Represents the delta for different types of message content during streaming.
+  ///
+  /// # Used By
+  /// - `MessageDelta`
+  #[ derive( Debug, Deserialize, Clone, PartialEq ) ]
+  #[ serde( untagged ) ]
+  pub enum MessageDeltaContent
+  {
+    /// Image file delta.
+    ImageFile( MessageDeltaContentImageFileObject ),
+    /// Text delta.
+    Text( MessageDeltaContentTextObject ),
+    /// Refusal delta.
+    Refusal( MessageDeltaContentRefusalObject ),
+    /// Image URL delta.
+    ImageUrl( MessageDeltaContentImageUrlObject ),
+  }
+
+  /// Represents the changes in a message during streaming.
+  ///
+  /// # Used By
+  /// - `MessageDeltaObject`
+  #[ derive( Debug, Deserialize, Clone, PartialEq ) ]
+  pub struct MessageDelta
+  {
+    /// The role of the message author, if changed.
+    pub role : Option< String >,
+    /// The content parts that have changed.
+    pub content : Option< Vec< MessageDeltaContent > >,
+  }
+
+  /// Represents a message delta event data during streaming.
+  ///
+  /// # Used By
+  /// - `AssistantStreamEvent::ThreadMessageDelta`
+  #[ derive( Debug, Deserialize, Clone, PartialEq ) ]
+  pub struct MessageDeltaObject
+  {
+    /// The identifier of the message being modified.
+    pub id : String,
+    /// The object type, always `thread.message.delta`.
+    pub object : String,
+    /// The delta containing the changed fields.
+    pub delta : MessageDelta,
+  }
+
+  // --- Helper Enums for Stream Event Handling ---
+
+  /// Represents message-related events during streaming.
+  #[ derive( Debug, Deserialize, Clone, PartialEq ) ]
+  #[ serde( untagged ) ]
+  pub enum MessageStreamEvent
+  {
+    /// Message created event.
+    Created( MessageCreatedEvent ),
+    /// Message in progress event.
+    InProgress( MessageInProgressEvent ),
+    /// Message delta event.
+    Delta( MessageDeltaEvent ),
+    /// Message completed event.
+    Completed( MessageCompletedEvent ),
+    /// Message incomplete event.
+    Incomplete( MessageIncompleteEvent ),
+  }
+
+  /// Event data for when a message is created.
+  #[ derive( Debug, Deserialize, Clone, PartialEq ) ]
+  pub struct MessageCreatedEvent
+  {
+    /// Event type identifier (`thread.message.created`).
+    pub event : String,
+    /// The created message object.
+    pub data : MessageObject,
+  }
+
+  /// Event data for when a message is in progress.
+  #[ derive( Debug, Deserialize, Clone, PartialEq ) ]
+  pub struct MessageInProgressEvent
+  {
+    /// Event type identifier (`thread.message.in_progress`).
+    pub event : String,
+    /// The message object in progress.
+    pub data : MessageObject,
+  }
+
+  /// Event data for a message delta.
+  #[ derive( Debug, Deserialize, Clone, PartialEq ) ]
+  pub struct MessageDeltaEvent
+  {
+    /// Event type identifier (`thread.message.delta`).
+    pub event : String,
+    /// The message delta object.
+    pub data : MessageDeltaObject,
+  }
+
+  /// Event data for when a message is completed.
+  #[ derive( Debug, Deserialize, Clone, PartialEq ) ]
+  pub struct MessageCompletedEvent
+  {
+    /// Event type identifier (`thread.message.completed`).
+    pub event : String,
+    /// The completed message object.
+    pub data : MessageObject,
+  }
+
+  /// Event data for when a message is incomplete.
+  #[ derive( Debug, Deserialize, Clone, PartialEq ) ]
+  pub struct MessageIncompleteEvent
+  {
+    /// Event type identifier (`thread.message.incomplete`).
+    pub event : String,
+    /// The incomplete message object.
+    pub data : MessageObject,
+  }
+}
+
+crate ::mod_interface!
+{
+  exposed use private::MessageContentImageFileObject;
+  exposed use private::ImageFileContent;
+  exposed use private::MessageContentImageUrlObject;
+  exposed use private::ImageUrlContent;
+  exposed use private::MessageContentTextAnnotationsFileCitationObject;
+  exposed use private::FileCitationAnnotation;
+  exposed use private::MessageContentTextAnnotationsFilePathObject;
+  exposed use private::FilePathAnnotation;
+  exposed use private::MessageContentTextObject;
+  exposed use private::TextContent;
+  exposed use private::MessageContentRefusalObject;
+  exposed use private::MessageContent;
+  exposed use private::MessageAttachment;
+  exposed use private::MessageObject;
+  exposed use private::IncompleteDetails;
+  exposed use private::ListMessagesResponse;
+  exposed use private::MessageDeltaContentImageFileObject;
+  exposed use private::MessageDeltaContentTextAnnotationsFileCitationObject;
+  exposed use private::FileCitationAnnotationDetails;
+  exposed use private::MessageDeltaContentTextAnnotationsFilePathObject;
+  exposed use private::MessageDeltaTextAnnotation;
+  exposed use private::MessageDeltaTextContent;
+  exposed use private::MessageDeltaContentTextObject;
+  exposed use private::MessageDeltaContentRefusalObject;
+  exposed use private::MessageDeltaContentImageUrlObject;
+  exposed use private::MessageDeltaContent;
+  exposed use private::MessageDelta;
+  exposed use private::MessageDeltaObject;
+  exposed use private::MessageStreamEvent;
+  exposed use private::MessageCreatedEvent;
+  exposed use private::MessageInProgressEvent;
+  exposed use private::MessageDeltaEvent;
+  exposed use private::MessageCompletedEvent;
+  exposed use private::MessageIncompleteEvent;
+}

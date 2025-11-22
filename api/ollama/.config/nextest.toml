@@ -1,0 +1,64 @@
+# Nextest configuration for api_ollama
+#
+# This configuration addresses integration test resource exhaustion while maintaining
+# strict "fail loudly" behavior per codebase requirements (issue-server-exhaustion-001).
+#
+# Integration tests require extended timeouts and resource limits because they:
+# 1. Each test binary spawns its own Ollama server on unique port (11435-11534)
+# 2. Pull AI models (tinyllama, etc.) on first run (~1GB RAM + model data)
+# 3. Perform end-to-end API validation against live Ollama services
+# 4. Running 6+ Ollama servers in parallel exhausts system resources (CPU/RAM)
+#
+# Per "dont tolerate silent failing" directive: Tests MUST fail loudly if
+# dependencies are unavailable, never silently skip.
+
+# Fix(issue-double-spawn-001): Removed terminate-after from default profile
+# Root cause: Nextest retry mechanism (terminate-after=2) causes double-spawn errors when current_dir != workspace_root
+# When tests are executed with current_dir=/path/to/crate but binaries are in /path/to/workspace/target/debug/deps,
+# the retry attempt fails with "No such file or directory" because path resolution is relative to current_dir
+# Pitfall: terminate-after is intended for flaky test retries but incompatible with workspace/crate directory mismatch
+[ profile.default ]
+# Default timeout for regular unit tests (3 minutes)
+slow-timeout = { period = "180s" }  # Removed: terminate-after = 2
+
+# Optimization(phase1-parallelization): Selective parallelization for unit vs integration tests
+# Root cause: Only 8/48 binaries need Ollama servers, but all ran serially (test-threads=1)
+# Solution: Run unit test binaries in parallel (8 threads), limit integration tests (2 threads)
+# Impact: Expected 47% runtime reduction (59min -> 32min) - 353 fast tests run concurrently
+# Pitfall: May cause resource exhaustion on systems with <16GB RAM - reduce threads if flaky
+test-threads = 8  # Allow 8 parallel unit test binaries (no Ollama servers needed)
+
+# Integration tests need extended timeouts for model pulling and server startup
+# Each test binary gets unique Ollama server port via binary name hash
+# Fix(issue-model-validation-timeout-001): Added example_model_validation_test to integration tests
+# Root cause: test_chat_with_valid_model makes real chat request taking 360+ seconds, exceeded default 180s timeout
+# Fix(issue-resource-exhaustion-002): Reduced from 2 to 1 parallel test binaries
+# Root cause: Each test binary spawns Ollama server + loads model into RAM (1.4GB+ per server)
+# With 2 parallel: 2.8GB+ RAM just for models, plus server overhead, causes system thrashing
+# Model loading takes 60-180s - running 2 in parallel doubles resource pressure without time savings
+# Fix(issue-model-loading-timeout-001): Added workspace_tests to integration test timeout overrides
+# Root cause: All test binaries using Ollama need 180s+ for model loading, but only api_comprehensive_tests had extended timeout
+# Workspace tests also make real API calls but were using default 180s timeout
+# Pitfall: Any test binary making real Ollama requests needs extended timeout to handle model loading overhead
+# Fix(issue-double-spawn-001): Removed terminate-after from integration test overrides
+# Same root cause as default profile - retry mechanism incompatible with workspace/crate path resolution
+[[ profile.default.overrides ]]
+filter = 'package(api_ollama) and (binary(embeddings_tests) or binary(api_comprehensive_tests) or binary(streaming_tests) or binary(tool_calling_tests) or binary(vision_support_tests) or binary(example_model_validation_test) or binary(health_checks_tests) or binary(sync_api_tests) or binary(workspace_tests))'
+slow-timeout = { period = "600s" }  # 10 minutes for integration tests (removed: terminate-after = 2)
+test-threads = 1  # Max 1 Ollama server at a time (prevents resource exhaustion)
+threads-required = "num-test-threads"  # Tests within binary run serially (share same Ollama server)
+
+# Builder pattern tests use chat endpoint which is extremely slow with tinyllama (up to 12+ min per request)
+# Fix(issue-builder-timeout-001): Increased from 600s -> 720s -> 750s -> 780s to handle slow chat endpoint responses
+# Root cause: Chat endpoint with tinyllama takes 720s+ per request under resource constraints
+# Observed: test_chat_request_builder_with_options passed at 361s, test_builder_complex_conversation failed at 741s
+# Complex multi-message conversations (4+ messages) take 2x longer than simple requests due to context processing
+# Fix(issue-resource-exhaustion-002): Reduced from 2 to 1 parallel executions
+# Root cause: Same as integration tests - running multiple Ollama servers causes resource exhaustion
+# Fix(issue-double-spawn-001): Removed terminate-after from builder test overrides
+# Pitfall: Chat endpoint is much slower than generate endpoint - budget 12+ minutes per complex chat test
+[[ profile.default.overrides ]]
+filter = 'package(api_ollama) and binary(builder_patterns_tests)'
+slow-timeout = { period = "780s" }  # 13 minutes for extremely slow chat tests (removed: terminate-after = 2)
+test-threads = 1  # Max 1 Ollama server at a time (prevents resource exhaustion)
+threads-required = "num-test-threads"

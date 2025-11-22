@@ -1,0 +1,140 @@
+[package]
+name = "api_claude"
+version = "0.1.0"
+edition = "2021"
+authors = [
+  "Kostiantyn Wandalen <wandalen@obox.systems>",
+]
+license = "MIT"
+readme = "readme.md"
+documentation = "https://docs.rs/api_claude"
+repository = "https://github.com/Wandalen/api_llm/tree/master/api/claude"
+homepage = "https://github.com/Wandalen/api_llm/tree/master/api/claude"
+description = """
+Claude API for accessing Anthropic's large language models (LLMs).
+"""
+categories = [ "algorithms", "development-tools" ]
+keywords = [ "fundamental", "general-purpose" ]
+
+[lints]
+workspace = true
+
+[package.metadata.docs.rs]
+features = [ "full" ]
+all-features = false
+
+[features]
+# Default enables everything for ease of use
+default = [ "full" ]
+# 'full' enables all features, including the base 'enabled'
+full = [ "enabled", "integration", "streaming", "authentication", "content-generation", "model-management", "error-handling", "tools", "vision", "embeddings", "curl-diagnostics", "general-diagnostics", "sync-api", "retry-logic", "circuit-breaker", "rate-limiting", "failover", "health-checks", "batch-processing", "count-tokens", "request-caching", "streaming-control", "compression", "enterprise-quota", "dynamic-config", "model-comparison", "request-templates", "buffered-streaming", "input-validation", "enhanced-function-calling" ]
+# 'enabled' is the master switch for the crate's core functionality
+enabled = [
+  "dep:mod_interface",
+  "dep:error_tools",
+  "dep:workspace_tools",
+  "dep:serde",
+  "dep:serde_json",
+  "dep:serde_with",
+  "dep:futures-core",
+  "dep:futures-util",
+  "dep:tokio",
+  "dep:reqwest",
+]
+# Feature for running integration tests with real API
+integration = []
+# Feature for Server-Sent Events streaming support
+streaming = [ "tokio-stream", "futures" ]
+# Feature for advanced authentication functionality
+authentication = []
+# Feature for refactored content generation functionality
+content-generation = []
+# Feature for model management functionality
+model-management = []
+# Feature for enhanced error handling functionality
+error-handling = [ "chrono" ]
+# Feature for tool calling functionality
+tools = []
+# Feature for vision support functionality
+vision = []
+# Feature for embeddings functionality (placeholder for future)
+embeddings = []
+# Feature for curl diagnostics functionality
+curl-diagnostics = []
+# Feature for general diagnostics functionality
+general-diagnostics = []
+# Feature for synchronous API functionality
+sync-api = []
+# Feature for retry logic functionality
+retry-logic = []
+# Feature for circuit breaker functionality
+circuit-breaker = []
+# Feature for rate limiting functionality
+rate-limiting = [ "tokio/time" ]
+# Feature for failover support functionality
+failover = []
+# Feature for health checks functionality
+health-checks = []
+# Feature for batch messages processing
+batch-processing = []
+# Feature for token counting before API calls
+count-tokens = []
+# Feature for request caching with TTL
+request-caching = []
+# Feature for streaming control (pause/resume/cancel)
+streaming-control = [ "streaming" ]
+# Feature for HTTP compression (request/response)
+compression = [ "flate2" ]
+# Feature for enterprise quota management and usage tracking
+enterprise-quota = [ "parking_lot", "chrono" ]
+# Feature for dynamic configuration with hot-reloading
+dynamic-config = [ "notify", "parking_lot" ]
+# Feature for model comparison and A/B testing
+model-comparison = []
+# Feature for request templates and presets
+request-templates = []
+# Feature for buffered streaming with smoother UX
+buffered-streaming = [ "streaming" ]
+# Feature for input validation before API calls
+input-validation = []
+# Feature for enhanced function calling with type-safe execution
+enhanced-function-calling = [ "tools" ]
+
+[dependencies]
+
+## Basic dependencies needed
+mod_interface = { workspace = true, optional = true }
+error_tools = { workspace = true, optional = true }
+workspace_tools = { workspace = true, features = [ "secrets" ], optional = true }
+
+## serialization
+serde = { workspace = true, features = ["derive"], optional = true }
+serde_json = { workspace = true, optional = true }
+serde_with = { workspace = true, optional = true }
+
+## async
+futures-core = { workspace = true, optional = true }
+futures-util = { workspace = true, optional = true }
+tokio = { workspace = true, features = ["macros"], optional = true }
+
+## streaming (optional)
+tokio-stream = { workspace = true, optional = true }
+futures = { workspace = true, optional = true }
+
+## web
+reqwest = { workspace = true, features = ["json", "rustls-tls"], default-features = false, optional = true }
+
+## time handling (optional for error-handling feature)
+chrono = { workspace = true, features = ["serde"], optional = true }
+
+## compression (optional for compression feature)
+flate2 = { workspace = true, optional = true }
+
+## sync primitives (optional for enterprise-quota and dynamic-config features)
+parking_lot = { workspace = true, optional = true }
+
+## file watching (optional for dynamic-config feature)
+notify = { workspace = true, optional = true }
+
+[dev-dependencies]
+tempfile = { workspace = true }

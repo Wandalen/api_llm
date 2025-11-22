@@ -1,0 +1,29 @@
+# Nextest configuration for api_ollama
+#
+# This configuration addresses integration test resource exhaustion while maintaining
+# strict "fail loudly" behavior per codebase requirements (issue-server-exhaustion-001).
+#
+# Integration tests require extended timeouts and resource limits because they:
+# 1. Each test binary spawns its own Ollama server on unique port (11435-11534)
+# 2. Pull AI models (tinyllama, etc.) on first run (~1GB RAM + model data)
+# 3. Perform end-to-end API validation against live Ollama services
+# 4. Running 6+ Ollama servers in parallel exhausts system resources (CPU/RAM)
+#
+# Per "dont tolerate silent failing" directive: Tests MUST fail loudly if
+# dependencies are unavailable, never silently skip.
+
+[ profile.default ]
+# Default timeout for regular unit tests (3 minutes)
+slow-timeout = { period = "180s", terminate-after = 2 }
+
+# Limit test binary parallelism to prevent resource exhaustion
+# Each integration test binary spawns an Ollama server (~1GB RAM + CPU)
+# Running too many in parallel causes timeouts due to resource contention
+test-threads = 1  # Fully serial execution to prevent resource exhaustion
+
+# Integration tests need extended timeouts for model pulling and server startup
+# Each test binary gets unique Ollama server port via binary name hash
+[[ profile.default.overrides ]]
+filter = 'package(api_ollama) and (binary(embeddings_tests) or binary(api_comprehensive_tests) or binary(streaming_tests) or binary(tool_calling_tests) or binary(builder_patterns_tests) or binary(vision_support_tests))'
+slow-timeout = { period = "600s", terminate-after = 2 }  # 10 minutes for integration tests
+threads-required = "num-test-threads"  # Tests within binary run serially (share same Ollama server)

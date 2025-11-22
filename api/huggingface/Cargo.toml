@@ -1,0 +1,218 @@
+[package]
+name = "api_huggingface"
+version = "0.2.0"
+edition = "2021"
+rust-version = "1.70.0"
+authors = [
+  "Kostiantyn Wandalen <wandalen@obox.systems>",
+]
+license = "MIT"
+readme = "readme.md"
+documentation = "https://docs.rs/api_huggingface"
+repository = "https://github.com/Wandalen/api_llm/tree/master/api/huggingface"
+homepage = "https://github.com/Wandalen/api_llm/tree/master/api/huggingface"
+description = """
+HuggingFace's API for accessing large language models (LLMs) and embeddings.
+"""
+categories = [ "algorithms", "development-tools" ]
+keywords = [ "fundamental", "general-purpose" ]
+autoexamples = false
+
+[lints]
+workspace = true
+
+[package.metadata.docs.rs]
+features = [ "full" ]
+all-features = false
+
+[features]
+# Crate is enabled by default with full functionality
+default = ["full"]
+
+# Master switch that activates all core dependencies
+enabled = [
+  "dep:mod_interface",
+  "dep:error_tools",
+  "dep:derive_tools",
+  "dep:serde",
+  "dep:serde_json",
+  "dep:secrecy",
+]
+
+# Core client functionality (common dependencies for API calls)
+client = [
+  "enabled",
+  "dep:former", "dep:async_tools", "dep:workspace_tools", "dep:async-trait",
+  "dep:url", "dep:reqwest", "dep:tokio", "dep:futures", "dep:futures-core"
+]
+
+# Core API Groups
+inference = [
+  "client", "dep:eventsource-stream", "dep:reqwest-eventsource",
+  "dep:bytes", "dep:rand", "dep:chrono"
+]
+embeddings = ["client", "dep:regex"]
+models = ["client"]
+vision = ["client", "dep:base64"]
+audio = ["client", "dep:base64"]
+
+# Inference Sub-Features
+inference-streaming = ["inference", "dep:tokio-stream", "dep:futures-util"]
+inference-parameters = ["inference"]
+inference-retry = ["inference", "dep:backoff"]
+streaming-control = ["inference-streaming", "dep:futures-core"]
+
+# Embedding Sub-Features
+embeddings-similarity = ["embeddings"]
+embeddings-batch = ["embeddings"]
+
+# Utility Features
+model-constants = []
+env-config = ["dep:dotenv"]
+logging = ["dep:tracing", "dep:tracing-subscriber"]
+sync = ["client"]  # Blocking API wrappers
+
+# Enterprise Reliability Features
+reliability = ["client"]
+circuit-breaker = ["reliability"]
+rate-limiting = ["reliability"]
+failover = ["reliability"]
+health-checks = ["reliability"]
+performance-metrics = ["client"]
+caching = ["client"]
+token-counting = ["client"]
+dynamic-config = ["reliability"]
+
+# Development and Testing Features
+integration-tests = ["inference", "embeddings", "models"]
+
+# Convenience Bundles
+basic = ["inference", "embeddings", "models", "env-config"]
+full = [
+  "enabled", "basic", "inference-streaming", "inference-retry",
+  "streaming-control", "embeddings-similarity", "embeddings-batch",
+  "model-constants", "logging", "sync", "reliability", "circuit-breaker",
+  "rate-limiting", "failover", "health-checks", "performance-metrics",
+  "caching", "token-counting", "dynamic-config", "vision", "audio"
+]
+
+# Integration testing configuration
+integration = ["integration-tests", "env-config", "logging"]
+
+[dependencies]
+
+## Core dependencies (gated by enabled feature per workspace rules)
+
+mod_interface = { workspace = true, optional = true }
+error_tools = { workspace = true, optional = true }
+derive_tools = { workspace = true, optional = true }
+serde = { workspace = true, features = ["derive"], optional = true }
+serde_json = { workspace = true, optional = true }
+secrecy = { workspace = true, optional = true }
+
+## Feature-gated dependencies
+
+# Core client dependencies
+former = { workspace = true, optional = true }
+async_tools = { workspace = true, optional = true }
+workspace_tools = { workspace = true, features = [ "secrets" ], optional = true }
+async-trait = { workspace = true, optional = true }
+url = { workspace = true, optional = true }
+reqwest = { workspace = true, features = [
+  "json",
+  "stream",
+  "multipart",
+  "rustls-tls",
+], default-features = false, optional = true }
+
+# Environment and configuration
+dotenv = { workspace = true, optional = true }
+
+# Async and streaming
+futures-core = { workspace = true, optional = true }
+futures-util = { workspace = true, optional = true }
+futures = { workspace = true, optional = true }
+backoff = { workspace = true, features = [ "tokio" ], optional = true }
+tokio = { workspace = true, features = [ "macros", "sync", "time", "rt-multi-thread" ], optional = true }
+tokio-stream = { workspace = true, optional = true }
+bytes = { workspace = true, optional = true }
+eventsource-stream = { workspace = true, optional = true }
+reqwest-eventsource = { workspace = true, optional = true }
+
+# Logging
+tracing = { workspace = true, optional = true }
+tracing-subscriber = { workspace = true, optional = true }
+
+# Utility
+rand = { workspace = true, optional = true }
+chrono = { workspace = true, optional = true }
+regex = { workspace = true, optional = true }
+serde_with = { workspace = true, optional = true }
+serde_yaml = { workspace = true, optional = true }
+base64 = { workspace = true, optional = true }
+tokio-tungstenite = { workspace = true, optional = true }
+
+# Optional dependencies for features
+# Note: nalgebra not available in workspace, will use alternative for vector operations
+
+[dev-dependencies]
+tempfile = { workspace = true }
+wiremock = "0.6"
+
+[[example]]
+name = "chat"
+path = "examples/chat.rs"
+
+[[example]]
+name = "chat_cached_interactive"
+path = "examples/chat_cached_interactive.rs"
+required-features = ["full", "caching"]
+
+[[example]]
+name = "huggingface_multi_turn_conversation"
+path = "examples/huggingface_multi_turn_conversation.rs"
+
+[[example]]
+name = "hf_interactive_chat"
+path = "examples/hf_interactive_chat.rs"
+
+[[example]]
+name = "inference_create"
+path = "examples/huggingface_inference_create.rs"
+
+[[example]]
+name = "embeddings_create"
+path = "examples/huggingface_embeddings_create.rs"
+
+[[example]]
+name = "huggingface_chat_conversational"
+path = "examples/huggingface_chat_conversational.rs"
+
+[[example]]
+name = "document_semantic_search"
+path = "examples/huggingface_document_semantic_search.rs"
+
+[[example]]
+name = "automated_content_generator"
+path = "examples/huggingface_automated_content_generator.rs"
+
+[[example]]
+name = "developer_code_assistant"
+path = "examples/huggingface_developer_code_assistant.rs"
+
+[[example]]
+name = "intelligent_qa_system"
+path = "examples/huggingface_intelligent_qa_system.rs"
+
+[[example]]
+name = "multilingual_translator"
+path = "examples/huggingface_multilingual_translator.rs"
+
+[[example]]
+name = "sentiment_content_analyzer"
+path = "examples/huggingface_sentiment_content_analyzer.rs"
+
+[[example]]
+name = "educational_ai_tutor"
+path = "examples/huggingface_educational_ai_tutor.rs"
+
