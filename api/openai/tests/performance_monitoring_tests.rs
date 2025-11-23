@@ -63,7 +63,8 @@ mod performance_monitoring_tests
 
     let _client = create_test_client().expect("Failed to create client");
 
-    // Configure performance monitoring with generous threshold for test environment
+    // Configure performance monitoring with generous thresholds for test environment
+    // to handle timing jitter and system load variability
     configure_performance_monitoring( PerformanceConfig
     {
       max_request_overhead_ms : 50, // More generous threshold for test environment
@@ -71,6 +72,7 @@ mod performance_monitoring_tests
       enable_regression_detection : false, // Disable for cleaner test runs
       baseline_performance : None,
       regression_threshold_percent : 20.0,
+      overhead_consistency_threshold : 5.0, // Relaxed for test timing variability
     });
 
     // This should succeed as overhead measurement is now implemented

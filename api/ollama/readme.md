@@ -164,7 +164,7 @@ w3 .test level::3
 ## Documentation
 
 - **[Implementation Roadmap](docs/implementation_roadmap.md)** - Feature priorities and guidelines
-- **[Examples](examples/)** - Runnable code examples
+- **[Examples](https://github.com/Wandalen/api_llm/tree/master/api/ollama/examples)** - Runnable code examples
 - **[Tests](tests/)** - Test documentation
 - **[Specification](spec/)** - Technical specification
 

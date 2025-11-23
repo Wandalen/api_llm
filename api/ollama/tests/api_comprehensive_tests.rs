@@ -69,7 +69,9 @@ async fn test_integration_model_info()
     {
       println!( "Model info for '{model}': family = {}, parameter_size = {}",
                details.family, details.parameter_size );
-    } else {
+    }
+    else
+    {
       println!( "Model info for '{model}' retrieved successfully" );
     }
   });

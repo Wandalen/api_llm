@@ -32,12 +32,13 @@ async fn test_embeddings_basic()
       prompt : "Hello world".to_string(),
       options : None,
     };
-    
+
     // Skip gracefully if server is unresponsive or encounters network errors
     let embeddings = match client.embeddings(request).await
     {
       Ok(emb) => emb,
-      Err(e) => {
+      Err(e) =>
+      {
         println!( "⏭️  Skipping test - Ollama server unresponsive or network error: {e}" );
         return;
       }
@@ -60,19 +61,20 @@ async fn test_embeddings_multiple_prompts()
       "Machine learning is a subset of artificial intelligence".to_string(),
       "Rust is a systems programming language".to_string(),
     ];
-    
+
     let request = EmbeddingsRequest
     {
       model : model.clone(),
       prompt : prompts.join(" "),
       options : None,
     };
-    
+
     // Skip gracefully if server is unresponsive or encounters network errors
     let embeddings = match client.embeddings(request).await
     {
       Ok(emb) => emb,
-      Err(e) => {
+      Err(e) =>
+      {
         println!( "⏭️  Skipping test - Ollama server unresponsive or network error: {e}" );
         return;
       }
@@ -100,16 +102,18 @@ async fn test_embeddings_empty_prompt_error()
     };
     
     let result = client.embeddings(request).await;
-    
+
     // Ollama might accept empty prompts or return a default embedding
     // Let's just check that we get some result, not necessarily an error
     match result
     {
-      Ok(embeddings) => {
+      Ok(embeddings) =>
+      {
         // Empty prompt might return empty or default embeddings
         println!( "✓ Empty prompt handled (got {} dimensions)", embeddings.embedding.len() );
       },
-      Err(error) => {
+      Err(error) =>
+      {
         let error_str = format!( "{error}" );
         assert!(error_str.contains("empty") || error_str.contains("invalid") || error_str.contains("API error"),
           "Error should mention empty, invalid, or API error : {error_str}");
@@ -198,19 +202,20 @@ async fn test_embeddings_long_prompt()
   with_test_server!(|mut client : OllamaClient, model : String| async move {
     // Create a long prompt to test handling of large inputs
     let long_prompt = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ".repeat(100);
-    
+
     let request = EmbeddingsRequest
     {
       model,
       prompt : long_prompt,
       options : None,
     };
-    
+
     // Skip gracefully if server is unresponsive or encounters network errors
     let embeddings = match client.embeddings(request).await
     {
       Ok(emb) => emb,
-      Err(e) => {
+      Err(e) =>
+      {
         println!( "⏭️  Skipping test - Ollama server unresponsive or network error: {e}" );
         return;
       }
@@ -267,7 +272,8 @@ async fn test_embeddings_consistency()
     let embeddings1 = match client.embeddings(request1).await
     {
       Ok(emb) => emb,
-      Err(e) => {
+      Err(e) =>
+      {
         println!( "⏭️  Skipping test - Ollama server unresponsive or network error: {e}" );
         return;
       }
@@ -275,7 +281,8 @@ async fn test_embeddings_consistency()
     let embeddings2 = match client.embeddings(request2).await
     {
       Ok(emb) => emb,
-      Err(e) => {
+      Err(e) =>
+      {
         println!( "⏭️  Skipping test - Ollama server unresponsive or network error: {e}" );
         return;
       }
@@ -324,7 +331,8 @@ async fn test_embeddings_authentication()
       let embeddings = match auth_client.embeddings(request).await
       {
         Ok(emb) => emb,
-        Err(e) => {
+        Err(e) =>
+        {
           println!( "⏭️  Skipping test - Ollama server unresponsive or network error: {e}" );
           return;
         }

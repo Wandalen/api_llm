@@ -80,7 +80,7 @@ fn test_sync_list_models()
         let server_arc = get_test_server().await.expect("Failed to start test server");
         let server_guard = server_arc.lock().unwrap();
         let test_server = server_guard.as_ref().expect("Test server not initialized");
-        let url = format!("http://127.0.0.1:{}", test_server.port());
+        let url = format!( "http://127.0.0.1:{}", test_server.port() );
         drop(server_guard);
         url
       })

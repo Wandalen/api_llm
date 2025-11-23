@@ -309,10 +309,10 @@ When explicitly enabled by developers, the library **should** support the follow
 **Configurable Retry Logic** (Cargo Feature: `retry`):
 ```rust
 let client = Client::builder()
-  .api_key("ollama_api_key")
-  .max_retries(3)                    // Explicitly configured
-  .enable_retry_logic(true)          // Explicitly enabled
-  .retry_backoff_multiplier(2.0)     // Optional: backoff configuration
+  .api_key( "ollama_api_key" )
+  .max_retries( 3 )                    // Explicitly configured
+  .enable_retry_logic( true )          // Explicitly enabled
+  .retry_backoff_multiplier( 2.0 )     // Optional: backoff configuration
   .build()?;
 
 // Method name clearly indicates retry behavior
@@ -322,10 +322,10 @@ client.execute_with_retries(request).await?;
 **Circuit Breaker Pattern** (Cargo Feature: `circuit_breaker`):
 ```rust
 let client = Client::builder()
-  .api_key("ollama_api_key")
-  .circuit_breaker_failure_threshold(5)     // Explicitly configured
-  .circuit_breaker_timeout(Duration::from_secs(60))
-  .enable_circuit_breaker(true)             // Explicitly enabled
+  .api_key( "ollama_api_key" )
+  .circuit_breaker_failure_threshold( 5 )     // Explicitly configured
+  .circuit_breaker_timeout( Duration::from_secs( 60 ) )
+  .enable_circuit_breaker( true )             // Explicitly enabled
   .build()?;
 
 // Method name clearly indicates circuit breaker behavior
@@ -335,10 +335,10 @@ client.execute_with_circuit_breaker(request).await?;
 **Rate Limiting** (Cargo Feature: `rate_limiting`):
 ```rust
 let client = Client::builder()
-  .api_key("ollama_api_key")
-  .rate_limit_requests_per_second(10.0)     // Explicitly configured
-  .rate_limit_burst_size(20)                // Optional: burst configuration
-  .enable_rate_limiting(true)               // Explicitly enabled
+  .api_key( "ollama_api_key" )
+  .rate_limit_requests_per_second( 10.0 )     // Explicitly configured
+  .rate_limit_burst_size( 20 )                // Optional: burst configuration
+  .enable_rate_limiting( true )               // Explicitly enabled
   .build()?;
 
 // Method name clearly indicates rate limiting behavior

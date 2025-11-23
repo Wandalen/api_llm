@@ -71,11 +71,13 @@ mod private
     {
       match self
       {
-        StreamControlError::InvalidStateTransition { from, to } => {
+        StreamControlError::InvalidStateTransition { from, to } =>
+        {
           write!( f, "Invalid state transition from {from} to {to}" )
         },
         StreamControlError::TimeoutError => write!( f, "Stream control operation timed out" ),
-        StreamControlError::BufferOverflow { limit } => {
+        StreamControlError::BufferOverflow { limit } =>
+        {
           write!( f, "Buffer overflow : exceeded limit of {limit} bytes" )
         },
         StreamControlError::StreamCancelled => write!( f, "Stream was cancelled" ),
@@ -113,7 +115,8 @@ mod private
     #[ must_use ]
     pub fn new() -> Self
     {
-      Self {
+      Self
+      {
         pause_count : 0,
         resume_count : 0,
         total_pause_duration : Duration::from_secs( 0 ),
@@ -177,7 +180,8 @@ mod private
     #[ must_use ]
     pub fn new( capacity : usize ) -> Self
     {
-      Self {
+      Self
+      {
         buffer : Arc::new( tokio::sync::Mutex::new( Vec::with_capacity( capacity ) ) ),
         capacity,
       }
@@ -265,7 +269,8 @@ mod private
     #[ must_use ]
     pub fn new() -> Self
     {
-      Self {
+      Self
+      {
         state : Arc::new( tokio::sync::RwLock::new( StreamState::Ready ) ),
         metrics : Arc::new( tokio::sync::Mutex::new( StreamMetrics::new() ) ),
         timeout : None,
@@ -279,7 +284,8 @@ mod private
     #[ must_use ]
     pub fn with_timeout( timeout : Duration ) -> Self
     {
-      Self {
+      Self
+      {
         state : Arc::new( tokio::sync::RwLock::new( StreamState::Ready ) ),
         metrics : Arc::new( tokio::sync::Mutex::new( StreamMetrics::new() ) ),
         timeout : Some( timeout ),
@@ -365,7 +371,8 @@ mod private
       if let Some( timeout ) = self.timeout
       {
         let control_clone = self.clone();
-        tokio ::spawn( async move {
+        tokio ::spawn( async move
+        {
           tokio ::time::sleep( timeout ).await;
           let current_state = control_clone.state().await;
           if current_state == StreamState::Paused
@@ -389,7 +396,8 @@ mod private
 
       match *state
       {
-        StreamState::Paused => {
+        StreamState::Paused =>
+        {
           let old_state = *state;
           *state = StreamState::Streaming;
 
@@ -403,10 +411,12 @@ mod private
           self.notify_state_change( old_state, StreamState::Streaming ).await;
           Ok( () )
         },
-        StreamState::Cancelled => {
+        StreamState::Cancelled =>
+        {
           Err( StreamControlError::StreamCancelled )
         },
-        _ => {
+        _ =>
+        {
           Err( StreamControlError::InvalidStateTransition {
             from : *state,
             to : StreamState::Streaming,
@@ -508,7 +518,8 @@ mod private
     #[ inline ]
     fn clone( &self ) -> Self
     {
-      Self {
+      Self
+      {
         state : self.state.clone(),
         metrics : self.metrics.clone(),
         timeout : self.timeout,
@@ -566,7 +577,8 @@ mod private
       control : StreamControl
     ) -> Self
     {
-      Self {
+      Self
+      {
         stream,
         control,
         buffer : StreamBuffer::new( 1024 * 1024 ), // 1MB default buffer

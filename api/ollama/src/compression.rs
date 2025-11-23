@@ -122,7 +122,8 @@ mod private
 
       match self.algorithm
       {
-        CompressionAlgorithm::Gzip => {
+        CompressionAlgorithm::Gzip =>
+        {
           use std::io::Write;
           let mut encoder = flate2::write::GzEncoder::new(
             Vec::new(),
@@ -131,7 +132,8 @@ mod private
           encoder.write_all( data )?;
           Ok( encoder.finish()? )
         },
-        CompressionAlgorithm::Deflate => {
+        CompressionAlgorithm::Deflate =>
+        {
           use std::io::Write;
           let mut encoder = flate2::write::DeflateEncoder::new(
             Vec::new(),
@@ -157,14 +159,16 @@ mod private
 
       match self.algorithm
       {
-        CompressionAlgorithm::Gzip => {
+        CompressionAlgorithm::Gzip =>
+        {
           use std::io::Read;
           let mut decoder = flate2::read::GzDecoder::new( data );
           let mut decompressed = Vec::new();
           decoder.read_to_end( &mut decompressed )?;
           Ok( decompressed )
         },
-        CompressionAlgorithm::Deflate => {
+        CompressionAlgorithm::Deflate =>
+        {
           use std::io::Read;
           let mut decoder = flate2::read::DeflateDecoder::new( data );
           let mut decompressed = Vec::new();

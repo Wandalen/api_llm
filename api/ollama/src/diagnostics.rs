@@ -980,7 +980,9 @@ mod private
         let avg_response_time = if window_metrics.is_empty()
         {
           Duration::ZERO
-        } else {
+        }
+        else
+        {
           let total : Duration = window_metrics.iter().map( | m | m.response_time ).sum();
           total / request_count as u32
         };

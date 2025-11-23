@@ -82,7 +82,8 @@ mod private
     #[ inline ]
     pub fn create_sample_performance_metrics() -> ModelPerformanceMetrics
     {
-      ModelPerformanceMetrics {
+      ModelPerformanceMetrics
+      {
         average_tokens_per_second : 25.0,
         peak_memory_usage : 4_000_000_000,
         last_inference_time : core::time::Duration::from_millis( 200 ),

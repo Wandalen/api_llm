@@ -151,7 +151,8 @@ mod private
       // Poll the inner stream
       match Pin::new( &mut self.inner ).poll_next( cx )
       {
-        Poll::Ready( Some( item ) ) => {
+        Poll::Ready( Some( item ) ) =>
+        {
           // Add to buffer
           self.buffer.push_str( &item );
 
@@ -167,11 +168,13 @@ mod private
             Poll::Pending
           }
         },
-        Poll::Ready( None ) => {
+        Poll::Ready( None ) =>
+        {
           // Stream ended, flush remaining buffer
           Poll::Ready( self.flush() )
         },
-        Poll::Pending => {
+        Poll::Pending =>
+        {
           // Check if time-based flush is needed
           if !self.buffer.is_empty() && self.should_flush()
           {

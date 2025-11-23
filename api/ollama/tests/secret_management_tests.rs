@@ -48,7 +48,7 @@ async fn test_secret_store_secure_debug()
   secret_store.set("password", "super-secret-password").expect("Failed to store secret");
   
   // Debug output should not contain actual secrets
-  let debug_output = format!("{secret_store:?}");
+  let debug_output = format!( "{secret_store:?}" );
   assert!(!debug_output.contains("super-secret-password"));
   assert!(debug_output.contains("***")); // Should contain masked representation
 }
@@ -115,7 +115,7 @@ async fn test_client_secret_masking()
     .with_secret_store(secret_store);
   
   // Debug output should not reveal secrets
-  let debug_output = format!("{client:?}");
+  let debug_output = format!( "{client:?}" );
   assert!(!debug_output.contains("very-sensitive-data"));
   // Should contain indication of secrets without revealing them
   assert!(debug_output.contains("secrets") || debug_output.contains("***"));

@@ -251,7 +251,9 @@ async fn test_metrics_aggregation_and_reporting()
     {
       // Simulate error
       collector.track_request_failure(&request_id, 404, "Model not found");
-    } else {
+    }
+    else
+    {
       // Simulate success
       collector.track_request_success(&request_id, usize::try_from(100 + i * 10).unwrap_or(100));
     }

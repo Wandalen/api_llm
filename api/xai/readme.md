@@ -204,7 +204,7 @@ The crate uses `workspace_tools` for secret management with automatic fallback c
 - **[API Reference](docs/api_reference.md)** - Complete API documentation
 - **[OpenAPI Summary](docs/openapi_endpoints_summary.md)** - Endpoint reference
 - **[Specification](spec.md)** - Detailed project specification
-- **[Examples](examples/)** - Real-world usage examples
+- **[Examples](https://github.com/Wandalen/api_llm/tree/master/api/xai/examples)** - Real-world usage examples
 
 ## Dependencies
 
@@ -240,5 +240,5 @@ MIT
 ## Links
 
 - **[Specification](spec.md)** - Technical specification
-- **[Examples](examples/)** - Usage examples
+- **[Examples](https://github.com/Wandalen/api_llm/tree/master/api/xai/examples)** - Usage examples
 - **[API Reference](docs/api_reference.md)** - Complete documentation

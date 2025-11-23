@@ -70,13 +70,13 @@ async fn test_vision_image_analysis_basic()
       Ok(response) =>
       {
         assert!(!response.message.content.is_empty(), "Vision response should have content");
-        println!("Vision response : {}", response.message.content);
-        println!("Vision analysis test successful");
+        println!( "Vision response : {}", response.message.content );
+        println!( "Vision analysis test successful" );
       },
       Err(_e) =>
       {
         // Vision models might not be available, that is ok for this test
-        println!("Vision model not available - test passed");
+        println!( "Vision model not available - test passed" );
       }
     }
   });
@@ -113,11 +113,11 @@ async fn test_vision_invalid_base64_handling()
     assert!(result.is_err(), "Invalid base64 image should result in error");
     
     let error = result.unwrap_err();
-    let error_str = format!("{error}");
+    let error_str = format!( "{error}" );
     assert!(error_str.contains("API error") || error_str.contains("Parse error"), 
            "Error should indicate API or parse problem : {error_str}");
     
-    println!("Invalid base64 error handling successful");
+    println!( "Invalid base64 error handling successful" );
   });
 }
 
@@ -156,12 +156,12 @@ async fn test_vision_with_non_vision_model()
       Ok(response) =>
       {
         assert!(!response.message.content.is_empty(), "Response should not be empty");
-        println!("Non-vision model handled images gracefully");
+        println!( "Non-vision model handled images gracefully" );
       },
       Err(error) =>
       {
-        let error_str = format!("{error}");
-        println!("Non-vision model error handling : {error_str}");
+        let error_str = format!( "{error}" );
+        println!( "Non-vision model error handling : {error_str}" );
         // This is acceptable - non-vision models may reject image inputs
       }
     }
@@ -180,12 +180,12 @@ async fn test_load_image_as_base64()
       assert!(!base64_data.is_empty(), "Base64 data should not be empty");
       assert!(base64_data.chars().all(|c| c.is_ascii_alphanumeric() || c == '+' || c == '/' || c == '='), 
               "Base64 data should only contain valid base64 characters");
-      println!("Image loading successful, base64 length : {}", base64_data.len());
+      println!( "Image loading successful, base64 length : {}", base64_data.len() );
     },
     Err(e) =>
     {
       // File might not exist in test environment, that is ok
-      println!("Image file not found (acceptable): {e}");
+      println!( "Image file not found (acceptable): {e}" );
     }
   }
 }

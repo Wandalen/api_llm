@@ -323,7 +323,8 @@ mod private
     #[ must_use ]
     pub fn get_failover_stats( &self ) -> FailoverStats
     {
-      self.stats.lock().map( |stats| stats.clone() ).unwrap_or_else( |_| {
+      self.stats.lock().map( |stats| stats.clone() ).unwrap_or_else( |_|
+      {
         FailoverStats::new( self.endpoints.len() )
       })
     }

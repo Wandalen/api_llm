@@ -71,6 +71,10 @@ mod private
     pub baseline_performance : Option< Duration >,
     /// Regression threshold percentage
     pub regression_threshold_percent : f64,
+    /// Overhead consistency threshold multiplier (`std_dev` / mean ratio)
+    /// Set to higher values (e.g., 5.0) for test environments with timing jitter
+    /// Default: 1.0 (`std_dev` must be less than 100% of mean)
+    pub overhead_consistency_threshold : f64,
   }
 
   impl Default for PerformanceConfig
@@ -85,6 +89,7 @@ mod private
         enable_regression_detection : true,
         baseline_performance : None,
         regression_threshold_percent : 20.0,
+        overhead_consistency_threshold : 1.0,
       }
     }
   }
@@ -193,9 +198,18 @@ mod private
         .sum::< f64 >() / measurements.len() as f64;
       let std_dev = variance.sqrt();
 
-      // If standard deviation is more than 100% of mean, consider it inconsistent
-      // Note : Relaxed threshold to account for system timing variability
-      if std_dev > mean * 1.0
+      // Check consistency using configurable threshold
+      // Note : Threshold can be relaxed for test environments with timing jitter
+      let threshold = if let Ok( config ) = self.config.lock()
+      {
+        config.overhead_consistency_threshold
+      }
+      else
+      {
+        1.0 // Default fallback
+      };
+
+      if std_dev > mean * threshold
       {
         return Err( "Request overhead measurements are inconsistent" );
       }

@@ -112,12 +112,12 @@ async fn test_secret_masking_in_debug_during_operations()
     .with_secret_store(secret_store);
   
   // Debug representation should mask secrets even during operations
-  let debug_output = format!("{client:?}");
+  let debug_output = format!( "{client:?}" );
   assert!(!debug_output.contains("super-secret-debug-value"));
   assert!(debug_output.contains("secrets") || debug_output.contains("***"));
   
   // Clone client to test debug masking with copied secrets
   let cloned_client = client.clone();
-  let cloned_debug = format!("{cloned_client:?}");
+  let cloned_debug = format!( "{cloned_client:?}" );
   assert!(!cloned_debug.contains("super-secret-debug-value"));
 }

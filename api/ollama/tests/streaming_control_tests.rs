@@ -215,7 +215,9 @@ mod integration_tests
         if i % 2 == 0
         {
           control_clone.pause().await
-        } else {
+        }
+        else
+        {
           control_clone.resume().await
         }
       } );

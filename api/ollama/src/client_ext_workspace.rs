@@ -81,11 +81,13 @@ mod private
         let workspace_secrets = match ws.load_secrets_from_file( "-secrets.sh" )
         {
           Ok( secrets ) => secrets,
-          Err( WorkspaceError::IoError( _ ) ) => {
+          Err( WorkspaceError::IoError( _ ) ) =>
+          {
             // Secret file doesnt exist - try environment fallback
             std ::collections::HashMap::new()
           },
-          Err( e ) => {
+          Err( e ) =>
+          {
             // Sanitize error message to avoid exposing secret-related terms
             let sanitized = crate::workspace::WorkspaceSecretStore::sanitize_error( &format!( "{e}" ) );
             return Err( format_err!( "Failed to load workspace configuration : {}", sanitized ) );
@@ -168,11 +170,13 @@ mod private
         let workspace_secrets = match ws.load_secrets_from_file( "-secrets.sh" )
         {
           Ok( secrets ) => secrets,
-          Err( WorkspaceError::IoError( _ ) ) => {
+          Err( WorkspaceError::IoError( _ ) ) =>
+          {
             // Secret file doesnt exist - use empty map, will fallback to environment
             std ::collections::HashMap::new()
           },
-          Err( e ) => {
+          Err( e ) =>
+          {
             // Sanitize error message to avoid exposing secret-related terms
             let sanitized = crate::workspace::WorkspaceSecretStore::sanitize_error( &format!( "{e}" ) );
             return Err( format_err!( "Failed to load workspace configuration : {}", sanitized ) );
@@ -186,7 +190,9 @@ mod private
           let clean_key = if let Some( stripped ) = key.strip_prefix( "export " )
           {
             stripped.to_string()
-          } else {
+          }
+          else
+          {
             key
           };
           cleaned_secrets.insert( clean_key, value );

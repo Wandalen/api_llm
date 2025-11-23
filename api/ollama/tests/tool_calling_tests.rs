@@ -77,15 +77,16 @@ async fn test_tool_calling_basic_function()
     // Handle both successful tool calls and models that don't support tools
     match result
     {
-      Ok(response) => {
+      Ok(response) =>
+      {
         assert!(response.message.tool_calls.is_some(), "Response should contain tool calls");
-        
+
         let tool_calls = response.message.tool_calls.unwrap();
         assert!(!tool_calls.is_empty(), "Should have at least one tool call");
-        
+
         let first_call = &tool_calls[0];
         assert_eq!(first_call.function["name"].as_str().unwrap(), "calculate", "Tool call should be for calculator");
-        
+
         // Verify the function arguments are properly structured
         let args = &first_call.function["arguments"];
         assert!(args["operation"].is_string(), "Operation should be a string");
@@ -94,12 +95,15 @@ async fn test_tool_calling_basic_function()
 
         println!( "✓ Basic tool calling successful" );
       },
-      Err(error) => {
-        let error_str = format!("{error}");
+      Err(error) =>
+      {
+        let error_str = format!( "{error}" );
         if error_str.contains("tool") || error_str.contains("support") || error_str.contains("400")
         {
           println!( "✓ Model doesn't support tools (expected): {error_str}" );
-        } else {
+        }
+        else
+        {
           panic!("Unexpected error in tool calling : {error:?}");
         }
       }
@@ -174,15 +178,19 @@ async fn test_tool_calling_multiple_tools()
     // Handle both successful tool calls and models that don't support tools
     match result
     {
-      Ok(_response) => {
+      Ok(_response) =>
+      {
         println!( "✓ Multiple tools request successful" );
       },
-      Err(error) => {
-        let error_str = format!("{error}");
+      Err(error) =>
+      {
+        let error_str = format!( "{error}" );
         if error_str.contains("tool") || error_str.contains("support") || error_str.contains("400")
         {
           println!( "✓ Model doesn't support tools (expected): {error_str}" );
-        } else {
+        }
+        else
+        {
           panic!("Unexpected error in multiple tools : {error:?}");
         }
       }
@@ -258,15 +266,19 @@ async fn test_tool_calling_with_response()
     // Handle both successful tool calls and models that don't support tools
     match result
     {
-      Ok(_response) => {
+      Ok(_response) =>
+      {
         println!( "✓ Tool response request successful" );
       },
-      Err(error) => {
-        let error_str = format!("{error}");
+      Err(error) =>
+      {
+        let error_str = format!( "{error}" );
         if error_str.contains("tool") || error_str.contains("support") || error_str.contains("400")
         {
           println!( "✓ Model doesn't support tools (expected): {error_str}" );
-        } else {
+        }
+        else
+        {
           panic!("Unexpected error in tool response : {error:?}");
         }
       }
@@ -311,15 +323,17 @@ async fn test_tool_calling_invalid_schema()
     };
 
     let result = client.chat(request).await;
-    
+
     match result
     {
-      Ok(_) => {
+      Ok(_) =>
+      {
         // Model might ignore invalid tools and respond normally
         println!( "✓ Invalid tool schema handled gracefully" );
       },
-      Err(error) => {
-        let error_str = format!("{error}");
+      Err(error) =>
+      {
+        let error_str = format!( "{error}" );
         assert!(
           error_str.contains("invalid") || error_str.contains("schema") || error_str.contains("tool") || error_str.contains("400"),
           "Error should mention invalid, schema, tool, or 400 Bad Request : {error_str}"
@@ -372,15 +386,17 @@ async fn test_tool_calling_streaming()
     };
 
     let result = client.chat(request).await;
-    
+
     // Streaming with tools should work or provide appropriate error
     match result
     {
-      Ok(_response) => {
+      Ok(_response) =>
+      {
         // Successful streaming response
         println!( "✓ Tool calling with streaming successful" );
       },
-      Err(_) => {
+      Err(_) =>
+      {
         // Streaming + tools might not be fully supported yet
         println!( "✓ Tool calling streaming limitation detected (expected)" );
       }
@@ -501,15 +517,19 @@ async fn test_tool_calling_complex_parameters()
     // Handle both successful tool calls and models that don't support tools
     match result
     {
-      Ok(_response) => {
+      Ok(_response) =>
+      {
         println!( "✓ Complex parameters request successful" );
       },
-      Err(error) => {
-        let error_str = format!("{error}");
+      Err(error) =>
+      {
+        let error_str = format!( "{error}" );
         if error_str.contains("tool") || error_str.contains("support") || error_str.contains("400")
         {
           println!( "✓ Model doesn't support tools (expected): {error_str}" );
-        } else {
+        }
+        else
+        {
           panic!("Unexpected error in complex parameters : {error:?}");
         }
       }
@@ -554,16 +574,18 @@ async fn test_tool_calling_non_tool_model()
     };
 
     let result = client.chat(request).await;
-    
+
     // Should either work (ignore tools) or give appropriate error
     match result
     {
-      Ok(_response) => {
+      Ok(_response) =>
+      {
         // Non-tool model might ignore tool definitions
         println!( "✓ Non-tool model handled tools gracefully" );
       },
-      Err(error) => {
-        let error_str = format!("{error}");
+      Err(error) =>
+      {
+        let error_str = format!( "{error}" );
         assert!(
           error_str.contains("tool") || error_str.contains("unsupported") || error_str.contains("model") || error_str.contains("400"),
           "Error should mention tool, unsupported, model, or 400 Bad Request : {error_str}"
@@ -627,16 +649,20 @@ async fn test_tool_calling_authentication()
       let result = auth_client.chat(request).await;
       match result
       {
-        Ok(_response) => {
+        Ok(_response) =>
+        {
           println!( "✓ Tool calling with authentication successful" );
         },
-        Err(error) => {
-          let error_str = format!("{error}");
+        Err(error) =>
+        {
+          let error_str = format!( "{error}" );
           // Accept either success or model capability error
           if error_str.contains("tool") || error_str.contains("support") || error_str.contains("400")
           {
             println!( "✓ Model doesn't support tools (expected): {error_str}" );
-          } else {
+          }
+          else
+          {
             panic!("Unexpected error : {error:?}");
           }
         }

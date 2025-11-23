@@ -119,7 +119,7 @@ impl TestServer
     // - OLLAMA_KEEP_ALIVE=0: Unload models immediately when idle
     let mut process = Command::new("ollama")
       .args(["serve"])
-      .env("OLLAMA_HOST", format!("127.0.0.1:{test_port}"))
+      .env("OLLAMA_HOST", format!( "127.0.0.1:{test_port}" ))
       .env("OLLAMA_NUM_PARALLEL", "1")
       .env("OLLAMA_MAX_LOADED_MODELS", "1")
       .env("OLLAMA_KEEP_ALIVE", "0")
@@ -128,7 +128,7 @@ impl TestServer
       .spawn()
       .map_err(|e| format!(
         "Failed to start Ollama server : {e}\n\nResolution steps:\n1. Install Ollama : curl -fsSL https://ollama.ai/install.sh | sh\n2. Ensure Ollama is in PATH\n3. Run 'ollama --version' to verify installation"
-      ))?;
+      ) )?;
 
     // Extended timeout for integration tests: Ollama server can be slow under load (model processing, concurrent requests)
     // Fix(issue-builder-timeout-001): Increased from 300s -> 570s -> 650s -> 680s -> 720s -> 750s to handle extremely variable tinyllama responses
@@ -136,7 +136,7 @@ impl TestServer
     // Observed: test_builder_authentication_integration varies wildly (216s -> 678s -> 781s timeout) with no code changes
     // Tinyllama performance under concurrent load is unpredictable - some requests take 13+ minutes
     // Pitfall: Client timeout must be less than nextest slow-timeout (780s for builder tests, 600s for others) but generous for variable responses
-    let mut client = OllamaClient::new(format!("http://127.0.0.1:{test_port}"), Duration::from_secs(750)); // 12.5 minutes for extremely variable tinyllama responses
+    let mut client = OllamaClient::new( format!( "http://127.0.0.1:{test_port}" ), Duration::from_secs(750) ); // 12.5 minutes for extremely variable tinyllama responses
 
     // Wait for server to be ready
     let start_time = Instant::now();
@@ -145,11 +145,11 @@ impl TestServer
       if start_time.elapsed() > SERVER_STARTUP_TIMEOUT
       {
         let _ = process.kill();
-        return Err(format!(
+        return Err( format!(
           "Ollama server failed to start within {timeout} seconds\n\nResolution steps:\n1. Check if port {port} is already in use\n2. Verify Ollama installation\n3. Check system resources (RAM/disk space)",
           timeout = SERVER_STARTUP_TIMEOUT.as_secs(),
           port = test_port
-        ));
+        ) );
       }
 
       if client.is_available().await
@@ -199,10 +199,10 @@ impl TestServer
       }
       Err(_) =>
       {
-        return Err(format!(
+        return Err( format!(
           "Failed to communicate with test server\n\nResolution steps:\n1. Verify Ollama server is running\n2. Check network connectivity\n3. Ensure port {} is accessible",
           self.port
-        ));
+        ) );
       }
     }
 
@@ -212,7 +212,7 @@ impl TestServer
     let pull_start = Instant::now();
     let pull_result = Command::new("ollama")
       .args(["pull", TEST_MODEL])
-      .env("OLLAMA_HOST", format!("127.0.0.1:{}", self.port))
+      .env("OLLAMA_HOST", format!( "127.0.0.1:{}", self.port ))
       .output();
       
     match pull_result
@@ -221,27 +221,27 @@ impl TestServer
       {
         println!( "✅ Test model '{TEST_MODEL}' pulled successfully in {:.1}s", pull_start.elapsed().as_secs_f64() );
       }
-      Ok(output) => 
+      Ok(output) =>
       {
         let stderr = String::from_utf8_lossy(&output.stderr);
-        return Err(format!(
+        return Err( format!(
           "Failed to pull test model '{TEST_MODEL}': {stderr}\n\nResolution steps:\n1. Check internet connectivity\n2. Verify Ollama registry access\n3. Ensure sufficient disk space\n4. Try manual pull : ollama pull {TEST_MODEL}"
-        ));
+        ) );
       }
-      Err(e) => 
+      Err(e) =>
       {
-        return Err(format!(
+        return Err( format!(
           "Failed to execute model pull : {e}\n\nResolution steps:\n1. Verify Ollama CLI is available\n2. Check PATH configuration\n3. Try manual pull : ollama pull {TEST_MODEL}"
-        ));
+        ) );
       }
     }
     
     if pull_start.elapsed() > MODEL_PULL_TIMEOUT
     {
-      return Err(format!(
-        "Model pull timed out after {timeout} seconds\n\nResolution steps:\n1. Check internet speed\n2. Retry with better connection\n3. Consider using cached model", 
+      return Err( format!(
+        "Model pull timed out after {timeout} seconds\n\nResolution steps:\n1. Check internet speed\n2. Retry with better connection\n3. Consider using cached model",
         timeout = MODEL_PULL_TIMEOUT.as_secs()
-      ));
+      ) );
     }
     
     // Verify model is now available
@@ -252,9 +252,9 @@ impl TestServer
         println!( "✅ Test model '{TEST_MODEL}' verified and ready for testing" );
         Ok(())
       }
-      _ => Err(format!(
+      _ => Err( format!(
         "Test model '{TEST_MODEL}' not found after pull\n\nResolution steps:\n1. Check Ollama model registry\n2. Verify model pull completed\n3. Try : ollama list"
-      ))
+      ) )
     }
   }
   
@@ -314,12 +314,12 @@ impl TestServer
       Ok(Err(e)) =>
       {
         let elapsed = start_time.elapsed();
-        Err(format!("Server failed to respond correctly ({:.2}s): {e}\n\nResolution steps:\n1. Check Ollama server logs\n2. Verify model is loaded correctly\n3. Check system resources (RAM/CPU)\n4. Try restarting Ollama server", elapsed.as_secs_f64()))
+        Err( format!( "Server failed to respond correctly ({:.2}s): {e}\n\nResolution steps:\n1. Check Ollama server logs\n2. Verify model is loaded correctly\n3. Check system resources (RAM/CPU)\n4. Try restarting Ollama server", elapsed.as_secs_f64() ) )
       }
       Err(_) =>
       {
         let elapsed = start_time.elapsed();
-        Err(format!("Server timed out after {:.2}s\n\nResolution steps:\n1. Check system resources (RAM/CPU)\n2. Try smaller model\n3. Increase QUICK_RESPONSE_TIMEOUT\n4. Check Ollama server logs", elapsed.as_secs_f64()))
+        Err( format!( "Server timed out after {:.2}s\n\nResolution steps:\n1. Check system resources (RAM/CPU)\n2. Try smaller model\n3. Increase QUICK_RESPONSE_TIMEOUT\n4. Check Ollama server logs", elapsed.as_secs_f64() ) )
       }
     }
   }
@@ -368,12 +368,12 @@ impl Drop for TestServer
     // Method 2: Kill by port using lsof (finds processes listening on the port)
     let _ = Command::new("sh")
       .arg("-c")
-      .arg(format!("lsof -ti tcp:{port} 2>/dev/null | xargs -r kill -9 2>/dev/null || true"))
+      .arg( format!( "lsof -ti tcp:{port} 2>/dev/null | xargs -r kill -9 2>/dev/null || true" ) )
       .output();
 
     // Method 3: Kill by OLLAMA_HOST environment variable (catches the serve process)
     let _ = Command::new("pkill")
-      .args(["-9", "-f", &format!("OLLAMA_HOST=.*:{port}")])
+      .args(["-9", "-f", &format!( "OLLAMA_HOST=.*:{port}" )])
       .output();
 
     // Method 4: Kill any user-owned ollama runner processes
@@ -381,9 +381,9 @@ impl Drop for TestServer
     let username = std::env::var("USER").unwrap_or_else(|_| "user1".to_string());
     let _ = Command::new("sh")
       .arg("-c")
-      .arg(format!(
+      .arg( format!(
         "ps aux | grep '[o]llama' | grep '^{username}' | awk '{{print $2}}' | xargs -r kill -9 2>/dev/null || true"
-      ))
+      ) )
       .output();
 
     // Wait for processes to fully terminate and release resources
@@ -420,7 +420,7 @@ fn cleanup_orphaned_servers()
   // This preserves servers from other test binaries running in parallel
   let port_cleanup = Command::new("sh")
     .arg("-c")
-    .arg(format!("lsof -ti tcp:{test_port} 2>/dev/null | xargs -r kill -9 2>/dev/null || true"))
+    .arg( format!( "lsof -ti tcp:{test_port} 2>/dev/null | xargs -r kill -9 2>/dev/null || true" ) )
     .output();
 
   // Report cleanup status
@@ -459,7 +459,7 @@ pub async fn get_test_server() -> Result< Arc< Mutex< Option< TestServer > > >, 
 
   // Check if server needs to be initialized
   let needs_init = {
-    let server_guard = server_arc.lock().map_err(|e| format!("Failed to acquire test server mutex for initialization check : {e}"))?;
+    let server_guard = server_arc.lock().map_err(|e| format!( "Failed to acquire test server mutex for initialization check : {e}" ))?;
     server_guard.is_none()
   };
 
@@ -469,13 +469,13 @@ pub async fn get_test_server() -> Result< Arc< Mutex< Option< TestServer > > >, 
     {
       Ok(server) =>
       {
-        let mut server_guard = server_arc.lock().map_err(|e| format!("Failed to acquire test server mutex for initialization : {e}"))?;
+        let mut server_guard = server_arc.lock().map_err(|e| format!( "Failed to acquire test server mutex for initialization : {e}" ))?;
         *server_guard = Some(server);
         println!( "🎯 Test server initialized successfully" );
       }
       Err(e) =>
       {
-        return Err(format!("Failed to initialize test server : {e}"));
+        return Err( format!( "Failed to initialize test server : {e}" ) );
       }
     }
   }
@@ -491,7 +491,7 @@ pub async fn get_test_server() -> Result< Arc< Mutex< Option< TestServer > > >, 
 pub async fn get_test_client() -> Result< ( OllamaClient, String ), String >
 {
   let server_arc = get_test_server().await?;
-  let server_guard = server_arc.lock().map_err(|e| format!("Failed to acquire test server mutex : {e}"))?;
+  let server_guard = server_arc.lock().map_err(|e| format!( "Failed to acquire test server mutex : {e}" ))?;
   let server = server_guard.as_ref().ok_or("Test server not initialized")?;
 
   // Clone the client and get model name
@@ -510,7 +510,8 @@ macro_rules! with_test_server {
     match $crate::server_helpers::get_test_client().await
     {
       Ok( ( client, model ) ) => $test_fn( client, model ).await,
-      Err( e ) => {
+      Err( e ) =>
+      {
         println!( "⏭️  Skipping integration test - Ollama server unavailable: {e}" );
         return;
       },
@@ -534,7 +535,8 @@ mod tests
     let (mut client, model) = match result
     {
       Ok(client_model) => client_model,
-      Err(e) => {
+      Err(e) =>
+      {
         println!( "⏭️  Skipping test - Ollama server unavailable: {e}" );
         return;
       }

@@ -21,11 +21,13 @@ mod private
         {
           let result = match self.generate( generate_req.clone() ).await
           {
-            Ok( response ) => {
+            Ok( response ) =>
+            {
               successful_requests += 1;
               BatchResult::Success( serde_json::to_value( response ).unwrap_or( serde_json::Value::Null ) )
             }
-            Err( e ) => {
+            Err( e ) =>
+            {
               failed_requests += 1;
               let error = BatchError::new( req_index, "generate_error".to_string(), e.to_string(), true );
               batch_errors.push( error.error_message.clone() );

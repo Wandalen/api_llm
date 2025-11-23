@@ -146,14 +146,16 @@ mod private
       let async_client = OllamaClient::new( base_url.to_string(), timeout );
       let runtime = tokio::runtime::Builder::new_current_thread().enable_all().build()
         .map_err( | e | format_err!( "Failed to create tokio runtime : {}", e ) )?;
-      let config = SyncApiConfig {
+      let config = SyncApiConfig
+      {
         base_url : base_url.to_string(),
         timeout,
         thread_pool_size : 4,
         enable_keepalive : true,
       };
 
-      Ok( SyncOllamaClient {
+      Ok( SyncOllamaClient
+      {
         async_client,
         runtime : Arc::new( runtime ),
         config,
@@ -417,7 +419,8 @@ mod private
     #[ inline ]
     fn default() -> Self
     {
-      Self {
+      Self
+      {
         base_url : "http://localhost:11434".to_string(),
         timeout : OllamaClient::recommended_timeout_fast(),
         thread_pool_size : 4,
@@ -438,7 +441,8 @@ mod private
         .build()
         .expect( "Failed to create runtime" );
 
-      Self {
+      Self
+      {
         thread_count,
         runtime : Arc::new( runtime ),
       }
@@ -500,7 +504,8 @@ mod private
     #[ must_use ]
     pub fn new() -> Self
     {
-      Self {
+      Self
+      {
         base_url : None,
         timeout : None,
         thread_pool_size : None,

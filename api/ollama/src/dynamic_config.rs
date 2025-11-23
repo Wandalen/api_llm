@@ -28,7 +28,8 @@ mod private
     #[ must_use ]
     pub fn new() -> Self
     {
-      Self {
+      Self
+      {
         server_url : "http://localhost:11434".to_string(),
         timeout : Duration::from_secs( 30 ),
         max_connections : 5,
@@ -149,7 +150,8 @@ mod private
     #[ must_use ]
     pub fn calculate( old : &DynamicConfig, new : &DynamicConfig ) -> Self
     {
-      Self {
+      Self
+      {
         server_url_changed : old.server_url != new.server_url,
         timeout_changed : old.timeout != new.timeout,
         max_connections_changed : old.max_connections != new.max_connections,
@@ -185,7 +187,8 @@ mod private
     #[ must_use ]
     pub fn from_config( config : &DynamicConfig ) -> Self
     {
-      Self {
+      Self
+      {
         config : config.clone(),
         timestamp : std::time::SystemTime::now(),
         version : 0, // Version will be set by manager
@@ -219,7 +222,8 @@ mod private
     #[ must_use ]
     pub fn new( config : DynamicConfig, version : u64 ) -> Self
     {
-      Self {
+      Self
+      {
         config,
         version,
         created_at : std::time::SystemTime::now(),
@@ -275,7 +279,8 @@ mod private
     pub fn from_config( config : DynamicConfig ) -> Self
     {
       let version = ConfigVersion::new( config.clone(), 0 );
-      Self {
+      Self
+      {
         current : config,
         history : vec![ version ],
         max_history : 10,

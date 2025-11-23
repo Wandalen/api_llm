@@ -149,7 +149,8 @@ mod private
           return manager.get_failover_stats();
         }
       }
-      FailoverStats {
+      FailoverStats
+      {
         total_failovers : 0,
         total_requests : 0,
         active_endpoint_index : 0,

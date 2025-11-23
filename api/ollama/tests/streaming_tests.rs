@@ -73,26 +73,26 @@ async fn test_streaming_chat_basic()
       if !response.message.content.is_empty()
       {
         response_count += 1;
-        println!("Stream chunk {response_count}: '{}'", response.message.content);
+        println!( "Stream chunk {response_count}: '{}'", response.message.content );
       }
       
       if response.done
       {
-        println!("Streaming completed after {response_count} chunks");
+        println!( "Streaming completed after {response_count} chunks" );
         break;
       }
       
       // Safety limit to prevent infinite loops
       if response_count > max_responses
       {
-        println!("Streaming stopped at safety limit of {max_responses} responses");
+        println!( "Streaming stopped at safety limit of {max_responses} responses" );
         break;
       }
     }
     
     assert!(!responses.is_empty(), "No streaming responses received");
     // The test passes if we received responses, whether we got the "done" signal or hit the safety limit
-    println!("Streaming test completed with {} responses", responses.len());
+    println!( "Streaming test completed with {} responses", responses.len() );
   });
 }
 

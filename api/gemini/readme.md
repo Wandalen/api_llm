@@ -222,7 +222,7 @@ async fn example()
 - **[Cookbook](docs/cookbook.md)** - Recipe patterns for common use cases
 - **[Testing Guide](docs/testing.md)** - Test organization and coverage details
 - **[Specification](spec.md)** - Complete technical specification
-- **[Examples](examples/)** - Runnable example programs
+- **[Examples](https://github.com/Wandalen/api_llm/tree/master/api/gemini/examples)** - Runnable example programs
 
 ## Dependencies
 
@@ -251,5 +251,5 @@ MIT
 
 - **[Google AI Studio](https://makersuite.google.com/)** - Get your API key
 - **[Gemini API Documentation](https://ai.google.dev/api/rest)** - Official API docs
-- **[Examples](examples/)** - Comprehensive usage examples
+- **[Examples](https://github.com/Wandalen/api_llm/tree/master/api/gemini/examples)** - Comprehensive usage examples
 - **[Specification](spec.md)** - Technical specification

@@ -963,14 +963,17 @@ pub struct ClientConfig {
     pub http_client: Arc<reqwest::Client>,
 }
 
-impl Default for ClientConfig {
-    fn default() -> Self {
-        Self {
-            base_url: "http://localhost:11434".to_string(),
-            timeout: Duration::from_secs(120),
-            http_client: Arc::new(reqwest::Client::new()),
-        }
+impl Default for ClientConfig
+{
+  fn default() -> Self
+  {
+    Self
+    {
+      base_url: "http://localhost:11434".to_string(),
+      timeout: Duration::from_secs( 120 ),
+      http_client: Arc::new( reqwest::Client::new() ),
     }
+  }
 }
 ```
 
@@ -998,14 +1001,25 @@ pub struct Message {
     pub content: String,
 }
 
-impl Message {
-    pub fn user(content: impl Into<String>) -> Self {
-        Self { role: "user".to_string(), content: content.into() }
+impl Message
+{
+  pub fn user( content: impl Into< String > ) -> Self
+  {
+    Self
+    {
+      role: "user".to_string(),
+      content: content.into()
     }
-    
-    pub fn assistant(content: impl Into<String>) -> Self {
-        Self { role: "assistant".to_string(), content: content.into() }
+  }
+
+  pub fn assistant( content: impl Into< String > ) -> Self
+  {
+    Self
+    {
+      role: "assistant".to_string(),
+      content: content.into()
     }
+  }
 }
 ```
 
@@ -1195,26 +1209,38 @@ pub(crate) struct StreamBuffer {
     max_size: usize,
 }
 
-#[cfg(feature = "streaming")]
-impl StreamBuffer {
-    pub fn new() -> Self {
-        Self {
-            buffer: Vec::with_capacity(65536), // 64KB
-            position: 0,
-            max_size: 65536,
-        }
+#[ cfg( feature = "streaming" ) ]
+impl StreamBuffer
+{
+  pub fn new() -> Self
+  {
+    Self
+    {
+      buffer: Vec::with_capacity( 65536 ), // 64KB
+      position: 0,
+      max_size: 65536,
     }
-    
-    pub fn append(&mut self, data: &[u8]) -> Result<(), OllamaError> {
-        if self.buffer.len() + data.len() > self.max_size {
-            return Err(OllamaError::StreamError(StreamErrorDetails {
-                message: "Stream buffer overflow".to_string(),
-                position: Some(self.position),
-            }));
-        }
-        self.buffer.extend_from_slice(data);
-        Ok(())
+  }
+
+  pub fn append( &mut self, data: &[ u8 ] ) -> Result< (), OllamaError >
+  {
+    if self.buffer.len() + data.len() > self.max_size
+    {
+      return Err
+      (
+        OllamaError::StreamError
+        (
+          StreamErrorDetails
+          {
+            message: "Stream buffer overflow".to_string(),
+            position: Some( self.position ),
+          }
+        )
+      );
     }
+    self.buffer.extend_from_slice( data );
+    Ok( () )
+  }
 }
 ```
 
@@ -1256,25 +1282,32 @@ It is recommended that client construction follow this pattern:
 
 ```rust
 // Default construction workflow
-pub fn new() -> OllamaResult<OllamaClient> {
-    let config = ClientConfig::default();
-    Self::from_config(config)
+pub fn new() -> OllamaResult< OllamaClient >
+{
+  let config = ClientConfig::default();
+  Self::from_config( config )
 }
 
 // Builder pattern workflow
-pub fn builder() -> ClientBuilder {
-    ClientBuilder::new()
+pub fn builder() -> ClientBuilder
+{
+  ClientBuilder::new()
 }
 
 // Internal construction from validated config
-fn from_config(config: ClientConfig) -> OllamaResult<OllamaClient> {
-    // Validate base URL format
-    url::Url::parse(&config.base_url)
-        .map_err(|e| OllamaError::InvalidArgument(format!("Invalid base URL: {}", e)))?;
-    
-    Ok(OllamaClient {
-        config: Arc::new(config),
-    })
+fn from_config( config: ClientConfig ) -> OllamaResult< OllamaClient >
+{
+  // Validate base URL format
+  url::Url::parse( &config.base_url )
+    .map_err( | e | OllamaError::InvalidArgument( format!( "Invalid base URL: {}", e ) ) )?;
+
+  Ok
+  (
+    OllamaClient
+    {
+      config: Arc::new( config ),
+    }
+  )
 }
 ```
 
@@ -1284,63 +1317,92 @@ The following workflow is recommended for all HTTP operations:
 
 **1. Request Preparation Phase**
 ```rust
-async fn execute_request<T, R>(&self, endpoint: &str, request: &T) -> OllamaResult<R>
+async fn execute_request< T, R >( &self, endpoint: &str, request: &T ) -> OllamaResult< R >
 where
-    T: Serialize,
-    R: for<'de> Deserialize<'de>,
+  T: Serialize,
+  R: for< 'de > Deserialize< 'de >,
 {
-    // Build complete URL
-    let url = format!("{}/api/{}", self.config.base_url, endpoint);
-    
-    // Serialize request to JSON
-    let json_body = serde_json::to_string(request)
-        .map_err(|e| OllamaError::ParseError(ParseErrorDetails {
-            context: "Failed to serialize request".to_string(),
-            source: e,
-        }))?;
-    
-    // Prepare HTTP request with headers
-    let http_request = self.config.http_client
-        .post(&url)
-        .header("Content-Type", "application/json")
-        .body(json_body)
-        .timeout(self.config.timeout);
+  // Build complete URL
+  let url = format!( "{}/api/{}", self.config.base_url, endpoint );
+
+  // Serialize request to JSON
+  let json_body = serde_json::to_string( request )
+    .map_err
+    (
+      | e | OllamaError::ParseError
+      (
+        ParseErrorDetails
+        {
+          context: "Failed to serialize request".to_string(),
+          source: e,
+        }
+      )
+    )?;
+
+  // Prepare HTTP request with headers
+  let http_request = self.config.http_client
+    .post( &url )
+    .header( "Content-Type", "application/json" )
+    .body( json_body )
+    .timeout( self.config.timeout );
 ```
 
 **2. HTTP Execution Phase**
 ```rust
-    // Execute HTTP request with error mapping
-    let response = http_request.send().await
-        .map_err(|e| self.map_reqwest_error(e))?;
-    
-    // Check HTTP status code
-    if !response.status().is_success() {
-        return Err(OllamaError::ApiError(ApiErrorDetails {
-            status_code: response.status().as_u16(),
-            message: format!("HTTP {}", response.status()),
-            response_body: response.text().await.ok(),
-        }));
-    }
+  // Execute HTTP request with error mapping
+  let response = http_request.send().await
+    .map_err( | e | self.map_reqwest_error( e ) )?;
+
+  // Check HTTP status code
+  if !response.status().is_success()
+  {
+    return Err
+    (
+      OllamaError::ApiError
+      (
+        ApiErrorDetails
+        {
+          status_code: response.status().as_u16(),
+          message: format!( "HTTP {}", response.status() ),
+          response_body: response.text().await.ok(),
+        }
+      )
+    );
+  }
 ```
 
 **3. Response Processing Phase**
 ```rust
-    // Extract response body
-    let response_text = response.text().await
-        .map_err(|e| OllamaError::NetworkError(NetworkErrorDetails {
-            kind: NetworkErrorKind::Unknown,
-            message: "Failed to read response body".to_string(),
-            source: Some(Box::new(e)),
-        }))?;
-    
-    // Deserialize JSON response
-    let parsed_response: R = serde_json::from_str(&response_text)
-        .map_err(|e| OllamaError::ParseError(ParseErrorDetails {
-            context: format!("Failed to parse response from {}", endpoint),
-            source: e,
-        }))?;
-    
-    Ok(parsed_response)
+  // Extract response body
+  let response_text = response.text().await
+    .map_err
+    (
+      | e | OllamaError::NetworkError
+      (
+        NetworkErrorDetails
+        {
+          kind: NetworkErrorKind::Unknown,
+          message: "Failed to read response body".to_string(),
+          source: Some( Box::new( e ) ),
+        }
+      )
+    )?;
+
+  // Deserialize JSON response
+  let parsed_response: R = serde_json::from_str( &response_text )
+    .map_err
+    (
+      | e | OllamaError::ParseError
+      (
+        ParseErrorDetails
+        {
+          context: format!( "Failed to parse response from {}", endpoint ),
+          source: e,
+        }
+      )
+    )?;
+
+  Ok( parsed_response )
 }
 ```
 
@@ -1349,44 +1411,65 @@ where
 For streaming operations, the following pattern is recommended:
 
 ```rust
-#[cfg(feature = "streaming")]
-pub async fn chat_stream(&self, mut request: ChatRequest) -> OllamaResult<impl Stream<Item = OllamaResult<ChatResponse>>> {
-    // Force streaming mode
-    request.stream = Some(true);
-    
-    // Execute streaming HTTP request
-    let response = self.execute_streaming_request("chat", &request).await?;
-    
-    // Create stream processor
-    let stream = response.bytes_stream()
-        .map(|chunk_result| self.process_stream_chunk(chunk_result))
-        .filter_map(|result| async move { 
-            match result {
-                Ok(Some(response)) => Some(Ok(response)),
-                Ok(None) => None, // Partial chunk, continue
-                Err(e) => Some(Err(e)),
-            }
-        });
-    
-    Ok(Box::pin(stream))
+#[ cfg( feature = "streaming" ) ]
+pub async fn chat_stream( &self, mut request: ChatRequest ) -> OllamaResult< impl Stream< Item = OllamaResult< ChatResponse > > >
+{
+  // Force streaming mode
+  request.stream = Some( true );
+
+  // Execute streaming HTTP request
+  let response = self.execute_streaming_request( "chat", &request ).await?;
+
+  // Create stream processor
+  let stream = response.bytes_stream()
+    .map( | chunk_result | self.process_stream_chunk( chunk_result ) )
+    .filter_map
+    (
+      | result | async move
+      {
+        match result
+        {
+          Ok( Some( response ) ) => Some( Ok( response ) ),
+          Ok( None ) => None, // Partial chunk, continue
+          Err( e ) => Some( Err( e ) ),
+        }
+      }
+    );
+
+  Ok( Box::pin( stream ) )
 }
 
 // Stream chunk processing with buffering
-fn process_stream_chunk(&self, chunk_result: Result<Bytes, reqwest::Error>) -> OllamaResult<Option<ChatResponse>> {
-    let chunk = chunk_result.map_err(|e| OllamaError::StreamError(StreamErrorDetails {
-        message: format!("Stream chunk error: {}", e),
+fn process_stream_chunk( &self, chunk_result: Result< Bytes, reqwest::Error > ) -> OllamaResult< Option< ChatResponse > >
+{
+  let chunk = chunk_result.map_err
+  (
+    | e | OllamaError::StreamError
+    (
+      StreamErrorDetails
+      {
+        message: format!( "Stream chunk error: {}", e ),
         position: None,
-    }))?;
-    
-    // Convert to string and attempt JSON parsing
-    let chunk_str = std::str::from_utf8(&chunk)
-        .map_err(|e| OllamaError::StreamError(StreamErrorDetails {
-            message: format!("UTF-8 decode error: {}", e),
-            position: Some(e.valid_up_to()),
-        }))?;
-    
-    // Handle partial JSON objects (implementation detail)
-    self.parse_json_chunk(chunk_str)
+      }
+    )
+  )?;
+
+  // Convert to string and attempt JSON parsing
+  let chunk_str = std::str::from_utf8( &chunk )
+    .map_err
+    (
+      | e | OllamaError::StreamError
+      (
+        StreamErrorDetails
+        {
+          message: format!( "UTF-8 decode error: {}", e ),
+          position: Some( e.valid_up_to() ),
+        }
+      )
+    )?;
+
+  // Handle partial JSON objects (implementation detail)
+  self.parse_json_chunk( chunk_str )
 }
 ```
 
@@ -1395,28 +1478,47 @@ fn process_stream_chunk(&self, chunk_result: Result<Bytes, reqwest::Error>) -> O
 It is recommended that error handling follow a consistent mapping pattern:
 
 ```rust
-impl OllamaClient {
-    fn map_reqwest_error(&self, error: reqwest::Error) -> OllamaError {
-        if error.is_timeout() {
-            OllamaError::NetworkError(NetworkErrorDetails {
-                kind: NetworkErrorKind::Timeout,
-                message: format!("Request timed out after {}s", self.config.timeout.as_secs()),
-                source: Some(Box::new(error)),
-            })
-        } else if error.is_connect() {
-            OllamaError::NetworkError(NetworkErrorDetails {
-                kind: NetworkErrorKind::Connection,
-                message: format!("Failed to connect to {}", self.config.base_url),
-                source: Some(Box::new(error)),
-            })
-        } else {
-            OllamaError::NetworkError(NetworkErrorDetails {
-                kind: NetworkErrorKind::Unknown,
-                message: error.to_string(),
-                source: Some(Box::new(error)),
-            })
+impl OllamaClient
+{
+  fn map_reqwest_error( &self, error: reqwest::Error ) -> OllamaError
+  {
+    if error.is_timeout()
+    {
+      OllamaError::NetworkError
+      (
+        NetworkErrorDetails
+        {
+          kind: NetworkErrorKind::Timeout,
+          message: format!( "Request timed out after {}s", self.config.timeout.as_secs() ),
+          source: Some( Box::new( error ) ),
         }
+      )
     }
+    else if error.is_connect()
+    {
+      OllamaError::NetworkError
+      (
+        NetworkErrorDetails
+        {
+          kind: NetworkErrorKind::Connection,
+          message: format!( "Failed to connect to {}", self.config.base_url ),
+          source: Some( Box::new( error ) ),
+        }
+      )
+    }
+    else
+    {
+      OllamaError::NetworkError
+      (
+        NetworkErrorDetails
+        {
+          kind: NetworkErrorKind::Unknown,
+          message: error.to_string(),
+          source: Some( Box::new( error ) ),
+        }
+      )
+    }
+  }
 }
 ```
 
@@ -1425,26 +1527,34 @@ impl OllamaClient {
 Conditional compilation should follow this pattern:
 
 ```rust
-impl OllamaClient {
-    // Core functionality always available when enabled
-    #[cfg(feature = "enabled")]
-    pub async fn chat(&self, request: ChatRequest) -> OllamaResult<ChatResponse> {
-        self.execute_request("chat", &request).await
-    }
-    
-    // Stub implementation when feature disabled
-    #[cfg(not(feature = "enabled"))]
-    pub async fn chat(&self, _request: ChatRequest) -> OllamaResult<ChatResponse> {
-        Err(OllamaError::FeatureNotEnabled(
-            "Chat functionality requires 'enabled' feature".to_string()
-        ))
-    }
-    
-    // Streaming methods only exist when both features enabled
-    #[cfg(all(feature = "enabled", feature = "streaming"))]
-    pub async fn chat_stream(&self, request: ChatRequest) -> OllamaResult<impl Stream<Item = OllamaResult<ChatResponse>>> {
-        // Streaming implementation
-    }
+impl OllamaClient
+{
+  // Core functionality always available when enabled
+  #[ cfg( feature = "enabled" ) ]
+  pub async fn chat( &self, request: ChatRequest ) -> OllamaResult< ChatResponse >
+  {
+    self.execute_request( "chat", &request ).await
+  }
+
+  // Stub implementation when feature disabled
+  #[ cfg( not( feature = "enabled" ) ) ]
+  pub async fn chat( &self, _request: ChatRequest ) -> OllamaResult< ChatResponse >
+  {
+    Err
+    (
+      OllamaError::FeatureNotEnabled
+      (
+        "Chat functionality requires 'enabled' feature".to_string()
+      )
+    )
+  }
+
+  // Streaming methods only exist when both features enabled
+  #[ cfg( all( feature = "enabled", feature = "streaming" ) ) ]
+  pub async fn chat_stream( &self, request: ChatRequest ) -> OllamaResult< impl Stream< Item = OllamaResult< ChatResponse > > >
+  {
+    // Streaming implementation
+  }
 }
 ```
 
@@ -1453,37 +1563,43 @@ impl OllamaClient {
 The implementation should provide hooks for testing:
 
 ```rust
-impl OllamaClient {
-    // Constructor for testing with custom HTTP client
-    #[cfg(test)]
-    pub fn with_http_client(base_url: String, client: reqwest::Client) -> OllamaResult<Self> {
-        let config = ClientConfig {
-            base_url,
-            timeout: Duration::from_secs(30),
-            http_client: Arc::new(client),
-        };
-        Self::from_config(config)
-    }
+impl OllamaClient
+{
+  // Constructor for testing with custom HTTP client
+  #[ cfg( test ) ]
+  pub fn with_http_client( base_url: String, client: reqwest::Client ) -> OllamaResult< Self >
+  {
+    let config = ClientConfig
+    {
+      base_url,
+      timeout: Duration::from_secs( 30 ),
+      http_client: Arc::new( client ),
+    };
+    Self::from_config( config )
+  }
 }
 
-#[cfg(all(test, feature = "integration"))]
-mod integration_tests {
-    use super::*;
-    
-    #[tokio::test]
-    async fn test_real_ollama_connection() {
-        let client = OllamaClient::new().expect("Failed to create client");
-        
-        // Only run if Ollama server is available
-        if !client.is_available().await {
-            eprintln!("Skipping integration test: Ollama server not available");
-            return;
-        }
-        
-        // Test actual API calls
-        let models = client.list_models().await.expect("Failed to list models");
-        assert!(!models.models.is_empty());
+#[ cfg( all( test, feature = "integration" ) ) ]
+mod integration_tests
+{
+  use super::*;
+
+  #[ tokio::test ]
+  async fn test_real_ollama_connection()
+  {
+    let client = OllamaClient::new().expect( "Failed to create client" );
+
+    // Only run if Ollama server is available
+    if !client.is_available().await
+    {
+      eprintln!( "Skipping integration test: Ollama server not available" );
+      return;
     }
+
+    // Test actual API calls
+    let models = client.list_models().await.expect( "Failed to list models" );
+    assert!( !models.models.is_empty() );
+  }
 }
 ```
 

@@ -131,7 +131,9 @@ mod private
         harm_categories : if is_safe
         {
           Vec::new()
-        } else {
+        }
+        else
+        {
           vec![
             crate ::safety_settings::HarmCategory {
               category : crate::safety_settings::HarmType::Violence,

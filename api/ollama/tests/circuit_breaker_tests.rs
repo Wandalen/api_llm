@@ -180,7 +180,9 @@ async fn test_circuit_breaker_integration_with_ollama_client()
     if i < 3
     {
       assert_eq!(client.circuit_breaker_state(), CircuitBreakerState::Closed);
-    } else {
+    }
+    else
+    {
       assert_eq!(client.circuit_breaker_state(), CircuitBreakerState::Open);
     }
   }

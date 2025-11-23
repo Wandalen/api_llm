@@ -39,7 +39,7 @@ export SHORT_TOKEN="abc123"
   env ::set_var("WORKSPACE_PATH", &temp_dir);
 
   // Test 1: Load secrets and validate they're correct
-  println!("🔑 Testing token loading...");
+  println!( "🔑 Testing token loading..." );
   let secret_store = SecretStore::from_path(&temp_dir)
     .expect("Failed to create secret store");
 
@@ -49,71 +49,73 @@ export SHORT_TOKEN="abc123"
   assert_eq!(ollama_key, "sk-proj-abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890");
   assert!(ollama_key.starts_with("sk-proj-"));
   assert!(ollama_key.len() > 50, "API key should be long enough");
-  println!("✅ OLLAMA_API_KEY loaded and validated");
+  println!( "✅ OLLAMA_API_KEY loaded and validated" );
 
   let openai_key = secret_store.get_with_fallback("OPENAI_API_KEY")
     .expect("Failed to get OPENAI_API_KEY");
   assert!(openai_key.starts_with("sk-"));
   assert!(openai_key.len() > 40, "OpenAI API key should be long enough");
-  println!("✅ OPENAI_API_KEY loaded and validated");
+  println!( "✅ OPENAI_API_KEY loaded and validated" );
 
   // Test URL validation
   let ollama_url = secret_store.get_with_fallback("OLLAMA_URL")
     .expect("Failed to get OLLAMA_URL");
   assert!(ollama_url.starts_with("https://"));
-  println!("✅ OLLAMA_URL loaded and validated");
+  println!( "✅ OLLAMA_URL loaded and validated" );
 
   // Test 2: Validate token format requirements
-  println!("🔍 Testing token validation...");
+  println!( "🔍 Testing token validation..." );
   
   // Test short token handling
   let short_token = secret_store.get_with_fallback("SHORT_TOKEN")
     .expect("Failed to get SHORT_TOKEN");
   assert_eq!(short_token, "abc123");
-  println!("✅ Short token handled correctly");
+  println!( "✅ Short token handled correctly" );
 
   // Test 3: Error handling for missing tokens
-  println!("❌ Testing error handling...");
+  println!( "❌ Testing error handling..." );
   let missing_result = secret_store.get_with_fallback("NONEXISTENT_TOKEN");
   assert!(missing_result.is_err(), "Should return error for missing token");
-  println!("✅ Missing token error handling works");
+  println!( "✅ Missing token error handling works" );
 
   // Test 4: Environment fallback
-  println!("🌍 Testing environment fallback...");
+  println!( "🌍 Testing environment fallback..." );
   env ::set_var("ENV_ONLY_TOKEN", "env-fallback-value");
   let env_token = secret_store.get_with_fallback("ENV_ONLY_TOKEN")
     .expect("Failed to get environment fallback token");
   assert_eq!(env_token, "env-fallback-value");
-  println!("✅ Environment fallback works");
+  println!( "✅ Environment fallback works" );
 
   // Test 5: Client creation with valid tokens
-  println!("🚀 Testing client creation with tokens...");
+  println!( "🚀 Testing client creation with tokens..." );
   let client = OllamaClient::from_workspace_secrets_at(&temp_dir)
     .expect("Failed to create client from workspace secrets");
   
   // Verify client has proper configuration
   assert_eq!(client.base_url(), "https://api.ollama.com/v1");
-  println!("✅ Client created successfully with workspace tokens");
+  println!( "✅ Client created successfully with workspace tokens" );
 
   // Test 6: Token security (masking in debug output)
-  println!("🔒 Testing token security...");
-  let debug_output = format!("{secret_store:?}");
+  println!( "🔒 Testing token security..." );
+  let debug_output = format!( "{secret_store:?}" );
   assert!(!debug_output.contains("sk-proj-abcdef1234567890"));
   assert!(!debug_output.contains("sk-1234567890abcdef"));
   assert!(debug_output.contains("***"));
-  println!("✅ Tokens are properly masked in debug output");
+  println!( "✅ Tokens are properly masked in debug output" );
 
   // Cleanup
   env ::remove_var("ENV_ONLY_TOKEN");
   if let Some(original) = original_workspace
   {
     env ::set_var("WORKSPACE_PATH", original);
-  } else {
+  }
+  else
+  {
     env ::remove_var("WORKSPACE_PATH");
   }
   let _ = fs::remove_dir_all(&temp_dir);
 
-  println!("🎉 All token validation tests passed!");
+  println!( "🎉 All token validation tests passed!" );
 }
 #[ tokio::test ]
 async fn test_token_validation_edge_cases()
@@ -155,17 +157,19 @@ export WHITESPACE_KEY="  sk-test-with-whitespace  "
   if let Some(original) = original_workspace
   {
     env ::set_var("WORKSPACE_PATH", original);
-  } else {
+  }
+  else
+  {
     env ::remove_var("WORKSPACE_PATH");
   }
   let _ = fs::remove_dir_all(&temp_dir);
 
-  println!("✅ Token edge case validation passed");
+  println!( "✅ Token edge case validation passed" );
 }
 
 #[ cfg( not( all( feature = "workspace", feature = "secret_management" ) ) ) ]
 fn main()
 {
-  println!("⚠️  Token validation tests require 'workspace' and 'secret_management' features");
-  println!("Run with : cargo test --features 'workspace,secret_management'");
+  println!( "⚠️  Token validation tests require 'workspace' and 'secret_management' features" );
+  println!( "Run with : cargo test --features 'workspace,secret_management'" );
 }

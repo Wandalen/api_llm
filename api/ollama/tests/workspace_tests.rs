@@ -93,10 +93,12 @@ async fn test_client_from_auto_workspace()
   // Should either succeed with config found, or fail gracefully
   match result
   {
-    Ok(_client) => {
+    Ok(_client) =>
+    {
       // Config was found and client created successfully
     },
-    Err(e) => {
+    Err(e) =>
+    {
       // Should be a specific "no workspace config found" error
       assert!(e.to_string().contains("workspace") || e.to_string().contains("config"));
     }
@@ -144,7 +146,8 @@ async fn test_workspace_fallback_gracefully()
   match result
   {
     Ok(_) => panic!("Should not succeed with non-existent file"),
-    Err(e) => {
+    Err(e) =>
+    {
       // Should be a descriptive error about file not found
       assert!(e.to_string().contains("file") || e.to_string().contains("not found"));
     }

@@ -465,13 +465,16 @@ mod private
       let client = self.client.clone();
       let simulate_failure = self.simulate_failure.clone();
 
-      let handle = tokio::spawn( async move {
+      let handle = tokio::spawn( async move
+      {
         let mut interval = tokio::time::interval( config.interval );
 
         loop
         {
           tokio ::select! {
-            _ = interval.tick() => {
+            _ = interval.tick()
+            =>
+            {
               let start_time = std::time::Instant::now();
               let success = if simulate_failure.load( std::sync::atomic::Ordering::Relaxed )
               {
@@ -530,7 +533,9 @@ mod private
                 }
               }
             }
-            _ = &mut shutdown_rx => {
+            _ = &mut shutdown_rx
+            =>
+            {
               break;
             }
           }

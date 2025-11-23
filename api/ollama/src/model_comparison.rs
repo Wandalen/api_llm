@@ -146,7 +146,8 @@ mod private
 
         match self.client.chat( request ).await
         {
-          Ok( response ) => {
+          Ok( response ) =>
+          {
             let elapsed = request_start.elapsed().as_millis() as u64;
 
             results.push( ModelComparisonResult
@@ -160,7 +161,8 @@ mod private
               error_message : None,
             } );
           },
-          Err( err ) => {
+          Err( err ) =>
+          {
             let elapsed = request_start.elapsed().as_millis() as u64;
 
             // Create empty response for failed request

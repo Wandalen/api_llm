@@ -230,7 +230,7 @@ See [Secret Loading Guide](docs/secret_loading.md) for complete authentication o
 ## Documentation
 
 - **[API Reference](https://docs.rs/api_claude)** - Complete API documentation
-- **[Examples](examples/)** - Real-world usage examples
+- **[Examples](https://github.com/Wandalen/api_llm/tree/master/api/claude/examples)** - Real-world usage examples
 - **[Secret Loading](docs/secret_loading.md)** - Authentication and secret management
 - **[Testing Guide](tests/readme.md)** - Testing organization and NO MOCKING policy
 - **[Specification](spec.md)** - Detailed project specification
@@ -264,5 +264,5 @@ MIT
 
 - **[Anthropic Console](https://console.anthropic.com/)** - Get your API key
 - **[Claude API Documentation](https://docs.anthropic.com/claude/reference)** - Official API docs
-- **[Examples](examples/)** - Comprehensive usage examples
+- **[Examples](https://github.com/Wandalen/api_llm/tree/master/api/claude/examples)** - Comprehensive usage examples
 - **[Specification](spec.md)** - Technical specification
