@@ -247,7 +247,7 @@ async fn test_retry_feature_gating()
 {
   // This test only runs when retry feature is enabled
   // The presence of this test confirms feature gating works
-  println!("✓ Enhanced retry logic tests are feature-gated");
+  println!( "✓ Enhanced retry logic tests are feature-gated" );
 
   // Verify fastrand dependency is available (used for jitter)
   let random_jitter = fastrand::u64( 0..=100 );
@@ -276,7 +276,7 @@ async fn test_exponential_backoff_calculation()
   assert!( delay2.as_millis() >= 400 ); // 400 + 0-50 jitter
   assert!( delay2.as_millis() <= 450 );
 
-  println!("✓ Exponential backoff with jitter : {delay0:?}, {delay1:?}, {delay2:?}");
+  println!( "✓ Exponential backoff with jitter : {delay0:?}, {delay1:?}, {delay2:?}" );
 }
 
 /// Test error classification for retry decisions
@@ -298,7 +298,7 @@ async fn test_error_classification()
   // Timeout errors
   assert_eq!( classify_error( "request timed out" ), ErrorType::Timeout );
 
-  println!("✓ Error classification works correctly");
+  println!( "✓ Error classification works correctly" );
 }
 
 /// Test retry configuration validation
@@ -325,7 +325,7 @@ async fn test_retry_configuration()
   assert_eq!( default_config.max_attempts, 3 );
   assert_eq!( default_config.base_delay_ms, 100 );
 
-  println!("✓ Retry configuration validation successful");
+  println!( "✓ Retry configuration validation successful" );
 }
 
 // Removed : test_successful_retry_after_failures
@@ -376,7 +376,7 @@ async fn test_retry_exhaustion()
   let final_count = client.get_request_count();
   assert_eq!( final_count, 3 );
 
-  println!("✓ Retry exhausted after {final_count} attempts in {elapsed:?}");
+  println!( "✓ Retry exhausted after {final_count} attempts in {elapsed:?}" );
 }
 
 /// Test non-retryable error bypass
@@ -415,7 +415,7 @@ async fn test_non_retryable_error_bypass()
   // Timing check : Should complete faster than if retries occurred (with generous margin for httpbin.org variance)
   assert!( elapsed < Duration::from_secs( 15 ), "Single HTTP request took {elapsed:?}, exceeds reasonable timeout" );
 
-  println!("✓ Non-retryable error bypassed retry logic (1 attempt) in {elapsed:?}");
+  println!( "✓ Non-retryable error bypassed retry logic (1 attempt) in {elapsed:?}" );
 }
 
 /// Test max elapsed time enforcement
@@ -458,7 +458,7 @@ async fn test_max_elapsed_time_enforcement()
   let final_count = client.get_request_count();
   assert!( final_count < 10 );
 
-  println!("✓ Max elapsed time enforced : stopped after {final_count} attempts in {elapsed:?}");
+  println!( "✓ Max elapsed time enforced : stopped after {final_count} attempts in {elapsed:?}" );
 }
 
 /// Test thread-safe retry state management
@@ -527,7 +527,7 @@ async fn test_thread_safe_retry_state()
     assert!( result.unwrap().contains( "success" ) );
   }
 
-  println!("✓ Thread-safe retry state management validated with concurrent operations");
+  println!( "✓ Thread-safe retry state management validated with concurrent operations" );
 }
 
 // Removed : test_retry_metrics_and_counting
@@ -579,7 +579,7 @@ async fn test_configurable_backoff_multipliers()
   assert_eq!( delay1_agg.as_millis(), 150 );  // 50 * 3^1 = 150
   assert_eq!( delay2_agg.as_millis(), 450 );  // 50 * 3^2 = 450
 
-  println!("✓ Configurable backoff multipliers : linear {delay0:?}, exponential {delay0_agg:?}→{delay1_agg:?}→{delay2_agg:?}");
+  println!( "✓ Configurable backoff multipliers : linear {delay0:?}, exponential {delay0_agg:?}→{delay1_agg:?}→{delay2_agg:?}" );
 }
 
 /// Test graceful degradation when retry config is None
@@ -603,7 +603,7 @@ async fn test_graceful_degradation_no_config()
   assert!( result.is_err() );
   assert!( elapsed < Duration::from_millis( 10 ) ); // Should fail immediately
 
-  println!("✓ Graceful degradation without retry config : failed immediately in {elapsed:?}");
+  println!( "✓ Graceful degradation without retry config : failed immediately in {elapsed:?}" );
 }
 
 /// Test zero overhead when retry feature disabled (compile-time test)
@@ -616,7 +616,7 @@ async fn test_zero_overhead_verification()
   // Verify that fastrand (retry dependency) is available
   let _ = fastrand::u32( 1..10 );
 
-  println!("✓ Retry feature and dependencies are properly available");
+  println!( "✓ Retry feature and dependencies are properly available" );
 }
 
 /// Integration test : validate HTTP layer retry behavior
@@ -667,5 +667,5 @@ async fn test_http_retry_integration()
   // Verify error would be classified as retryable
   assert!( error_type == ErrorType::Retryable || error_type == ErrorType::Timeout );
 
-  println!("✓ HTTP layer error classification ready for retry integration : {error_type:?}");
+  println!( "✓ HTTP layer error classification ready for retry integration : {error_type:?}" );
 }

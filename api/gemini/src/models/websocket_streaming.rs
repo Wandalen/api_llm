@@ -173,7 +173,8 @@ mod private
         ) );
       }
 
-      if self.config.max_message_size > 5 * 1024 * 1024 { // 5MB limit
+      if self.config.max_message_size > 5 * 1024 * 1024  // 5MB limit
+      {
         return Err( crate::error::Error::ConfigurationError(
           "Max message size cannot exceed 5MB".to_string()
         ) );

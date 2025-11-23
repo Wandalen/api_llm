@@ -32,7 +32,10 @@ pub trait ConfigSource : Send + Sync
   fn priority( &self ) -> u8;
 
   /// Check if this source supports watching for changes
-  fn supports_watching( &self ) -> bool { false }
+  fn supports_watching( &self ) -> bool
+  {
+    false
+  }
 
   /// Start watching for configuration changes (if supported)
   async fn start_watching( &self, _sender : Sender< ConfigSourceEvent > ) -> Result< (), crate::error::Error >

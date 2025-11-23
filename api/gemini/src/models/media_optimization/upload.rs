@@ -261,7 +261,8 @@ impl MediaProcessingPipeline
     }
 
     // For other types, just check if reasonable
-    if file_data.len() > 100 * 1024 * 1024 { // 100MB limit
+    if file_data.len() > 100 * 1024 * 1024  // 100MB limit
+    {
       return Err( crate::error::Error::ApiError( "File too large".to_string() ) );
     }
 

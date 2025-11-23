@@ -91,7 +91,9 @@ impl core::fmt::Display for ValidationError
   }
 }
 
-impl core::error::Error for ValidationError {}
+impl core::error::Error for ValidationError
+{
+}
 
 /// Maximum number of models that can be compared in a single request.
 const MAX_MODELS_TO_COMPARE: usize = 10;

@@ -206,19 +206,6 @@ async fn example()
 - 100% documentation coverage for public APIs
 - No-mockup policy: all tests use real API integration
 
-### Running Tests
-
-```bash
-# All tests (requires GEMINI_API_KEY)
-cargo test
-
-# Full validation
-w3 .test level::3
-
-# Specific test category
-cargo test --test integration_tests
-```
-
 ## Supported Models
 
 | Model | Context Window | Vision | Capabilities |

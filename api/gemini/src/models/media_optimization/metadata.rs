@@ -141,11 +141,15 @@ impl MediaCache
     {
       match self.compress_data( &data )
       {
-        Ok( compressed ) => {
+        Ok( compressed ) =>
+        {
           let ratio = compressed.len() as f64 / original_size as f64;
-          if ratio < 0.95 { // Only use compression if it saves at least 5%
+          if ratio < 0.95  // Only use compression if it saves at least 5%
+          {
             ( compressed, true, ratio )
-          } else {
+          }
+          else
+          {
             ( data, false, 1.0 )
           }
         },
@@ -313,10 +317,18 @@ impl MediaCache
       evictions : self.stats.evictions.load( Ordering::Relaxed ),
       total_size_bytes : self.total_size_bytes.load( Ordering::Relaxed ),
       total_compressed_bytes : self.stats.total_compressed_bytes.load( Ordering::Relaxed ),
-      avg_compression_time_us : {
+      avg_compression_time_us :
+      {
         let total_time = self.stats.total_compression_time_us.load( Ordering::Relaxed );
         let total_compressed = self.stats.total_compressed_bytes.load( Ordering::Relaxed );
-        if total_compressed > 0 { total_time / total_compressed } else { 0 }
+        if total_compressed > 0
+        {
+          total_time / total_compressed
+        }
+        else
+        {
+          0
+        }
       },
     }
   }

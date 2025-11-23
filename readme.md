@@ -41,7 +41,7 @@ Key principles:
 
 ### Out of Scope
 - High-level abstractions or unified interfaces (see llm_contract)
-- Provider switching or fallback logic (see uni_* providers)
+- Provider switching or fallback logic
 - Business logic or application features
 - Persistent state management
 

@@ -218,19 +218,6 @@ See [Secret Loading Guide](docs/secret_loading.md) for complete authentication o
 - Real API integration tests
 - No-mockup policy: all integration tests use real API calls
 
-### Running Tests
-
-```bash
-# All tests (requires ANTHROPIC_API_KEY)
-cargo nextest run --all-features
-
-# Full validation
-w3 .test level::3
-
-# With linting
-cargo clippy --all-targets --all-features -- -D warnings
-```
-
 ## Supported Models
 
 | Model | Context Window | Capabilities |

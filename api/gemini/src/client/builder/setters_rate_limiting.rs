@@ -86,45 +86,72 @@ impl ClientBuilder
   /// Set the token refill rate for token bucket algorithm (placeholder for future implementation).
   #[ must_use ]
   #[ inline ]
-  pub fn rate_limit_tokens_per_second( self, _tokens : f64 ) -> Self { self }
+  pub fn rate_limit_tokens_per_second( self, _tokens : f64 ) -> Self
+  {
+    self
+  }
 
   /// Set the request limit per sliding window (placeholder for future implementation).
   #[ must_use ]
   #[ inline ]
-  pub fn rate_limit_requests_per_window( self, _requests : usize ) -> Self { self }
+  pub fn rate_limit_requests_per_window( self, _requests : usize ) -> Self
+  {
+    self
+  }
 
   /// Set the sliding window size duration (placeholder for future implementation).
   #[ must_use ]
   #[ inline ]
-  pub fn rate_limit_window_size( self, _window : Duration ) -> Self { self }
+  pub fn rate_limit_window_size( self, _window : Duration ) -> Self
+  {
+    self
+  }
 
   /// Enable per-endpoint rate limiting (placeholder for future implementation).
   #[ must_use ]
   #[ inline ]
-  pub fn rate_limit_per_endpoint( self, _per_endpoint : bool ) -> Self { self }
+  pub fn rate_limit_per_endpoint( self, _per_endpoint : bool ) -> Self
+  {
+    self
+  }
 
   /// Set backoff strategy for rate limiting violations (placeholder for future implementation).
   #[ must_use ]
   #[ inline ]
-  pub fn rate_limit_backoff_strategy( self, _strategy : &str ) -> Self { self }
+  pub fn rate_limit_backoff_strategy( self, _strategy : &str ) -> Self
+  {
+    self
+  }
 
   /// Set maximum backoff duration for rate limiting (placeholder for future implementation).
   #[ must_use ]
   #[ inline ]
-  pub fn rate_limit_max_backoff( self, _max_backoff : Duration ) -> Self { self }
+  pub fn rate_limit_max_backoff( self, _max_backoff : Duration ) -> Self
+  {
+    self
+  }
 
   /// Enable priority queue for request handling (placeholder for future implementation).
   #[ must_use ]
   #[ inline ]
-  pub fn enable_priority_queues( self, _enable : bool ) -> Self { self }
+  pub fn enable_priority_queues( self, _enable : bool ) -> Self
+  {
+    self
+  }
 
   /// Set target latency for adaptive rate limiting (placeholder for future implementation).
   #[ must_use ]
   #[ inline ]
-  pub fn rate_limit_adaptive_target_latency( self, _target : Duration ) -> Self { self }
+  pub fn rate_limit_adaptive_target_latency( self, _target : Duration ) -> Self
+  {
+    self
+  }
 
   /// Set adjustment factor for adaptive rate limiting (placeholder for future implementation).
   #[ must_use ]
   #[ inline ]
-  pub fn rate_limit_adaptive_adjustment_factor( self, _factor : f64 ) -> Self { self }
+  pub fn rate_limit_adaptive_adjustment_factor( self, _factor : f64 ) -> Self
+  {
+    self
+  }
 }

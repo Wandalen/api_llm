@@ -270,14 +270,18 @@ impl ConfigMetrics
     }
 
     // Check update performance
-    if report.avg_update_time_us > 5000 {  // 5ms
+    if report.avg_update_time_us > 5000  // 5ms
+    {
       issues.push( format!( "Slow updates : {}μs average", report.avg_update_time_us ) );
-    } else if report.avg_update_time_us > 2000 {  // 2ms
+    }
+    else if report.avg_update_time_us > 2000  // 2ms
+    {
       warnings.push( format!( "Slow updates : {}μs average", report.avg_update_time_us ) );
     }
 
     // Check memory usage
-    if report.history_memory_bytes > 10 * 1024 * 1024 {  // 10MB
+    if report.history_memory_bytes > 10 * 1024 * 1024  // 10MB
+    {
       warnings.push( format!( "High memory usage : {} bytes", report.history_memory_bytes ) );
     }
 

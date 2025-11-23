@@ -201,13 +201,15 @@ async fn demonstrate_error_resilience() -> Result< (), Box< dyn core::error::Err
       break;
     }
 
-  if (make_simple_request( &client, &format!( "Request {i}" ) ).await).is_ok()
+    if (make_simple_request( &client, &format!( "Request {i}" ) ).await).is_ok()
     {
       consecutive_failures = 0; // Reset on success
-    println!( "✅ Request {i} succeeded" );
-    } else {
+      println!( "✅ Request {i} succeeded" );
+    }
+    else
+    {
       consecutive_failures += 1;
-println!( "❌ Request {i} failed ({consecutive_failures}/{max_failures})" );
+      println!( "❌ Request {i} failed ({consecutive_failures}/{max_failures})" );
     }
   }
 

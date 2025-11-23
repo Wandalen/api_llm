@@ -274,7 +274,7 @@ async fn test_streaming_error_transparency()
 
   #[ cfg( not( feature = "streaming" ) ) ]
   {
-    println!("⚠ Skipping streaming error transparency test - streaming feature not enabled");
+    println!( "⚠ Skipping streaming error transparency test - streaming feature not enabled" );
   }
 }
 
@@ -310,5 +310,5 @@ async fn test_no_retry_configuration_methods()
   // The absence of compilation errors for missing retry methods confirms removal
   let _ = client;
 
-  println!("✓ No retry configuration methods exist - successful elimination");
+  println!( "✓ No retry configuration methods exist - successful elimination" );
 }

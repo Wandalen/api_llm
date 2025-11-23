@@ -130,8 +130,9 @@ println!( "Execution outcome : {}", outcome );
       return Err( "Invalid negative execution time".to_string() );
     }
 
-    if exec_time > 60000 { // More than 60 seconds seems excessive for most tests
-    println!( "⚠️ Execution took longer than expected : {}ms", exec_time );
+    if exec_time > 60000  // More than 60 seconds seems excessive for most tests
+    {
+      println!( "⚠️ Execution took longer than expected : {}ms", exec_time );
     }
   }
 

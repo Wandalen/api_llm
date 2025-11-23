@@ -199,19 +199,6 @@ The crate uses `workspace_tools` for secret management with automatic fallback c
 - 229 total tests with real API validation
 - No-mockup policy: all tests use real API calls
 
-### Running Tests
-
-```bash
-# All tests (requires XAI_API_KEY)
-cargo test --all-features
-
-# Full validation
-w3 .test level::3
-
-# With linting
-cargo clippy --all-targets --all-features
-```
-
 ## Documentation
 
 - **[API Reference](docs/api_reference.md)** - Complete API documentation

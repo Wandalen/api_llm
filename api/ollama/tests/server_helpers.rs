@@ -110,7 +110,7 @@ impl TestServer
     }
 
     let test_port = get_test_port();
-    println!("🚀 Starting Ollama test server on port {test_port}...");
+    println!( "🚀 Starting Ollama test server on port {test_port}..." );
 
     // Start Ollama server with custom port unique to this test binary
     // Resource limits prevent memory exhaustion when running many test binaries:
@@ -154,7 +154,7 @@ impl TestServer
 
       if client.is_available().await
       {
-        println!("✅ Ollama test server ready on port {test_port}");
+        println!( "✅ Ollama test server ready on port {test_port}" );
         break;
       }
 
@@ -184,7 +184,7 @@ impl TestServer
   /// - Model verification fails after pull
   async fn ensure_test_model_available(&mut self) -> Result< (), String >
   {
-    println!("🔍 Checking if test model '{TEST_MODEL}' is available...");
+    println!( "🔍 Checking if test model '{TEST_MODEL}' is available..." );
     
     // Check if model is already available
     match self.client.list_models().await
@@ -193,7 +193,7 @@ impl TestServer
       {
         if models.models.iter().any(|m| m.name.starts_with(TEST_MODEL))
         {
-          println!("✅ Test model '{TEST_MODEL}' already available");
+          println!( "✅ Test model '{TEST_MODEL}' already available" );
           return Ok(());
         }
       }
@@ -206,7 +206,7 @@ impl TestServer
       }
     }
 
-    println!("⬇️ Pulling test model '{TEST_MODEL}' (this may take several minutes)...");
+    println!( "⬇️ Pulling test model '{TEST_MODEL}' (this may take several minutes)..." );
 
     // Pull the minimal test model
     let pull_start = Instant::now();
@@ -219,7 +219,7 @@ impl TestServer
     {
       Ok(output) if output.status.success() => 
       {
-        println!("✅ Test model '{TEST_MODEL}' pulled successfully in {:.1}s", pull_start.elapsed().as_secs_f64());
+        println!( "✅ Test model '{TEST_MODEL}' pulled successfully in {:.1}s", pull_start.elapsed().as_secs_f64() );
       }
       Ok(output) => 
       {
@@ -249,7 +249,7 @@ impl TestServer
     {
       Ok(models) if models.models.iter().any(|m| m.name.starts_with(TEST_MODEL)) => 
       {
-        println!("✅ Test model '{TEST_MODEL}' verified and ready for testing");
+        println!( "✅ Test model '{TEST_MODEL}' verified and ready for testing" );
         Ok(())
       }
       _ => Err(format!(
@@ -283,7 +283,7 @@ impl TestServer
   #[allow(dead_code)]
   async fn test_quick_response(&mut self) -> Result< (), String >
   {
-    println!("🚀 Testing server quick response...");
+    println!( "🚀 Testing server quick response..." );
     
     use api_ollama::{ GenerateRequest };
     
@@ -308,7 +308,7 @@ impl TestServer
       Ok(Ok(_)) => 
       {
         let elapsed = start_time.elapsed();
-        println!("✅ Server responding quickly ({:.2}s)", elapsed.as_secs_f64());
+        println!( "✅ Server responding quickly ({:.2}s)", elapsed.as_secs_f64() );
         Ok(())
       }
       Ok(Err(e)) =>
@@ -354,7 +354,7 @@ impl Drop for TestServer
   fn drop(&mut self)
   {
     let port = self.port;
-    println!("🛑 Shutting down Ollama test server on port {port}");
+    println!( "🛑 Shutting down Ollama test server on port {port}" );
 
     // Method 1: Try graceful kill via process handle
     let _ = self.process.kill();
@@ -392,7 +392,7 @@ impl Drop for TestServer
     // Final verification - wait for process handle
     let _ = self.process.wait();
 
-    println!("✅ Ollama server on port {port} cleanup completed");
+    println!( "✅ Ollama server on port {port} cleanup completed" );
   }
 }
 
@@ -414,7 +414,7 @@ fn cleanup_orphaned_servers()
   // Binary A's cleanup at startup would kill Binary B's running server, causing "error sending request" failures
   // Pitfall: Over-aggressive cleanup in parallel environments creates race conditions between test binaries
   let test_port = get_test_port();
-  println!("🧹 Cleaning up orphaned Ollama server on port {test_port}...");
+  println!( "🧹 Cleaning up orphaned Ollama server on port {test_port}..." );
 
   // Kill any process listening on THIS test binary's port only
   // This preserves servers from other test binaries running in parallel
@@ -428,12 +428,12 @@ fn cleanup_orphaned_servers()
   {
     Ok(output) if output.status.success() =>
     {
-      println!("✅ Cleaned up orphaned server on port {test_port}");
+      println!( "✅ Cleaned up orphaned server on port {test_port}" );
     }
     _ =>
     {
       // Cleanup failure is non-fatal - server may not exist (expected on first run)
-      println!("✅ No orphaned server found on port {test_port}");
+      println!( "✅ No orphaned server found on port {test_port}" );
     }
   }
 
@@ -471,7 +471,7 @@ pub async fn get_test_server() -> Result< Arc< Mutex< Option< TestServer > > >, 
       {
         let mut server_guard = server_arc.lock().map_err(|e| format!("Failed to acquire test server mutex for initialization : {e}"))?;
         *server_guard = Some(server);
-        println!("🎯 Test server initialized successfully");
+        println!( "🎯 Test server initialized successfully" );
       }
       Err(e) =>
       {
@@ -535,7 +535,7 @@ mod tests
     {
       Ok(client_model) => client_model,
       Err(e) => {
-        println!("⏭️  Skipping test - Ollama server unavailable: {e}");
+        println!( "⏭️  Skipping test - Ollama server unavailable: {e}" );
         return;
       }
     };
@@ -546,6 +546,6 @@ mod tests
     // Test that model is correct
     assert_eq!(model, TEST_MODEL, "Test model should be {TEST_MODEL}");
 
-    println!("✅ Test server lifecycle validated");
+    println!( "✅ Test server lifecycle validated" );
   }
 }

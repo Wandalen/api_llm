@@ -92,13 +92,13 @@ async fn test_tool_calling_basic_function()
         assert!(args["a"].is_number(), "First argument should be a number");
         assert!(args["b"].is_number(), "Second argument should be a number");
 
-        println!("✓ Basic tool calling successful");
+        println!( "✓ Basic tool calling successful" );
       },
       Err(error) => {
         let error_str = format!("{error}");
         if error_str.contains("tool") || error_str.contains("support") || error_str.contains("400")
         {
-          println!("✓ Model doesn't support tools (expected): {error_str}");
+          println!( "✓ Model doesn't support tools (expected): {error_str}" );
         } else {
           panic!("Unexpected error in tool calling : {error:?}");
         }
@@ -175,13 +175,13 @@ async fn test_tool_calling_multiple_tools()
     match result
     {
       Ok(_response) => {
-        println!("✓ Multiple tools request successful");
+        println!( "✓ Multiple tools request successful" );
       },
       Err(error) => {
         let error_str = format!("{error}");
         if error_str.contains("tool") || error_str.contains("support") || error_str.contains("400")
         {
-          println!("✓ Model doesn't support tools (expected): {error_str}");
+          println!( "✓ Model doesn't support tools (expected): {error_str}" );
         } else {
           panic!("Unexpected error in multiple tools : {error:?}");
         }
@@ -259,13 +259,13 @@ async fn test_tool_calling_with_response()
     match result
     {
       Ok(_response) => {
-        println!("✓ Tool response request successful");
+        println!( "✓ Tool response request successful" );
       },
       Err(error) => {
         let error_str = format!("{error}");
         if error_str.contains("tool") || error_str.contains("support") || error_str.contains("400")
         {
-          println!("✓ Model doesn't support tools (expected): {error_str}");
+          println!( "✓ Model doesn't support tools (expected): {error_str}" );
         } else {
           panic!("Unexpected error in tool response : {error:?}");
         }
@@ -316,7 +316,7 @@ async fn test_tool_calling_invalid_schema()
     {
       Ok(_) => {
         // Model might ignore invalid tools and respond normally
-        println!("✓ Invalid tool schema handled gracefully");
+        println!( "✓ Invalid tool schema handled gracefully" );
       },
       Err(error) => {
         let error_str = format!("{error}");
@@ -324,7 +324,7 @@ async fn test_tool_calling_invalid_schema()
           error_str.contains("invalid") || error_str.contains("schema") || error_str.contains("tool") || error_str.contains("400"),
           "Error should mention invalid, schema, tool, or 400 Bad Request : {error_str}"
         );
-        println!("✓ Invalid tool schema error handling : {error_str}");
+        println!( "✓ Invalid tool schema error handling : {error_str}" );
       }
     }
   });
@@ -378,11 +378,11 @@ async fn test_tool_calling_streaming()
     {
       Ok(_response) => {
         // Successful streaming response
-        println!("✓ Tool calling with streaming successful");
+        println!( "✓ Tool calling with streaming successful" );
       },
       Err(_) => {
         // Streaming + tools might not be fully supported yet
-        println!("✓ Tool calling streaming limitation detected (expected)");
+        println!( "✓ Tool calling streaming limitation detected (expected)" );
       }
     }
   });
@@ -427,7 +427,7 @@ async fn test_tool_calling_no_tools_available()
       "Should not have tool calls when no tools provided");
     assert!(!response.message.content.is_empty(), "Should have text response");
 
-    println!("✓ No tools available handling successful");
+    println!( "✓ No tools available handling successful" );
   });
 }
 
@@ -502,13 +502,13 @@ async fn test_tool_calling_complex_parameters()
     match result
     {
       Ok(_response) => {
-        println!("✓ Complex parameters request successful");
+        println!( "✓ Complex parameters request successful" );
       },
       Err(error) => {
         let error_str = format!("{error}");
         if error_str.contains("tool") || error_str.contains("support") || error_str.contains("400")
         {
-          println!("✓ Model doesn't support tools (expected): {error_str}");
+          println!( "✓ Model doesn't support tools (expected): {error_str}" );
         } else {
           panic!("Unexpected error in complex parameters : {error:?}");
         }
@@ -560,7 +560,7 @@ async fn test_tool_calling_non_tool_model()
     {
       Ok(_response) => {
         // Non-tool model might ignore tool definitions
-        println!("✓ Non-tool model handled tools gracefully");
+        println!( "✓ Non-tool model handled tools gracefully" );
       },
       Err(error) => {
         let error_str = format!("{error}");
@@ -568,7 +568,7 @@ async fn test_tool_calling_non_tool_model()
           error_str.contains("tool") || error_str.contains("unsupported") || error_str.contains("model") || error_str.contains("400"),
           "Error should mention tool, unsupported, model, or 400 Bad Request : {error_str}"
         );
-        println!("✓ Non-tool model error handling : {error_str}");
+        println!( "✓ Non-tool model error handling : {error_str}" );
       }
     }
   });
@@ -628,14 +628,14 @@ async fn test_tool_calling_authentication()
       match result
       {
         Ok(_response) => {
-          println!("✓ Tool calling with authentication successful");
+          println!( "✓ Tool calling with authentication successful" );
         },
         Err(error) => {
           let error_str = format!("{error}");
           // Accept either success or model capability error
           if error_str.contains("tool") || error_str.contains("support") || error_str.contains("400")
           {
-            println!("✓ Model doesn't support tools (expected): {error_str}");
+            println!( "✓ Model doesn't support tools (expected): {error_str}" );
           } else {
             panic!("Unexpected error : {error:?}");
           }
@@ -646,6 +646,6 @@ async fn test_tool_calling_authentication()
   
   #[ cfg( not( feature = "secret_management" ) ) ]
   {
-    println!("⚠ Skipping authentication test - secret_management feature not enabled");
+    println!( "⚠ Skipping authentication test - secret_management feature not enabled" );
   }
 }

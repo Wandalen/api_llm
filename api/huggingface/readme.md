@@ -187,19 +187,6 @@ Get your API key from [huggingface.co/settings/tokens](https://huggingface.co/se
 - Real API integration tests (no mocking)
 - No-mockup policy: all tests use real HuggingFace API
 
-### Running Tests
-
-```bash
-# All tests (requires HUGGINGFACE_API_KEY)
-cargo test --all-features
-
-# Full validation
-w3 .test level::3
-
-# Specific test category
-cargo test --test integration_tests
-```
-
 ## Supported Models
 
 ### Router API (Pro Plan)

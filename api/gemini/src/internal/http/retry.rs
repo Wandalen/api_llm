@@ -170,7 +170,8 @@ where
         }
 
         // Check if we've exceeded max attempts
-        if attempt > retry_config.max_retries { // First attempt isnt counted as a retry
+        if attempt > retry_config.max_retries  // First attempt isnt counted as a retry
+        {
           #[ cfg( feature = "logging" ) ]
           if config.enable_logging
           {

@@ -295,7 +295,9 @@ impl std::fmt::Display for CostQuotaExceededError
   }
 }
 
-impl std::error::Error for CostQuotaExceededError {}
+impl std::error::Error for CostQuotaExceededError
+{
+}
 
 /// Cost-based quota manager for tracking and enforcing usage limits
 #[ derive( Debug, Clone ) ]

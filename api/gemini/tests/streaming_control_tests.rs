@@ -247,7 +247,8 @@ mod integration_tests
       received_count += 1;
     println!( "Received : {}", data );
 
-      if received_count >= 5 { // Get a few more items
+      if received_count >= 5  // Get a few more items
+      {
         break;
       }
     }
