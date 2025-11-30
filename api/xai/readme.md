@@ -206,6 +206,46 @@ The crate uses `workspace_tools` for secret management with automatic fallback c
 - **[Specification](spec.md)** - Detailed project specification
 - **[Examples](https://github.com/Wandalen/api_llm/tree/master/api/xai/examples)** - Real-world usage examples
 
+## Project Structure
+
+This section documents the complete project layout with each entity's responsibility and scope.
+
+### Responsibility Table
+
+#### Production Code & Configuration
+
+| Entity | Responsibility | Scope |
+|--------|----------------|-------|
+| `src/` | Production source code | Core library implementation (see module docs) |
+| `Cargo.toml` | Crate manifest and configuration | Dependencies, features, metadata |
+| `license` | License terms | MIT license text |
+
+#### Testing & Documentation
+
+| Entity | Responsibility | Scope |
+|--------|----------------|-------|
+| `tests/` | Comprehensive test suite | All tests (integration, reliability, components) - see tests/readme.md |
+| `docs/` | API reference and research | OpenAPI specs, endpoint docs, research - see docs/readme.md |
+| `examples/` | Usage demonstrations | Runnable examples for developers - see examples/readme.md |
+
+#### Specification & Documentation Files
+
+| Entity | Responsibility | Scope |
+|--------|----------------|-------|
+| `readme.md` | Project overview and onboarding | Quick start, architecture overview, feature summary |
+| `spec.md` | Formal specification | Complete requirements, design, governance |
+
+#### Temporary Files & Working Directories
+
+| Entity | Responsibility | Scope |
+|--------|----------------|-------|
+| `-default_topic/` | Claude Code working directory | Tool-generated temporary workspace |
+| `-validation_checklist.md` | Validation checklist | Audit validation items (temporary) |
+| `-audit_report_comprehensive.md` | Comprehensive audit report | Audit findings and remediation guidance (temporary) |
+| `-remediation_plan_comprehensive.md` | Remediation strategy | Step-by-step compliance fix plan (temporary) |
+
+**Note:** All entities prefixed with `-` are temporary and excluded from git tracking.
+
 ## Dependencies
 
 - **reqwest**: HTTP client with async support

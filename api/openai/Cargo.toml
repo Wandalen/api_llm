@@ -228,51 +228,7 @@ path = "examples/openai_cached_interactive_chat.rs"
 name = "openai_request_batching_demo"
 path = "examples/openai_request_batching_demo.rs"
 
-# NOTE: 17 example files exist but are NOT registered due to compilation errors from outdated API usage.
-#
-# COMMON FIXES NEEDED (apply to all broken examples):
-#
-# 1. Client Construction - Replace Client::new() with proper environment setup:
-#    OLD: let client = Client::new();
-#    NEW: use api_openai::{ Client, Secret, environment::{ OpenaiEnvironmentImpl, OpenAIRecommended } };
-#         let secret = Secret::load_from_env("OPENAI_API_KEY")?;
-#         let env = OpenaiEnvironmentImpl::build(secret, None, None,
-#                    OpenAIRecommended::base_url().to_string(),
-#                    OpenAIRecommended::realtime_base_url().to_string())?;
-#         let client = Client::build(env)?;
-#
-# 2. Remove dotenv - workspace_tools handles secrets:
-#    OLD: dotenv::from_filename("./secret/-secret.sh").ok();
-#    NEW: (remove entirely - Secret::load_from_env handles fallback chain)
-#
-# 3. Error Variants - Check OpenAIError enum for current variants:
-#    OLD: OpenAIError::WsConnectionClosed
-#    NEW: Review src/error.rs for available error types
-#
-# 4. Tracing Setup - API changed:
-#    OLD: fmt().with_env_filter(EnvFilter::from_default_env()...)
-#    NEW: Consult tracing_subscriber docs or use simpler setup
-#
-# BROKEN FILES (19 total - need above fixes):
-# - openai_enhanced_client_with_caching.rs (DevEnvironment/CreateChatCompletionRequest dont exist)
-# - openai_enhanced_error_recovery_demo.rs (common fixes + API updates)
-# - openai_comprehensive_metrics_demo.rs (common fixes + API updates)
-# - openai_responses_cancel.rs (common fixes + type mismatches)
-# - openai_responses_delete.rs (COMMENTED OUT + needs common fixes)
-# - openai_responses_get.rs (COMMENTED OUT + needs common fixes)
-# - openai_responses_list_input_items.rs (COMMENTED OUT + needs common fixes)
-# - openai_responses_update.rs (common fixes)
-# - openai_realtime_conversation_item_create.rs (common fixes)
-# - openai_realtime_conversation_item_delete.rs (common fixes)
-# - openai_realtime_conversation_item_retrieve.rs (common fixes)
-# - openai_realtime_conversation_item_truncate.rs (common fixes)
-# - openai_realtime_input_audio_buffer_append.rs (common fixes)
-# - openai_realtime_input_audio_buffer_clear.rs (common fixes)
-# - openai_realtime_input_audio_buffer_commit.rs (common fixes)
-# - openai_realtime_response_cancel.rs (common fixes)
-# - openai_realtime_response_create.rs (common fixes)
-# - openai_realtime_session_update.rs (common fixes)
-# - openai_realtime_transcription_session_update.rs (common fixes)
+# NOTE: 19 broken example files tracked in -broken_examples_tracking.md
 
 # Profile configurations moved to workspace root Cargo.toml
 

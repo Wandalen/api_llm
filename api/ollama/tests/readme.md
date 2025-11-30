@@ -12,6 +12,140 @@ Comprehensive test suite for the Ollama API client, validating functionality, in
 - **Real API Testing**: All tests use real Ollama API integration (no mocking)
 - **Feature Gating**: Tests requiring specific features use `#[cfg(feature = "...")]`
 
+## Responsibility Table
+
+### Core Infrastructure
+
+| File | Responsibility | Coverage |
+|------|----------------|----------|
+| `readme.md` | Document test suite organization | Architecture, patterns, troubleshooting, marathon validation |
+| `server_helpers.rs` | Provide isolated test server infrastructure | Hash-based port allocation, test model management, endpoint isolation |
+| `manual/` | Contain manual testing procedures | Human-verified functionality (see manual/readme.md) |
+| `-marathon_test.sh` | Marathon stress testing for flaky tests | Repetitive test execution, flake rate detection (temporary file) |
+
+### Core API Functionality
+
+| File | Responsibility | Feature Coverage |
+|------|----------------|------------------|
+| `core_client_api_tests.rs` | Test core client operations | Client initialization, configuration, basic API calls |
+| `core_functionality_tests.rs` | Test fundamental API operations | Chat, generation, model listing |
+| `api_comprehensive_tests.rs` | Test end-to-end API workflows | Complete usage scenarios, integration validation |
+
+### Streaming & Real-Time
+
+| File | Responsibility | Feature Coverage |
+|------|----------------|------------------|
+| `streaming_tests.rs` | Test streaming response handling | Stream initiation, data flow, completion |
+| `streaming_control_tests.rs` | Test streaming pause/resume/cancel | Stream lifecycle control |
+| `streaming_request_validation_tests.rs` | Validate streaming request construction | Request format, parameter validation |
+
+### Embeddings
+
+| File | Responsibility | Feature Coverage |
+|------|----------------|------------------|
+| `embeddings_tests.rs` | Test embeddings generation | Vector generation, batch processing |
+| `embeddings_request_validation_tests.rs` | Validate embeddings request construction | Request format, parameter validation |
+
+### Vision & Multimodal
+
+| File | Responsibility | Feature Coverage |
+|------|----------------|------------------|
+| `vision_support_tests.rs` | Test vision model integration | Image inputs, multimodal requests |
+| `vision_request_validation_tests.rs` | Validate vision request construction | Image format, parameter validation |
+| `multimodal_request_validation_tests.rs` | Validate multimodal request patterns | Combined text/image inputs |
+
+### Tool Calling & Function Support
+
+| File | Responsibility | Feature Coverage |
+|------|----------------|------------------|
+| `tool_calling_tests.rs` | Test function/tool calling | Tool definitions, execution, responses |
+| `tool_calling_request_validation_tests.rs` | Validate tool calling request construction | Tool schemas, parameter validation |
+| `enhanced_function_calling_tests.rs` | Test advanced function calling scenarios | Complex tools, error handling |
+
+### Reliability & Resilience
+
+| File | Responsibility | Feature Coverage |
+|------|----------------|------------------|
+| `retry_logic_tests.rs` | Test exponential backoff retry | Retry strategies, backoff timing |
+| `enhanced_retry_logic_tests.rs` | Test advanced retry scenarios | Complex failure modes, recovery |
+| `circuit_breaker_tests.rs` | Test circuit breaker pattern | State transitions, failure thresholds |
+| `enhanced_circuit_breaker_tests.rs` | Test circuit breaker edge cases | Recovery timing, state persistence |
+| `circuit_breaker_resilience_tests.rs` | Test circuit breaker robustness | Stress scenarios, timing safety |
+| `failover_tests.rs` | Test endpoint failover | Automatic failover, endpoint rotation |
+| `health_checks_tests.rs` | Test health monitoring | Health checks, endpoint status tracking |
+
+### Rate Limiting & Caching
+
+| File | Responsibility | Feature Coverage |
+|------|----------------|------------------|
+| `rate_limiting_behavior_tests.rs` | Test token bucket rate limiting | Rate limit enforcement, token consumption |
+| `enhanced_rate_limiting_tests.rs` | Test advanced rate limiting scenarios | Burst handling, refill timing |
+| `request_caching_tests.rs` | Test response caching with TTL | Cache hits/misses, expiration |
+
+### Builder Patterns & Construction
+
+| File | Responsibility | Feature Coverage |
+|------|----------------|------------------|
+| `builder_patterns_tests.rs` | Test fluent builder APIs | Request builders, method chaining |
+| `builder_construction_tests.rs` | Test builder construction patterns | Builder initialization, validation |
+
+### Secret Management & Workspace Integration
+
+| File | Responsibility | Feature Coverage |
+|------|----------------|------------------|
+| `secret_management_tests.rs` | Test secret handling | Secret loading, validation |
+| `secret_management_workflow_tests.rs` | Test secret workflow integration | End-to-end secret usage |
+| `workspace_secrets_tests.rs` | Test workspace secret integration | Workspace-level secret management |
+| `workspace_tests.rs` | Test workspace integration patterns | Workspace configuration, coordination |
+
+### Synchronous API
+
+| File | Responsibility | Feature Coverage |
+|------|----------------|------------------|
+| `sync_api_tests.rs` | Test synchronous blocking wrappers | Blocking chat, generation, embeddings |
+
+### Request Validation
+
+| File | Responsibility | Feature Coverage |
+|------|----------------|------------------|
+| `input_validation_tests.rs` | Test input parameter validation | Parameter bounds, format checks |
+| `token_validation_tests.rs` | Test token handling validation | Token counting, limits |
+
+### Error Handling
+
+| File | Responsibility | Feature Coverage |
+|------|----------------|------------------|
+| `error_handling_tests.rs` | Test error scenarios | Error types, recovery, propagation |
+
+### Diagnostics & Monitoring
+
+| File | Responsibility | Feature Coverage |
+|------|----------------|------------------|
+| `general_diagnostics_tests.rs` | Test diagnostics system | Diagnostic data collection, reporting |
+
+### Example Validation
+
+| File | Responsibility | Feature Coverage |
+|------|----------------|------------------|
+| `examples_comprehensive_tests.rs` | Test example correctness | Example compilation, execution |
+| `example_execution_validation_tests.rs` | Validate example execution | Runtime behavior verification |
+| `example_model_validation_test.rs` | Validate example model usage | Model availability, compatibility |
+| `example_retry_logic_test.rs` | Test example retry patterns | Retry logic in examples |
+| `example_eof_handling_test.rs` | Test example EOF handling | Stream termination in examples |
+| `code_assistant_functionality_tests.rs` | Test code assistant example functionality | Code generation, completion |
+| `document_analyzer_functionality_tests.rs` | Test document analyzer example functionality | Document processing, analysis |
+
+### Feature-Specific Advanced Tests
+
+| File | Responsibility | Feature Coverage |
+|------|----------------|------------------|
+| `audio_processing_tests.rs` | Test audio processing (when supported) | Audio inputs, transcription |
+| `batch_operations_tests.rs` | Test batch request processing | Batch API calls, bulk operations |
+| `cached_content_tests.rs` | Test content caching patterns | Content-based caching |
+| `count_tokens_tests.rs` | Test token counting functionality | Token calculation, limits |
+| `model_tuning_tests.rs` | Test model tuning operations | Fine-tuning, model customization |
+| `safety_settings_tests.rs` | Test safety configuration | Content filtering, safety levels |
+
 ## Navigation Guide
 
 - Circuit breaker functionality: `circuit_breaker_tests.rs`

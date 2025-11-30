@@ -1,32 +1,49 @@
 # Documentation
 
-This directory contains detailed API documentation and feature reference for the api_huggingface crate.
+## Purpose
 
-## Organization
+This directory contains detailed API documentation and feature reference for the api_huggingface crate, organized into design collections following documentation.rulebook.md standards.
 
-Documentation is organized into focused files:
+Documentation is structured by design dimensions (api/, operation/, etc.) with each collection containing:
+- Master file (`readme.md`) with Collection Scope and Responsibility Table
+- Instance files with NNN identifiers (001, 002, etc.)
 
-- `api_reference.md` - Comprehensive API documentation covering:
-  - Client operations (Text Generation, Embeddings, Model Management)
-  - Popular models constants
-  - Environment configuration
-  - Error handling patterns
-  - Parameters and options
-  - Response types
-  - Advanced features (Sync API, CURL diagnostics)
+## Responsibility
 
-- `features.md` - Complete feature tables and cargo features:
-  - Feature status tracking (Core APIs, Enterprise Features, Multimodal APIs)
-  - Feature tier classification (Tier 1 vs Tier 2)
-  - Not implemented features list
-  - Cargo features documentation with examples
+This table documents all entities in the docs/ directory, ensuring Complete Entity Coverage.
+
+| Path | Purpose |
+|------|---------|
+| `readme.md` | Master documentation file with navigation and Complete Entity Coverage |
+| `api/` | API design collection - comprehensive API reference, endpoints, usage patterns |
+| `operation/` | Operational procedures collection - feature management, cargo features, status tracking |
+
+## Collections
+
+### api/
+
+API design, endpoints, and usage patterns for the api_huggingface crate.
+
+**Master File**: `api/readme.md`
+
+**Instances**:
+- `001_reference.md` - Comprehensive API reference covering client operations, models, environment config, error handling
+
+### operation/
+
+Operational procedures for feature management and configuration.
+
+**Master File**: `operation/readme.md`
+
+**Instances**:
+- `001_features.md` - Complete feature tables, cargo features documentation, feature tier classification
 
 ## Navigation
 
 **For API Usage**:
 - Start with main `readme.md` for quick start
-- Reference `api_reference.md` for detailed API patterns
-- Check `features.md` for feature availability
+- Reference `api/001_reference.md` for detailed API patterns
+- Check `operation/001_features.md` for feature availability
 
 **For Implementation Details**:
 - See `spec.md` for requirements and architecture
@@ -38,5 +55,8 @@ Documentation is organized into focused files:
 - **API Reference**: HOW to use the library (usage patterns, examples)
 - **Features**: WHAT functionality is available (status, cargo flags)
 - **Specification**: WHY design decisions were made (requirements, architecture)
+- **Collections**: Organized by design dimension (api, operation, pattern, protocol, etc.)
+- **Abstract First**: Documentation focuses on concepts, not implementation details
+- **Complete Coverage**: All documents listed in Responsibility Tables
 
 This separation ensures each document has clear purpose and audience.

@@ -279,3 +279,28 @@ The crate follows a layered architecture using the `mod_interface` pattern:
 ## License
 
 See the [license](license) file for details.
+## Responsibility
+
+This section documents all files and directories in the crate root, ensuring Complete Entity Coverage per organizational_principles.rulebook.md.
+
+| Path | Purpose |
+|------|---------|
+| `src/` | Source code implementation - client, APIs, components, error handling |
+| `tests/` | Comprehensive test suite with 287 tests, zero mocking policy |
+| `examples/` | API usage examples demonstrating all major endpoints |
+| `docs/` | Technical documentation organized in design collections |
+| `scripts/` | Build automation and development scripts |
+| `Cargo.toml` | Crate metadata, dependencies, and feature configuration |
+| `readme.md` | Crate overview, quick start, API documentation, and this Responsibility Table |
+| `spec.md` | Crate specification, requirements, and architecture decisions |
+| `license` | MIT license text |
+| `clippy.toml` | Clippy linter configuration |
+
+### Directory Responsibilities
+
+Each directory contains its own `readme.md` with detailed Responsibility Table:
+- **src/**: Module-level documentation (components/, enterprise/, environment/, realtime/)
+- **tests/**: Testing policies, test organization, and test suite documentation
+- **examples/**: Example index, usage patterns, and API tutorials
+- **docs/**: Design collections with master files for each collection type
+- **scripts/**: Script documentation and usage instructions

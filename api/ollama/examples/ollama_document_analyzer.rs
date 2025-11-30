@@ -15,7 +15,7 @@
 //! ```bash
 //! # Make sure Ollama is running with a model installed
 //! ollama pull llama3.2
-//! echo "Your document content here..." > sample_document.txt
+//! echo "Your document content here..." > -sample_document.txt
 //! cargo run --example document_analyzer --all-features
 //! ```
 
@@ -238,9 +238,9 @@ async fn main() -> Result< (), Box< dyn core::error::Error > >
   let ( mut client, model_name ) = setup_client_and_model().await?;
   
   // Sample document (in real use, this would be loaded from files)
-  let sample_document = if Path::new( "sample_document.txt" ).exists()
+  let sample_document = if Path::new( "-sample_document.txt" ).exists()
   {
-    fs ::read_to_string( "sample_document.txt" )?
+    fs ::read_to_string( "-sample_document.txt" )?
   }
   else
   {
@@ -265,8 +265,8 @@ technologies, it is crucial to ensure they are developed and deployed in ways th
 humanity as a whole while minimizing potential risks and negative consequences.
     ".trim().to_string();
     
-    fs ::write( "sample_document.txt", &sample )?;
-    println!( "📝 Created sample document : sample_document.txt" );
+    fs ::write( "-sample_document.txt", &sample )?;
+    println!( "📝 Created sample document : -sample_document.txt" );
     sample
   };
   

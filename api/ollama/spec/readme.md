@@ -22,7 +22,18 @@ This specification follows the **Directory Structure** for multi-file specificat
 
 ## organization
 
-The specification is organized into three main parts:
+The specification is organized into three main parts.
+
+## Responsibility Table
+
+| File | Responsibility | Scope |
+|------|----------------|-------|
+| `readme.md` | Document specification structure | Navigation, organization, quick start guidance |
+| `1_public_contract.md` | Define mandatory public interface | Goals, requirements, API contracts, success metrics |
+| `2_internal_design.md` | Provide implementation recommendations | Architecture, patterns, design decisions, data models |
+| `3_governance.md` | Establish development principles | Core principles, deliverables, open questions |
+
+## Specification Parts
 
 ### [part I: public contract (mandatory requirements)](1_public_contract.md)
 

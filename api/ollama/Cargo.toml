@@ -27,7 +27,7 @@ all-features = false
 # Default enables everything for ease of use
 default = [ "full" ]
 # The master switch that activates all dependencies
-enabled = [ "dep:reqwest", "dep:serde", "dep:serde_json", "dep:tokio", "dep:futures-core", "dep:futures-util", "dep:error_tools", "dep:mod_interface", "vision_support" ]
+enabled = [ "dep:reqwest", "dep:serde", "dep:serde_json", "dep:tokio", "dep:futures-core", "dep:futures-util", "dep:error_tools", "dep:mod_interface" ]
 # The 'full' feature enables all other features, including 'enabled'
 full = [ "enabled", "streaming", "integration", "authentication", "advanced", "workspace", "secret_management", "embeddings", "builder_patterns", "retry_logic", "vision_support", "tool_calling", "integration_tests", "circuit_breaker", "general_diagnostics", "model_details", "sync_api", "failover", "health_checks", "dynamic_config", "streaming_control", "websocket_streaming", "model_tuning", "model_deployment", "rate_limiting", "retry", "request_caching", "audio_processing", "count_tokens", "cached_content", "batch_operations", "safety_settings", "structured_logging", "input_validation", "enhanced_function_calling", "model_comparison", "request_templates", "buffered_streaming", "compression", "enterprise_quota", "curl_diagnostics" ]
 # Feature for streaming responses

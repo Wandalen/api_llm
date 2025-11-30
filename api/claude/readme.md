@@ -260,6 +260,21 @@ All dependencies workspace-managed for consistency.
 
 MIT
 
+## Responsibility
+
+This section documents all files and directories in the crate root, ensuring Complete Entity Coverage per organizational_principles.rulebook.md.
+
+| Path | Purpose |
+|------|---------|
+| `src/` | Source code implementation - client, Messages API, streaming, tools, error handling |
+| `tests/` | Comprehensive test suite with 88 tests, strict NO MOCKING ALLOWED policy |
+| `examples/` | API usage examples demonstrating Claude API features and capabilities |
+| `docs/` | Technical documentation organized in design collections (operation/) |
+| `spec.md` | Crate specification, requirements, and architecture decisions |
+| `Cargo.toml` | Crate metadata, dependencies, and feature configuration |
+| `readme.md` | Crate overview, quick start, API documentation, and this Responsibility Table |
+| `license` | MIT license text |
+
 ## Links
 
 - **[Anthropic Console](https://console.anthropic.com/)** - Get your API key

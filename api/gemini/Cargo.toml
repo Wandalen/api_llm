@@ -83,7 +83,39 @@ default = [ "full" ]
 # 'full' enables all features, including the base 'enabled'
 full = [ "enabled", "integration", "diagnostics_curl", "logging", "streaming", "websocket_streaming", "streaming_control", "chat", "retry", "circuit_breaker", "rate_limiting", "failover", "health_checks", "builder_patterns", "caching", "dynamic_configuration", "batch_operations", "compression", "enterprise_quota", "model_comparison", "request_templates", "buffered_streaming" ]
 # 'enabled' is the master switch for the crate's core functionality
-enabled = []
+enabled = [
+  # Core dependencies
+  "dep:mod_interface",
+  "dep:error_tools",
+  "dep:workspace_tools",
+  "dep:former",
+  # Utilities
+  "dep:rand",
+  "dep:uuid",
+  # Serialization
+  "dep:regex",
+  "dep:serde",
+  "dep:serde_with",
+  "dep:serde_json",
+  "dep:serde_yaml",
+  "dep:base64",
+  "dep:secrecy",
+  "dep:urlencoding",
+  # Async
+  "dep:futures-core",
+  "dep:futures-util",
+  "dep:futures",
+  "dep:async-stream",
+  "dep:backoff",
+  "dep:tokio",
+  "dep:tokio-stream",
+  "dep:bytes",
+  # Web
+  "dep:reqwest",
+  "dep:tracing",
+  "dep:tracing-subscriber",
+  "dep:tokio-tungstenite",
+]
 # Feature for running integration tests with real API
 integration = []
 # Feature for diagnostics curl command generation
@@ -135,37 +167,37 @@ enterprise_quota = [ "parking_lot", "chrono" ]
 
 ## peers
 
-mod_interface = { workspace = true }
-error_tools = { workspace = true }
-workspace_tools = { workspace = true, features = [ "secrets" ] }
-former = { workspace = true }
+mod_interface = { workspace = true, optional = true }
+error_tools = { workspace = true, optional = true }
+workspace_tools = { workspace = true, features = [ "secrets" ], optional = true }
+former = { workspace = true, optional = true }
 
 ## unsorted
 
-rand = { workspace = true }
-uuid = { workspace = true, features = ["v4"] }
+rand = { workspace = true, optional = true }
+uuid = { workspace = true, features = ["v4"], optional = true }
 
 ## serialization
 
-regex = { workspace = true }
-serde = { workspace = true, features = ["derive"] }
-serde_with = { workspace = true }
-serde_json = { workspace = true }
-serde_yaml = { workspace = true }
-base64 = { workspace = true }
-secrecy = { workspace = true, features = ["serde"] }
-urlencoding = { workspace = true }
+regex = { workspace = true, optional = true }
+serde = { workspace = true, features = ["derive"], optional = true }
+serde_with = { workspace = true, optional = true }
+serde_json = { workspace = true, optional = true }
+serde_yaml = { workspace = true, optional = true }
+base64 = { workspace = true, optional = true }
+secrecy = { workspace = true, features = ["serde"], optional = true }
+urlencoding = { workspace = true, optional = true }
 
 ## async
 
-futures-core = { workspace = true }
-futures-util = { workspace = true }
-futures = { workspace = true }
-async-stream = { workspace = true }
-backoff = { workspace = true, features = [ "tokio" ] }
-tokio = { workspace = true, features = [ "macros", "sync", "time", "rt-multi-thread" ] }
-tokio-stream = { workspace = true }
-bytes = { workspace = true }
+futures-core = { workspace = true, optional = true }
+futures-util = { workspace = true, optional = true }
+futures = { workspace = true, optional = true }
+async-stream = { workspace = true, optional = true }
+backoff = { workspace = true, features = [ "tokio" ], optional = true }
+tokio = { workspace = true, features = [ "macros", "sync", "time", "rt-multi-thread" ], optional = true }
+tokio-stream = { workspace = true, optional = true }
+bytes = { workspace = true, optional = true }
 
 ## web
 
@@ -174,10 +206,10 @@ reqwest = { workspace = true, features = [
   "stream",
   "multipart",
   "rustls-tls",
-], default-features = false }
-tracing = { workspace = true }
-tracing-subscriber = { workspace = true, features = [ "env-filter", "fmt" ] }
-tokio-tungstenite = { workspace = true, features = [ "native-tls" ] }
+], default-features = false, optional = true }
+tracing = { workspace = true, optional = true }
+tracing-subscriber = { workspace = true, features = [ "env-filter", "fmt" ], optional = true }
+tokio-tungstenite = { workspace = true, features = [ "native-tls" ], optional = true }
 # tracing-capture = { workspace = true }
 
 ## dynamic configuration (optional)

@@ -4,6 +4,21 @@
 
 Usage demonstrations for the Ollama API client showing real-world usage patterns and best practices.
 
+## Responsibility Table
+
+| File | Responsibility | Use Case |
+|------|----------------|----------|
+| `readme.md` | Document example organization | Prerequisites, running examples, troubleshooting |
+| `ollama_chat_basic.rs` | Demonstrate basic chat completion | Simplest possible usage, getting started |
+| `ollama_chat_streaming.rs` | Demonstrate streaming responses | Real-time output, stream handling |
+| `ollama_chat_interactive.rs` | Demonstrate multi-turn conversations | Interactive chat, conversation context |
+| `ollama_chat_cached_interactive.rs` | Demonstrate caching with conversations | Cache integration, performance optimization |
+| `ollama_chat_assistant.rs` | Demonstrate assistant-style interactions | System prompts, role-based conversations |
+| `ollama_code_assistant.rs` | Demonstrate code generation use case | Code completion, code explanation |
+| `ollama_document_analyzer.rs` | Demonstrate document analysis use case | Document processing, text analysis |
+| `ollama_multimodal_vision.rs` | Demonstrate vision model integration | Image inputs, multimodal requests |
+| `simple_secret_example.rs` | Demonstrate secret management integration | Workspace secrets, API key handling |
+
 ## Organization Principles
 
 - Examples demonstrate actual usage, not testing

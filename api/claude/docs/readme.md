@@ -2,32 +2,40 @@
 
 ## Purpose
 
-This directory contains supplementary documentation for the Claude API client. Files here provide deep-dive technical documentation, analysis reports, and reference materials that extend beyond the primary readme.
+This directory contains supplementary technical documentation for the Claude API client, organized into design collections following documentation.rulebook.md standards.
 
-## Organization Principles
+Documentation is structured by design dimensions (operation/, pattern/, protocol/, etc.) with each collection containing:
+- Master file (`readme.md`) with Collection Scope and Responsibility Table
+- Instance files with NNN identifiers (001, 002, etc.)
 
-- Documentation files use descriptive, lowercase snake_case names
-- Technical deep-dives separated from main readme
-- Analysis reports and frameworks kept as reference materials
-- Policy and security documentation centralized here
+## Responsibility
 
-## Navigation Guide
+This table documents all entities in the docs/ directory, ensuring Complete Entity Coverage.
 
-**Secret Management:**
-- For secret loading details: see `secret_loading.md`
+| Path | Purpose |
+|------|---------|
+| `readme.md` | Master documentation file with navigation and Complete Entity Coverage |
+| `operation/` | Operational procedures collection - authentication, configuration, secret management |
 
-**Policy & Analysis:**
-- Policy enforcement: see `ecosystem-policy-enforcement.md`
-- Performance analysis: see `performance-analysis-framework.md`
-- Security audits: see `security-audit-report.md`
+## Collections
 
-**Development Resources:**
-- Mock detection: see `runtime-mock-detection.md`, `static-analysis-mock-detector.md`
-- CI/CD recommendations: see `cicd-enforcement-recommendations.md`
-- Policy metrics: see `policy-effectiveness-metrics.md`
+### operation/
 
-**Strategic Analysis:**
-- Credit handling: see `credit-exhaustion-handling-ultrathink.md`
-- Deep synthesis: see `ultra-deep-synthesis.md`
+Operational procedures for Claude API client.
 
-For primary API documentation, usage examples, and getting started guides, see the main `../readme.md` in the project root.
+**Master File**: `operation/readme.md`
+
+**Instances**:
+- `001_secret_loading.md` - Secret loading, authentication, and credential management procedures
+
+## Navigation
+
+For operational procedures (authentication, secret loading): see `operation/`
+
+## Collection Organization Principles
+
+Per documentation.rulebook.md:
+- **Dimension-based structure**: Collections organized by design dimension (operation, pattern, protocol, etc.)
+- **Instance granularity**: Each design concept in separate NNN-prefixed file
+- **Master files required**: Each collection has readme.md with Scope, Responsibility, Overview
+- **Complete Entity Coverage**: All files and directories documented in Responsibility Tables

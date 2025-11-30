@@ -168,6 +168,53 @@ w3 .test level::3
 - **[Tests](tests/)** - Test documentation
 - **[Specification](spec/)** - Technical specification
 
+## Project Structure
+
+This section documents the complete project layout with each entity's responsibility and scope.
+
+### Responsibility Table
+
+#### Production Code & Configuration
+
+| Entity | Responsibility | Scope |
+|--------|----------------|-------|
+| `src/` | Production source code | Core library implementation (see module docs for details) |
+| `Cargo.toml` | Crate manifest and configuration | Dependencies, features, metadata, build configuration |
+| `license` | License terms | MIT license text |
+
+#### Testing & Quality
+
+| Entity | Responsibility | Scope |
+|--------|----------------|-------|
+| `tests/` | Comprehensive test suite | All tests (unit, integration, validation) - see tests/readme.md |
+| `benches/` | Performance benchmarks | Regression detection, performance measurements - see benches/readme.md |
+
+#### Documentation & Examples
+
+| Entity | Responsibility | Scope |
+|--------|----------------|-------|
+| `readme.md` | Project overview and onboarding | Quick start, architecture overview, feature summary, navigation |
+| `docs/` | Detailed documentation | Roadmaps, guides, design docs - see docs/readme.md |
+| `spec/` | Formal technical specification | Complete requirements, design, governance - see spec/readme.md |
+| `examples/` | Usage demonstrations | Runnable examples for developers - see examples/readme.md |
+
+#### Temporary Files & Working Directories
+
+| Entity | Responsibility | Scope |
+|--------|----------------|-------|
+| `-knowledge/` | Organized temporary knowledge | Investigations, explorations, temporary reports |
+| `-default_topic/` | Claude Code working directory | Tool-generated temporary workspace |
+| `-audit_report_api_ollama.md` | Previous audit findings | Historical compliance audit (temporary) |
+| `-audit_report_comprehensive.md` | Comprehensive audit report | Current compliance audit results (temporary) |
+| `-remediation_plan_comprehensive.md` | Remediation strategy | Step-by-step compliance fix plan (temporary) |
+| `-remediation_summary.md` | Previous remediation tracking | Historical remediation work summary (temporary) |
+| `-validation_checklist.md` | Validation checklist | Pre-audit validation items (temporary) |
+| `-sample_chart.txt` | Sample data for examples | Example input data (temporary) |
+| `-sample_document.txt` | Sample data for examples | Example input data (temporary) |
+| `-sample_scene.txt` | Sample data for examples | Example input data (temporary) |
+
+**Note:** All entities prefixed with `-` are temporary and excluded from git tracking.
+
 ## Dependencies
 
 - **reqwest**: HTTP client with async support

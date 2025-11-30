@@ -2,10 +2,13 @@
 
 Performance benchmarks for the Ollama API client.
 
-## Organization
+## Responsibility Table
 
-- `diagnostics_performance.rs` - Diagnostics overhead measurements
-- `cache_performance.rs` - Request cache performance measurements
+| File | Responsibility | Scope |
+|------|----------------|-------|
+| `readme.md` | Document benchmark organization | Running benchmarks, interpreting results, available benchmarks |
+| `cache_performance.rs` | Measure request cache performance | Throughput, latency, memory overhead benchmarks |
+| `diagnostics_performance.rs` | Measure diagnostics overhead | Performance impact of diagnostics system |
 
 ## Running Benchmarks
 
