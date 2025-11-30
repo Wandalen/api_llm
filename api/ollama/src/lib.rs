@@ -186,7 +186,7 @@ mod client_ext_safety;
 #[ cfg( feature = "retry" ) ]
 mod client_ext_retry;
 #[ cfg( feature = "secret_management" ) ]
-mod client_ext_secrets;
+mod client_ext_auth;
 #[ cfg( feature = "model_details" ) ]
 mod client_ext_model_details;
 #[ cfg( feature = "streaming" ) ]
